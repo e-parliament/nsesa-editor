@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xml:lang="EN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache" content="no store"/>
+    <meta http-equiv="Expires" content="0"/>
+    <title>Nsesa editor - loading ...</title>
+    <link rel="SHORTCUT ICON" href="img/favicon.ico"/>
+
+    <style type="text/css">
+        #loading {
+            position: absolute;
+            left: 45%;
+            top: 40%;
+            padding: 2px;
+            z-index: 20001;
+            height: auto;
+            border: 1px solid #ccc;
+            background-color: white;
+        }
+
+        .loaded {
+            left: 5px;
+            top: 35px;
+        }
+
+        #loading a {
+            color: #225588;
+        }
+
+        #loading .loading-indicator {
+            background: white;
+            color: #444;
+            font: bold 13px tahoma, arial, helvetica;
+            padding: 10px;
+            margin: 0;
+            height: auto;
+        }
+
+        #loading-msg {
+            font: normal 10px arial, tahoma, sans-serif;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function fadeOut() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function fadeIn(message) {
+            document.getElementById('loading-msg').innerHTML = message;
+            document.getElementById('loading').style.display = 'inline';
+        }
+
+        function reposition() {
+            document.getElementById('loading').style.left = '25px';
+            document.getElementById('loading').style.top = '35px';
+        }
+    </script>
+</head>
+<body>
+<!-- GWT history frame -->
+<iframe src="javascript:''" id='__gwt_historyFrame' style='position:absolute;width:0;height:0;border:0'></iframe>
+<!-- GWT printing frame -->
+<iframe src="javascript:''" id='__gwt_printingFrame' style='position:absolute;width:0;height:0;border:0'></iframe>
+<!-- loading indicator while the app is being loaded -->
+<div id="loading">
+    <div class="loading-indicator">
+        <img src="img/large-loading.gif" width="32" height="32"
+             style="margin-right:8px;float:left;vertical-align:top;"/>AT4AM<br/>
+        <span id="loading-msg">Loading...</span></div>
+</div>
+<script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Tiny mce ...';</script>
+<script language='javascript' src="js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Initializing...';</script>
+<script language='javascript' src="Editor/Editor.nocache.js"></script>
+<!-- hide loading message -->
+<script type="text/javascript">
+    document.getElementById('loading').style.display = 'none';
+    reposition();
+</script>
+</body>
+</html>

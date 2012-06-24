@@ -1,0 +1,7 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="HeaderViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.header.HeaderViewCss'/>
+    <g:HTMLPanel>
+        Header
+    </g:HTMLPanel>
+</ui:UiBinder>
