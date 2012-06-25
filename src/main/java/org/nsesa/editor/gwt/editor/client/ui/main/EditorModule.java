@@ -14,7 +14,6 @@ public class EditorModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
         binder.bind(EditorController.class).in(Singleton.class);
-        binder.bind(EditorViewImpl.class).in(Singleton.class);
         binder.bind(EditorView.class).to(EditorViewImpl.class).in(Singleton.class);
     }
 }
