@@ -54,11 +54,19 @@ public class Editor implements EntryPoint {
 
         registerEventListeners();
 
+        // update the window title
+        setInitialTitle();
+
         // retrieve the url parameters for the client context
         getParameters();
 
         // retrieve the user principal for the client context
         authenticate();
+    }
+
+    private void setInitialTitle() {
+        final EventBus eventBus = clientFactory.getEventBus();
+        eventBus.fireEvent(new SetWindowTitleEvent(clientFactory.getCoreMessages().windowTitleBootstrap()));
     }
 
     private void registerEventListeners() {
@@ -81,6 +89,13 @@ public class Editor implements EntryPoint {
 
                 // we're authenticated, time for bootstrapping the rest of the application
                 eventBus.fireEvent(new BootstrapEvent(clientContext));
+            }
+        });
+        eventBus.addHandler(SetWindowTitleEvent.TYPE, new SetWindowTitleEventHandler() {
+            @Override
+            public void onEvent(SetWindowTitleEvent event) {
+                Log.debug("Setting window.title to " + event.getTitle());
+                Window.setTitle(event.getTitle());
             }
         });
     }
