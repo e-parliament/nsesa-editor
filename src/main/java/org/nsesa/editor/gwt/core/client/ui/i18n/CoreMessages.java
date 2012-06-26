@@ -17,4 +17,7 @@ public interface CoreMessages extends Messages {
 
     @Key("window.title.amendments")
     String windowTitleAmendments(String documentIdentifier, String numberOfAmendments);
+
+    @Key("authentication.failed")
+    String authenticationFailed();
 }

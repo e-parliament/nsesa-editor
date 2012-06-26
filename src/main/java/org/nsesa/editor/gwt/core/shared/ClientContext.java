@@ -2,9 +2,8 @@ package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-import java.util.Arrays;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Date: 24/06/12 18:54
@@ -12,13 +11,13 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ClientContext implements IsSerializable {
+public class ClientContext implements Serializable, IsSerializable {
 
-    private HashMap<String, List<String>> parameters = new HashMap<String, List<String>>();
+    private HashMap<String, String[]> parameters = new HashMap<String, String[]>();
 
     private String principal;
 
-    private Long creationStamp;
+    private String[] roles;
 
     private String sessionID;
 
@@ -27,10 +26,10 @@ public class ClientContext implements IsSerializable {
     }
 
     public void addParameter(String key, String value) {
-        addParameter(key, Arrays.asList(value));
+        addParameter(key, new String[]{value});
     }
 
-    public void addParameter(String key, List<String> values) {
+    public void addParameter(String key, String[] values) {
         parameters.put(key, values);
     }
 
@@ -38,12 +37,16 @@ public class ClientContext implements IsSerializable {
         parameters.remove(key);
     }
 
-    public List<String> getParameter(String key) {
+    public String[] getParameter(String key) {
         return parameters.get(key);
     }
 
-    public HashMap<String, List<String>> getParameters() {
-        return new HashMap<String, List<String>>(parameters);
+    public HashMap<String, String[]> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(HashMap<String, String[]> parameters) {
+        this.parameters = parameters;
     }
 
     public String getPrincipal() {
@@ -51,7 +54,6 @@ public class ClientContext implements IsSerializable {
     }
 
     public void setPrincipal(String principal) {
-        assert principal != null : "Principal already set --BUG";
         this.principal = principal;
     }
 
@@ -60,15 +62,14 @@ public class ClientContext implements IsSerializable {
     }
 
     public void setSessionID(String sessionID) {
-        assert sessionID != null : "SessionID already set --BUG";
         this.sessionID = sessionID;
     }
 
-    public Long getCreationStamp() {
-        return creationStamp;
+    public String[] getRoles() {
+        return roles;
     }
 
-    public void setCreationStamp(Long creationStamp) {
-        this.creationStamp = creationStamp;
+    public void setRoles(String[] roles) {
+        this.roles = roles;
     }
 }

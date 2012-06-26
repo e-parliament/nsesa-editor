@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
+import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
  * Date: 24/06/12 20:14
@@ -12,10 +13,10 @@ public class AuthenticatedEvent extends GwtEvent<AuthenticatedEventHandler> {
 
     public static Type<AuthenticatedEventHandler> TYPE = new Type<AuthenticatedEventHandler>();
 
-    private final String principal;
+    private final ClientContext clientContext;
 
-    public AuthenticatedEvent(String principal) {
-        this.principal = principal;
+    public AuthenticatedEvent(ClientContext clientContext) {
+        this.clientContext = clientContext;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class AuthenticatedEvent extends GwtEvent<AuthenticatedEventHandler> {
         handler.onEvent(this);
     }
 
-    public String getPrincipal() {
-        return principal;
+    public ClientContext getClientContext() {
+        return clientContext;
     }
 }

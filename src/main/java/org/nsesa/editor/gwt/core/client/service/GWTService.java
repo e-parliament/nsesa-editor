@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
  * Date: 24/06/12 19:58
@@ -13,9 +14,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GWTService extends RemoteService {
 
     /**
-     * Retrieves the principal of the client.
-     *
-     * @return the username of the principal.
+     * Authenticate the client context (set the principal and roles).
      */
-    String getPrincipal();
+    ClientContext authenticate(ClientContext clientContext);
 }

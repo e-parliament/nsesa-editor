@@ -8,13 +8,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
-import org.nsesa.editor.gwt.core.client.event.AuthenticatedEvent;
-import org.nsesa.editor.gwt.core.client.event.AuthenticatedEventHandler;
-import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +29,15 @@ import java.util.Map;
 public class Editor implements EntryPoint {
 
     private final Injector injector = GWT.create(Injector.class);
+    private ClientFactory clientFactory;
 
     @Override
     public void onModuleLoad() {
         // set up the uncaught exception handler before the actual initialization
         Log.setUncaughtExceptionHandler();
+        clientFactory = injector.getClientFactory();
 
-        injector.getScheduler().scheduleDeferred(new Command() {
+        clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
             public void execute() {
                 Log.debug("Deferred Editor module loading started.");
@@ -50,26 +52,37 @@ public class Editor implements EntryPoint {
         final EditorController editorController = injector.getEditorController();
         RootPanel.get().add(editorController.getView());
 
-        // start the bootstrap
-        final ClientContext clientContext = injector.getClientContext();
-        final EventBus eventBus = injector.getEventBus();
-
-        eventBus.addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
-            @Override
-            public void onEvent(AuthenticatedEvent event) {
-                Log.info("User authenticated as " + event.getPrincipal());
-                clientContext.setPrincipal(event.getPrincipal());
-
-                // we're authenticated, time for bootstrapping the rest of the application
-                eventBus.fireEvent(new BootstrapEvent(clientContext));
-            }
-        });
+        registerEventListeners();
 
         // retrieve the url parameters for the client context
         getParameters();
 
         // retrieve the user principal for the client context
-        getPrincipal();
+        authenticate();
+    }
+
+    private void registerEventListeners() {
+        // start the bootstrap
+        final EventBus eventBus = clientFactory.getEventBus();
+        eventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
+            @Override
+            public void onEvent(CriticalErrorEvent event) {
+                Log.error(event.getMessage(), event.getThrowable());
+            }
+        });
+        eventBus.addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
+            @Override
+            public void onEvent(AuthenticatedEvent event) {
+                final ClientContext clientContext = event.getClientContext();
+                clientFactory.setClientContext(clientContext);
+
+                Log.info("User authenticated as " + clientContext.getPrincipal()
+                        + " with roles: " + (clientContext.getRoles() != null ? Arrays.asList(clientContext.getRoles()) : "[NONE]"));
+
+                // we're authenticated, time for bootstrapping the rest of the application
+                eventBus.fireEvent(new BootstrapEvent(clientContext));
+            }
+        });
     }
 
     /**
@@ -79,26 +92,28 @@ public class Editor implements EntryPoint {
      * <p/>
      */
     protected void getParameters() {
-        final ClientContext initialClient = injector.getClientContext();
+        final ClientContext initialClient = clientFactory.getClientContext();
         for (Map.Entry<String, List<String>> entry : Window.Location.getParameterMap().entrySet()) {
-            initialClient.addParameter(entry.getKey(), entry.getValue());
+            initialClient.addParameter(entry.getKey(), entry.getValue().toArray(new String[entry.getValue().size()]));
         }
     }
 
-    protected void getPrincipal() {
+    /**
+     * Get the principal and fire the {@link AuthenticatedEvent} when ready.
+     */
+    protected void authenticate() {
         final GWTServiceAsync gwtService = injector.getGWTService();
-        final EventBus eventBus = injector.getEventBus();
+        final EventBus eventBus = clientFactory.getEventBus();
 
-        gwtService.getPrincipal(new AsyncCallback<String>() {
+        gwtService.authenticate(clientFactory.getClientContext(), new AsyncCallback<ClientContext>() {
             @Override
             public void onFailure(Throwable caught) {
-                throw new RuntimeException("Could not authenticate user.", caught);
+                eventBus.fireEvent(new CriticalErrorEvent(clientFactory.getCoreMessages().authenticationFailed(), caught));
             }
 
             @Override
-            public void onSuccess(String result) {
-                assert result != null : "Principal is null --BUG";
-                eventBus.fireEvent(new AuthenticatedEvent(result));
+            public void onSuccess(final ClientContext clientContext) {
+                eventBus.fireEvent(new AuthenticatedEvent(clientContext));
             }
         });
     }
