@@ -1,9 +1,9 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="ErrorViewImpl.css" field="css" type='org.nsesa.editor.gwt.core.client.ui.error.ErrorViewCss'/>
-    <g:PopupPanel ui:field="errorPanel">
-        <g:HTMLPanel>
-            Oops.
-        </g:HTMLPanel>
-    </g:PopupPanel>
+    <g:HTMLPanel>
+        <g:HTML ui:field="errorTitle"/>
+        <g:HTML ui:field="errorMessage"/>
+        <g:Button ui:field="okButton"/>
+    </g:HTMLPanel>
 </ui:UiBinder>

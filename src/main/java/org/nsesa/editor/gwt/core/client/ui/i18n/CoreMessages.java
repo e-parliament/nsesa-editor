@@ -20,4 +20,7 @@ public interface CoreMessages extends Messages {
 
     @Key("authentication.failed")
     String authenticationFailed();
+
+    @Key("error.title.default")
+    String errorTitleDefault();
 }

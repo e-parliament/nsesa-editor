@@ -11,6 +11,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 
@@ -64,20 +65,23 @@ public class Editor implements EntryPoint {
         authenticate();
     }
 
-    private void setInitialTitle() {
-        final EventBus eventBus = clientFactory.getEventBus();
-        eventBus.fireEvent(new SetWindowTitleEvent(clientFactory.getCoreMessages().windowTitleBootstrap()));
+    protected void setInitialTitle() {
+        clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(clientFactory.getCoreMessages().windowTitleBootstrap()));
     }
 
-    private void registerEventListeners() {
-        // start the bootstrap
+    protected void registerEventListeners() {
+        // register the basic event listeners
         final EventBus eventBus = clientFactory.getEventBus();
+
+        // deal with critical errors
         eventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
             @Override
             public void onEvent(CriticalErrorEvent event) {
-                Log.error(event.getMessage(), event.getThrowable());
+                handleError(clientFactory.getCoreMessages().errorTitleDefault(), event.getMessage(), event.getThrowable());
             }
         });
+
+        // handle login & logout
         eventBus.addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
             @Override
             public void onEvent(AuthenticatedEvent event) {
@@ -91,6 +95,8 @@ public class Editor implements EntryPoint {
                 eventBus.fireEvent(new BootstrapEvent(clientContext));
             }
         });
+
+        // handle updates to the window title
         eventBus.addHandler(SetWindowTitleEvent.TYPE, new SetWindowTitleEventHandler() {
             @Override
             public void onEvent(SetWindowTitleEvent event) {
@@ -131,5 +137,20 @@ public class Editor implements EntryPoint {
                 eventBus.fireEvent(new AuthenticatedEvent(clientContext));
             }
         });
+    }
+
+    /**
+     * Handle an error. By default, this means passing it on to the {@link ErrorController} and displaying it,
+     * as well as logging it via gwt-log on error level.
+     *
+     * @param errorTitle   the title of the error message
+     * @param errorMessage the content of the error message
+     * @param throwable    the throwable, if it exists
+     */
+    protected void handleError(String errorTitle, String errorMessage, Throwable throwable) {
+        final ErrorController errorController = injector.getErrorController();
+        errorController.setError(errorTitle, errorMessage);
+        errorController.center();
+        Log.error(errorMessage, throwable);
     }
 }

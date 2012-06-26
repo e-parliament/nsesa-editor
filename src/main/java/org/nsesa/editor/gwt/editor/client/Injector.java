@@ -7,6 +7,7 @@ import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.service.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
@@ -24,6 +25,8 @@ public interface Injector extends Ginjector {
     ClientFactory getClientFactory();
 
     EditorController getEditorController();
+
+    ErrorController getErrorController();
 
     GWTServiceAsync getGWTService();
 
