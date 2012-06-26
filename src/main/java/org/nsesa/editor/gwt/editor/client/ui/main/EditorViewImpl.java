@@ -15,10 +15,10 @@ import com.google.web.bindery.event.shared.EventBus;
  */
 public class EditorViewImpl extends Composite implements EditorView {
 
-    interface EditorUiBinder extends UiBinder<Widget, EditorViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, EditorViewImpl> {
     }
 
-    private static EditorUiBinder uiBinder = GWT.create(EditorUiBinder.class);
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @Inject
     public EditorViewImpl(final EventBus eventBus) {
