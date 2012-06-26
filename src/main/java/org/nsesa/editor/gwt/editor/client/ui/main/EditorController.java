@@ -17,7 +17,7 @@ public class EditorController {
     private EditorView view;
 
     @Inject
-    public EditorController(final EventBus eventBus, final EditorViewImpl view) {
+    public EditorController(final EventBus eventBus, final EditorView view) {
         assert eventBus != null : "EventBus not set in constructor --BUG";
         assert view != null : "View is not set --BUG";
 
