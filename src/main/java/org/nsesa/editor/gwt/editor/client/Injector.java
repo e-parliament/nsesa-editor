@@ -3,13 +3,10 @@ package org.nsesa.editor.gwt.editor.client;
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.service.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
-import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
-import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorModule;
 
@@ -19,7 +16,7 @@ import org.nsesa.editor.gwt.editor.client.ui.main.EditorModule;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@GinModules({CoreModule.class, EditorModule.class, HeaderModule.class, FooterModule.class})
+@GinModules({EditorModule.class})
 public interface Injector extends Ginjector {
 
     ClientFactory getClientFactory();
