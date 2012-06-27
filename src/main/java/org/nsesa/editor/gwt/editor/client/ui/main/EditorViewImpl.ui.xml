@@ -15,7 +15,7 @@
         <g:center>
             <g:SplitLayoutPanel>
                 <g:south size='0'>
-                    <g:HTML>FOOTER</g:HTML>
+                    <g:HTML>Console</g:HTML>
                 </g:south>
                 <g:center>
                     <g:HorizontalPanel ui:field="mainPanel"/>

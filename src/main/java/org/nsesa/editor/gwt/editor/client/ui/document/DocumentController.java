@@ -65,11 +65,12 @@ public class DocumentController extends Composite {
     private void registerListeners() {
     }
 
-    public void setDocument(DocumentDTO document) {
+    public void setDocument(final DocumentDTO document) {
         this.document = document;
 
         // update the header
         this.documentHeaderController.setDocumentName(document.getName());
+
         serviceFactory.getGwtDocumentService().getAvailableTranslations(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<ArrayList<DocumentDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -79,12 +80,18 @@ public class DocumentController extends Composite {
             @Override
             public void onSuccess(ArrayList<DocumentDTO> translations) {
                 documentHeaderController.setAvailableTranslations(translations);
+                // select the correct translation
+                documentHeaderController.setSelectedTranslation(document);
             }
         });
     }
 
     public void setContent(String documentContent) {
         contentController.setContent(documentContent);
+    }
+
+    public void wrapContent() {
+        contentController.overlay();
     }
 
     public String getDocumentID() {

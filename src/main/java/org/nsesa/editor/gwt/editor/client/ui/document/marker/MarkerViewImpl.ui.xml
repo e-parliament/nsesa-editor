@@ -3,6 +3,6 @@
     <ui:style src="MarkerViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerViewCss'/>
     <g:HTMLPanel>
-        Marker
+
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -69,7 +69,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
         } else {
             for (final String documentID : documentIDs) {
                 // request the amendment in the backend
-                fetchDocument(documentID);
+                fetchDocument(documentID, true);
             }
         }
     }
@@ -89,25 +89,26 @@ public class EditorController extends Composite implements BootstrapEventHandler
         return documentController;
     }
 
-    public boolean addDocumentController(final DocumentController documentController) {
+    public boolean addDocumentController(final DocumentController documentController, final boolean autoCreateView) {
         boolean added = documentControllers.add(documentController);
-        if (added) {
+        if (added && autoCreateView) {
             view.getDocumentsPanel().add(documentController.getView());
             doLayout();
         }
         return added;
     }
 
-    public boolean removeDocumentController(final DocumentController documentController) {
+    public boolean removeDocumentController(final DocumentController documentController, final boolean autoRemoveView) {
         final boolean removed = documentControllers.remove(documentController);
-        if (removed) {
-            view.getDocumentsPanel().remove(documentController.getView());
-            doLayout();
+        if (removed && autoRemoveView) {
+            if (view.getDocumentsPanel().remove(documentController.getView())) {
+                doLayout();
+            }
         }
         return removed;
     }
 
-    private void fetchDocument(final String documentID) {
+    private void fetchDocument(final String documentID, final boolean autoCreateView) {
         serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -118,7 +119,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
             @Override
             public void onSuccess(DocumentDTO document) {
                 final DocumentController documentController = addDocument(document);
-                addDocumentController(documentController);
+                addDocumentController(documentController, autoCreateView);
                 fetchContent(documentController);
             }
         });

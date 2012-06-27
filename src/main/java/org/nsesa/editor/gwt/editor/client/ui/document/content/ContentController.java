@@ -35,4 +35,8 @@ public class ContentController extends Composite {
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
+
+    public void overlay() {
+
+    }
 }

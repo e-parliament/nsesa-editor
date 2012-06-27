@@ -82,6 +82,10 @@ public class DocumentHeaderController extends Composite {
         view.setAvailableTranslations(translations);
     }
 
+    public void setSelectedTranslation(final DocumentDTO selectedTranslation) {
+        view.setSelectedTranslation(selectedTranslation);
+    }
+
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }

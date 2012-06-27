@@ -2,8 +2,30 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="DocumentHeaderViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderViewCss'/>
-    <g:HorizontalPanel>
-        <g:Label ui:field="documentName"/>
-        <g:ListBox ui:field="documentTranslations"/>
+    <ui:style field="res">
+        .headerPanel {
+            width: 100%;
+            padding: 5px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-top: clear;
+        }
+
+        .documentName {
+        }
+
+        .documentTranslations {
+            float: right;
+            padding-right: 10px;
+        }
+    </ui:style>
+
+    <g:HorizontalPanel styleName="{res.headerPanel}">
+        <g:HTMLPanel styleName="{res.documentName}">
+            <g:Label ui:field="documentName"/>
+        </g:HTMLPanel>
+        <g:HTMLPanel styleName="{res.documentTranslations}">
+            <g:ListBox ui:field="documentTranslations"/>
+        </g:HTMLPanel>
     </g:HorizontalPanel>
 </ui:UiBinder>

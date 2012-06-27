@@ -67,4 +67,16 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
         }
         return null;
     }
+
+    @Override
+    public void setSelectedTranslation(DocumentDTO selectedTranslation) {
+        for (int i = 0; i < documentTranslations.getItemCount(); i++) {
+            final String value = documentTranslations.getValue(i);
+            final String text = documentTranslations.getItemText(i);
+            if (value.equals(selectedTranslation.getDocumentID()) && text.equals(selectedTranslation.getLanguageIso())) {
+                documentTranslations.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
 }

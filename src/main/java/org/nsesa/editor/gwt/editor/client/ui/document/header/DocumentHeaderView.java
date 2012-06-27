@@ -21,4 +21,6 @@ public interface DocumentHeaderView extends IsWidget {
     HasChangeHandlers getTranslationsListBox();
 
     String getSelectedDocumentID();
+
+    void setSelectedTranslation(DocumentDTO selectedTranslation);
 }
