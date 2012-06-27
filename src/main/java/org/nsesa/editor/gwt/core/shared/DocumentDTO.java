@@ -13,6 +13,7 @@ import java.io.Serializable;
 public class DocumentDTO implements IsSerializable, Serializable {
 
     private String documentID;
+    private String name;
     private String languageIso;
     private boolean amendable;
 
@@ -28,6 +29,7 @@ public class DocumentDTO implements IsSerializable, Serializable {
 
         if (documentID != null ? !documentID.equals(that.documentID) : that.documentID != null) return false;
         if (languageIso != null ? !languageIso.equals(that.languageIso) : that.languageIso != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
         return true;
     }
@@ -35,6 +37,7 @@ public class DocumentDTO implements IsSerializable, Serializable {
     @Override
     public int hashCode() {
         int result = documentID != null ? documentID.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (languageIso != null ? languageIso.hashCode() : 0);
         return result;
     }
@@ -61,5 +64,13 @@ public class DocumentDTO implements IsSerializable, Serializable {
 
     public void setAmendable(boolean amendable) {
         this.amendable = amendable;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
