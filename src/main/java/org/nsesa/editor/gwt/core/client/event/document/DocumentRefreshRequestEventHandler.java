@@ -8,6 +8,6 @@ import com.google.gwt.event.shared.EventHandler;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface ContentRequestEventHandler extends EventHandler {
-    void onEvent(ContentRequestEvent event);
+public interface DocumentRefreshRequestEventHandler extends EventHandler {
+    void onEvent(DocumentRefreshRequestEvent event);
 }

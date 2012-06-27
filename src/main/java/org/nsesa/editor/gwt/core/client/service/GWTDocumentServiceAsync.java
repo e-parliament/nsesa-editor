@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface GWTDocumentServiceAsync {
@@ -24,7 +25,7 @@ public interface GWTDocumentServiceAsync {
      * @param documentID    the document identifier
      * @param async         the callback
      */
-    void getAvailableTranslations(ClientContext clientContext, String documentID, AsyncCallback<String[]> async);
+    void getAvailableTranslations(ClientContext clientContext, String documentID, AsyncCallback<ArrayList<DocumentDTO>> async);
 
     /**
      * Retrieves a fragment of a document (usually a tree under the element identified by <tt>elementID</tt>).

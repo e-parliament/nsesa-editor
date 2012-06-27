@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 
 /**
  * Date: 24/06/12 16:39
@@ -23,19 +23,27 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final EventBus eventBus;
+    private final ClientFactory clientFactory;
+
     @UiField
     HTMLPanel contentPanel;
     @UiField
     HTMLPanel markerPanel;
+    @UiField
+    HTMLPanel documentHeaderPanel;
 
     @Inject
-    public DocumentViewImpl(final EventBus eventBus) {
+    public DocumentViewImpl(final ClientFactory clientFactory) {
 
-        this.eventBus = eventBus;
+        this.clientFactory = clientFactory;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+    }
+
+    @Override
+    public Panel getDocumentHeaderPanel() {
+        return documentHeaderPanel;
     }
 
     @Override

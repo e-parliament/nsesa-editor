@@ -1,0 +1,9 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="DocumentHeaderViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderViewCss'/>
+    <g:HorizontalPanel>
+        <g:Label ui:field="documentName"/>
+        <g:ListBox ui:field="documentTranslations"/>
+    </g:HorizontalPanel>
+</ui:UiBinder>

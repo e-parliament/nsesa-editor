@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.Panel;
  * @version $Id$
  */
 public interface DocumentView extends IsWidget {
+
+    Panel getDocumentHeaderPanel();
+
     Panel getContentPanel();
 
     Panel getMarkerPanel();

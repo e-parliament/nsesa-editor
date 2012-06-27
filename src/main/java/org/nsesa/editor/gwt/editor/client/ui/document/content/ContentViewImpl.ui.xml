@@ -9,7 +9,7 @@
 
         .documentPanel {
             margin: 20px;
-            padding: 10px;
+            padding: 8%;
             border: 1px solid black;
 
             -moz-box-shadow: 10px 10px 5px #888;

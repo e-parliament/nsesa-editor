@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.editor.client.ui.document;
 import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerModule;
 
 /**
@@ -16,6 +17,7 @@ public class DocumentModule implements GinModule {
     public void configure(GinBinder binder) {
         binder.install(new ContentModule());
         binder.install(new MarkerModule());
+        binder.install(new DocumentHeaderModule());
         binder.bind(DocumentView.class).to(DocumentViewImpl.class);
     }
 }

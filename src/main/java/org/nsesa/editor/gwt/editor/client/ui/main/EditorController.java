@@ -12,7 +12,8 @@ import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
-import org.nsesa.editor.gwt.core.client.event.document.ContentRequestEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class EditorController extends Composite implements BootstrapEventHandler {
+public class EditorController extends Composite implements BootstrapEventHandler, DocumentRefreshRequestEventHandler {
 
     private final EditorView view;
     private final ClientFactory clientFactory;
@@ -48,6 +49,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
 
     private void registerListeners() {
         clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
+        clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, this);
     }
 
     @Override
@@ -67,34 +69,83 @@ public class EditorController extends Composite implements BootstrapEventHandler
         } else {
             for (final String documentID : documentIDs) {
                 // request the amendment in the backend
-                serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        // TODO check the type of caught exception to differentiate the action
-                        final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
-                        eventBus.fireEvent(new CriticalErrorEvent(message));
-                    }
-
-                    @Override
-                    public void onSuccess(DocumentDTO document) {
-                        addDocument(document);
-                        doLayout();
-                        eventBus.fireEvent(new ContentRequestEvent(document));
-                    }
-                });
+                fetchDocument(documentID);
             }
         }
     }
 
-    public void addDocument(DocumentDTO documentDTO) {
-        final DocumentController documentController = injector.getDocumentController();
-        documentController.setDocument(documentDTO);
-        addDocumentController(documentController);
+    @Override
+    public void onEvent(DocumentRefreshRequestEvent event) {
+        // find the origin of this event
+        DocumentController documentController = getDocumentController(event.getDocumentID());
+        if (documentController != null) {
+            fetchContent(documentController);
+        }
     }
 
-    public void addDocumentController(DocumentController documentController) {
-        documentControllers.add(documentController);
-        view.getDocumentsPanel().add(documentController.getView());
+    protected DocumentController addDocument(final DocumentDTO documentDTO) {
+        final DocumentController documentController = injector.getDocumentController();
+        documentController.setDocument(documentDTO);
+        return documentController;
+    }
+
+    public boolean addDocumentController(final DocumentController documentController) {
+        boolean added = documentControllers.add(documentController);
+        if (added) {
+            view.getDocumentsPanel().add(documentController.getView());
+            doLayout();
+        }
+        return added;
+    }
+
+    public boolean removeDocumentController(final DocumentController documentController) {
+        final boolean removed = documentControllers.remove(documentController);
+        if (removed) {
+            view.getDocumentsPanel().remove(documentController.getView());
+            doLayout();
+        }
+        return removed;
+    }
+
+    private void fetchDocument(final String documentID) {
+        serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
+            }
+
+            @Override
+            public void onSuccess(DocumentDTO document) {
+                final DocumentController documentController = addDocument(document);
+                addDocumentController(documentController);
+                fetchContent(documentController);
+            }
+        });
+    }
+
+    private void fetchContent(final DocumentController documentController) {
+        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentController.getDocumentID(), new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorDocumentError(documentController.getDocumentID());
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
+            }
+
+            @Override
+            public void onSuccess(String content) {
+                documentController.setContent(content);
+            }
+        });
+    }
+
+    private DocumentController getDocumentController(String documentID) {
+        for (final DocumentController documentController : documentControllers) {
+            if (documentID.equals(documentController.getDocumentID())) {
+                return documentController;
+            }
+        }
+        return null;
     }
 
     private void doLayout() {

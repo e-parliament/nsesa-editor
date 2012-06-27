@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,8 +42,28 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
     }
 
     @Override
-    public String[] getAvailableTranslations(final ClientContext clientContext, final String documentID) {
-        return null;
+    public ArrayList<DocumentDTO> getAvailableTranslations(final ClientContext clientContext, final String documentID) {
+        ArrayList<DocumentDTO> translations = new ArrayList<DocumentDTO>();
+
+        final DocumentDTO documentDTO1 = new DocumentDTO();
+        documentDTO1.setLanguageIso("EN");
+        documentDTO1.setName("English");
+        documentDTO1.setDocumentID("1-English");
+        translations.add(documentDTO1);
+
+        final DocumentDTO documentDTO2 = new DocumentDTO();
+        documentDTO2.setLanguageIso("FR");
+        documentDTO2.setName("French");
+        documentDTO2.setDocumentID("1-French");
+        translations.add(documentDTO2);
+
+        final DocumentDTO documentDTO3 = new DocumentDTO();
+        documentDTO3.setLanguageIso("DE");
+        documentDTO3.setName("German");
+        documentDTO3.setDocumentID("1-German");
+        translations.add(documentDTO3);
+
+        return translations;
     }
 
     @Override

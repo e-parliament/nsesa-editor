@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -59,7 +60,7 @@ public interface GWTDocumentService extends RemoteService {
      *
      * @param clientContext the client context
      * @param documentID    the id of the document or revision
-     * @return the array with the iso codes of the translations that are available.
+     * @return the array with the translations that are available.
      */
-    String[] getAvailableTranslations(ClientContext clientContext, String documentID);
+    ArrayList<DocumentDTO> getAvailableTranslations(ClientContext clientContext, String documentID);
 }

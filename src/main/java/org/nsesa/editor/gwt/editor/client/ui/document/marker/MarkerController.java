@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.editor.client.ui.document.marker;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 18:42
@@ -13,6 +14,7 @@ import com.google.web.bindery.event.shared.EventBus;
 public class MarkerController extends Composite {
 
     private MarkerView view;
+    private DocumentController documentController;
 
     @Inject
     public MarkerController(final EventBus eventBus, final MarkerView view) {
@@ -24,5 +26,9 @@ public class MarkerController extends Composite {
 
     public MarkerView getView() {
         return view;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }
