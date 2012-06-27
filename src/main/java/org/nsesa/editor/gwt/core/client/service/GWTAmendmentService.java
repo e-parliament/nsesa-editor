@@ -2,7 +2,7 @@ package org.nsesa.editor.gwt.core.client.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainer;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.exception.ResourceNotFoundException;
 import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
@@ -25,7 +25,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param id            the identifier for a single amendment container
      * @return the amendment container, or <tt>null</tt> if it cannot be found.
      */
-    AmendmentContainer getAmendmentContainer(ClientContext clientContext, String id)
+    AmendmentContainerDTO getAmendmentContainer(ClientContext clientContext, String id)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
 
@@ -35,7 +35,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param clientContext the client context
      * @return the array of amendment containers
      */
-    AmendmentContainer[] getAmendmentContainers(ClientContext clientContext)
+    AmendmentContainerDTO[] getAmendmentContainers(ClientContext clientContext)
             throws UnsupportedOperationException;
 
     /**
@@ -45,7 +45,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param id            the identifier of the amendment container
      * @return the array of amendment container revisions
      */
-    AmendmentContainer[] getRevisions(ClientContext clientContext, String id)
+    AmendmentContainerDTO[] getRevisions(ClientContext clientContext, String id)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**
@@ -55,7 +55,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param amendmentContainers the amendment container(s) to save
      * @return the array of amendment containers
      */
-    AmendmentContainer[] saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers)
+    AmendmentContainerDTO[] saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, StaleResourceException;
 
     /**
@@ -65,7 +65,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param amendmentContainers the amendment container(s) to delete
      * @return the array of deleted amendment containers
      */
-    AmendmentContainer[] deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers)
+    AmendmentContainerDTO[] deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 
     /**
@@ -75,7 +75,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param amendmentContainers the amendment container(s) to table
      * @return the array of tabled amendment containers
      */
-    AmendmentContainer[] tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers)
+    AmendmentContainerDTO[] tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 
     /**
@@ -85,6 +85,6 @@ public interface GWTAmendmentService extends RemoteService {
      * @param amendmentContainers the amendment container(s) to withdraw
      * @return the withdrawn amendment containers
      */
-    AmendmentContainer[] withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers)
+    AmendmentContainerDTO[] withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 }

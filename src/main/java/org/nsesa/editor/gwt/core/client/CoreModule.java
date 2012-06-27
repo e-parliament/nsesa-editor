@@ -19,7 +19,10 @@ public class CoreModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
         binder.install(new ErrorModule());
+
         binder.bind(ClientFactory.class).to(ClientFactoryImpl.class).in(Singleton.class);
+        binder.bind(ServiceFactory.class).to(ServiceFactoryImpl.class).in(Singleton.class);
+
         binder.bind(ClientContext.class).toProvider(DefaultClientContextProvider.class).in(Singleton.class);
         binder.bind(Scheduler.class).toProvider(DefaultSchedulerProvider.class).in(Singleton.class);
         binder.bind(EventBus.class).toProvider(DefaultEventBusProvider.class).in(Singleton.class);

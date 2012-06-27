@@ -8,5 +8,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentContainer implements IsSerializable {
+public class AmendmentContainerDTO implements IsSerializable {
+    private String amendmentContainerID;
 }

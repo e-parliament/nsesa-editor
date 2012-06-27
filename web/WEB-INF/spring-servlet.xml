@@ -16,7 +16,9 @@
     </bean>
 
     <bean id="gwtService" class="org.nsesa.editor.gwt.core.server.service.GWTServiceImpl"/>
-    <bean id="gwtDocumentService" class="org.nsesa.editor.gwt.core.server.service.GWTDocumentServiceImpl"/>
+    <bean id="gwtDocumentService" class="org.nsesa.editor.gwt.core.server.service.GWTDocumentServiceImpl">
+        <property name="documentResource" value="classpath:COM_COM(2011)0032_EN.xml"/>
+    </bean>
     <bean id="gwtAmendmentService" class="org.nsesa.editor.gwt.core.server.service.GWTAmendmentServiceImpl"/>
 
     <bean id="gwtLogController" class="org.springframework.web.servlet.mvc.ServletWrappingController">

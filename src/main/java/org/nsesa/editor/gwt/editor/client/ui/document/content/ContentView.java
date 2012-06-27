@@ -9,4 +9,5 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @version $Id$
  */
 public interface ContentView extends IsWidget {
+    void setContent(String documentContent);
 }

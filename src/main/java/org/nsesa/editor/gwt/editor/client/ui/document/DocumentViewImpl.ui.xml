@@ -2,7 +2,21 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="DocumentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.DocumentViewCss'/>
-    <g:HTMLPanel>
-        <g:ScrollPanel ui:field="scrollPanel"/>
-    </g:HTMLPanel>
+    <ui:style field="res">
+        .documentPanel {
+        }
+
+        .contentPanel {
+            border-color: red;
+        }
+
+        .markerPanel {
+            width: 25px;
+            background-color: blue;
+        }
+    </ui:style>
+    <g:HorizontalPanel styleName="{res.documentPanel}">
+        <g:HTMLPanel ui:field="contentPanel" styleName="{res.contentPanel}"/>
+        <g:HTMLPanel ui:field="markerPanel" styleName="{res.markerPanel}"/>
+    </g:HorizontalPanel>
 </ui:UiBinder>

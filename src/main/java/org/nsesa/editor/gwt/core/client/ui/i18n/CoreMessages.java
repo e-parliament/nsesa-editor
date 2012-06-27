@@ -23,4 +23,19 @@ public interface CoreMessages extends Messages {
 
     @Key("error.title.default")
     String errorTitleDefault();
+
+    @Key("error.document.id.missing")
+    String errorDocumentIdMissing();
+
+    @Key("error.document.error")
+    String errorDocumentError(String p0);
+
+    @Key("error.document.notfound")
+    String errorDocumentNotfound(String p0);
+
+    @Key("error.document.inprogress")
+    String errorDocumentInprogress(String p0);
+
+    @Key("error.document.forbidden")
+    String errorDocumentForbidden(String p0);
 }

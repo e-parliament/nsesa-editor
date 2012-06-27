@@ -3,12 +3,15 @@ package org.nsesa.editor.gwt.editor.client;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
@@ -31,12 +34,14 @@ public class Editor implements EntryPoint {
 
     private final Injector injector = GWT.create(Injector.class);
     private ClientFactory clientFactory;
+    private ServiceFactory serviceFactory;
 
     @Override
     public void onModuleLoad() {
         // set up the uncaught exception handler before the actual initialization
         Log.setUncaughtExceptionHandler();
         clientFactory = injector.getClientFactory();
+        serviceFactory = injector.getServiceFactory();
 
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
@@ -51,12 +56,15 @@ public class Editor implements EntryPoint {
     protected void onModuleLoadDeferred() {
         // set up the main window
         final EditorController editorController = injector.getEditorController();
-        RootPanel.get().add(editorController.getView());
+        RootLayoutPanel.get().add(editorController.getView());
 
         registerEventListeners();
 
         // update the window title
         setInitialTitle();
+
+        // process any changes to the layout
+        doLayout();
 
         // retrieve the url parameters for the client context
         getParameters();
@@ -104,6 +112,24 @@ public class Editor implements EntryPoint {
                 Window.setTitle(event.getTitle());
             }
         });
+
+        // handle browser window resizing
+        Window.addResizeHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                clientFactory.getScheduler().scheduleDeferred(new Command() {
+                    @Override
+                    public void execute() {
+                        eventBus.fireEvent(new org.nsesa.editor.gwt.core.client.event.ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+                    }
+                });
+            }
+        });
+    }
+
+    protected void doLayout() {
+        // remove the margin
+        Window.setMargin("0px");
     }
 
     /**
@@ -123,7 +149,7 @@ public class Editor implements EntryPoint {
      * Get the principal and fire the {@link AuthenticatedEvent} when ready.
      */
     protected void authenticate() {
-        final GWTServiceAsync gwtService = injector.getGWTService();
+        final GWTServiceAsync gwtService = serviceFactory.getGwtService();
         final EventBus eventBus = clientFactory.getEventBus();
 
         gwtService.authenticate(clientFactory.getClientContext(), new AsyncCallback<ClientContext>() {

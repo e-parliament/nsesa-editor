@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.core.client.service;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.HashMap;
 
@@ -20,32 +21,45 @@ public interface GWTDocumentService extends RemoteService {
      * rapporteur, document identification, procedure identification, ...
      *
      * @param clientContext the client context
+     * @param documentID    the id of the document or revision
      * @return a Map with key/value pairs.
      */
-    HashMap<String, String> getMetaInformation(ClientContext clientContext);
+    HashMap<String, String> getMetaInformation(ClientContext clientContext, String documentID);
 
     /**
-     * Retrieves the full document content for a given document identified by the client context.
+     * Retrieves the document object for a given document identified by the client context.
      *
      * @param clientContext the client context
+     * @param documentID    the identifier of the document to load (or revision)
      * @return the full document content (XML, HTML, JSON, ...)
      */
-    String getDocument(ClientContext clientContext);
+    DocumentDTO getDocument(ClientContext clientContext, String documentID);
+
+    /**
+     * Retrieves the document object for a given document identified by the client context.
+     *
+     * @param clientContext the client context
+     * @param documentID    the identifier of the document to load (or revision)
+     * @return the full document content (XML, HTML, JSON, ...)
+     */
+    String getDocumentContent(ClientContext clientContext, String documentID);
 
     /**
      * Retrieves a fragment of a document (usually a tree under the element identified by <tt>elementID</tt>).
      *
      * @param clientContext the client context
+     * @param documentID    the id of the document or revision
      * @param elementID     the id attribute of the element for which the fragment is requested.
      * @return the fragment content (XML, HTML, JSON, ...)
      */
-    String getDocumentFragment(ClientContext clientContext, String elementID);
+    String getDocumentFragment(ClientContext clientContext, String documentID, String elementID);
 
     /**
      * Retrieves a list of the available translations for the given document.
      *
      * @param clientContext the client context
+     * @param documentID    the id of the document or revision
      * @return the array with the iso codes of the translations that are available.
      */
-    String[] getAvailableTranslations(ClientContext clientContext);
+    String[] getAvailableTranslations(ClientContext clientContext, String documentID);
 }

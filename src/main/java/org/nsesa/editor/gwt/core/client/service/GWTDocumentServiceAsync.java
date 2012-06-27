@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.HashMap;
 
@@ -11,32 +12,46 @@ public interface GWTDocumentServiceAsync {
      * rapporteur, document identification, procedure identification, ...
      *
      * @param clientContext the client context
-     * @return a Map with key/value pairs.
+     * @param documentID    the document identifier
+     * @param async         the callback
      */
-    void getMetaInformation(ClientContext clientContext, AsyncCallback<HashMap<String, String>> async);
-
-    /**
-     * Retrieves the full document content for a given document identified by the client context.
-     *
-     * @param clientContext the client context
-     * @return the full document content (XML, HTML, ...)
-     */
-    void getDocument(ClientContext clientContext, AsyncCallback<String> async);
+    void getMetaInformation(ClientContext clientContext, String documentID, AsyncCallback<HashMap<String, String>> async);
 
     /**
      * Retrieves a list of the available translations for the given document.
      *
      * @param clientContext the client context
-     * @return the array with the iso codes of the translations that are available.
+     * @param documentID    the document identifier
+     * @param async         the callback
      */
-    void getAvailableTranslations(ClientContext clientContext, AsyncCallback<String[]> async);
+    void getAvailableTranslations(ClientContext clientContext, String documentID, AsyncCallback<String[]> async);
 
     /**
      * Retrieves a fragment of a document (usually a tree under the element identified by <tt>elementID</tt>).
      *
      * @param clientContext the client context
+     * @param documentID    the document identifier
      * @param elementID     the id attribute of the element for which the fragment is requested.
-     * @return the fragment content (XML, HTML, JSON, ...)
+     * @param async         the callback
      */
-    void getDocumentFragment(ClientContext clientContext, String elementID, AsyncCallback<String> async);
+    void getDocumentFragment(ClientContext clientContext, String documentID, String elementID, AsyncCallback<String> async);
+
+    /**
+     * Retrieves the document object for a given document identified by the client context.
+     *
+     * @param clientContext the client context
+     * @param documentID    the document identifier
+     * @param async         the callback
+     */
+    void getDocument(ClientContext clientContext, String documentID, AsyncCallback<DocumentDTO> async);
+
+    /**
+     * Retrieves the full document content for a given document identified by the client context.
+     *
+     * @param clientContext the client context
+     * @param documentID    the document identifier
+     * @param async         the callback
+     */
+    void getDocumentContent(ClientContext clientContext, String documentID, AsyncCallback<String> async);
+
 }

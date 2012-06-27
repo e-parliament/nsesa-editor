@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.content;
 
+import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 
@@ -9,7 +10,7 @@ import com.google.web.bindery.event.shared.EventBus;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ContentController {
+public class ContentController extends Composite {
 
     private ContentView view;
 
@@ -23,5 +24,9 @@ public class ContentController {
 
     public ContentView getView() {
         return view;
+    }
+
+    public void setContent(String documentContent) {
+        view.setContent(documentContent);
     }
 }

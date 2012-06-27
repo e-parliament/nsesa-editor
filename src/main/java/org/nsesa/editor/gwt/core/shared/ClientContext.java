@@ -13,11 +13,15 @@ import java.util.HashMap;
  */
 public class ClientContext implements Serializable, IsSerializable {
 
+    public static final String DOCUMENT_ID = "documentID";
+
     private HashMap<String, String[]> parameters = new HashMap<String, String[]>();
 
     private String principal;
 
     private String[] roles;
+
+    private String[] documentIDs;
 
     private String sessionID;
 
@@ -71,5 +75,13 @@ public class ClientContext implements Serializable, IsSerializable {
 
     public void setRoles(String[] roles) {
         this.roles = roles;
+    }
+
+    public String[] getDocumentIDs() {
+        return documentIDs;
+    }
+
+    public void setDocumentIDs(String[] documentIDs) {
+        this.documentIDs = documentIDs;
     }
 }

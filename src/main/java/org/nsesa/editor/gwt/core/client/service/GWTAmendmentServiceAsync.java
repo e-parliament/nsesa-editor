@@ -1,7 +1,7 @@
 package org.nsesa.editor.gwt.core.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainer;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext the client context
      * @param id            the identifier for a single amendment container
      */
-    void getAmendmentContainer(ClientContext clientContext, String id, AsyncCallback<AmendmentContainer> async)
+    void getAmendmentContainer(ClientContext clientContext, String id, AsyncCallback<AmendmentContainerDTO> async)
     ;
 
     /**
@@ -22,7 +22,7 @@ public interface GWTAmendmentServiceAsync {
      *
      * @param clientContext the client context
      */
-    void getAmendmentContainers(ClientContext clientContext, AsyncCallback<AmendmentContainer[]> async)
+    void getAmendmentContainers(ClientContext clientContext, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 
     /**
@@ -31,7 +31,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext the client context
      * @param id            the identifier of the amendment container
      */
-    void getRevisions(ClientContext clientContext, String id, AsyncCallback<AmendmentContainer[]> async)
+    void getRevisions(ClientContext clientContext, String id, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 
     /**
@@ -40,7 +40,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to save
      */
-    void saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers, AsyncCallback<AmendmentContainer[]> async)
+    void saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 
     /**
@@ -49,7 +49,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to delete
      */
-    void deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers, AsyncCallback<AmendmentContainer[]> async)
+    void deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 
     /**
@@ -58,7 +58,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to table
      */
-    void tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers, AsyncCallback<AmendmentContainer[]> async)
+    void tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 
     /**
@@ -67,6 +67,6 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to withdraw
      */
-    void withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainer> amendmentContainers, AsyncCallback<AmendmentContainer[]> async)
+    void withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
     ;
 }

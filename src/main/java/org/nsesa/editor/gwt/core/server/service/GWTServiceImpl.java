@@ -15,6 +15,7 @@ public class GWTServiceImpl extends SpringRemoteServiceServlet implements GWTSer
     public ClientContext authenticate(ClientContext clientContext) {
         clientContext.setPrincipal("dummy-" + new DateTime().getMillis());
         clientContext.setRoles(new String[]{"USER", "ADMIN"});
+        clientContext.setDocumentIDs(clientContext.getParameter(ClientContext.DOCUMENT_ID));
         return clientContext;
     }
 }
