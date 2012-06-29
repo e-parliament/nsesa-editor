@@ -101,4 +101,9 @@ public class DocumentController extends Composite {
     public DocumentView getView() {
         return view;
     }
+
+    @Override
+    public void setWidth(final String width) {
+        view.setWidth(width);
+    }
 }

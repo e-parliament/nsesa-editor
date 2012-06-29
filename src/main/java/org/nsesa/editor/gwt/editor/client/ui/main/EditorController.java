@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -17,6 +18,7 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentView;
 
 import java.util.ArrayList;
 
@@ -92,8 +94,17 @@ public class EditorController extends Composite implements BootstrapEventHandler
     public boolean addDocumentController(final DocumentController documentController, final boolean autoCreateView) {
         boolean added = documentControllers.add(documentController);
         if (added && autoCreateView) {
-            view.getDocumentsPanel().add(documentController.getView());
+            final DocumentView documentControllerView = documentController.getView();
+            view.getDocumentsPanel().add(documentControllerView);
             doLayout();
+
+            // There seems to be no other way to dynamically set the width of the children
+            // for an evenly distributed width
+            for (final DocumentController d : documentControllers) {
+                final String width = (100 / documentControllers.size()) + "%";
+                final CellPanel documentsPanel = view.getDocumentsPanel();
+                documentsPanel.setCellWidth(d.getView(), width);
+            }
         }
         return added;
     }

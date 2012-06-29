@@ -16,4 +16,6 @@ public interface DocumentView extends IsWidget {
     Panel getContentPanel();
 
     Panel getMarkerPanel();
+
+    void setWidth(String width);
 }

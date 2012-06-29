@@ -17,7 +17,15 @@
 
     <bean id="gwtService" class="org.nsesa.editor.gwt.core.server.service.GWTServiceImpl"/>
     <bean id="gwtDocumentService" class="org.nsesa.editor.gwt.core.server.service.GWTDocumentServiceImpl">
-        <property name="documentResource" value="classpath:COM_COM(2011)0032_EN.xml"/>
+        <property name="documents">
+            <map>
+                <entry key="1" value="classpath:COM_COM(2011)0032_EN.xml"/>
+                <entry key="2" value="classpath:Act_Kenya_1980-01-01@1989-12-15.xml"/>
+                <entry key="3" value="classpath:Act_Kenya_1989-12-06.xml"/>
+                <entry key="4" value="classpath:AmendmentList_Bungeni_2010-10-28v1.xml"/>
+                <entry key="5" value="classpath:Debate_Bungeni_2010-12-07.xml"/>
+            </map>
+        </property>
     </bean>
     <bean id="gwtAmendmentService" class="org.nsesa.editor.gwt.core.server.service.GWTAmendmentServiceImpl"/>
 

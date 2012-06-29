@@ -3,9 +3,9 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -24,7 +24,7 @@ public class EditorViewImpl extends Composite implements EditorView {
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @UiField
-    HorizontalPanel mainPanel;
+    HorizontalPanel documentsPanel;
 
     @Inject
     public EditorViewImpl(final EventBus eventBus) {
@@ -33,7 +33,7 @@ public class EditorViewImpl extends Composite implements EditorView {
     }
 
     @Override
-    public Panel getDocumentsPanel() {
-        return mainPanel;
+    public CellPanel getDocumentsPanel() {
+        return documentsPanel;
     }
 }

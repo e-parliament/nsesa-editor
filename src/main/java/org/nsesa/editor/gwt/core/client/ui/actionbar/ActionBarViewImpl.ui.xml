@@ -1,0 +1,19 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="ActionBarViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.actionbar.ActionBarViewCss'/>
+    <ui:style field="res">
+        .locationPanel {
+            float: right;
+        }
+    </ui:style>
+    <g:HTMLPanel width="100%">
+        <g:Anchor ui:field="modifyAnchor"/>
+        <g:Anchor ui:field="bundleAnchor"/>
+        <g:Anchor ui:field="childAnchor"/>
+        <g:Anchor ui:field="deleteAnchor"/>
+        <g:Anchor ui:field="moveAnchor"/>
+        <g:Anchor ui:field="translateAnchor"/>
+        <g:Label ui:field="location" styleName="{res.locationPanel}"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

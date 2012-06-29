@@ -3,7 +3,9 @@
     <ui:style src="EditorViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.main.EditorViewCss'/>
 
     <ui:style field="res">
+        .documentsPanel {
 
+        }
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
@@ -18,7 +20,7 @@
                     <g:HTML>Console</g:HTML>
                 </g:south>
                 <g:center>
-                    <g:HorizontalPanel ui:field="mainPanel"/>
+                    <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
                 </g:center>
             </g:SplitLayoutPanel>
         </g:center>

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Date: 24/06/12 19:57
@@ -19,7 +20,7 @@ import java.util.HashMap;
  */
 public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implements GWTDocumentService {
 
-    private Resource documentResource;
+    private Map<String, Resource> documents;
 
     @Override
     public HashMap<String, String> getMetaInformation(final ClientContext clientContext, final String documentID) {
@@ -68,16 +69,21 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
 
     @Override
     public String getDocumentContent(ClientContext clientContext, String documentID) {
-        try {
-            return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read file.");
+        Resource documentResource = documents.get(documentID);
+        if (documentResource != null) {
+            try {
+                return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                throw new RuntimeException("Could not read file.");
+            }
         }
+        return null;
     }
 
     // Spring setters ----------------------
 
-    public void setDocumentResource(Resource documentResource) {
-        this.documentResource = documentResource;
+
+    public void setDocuments(Map<String, Resource> documents) {
+        this.documents = documents;
     }
 }
