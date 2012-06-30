@@ -97,14 +97,6 @@ public class EditorController extends Composite implements BootstrapEventHandler
             final DocumentView documentControllerView = documentController.getView();
             view.getDocumentsPanel().add(documentControllerView);
             doLayout();
-
-            // There seems to be no other way to dynamically set the width of the children
-            // for an evenly distributed width
-            for (final DocumentController d : documentControllers) {
-                final String width = (100 / documentControllers.size()) + "%";
-                final CellPanel documentsPanel = view.getDocumentsPanel();
-                documentsPanel.setCellWidth(d.getView(), width);
-            }
         }
         return added;
     }
@@ -147,6 +139,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
             @Override
             public void onSuccess(String content) {
                 documentController.setContent(content);
+                documentController.wrapContent();
             }
         });
     }
@@ -162,6 +155,14 @@ public class EditorController extends Composite implements BootstrapEventHandler
 
     private void doLayout() {
         clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+
+        // There seems to be no other way to dynamically set the width of the children
+        // for an evenly distributed width
+        for (final DocumentController d : documentControllers) {
+            final String width = (100 / documentControllers.size()) + "%";
+            final CellPanel documentsPanel = view.getDocumentsPanel();
+            documentsPanel.setCellWidth(d.getView(), width);
+        }
     }
 
     public EditorView getView() {

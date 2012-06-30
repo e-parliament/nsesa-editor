@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.content;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
@@ -10,4 +11,6 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface ContentView extends IsWidget {
     void setContent(String documentContent);
+
+    Element getContentElement();
 }

@@ -1,0 +1,122 @@
+    /*
+    - Add padding left 10-20 px for each child element in a structure
+
+    */
+    akomaNtoso {
+        display: block;
+        margin: 1em;
+    }
+
+    act {
+        display: block;
+        margin: 1em;
+    }
+
+    meta {
+        display: none;
+    }
+
+    longTitle {
+        display: block;
+        font-size: 2em;
+        text-align: center;
+    }
+
+    section, part, book, tome, title, chapter, article {
+        display: block;
+        padding-top: 25px;
+    }
+
+    clause, point, introductory, paragraph, indent, subparagraph {
+        display: block;
+    }
+
+    num + subparagraph {
+        display: inline;
+    }
+
+    num + introductory {
+        display: inline;
+    }
+
+    paragraph {
+        display: block;
+        padding-top: 10px;
+    }
+
+    title > num {
+        display: block;
+        font-size: 2.4em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    chapter > num {
+        display: block;
+        font-size: 2.0em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    heading, num {
+        font-size: 2.4em;
+        font-weight: bold;
+        padding-right: 25px;
+    }
+
+    * * heading, num {
+        font-size: 2.0em;
+    }
+
+    * * * heading, num {
+        font-size: 1.6em;
+    }
+
+    * * * * heading, num {
+        font-size: 1.2em;
+    }
+
+    article > content {
+        display: block;
+        padding-top: 10px;
+    }
+
+    indent {
+        padding-left: 35px;
+    }
+
+    title > heading {
+        display: block;
+        font-size: 2.4em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    paragraph > introductory {
+        display: inline
+    }
+
+    chapter > heading {
+        display: block;
+        font-size: 2.0em;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    article {
+        foldable: true;
+        not-foldable-child: heading;
+    }
+
+    b, i {
+        display: inline;
+    }
+
+    b {
+        font-weight: bold;
+    }
+
+    i {
+        font-style: italic;
+    }
+

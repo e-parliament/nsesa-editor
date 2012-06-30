@@ -9,4 +9,7 @@ import com.google.gwt.resources.client.CssResource;
  * @version $Id$
  */
 public interface DocumentViewCss extends CssResource {
+    String amendable();
+
+    String immutable();
 }

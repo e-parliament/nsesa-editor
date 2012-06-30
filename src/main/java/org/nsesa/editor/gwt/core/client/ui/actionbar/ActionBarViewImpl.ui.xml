@@ -3,17 +3,26 @@
     <ui:style src="ActionBarViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.actionbar.ActionBarViewCss'/>
     <ui:style field="res">
+        .actionBar {
+            border: 1px solid green;
+            height: 25px;
+        }
+
         .locationPanel {
             float: right;
         }
+
+        .anchor {
+
+        }
     </ui:style>
-    <g:HTMLPanel width="100%">
-        <g:Anchor ui:field="modifyAnchor"/>
-        <g:Anchor ui:field="bundleAnchor"/>
-        <g:Anchor ui:field="childAnchor"/>
-        <g:Anchor ui:field="deleteAnchor"/>
-        <g:Anchor ui:field="moveAnchor"/>
-        <g:Anchor ui:field="translateAnchor"/>
+    <g:HTMLPanel width="100%" styleName="{res.actionBar}">
+        <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
+        <g:Anchor ui:field="bundleAnchor" styleName="{res.anchor}" text="Bundle"/>
+        <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
+        <g:Anchor ui:field="deleteAnchor" styleName="{res.anchor}" text="Delete"/>
+        <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move"/>
+        <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate"/>
         <g:Label ui:field="location" styleName="{res.locationPanel}"/>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -9,4 +9,5 @@ import com.google.gwt.resources.client.CssResource;
  * @version $Id$
  */
 public interface ActionBarViewCss extends CssResource {
+    String hover();
 }

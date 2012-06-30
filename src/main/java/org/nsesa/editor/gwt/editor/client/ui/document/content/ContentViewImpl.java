@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.content;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -71,5 +72,10 @@ public class ContentViewImpl extends Composite implements ContentView {
     @Override
     public void setContent(String documentContent) {
         contentPanel.setHTML(documentContent);
+    }
+
+    @Override
+    public Element getContentElement() {
+        return contentPanel.getElement();
     }
 }
