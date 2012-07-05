@@ -217,9 +217,7 @@
                 <artifactId>gwt-maven-plugin</artifactId>
                 <version>${gwtplugin.version}</version>
                 <configuration>
-                    <extraJvmArgs>-Xss4M -Dgwt.persistentunitcache -Dgwt.persistentunitcachedir=/tmp
-                        -XX:MaxPermSize=512M -Xmx2048m
-                    </extraJvmArgs>
+                    <extraJvmArgs>-Xss2M -XX:MaxPermSize=512M -Xmx2048m</extraJvmArgs>
                     <hostedWebapp>web</hostedWebapp>
                     <modules>
                         <module>org.nsesa.editor.gwt.editor.Editor</module>
