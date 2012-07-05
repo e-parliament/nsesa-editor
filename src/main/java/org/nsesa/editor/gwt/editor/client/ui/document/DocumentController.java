@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -9,8 +10,9 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidgetListener;
-import org.nsesa.editor.gwt.core.client.util.DOMHelper;
+import org.nsesa.editor.gwt.core.client.ui.overlay.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
@@ -36,6 +38,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
     private final ContentController contentController;
     private final ActionBarController actionBarController;
 
+    private final OverlayStrategy overlayStrategy;
+
     private ArrayList<AmendableWidget> amendableWidgets;
 
     @Inject
@@ -44,7 +48,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
                               final MarkerController markerController,
                               final ContentController contentController,
                               final DocumentHeaderController documentHeaderController,
-                              final ActionBarController actionBarController) {
+                              final ActionBarController actionBarController,
+                              final OverlayStrategy overlayStrategy) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
@@ -60,6 +65,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
+
+        this.overlayStrategy = overlayStrategy;
 
         registerListeners();
 
@@ -104,8 +111,43 @@ public class DocumentController extends Composite implements AmendableWidgetList
         final Element[] contentElements = contentController.getContentElements();
         if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
         for (Element element : contentElements) {
-            amendableWidgets.add(DOMHelper.wrap(element, this));
+            final AmendableWidget rootAmendableWidget = wrap(element, this);
+            amendableWidgets.add(rootAmendableWidget);
         }
+    }
+
+    public AmendableWidget wrap(final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener) {
+        return wrap(null, element, listener, 0);
+    }
+
+    public AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener, int depth) {
+        // Assert that the element is attached.
+        assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
+
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl(element);
+        amendableWidget.setParentAmendableWidget(parent);
+
+        // process all properties
+        amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
+        amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+
+        // attach all children (note, this is a recursive call)
+        final Element[] children = overlayStrategy.getChildren(element);
+        ++depth;
+        for (int i = 0; i < children.length; i++) {
+            Element child = children[i];
+            final AmendableWidget amendableChild = wrap(amendableWidget, child, listener, depth);
+            amendableWidget.addAmendableWidget(amendableChild);
+            //Log.info(indent(depth) + " " + amendableChild.asWidget().getElement().getNodeName());
+        }
+
+        // if the widget is amendable, register a listener for its events
+        if (amendableWidget.isAmendable() != null && amendableWidget.isAmendable()) {
+            amendableWidget.setListener(listener);
+        }
+        // post process the widget (eg. hide large tables)
+        amendableWidget.postProcess();
+        return amendableWidget;
     }
 
     public String getDocumentID() {

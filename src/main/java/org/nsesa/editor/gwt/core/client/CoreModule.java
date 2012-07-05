@@ -4,8 +4,11 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.inject.Inject;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.SimpleEventBus;
 import org.nsesa.editor.gwt.core.client.ui.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorModule;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
@@ -26,8 +29,22 @@ public class CoreModule implements GinModule {
         binder.bind(ServiceFactory.class).to(ServiceFactoryImpl.class).in(Singleton.class);
 
         binder.bind(ClientContext.class).toProvider(DefaultClientContextProvider.class).in(Singleton.class);
-        binder.bind(Scheduler.class).toProvider(DefaultSchedulerProvider.class).in(Singleton.class);
-        binder.bind(EventBus.class).toProvider(DefaultEventBusProvider.class).in(Singleton.class);
-        binder.bind(PlaceController.class).toProvider(DefaultPlaceControllerProvider.class).in(Singleton.class);
     }
+
+    @Provides
+    EventBus getEventBus() {
+        return new SimpleEventBus();
+    }
+
+    @Provides
+    Scheduler getScheduler() {
+        return Scheduler.get();
+    }
+
+    @Provides
+    @Inject
+    PlaceController getPlaceController(final EventBus eventBus) {
+        return new PlaceController(eventBus);
+    }
+
 }

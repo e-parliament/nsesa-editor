@@ -36,6 +36,8 @@ the web app class loader and the classes that it holds. -->
 
     <servlet-mapping>
         <servlet-name>spring</servlet-name>
+        <url-pattern>/gwt-log</url-pattern>
+        <url-pattern>/Core/gwt-log</url-pattern>
         <url-pattern>/Editor/gwt-log</url-pattern>
         <url-pattern>/Editor/gwtService</url-pattern>
         <url-pattern>/Editor/gwtDocumentService</url-pattern>

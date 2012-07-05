@@ -10,7 +10,13 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface AmendableWidget extends IsWidget {
 
-    boolean isAmendable();
+    Boolean isAmendable();
+
+    void setAmendable(Boolean amendable);
+
+    Boolean isImmutable();
+
+    void setImmutable(Boolean immutable);
 
     void setListener(AmendableWidgetListener listener);
 
@@ -19,8 +25,4 @@ public interface AmendableWidget extends IsWidget {
     void addAmendableWidget(AmendableWidget child);
 
     void postProcess();
-
-    boolean isAttached();
-
-    void onAttach();
 }
