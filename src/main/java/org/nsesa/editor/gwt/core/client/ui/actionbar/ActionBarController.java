@@ -75,31 +75,33 @@ public class ActionBarController extends Composite {
     }
 
     public void attach(AmendableWidget target) {
-
-
         if (amendableWidget != target) {
 
+            // if our action bar view has not yet been added to the rootpanel, then do so now.
             if (!view.asWidget().isAttached()) {
                 RootPanel.get().add(view);
             }
 
+            //make sure it is visible
             view.asWidget().setVisible(true);
 
+            // if we had a previous widget that was selected, make sure to remove its special action css
+            // done this way because onmouseout is not reliable enough
             if (amendableWidget != null) {
                 amendableWidget.asWidget().removeStyleName(actionBarViewCss.hover());
             }
 
             this.amendableWidget = target;
 
+            // position our action bar exactly above the amendable widget
             final Style style = view.asWidget().getElement().getStyle();
-            style.setPosition(Style.Position.RELATIVE);
+            style.setPosition(Style.Position.ABSOLUTE);
             style.setTop(amendableWidget.asWidget().getAbsoluteTop() - view.asWidget().getOffsetHeight(), Style.Unit.PX);
             style.setLeft(amendableWidget.asWidget().getAbsoluteLeft(), Style.Unit.PX);
             style.setWidth(amendableWidget.asWidget().getOffsetWidth(), Style.Unit.PX);
 
+            // get the location for this amendable widget and display it
             setLocation(this.amendableWidget.asWidget().getElement().getNodeName());
-
-            this.amendableWidget.asWidget().addStyleName(actionBarViewCss.hover());
         }
     }
 }
