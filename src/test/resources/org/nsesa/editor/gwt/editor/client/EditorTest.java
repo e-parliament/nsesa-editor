@@ -14,5 +14,7 @@ public class EditorTest extends GWTTestCase {
         return Editor.class.getName();
     }
 
+    public void testNothing() {
 
+    }
 }
