@@ -3,10 +3,7 @@ package org.nsesa.editor.gwt.core.client.ui.actionbar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 
 /**
@@ -43,37 +40,42 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     }
 
     @Override
-    public Widget getModifyHandler() {
+    public FocusWidget getModifyHandler() {
         return modifyAnchor;
     }
 
     @Override
-    public Widget getDeleteHandler() {
+    public FocusWidget getDeleteHandler() {
         return deleteAnchor;
     }
 
     @Override
-    public Widget getBundleHandler() {
+    public FocusWidget getBundleHandler() {
         return bundleAnchor;
     }
 
     @Override
-    public Widget getMoveHandler() {
+    public FocusWidget getMoveHandler() {
         return moveAnchor;
     }
 
     @Override
-    public Widget getChildHandler() {
+    public FocusWidget getChildHandler() {
         return childAnchor;
     }
 
     @Override
-    public Widget getTranslateHandler() {
+    public FocusWidget getTranslateHandler() {
         return translateAnchor;
     }
 
     @Override
     public void setLocation(String location) {
         this.location.setText(location);
+    }
+
+    @Override
+    public void attach() {
+        onAttach();
     }
 }

@@ -1,8 +1,11 @@
 package org.nsesa.editor.gwt.core.client.ui.actionbar;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidget;
 
@@ -27,7 +30,12 @@ public class ActionBarController extends Composite {
     }
 
     private void registerListeners() {
-
+        view.getModifyHandler().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                Log.info("Clicked on " + event.getSource());
+            }
+        });
     }
 
     public ActionBarView getView() {
@@ -67,18 +75,30 @@ public class ActionBarController extends Composite {
     }
 
     public void attach(AmendableWidget target) {
+
+
         if (amendableWidget != target) {
+
+            if (!view.asWidget().isAttached()) {
+                RootPanel.get().add(view);
+            }
+
+            view.asWidget().setVisible(true);
+
             if (amendableWidget != null) {
                 amendableWidget.asWidget().removeStyleName(actionBarViewCss.hover());
             }
-            if (view.asWidget().getParent() != null) {
-                view.asWidget().removeFromParent();
-            }
 
             this.amendableWidget = target;
-            final Element element = this.amendableWidget.asWidget().getElement();
-            DOM.insertChild(element, view.asWidget().getElement(), 0);
+
+            final Style style = view.asWidget().getElement().getStyle();
+            style.setPosition(Style.Position.RELATIVE);
+            style.setTop(amendableWidget.asWidget().getAbsoluteTop() - view.asWidget().getOffsetHeight(), Style.Unit.PX);
+            style.setLeft(amendableWidget.asWidget().getAbsoluteLeft(), Style.Unit.PX);
+            style.setWidth(amendableWidget.asWidget().getOffsetWidth(), Style.Unit.PX);
+
             setLocation(this.amendableWidget.asWidget().getElement().getNodeName());
+
             this.amendableWidget.asWidget().addStyleName(actionBarViewCss.hover());
         }
     }

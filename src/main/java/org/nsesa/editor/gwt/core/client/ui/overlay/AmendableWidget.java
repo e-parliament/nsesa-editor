@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
@@ -8,7 +9,7 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidget extends IsWidget {
+public interface AmendableWidget extends IsWidget, HasWidgets {
 
     Boolean isAmendable();
 

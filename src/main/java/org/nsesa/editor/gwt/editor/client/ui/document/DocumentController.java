@@ -117,10 +117,10 @@ public class DocumentController extends Composite implements AmendableWidgetList
     }
 
     public AmendableWidget wrap(final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener) {
-        return wrap(null, element, listener, 0);
+        return wrap(null, element, listener);
     }
 
-    public AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener, int depth) {
+    public AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener) {
         // Assert that the element is attached.
         assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
@@ -133,12 +133,9 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
         // attach all children (note, this is a recursive call)
         final Element[] children = overlayStrategy.getChildren(element);
-        ++depth;
-        for (int i = 0; i < children.length; i++) {
-            Element child = children[i];
-            final AmendableWidget amendableChild = wrap(amendableWidget, child, listener, depth);
+        for (final Element child : children) {
+            final AmendableWidget amendableChild = wrap(amendableWidget, child, listener);
             amendableWidget.addAmendableWidget(amendableChild);
-            //Log.info(indent(depth) + " " + amendableChild.asWidget().getElement().getNodeName());
         }
 
         // if the widget is amendable, register a listener for its events

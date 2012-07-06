@@ -35,8 +35,9 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         this.amendableElement = amendableElement;
         setElement(amendableElement);
         // if we're not yet part of the DOM tree, try to attach
-        if (!isAttached())
+        if (!isAttached()) {
             onAttach();
+        }
     }
 
     @Override

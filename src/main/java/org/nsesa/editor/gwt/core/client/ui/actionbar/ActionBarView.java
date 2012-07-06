@@ -1,7 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.actionbar;
 
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Date: 24/06/12 21:44
@@ -10,17 +10,19 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Id$
  */
 public interface ActionBarView extends IsWidget {
-    Widget getModifyHandler();
+    FocusWidget getModifyHandler();
 
-    Widget getDeleteHandler();
+    FocusWidget getDeleteHandler();
 
-    Widget getBundleHandler();
+    FocusWidget getBundleHandler();
 
-    Widget getMoveHandler();
+    FocusWidget getMoveHandler();
 
-    Widget getChildHandler();
+    FocusWidget getChildHandler();
 
-    Widget getTranslateHandler();
+    FocusWidget getTranslateHandler();
 
     void setLocation(String location);
+
+    void attach();
 }
