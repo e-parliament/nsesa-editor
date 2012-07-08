@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.amendment;
+package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -9,4 +9,8 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @version $Id$
  */
 public interface AmendmentView extends IsWidget {
+
+    void setJustification(String justification);
+
+    void setTitle(String title);
 }

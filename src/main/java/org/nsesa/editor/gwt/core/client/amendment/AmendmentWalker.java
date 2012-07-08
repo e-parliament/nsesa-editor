@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.amendment;
+package org.nsesa.editor.gwt.core.client.amendment;
 
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 

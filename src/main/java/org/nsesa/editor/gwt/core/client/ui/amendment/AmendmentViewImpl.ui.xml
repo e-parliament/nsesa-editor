@@ -1,8 +1,15 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="AmendmentViewImpl.css" field="css"
-              type='org.nsesa.editor.gwt.editor.client.ui.amendment.AmendmentViewCss'/>
-    <g:HTMLPanel>
+              type='org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewCss'/>
+    <ui:style field="res">
+        .amendmentHolder {
+            background-color: red;
+            width: 100%;
+            height: 300px;
+        }
+    </ui:style>
+    <g:HTMLPanel styleName="{res.amendmentHolder}">
         <div class="amendment">
 
             <div class="header">
@@ -11,10 +18,11 @@
                 </div>
             </div>
             <div class="content">
-
+                <g:FlexTable ui:field="originalContentTable"/>
+                <g:FlexTable ui:field="amendmentContentTable"/>
             </div>
             <div class="justification">
-
+                <g:Label ui:field="justification"/>
             </div>
             <div class="footer">
 

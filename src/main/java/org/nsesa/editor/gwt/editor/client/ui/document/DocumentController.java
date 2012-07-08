@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
@@ -46,6 +47,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
     private final ActionBarController actionBarController;
     private final Locator locator;
 
+    private final AmendmentManager amendmentManager;
+
     private final OverlayStrategy overlayStrategy;
 
     private ArrayList<AmendableWidget> amendableWidgets;
@@ -58,7 +61,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
                               final DocumentHeaderController documentHeaderController,
                               final ActionBarController actionBarController,
                               final OverlayStrategy overlayStrategy,
-                              final Locator locator) {
+                              final Locator locator,
+                              final AmendmentManager amendmentManager) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
@@ -69,14 +73,14 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.contentController = contentController;
         this.documentHeaderController = documentHeaderController;
         this.actionBarController = actionBarController;
+        this.amendmentManager = amendmentManager;
+        this.overlayStrategy = overlayStrategy;
+        this.locator = locator;
 
         // set references in the child controllers
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
-
-        this.overlayStrategy = overlayStrategy;
-        this.locator = locator;
 
         registerListeners();
 
@@ -249,5 +253,11 @@ public class DocumentController extends Composite implements AmendableWidgetList
     public void onMouseOut(AmendableWidget sender) {
 //        Log.info("[Event: OMOu] " + sender);
 
+    }
+
+    public void injectAmendments() {
+        for (final AmendableWidget root : amendableWidgets) {
+            amendmentManager.inject(root);
+        }
     }
 }

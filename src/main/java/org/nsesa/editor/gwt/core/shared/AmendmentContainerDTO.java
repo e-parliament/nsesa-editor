@@ -10,4 +10,21 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class AmendmentContainerDTO implements IsSerializable {
     private String amendmentContainerID;
+    private String position;
+
+    public String getAmendmentContainerID() {
+        return amendmentContainerID;
+    }
+
+    public void setAmendmentContainerID(String amendmentContainerID) {
+        this.amendmentContainerID = amendmentContainerID;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
 }

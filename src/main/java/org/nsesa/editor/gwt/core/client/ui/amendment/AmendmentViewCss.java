@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.amendment;
+package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.resources.client.CssResource;
 

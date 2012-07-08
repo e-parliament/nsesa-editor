@@ -14,7 +14,7 @@ public class EPLocator implements Locator {
     public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
         StringBuilder location = new StringBuilder();
 
-        final AmendableWidget[] parents = amendableWidget.getParents();
+        final AmendableWidget[] parents = amendableWidget.getParentAmendableWidgets();
         for (AmendableWidget parent : parents) {
             location.append(parent.getType()).append(" - ");
         }

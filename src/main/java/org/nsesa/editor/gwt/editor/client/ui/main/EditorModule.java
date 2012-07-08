@@ -4,9 +4,10 @@ import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.CoreModule;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.editor.client.module.EPModule;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
-import org.nsesa.editor.gwt.editor.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
@@ -33,5 +34,7 @@ public class EditorModule implements GinModule {
 
         binder.bind(EditorController.class).in(Singleton.class);
         binder.bind(EditorView.class).to(EditorViewImpl.class).in(Singleton.class);
+
+        binder.bind(AmendmentManager.class).in(Singleton.class);
     }
 }

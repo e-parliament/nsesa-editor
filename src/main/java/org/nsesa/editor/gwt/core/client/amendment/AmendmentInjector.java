@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.amendment;
+package org.nsesa.editor.gwt.core.client.amendment;
 
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -10,6 +10,8 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  * @version $Id$
  */
 public interface AmendmentInjector {
+
+    void inject(AmendableWidget root);
 
     void inject(AmendmentContainerDTO amendment, AmendableWidget root);
 }

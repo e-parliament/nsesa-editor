@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
  * Date: 27/06/12 17:52
@@ -23,11 +24,19 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
 
     void setParentAmendableWidget(AmendableWidget parent);
 
-    AmendableWidget[] getParents();
+    AmendableWidget[] getParentAmendableWidgets();
+
+    AmendableWidget[] getChildAmendableWidgets();
 
     AmendableWidget getParentAmendableWidget();
 
     void addAmendableWidget(AmendableWidget child);
+
+    void removeAmendableWidget(AmendableWidget child);
+
+    void addAmendmentController(AmendmentController amendmentController);
+
+    void removeAmendmentController(AmendmentController amendmentController);
 
     void postProcess();
 

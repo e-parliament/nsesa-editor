@@ -5,6 +5,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,19 +19,53 @@ import java.util.List;
  */
 public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget, HasWidgets {
 
+    /**
+     * The underlying DOM element.
+     */
     private final Element amendableElement;
 
+    /**
+     * A listener for all the amending operations to call back on.
+     */
     private AmendableWidgetListener listener;
 
+    /**
+     * The logical parent amendable widget. If the parent is null, this is considered a root widget.
+     */
     private AmendableWidget parentAmendableWidget;
 
-    private List<AmendableWidget> children = new ArrayList<AmendableWidget>();
+    /**
+     * A list of logical children.
+     */
+    private List<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
 
-    private Boolean amendable, immutable;
+    /**
+     * A list of all the amendments on this widget.
+     */
+    private List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
+    /**
+     * Flag to indicate whether or not this widget is amendable by the user (not, that does not mean there are no
+     * amendments on this element). Note that this value, if set, cascades into its children.
+     */
+    private Boolean amendable;
+
+    /**
+     * Flag to indicate that this widget is immutable. We use this flag to set a single element as non-amendable
+     * without having to set each of its children as amendable. Does <strong>not</strong> cascade into its children.
+     */
+    private Boolean immutable;
+
+    /**
+     * The assigned index: this is used to determine the location in case the index is not sufficient to uniquely
+     * identify this widget (eg. in case of indents, bullet points ...)
+     */
     private Integer assignedIndex;
 
-    private Element actionBarHolderElement, amendmentHolderElement;
+    /**
+     * The holder element for the amendments.
+     */
+    private Element amendmentHolderElement;
 
     public AmendableWidgetImpl(Element amendableElement) {
         this.amendableElement = amendableElement;
@@ -42,10 +77,35 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void addAmendableWidget(AmendableWidget child) {
-        if (!children.add(child)) {
+    public void addAmendableWidget(final AmendableWidget child) {
+        if (!childAmendableWidgets.add(child)) {
             throw new RuntimeException("Child already exists: " + child);
         }
+    }
+
+    @Override
+    public void removeAmendableWidget(final AmendableWidget child) {
+        if (!childAmendableWidgets.remove(child)) {
+            throw new RuntimeException("Child widget not found: " + child);
+        }
+    }
+
+    @Override
+    public void addAmendmentController(final AmendmentController amendmentController) {
+        if (!amendmentControllers.add(amendmentController)) {
+            throw new RuntimeException("Amendment already exists: " + amendmentController);
+        }
+        // physical attach
+        add(amendmentController.getView().asWidget(), (com.google.gwt.user.client.Element) getAmendmentHolderElement());
+    }
+
+    @Override
+    public void removeAmendmentController(final AmendmentController amendmentController) {
+        if (!amendmentControllers.remove(amendmentController)) {
+            throw new RuntimeException("Child widget not found: " + amendmentController);
+        }
+        // physical remove
+        remove(amendmentController);
     }
 
     @Override
@@ -93,7 +153,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public AmendableWidget[] getParents() {
+    public AmendableWidget[] getParentAmendableWidgets() {
         final ArrayList<AmendableWidget> parents = new ArrayList<AmendableWidget>();
         AmendableWidget parent = getParentAmendableWidget();
         while (parent != null) {
@@ -102,6 +162,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         }
         Collections.reverse(parents);
         return parents.toArray(new AmendableWidget[parents.size()]);
+    }
+
+    @Override
+    public AmendableWidget[] getChildAmendableWidgets() {
+        return childAmendableWidgets.toArray(new AmendableWidget[childAmendableWidgets.size()]);
     }
 
     @Override
@@ -138,5 +203,13 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public void setImmutable(Boolean immutable) {
         this.immutable = immutable;
+    }
+
+    public Element getAmendmentHolderElement() {
+        if (amendmentHolderElement == null) {
+            amendmentHolderElement = DOM.createDiv();
+            amendableElement.appendChild(amendmentHolderElement);
+        }
+        return amendmentHolderElement;
     }
 }

@@ -6,13 +6,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
@@ -34,17 +35,21 @@ public class EditorController extends Composite implements BootstrapEventHandler
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
     private final Injector injector;
+    private final AmendmentManager amendmentManager;
 
     private final ArrayList<DocumentController> documentControllers = new ArrayList<DocumentController>();
 
     @Inject
-    public EditorController(final EditorView view, final ClientFactory clientFactory, final ServiceFactory serviceFactory, final Injector injector) {
+    public EditorController(final EditorView view, final ClientFactory clientFactory,
+                            final ServiceFactory serviceFactory, final Injector injector,
+                            final AmendmentManager amendmentManager) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
         this.injector = injector;
+        this.amendmentManager = amendmentManager;
 
         registerListeners();
     }
@@ -56,23 +61,16 @@ public class EditorController extends Composite implements BootstrapEventHandler
 
     @Override
     public void onEvent(BootstrapEvent event) {
-
         Log.info("Received bootstrap event.");
-
-        final EventBus eventBus = clientFactory.getEventBus();
-
         final String[] documentIDs = event.getClientContext().getDocumentIDs();
 
         if (documentIDs == null) {
             // no document ids provided in the client context?
             final String message = clientFactory.getCoreMessages().errorDocumentIdMissing();
-            eventBus.fireEvent(new CriticalErrorEvent(message));
-
+            clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
         } else {
-            for (final String documentID : documentIDs) {
-                // request the amendment in the backend
-                fetchDocument(documentID, true);
-            }
+            // get the amendments belonging to this document
+            fetchAmendments();
         }
     }
 
@@ -107,12 +105,33 @@ public class EditorController extends Composite implements BootstrapEventHandler
         return removed;
     }
 
+    private void fetchAmendments() {
+        serviceFactory.getGwtAmendmentService().getAmendmentContainers(clientFactory.getClientContext(), new AsyncCallback<AmendmentContainerDTO[]>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorAmendmentsError();
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
+            }
+
+            @Override
+            public void onSuccess(AmendmentContainerDTO[] result) {
+                Log.info("Received " + result.length + " amendments.");
+                amendmentManager.setAmendmentContainerDTOs(result);
+                // after the amendments, retrieve the documents
+                for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
+                    // request the amendment in the backend
+                    fetchDocument(documentID, true);
+                }
+            }
+        });
+    }
+
     private void fetchDocument(final String documentID, final boolean autoCreateView) {
         serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
             @Override
             public void onFailure(Throwable caught) {
                 final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
             }
 
             @Override
@@ -129,13 +148,14 @@ public class EditorController extends Composite implements BootstrapEventHandler
             @Override
             public void onFailure(Throwable caught) {
                 final String message = clientFactory.getCoreMessages().errorDocumentError(documentController.getDocumentID());
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
             }
 
             @Override
             public void onSuccess(String content) {
                 documentController.setContent(content);
                 documentController.wrapContent();
+                documentController.injectAmendments();
             }
         });
     }

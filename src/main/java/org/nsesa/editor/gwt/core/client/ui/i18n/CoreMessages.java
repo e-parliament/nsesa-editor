@@ -38,4 +38,10 @@ public interface CoreMessages extends Messages {
 
     @Key("error.document.forbidden")
     String errorDocumentForbidden(String p0);
+
+    @Key("error.amendment.error")
+    String errorAmendmentError(String p0);
+
+    @Key("error.amendments.error")
+    String errorAmendmentsError();
 }
