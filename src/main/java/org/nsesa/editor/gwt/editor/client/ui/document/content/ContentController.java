@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -56,5 +57,14 @@ public class ContentController extends Composite {
             }
         }
         return elements.toArray(new Element[elements.size()]);
+    }
+
+    /**
+     * Scroll to the given widget (if it exists)
+     *
+     * @param widget the widget to scroll to
+     */
+    public void scrollTo(final Widget widget) {
+        view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop());
     }
 }

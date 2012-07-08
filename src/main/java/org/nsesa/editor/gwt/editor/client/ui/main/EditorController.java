@@ -13,10 +13,10 @@ import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.Injector;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentView;
 
@@ -78,11 +78,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
 
     @Override
     public void onEvent(DocumentRefreshRequestEvent event) {
-        // find the origin of this event
-        DocumentController documentController = getDocumentController(event.getDocumentID());
-        if (documentController != null) {
-            fetchContent(documentController);
-        }
+        fetchContent(event.getDocumentController());
     }
 
     protected DocumentController addDocument(final DocumentDTO documentDTO) {
@@ -153,7 +149,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
         return null;
     }
 
-    private void doLayout() {
+    protected void doLayout() {
         clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
 
         // There seems to be no other way to dynamically set the width of the children

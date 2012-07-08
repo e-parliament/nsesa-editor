@@ -6,8 +6,8 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class DocumentHeaderController extends Composite {
                     }
                     documentController.setDocument(document);
                     // fire an update to get the new content
-                    eventBus.fireEvent(new DocumentRefreshRequestEvent(documentID));
+                    eventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
                 }
             }
         });

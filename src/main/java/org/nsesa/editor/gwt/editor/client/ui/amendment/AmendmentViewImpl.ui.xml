@@ -1,0 +1,24 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="AmendmentViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.amendment.AmendmentViewCss'/>
+    <g:HTMLPanel>
+        <div class="amendment">
+
+            <div class="header">
+                <div class="title">
+                    <g:Label ui:field="title"/>
+                </div>
+            </div>
+            <div class="content">
+
+            </div>
+            <div class="justification">
+
+            </div>
+            <div class="footer">
+
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

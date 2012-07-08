@@ -3,17 +3,24 @@ package org.nsesa.editor.gwt.editor.client.ui.document;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.ui.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidgetImpl;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidgetListener;
-import org.nsesa.editor.gwt.core.client.ui.overlay.OverlayStrategy;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEvent;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEventHandler;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
@@ -37,6 +44,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
     private final DocumentHeaderController documentHeaderController;
     private final ContentController contentController;
     private final ActionBarController actionBarController;
+    private final Locator locator;
 
     private final OverlayStrategy overlayStrategy;
 
@@ -49,7 +57,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
                               final ContentController contentController,
                               final DocumentHeaderController documentHeaderController,
                               final ActionBarController actionBarController,
-                              final OverlayStrategy overlayStrategy) {
+                              final OverlayStrategy overlayStrategy,
+                              final Locator locator) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
@@ -67,6 +76,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.documentHeaderController.setDocumentController(this);
 
         this.overlayStrategy = overlayStrategy;
+        this.locator = locator;
 
         registerListeners();
 
@@ -80,6 +90,20 @@ public class DocumentController extends Composite implements AmendableWidgetList
     }
 
     private void registerListeners() {
+        contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
+            @Override
+            public void onScroll(ScrollEvent event) {
+                clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
+            }
+        });
+        clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
+            @Override
+            public void onEvent(DocumentScrollToEvent event) {
+                if (event.getDocumentController() == DocumentController.this) {
+                    scrollTo(event.getTarget());
+                }
+            }
+        });
     }
 
     public void setDocument(final DocumentDTO document) {
@@ -105,6 +129,10 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     public void setContent(String documentContent) {
         contentController.setContent(documentContent);
+    }
+
+    public void scrollTo(Widget widget) {
+        contentController.scrollTo(widget);
     }
 
     public void wrapContent() {
@@ -214,6 +242,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
     public void onMouseOver(AmendableWidget sender) {
 //        Log.info("[Event: OMOv] " + sender);
         actionBarController.attach(sender);
+        actionBarController.setLocation(locator.getLocation(sender, document.getLanguageIso(), false));
     }
 
     @Override
