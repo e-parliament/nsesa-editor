@@ -171,4 +171,12 @@ public class TextUtils {
         }
         return html;
     }
+
+    public static String indent(int amount) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < amount; i++) {
+            sb.append("-");
+        }
+        return sb.toString();
+    }
 }

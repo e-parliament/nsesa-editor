@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN"
         "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
-<module rename-to="Editor">
+<module rename-to="Core">
     <inherits name="org.nsesa.editor.gwt.core.Core"/>
-    <inherits name="org.nsesa.editor.gwt.dialog.Dialog"/>
 
-    <stylesheet src="css/editor.css"/>
+    <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO"/>
+    <set-property name="log_WindowLogger" value="DISABLED"/>
+    <set-property name="log_DivLogger" value="DISABLED"/>
+    <inherits name='com.allen_sauer.gwt.log.gwt-log-RemoteLogger'/>
+
+    <stylesheet src="css/core.css"/>
 
     <source path="client"/>
     <source path="shared"/>
     <public path="public"/>
 
-    <entry-point class="org.nsesa.editor.gwt.editor.client.Editor"/>
 </module>

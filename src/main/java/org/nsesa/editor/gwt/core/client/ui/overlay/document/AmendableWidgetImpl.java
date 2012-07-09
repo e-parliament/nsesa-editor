@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -153,6 +154,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
+    public String getId() {
+        return amendableElement.getId();
+    }
+
+    @Override
     public AmendableWidget[] getParentAmendableWidgets() {
         final ArrayList<AmendableWidget> parents = new ArrayList<AmendableWidget>();
         AmendableWidget parent = getParentAmendableWidget();
@@ -208,7 +214,18 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public Element getAmendmentHolderElement() {
         if (amendmentHolderElement == null) {
             amendmentHolderElement = DOM.createDiv();
-            amendableElement.appendChild(amendmentHolderElement);
+            if (childAmendableWidgets.isEmpty()) {
+                // add it at the end
+                amendableElement.appendChild(amendmentHolderElement);
+            } else {
+                // add it just before the first child
+                final AmendableWidget firstChild = childAmendableWidgets.get(0);
+                Log.info("First child " + firstChild);
+                final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) amendableElement.getParentElement(), firstChild.asWidget().getElement());
+                Log.info("Insert at childIndex " + childIndex);
+                DOM.insertChild((com.google.gwt.user.client.Element) amendableElement.getParentElement(),
+                        (com.google.gwt.user.client.Element) amendmentHolderElement, childIndex - 1);
+            }
         }
         return amendmentHolderElement;
     }

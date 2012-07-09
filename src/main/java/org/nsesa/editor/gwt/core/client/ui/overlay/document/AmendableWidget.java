@@ -41,4 +41,6 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     void postProcess();
 
     String getType();
+
+    String getId();
 }

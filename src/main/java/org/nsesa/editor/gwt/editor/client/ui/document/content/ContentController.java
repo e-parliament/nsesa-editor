@@ -3,6 +3,8 @@ package org.nsesa.editor.gwt.editor.client.ui.document.content;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -29,10 +31,29 @@ public class ContentController extends Composite {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
+        registerListeners();
+    }
+
+    private void registerListeners() {
+        view.getScrollPanel().addScrollHandler(new ScrollHandler() {
+            @Override
+            public void onScroll(ScrollEvent event) {
+
+            }
+        });
     }
 
     public ContentView getView() {
         return view;
+    }
+
+    public boolean isVisible(Widget widget) {
+        if (widget != null) {
+            final int absoluteTop = widget.asWidget().getAbsoluteTop();
+            final int scrollPanelAbsoluteTop = view.getScrollPanel().getAbsoluteTop();
+            return absoluteTop > scrollPanelAbsoluteTop && absoluteTop < (view.getScrollPanel().getOffsetHeight() + scrollPanelAbsoluteTop);
+        }
+        return false;
     }
 
     public void setContent(String documentContent) {

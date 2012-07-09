@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.actionbar;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -9,6 +8,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.editor.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
 
@@ -41,7 +41,7 @@ public class ActionBarController extends Composite {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    Log.info("Clicked on " + amendableWidget.toString());
+                    clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(amendableWidget));
                 }
             }
         });
@@ -49,8 +49,7 @@ public class ActionBarController extends Composite {
         clientFactory.getEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
-                // adapt the position of our action toolbar so it moves with the rest of the document
-                adaptPosition();
+                view.asWidget().setVisible(false);
             }
         });
     }
@@ -120,9 +119,14 @@ public class ActionBarController extends Composite {
         if (amendableWidget != null) {
             final Style style = view.asWidget().getElement().getStyle();
             style.setPosition(Style.Position.ABSOLUTE);
-            style.setTop(amendableWidget.asWidget().getAbsoluteTop() - view.asWidget().getOffsetHeight(), Style.Unit.PX);
+            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - view.asWidget().getOffsetHeight();
+            style.setTop(coordinateY, Style.Unit.PX);
             style.setLeft(amendableWidget.asWidget().getAbsoluteLeft(), Style.Unit.PX);
             style.setWidth(amendableWidget.asWidget().getOffsetWidth(), Style.Unit.PX);
         }
+    }
+
+    public AmendableWidget getAmendableWidget() {
+        return amendableWidget;
     }
 }

@@ -18,6 +18,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEventHandler;
@@ -100,6 +101,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
                 clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
             }
         });
+
         clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
@@ -194,17 +196,17 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     @Override
     public void onAmend(AmendableWidget sender) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not yet migrated away ...");
     }
 
     @Override
     public void onAdd(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not yet migrated away ...");
     }
 
     @Override
     public void onAddWithExternalSource(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        throw new RuntimeException("Not yet migrated away ...");
     }
 
     @Override
@@ -239,20 +241,18 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        Log.info("[Event: DC] " + sender);
+        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender));
     }
 
     @Override
     public void onMouseOver(AmendableWidget sender) {
-//        Log.info("[Event: OMOv] " + sender);
         actionBarController.attach(sender);
         actionBarController.setLocation(locator.getLocation(sender, document.getLanguageIso(), false));
     }
 
     @Override
     public void onMouseOut(AmendableWidget sender) {
-//        Log.info("[Event: OMOu] " + sender);
-
+        // ignore
     }
 
     public void injectAmendments() {

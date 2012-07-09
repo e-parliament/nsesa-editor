@@ -44,7 +44,7 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
             @Override
             public boolean visit(AmendableWidget visited) {
                 // todo: detection mechanism
-                if (amendmentController.getAmendment().getPosition().equalsIgnoreCase(visited.getType())) {
+                if (amendmentController.getAmendment().getPosition().equalsIgnoreCase(visited.getId())) {
                     visited.addAmendmentController(amendmentController);
                     return false;
                 }
