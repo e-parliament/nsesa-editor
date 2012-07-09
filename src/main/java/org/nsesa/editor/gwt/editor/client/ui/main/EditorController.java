@@ -15,6 +15,7 @@ import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
@@ -36,13 +37,15 @@ public class EditorController extends Composite implements BootstrapEventHandler
     private final ServiceFactory serviceFactory;
     private final Injector injector;
     private final AmendmentManager amendmentManager;
+    private final AmendmentDialogController amendmentDialogController;
 
     private final ArrayList<DocumentController> documentControllers = new ArrayList<DocumentController>();
 
     @Inject
     public EditorController(final EditorView view, final ClientFactory clientFactory,
                             final ServiceFactory serviceFactory, final Injector injector,
-                            final AmendmentManager amendmentManager) {
+                            final AmendmentManager amendmentManager,
+                            final AmendmentDialogController amendmentDialogController) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
@@ -50,6 +53,7 @@ public class EditorController extends Composite implements BootstrapEventHandler
         this.serviceFactory = serviceFactory;
         this.injector = injector;
         this.amendmentManager = amendmentManager;
+        this.amendmentDialogController = amendmentDialogController;
 
         registerListeners();
     }

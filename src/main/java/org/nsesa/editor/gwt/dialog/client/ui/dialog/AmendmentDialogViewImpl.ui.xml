@@ -1,0 +1,69 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="AmendmentDialogViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogViewCss'/>
+    <ui:style field="res">
+        .amendmentDialog {
+            background-color: white;
+            height: 100%;
+            width: 100%;
+        }
+
+        .header {
+            width: 100%;
+            height: 25px;
+            font-size: 1.5em;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            height: 25px;
+        }
+
+        .content {
+            height: 100%;
+            width: 100%;
+        }
+
+        .original {
+
+        }
+
+        .more {
+
+        }
+
+        .amendment {
+
+        }
+    </ui:style>
+    <g:VerticalPanel styleName="{res.amendmentDialog}">
+        <g:HTMLPanel styleName="{res.header}">
+            Header
+        </g:HTMLPanel>
+        <g:HorizontalPanel styleName="{res.content}" ui:field="contentPanel">
+            <g:TabPanel>
+                <g:Tab text="Original">
+                    <g:HTMLPanel styleName="{res.original}">
+                        <h1>Original</h1>
+                    </g:HTMLPanel>
+                </g:Tab>
+                <g:Tab text="More">
+                    <g:HTMLPanel styleName="{res.more}">
+                        More
+                    </g:HTMLPanel>
+                </g:Tab>
+            </g:TabPanel>
+            <g:HTMLPanel styleName="{res.amendment}">
+                <h1>Amendment</h1>
+            </g:HTMLPanel>
+        </g:HorizontalPanel>
+
+        <g:HTMLPanel styleName="{res.footer}">
+            <g:Button ui:field="saveButton" text="Save"/>
+            <g:Button ui:field="cancelButton" text="Cancel"/>
+        </g:HTMLPanel>
+    </g:VerticalPanel>
+
+</ui:UiBinder>

@@ -7,8 +7,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.editor.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
 
