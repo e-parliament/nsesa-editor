@@ -1,5 +1,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
+import com.google.gwt.user.client.ui.CellPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
@@ -10,5 +12,7 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @version $Id$
  */
 public interface AmendmentDialogView extends IsWidget {
+    CellPanel getMainPanel();
 
+    DockLayoutPanel getLayoutPanel();
 }

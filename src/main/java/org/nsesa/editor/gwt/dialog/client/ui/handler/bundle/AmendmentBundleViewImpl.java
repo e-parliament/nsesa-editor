@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.widget;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.bundle;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -16,9 +16,9 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidgetView {
+public class AmendmentBundleViewImpl extends Composite implements AmendmentBundleView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentWidgetViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentBundleViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -30,11 +30,9 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
     DockLayoutPanel dockPanel;
 
     @Inject
-    public AmendmentWidgetViewImpl() {
+    public AmendmentBundleViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        dockPanel.setHeight("100%");
-        dockPanel.setWidth("100%");
     }
 
     @Override

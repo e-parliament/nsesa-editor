@@ -14,6 +14,11 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEv
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentBundleController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentMoveController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentTableController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -37,6 +42,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      */
     private final AmendmentDialogView view;
 
+    private final AmendmentBundleController amendmentBundleController;
+    private final AmendmentMoveController amendmentMoveController;
+    private final AmendmentTableController amendmentTableController;
+    private final AmendmentWidgetController amendmentWidgetController;
+
     /**
      * The client factory, with access to the {@link com.google.web.bindery.event.shared.EventBus},
      * {@link org.nsesa.editor.gwt.core.shared.ClientContext}, ..
@@ -59,9 +69,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private AmendableWidget amendableWidget;
 
     @Inject
-    public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view) {
+    public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view,
+                                     final AmendmentBundleController amendmentBundleController,
+                                     final AmendmentTableController amendmentTableController,
+                                     final AmendmentMoveController amendmentMoveController,
+                                     final AmendmentWidgetController amendmentWidgetController) {
         this.clientFactory = clientFactory;
         this.view = view;
+
+        this.amendmentBundleController = amendmentBundleController;
+        this.amendmentTableController = amendmentTableController;
+        this.amendmentMoveController = amendmentMoveController;
+        this.amendmentWidgetController = amendmentWidgetController;
+
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
 
@@ -74,6 +94,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = event.getAmendmentAction();
+
+                AmendmentUIHandler handler = getHandler(amendableWidget);
+                handle(handler);
                 show();
             }
         });
@@ -81,9 +104,30 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
                 amendment = event.getAmendment();
+                amendableWidget = event.getAmendableWidget();
+                amendmentAction = amendment.getAmendmentAction();
+
+                AmendmentUIHandler handler = getHandler(amendableWidget);
+                handle(handler);
                 show();
             }
         });
+    }
+
+    protected AmendmentUIHandler getHandler(final AmendableWidget amendableWidget) {
+        return amendmentWidgetController;
+    }
+
+    private void handle(AmendmentUIHandler amendmentUIHandler) {
+        this.view.getMainPanel().add(amendmentUIHandler.getView());
+
+        view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
+        amendmentUIHandler.setAmendableWidget(amendableWidget);
+        amendmentUIHandler.setAmendment(amendment);
+    }
+
+    private void hideAll() {
+        view.getMainPanel().clear();
     }
 
     /**
@@ -99,8 +143,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      * Changes the size of the dialog to become the size of the window - 100 pixels.
      */
     public void adaptSize() {
-        view.asWidget().setHeight((Window.getClientHeight() - 100) + "px");
-        view.asWidget().setWidth((Window.getClientWidth() - 100) + "px");
+        view.getLayoutPanel().setHeight((Window.getClientHeight() - 100) + "px");
+        view.getLayoutPanel().setWidth((Window.getClientWidth() - 100) + "px");
     }
 
     public void hide() {
