@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
@@ -241,7 +242,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender));
+        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, AmendmentAction.MODIFICATION));
     }
 
     @Override

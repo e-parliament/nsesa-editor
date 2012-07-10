@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
@@ -41,7 +42,7 @@ public class ActionBarController extends Composite {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(amendableWidget));
+                    clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(amendableWidget, AmendmentAction.MODIFICATION));
                 }
             }
         });

@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 /**
@@ -29,6 +30,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private final ClientFactory clientFactory;
 
     private AmendmentContainerDTO amendment;
+    private AmendmentAction amendmentAction;
 
     @Inject
     public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view) {
@@ -93,5 +95,13 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     public AmendmentDialogView getView() {
         return view;
+    }
+
+    public AmendmentAction getAmendmentAction() {
+        return amendmentAction;
+    }
+
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
     }
 }
