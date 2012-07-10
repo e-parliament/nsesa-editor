@@ -38,32 +38,46 @@
 
         }
     </ui:style>
-    <g:VerticalPanel styleName="{res.amendmentDialog}">
-        <g:HTMLPanel styleName="{res.header}">
-            Header
-        </g:HTMLPanel>
-        <g:HorizontalPanel styleName="{res.content}" ui:field="contentPanel">
-            <g:TabPanel>
-                <g:Tab text="Original">
-                    <g:HTMLPanel styleName="{res.original}">
-                        <h1>Original</h1>
-                    </g:HTMLPanel>
-                </g:Tab>
-                <g:Tab text="More">
-                    <g:HTMLPanel styleName="{res.more}">
-                        More
-                    </g:HTMLPanel>
-                </g:Tab>
-            </g:TabPanel>
-            <g:HTMLPanel styleName="{res.amendment}">
-                <h1>Amendment</h1>
+    <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
+        <g:north size='40'>
+            <g:HTML>HEADER</g:HTML>
+        </g:north>
+        <g:center>
+            <g:DockLayoutPanel unit="PCT">
+                <g:center size="50">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
+                        <g:tab>
+                            <g:header>Original</g:header>
+                            <g:HTMLPanel styleName="{res.original}">
+                                <h1>Original</h1>
+                            </g:HTMLPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>More</g:header>
+                            <g:HTMLPanel styleName="{res.more}">
+                                <h1>More</h1>
+                            </g:HTMLPanel>
+                        </g:tab>
+                    </g:TabLayoutPanel>
+                </g:center>
+                <g:east size="50">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
+                        <g:tab>
+                            <g:header>Amendment</g:header>
+                            <g:HTMLPanel styleName="{res.amendment}">
+                                <h1>Amendment</h1>
+                            </g:HTMLPanel>
+                        </g:tab>
+                    </g:TabLayoutPanel>
+                </g:east>
+            </g:DockLayoutPanel>
+        </g:center>
+        <g:south size="40">
+            <g:HTMLPanel styleName="{res.footer}">
+                <g:Button ui:field="saveButton" text="Save"/>
+                <g:Button ui:field="cancelButton" text="Cancel"/>
             </g:HTMLPanel>
-        </g:HorizontalPanel>
-
-        <g:HTMLPanel styleName="{res.footer}">
-            <g:Button ui:field="saveButton" text="Save"/>
-            <g:Button ui:field="cancelButton" text="Cancel"/>
-        </g:HTMLPanel>
-    </g:VerticalPanel>
+        </g:south>
+    </g:DockLayoutPanel>
 
 </ui:UiBinder>
