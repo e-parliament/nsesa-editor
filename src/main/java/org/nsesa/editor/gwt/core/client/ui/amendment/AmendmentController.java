@@ -36,7 +36,6 @@ public class AmendmentController extends Composite {
 
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
-        setTitle(amendment.getPosition());
     }
 
     public AmendmentView getView() {

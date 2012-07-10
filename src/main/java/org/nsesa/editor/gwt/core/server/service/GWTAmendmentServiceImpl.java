@@ -1,12 +1,14 @@
 package org.nsesa.editor.gwt.core.server.service;
 
 import org.nsesa.editor.gwt.core.client.service.GWTAmendmentService;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.exception.ResourceNotFoundException;
 import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Date: 24/06/12 19:57
@@ -24,11 +26,14 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
     public AmendmentContainerDTO[] getAmendmentContainers(ClientContext clientContext) throws UnsupportedOperationException {
 
         AmendmentContainerDTO amendment1 = new AmendmentContainerDTO();
-        amendment1.setPosition("rec1");
+        AmendableWidgetReference reference1 = new AmendableWidgetReference("rec1");
+        amendment1.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference1)));
         AmendmentContainerDTO amendment2 = new AmendmentContainerDTO();
-        amendment2.setPosition("art2");
+        AmendableWidgetReference reference2 = new AmendableWidgetReference("rec1");
+        amendment2.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference2)));
         AmendmentContainerDTO amendment3 = new AmendmentContainerDTO();
-        amendment3.setPosition("art2-pnta");
+        AmendableWidgetReference reference3 = new AmendableWidgetReference("art2-pnta");
+        amendment3.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference3)));
 
         return new AmendmentContainerDTO[]{amendment1, amendment2, amendment3};
     }
