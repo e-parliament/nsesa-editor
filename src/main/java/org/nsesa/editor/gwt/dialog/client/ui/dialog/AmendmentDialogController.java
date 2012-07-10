@@ -14,9 +14,14 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 /**
+ * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
+ * column layout (with the original proposed text on the left, and a rich text editor on the right).
+ * <p/>
+ * Requires an {@link AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,13 +29,36 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  */
 public class AmendmentDialogController extends Composite implements ProvidesResize {
 
+    /**
+     * The encompassing popup panel used to display this view as a modal dialog.
+     */
     private final PopupPanel popupPanel = new DecoratedPopupPanel(false, true);
 
+    /**
+     * The amendment dialog view.
+     */
     private final AmendmentDialogView view;
+
+    /**
+     * The client factory, with access to the {@link com.google.web.bindery.event.shared.EventBus},
+     * {@link org.nsesa.editor.gwt.core.shared.ClientContext}, ..
+     */
     private final ClientFactory clientFactory;
 
+    /**
+     * The amendment to add or edit.
+     */
     private AmendmentContainerDTO amendment;
+
+    /**
+     * The amendment action (modification, deletion, ..). Can be retrieved via the amendment in case of an edit.
+     */
     private AmendmentAction amendmentAction;
+
+    /**
+     * The amendable widget.
+     */
+    private AmendableWidget amendableWidget;
 
     @Inject
     public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view) {
@@ -46,26 +74,29 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
-                center();
+                amendableWidget = event.getAmendableWidget();
+                amendmentAction = event.getAmendmentAction();
+                show();
             }
         });
         clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
-                center();
+                amendment = event.getAmendment();
+                show();
             }
         });
         this.view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AmendmentDialogController.this.hide();
+                hide();
             }
         });
 
         this.view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AmendmentDialogController.this.hide();
+                hide();
             }
         });
     }
@@ -73,7 +104,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     /**
      * Resizes the dialog, centers and shows the popup.
      */
-    public void center() {
+    public void show() {
         adaptSize();
         popupPanel.center();
         popupPanel.show();
@@ -109,5 +140,13 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     public void setAmendmentAction(AmendmentAction amendmentAction) {
         this.amendmentAction = amendmentAction;
+    }
+
+    public AmendableWidget getAmendableWidget() {
+        return amendableWidget;
+    }
+
+    public void setAmendableWidget(AmendableWidget amendableWidget) {
+        this.amendableWidget = amendableWidget;
     }
 }

@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 
 /**
  * Date: 24/06/12 21:51
@@ -9,6 +10,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @version $Id$
  */
 public class AmendmentContainerDTO implements IsSerializable {
+
+    private AmendmentAction amendmentAction;
     private String amendmentContainerID;
     private String position;
 
@@ -26,5 +29,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public AmendmentAction getAmendmentAction() {
+        return amendmentAction;
+    }
+
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
     }
 }
