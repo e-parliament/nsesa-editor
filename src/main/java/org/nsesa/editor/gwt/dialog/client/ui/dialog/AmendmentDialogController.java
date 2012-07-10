@@ -70,13 +70,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         });
     }
 
+    /**
+     * Resizes the dialog, centers and shows the popup.
+     */
     public void center() {
-        resize();
+        adaptSize();
         popupPanel.center();
         popupPanel.show();
     }
 
-    private void resize() {
+    /**
+     * Changes the size of the dialog to become the size of the window - 100 pixels.
+     */
+    public void adaptSize() {
         view.asWidget().setHeight((Window.getClientHeight() - 100) + "px");
         view.asWidget().setWidth((Window.getClientWidth() - 100) + "px");
     }
