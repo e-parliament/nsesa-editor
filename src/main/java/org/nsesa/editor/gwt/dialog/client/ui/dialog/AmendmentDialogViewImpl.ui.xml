@@ -3,11 +3,6 @@
     <ui:style src="AmendmentDialogViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogViewCss'/>
     <ui:style field="res">
-        .amendmentDialog {
-            background-color: white;
-            height: 100%;
-            width: 100%;
-        }
 
         .header {
             width: 100%;
@@ -40,12 +35,12 @@
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
         <g:north size='40'>
-            <g:HTML>HEADER</g:HTML>
+            <g:HTML styleName="{res.header}">HEADER</g:HTML>
         </g:north>
         <g:center>
             <g:DockLayoutPanel unit="PCT">
                 <g:center size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX" styleName="{res.content}">
                         <g:tab>
                             <g:header>Original</g:header>
                             <g:HTMLPanel styleName="{res.original}">
