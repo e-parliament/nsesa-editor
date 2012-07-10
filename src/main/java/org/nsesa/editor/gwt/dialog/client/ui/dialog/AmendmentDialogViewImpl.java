@@ -1,12 +1,8 @@
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
@@ -22,28 +18,10 @@ public class AmendmentDialogViewImpl extends Composite implements AmendmentDialo
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-    @UiField
-    Button cancelButton;
-    @UiField
-    Button saveButton;
-    @UiField
-    DockLayoutPanel dockPanel;
 
     @Inject
     public AmendmentDialogViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        dockPanel.setWidth("500");
-        dockPanel.setHeight("400");
-    }
-
-    @Override
-    public HasClickHandlers getSaveButton() {
-        return saveButton;
-    }
-
-    @Override
-    public HasClickHandlers getCancelButton() {
-        return cancelButton;
     }
 }

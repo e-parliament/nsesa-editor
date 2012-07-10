@@ -1,93 +1,9 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+        >
     <ui:style src="AmendmentDialogViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogViewCss'/>
     <ui:style field="res">
 
-        .header {
-            width: 100%;
-            height: 25px;
-            font-size: 1.5em;
-        }
-
-        .footer {
-            width: 100%;
-            text-align: center;
-            height: 25px;
-        }
-
-        .original {
-
-        }
-
-        .authors {
-
-        }
-
-        .additional {
-
-        }
-
-        .footNotes {
-
-        }
-
-        .amendment {
-
-        }
     </ui:style>
-    <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
-        <g:north size='40'>
-            <g:HTML styleName="{res.header}">HEADER</g:HTML>
-        </g:north>
-        <g:center>
-            <g:DockLayoutPanel unit="PCT">
-                <g:center size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
-                        <g:tab>
-                            <g:header>Original</g:header>
-                            <g:HTMLPanel styleName="{res.original}">
-                                <h1>Original</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Authors</g:header>
-                            <g:HTMLPanel styleName="{res.authors}">
-                                <h1>Authors</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Footnotes</g:header>
-                            <g:HTMLPanel styleName="{res.footNotes}">
-                                <h1>Footnotes</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Additional</g:header>
-                            <g:HTMLPanel styleName="{res.additional}">
-                                <h1>Additional</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                    </g:TabLayoutPanel>
-                </g:center>
-                <g:east size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
-                        <g:tab>
-                            <g:header>Amendment</g:header>
-                            <g:HTMLPanel styleName="{res.amendment}">
-                                <h1>Amendment</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                    </g:TabLayoutPanel>
-                </g:east>
-            </g:DockLayoutPanel>
-        </g:center>
-        <g:south size="40">
-            <g:HTMLPanel styleName="{res.footer}">
-                <g:Button ui:field="saveButton" text="Save"/>
-                <g:Button ui:field="cancelButton" text="Cancel"/>
-            </g:HTMLPanel>
-        </g:south>
-    </g:DockLayoutPanel>
 
 </ui:UiBinder>
