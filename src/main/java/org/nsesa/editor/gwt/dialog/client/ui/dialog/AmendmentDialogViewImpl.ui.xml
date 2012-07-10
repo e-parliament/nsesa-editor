@@ -16,16 +16,19 @@
             height: 25px;
         }
 
-        .content {
-            height: 100%;
-            width: 100%;
-        }
-
         .original {
 
         }
 
-        .more {
+        .authors {
+
+        }
+
+        .additional {
+
+        }
+
+        .footNotes {
 
         }
 
@@ -40,7 +43,7 @@
         <g:center>
             <g:DockLayoutPanel unit="PCT">
                 <g:center size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX" styleName="{res.content}">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
                         <g:tab>
                             <g:header>Original</g:header>
                             <g:HTMLPanel styleName="{res.original}">
@@ -48,9 +51,21 @@
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
-                            <g:header>More</g:header>
-                            <g:HTMLPanel styleName="{res.more}">
-                                <h1>More</h1>
+                            <g:header>Authors</g:header>
+                            <g:HTMLPanel styleName="{res.authors}">
+                                <h1>Authors</h1>
+                            </g:HTMLPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>Footnotes</g:header>
+                            <g:HTMLPanel styleName="{res.footNotes}">
+                                <h1>Footnotes</h1>
+                            </g:HTMLPanel>
+                        </g:tab>
+                        <g:tab>
+                            <g:header>Additional</g:header>
+                            <g:HTMLPanel styleName="{res.additional}">
+                                <h1>Additional</h1>
                             </g:HTMLPanel>
                         </g:tab>
                     </g:TabLayoutPanel>
