@@ -1,7 +1,5 @@
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
@@ -84,19 +82,6 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerEditEvent event) {
                 amendment = event.getAmendment();
                 show();
-            }
-        });
-        this.view.getCancelButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                hide();
-            }
-        });
-
-        this.view.getSaveButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                hide();
             }
         });
     }
