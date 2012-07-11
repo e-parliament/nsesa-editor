@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.event.amendment;
+package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
 
