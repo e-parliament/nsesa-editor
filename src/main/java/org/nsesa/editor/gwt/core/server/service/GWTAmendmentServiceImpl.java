@@ -27,13 +27,16 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
 
         AmendmentContainerDTO amendment1 = new AmendmentContainerDTO();
         AmendableWidgetReference reference1 = new AmendableWidgetReference("rec1");
-        amendment1.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference1)));
+        amendment1.setSourceReference(reference1);
         AmendmentContainerDTO amendment2 = new AmendmentContainerDTO();
-        AmendableWidgetReference reference2 = new AmendableWidgetReference("rec1");
-        amendment2.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference2)));
+        AmendableWidgetReference reference2 = new AmendableWidgetReference("rec2");
+        AmendableWidgetReference reference2a = new AmendableWidgetReference("rec3");
+        AmendableWidgetReference reference2b = new AmendableWidgetReference("rec1");
+        amendment2.setTargetReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference2a, reference2b)));
+        amendment2.setSourceReference(reference2);
         AmendmentContainerDTO amendment3 = new AmendmentContainerDTO();
         AmendableWidgetReference reference3 = new AmendableWidgetReference("art2-pnta");
-        amendment3.setSourceReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference3)));
+        amendment3.setSourceReference(reference3);
 
         return new AmendmentContainerDTO[]{amendment1, amendment2, amendment3};
     }

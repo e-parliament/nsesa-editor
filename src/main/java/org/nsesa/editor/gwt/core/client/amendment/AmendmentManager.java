@@ -5,7 +5,6 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 import java.util.ArrayList;
@@ -45,10 +44,8 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
             @Override
             public boolean visit(AmendableWidget visited) {
                 // todo: detection mechanism
-                for (final AmendableWidgetReference reference : amendmentController.getAmendment().getSourceReferences()) {
-                    if (reference.getElement().equalsIgnoreCase(visited.getId())) {
-                        visited.addAmendmentController(amendmentController);
-                    }
+                if (amendmentController.getAmendment().getSourceReference().getElement().equalsIgnoreCase(visited.getId())) {
+                    visited.addAmendmentController(amendmentController);
                 }
                 return true;
             }
