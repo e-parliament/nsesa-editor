@@ -261,4 +261,20 @@ public class DocumentController extends Composite implements AmendableWidgetList
             amendmentManager.inject(root);
         }
     }
+
+    public MarkerController getMarkerController() {
+        return markerController;
+    }
+
+    public DocumentHeaderController getDocumentHeaderController() {
+        return documentHeaderController;
+    }
+
+    public ContentController getContentController() {
+        return contentController;
+    }
+
+    public ActionBarController getActionBarController() {
+        return actionBarController;
+    }
 }

@@ -9,4 +9,7 @@ import com.google.gwt.user.client.ui.IsWidget;
  * @version $Id$
  */
 public interface MarkerView extends IsWidget {
+    void addMarker(double top);
+
+    void clearMarkers();
 }
