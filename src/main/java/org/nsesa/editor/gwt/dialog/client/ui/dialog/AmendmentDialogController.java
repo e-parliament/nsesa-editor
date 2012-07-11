@@ -94,9 +94,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = event.getAmendmentAction();
-
-                AmendmentUIHandler handler = getHandler(amendableWidget);
-                handle(handler);
+                handle();
                 show();
             }
         });
@@ -106,19 +104,30 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 amendment = event.getAmendment();
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = amendment.getAmendmentAction();
-
-                AmendmentUIHandler handler = getHandler(amendableWidget);
-                handle(handler);
+                handle();
                 show();
             }
         });
     }
 
-    protected AmendmentUIHandler getHandler(final AmendableWidget amendableWidget) {
+    protected AmendmentUIHandler getHandler() {
+        if (amendmentAction == AmendmentAction.MOVE) {
+            return amendmentMoveController;
+        }
+        if (amendmentAction == AmendmentAction.BUNDLE) {
+            return amendmentBundleController;
+        }
+        if ("table".equalsIgnoreCase(amendableWidget.getType()) || "tr".equalsIgnoreCase(amendableWidget.getType())) {
+            return amendmentTableController;
+        }
+        if ("img".equalsIgnoreCase(amendableWidget.getType())) {
+            throw new UnsupportedOperationException("Not yet implemented.");
+        }
         return amendmentWidgetController;
     }
 
-    private void handle(AmendmentUIHandler amendmentUIHandler) {
+    private void handle() {
+        AmendmentUIHandler amendmentUIHandler = getHandler();
         this.view.getMainPanel().add(amendmentUIHandler.getView());
 
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");

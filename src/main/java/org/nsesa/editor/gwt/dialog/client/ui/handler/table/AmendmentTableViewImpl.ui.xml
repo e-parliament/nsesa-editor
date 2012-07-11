@@ -14,25 +14,7 @@
             height: 25px;
         }
 
-        .original {
 
-        }
-
-        .authors {
-
-        }
-
-        .additional {
-
-        }
-
-        .footNotes {
-
-        }
-
-        .amendment {
-
-        }
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
         <g:north size='40'>
@@ -41,43 +23,10 @@
         <g:center>
             <g:DockLayoutPanel unit="PCT">
                 <g:center size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
-                        <g:tab>
-                            <g:header>Original</g:header>
-                            <g:HTMLPanel styleName="{res.original}">
-                                <h1>Original</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Authors</g:header>
-                            <g:HTMLPanel styleName="{res.authors}">
-                                <h1>Authors</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Footnotes</g:header>
-                            <g:HTMLPanel styleName="{res.footNotes}">
-                                <h1>Footnotes</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                        <g:tab>
-                            <g:header>Additional</g:header>
-                            <g:HTMLPanel styleName="{res.additional}">
-                                <h1>Additional</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                    </g:TabLayoutPanel>
+                    <g:HTMLPanel>
+                        <h1>Table editor</h1>
+                    </g:HTMLPanel>
                 </g:center>
-                <g:east size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
-                        <g:tab>
-                            <g:header>Amendment</g:header>
-                            <g:HTMLPanel styleName="{res.amendment}">
-                                <h1>Amendment</h1>
-                            </g:HTMLPanel>
-                        </g:tab>
-                    </g:TabLayoutPanel>
-                </g:east>
             </g:DockLayoutPanel>
         </g:center>
         <g:south size="40">
