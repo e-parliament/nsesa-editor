@@ -9,6 +9,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
@@ -48,6 +50,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
     private final ContentController contentController;
     private final ActionBarController actionBarController;
     private final Locator locator;
+    private final EventBus documentEventBus;
 
     private final AmendmentManager amendmentManager;
 
@@ -64,7 +67,8 @@ public class DocumentController extends Composite implements AmendableWidgetList
                               final ActionBarController actionBarController,
                               final OverlayStrategy overlayStrategy,
                               final Locator locator,
-                              final AmendmentManager amendmentManager) {
+                              final AmendmentManager amendmentManager,
+                              @Named("documentEventBus") final EventBus documentEventBus) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
@@ -78,11 +82,18 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.amendmentManager = amendmentManager;
         this.overlayStrategy = overlayStrategy;
         this.locator = locator;
+        this.documentEventBus = documentEventBus;
 
         // set references in the child controllers
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
+
+        // set up a private event bus
+        this.markerController.setDocumentEventBus(documentEventBus);
+        this.contentController.setDocumentEventBus(documentEventBus);
+        this.documentHeaderController.setDocumentEventBus(documentEventBus);
+        this.actionBarController.setDocumentEventBus(documentEventBus);
 
         registerListeners();
 
@@ -99,16 +110,14 @@ public class DocumentController extends Composite implements AmendableWidgetList
         contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
+                documentEventBus.fireEvent(new DocumentScrollEvent(DocumentController.this));
             }
         });
 
-        clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
+        documentEventBus.addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
-                if (event.getDocumentController() == DocumentController.this) {
-                    scrollTo(event.getTarget());
-                }
+                scrollTo(event.getTarget());
             }
         });
     }

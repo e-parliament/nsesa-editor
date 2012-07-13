@@ -5,6 +5,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
@@ -27,6 +28,8 @@ public class MarkerController extends Composite {
 
     private final ClientFactory clientFactory;
 
+    private EventBus documentEventBus;
+
     private Timer timer;
 
     @Inject
@@ -36,21 +39,25 @@ public class MarkerController extends Composite {
         this.clientFactory = clientFactory;
         this.view = view;
 
-        registerListeners();
+        registerGlobalListeners();
     }
 
-    private void registerListeners() {
-        clientFactory.getEventBus().addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                // todo: only draw this if he amendment is injected into this document
-                drawAmendmentController(event.getAmendmentController());
-            }
-        });
+    private void registerGlobalListeners() {
         clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 view.asWidget().setHeight((event.getHeight() - 30) + "px");
+            }
+        });
+    }
+
+    private void registerPrivateListeners() {
+        assert documentEventBus != null;
+        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerInjectedEvent event) {
+                // todo: only draw this if he amendment is injected into this document
+                drawAmendmentController(event.getAmendmentController());
             }
         });
     }
@@ -83,5 +90,10 @@ public class MarkerController extends Composite {
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    public void setDocumentEventBus(EventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
+        registerPrivateListeners();
     }
 }

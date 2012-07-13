@@ -14,6 +14,8 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEv
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
+import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentBundleController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentMoveController;
@@ -108,9 +110,15 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 show();
             }
         });
+        clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
+            @Override
+            public void onEvent(CloseDialogEvent event) {
+                hide();
+            }
+        });
     }
 
-    protected AmendmentUIHandler getHandler() {
+    protected AmendmentUIHandler getUIHandler() {
         if (amendmentAction == AmendmentAction.MOVE) {
             return amendmentMoveController;
         }
@@ -127,16 +135,12 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     private void handle() {
-        AmendmentUIHandler amendmentUIHandler = getHandler();
+        AmendmentUIHandler amendmentUIHandler = getUIHandler();
         this.view.getMainPanel().add(amendmentUIHandler.getView());
 
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
         amendmentUIHandler.setAmendableWidget(amendableWidget);
         amendmentUIHandler.setAmendment(amendment);
-    }
-
-    private void hideAll() {
-        view.getMainPanel().clear();
     }
 
     /**

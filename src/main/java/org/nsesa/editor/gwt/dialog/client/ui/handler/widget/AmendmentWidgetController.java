@@ -1,11 +1,14 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.widget;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 
 /**
@@ -36,7 +39,12 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
     }
 
     private void registerListeners() {
-
+        view.getCancelButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+            }
+        });
     }
 
     public AmendmentWidgetView getView() {

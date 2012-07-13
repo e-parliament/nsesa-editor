@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -21,22 +22,26 @@ import java.util.ArrayList;
 public class DocumentHeaderController extends Composite {
 
     private final DocumentHeaderView view;
-    private final EventBus eventBus;
+    private final ClientFactory clientFactory;
+    private EventBus documentEventBus;
     private DocumentController documentController;
 
     private ArrayList<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
 
     @Inject
-    public DocumentHeaderController(final EventBus eventBus, final DocumentHeaderView view) {
-        assert eventBus != null : "EventBus not set in constructor --BUG";
+    public DocumentHeaderController(final ClientFactory clientFactory, final DocumentHeaderView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
-        this.eventBus = eventBus;
-        registerListeners();
+        this.clientFactory = clientFactory;
+        registerGlobalListeners();
     }
 
-    private void registerListeners() {
+    private void registerGlobalListeners() {
+
+    }
+
+    private void registerPrivateListeners() {
         final HasChangeHandlers listBox = view.getTranslationsListBox();
         listBox.addChangeHandler(new ChangeHandler() {
             @Override
@@ -54,7 +59,7 @@ public class DocumentHeaderController extends Composite {
                     }
                     documentController.setDocument(document);
                     // fire an update to get the new content
-                    eventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
+                    clientFactory.getEventBus().fireEvent(new DocumentRefreshRequestEvent(documentController));
                 }
             }
         });
@@ -88,5 +93,10 @@ public class DocumentHeaderController extends Composite {
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    public void setDocumentEventBus(EventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
+        registerPrivateListeners();
     }
 }

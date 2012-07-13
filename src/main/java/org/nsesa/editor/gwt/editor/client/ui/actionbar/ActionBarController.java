@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
@@ -25,6 +26,7 @@ public class ActionBarController extends Composite {
     private final ActionBarViewCss actionBarViewCss;
 
     private final ClientFactory clientFactory;
+    private EventBus documentEventBus;
 
     private AmendableWidget amendableWidget;
 
@@ -46,8 +48,10 @@ public class ActionBarController extends Composite {
                 }
             }
         });
+    }
 
-        clientFactory.getEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+    private void registerPrivateListeners() {
+        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
                 view.asWidget().setVisible(false);
@@ -129,5 +133,10 @@ public class ActionBarController extends Composite {
 
     public AmendableWidget getAmendableWidget() {
         return amendableWidget;
+    }
+
+    public void setDocumentEventBus(EventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
+        registerPrivateListeners();
     }
 }

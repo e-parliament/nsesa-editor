@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -23,14 +24,16 @@ public class ContentController extends Composite {
 
     private ContentView view;
     private DocumentController documentController;
+    private EventBus documentEventBus;
+    private final ClientFactory clientFactory;
     private boolean contentLoaded;
 
     @Inject
-    public ContentController(final EventBus eventBus, final ContentView view) {
-        assert eventBus != null : "EventBus not set in constructor --BUG";
+    public ContentController(final ClientFactory clientFactory, final ContentView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
+        this.clientFactory = clientFactory;
         registerListeners();
     }
 
@@ -41,6 +44,10 @@ public class ContentController extends Composite {
 
             }
         });
+    }
+
+    private void registerPrivateListeners() {
+
     }
 
     public ContentView getView() {
@@ -87,5 +94,10 @@ public class ContentController extends Composite {
      */
     public void scrollTo(final Widget widget) {
         view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop());
+    }
+
+    public void setDocumentEventBus(EventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
+        registerPrivateListeners();
     }
 }
