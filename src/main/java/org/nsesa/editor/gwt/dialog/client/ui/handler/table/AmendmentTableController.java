@@ -47,25 +47,16 @@ public class AmendmentTableController extends Composite implements ProvidesResiz
         });
     }
 
+    @Override
     public AmendmentTableView getView() {
         return view;
     }
 
-    public AmendmentContainerDTO getAmendment() {
-        return amendment;
-    }
-
     @Override
-    public void setAmendment(AmendmentContainerDTO amendment) {
+    public void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
+        assert amendment != null : "Amendment should not be null.";
+        assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
-    }
-
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
-    }
-
-    @Override
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
         this.amendableWidget = amendableWidget;
     }
 }

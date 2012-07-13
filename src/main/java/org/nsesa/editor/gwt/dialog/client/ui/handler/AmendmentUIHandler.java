@@ -11,9 +11,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  * @version $Id$
  */
 public interface AmendmentUIHandler {
-    void setAmendment(AmendmentContainerDTO amendment);
-
-    void setAmendableWidget(AmendableWidget amendableWidget);
+    void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
 
     IsWidget getView();
 }

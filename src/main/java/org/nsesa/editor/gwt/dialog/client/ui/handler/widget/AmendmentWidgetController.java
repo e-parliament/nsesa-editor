@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -27,14 +28,18 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
 
     private final AmendmentWidgetView view;
 
+    private final Locator locator;
+
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
 
     @Inject
-    public AmendmentWidgetController(final ClientFactory clientFactory, final AmendmentWidgetView view) {
+    public AmendmentWidgetController(final ClientFactory clientFactory, final AmendmentWidgetView view,
+                                     final Locator locator) {
         this.clientFactory = clientFactory;
         this.view = view;
+        this.locator = locator;
         registerListeners();
     }
 
@@ -47,25 +52,16 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
         });
     }
 
+    @Override
     public AmendmentWidgetView getView() {
         return view;
     }
 
-    public AmendmentContainerDTO getAmendment() {
-        return amendment;
-    }
-
     @Override
-    public void setAmendment(AmendmentContainerDTO amendment) {
+    public void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
+        assert amendment != null : "Amendment should not be null.";
+        assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
-    }
-
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
-    }
-
-    @Override
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
         this.amendableWidget = amendableWidget;
     }
 }

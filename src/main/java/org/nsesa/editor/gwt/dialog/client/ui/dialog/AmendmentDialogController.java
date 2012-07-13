@@ -136,11 +136,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     private void handle() {
         AmendmentUIHandler amendmentUIHandler = getUIHandler();
-        this.view.getMainPanel().add(amendmentUIHandler.getView());
 
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
-        amendmentUIHandler.setAmendableWidget(amendableWidget);
-        amendmentUIHandler.setAmendment(amendment);
+        amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
+
+        this.view.getMainPanel().add(amendmentUIHandler.getView());
     }
 
     /**
