@@ -1,10 +1,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
@@ -137,10 +134,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private void handle() {
         AmendmentUIHandler amendmentUIHandler = getUIHandler();
 
-        view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
-        amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
+        final int widgetCount = this.view.getMainPanel().getWidgetCount();
+        if (widgetCount > 0) {
+            final Widget previous = this.view.getMainPanel().getWidget(0);
+            if (previous != null) {
+                previous.removeFromParent();
+            }
+        }
 
         this.view.getMainPanel().add(amendmentUIHandler.getView());
+        view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
+
+        amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
+
     }
 
     /**

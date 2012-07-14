@@ -25,7 +25,9 @@ public class ClientContext implements Serializable, IsSerializable {
 
     private String sessionID;
 
-    private String languageIso;
+    private String languageIso = "EN";
+
+    private String documentIso = "EN";
 
     public ClientContext() {
 
@@ -93,5 +95,13 @@ public class ClientContext implements Serializable, IsSerializable {
 
     public void setLanguageIso(String languageIso) {
         this.languageIso = languageIso;
+    }
+
+    public String getDocumentIso() {
+        return documentIso;
+    }
+
+    public void setDocumentIso(String documentIso) {
+        this.documentIso = documentIso;
     }
 }

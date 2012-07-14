@@ -19,4 +19,5 @@ public class AmendmentUtil {
         amendableWidget.setParentAmendableWidget(parent);
         return amendableWidget;
     }
+
 }

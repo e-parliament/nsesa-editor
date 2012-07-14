@@ -373,7 +373,7 @@ public class OverlayStrategySupport {
     public final Element getElementByTag(Element element, final String tag) {
         for (int i = 0; i < element.getChildCount(); i++) {
             final Node node = element.getChild(i);
-            if (node.getNodeName().equals(tag)) {
+            if (node.getNodeName().equalsIgnoreCase(tag)) {
                 return node.cast();
             }
         }

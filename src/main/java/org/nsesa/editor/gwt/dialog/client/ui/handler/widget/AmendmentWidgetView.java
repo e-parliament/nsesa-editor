@@ -12,6 +12,12 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface AmendmentWidgetView extends IsWidget {
 
+    void setTitle(String title);
+
+    void setOriginalContent(String originalContent);
+
+    void setAmendmentContent(String amendmentContent);
+
     HasClickHandlers getSaveButton();
 
     HasClickHandlers getCancelButton();

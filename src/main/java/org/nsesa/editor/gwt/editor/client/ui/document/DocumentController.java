@@ -175,6 +175,11 @@ public class DocumentController extends Composite implements AmendableWidgetList
         amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
         amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
 
+        if (amendableWidget.isAmendable()) {
+            amendableWidget.setContent(overlayStrategy.getContent(element));
+            amendableWidget.setHeading(overlayStrategy.getHeading(element));
+        }
+
         // attach all children (note, this is a recursive call)
         final Element[] children = overlayStrategy.getChildren(element);
         for (final Element child : children) {

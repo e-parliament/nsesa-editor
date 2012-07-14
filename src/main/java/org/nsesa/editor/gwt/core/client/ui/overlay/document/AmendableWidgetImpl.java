@@ -57,6 +57,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      */
     private Boolean immutable;
 
+    private String amendableContent;
+
+    private String amendableTitle;
+
     /**
      * The assigned index: this is used to determine the location in case the index is not sufficient to uniquely
      * identify this widget (eg. in case of indents, bullet points ...)
@@ -156,6 +160,26 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public String getId() {
         return amendableElement.getId();
+    }
+
+    @Override
+    public String getContent() {
+        return amendableContent;
+    }
+
+    @Override
+    public String getHeading() {
+        return amendableTitle;
+    }
+
+    @Override
+    public void setContent(String amendableContent) {
+        this.amendableContent = amendableContent;
+    }
+
+    @Override
+    public void setHeading(String amendableTitle) {
+        this.amendableTitle = amendableTitle;
     }
 
     @Override

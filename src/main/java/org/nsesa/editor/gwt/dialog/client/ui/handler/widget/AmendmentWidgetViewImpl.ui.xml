@@ -5,7 +5,7 @@
         .header {
             width: 100%;
             height: 25px;
-            font-size: 1.5em;
+            font-size: 1.2em;
         }
 
         .footer {
@@ -14,29 +14,37 @@
             height: 25px;
         }
 
-        .original {
+        .originalPanel {
 
         }
 
-        .authors {
+        .originalContent {
 
         }
 
-        .additional {
+        .authorsPanel {
 
         }
 
-        .footNotes {
+        .additionalPanel {
 
         }
 
-        .amendment {
+        .footNotesPanel {
+
+        }
+
+        .amendmentPanel {
+
+        }
+
+        .amendmentContent {
 
         }
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
-        <g:north size='40'>
-            <g:HTML styleName="{res.header}">HEADER</g:HTML>
+        <g:north size='20'>
+            <g:HTML styleName="{res.header}" ui:field="title">HEADER</g:HTML>
         </g:north>
         <g:center>
             <g:DockLayoutPanel unit="PCT">
@@ -44,25 +52,27 @@
                     <g:TabLayoutPanel barHeight="40" barUnit="PX">
                         <g:tab>
                             <g:header>Original</g:header>
-                            <g:HTMLPanel styleName="{res.original}">
-                                <h1>Original</h1>
+                            <g:HTMLPanel styleName="{res.originalPanel}">
+                                <g:HTMLPanel styleName="{res.originalContent}" ui:field="originalContent">
+
+                                </g:HTMLPanel>
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>Authors</g:header>
-                            <g:HTMLPanel styleName="{res.authors}">
+                            <g:HTMLPanel styleName="{res.authorsPanel}">
                                 <h1>Authors</h1>
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>Footnotes</g:header>
-                            <g:HTMLPanel styleName="{res.footNotes}">
+                            <g:HTMLPanel styleName="{res.footNotesPanel}">
                                 <h1>Footnotes</h1>
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
                             <g:header>Additional</g:header>
-                            <g:HTMLPanel styleName="{res.additional}">
+                            <g:HTMLPanel styleName="{res.additionalPanel}">
                                 <h1>Additional</h1>
                             </g:HTMLPanel>
                         </g:tab>
@@ -72,8 +82,10 @@
                     <g:TabLayoutPanel barHeight="40" barUnit="PX">
                         <g:tab>
                             <g:header>Amendment</g:header>
-                            <g:HTMLPanel styleName="{res.amendment}">
-                                <h1>Amendment</h1>
+                            <g:HTMLPanel styleName="{res.amendmentPanel}">
+                                <g:HTMLPanel styleName="{res.amendmentContent}" ui:field="amendmentContent">
+
+                                </g:HTMLPanel>
                             </g:HTMLPanel>
                         </g:tab>
                     </g:TabLayoutPanel>

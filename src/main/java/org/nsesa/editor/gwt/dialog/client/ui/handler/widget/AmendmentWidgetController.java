@@ -59,9 +59,17 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
 
     @Override
     public void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
-        assert amendment != null : "Amendment should not be null.";
-        assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
+
+        if (amendableWidget != null) {
+            view.setTitle(locator.getLocation(amendableWidget, clientFactory.getClientContext().getDocumentIso(), false));
+            view.setOriginalContent(amendableWidget.getContent());
+            view.setAmendmentContent(amendableWidget.getContent());
+        } else if (amendment != null) {
+            // TODO edit the amendment
+        } else {
+            throw new NullPointerException("Neither amendment nor amendable widget are set.");
+        }
     }
 }
