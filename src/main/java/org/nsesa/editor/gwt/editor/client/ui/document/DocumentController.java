@@ -272,7 +272,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     public void injectAmendments() {
         for (final AmendableWidget root : amendableWidgets) {
-            amendmentManager.inject(root);
+            amendmentManager.inject(root, documentEventBus);
         }
     }
 

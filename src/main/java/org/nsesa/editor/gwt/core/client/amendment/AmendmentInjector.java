@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.amendment;
 
+import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
@@ -14,4 +15,8 @@ public interface AmendmentInjector {
     void inject(AmendableWidget root);
 
     void inject(AmendmentContainerDTO amendment, AmendableWidget root);
+
+    void inject(AmendableWidget root, EventBus eventBus);
+
+    void inject(AmendmentContainerDTO amendment, AmendableWidget root, EventBus eventBus);
 }

@@ -56,7 +56,6 @@ public class MarkerController extends Composite {
         documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
-                // todo: only draw this if he amendment is injected into this document
                 drawAmendmentController(event.getAmendmentController());
             }
         });
