@@ -15,6 +15,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
@@ -49,6 +50,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
     private final DocumentHeaderController documentHeaderController;
     private final ContentController contentController;
     private final ActionBarController actionBarController;
+    private final DeadlineController deadlineController;
     private final Locator locator;
     private final EventBus documentEventBus;
 
@@ -65,6 +67,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
                               final ContentController contentController,
                               final DocumentHeaderController documentHeaderController,
                               final ActionBarController actionBarController,
+                              final DeadlineController deadlineController,
                               final OverlayStrategy overlayStrategy,
                               final Locator locator,
                               final AmendmentManager amendmentManager,
@@ -79,6 +82,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.contentController = contentController;
         this.documentHeaderController = documentHeaderController;
         this.actionBarController = actionBarController;
+        this.deadlineController = deadlineController;
         this.amendmentManager = amendmentManager;
         this.overlayStrategy = overlayStrategy;
         this.locator = locator;

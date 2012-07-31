@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.core.shared;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Date: 26/06/12 19:15
@@ -16,6 +17,8 @@ public class DocumentDTO implements IsSerializable, Serializable {
     private String name;
     private String languageIso;
     private boolean amendable;
+
+    private Date deadline;
 
     public DocumentDTO() {
     }
@@ -72,5 +75,13 @@ public class DocumentDTO implements IsSerializable, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
     }
 }
