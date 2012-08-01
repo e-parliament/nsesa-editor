@@ -12,6 +12,5 @@ import com.google.gwt.inject.client.binder.GinBinder;
 public class DocumentHeaderModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
-        binder.bind(DocumentHeaderView.class).to(DocumentHeaderViewImpl.class);
     }
 }

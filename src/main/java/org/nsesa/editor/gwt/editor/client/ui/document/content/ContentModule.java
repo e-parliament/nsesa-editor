@@ -12,6 +12,5 @@ import com.google.gwt.inject.client.binder.GinBinder;
 public class ContentModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
-        binder.bind(ContentView.class).to(ContentViewImpl.class);
     }
 }

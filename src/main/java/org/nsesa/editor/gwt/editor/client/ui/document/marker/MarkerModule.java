@@ -12,6 +12,5 @@ import com.google.gwt.inject.client.binder.GinBinder;
 public class MarkerModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
-        binder.bind(MarkerView.class).to(MarkerViewImpl.class);
     }
 }

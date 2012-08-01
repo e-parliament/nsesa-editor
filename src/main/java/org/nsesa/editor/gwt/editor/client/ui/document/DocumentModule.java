@@ -6,11 +6,7 @@ import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
-import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineModule;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
-import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentModule;
-import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderModule;
-import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -22,11 +18,6 @@ public class DocumentModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
-        install(new ContentModule());
-        install(new MarkerModule());
-        install(new DocumentHeaderModule());
-        install(new DeadlineModule());
-        bind(DocumentView.class).to(DocumentViewImpl.class);
         bind(AmendableWidgetListener.class).to(DocumentController.class);
         bind(EventBus.class).annotatedWith(Names.named("documentEventBus")).to(SimpleEventBus.class);
     }

@@ -4,7 +4,6 @@ import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 /**
  * Date: 24/06/12 15:11
@@ -15,7 +14,6 @@ import com.google.inject.Singleton;
 public class ActionBarModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
-        binder.bind(ActionBarView.class).to(ActionBarViewImpl.class).in(Singleton.class);
     }
 
     @Inject
