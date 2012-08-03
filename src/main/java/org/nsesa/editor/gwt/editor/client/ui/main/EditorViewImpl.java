@@ -42,4 +42,8 @@ public class EditorViewImpl extends Composite implements EditorView {
     public CellPanel getDocumentsPanel() {
         return documentsPanel;
     }
+
+    public void switchToTab(int index) {
+        tabPanel.selectTab(index);
+    }
 }

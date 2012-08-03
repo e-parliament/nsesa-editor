@@ -13,4 +13,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(EditorViewImpl.class)
 public interface EditorView extends IsWidget {
     CellPanel getDocumentsPanel();
+
+    void switchToTab(int index);
 }
