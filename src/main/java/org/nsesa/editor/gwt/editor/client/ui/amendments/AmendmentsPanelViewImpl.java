@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.header;
+package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -13,13 +13,13 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
-public class HeaderViewImpl extends Composite implements HeaderView {
-    interface MyUiBinder extends UiBinder<Widget, HeaderViewImpl> {
+public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPanelView {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    public HeaderViewImpl() {
+    public AmendmentsPanelViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }

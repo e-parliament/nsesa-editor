@@ -8,8 +8,10 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
 import org.nsesa.editor.gwt.editor.client.module.EPModule;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
+import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -25,6 +27,8 @@ public class EditorModule extends AbstractGinModule {
         install(new HeaderModule());
         install(new FooterModule());
         install(new AmendmentModule());
+        install(new AmendmentsPanelModule());
+        install(new InfoPanelModule());
         install(new AmendmentDialogModule());
 
         install(new EPModule());

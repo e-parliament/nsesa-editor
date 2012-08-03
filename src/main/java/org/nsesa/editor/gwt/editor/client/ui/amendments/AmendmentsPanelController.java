@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.header;
+package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.inject.Singleton;
 
@@ -9,11 +9,11 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
-public class HeaderController {
-    private HeaderView view;
+public class AmendmentsPanelController {
+    private AmendmentsPanelView view;
 
 
-    public HeaderView getView() {
+    public AmendmentsPanelView getView() {
         return view;
     }
 }

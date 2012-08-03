@@ -3,12 +3,10 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.CellPanel;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
 
 /**
  * Date: 24/06/12 16:39
@@ -23,11 +21,19 @@ public class EditorViewImpl extends Composite implements EditorView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    private final ClientFactory clientFactory;
+
     @UiField
     HorizontalPanel documentsPanel;
+    @UiField(provided = true)
+    HeaderView headerView;
+    @UiField
+    TabLayoutPanel tabPanel;
 
     @Inject
-    public EditorViewImpl(final EventBus eventBus) {
+    public EditorViewImpl(final ClientFactory clientFactory, final HeaderView headerView) {
+        this.clientFactory = clientFactory;
+        this.headerView = headerView;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }

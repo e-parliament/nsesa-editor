@@ -3,6 +3,6 @@
     <ui:style src="HeaderViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.header.HeaderViewCss'/>
 
     <g:HTMLPanel>
-        <div id="header">Footer</div>
+        <div id="header">My Fancy Header</div>
     </g:HTMLPanel>
 </ui:UiBinder>
