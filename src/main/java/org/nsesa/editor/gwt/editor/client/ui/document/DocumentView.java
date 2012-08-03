@@ -13,4 +13,6 @@ import com.google.inject.ImplementedBy;
 public interface DocumentView extends IsWidget {
 
     void setWidth(String width);
+
+    void setStyleName(String style);
 }
