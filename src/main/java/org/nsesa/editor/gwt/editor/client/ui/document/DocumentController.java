@@ -129,6 +129,9 @@ public class DocumentController implements AmendableWidgetListener {
         // update the header
         this.documentHeaderController.setDocumentName(document.getName());
 
+        // set the deadline
+        this.deadlineController.setDeadline(document.getDeadline());
+
         serviceFactory.getGwtDocumentService().getAvailableTranslations(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<ArrayList<DocumentDTO>>() {
             @Override
             public void onFailure(Throwable caught) {

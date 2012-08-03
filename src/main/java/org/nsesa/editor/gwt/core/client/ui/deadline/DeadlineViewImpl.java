@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Date: 24/06/12 21:44
@@ -14,6 +15,7 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class DeadlineViewImpl extends Composite implements DeadlineView {
 
     interface MyUiBinder extends UiBinder<Widget, DeadlineViewImpl> {

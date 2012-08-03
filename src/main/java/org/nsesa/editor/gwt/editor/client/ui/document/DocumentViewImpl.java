@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentView;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerView;
@@ -32,14 +33,19 @@ public class DocumentViewImpl extends Composite implements DocumentView {
     final MarkerView markerView;
     @UiField(provided = true)
     final DocumentHeaderView documentHeaderView;
+    @UiField(provided = true)
+    DeadlineView deadlineView;
 
     @Inject
-    public DocumentViewImpl(final ClientFactory clientFactory, final ContentView contentView, final MarkerView markerView, final DocumentHeaderView documentHeaderView) {
+    public DocumentViewImpl(final ClientFactory clientFactory, final ContentView contentView,
+                            final MarkerView markerView, final DocumentHeaderView documentHeaderView,
+                            final DeadlineView deadlineView) {
 
         this.clientFactory = clientFactory;
         this.contentView = contentView;
         this.markerView = markerView;
         this.documentHeaderView = documentHeaderView;
+        this.deadlineView = deadlineView;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);

@@ -2,30 +2,54 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:marker='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.marker'
              xmlns:content='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.content'
-             xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.header'>
+             xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.header'
+             xmlns:deadline='urn:import:org.nsesa.editor.gwt.core.client.ui.deadline'>
     <ui:style src="DocumentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.DocumentViewCss'/>
     <ui:style field="res">
-        .documentPanel {
-        }
-
-        .contentPanel {
+        .document {
             width: 100%;
         }
 
-        .documentHeaderPanel {
-
+        .content {
+            width: 100%;
         }
 
-        .markerPanel {
+        .deadline {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            padding-left: 5px;
+            padding-right: 5px;
+            top: 40px;
+            max-width: 350px;
+            height: 20px;
+            background-color: #dcdcdc;
+            color: #fff;
+            font-weight: bold;
+            z-index: 3;
+            text-align: center;
+        }
+
+        .documentHeader {
+            width: 100%;
+            padding: 5px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-top: clear;
+        }
+
+        .marker {
             width: 25px;
         }
     </ui:style>
     <g:HTMLPanel>
-        <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeaderPanel}"/>
-        <g:HorizontalPanel styleName="{res.documentPanel}">
-            <content:ContentView ui:field="contentView" styleName="{res.contentPanel}"/>
-            <marker:MarkerView ui:field="markerView" styleName="{res.markerPanel}"/>
+        <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeader}"/>
+        <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
+        <g:HorizontalPanel styleName="{res.document}">
+            <content:ContentView ui:field="contentView" styleName="{res.content}"/>
+            <marker:MarkerView ui:field="markerView" styleName="{res.marker}"/>
         </g:HorizontalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

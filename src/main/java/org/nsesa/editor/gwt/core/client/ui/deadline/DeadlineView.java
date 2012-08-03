@@ -19,4 +19,6 @@ public interface DeadlineView extends IsWidget {
     void set24HourStyle();
 
     void set1HourStyle();
+
+    void setStyleName(String style);
 }

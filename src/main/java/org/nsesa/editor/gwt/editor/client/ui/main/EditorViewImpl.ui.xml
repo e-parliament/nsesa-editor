@@ -3,17 +3,23 @@
     <ui:style src="EditorViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.main.EditorViewCss'/>
 
     <ui:style field="res">
-        .documentsPanel {
+        .header {
+            height: 100%;
+            width: 100%;
+            background-color: #dc143c;
+            z-index: 2;
+        }
 
+        .documentsPanel {
+            width: 100%;
+            height: 100%;
         }
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
         <g:north size='40'>
-            <g:HTML>HEADER</g:HTML>
+            <g:HTML styleName="{res.header}">HEADER</g:HTML>
         </g:north>
-
-
         <g:center>
             <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
         </g:center>

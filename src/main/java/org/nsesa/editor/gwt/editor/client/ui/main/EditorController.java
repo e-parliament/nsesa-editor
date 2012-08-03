@@ -8,10 +8,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
-import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
-import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
-import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
@@ -138,6 +135,8 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
             @Override
             public void onSuccess(DocumentDTO document) {
                 documentController.setDocument(document);
+                final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
+                clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
                 fetchContent(documentController);
             }
         });
