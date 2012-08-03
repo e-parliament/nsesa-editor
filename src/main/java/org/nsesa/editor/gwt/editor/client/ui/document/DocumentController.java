@@ -13,6 +13,8 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
@@ -91,9 +93,6 @@ public class DocumentController implements AmendableWidgetListener {
         this.documentHeaderController.setDocumentController(this);
 
         // set up a private event bus
-        this.markerController.setDocumentEventBus(documentEventBus);
-        this.contentController.setDocumentEventBus(documentEventBus);
-        this.documentHeaderController.setDocumentEventBus(documentEventBus);
         this.actionBarController.setDocumentEventBus(documentEventBus);
 
         registerListeners();
@@ -111,6 +110,14 @@ public class DocumentController implements AmendableWidgetListener {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
                 scrollTo(event.getTarget());
+            }
+        });
+
+        // forward the resize event
+        clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                documentEventBus.fireEvent(event);
             }
         });
     }

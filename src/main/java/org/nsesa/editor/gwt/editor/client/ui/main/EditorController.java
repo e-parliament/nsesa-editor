@@ -154,8 +154,9 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
             @Override
             public void onSuccess(final String content) {
                 documentController.setContent(content);
-//                documentController.wrapContent();
-                //              documentController.injectAmendments();
+                documentController.wrapContent();
+                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+                documentController.injectAmendments();
             }
         });
     }
@@ -170,8 +171,6 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
     }
 
     protected void doLayout() {
-        clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
-
         // There seems to be no other way to dynamically set the width of the children
         // for an evenly distributed width
         for (final DocumentController d : documentControllers) {

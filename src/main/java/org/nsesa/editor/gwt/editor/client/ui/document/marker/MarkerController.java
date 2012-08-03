@@ -6,7 +6,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
@@ -27,34 +26,28 @@ public class MarkerController {
 
     private DocumentController documentController;
 
-    private final ClientFactory clientFactory;
-
-    private EventBus documentEventBus;
+    private EventBus eventBus;
 
     private Timer timer;
 
     @Inject
-    public MarkerController(final ClientFactory clientFactory, final MarkerView view) {
+    public MarkerController(final EventBus eventBus, final MarkerView view) {
         assert view != null : "View is not set --BUG";
 
-        this.clientFactory = clientFactory;
+        this.eventBus = eventBus;
         this.view = view;
 
-        registerGlobalListeners();
+        registerListeners();
     }
 
-    private void registerGlobalListeners() {
-        clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+    private void registerListeners() {
+        eventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 view.asWidget().setHeight((event.getHeight() - 30) + "px");
             }
         });
-    }
-
-    private void registerPrivateListeners() {
-        assert documentEventBus != null;
-        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        eventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 drawAmendmentController(event.getAmendmentController());
@@ -90,10 +83,5 @@ public class MarkerController {
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
-    }
-
-    public void setDocumentEventBus(EventBus documentEventBus) {
-        this.documentEventBus = documentEventBus;
-        registerPrivateListeners();
     }
 }

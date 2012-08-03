@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -23,26 +22,21 @@ import java.util.ArrayList;
 public class DocumentHeaderController {
 
     private final DocumentHeaderView view;
-    private final ClientFactory clientFactory;
-    private EventBus documentEventBus;
+    private EventBus eventBus;
     private DocumentController documentController;
 
     private ArrayList<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
 
     @Inject
-    public DocumentHeaderController(final ClientFactory clientFactory, final DocumentHeaderView view) {
+    public DocumentHeaderController(final EventBus eventBus, final DocumentHeaderView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
-        this.clientFactory = clientFactory;
-        registerGlobalListeners();
+        this.eventBus = eventBus;
+        registerListeners();
     }
 
-    private void registerGlobalListeners() {
-
-    }
-
-    private void registerPrivateListeners() {
+    private void registerListeners() {
         final HasChangeHandlers listBox = view.getTranslationsListBox();
         listBox.addChangeHandler(new ChangeHandler() {
             @Override
@@ -60,7 +54,7 @@ public class DocumentHeaderController {
                     }
                     documentController.setDocument(document);
                     // fire an update to get the new content
-                    clientFactory.getEventBus().fireEvent(new DocumentRefreshRequestEvent(documentController));
+                    eventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
                 }
             }
         });
@@ -94,10 +88,5 @@ public class DocumentHeaderController {
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
-    }
-
-    public void setDocumentEventBus(EventBus documentEventBus) {
-        this.documentEventBus = documentEventBus;
-        registerPrivateListeners();
     }
 }

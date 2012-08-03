@@ -29,16 +29,19 @@ public class CoreModule implements GinModule {
         binder.bind(ClientContext.class).toProvider(DefaultClientContextProvider.class).in(Singleton.class);
     }
 
+    @Singleton
     @Provides
     EventBus getEventBus() {
         return new SimpleEventBus();
     }
 
+    @Singleton
     @Provides
     Scheduler getScheduler() {
         return Scheduler.get();
     }
 
+    @Singleton
     @Provides
     @Inject
     PlaceController getPlaceController(final EventBus eventBus) {
