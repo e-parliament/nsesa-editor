@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
@@ -19,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class ContentViewImpl extends Composite implements ContentView {
 
     interface MyUiBinder extends UiBinder<Widget, ContentViewImpl> {

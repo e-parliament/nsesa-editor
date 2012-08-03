@@ -25,4 +25,6 @@ public interface DocumentHeaderView extends IsWidget {
     String getSelectedDocumentID();
 
     void setSelectedTranslation(DocumentDTO selectedTranslation);
+
+    void setStyleName(String style);
 }

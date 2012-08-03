@@ -3,7 +3,6 @@ package org.nsesa.editor.gwt.editor.client.ui.actionbar;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -20,7 +19,7 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHand
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ActionBarController extends Composite {
+public class ActionBarController {
 
     private final ActionBarView view;
     private final ActionBarViewCss actionBarViewCss;

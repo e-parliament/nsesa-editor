@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderView {
 
     interface MyUiBinder extends UiBinder<Widget, DocumentHeaderViewImpl> {

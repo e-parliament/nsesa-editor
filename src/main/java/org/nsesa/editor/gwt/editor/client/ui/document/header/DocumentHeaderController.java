@@ -3,8 +3,8 @@ package org.nsesa.editor.gwt.editor.client.ui.document.header;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
@@ -19,7 +19,8 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentHeaderController extends Composite {
+@Singleton
+public class DocumentHeaderController {
 
     private final DocumentHeaderView view;
     private final ClientFactory clientFactory;

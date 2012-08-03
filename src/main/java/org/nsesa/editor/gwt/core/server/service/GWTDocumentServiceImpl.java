@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
         document.setAmendable(true);
         document.setName("Document " + documentID);
         document.setLanguageIso("EN");
+        document.setDeadline(new Date(new Date().getTime() + (60 * 60 * 1000)));
         return document;
     }
 

@@ -4,7 +4,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CellPanel;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class EditorController extends Composite implements BootstrapEventHandler, DocumentRefreshRequestEventHandler {
+public class EditorController implements BootstrapEventHandler, DocumentRefreshRequestEventHandler {
 
     private final EditorView view;
     private final ClientFactory clientFactory;
@@ -83,15 +82,9 @@ public class EditorController extends Composite implements BootstrapEventHandler
         fetchContent(event.getDocumentController());
     }
 
-    protected DocumentController addDocument(final DocumentDTO documentDTO) {
-        final DocumentController documentController = injector.getDocumentController();
-        documentController.setDocument(documentDTO);
-        return documentController;
-    }
-
-    public boolean addDocumentController(final DocumentController documentController, final boolean autoCreateView) {
+    public boolean addDocumentController(final DocumentController documentController) {
         boolean added = documentControllers.add(documentController);
-        if (added && autoCreateView) {
+        if (added) {
             final DocumentView documentControllerView = documentController.getView();
             view.getDocumentsPanel().add(documentControllerView);
             doLayout();
@@ -123,25 +116,28 @@ public class EditorController extends Composite implements BootstrapEventHandler
                 amendmentManager.setAmendmentContainerDTOs(result);
                 // after the amendments, retrieve the documents
                 for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
+
+                    final DocumentController documentController = injector.getDocumentController();
+                    documentController.setDocumentID(documentID);
+                    addDocumentController(documentController);
                     // request the amendment in the backend
-                    fetchDocument(documentID, true);
+                    fetchDocument(documentController);
                 }
             }
         });
     }
 
-    private void fetchDocument(final String documentID, final boolean autoCreateView) {
-        serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
+    private void fetchDocument(final DocumentController documentController) {
+        serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentController.getDocumentID(), new AsyncCallback<DocumentDTO>() {
             @Override
             public void onFailure(Throwable caught) {
-                final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
+                final String message = clientFactory.getCoreMessages().errorDocumentError(documentController.getDocumentID());
                 clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
             }
 
             @Override
             public void onSuccess(DocumentDTO document) {
-                final DocumentController documentController = addDocument(document);
-                addDocumentController(documentController, autoCreateView);
+                documentController.setDocument(document);
                 fetchContent(documentController);
             }
         });
@@ -156,10 +152,10 @@ public class EditorController extends Composite implements BootstrapEventHandler
             }
 
             @Override
-            public void onSuccess(String content) {
+            public void onSuccess(final String content) {
                 documentController.setContent(content);
-                documentController.wrapContent();
-                documentController.injectAmendments();
+//                documentController.wrapContent();
+                //              documentController.injectAmendments();
             }
         });
     }

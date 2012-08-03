@@ -18,4 +18,6 @@ public interface ContentView extends IsWidget {
     Element getContentElement();
 
     ScrollPanel getScrollPanel();
+
+    void setStyleName(String style);
 }

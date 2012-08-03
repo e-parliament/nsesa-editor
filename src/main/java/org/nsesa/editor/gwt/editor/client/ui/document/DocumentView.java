@@ -1,7 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -12,12 +11,6 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(DocumentViewImpl.class)
 public interface DocumentView extends IsWidget {
-
-    Panel getDocumentHeaderPanel();
-
-    Panel getContentPanel();
-
-    Panel getMarkerPanel();
 
     void setWidth(String width);
 }

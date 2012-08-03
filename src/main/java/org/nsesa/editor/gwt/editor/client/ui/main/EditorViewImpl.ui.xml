@@ -15,14 +15,7 @@
 
 
         <g:center>
-            <g:SplitLayoutPanel>
-                <g:south size='0'>
-                    <g:HTML>Console</g:HTML>
-                </g:south>
-                <g:center>
-                    <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
-                </g:center>
-            </g:SplitLayoutPanel>
+            <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
         </g:center>
     </g:DockLayoutPanel>
 </ui:UiBinder>

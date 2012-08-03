@@ -4,11 +4,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentView;
+import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderView;
+import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerView;
 
 /**
  * Date: 24/06/12 16:39
@@ -25,34 +26,22 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
     private final ClientFactory clientFactory;
 
-    @UiField
-    HTMLPanel contentPanel;
-    @UiField
-    HTMLPanel markerPanel;
-    @UiField
-    HTMLPanel documentHeaderPanel;
+    @UiField(provided = true)
+    final ContentView contentView;
+    @UiField(provided = true)
+    final MarkerView markerView;
+    @UiField(provided = true)
+    final DocumentHeaderView documentHeaderView;
 
     @Inject
-    public DocumentViewImpl(final ClientFactory clientFactory) {
+    public DocumentViewImpl(final ClientFactory clientFactory, final ContentView contentView, final MarkerView markerView, final DocumentHeaderView documentHeaderView) {
 
         this.clientFactory = clientFactory;
+        this.contentView = contentView;
+        this.markerView = markerView;
+        this.documentHeaderView = documentHeaderView;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-    }
-
-    @Override
-    public Panel getDocumentHeaderPanel() {
-        return documentHeaderPanel;
-    }
-
-    @Override
-    public Panel getContentPanel() {
-        return contentPanel;
-    }
-
-    @Override
-    public Panel getMarkerPanel() {
-        return markerPanel;
     }
 }

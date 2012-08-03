@@ -2,9 +2,9 @@ package org.nsesa.editor.gwt.editor.client.ui.document.marker;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
@@ -20,7 +20,8 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class MarkerController extends Composite {
+@Singleton
+public class MarkerController {
 
     private final MarkerView view;
 

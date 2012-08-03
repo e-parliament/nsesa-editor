@@ -1,15 +1,14 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
@@ -39,10 +38,13 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentController extends Composite implements AmendableWidgetListener {
+public class DocumentController implements AmendableWidgetListener {
+
+    private final DocumentInjector documentInjector = GWT.create(DocumentInjector.class);
 
     private DocumentView view;
     private DocumentDTO document;
+    private String documentID;
 
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
@@ -62,31 +64,26 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     @Inject
     public DocumentController(final ClientFactory clientFactory, final ServiceFactory serviceFactory,
-                              final DocumentView view,
-                              final MarkerController markerController,
-                              final ContentController contentController,
-                              final DocumentHeaderController documentHeaderController,
-                              final ActionBarController actionBarController,
-                              final DeadlineController deadlineController,
                               final OverlayStrategy overlayStrategy,
+                              final ActionBarController actionBarController,
                               final Locator locator,
-                              final AmendmentManager amendmentManager,
-                              @Named("documentEventBus") final EventBus documentEventBus) {
-        assert view != null : "View is not set --BUG";
+                              final AmendmentManager amendmentManager) {
 
-        this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-
-        this.markerController = markerController;
-        this.contentController = contentController;
-        this.documentHeaderController = documentHeaderController;
         this.actionBarController = actionBarController;
-        this.deadlineController = deadlineController;
+
         this.amendmentManager = amendmentManager;
         this.overlayStrategy = overlayStrategy;
         this.locator = locator;
-        this.documentEventBus = documentEventBus;
+
+        // set up via the document injector so they effectively become document-wide singletons
+        this.view = documentInjector.getDocumentView();
+        this.markerController = documentInjector.getMarkerController();
+        this.contentController = documentInjector.getContentController();
+        this.documentHeaderController = documentInjector.getDocumentHeaderController();
+        this.deadlineController = documentInjector.getDeadlineController();
+        this.documentEventBus = documentInjector.getEventBus();
 
         // set references in the child controllers
         this.markerController.setDocumentController(this);
@@ -100,14 +97,6 @@ public class DocumentController extends Composite implements AmendableWidgetList
         this.actionBarController.setDocumentEventBus(documentEventBus);
 
         registerListeners();
-
-        doLayout();
-    }
-
-    private void doLayout() {
-        view.getContentPanel().add(contentController.getView());
-        view.getMarkerPanel().add(markerController.getView());
-        view.getDocumentHeaderPanel().add(documentHeaderController.getView());
     }
 
     private void registerListeners() {
@@ -128,6 +117,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     public void setDocument(final DocumentDTO document) {
         this.document = document;
+        this.documentID = document.getDocumentID();
 
         // update the header
         this.documentHeaderController.setDocumentName(document.getName());
@@ -146,6 +136,7 @@ public class DocumentController extends Composite implements AmendableWidgetList
             }
         });
     }
+
 
     public void setContent(String documentContent) {
         contentController.setContent(documentContent);
@@ -200,15 +191,10 @@ public class DocumentController extends Composite implements AmendableWidgetList
         return amendableWidget;
     }
 
-    public String getDocumentID() {
-        return document.getDocumentID();
-    }
-
     public DocumentView getView() {
         return view;
     }
 
-    @Override
     public void setWidth(final String width) {
         view.setWidth(width);
     }
@@ -294,5 +280,13 @@ public class DocumentController extends Composite implements AmendableWidgetList
 
     public ActionBarController getActionBarController() {
         return actionBarController;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
+    }
+
+    public String getDocumentID() {
+        return documentID;
     }
 }

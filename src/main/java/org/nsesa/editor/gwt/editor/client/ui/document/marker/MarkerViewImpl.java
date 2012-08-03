@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 
 /**
@@ -19,6 +20,7 @@ import com.google.web.bindery.event.shared.EventBus;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class MarkerViewImpl extends Composite implements MarkerView {
 
     interface MyUiBinder extends UiBinder<Widget, MarkerViewImpl> {
