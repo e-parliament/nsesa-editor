@@ -20,4 +20,8 @@
     <source path="shared"/>
     <public path="public"/>
 
+    <!--<generate-with class="org.nsesa.editor.gwt.core.server.generator.GwtOverlayGenerator">-->
+    <!--<when-type-assignable class="org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory"/>-->
+    <!--</generate-with>-->
+
 </module>

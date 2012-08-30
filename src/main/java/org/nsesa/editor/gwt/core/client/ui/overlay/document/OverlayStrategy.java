@@ -81,14 +81,6 @@ public interface OverlayStrategy {
     Format getFormat(Element element);
 
     /**
-     * Get the heading.
-     *
-     * @param element the amendable element
-     * @return the heading, or <tt>null</tt> if it does not exist
-     */
-    String getHeading(Element element);
-
-    /**
      * Get the (amendable) content.
      *
      * @param element the element

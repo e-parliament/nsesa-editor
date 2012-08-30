@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="terminal" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <!-- No need for the date in the console -->
+            <param name="ConversionPattern" value="%d{HH:mm} %-5p [%t] %30.30c - %m%n"/>
+        </layout>
+    </appender>
+
+    <!-- Note: This root logger will be inherited by all loggers unless you use additivity="false". -->
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="terminal"/>
+    </root>
+
+</log4j:configuration>

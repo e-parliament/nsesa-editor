@@ -33,6 +33,7 @@ import java.util.Map;
 public class Editor implements EntryPoint {
 
     private final Injector injector = GWT.create(Injector.class);
+
     private ClientFactory clientFactory;
     private ServiceFactory serviceFactory;
 

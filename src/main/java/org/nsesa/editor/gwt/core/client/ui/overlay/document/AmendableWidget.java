@@ -47,8 +47,4 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     String getContent();
 
     void setContent(String amendableContent);
-
-    String getHeading();
-
-    void setHeading(String amendableTitle);
 }

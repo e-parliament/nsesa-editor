@@ -21,8 +21,6 @@ public class OverlayStrategySupport {
 
     public static final String TAG_LITERAL_INDEX = "num";
     public static final String TAG_CONTENT = "content";
-    public static final String TAG_HEADING = "heading";
-    public static final String TAG_INTRODUCTORY = "introductory";
 
     public static final String ATTRIB_ID = "id";
     public static final String ATTRIB_EVOLVING_ID = "evolvingId";
@@ -82,11 +80,6 @@ public class OverlayStrategySupport {
      */
     public String getAmendableContent(Element element) {
         Element el = getElementByTag(element, TAG_CONTENT);
-        return el != null ? el.getInnerHTML() : null;
-    }
-
-    public final String getHeading(Element element) {
-        Element el = getElementByTag(element, TAG_HEADING);
         return el != null ? el.getInnerHTML() : null;
     }
 

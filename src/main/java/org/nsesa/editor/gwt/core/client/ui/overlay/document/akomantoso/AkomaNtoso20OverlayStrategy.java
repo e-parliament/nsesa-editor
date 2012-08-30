@@ -59,11 +59,6 @@ public class AkomaNtoso20OverlayStrategy implements OverlayStrategy {
     }
 
     @Override
-    public String getHeading(Element element) {
-        return overlayStrategySupport.getHeading(element);
-    }
-
-    @Override
     public String getContent(Element element) {
         return overlayStrategySupport.getAmendableContent(element);
     }

@@ -182,7 +182,6 @@ public class DocumentController implements AmendableWidgetListener {
 
         if (amendableWidget.isAmendable()) {
             amendableWidget.setContent(overlayStrategy.getContent(element));
-            amendableWidget.setHeading(overlayStrategy.getHeading(element));
         }
 
         // attach all children (note, this is a recursive call)

@@ -6,7 +6,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelView;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
+import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelView;
 
 /**
  * Date: 24/06/12 16:39
@@ -29,11 +31,18 @@ public class EditorViewImpl extends Composite implements EditorView {
     HeaderView headerView;
     @UiField
     TabLayoutPanel tabPanel;
+    @UiField(provided = true)
+    AmendmentsPanelView amendmentsPanelView;
+    @UiField(provided = true)
+    InfoPanelView infoPanelView;
 
     @Inject
-    public EditorViewImpl(final ClientFactory clientFactory, final HeaderView headerView) {
+    public EditorViewImpl(final ClientFactory clientFactory, final HeaderView headerView,
+                          final AmendmentsPanelView amendmentsPanelView, final InfoPanelView infoPanelView) {
         this.clientFactory = clientFactory;
         this.headerView = headerView;
+        this.amendmentsPanelView = amendmentsPanelView;
+        this.infoPanelView = infoPanelView;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
