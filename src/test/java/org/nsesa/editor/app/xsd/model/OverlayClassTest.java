@@ -18,10 +18,10 @@ public class OverlayClassTest {
     @Test
     public void testGetImports() throws Exception {
         OverlayClass overlayClass = new OverlayClass();
-        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package1", "Foo", "foo"));
-        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package2", "Bar", "bar"));
-        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package3", "Baz", "baz"));
-        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package3", "Doo", "doo"));
+        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package1", "Foo", "foo", false));
+        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package2", "Bar", "bar", false));
+        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package3", "Baz", "baz", false));
+        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package3", "Doo", "doo", false));
 
         final String[] imports = overlayClass.getImports();
         assertNotNull(imports);
@@ -36,9 +36,9 @@ public class OverlayClassTest {
     @Test
     public void testJavaLangImports() throws Exception {
         OverlayClass overlayClass = new OverlayClass();
-        overlayClass.getProperties().add(new OverlayProperty("java.lang", "Foo", "foo"));
-        overlayClass.getProperties().add(new OverlayProperty("java.lang", "Bar", "bar"));
-        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package1", "Baz", "baz"));
+        overlayClass.getProperties().add(new OverlayProperty("java.lang", "Foo", "foo", false));
+        overlayClass.getProperties().add(new OverlayProperty("java.lang", "Bar", "bar", false));
+        overlayClass.getProperties().add(new OverlayProperty("tld.domain.package1", "Baz", "baz", false));
 
         final String[] imports = overlayClass.getImports();
         assertNotNull(imports);

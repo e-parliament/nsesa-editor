@@ -73,7 +73,7 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
             walk(root, new AmendableVisitor() {
                 @Override
                 public boolean visit(final AmendableWidget visited) {
-                    if (element.equalsIgnoreCase(visited.getId())) {
+                    if (visited != null && element.equalsIgnoreCase(visited.getId())) {
                         visited.addAmendmentController(amendmentController);
                         if (eventBus != null) {
                             eventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
@@ -106,7 +106,7 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
             @Override
             public boolean visit(final AmendableWidget visited) {
                 // todo: detection mechanism
-                if (visited.getId() != null) {
+                if (visited != null && visited.getId() != null) {
                     elementIDCache.put(visited.getId(), visited);
                 }
                 return true;
@@ -117,8 +117,10 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
     @Override
     public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
         if (visitor.visit(toVisit)) {
-            for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
-                walk(child, visitor);
+            if (toVisit != null) {
+                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
+                    walk(child, visitor);
+                }
             }
         }
     }

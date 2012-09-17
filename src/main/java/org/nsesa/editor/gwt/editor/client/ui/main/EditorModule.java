@@ -6,7 +6,7 @@ import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
-import org.nsesa.editor.gwt.editor.client.module.EPModule;
+import org.nsesa.editor.gwt.editor.client.module.AkomaNtoso20Module;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
@@ -31,7 +31,8 @@ public class EditorModule extends AbstractGinModule {
         install(new InfoPanelModule());
         install(new AmendmentDialogModule());
 
-        install(new EPModule());
+//        install(new EPModule());
+        install(new AkomaNtoso20Module());
 
         bind(AmendmentManager.class).in(Singleton.class);
     }

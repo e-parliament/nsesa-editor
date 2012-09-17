@@ -17,6 +17,7 @@ import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
+import org.nsesa.editor.gwt.editor.client.ui.main.EditorView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +43,7 @@ public class Editor implements EntryPoint {
         // set up the uncaught exception handler before the actual initialization
         Log.setUncaughtExceptionHandler();
         clientFactory = injector.getClientFactory();
+
         serviceFactory = injector.getServiceFactory();
 
         clientFactory.getScheduler().scheduleDeferred(new Command() {
@@ -57,7 +59,8 @@ public class Editor implements EntryPoint {
     protected void onModuleLoadDeferred() {
         // set up the main window
         final EditorController editorController = injector.getEditorController();
-        RootLayoutPanel.get().add(editorController.getView());
+        final EditorView view = editorController.getView();
+        RootLayoutPanel.get().add(view);
 
         registerEventListeners();
 

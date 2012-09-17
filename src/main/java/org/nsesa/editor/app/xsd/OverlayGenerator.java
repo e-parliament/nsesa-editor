@@ -21,10 +21,7 @@ import org.xml.sax.SAXParseException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Date: 03/08/12 19:25
@@ -36,7 +33,8 @@ public class OverlayGenerator {
 
     public static final Logger LOG = LoggerFactory.getLogger(OverlayGenerator.class);
 
-    private static final String TEMPLATE_NAME = "overlayClass.ftl";
+    private static final String OVERLAY_ELEMENT_TEMPLATE_NAME = "overlayClass.ftl";
+    private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
 
     private File generatedSourcesDirectory;
 
@@ -55,7 +53,7 @@ public class OverlayGenerator {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            final File directoryForTemplateLoading = new File(classLoader.getResource(TEMPLATE_NAME).getFile()).getParentFile();
+            final File directoryForTemplateLoading = new File(classLoader.getResource(OVERLAY_ELEMENT_TEMPLATE_NAME).getFile()).getParentFile();
             configuration.setDirectoryForTemplateLoading(directoryForTemplateLoading);
 
             // create the subdirectory name
@@ -76,17 +74,35 @@ public class OverlayGenerator {
 
     }
 
-    public void analyze(final String packageName) throws SAXException {
-        XSSchemaSet set = parser.getResult();
+    public void analyze(final String packageName, final String xsd) throws SAXException {
+        final List<OverlayClass> allGeneratedClasses = new ArrayList<OverlayClass>();
+        final XSSchemaSet set = parser.getResult();
         for (final XSSchema schema : set.getSchemas()) {
+            final List<OverlayClass> generatedClasses = new ArrayList<OverlayClass>();
             final Collection<XSElementDecl> elementDecls = schema.getElementDecls().values();
             for (final XSElementDecl elementDecl : elementDecls) {
                 // create the filename
                 final File file = new File(generatedSourcesDirectory, StringUtils.capitalize(elementDecl.getName()) + ".java");
                 Map<String, Object> rootMap = new HashMap<String, Object>();
-                rootMap.put("overlayClass", generate(elementDecl, packageName));
-                writeToFile(file, rootMap, TEMPLATE_NAME);
+                final OverlayClass overlayClass = generate(elementDecl, packageName);
+                rootMap.put("overlayClass", overlayClass);
+                generatedClasses.add(overlayClass);
+                writeToFile(file, rootMap, OVERLAY_ELEMENT_TEMPLATE_NAME);
             }
+
+            // create the factory
+            final String className = StringUtils.capitalize(xsd.substring(0, xsd.indexOf("."))) + "OverlayFactory";
+            final File file = new File(generatedSourcesDirectory, className + ".java");
+
+            Map<String, Object> rootMap = new HashMap<String, Object>();
+
+            final OverlayClass factoryClass = new OverlayClass();
+            factoryClass.setName(className);
+            factoryClass.setPackageName("org.nsesa.editor.gwt.core.shared." + packageName + ".gen");
+
+            rootMap.put("overlayClass", factoryClass);
+            rootMap.put("overlayClasses", generatedClasses);
+            writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
         }
     }
 
@@ -120,7 +136,7 @@ public class OverlayGenerator {
         try {
             final String xsd = "akomantoso20.xsd";
             generator.parse(xsd);
-            generator.analyze(xsd.substring(0, xsd.indexOf(".")));
+            generator.analyze(xsd.substring(0, xsd.indexOf(".")), xsd);
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }

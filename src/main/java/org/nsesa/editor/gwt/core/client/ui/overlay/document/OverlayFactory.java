@@ -1,5 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.dom.client.Element;
+
 /**
  * Date: 04/08/12 17:44
  *
@@ -7,5 +9,5 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  * @version $Id$
  */
 public interface OverlayFactory {
-    //AmendableWidget getAmendableWidget(Element element);
+    AmendableWidget getAmendableWidget(Element element);
 }

@@ -12,6 +12,12 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 public class AkomaNtoso20Locator implements Locator {
     @Override
     public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
-        return amendableWidget.toString();
+        StringBuilder location = new StringBuilder();
+
+        final AmendableWidget[] parents = amendableWidget.getParentAmendableWidgets();
+        for (AmendableWidget parent : parents) {
+            location.append(parent.getType()).append(" - ");
+        }
+        return location.toString();
     }
 }

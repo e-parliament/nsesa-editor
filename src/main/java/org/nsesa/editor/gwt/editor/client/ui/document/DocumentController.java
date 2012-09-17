@@ -20,8 +20,8 @@ import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
@@ -43,6 +43,7 @@ import java.util.ArrayList;
 public class DocumentController implements AmendableWidgetListener {
 
     private final DocumentInjector documentInjector = GWT.create(DocumentInjector.class);
+    private final OverlayFactory overlayFactory = GWT.create(OverlayFactory.class);
 
     private DocumentView view;
     private DocumentDTO document;
@@ -159,7 +160,7 @@ public class DocumentController implements AmendableWidgetListener {
     public void wrapContent() {
         final Element[] contentElements = contentController.getContentElements();
         if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
-        for (Element element : contentElements) {
+        for (final Element element : contentElements) {
             final AmendableWidget rootAmendableWidget = wrap(element, this);
             amendableWidgets.add(rootAmendableWidget);
         }
@@ -173,30 +174,34 @@ public class DocumentController implements AmendableWidgetListener {
         // Assert that the element is attached.
         assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
-        final AmendableWidget amendableWidget = new AmendableWidgetImpl(element);
-        amendableWidget.setParentAmendableWidget(parent);
+        final AmendableWidget amendableWidget = overlayFactory.getAmendableWidget(element);
+        if (amendableWidget != null) {
 
-        // process all properties
-        amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
-        amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
 
-        if (amendableWidget.isAmendable()) {
-            amendableWidget.setContent(overlayStrategy.getContent(element));
+            amendableWidget.setParentAmendableWidget(parent);
+
+            // process all properties
+            amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
+            amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+
+            if (amendableWidget.isAmendable()) {
+                amendableWidget.setContent(overlayStrategy.getContent(element));
+            }
+
+            // attach all children (note, this is a recursive call)
+            final Element[] children = overlayStrategy.getChildren(element);
+            for (final Element child : children) {
+                final AmendableWidget amendableChild = wrap(amendableWidget, child, listener);
+                amendableWidget.addAmendableWidget(amendableChild);
+            }
+
+            // if the widget is amendable, register a listener for its events
+            if (amendableWidget.isAmendable() != null && amendableWidget.isAmendable()) {
+                amendableWidget.setListener(listener);
+            }
+            // post process the widget (eg. hide large tables)
+            amendableWidget.postProcess();
         }
-
-        // attach all children (note, this is a recursive call)
-        final Element[] children = overlayStrategy.getChildren(element);
-        for (final Element child : children) {
-            final AmendableWidget amendableChild = wrap(amendableWidget, child, listener);
-            amendableWidget.addAmendableWidget(amendableChild);
-        }
-
-        // if the widget is amendable, register a listener for its events
-        if (amendableWidget.isAmendable() != null && amendableWidget.isAmendable()) {
-            amendableWidget.setListener(listener);
-        }
-        // post process the widget (eg. hide large tables)
-        amendableWidget.postProcess();
         return amendableWidget;
     }
 
