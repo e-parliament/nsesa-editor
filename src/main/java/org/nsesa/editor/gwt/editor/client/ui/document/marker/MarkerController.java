@@ -13,6 +13,8 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInject
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
+import java.util.ArrayList;
+
 /**
  * Date: 24/06/12 18:42
  *
@@ -26,9 +28,28 @@ public class MarkerController {
 
     private DocumentController documentController;
 
-    private EventBus eventBus;
+    private ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
-    private Timer timer;
+    private final EventBus eventBus;
+
+    private final Timer timer = new Timer() {
+        public void run() {
+            if (documentController != null) {
+                view.clearMarkers();
+                final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
+                final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
+                Log.info("Document height is: " + documentHeight);
+                for (final AmendmentController amendmentController : amendmentControllers) {
+                    if (amendmentController.getView().asWidget().isAttached()) {
+                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
+                        Log.info("Amendment top is: " + amendmentTop);
+                        double division = (double) documentHeight / (double) amendmentTop;
+                        view.addMarker(division);
+                    }
+                }
+            }
+        }
+    };
 
     @Inject
     public MarkerController(final EventBus eventBus, final MarkerView view) {
@@ -45,30 +66,20 @@ public class MarkerController {
             @Override
             public void onEvent(ResizeEvent event) {
                 view.asWidget().setHeight((event.getHeight() - 30) + "px");
+                drawAmendmentControllers();
             }
         });
         eventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
-                drawAmendmentController(event.getAmendmentController());
+                amendmentControllers.add(event.getAmendmentController());
+                drawAmendmentControllers();
             }
         });
     }
 
-    private void drawAmendmentController(final AmendmentController amendmentController) {
-        timer = new Timer() {
-            public void run() {
-                if (documentController != null) {
-                    final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
-                    final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-                    Log.info("Document height is: " + documentHeight);
-                    final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                    Log.info("Amendment top is: " + amendmentTop);
-                    double division = (double) documentHeight / (double) amendmentTop;
-                    view.addMarker(division);
-                }
-            }
-        };
+    private void drawAmendmentControllers() {
+        timer.cancel();
         timer.schedule(1000);
     }
 
