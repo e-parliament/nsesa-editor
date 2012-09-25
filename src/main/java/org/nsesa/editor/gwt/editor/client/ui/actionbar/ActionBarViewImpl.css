@@ -1,3 +1,5 @@
 .hover {
-    border: 1px solid red;
+    background-color: #eee;
+    color: #000;
+    cursor: default;
 }

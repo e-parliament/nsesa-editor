@@ -120,13 +120,16 @@ public class ActionBarController {
     }
 
     public void adaptPosition() {
-        if (amendableWidget != null) {
+        if (amendableWidget != null && amendableWidget.getRoot() != null) {
             final Style style = view.asWidget().getElement().getStyle();
             style.setPosition(Style.Position.ABSOLUTE);
-            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - view.asWidget().getOffsetHeight();
+            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1);
             style.setTop(coordinateY, Style.Unit.PX);
-            style.setLeft(amendableWidget.asWidget().getAbsoluteLeft(), Style.Unit.PX);
-            style.setWidth(amendableWidget.asWidget().getOffsetWidth(), Style.Unit.PX);
+            final int x = amendableWidget.asWidget().getAbsoluteLeft();
+            style.setLeft(x, Style.Unit.PX);
+            final int width = amendableWidget.getRoot().asWidget().getOffsetWidth();
+            final int offsetRoot = amendableWidget.getRoot().asWidget().getAbsoluteLeft();
+            style.setWidth((width + offsetRoot) - x, Style.Unit.PX);
         }
     }
 

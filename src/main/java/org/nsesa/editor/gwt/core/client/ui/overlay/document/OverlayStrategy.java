@@ -1,15 +1,19 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
+import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso.AkomaNtoso20OverlayStrategy;
 
 /**
+ * The overlay strategy is responsible for retrieving the correct properties from the DOM.
  * Date: 03/07/12 22:20
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@ImplementedBy(AkomaNtoso20OverlayStrategy.class)
 public interface OverlayStrategy {
 
     /**

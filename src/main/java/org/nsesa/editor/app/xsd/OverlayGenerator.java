@@ -59,7 +59,7 @@ public class OverlayGenerator {
             // create the subdirectory name
             final String subDirectory = xsd.contains(".") ? xsd.substring(0, xsd.indexOf(".")) : xsd;
             final File targetDirectoryClasses = new File(classLoader.getResource(".").getFile());
-            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), "src/main/java/org/nsesa/editor/gwt/core/shared/" + subDirectory + "/gen/");
+            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/" + subDirectory + "/gen/");
             if (!generatedSourcesDirectory.exists() && !generatedSourcesDirectory.mkdirs()) {
                 throw new RuntimeException("Could not create generated source directory " + generatedSourcesDirectory.getAbsolutePath());
             }
@@ -98,7 +98,7 @@ public class OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass();
             factoryClass.setName(className);
-            factoryClass.setPackageName("org.nsesa.editor.gwt.core.shared." + packageName + ".gen");
+            factoryClass.setPackageName("org.nsesa.editor.gwt.core.client.ui.overlay.document." + packageName + ".gen");
 
             rootMap.put("overlayClass", factoryClass);
             rootMap.put("overlayClasses", generatedClasses);
@@ -145,7 +145,7 @@ public class OverlayGenerator {
     public OverlayClass generate(final XSElementDecl elementDecl, final String packageName) {
         final OverlayClass overlayClass = new OverlayClass();
         // TODO: generate the correct package name
-        overlayClass.setPackageName("org.nsesa.editor.gwt.core.shared." + packageName + ".gen");
+        overlayClass.setPackageName("org.nsesa.editor.gwt.core.client.ui.overlay.document." + packageName + ".gen");
         // TODO: correct the interfaces/extension
         //overlayClass.setInterfaces(new Class<?>[]{AmendableWidget.class});
         overlayClass.setName(elementDecl.getName());
@@ -211,6 +211,10 @@ public class OverlayGenerator {
         } else {
             //LOG.info("Type is {}" + type.getName());
         }
+    }
+
+    public File getGeneratedSourcesDirectory() {
+        return generatedSourcesDirectory;
     }
 
     private static String depth(int times) {

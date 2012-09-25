@@ -7,13 +7,12 @@
 
     <stylesheet src="css/editor.css"/>
 
-    <set-configuration-property name="overlayFactories"
-                                value="org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso.AkomaNtoso20OverlayFactory"/>
+    <!--<set-configuration-property name="overlayFactories" value="org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso.AkomaNtoso20OverlayFactory"/>-->
 
     <!--If we find a Overlay factory, make sure to process it with the generator.-->
-    <generate-with class="org.nsesa.editor.gwt.core.server.generator.GwtOverlayGenerator">
-        <when-type-assignable class="org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory"/>
-    </generate-with>
+    <!--<generate-with class="org.nsesa.editor.gwt.core.server.generator.GwtOverlayGenerator">-->
+    <!--<when-type-assignable class="org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory"/>-->
+    <!--</generate-with>-->
 
     <source path="client"/>
     <source path="shared"/>

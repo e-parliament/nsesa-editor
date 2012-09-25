@@ -1,7 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document.ep;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AbstractLocator;
 
 /**
  * Date: 06/07/12 17:24
@@ -9,15 +8,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class EPLocator implements Locator {
-    @Override
-    public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
-        StringBuilder location = new StringBuilder();
+public class EPLocator extends AbstractLocator {
 
-        final AmendableWidget[] parents = amendableWidget.getParentAmendableWidgets();
-        for (AmendableWidget parent : parents) {
-            location.append(parent.getType()).append(" - ");
-        }
-        return location.toString();
-    }
 }

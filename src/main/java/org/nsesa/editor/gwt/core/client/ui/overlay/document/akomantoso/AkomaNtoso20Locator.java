@@ -1,7 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AbstractLocator;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20.gen.*;
 
 /**
  * Date: 06/07/12 17:24
@@ -9,15 +9,8 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AkomaNtoso20Locator implements Locator {
-    @Override
-    public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
-        StringBuilder location = new StringBuilder();
-
-        final AmendableWidget[] parents = amendableWidget.getParentAmendableWidgets();
-        for (AmendableWidget parent : parents) {
-            location.append(parent.getType()).append(" - ");
-        }
-        return location.toString();
+public class AkomaNtoso20Locator extends AbstractLocator {
+    public AkomaNtoso20Locator() {
+        hide(AkomaNtoso.class, Components.class, Component.class, Eol.class, P.class, B.class, I.class, Span.class);
     }
 }

@@ -6,7 +6,6 @@ import com.google.inject.Provides;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineModule;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
-import org.nsesa.editor.gwt.editor.client.module.EPModule;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderModule;
@@ -28,7 +27,6 @@ public class DocumentModule extends AbstractGinModule {
         install(new DocumentHeaderModule());
         install(new DeadlineModule());
         install(new ActionBarModule());
-        install(new EPModule());
 
         bind(AmendableWidgetListener.class).to(DocumentController.class);
     }

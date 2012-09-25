@@ -42,8 +42,8 @@ import java.util.ArrayList;
  */
 public class DocumentController implements AmendableWidgetListener {
 
+    // we need a separate injector so we can scope the injection to a single document (since there might be more)
     private final DocumentInjector documentInjector = GWT.create(DocumentInjector.class);
-    private final OverlayFactory overlayFactory = GWT.create(OverlayFactory.class);
 
     private DocumentView view;
     private DocumentDTO document;
@@ -56,6 +56,7 @@ public class DocumentController implements AmendableWidgetListener {
     private final ContentController contentController;
     private final ActionBarController actionBarController;
     private final DeadlineController deadlineController;
+    private final OverlayFactory overlayFactory;
     private final Locator locator;
     private final EventBus documentEventBus;
 
@@ -67,6 +68,7 @@ public class DocumentController implements AmendableWidgetListener {
 
     @Inject
     public DocumentController(final ClientFactory clientFactory, final ServiceFactory serviceFactory,
+                              final OverlayFactory overlayFactory,
                               final OverlayStrategy overlayStrategy,
                               final ActionBarController actionBarController,
                               final Locator locator,
@@ -79,6 +81,7 @@ public class DocumentController implements AmendableWidgetListener {
         this.amendmentManager = amendmentManager;
         this.overlayStrategy = overlayStrategy;
         this.locator = locator;
+        this.overlayFactory = overlayFactory;
 
         // set up via the document injector so they effectively become document-wide singletons
         this.view = documentInjector.getDocumentView();
@@ -176,8 +179,6 @@ public class DocumentController implements AmendableWidgetListener {
 
         final AmendableWidget amendableWidget = overlayFactory.getAmendableWidget(element);
         if (amendableWidget != null) {
-
-
             amendableWidget.setParentAmendableWidget(parent);
 
             // process all properties

@@ -72,9 +72,9 @@ public class ContentController {
             throw new RuntimeException("Content not yet available.");
         }
         ArrayList<Element> elements = new ArrayList<Element>();
-        final NodeList<Element> elementsByTagName = view.getContentElement().getElementsByTagName("component");
-        for (int i = 0; i < elementsByTagName.getLength(); i++) {
-            Node node = elementsByTagName.getItem(i);
+        final NodeList<Node> childNodes = view.getContentElement().getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            Node node = childNodes.getItem(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 elements.add(Element.as(node));
             }

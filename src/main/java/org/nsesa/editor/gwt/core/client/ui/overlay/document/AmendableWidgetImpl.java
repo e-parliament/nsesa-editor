@@ -10,7 +10,6 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Date: 27/06/12 17:52
@@ -38,12 +37,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * A list of logical children.
      */
-    private List<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
+    private ArrayList<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
 
     /**
      * A list of all the amendments on this widget.
      */
-    private List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     /**
      * Flag to indicate whether or not this widget is amendable by the user (not, that does not mean there are no
@@ -171,7 +170,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public AmendableWidget[] getParentAmendableWidgets() {
+    public ArrayList<AmendableWidget> getParentAmendableWidgets() {
         final ArrayList<AmendableWidget> parents = new ArrayList<AmendableWidget>();
         AmendableWidget parent = getParentAmendableWidget();
         while (parent != null) {
@@ -179,17 +178,22 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             parent = parent.getParentAmendableWidget();
         }
         Collections.reverse(parents);
-        return parents.toArray(new AmendableWidget[parents.size()]);
+        return parents;
     }
 
     @Override
-    public AmendableWidget[] getChildAmendableWidgets() {
-        return childAmendableWidgets.toArray(new AmendableWidget[childAmendableWidgets.size()]);
+    public ArrayList<AmendableWidget> getChildAmendableWidgets() {
+        return childAmendableWidgets;
     }
 
     @Override
     public AmendableWidget getParentAmendableWidget() {
         return parentAmendableWidget;
+    }
+
+    @Override
+    public AmendableWidget getRoot() {
+        return getParentAmendableWidget() != null ? getParentAmendableWidget().getParentAmendableWidget() : getParentAmendableWidget();
     }
 
     @Override

@@ -27,7 +27,7 @@
     </ui:style>
     <g:HTMLPanel>
         <g:HTML styleName="{res.logo}">
-            +Nsesa
+            AT4AM4ALL
         </g:HTML>
 
         <g:FlowPanel styleName="{res.tabHeaders}">

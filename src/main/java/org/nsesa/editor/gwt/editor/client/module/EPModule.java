@@ -17,6 +17,7 @@ public class EPModule extends AbstractGinModule {
 
     @Override
     protected void configure() {
+//        bind(OverlayFactory.class).to(EPOverlayFa.class).in(Singleton.class);
         bind(OverlayStrategy.class).to(EPOverlayStrategy.class).in(Singleton.class);
         bind(Locator.class).to(EPLocator.class).in(Singleton.class);
     }

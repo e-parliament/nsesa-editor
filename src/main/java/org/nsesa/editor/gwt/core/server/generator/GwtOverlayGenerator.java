@@ -37,42 +37,44 @@ public class GwtOverlayGenerator extends Generator {
 
             final ConfigurationProperty overlayFactoriesProperty = propertyOracle.getConfigurationProperty(OVERLAY_FACTORY_CLASS_NAMES_PROPERTY);
 
-            for (final String className : overlayFactoriesProperty.getValues()) {
+            final String className = overlayFactoriesProperty.getValues().get(0);
 
-                final Class<?> type = Class.forName(className);
-                final String packageName = type.getPackage().getName();
-                final Overlay overlay = type.getAnnotation(Overlay.class);
-                if (overlay == null) {
-                    throw new RuntimeException("No @Overlay annotation specified on OverlayFactory " + type.getName());
-                }
-                String xsd = overlay.value();
-                if (xsd == null || "".equals(xsd.trim())) {
-                    throw new RuntimeException("No xsd value specified on @Overlay annotation on " + type.getName());
-                }
-
-                // generate the matching elements
-                generateOverlayElements(xsd);
-
-                final String xsdFileName = xsd.substring(0, xsd.indexOf("."));
-                return "org.nsesa.editor.gwt.core.shared." + xsdFileName + ".gen." + StringUtils.capitalize(xsdFileName) + "OverlayFactory";
-
-                /*final String implementationName = type.getName() + "_GeneratedImpl";
-                final ClassSourceFileComposerFactory mainComposer = new ClassSourceFileComposerFactory(packageName, implementationName);
-
-                PrintWriter printWriter = context.tryCreate(logger, mainComposer.getCreatedPackage(), mainComposer.getCreatedClassShortName());
-                if (printWriter != null) {
-                    SourceWriter writer = mainComposer.createSourceWriter(context, printWriter);
-                    writer.indent();
-                    writer.println("// this is a test");
-                    writer.commit(logger);
-                }
-
-
-
-                final String interfaceName = OverlayFactory.class.getName();
-                mainComposer.addImplementedInterface(interfaceName);*/
+            final Class<?> type = Class.forName(className);
+            final String packageName = type.getPackage().getName();
+            final Overlay overlay = type.getAnnotation(Overlay.class);
+            if (overlay == null) {
+                throw new RuntimeException("No @Overlay annotation specified on OverlayFactory " + type.getName());
             }
-            return null;
+            String xsd = overlay.value();
+            if (xsd == null || "".equals(xsd.trim())) {
+                throw new RuntimeException("No xsd value specified on @Overlay annotation on " + type.getName());
+            }
+
+            // generate the matching elements
+            generateOverlayElements(xsd);
+
+            final String xsdFileName = xsd.substring(0, xsd.indexOf("."));
+
+
+            /*final String implementationName = type.getName() + "_GeneratedImpl";
+            final ClassSourceFileComposerFactory mainComposer = new ClassSourceFileComposerFactory(packageName, implementationName);
+
+            PrintWriter printWriter = context.tryCreate(logger, mainComposer.getCreatedPackage(), mainComposer.getCreatedClassShortName());
+            if (printWriter != null) {
+                SourceWriter writer = mainComposer.createSourceWriter(context, printWriter);
+                writer.indent();
+                writer.println("// this is a test");
+                writer.commit(logger);
+            }
+
+
+
+            final String interfaceName = OverlayFactory.class.getName();
+            mainComposer.addImplementedInterface(interfaceName);*/
+
+
+            return "org.nsesa.editor.gwt.core.shared." + xsdFileName + ".gen." + StringUtils.capitalize(xsdFileName) + "OverlayFactory";
+
 
         } catch (Exception e) {
             logger.log(TreeLogger.ERROR, "unable to generate code for " + typeName, e);
@@ -84,6 +86,7 @@ public class GwtOverlayGenerator extends Generator {
     private void generateOverlayElements(final String xsd) {
         try {
             OVERLAY_GENERATOR.parse(xsd);
+            OVERLAY_GENERATOR.analyze(xsd.substring(0, xsd.indexOf(".")), xsd);
         } catch (SAXException e) {
             throw new RuntimeException("Could not parse XSD " + xsd, e);
         }

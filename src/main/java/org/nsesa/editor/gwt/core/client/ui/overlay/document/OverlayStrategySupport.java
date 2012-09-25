@@ -52,8 +52,9 @@ public class OverlayStrategySupport {
     }
 
     public Boolean isAmendable(Element element) {
-        String amendableAttribute = element.getAttribute(getAmendableAttributeName());
-        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
+        return true;
+//        String amendableAttribute = element.getAttribute(getAmendableAttributeName());
+//        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
     }
 
     protected String getAmendableAttributeName() {
@@ -79,8 +80,7 @@ public class OverlayStrategySupport {
      * @return the amendable content.
      */
     public String getAmendableContent(Element element) {
-        Element el = getElementByTag(element, TAG_CONTENT);
-        return el != null ? el.getInnerHTML() : null;
+        return element != null ? element.getInnerHTML() : null;
     }
 
 
@@ -351,13 +351,14 @@ public class OverlayStrategySupport {
         for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element el = nodes.getItem(i).cast();
-                // note: the only way we can detect 'children' is because they have an id specified ... :(
+                amendableElements.add(el);
+                /*// note: the only way we can detect 'children' is because they have an id specified ... :(
                 if (!"num".equalsIgnoreCase(el.getNodeName()) && !"content".equalsIgnoreCase(el.getNodeName())) {
                     if ("NUM".equalsIgnoreCase(el.getNodeName())) {
                         throw new RuntimeException("Shouldn't happen: " + el.getId());
                     }
                     amendableElements.add(el);
-                }
+                }*/
             }
         }
         return amendableElements;
