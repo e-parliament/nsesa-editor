@@ -5,6 +5,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategySupport;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20.gen.*;
 
 import java.util.List;
 
@@ -17,6 +18,10 @@ import java.util.List;
 public class AkomaNtoso20OverlayStrategy implements OverlayStrategy {
 
     private OverlayStrategySupport overlayStrategySupport = new OverlayStrategySupport();
+
+    public AkomaNtoso20OverlayStrategy() {
+        overlayStrategySupport.asProperties(Num.class, B.class, I.class, Span.class, Content.class);
+    }
 
     @Override
     public String getSource(Element element) {

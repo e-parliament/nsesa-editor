@@ -11,6 +11,8 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -69,6 +71,15 @@ public class MarkerController {
                 drawAmendmentControllers();
             }
         });
+
+        eventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+            @Override
+            public void onEvent(DocumentRefreshRequestEvent event) {
+                clearAmendmentControllers();
+                clearMarkers();
+            }
+        });
+
         eventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
@@ -86,6 +97,10 @@ public class MarkerController {
 
     private void clearMarkers() {
         view.clearMarkers();
+    }
+
+    private void clearAmendmentControllers() {
+        amendmentControllers = new ArrayList<AmendmentController>();
     }
 
     public MarkerView getView() {

@@ -11,6 +11,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20.gen.*;
  */
 public class AkomaNtoso20Locator extends AbstractLocator {
     public AkomaNtoso20Locator() {
-        hide(AkomaNtoso.class, Components.class, Component.class, Eol.class, P.class, B.class, I.class, Span.class);
+        hide(AkomaNtoso.class, Components.class, Component.class, Eol.class, P.class, B.class, I.class, Span.class, Recitals.class/*, Content.class, Num.class*/);
     }
 }

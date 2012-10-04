@@ -5,6 +5,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Date: 24/09/12 17:19
@@ -35,7 +36,18 @@ public abstract class AbstractLocator implements Locator {
 
     public String getNum(AmendableWidget amendableWidget) {
         if (amendableWidget.getParentAmendableWidget() != null) {
-            return Integer.toString(amendableWidget.getParentAmendableWidget().getChildAmendableWidgets().indexOf(amendableWidget) + 1);
+            final Iterator<AmendableWidget> iterator = amendableWidget.getParentAmendableWidget().getChildAmendableWidgets().iterator();
+            int count = 1;
+            while (iterator.hasNext()) {
+                AmendableWidget aw = iterator.next();
+                if (aw.getType().equalsIgnoreCase(amendableWidget.getType())) {
+                    count++;
+                }
+                if (aw == amendableWidget) {
+                    break;
+                }
+            }
+            return Integer.toString(count);
         }
         return "";
     }

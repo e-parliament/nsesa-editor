@@ -24,9 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListe
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEvent;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollToEventHandler;
+import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
@@ -114,6 +112,14 @@ public class DocumentController implements AmendableWidgetListener {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
                 scrollTo(event.getTarget());
+            }
+        });
+
+        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+            @Override
+            public void onEvent(DocumentRefreshRequestEvent event) {
+                // forward to the parent bus
+                clientFactory.getEventBus().fireEvent(event);
             }
         });
 

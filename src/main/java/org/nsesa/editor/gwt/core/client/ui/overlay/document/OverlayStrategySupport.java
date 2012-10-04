@@ -9,6 +9,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,6 +38,14 @@ public class OverlayStrategySupport {
 
     public static final String CLASS_OPERATION_PANEL = "ep:operationPanel";
     public static final String CLASS_AMENDMENTS_PANEL = "ep:amendmentsPanel";
+
+    private HashSet<String> asProperties = new HashSet<String>();
+
+    public void asProperties(Class<? extends AmendableWidget>... widgetClasses) {
+        for (Class<? extends AmendableWidget> clazz : widgetClasses) {
+            asProperties.add(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1).toUpperCase());
+        }
+    }
 
     public String getSource(Element element) {
         String sourceAttribute = element.getAttribute(getSourceAttributeName());
@@ -351,14 +360,10 @@ public class OverlayStrategySupport {
         for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element el = nodes.getItem(i).cast();
-                amendableElements.add(el);
-                /*// note: the only way we can detect 'children' is because they have an id specified ... :(
-                if (!"num".equalsIgnoreCase(el.getNodeName()) && !"content".equalsIgnoreCase(el.getNodeName())) {
-                    if ("NUM".equalsIgnoreCase(el.getNodeName())) {
-                        throw new RuntimeException("Shouldn't happen: " + el.getId());
-                    }
+                // do not include any of the 'property' tags
+                if (!asProperties.contains(el.getTagName().toUpperCase())) {
                     amendableElements.add(el);
-                }*/
+                }
             }
         }
         return amendableElements;

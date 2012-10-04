@@ -71,7 +71,7 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
 
     @Override
     public String getDocumentContent(ClientContext clientContext, String documentID) {
-        Resource documentResource = documents.get(documentID);
+        final Resource documentResource = documents.get(documentID);
         if (documentResource != null) {
             try {
                 return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
