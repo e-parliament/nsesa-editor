@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.core.client.service;
+package org.nsesa.editor.gwt.core.client.service.gwt;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;

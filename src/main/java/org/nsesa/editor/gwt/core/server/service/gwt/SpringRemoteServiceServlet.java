@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.core.server.service;
+package org.nsesa.editor.gwt.core.server.service.gwt;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.springframework.context.ApplicationContext;

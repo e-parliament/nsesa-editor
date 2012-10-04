@@ -13,7 +13,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
-import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;

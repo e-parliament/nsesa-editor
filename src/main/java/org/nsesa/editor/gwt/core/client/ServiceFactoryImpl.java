@@ -1,9 +1,9 @@
 package org.nsesa.editor.gwt.core.client;
 
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.service.GWTAmendmentServiceAsync;
-import org.nsesa.editor.gwt.core.client.service.GWTDocumentServiceAsync;
-import org.nsesa.editor.gwt.core.client.service.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentServiceAsync;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 
 /**
  * Date: 26/06/12 17:18

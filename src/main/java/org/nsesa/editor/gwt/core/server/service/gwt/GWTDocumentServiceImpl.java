@@ -1,7 +1,7 @@
-package org.nsesa.editor.gwt.core.server.service;
+package org.nsesa.editor.gwt.core.server.service.gwt;
 
 import com.google.common.io.Files;
-import org.nsesa.editor.gwt.core.client.service.GWTDocumentService;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentService;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.springframework.core.io.Resource;

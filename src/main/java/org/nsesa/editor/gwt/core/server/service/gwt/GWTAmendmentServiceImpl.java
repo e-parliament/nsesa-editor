@@ -1,6 +1,6 @@
-package org.nsesa.editor.gwt.core.server.service;
+package org.nsesa.editor.gwt.core.server.service.gwt;
 
-import org.nsesa.editor.gwt.core.client.service.GWTAmendmentService;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;

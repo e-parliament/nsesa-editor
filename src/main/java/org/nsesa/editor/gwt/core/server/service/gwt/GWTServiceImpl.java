@@ -1,7 +1,7 @@
-package org.nsesa.editor.gwt.core.server.service;
+package org.nsesa.editor.gwt.core.server.service.gwt;
 
 import org.joda.time.DateTime;
-import org.nsesa.editor.gwt.core.client.service.GWTService;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTService;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
