@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso;
+package org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20;
 
 import com.google.gwt.dom.client.Element;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
