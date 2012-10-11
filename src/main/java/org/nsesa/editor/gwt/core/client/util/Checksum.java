@@ -11,6 +11,7 @@ import com.googlecode.gwt.crypto.bouncycastle.digests.SHA1Digest;
  */
 public class Checksum {
     public static String checksum(final String toHash) throws Exception {
+        if (toHash == null) return null;
         final SHA1Digest sha1 = new SHA1Digest();
         final byte[] result = new byte[sha1.getDigestSize()];
         final byte[] bytes = toHash.getBytes();
