@@ -8,6 +8,9 @@
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.place.Place"/>
 
+    <!--GWT Crypto library for the SHA-1 checksumming-->
+    <inherits name="com.googlecode.gwt.crypto.Crypto"/>
+
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
     <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO"/>
     <set-property name="log_WindowLogger" value="DISABLED"/>
