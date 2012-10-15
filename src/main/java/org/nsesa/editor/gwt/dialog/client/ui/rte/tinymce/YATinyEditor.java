@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 import java.util.HashMap;
@@ -64,7 +67,8 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     protected boolean readOnly;
     protected final String itemID;
 
-    private YATinyEditorListener listener;
+    private final YATinyEditorListener listener;
+    private final ClientFactory clientFactory;
 
     private int work_width;
     private int work_height;
@@ -73,9 +77,10 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     protected TextArea textArea;
     private FlowPanel mainPanel;
 
-    public YATinyEditor(boolean readOnly, YATinyEditorListener listener) {
+    public YATinyEditor(final boolean readOnly, final ClientFactory clientFactory, final YATinyEditorListener listener) {
         this.readOnly = readOnly;
         this.listener = listener;
+        this.clientFactory = clientFactory;
 
         mainPanel = new FlowPanel();
         mainPanel.setStyleName("tinyEditor-mainPanel");
@@ -100,14 +105,25 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         el.setClassName(el.getClassName() + " " + itemID);
 
         initWidget(mainPanel);
+
+        registerListeners();
     }
 
-    public void logEvents(String toLog) {
+    private void registerListeners() {
+        clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                resize();
+            }
+        });
+    }
+
+    private void logEvents(String toLog) {
         if (Log.isDebugEnabled())
             Log.debug("-----------> " + toLog);
     }
 
-    public void initialized() {
+    private void initialized() {
         resize();
         listener.onInitialized(this);
     }
@@ -116,31 +132,42 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         $wnd.tinyMCE.execCommand('mceRepaint', false, itemID);
     }-*/;
 
-    public String getItemID() {
+    private String getItemID() {
         return itemID;
     }
 
-    public boolean commandCallback(String command, Object value) {
+    private boolean commandCallback(String command, Object value) {
         return listener.executeCommand(this, command, value);
     }
 
-    public void attachEditor(String isoLanguage) {
+    @Override
+    public void onAttach() {
+        super.onAttach();
+        attachEditor("EN");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        detachEditor();
+    }
+
+    private void attachEditor(String isoLanguage) {
         attachEditor(isoLanguage, true);
     }
 
-    public void attachEditor(String isoLanguage, boolean noAlignment) {
+    private void attachEditor(String isoLanguage, boolean noAlignment) {
         String mceButtons = noAlignment ? NO_JUSTIFY_TINY_MCE_BUTTONS : DEFAULT_TINY_MCE_BUTTONS;
         attachEditor(isoLanguage, mceButtons);
     }
 
-    public void attachEditor(String isoLanguage, String mceButtons) {
+    private void attachEditor(String isoLanguage, String mceButtons) {
         if (!attached) {
             String path = GWT.getModuleBaseURL() + "css/editor.css";
             attachEditor(this, itemID, path, readOnly, generateLanguageSettings(isoLanguage, new HashSet<String>()), mceButtons);
         }
         attached = true;
         listener.onAttached();
-        resize();
     }
 
     private native void attachEditor(YATinyEditor tinyEditor, String itemID, String cssPath,
@@ -177,9 +204,11 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             // + "thead[id|lang],"
                 + "tr[id|rowspan|lang],";
 
-        var plug = "paste, noneditable, contextmenu, table, tablecontextmenu";
+        //var plug = "paste, noneditable, contextmenu, table, tablecontextmenu";
+        var plug = "paste, noneditable, contextmenu";
         if (defaultLanguages) {
-            plug = "paste, spellchecker, noneditable, contextmenu, table, tablecontextmenu";
+            //plug = "paste, spellchecker, noneditable, contextmenu, table, tablecontextmenu";
+            plug = "paste, spellchecker, noneditable, contextmenu";
         }
 
         var settings = {
@@ -203,6 +232,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             theme_advanced_buttons2:"",
             theme_advanced_buttons3:"",
             theme_advanced_toolbar_location:"bottom",
+            theme_advanced_statusbar_location :"none",
             //theme_advanced_buttons2_add : "tablecontrols",
             table_styles:"Header 1=header1;Header 2=header2;Header 3=header3",
             table_cell_styles:"Header 1=header1;Header 2=header2;Header3=header3;Table Cell=tableCel1",
@@ -222,7 +252,6 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                     ed.pasteAsPlainText = true;
                 });
                 ed.onLoadContent.add(function (ed) {
-                    tinyEditor.@org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditor::initialized()();
                     // Modify the context menu
                     ed.plugins.contextmenu.onContextMenu.add(function (th, menu, event) {
                         var se = ed.selection, col = se.isCollapsed();
@@ -232,6 +261,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                         menu.add({title:'advanced.copy_desc', icon:'copy', cmd:'Copy'}).setDisabled(col);
                         menu.add({title:'advanced.paste_desc', icon:'paste', cmd:'Paste'});
                     });
+                    tinyEditor.@org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditor::initialized()();
                 });
             }
         };
@@ -239,7 +269,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         $wnd.tinyMCE.execCommand('mceAddControl', false, itemID);
     }-*/;
 
-    public void detachEditor() {
+    private void detachEditor() {
         if (attached) {
             detachEditor(itemID);
         }
@@ -261,7 +291,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         return html;
     }
 
-    public native String getHTML(String itemID) /*-{
+    private native String getHTML(String itemID) /*-{
         var html = null;
         if ($wnd.tinyMCE.get(itemID)) {
             html = $wnd.tinyMCE.get(itemID).getContent();
@@ -277,7 +307,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         setFocus();
     }
 
-    public native void setHTML(final YATinyEditor editor, final String html, final String itemID) /*-{
+    private native void setHTML(final YATinyEditor editor, final String html, final String itemID) /*-{
         if ($wnd.tinyMCE.get(itemID)) {
             $wnd.tinyMCE.get(itemID).execCommand('mceSetContent', false, html);
         }
@@ -285,7 +315,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     }-*/;
 
 
-    public void setTemporaryHTML(String html) {
+    private void setTemporaryHTML(String html) {
         //Log.info("Setting temporary html in tiny editor to " + itemID + "  '" + html + "'");
         textArea.setText(html);
     }
@@ -303,7 +333,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     }-*/;
 
 
-    public void setWorkSize(int work_width, int work_height) {
+    private void setWorkSize(int work_width, int work_height) {
         this.work_width = work_width;
         this.work_height = work_height;
         resize();
@@ -318,8 +348,8 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                     // the table node is on the second position now
                     Node table = node.getChild(1);
                     Element child = (Element) table.cast();
-                    child.getStyle().setWidth(work_width, Style.Unit.PX);
-                    child.getStyle().setHeight(work_height, Style.Unit.PX);
+                    child.getStyle().setWidth(100, Style.Unit.PCT);
+                    child.getStyle().setHeight(100, Style.Unit.PCT);
                     if (!readOnly) {
                         //adjust height of <td> with IFrame
                         Node tableBody = table.getChild(0);
@@ -327,7 +357,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                         Node tableTD = tableTR.getChild(0);
                         int h = work_height - 30; //26 + 2 + 2
                         Element cell = (Element) tableTD.cast();
-                        cell.getStyle().setHeight(h, Style.Unit.PX);
+                        cell.getStyle().setHeight(100, Style.Unit.PCT);
                     }
 
                 }
@@ -344,7 +374,6 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                 return LANGUAGE_PARAM_BY_LANG_ISOCODE.get(language.toLowerCase());
             }
         }
-
         return null;
     }
 }

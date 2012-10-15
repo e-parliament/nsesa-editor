@@ -36,6 +36,9 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
     @UiField(provided = true)
     final RichTextEditor amendmentText;
 
+    @UiField
+    TabLayoutPanel tabLayoutPanel;
+
 
     @Inject
     public AmendmentWidgetViewImpl(
@@ -49,6 +52,16 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
         initWidget(widget);
         dockPanel.setHeight("100%");
         dockPanel.setWidth("100%");
+    }
+
+    @Override
+    protected void onAttach() {
+        super.onAttach();
+        selectTab(0);
+    }
+
+    private void selectTab(final int i) {
+        tabLayoutPanel.selectTab(i);
     }
 
     @Override

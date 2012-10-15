@@ -1,8 +1,10 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce;
 
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
@@ -19,9 +21,13 @@ public class TinyMCEModule extends AbstractGinModule {
     }
 
     public static class AmendmentTextProvider implements Provider<RichTextEditor> {
+
+        @Inject
+        ClientFactory clientFactory;
+
         @Override
         public RichTextEditor get() {
-            return new YATinyEditor(false, new YATinyEditorListener() {
+            return new YATinyEditor(false, clientFactory, new YATinyEditorListener() {
                 @Override
                 public void onInitialized(YATinyEditor editor) {
                     editor.addStyleName("tiny-editor");
@@ -47,9 +53,13 @@ public class TinyMCEModule extends AbstractGinModule {
     }
 
     public static class OriginalTextProvider implements Provider<RichTextEditor> {
+
+        @Inject
+        ClientFactory clientFactory;
+
         @Override
         public RichTextEditor get() {
-            return new YATinyEditor(true, new YATinyEditorListener() {
+            return new YATinyEditor(true, clientFactory, new YATinyEditorListener() {
                 @Override
                 public void onInitialized(YATinyEditor editor) {
                     editor.addStyleName("tiny-editor");

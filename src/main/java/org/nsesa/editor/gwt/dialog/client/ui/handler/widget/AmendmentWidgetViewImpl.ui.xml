@@ -50,7 +50,7 @@
         <g:center>
             <g:DockLayoutPanel unit="PCT">
                 <g:center size="50">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX" ui:field="tabLayoutPanel">
                         <g:tab>
                             <g:header>Original</g:header>
                             <g:HTMLPanel styleName="{res.originalPanel}">

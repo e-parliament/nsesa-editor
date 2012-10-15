@@ -30,7 +30,6 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetContr
  * @version $Id$
  */
 public class AmendmentDialogController extends Composite implements ProvidesResize {
-
     /**
      * The encompassing popup panel used to display this view as a modal dialog.
      */
