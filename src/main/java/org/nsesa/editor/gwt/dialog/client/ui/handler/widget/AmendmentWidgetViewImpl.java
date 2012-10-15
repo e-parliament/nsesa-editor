@@ -6,6 +6,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
  * Date: 24/06/12 21:44
@@ -27,13 +29,22 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
     DockLayoutPanel dockPanel;
     @UiField
     HTML title;
-    @UiField
-    HTMLPanel originalContent;
-    @UiField
-    HTMLPanel amendmentContent;
+
+    @UiField(provided = true)
+    final RichTextEditor originalText;
+
+    @UiField(provided = true)
+    final RichTextEditor amendmentText;
+
 
     @Inject
-    public AmendmentWidgetViewImpl() {
+    public AmendmentWidgetViewImpl(
+            @Named("originalText") final RichTextEditor originalText,
+            @Named("amendmentText") final RichTextEditor amendmentText) {
+
+        this.originalText = originalText;
+        this.amendmentText = amendmentText;
+
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         dockPanel.setHeight("100%");
@@ -47,12 +58,12 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
 
     @Override
     public void setOriginalContent(final String originalContent) {
-        this.originalContent.getElement().setInnerHTML(originalContent);
+        this.originalText.setHTML(originalContent);
     }
 
     @Override
     public void setAmendmentContent(final String amendmentContent) {
-        this.amendmentContent.getElement().setInnerHTML(amendmentContent);
+        this.amendmentText.setHTML(amendmentContent);
     }
 
     @Override

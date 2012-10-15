@@ -1,5 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:rte='urn:import:org.nsesa.editor.gwt.dialog.client.ui.rte'>
     <ui:style field="res">
 
         .header {
@@ -53,9 +54,7 @@
                         <g:tab>
                             <g:header>Original</g:header>
                             <g:HTMLPanel styleName="{res.originalPanel}">
-                                <g:HTMLPanel styleName="{res.originalContent}" ui:field="originalContent">
-
-                                </g:HTMLPanel>
+                                <rte:RichTextEditor ui:field="originalText"/>
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
@@ -83,9 +82,7 @@
                         <g:tab>
                             <g:header>Amendment</g:header>
                             <g:HTMLPanel styleName="{res.amendmentPanel}">
-                                <g:HTMLPanel styleName="{res.amendmentContent}" ui:field="amendmentContent">
-
-                                </g:HTMLPanel>
+                                <rte:RichTextEditor ui:field="amendmentText"/>
                             </g:HTMLPanel>
                         </g:tab>
                     </g:TabLayoutPanel>

@@ -4,6 +4,8 @@
 <module rename-to="Dialog">
     <inherits name="org.nsesa.editor.gwt.core.Core"/>
 
+    <inherits name='com.google.gwt.query.Query'/>
+
     <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO"/>
     <set-property name="log_WindowLogger" value="DISABLED"/>
     <set-property name="log_DivLogger" value="DISABLED"/>
