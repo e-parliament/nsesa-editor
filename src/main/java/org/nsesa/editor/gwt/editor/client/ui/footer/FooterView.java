@@ -11,4 +11,5 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(FooterViewImpl.class)
 public interface FooterView extends IsWidget {
+    void setStyleName(String style);
 }

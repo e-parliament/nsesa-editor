@@ -1,7 +1,14 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="FooterViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.footer.FooterViewCss'/>
+    <ui:with field='res' type='org.nsesa.editor.gwt.core.client.ui.resources.GitMessages'/>
     <g:HTMLPanel>
-        <div id="footer">Footer</div>
+        <div id="footer">Commit:
+            <ui:text from='{res.gitCommitIdAbbrev}'/>
+            (on '
+            <ui:text from='{res.gitBranch}'/>
+            branch), built on
+            <ui:text from='{res.gitBuildTime}'/>
+        </div>
     </g:HTMLPanel>
 </ui:UiBinder>
