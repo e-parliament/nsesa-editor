@@ -232,7 +232,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             theme_advanced_buttons2:"",
             theme_advanced_buttons3:"",
             theme_advanced_toolbar_location:"bottom",
-            theme_advanced_statusbar_location :"none",
+            theme_advanced_statusbar_location:"none",
             //theme_advanced_buttons2_add : "tablecontrols",
             table_styles:"Header 1=header1;Header 2=header2;Header 3=header3",
             table_cell_styles:"Header 1=header1;Header 2=header2;Header3=header3;Table Cell=tableCel1",
@@ -350,15 +350,12 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                     Element child = (Element) table.cast();
                     child.getStyle().setWidth(100, Style.Unit.PCT);
                     child.getStyle().setHeight(100, Style.Unit.PCT);
-                    if (!readOnly) {
-                        //adjust height of <td> with IFrame
-                        Node tableBody = table.getChild(0);
-                        Node tableTR = tableBody.getChild(0);
-                        Node tableTD = tableTR.getChild(0);
-                        int h = work_height - 30; //26 + 2 + 2
-                        Element cell = (Element) tableTD.cast();
-                        cell.getStyle().setHeight(100, Style.Unit.PCT);
-                    }
+                    //adjust height of <td> with IFrame
+                    Node tableBody = table.getChild(0);
+                    Node tableTR = tableBody.getChild(0);
+                    Node tableTD = tableTR.getChild(0);
+                    Element cell = (Element) tableTD.cast();
+                    cell.getStyle().setHeight(100, Style.Unit.PCT);
 
                 }
             }
