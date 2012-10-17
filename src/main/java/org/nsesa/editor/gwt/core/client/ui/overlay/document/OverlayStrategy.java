@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
+import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
@@ -11,6 +12,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@ImplementedBy(DefaultOverlayStrategy.class)
 public interface OverlayStrategy {
 
     /**
