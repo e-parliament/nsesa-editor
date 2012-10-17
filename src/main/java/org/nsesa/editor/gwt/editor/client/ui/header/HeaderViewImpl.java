@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.editor.client.event.main.ShowAmendmentsTabEvent;
 import org.nsesa.editor.gwt.editor.client.event.main.ShowDocumentTabEvent;
@@ -21,7 +20,6 @@ import org.nsesa.editor.gwt.editor.client.event.main.ShowInfoTabEvent;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 public class HeaderViewImpl extends Composite implements HeaderView {
     interface MyUiBinder extends UiBinder<Widget, HeaderViewImpl> {
     }

@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.inject.ImplementedBy;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -11,97 +12,44 @@ import java.util.HashMap;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ClientContext implements Serializable, IsSerializable {
+@ImplementedBy(ClientContextImpl.class)
+public interface ClientContext extends Serializable, IsSerializable {
 
     public static final String DOCUMENT_ID = "documentID";
 
-    private HashMap<String, String[]> parameters = new HashMap<String, String[]>();
+    void addParameter(String key, String value);
 
-    private String principal;
+    void addParameter(String key, String[] values);
 
-    private String[] roles;
+    void removeParameter(String key);
 
-    private String[] documentIDs;
+    String[] getParameter(String key);
 
-    private String sessionID;
+    HashMap<String, String[]> getParameters();
 
-    private String languageIso = "EN";
+    void setParameters(HashMap<String, String[]> parameters);
 
-    private String documentIso = "EN";
+    String getPrincipal();
 
-    public ClientContext() {
+    void setPrincipal(String principal);
 
-    }
+    String getSessionID();
 
-    public void addParameter(String key, String value) {
-        addParameter(key, new String[]{value});
-    }
+    void setSessionID(String sessionID);
 
-    public void addParameter(String key, String[] values) {
-        parameters.put(key, values);
-    }
+    String[] getRoles();
 
-    public void removeParameter(String key) {
-        parameters.remove(key);
-    }
+    void setRoles(String[] roles);
 
-    public String[] getParameter(String key) {
-        return parameters.get(key);
-    }
+    String[] getDocumentIDs();
 
-    public HashMap<String, String[]> getParameters() {
-        return parameters;
-    }
+    void setDocumentIDs(String[] documentIDs);
 
-    public void setParameters(HashMap<String, String[]> parameters) {
-        this.parameters = parameters;
-    }
+    String getLanguageIso();
 
-    public String getPrincipal() {
-        return principal;
-    }
+    void setLanguageIso(String languageIso);
 
-    public void setPrincipal(String principal) {
-        this.principal = principal;
-    }
+    String getDocumentIso();
 
-    public String getSessionID() {
-        return sessionID;
-    }
-
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
-    }
-
-    public String[] getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String[] roles) {
-        this.roles = roles;
-    }
-
-    public String[] getDocumentIDs() {
-        return documentIDs;
-    }
-
-    public void setDocumentIDs(String[] documentIDs) {
-        this.documentIDs = documentIDs;
-    }
-
-    public String getLanguageIso() {
-        return languageIso;
-    }
-
-    public void setLanguageIso(String languageIso) {
-        this.languageIso = languageIso;
-    }
-
-    public String getDocumentIso() {
-        return documentIso;
-    }
-
-    public void setDocumentIso(String documentIso) {
-        this.documentIso = documentIso;
-    }
+    void setDocumentIso(String documentIso);
 }

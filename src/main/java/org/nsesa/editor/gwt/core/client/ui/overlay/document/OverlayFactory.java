@@ -1,8 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
-import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20.gen.Akomantoso20OverlayFactory;
 
 /**
  * An overlay factory is responsible for translating an element into an amendable widget.
@@ -14,7 +12,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.akomantoso20.gen.Ako
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(Akomantoso20OverlayFactory.class)
 public interface OverlayFactory {
     /**
      * Translates a given element into an {@link AmendableWidget}. If the overlay does not succeed (eg. because there

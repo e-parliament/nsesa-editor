@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
@@ -11,6 +12,7 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class ServiceFactoryImpl implements ServiceFactory {
 
     private final GWTServiceAsync gwtService;

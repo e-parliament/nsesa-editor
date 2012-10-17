@@ -1,0 +1,7 @@
+.globalGlassPanel {
+    z-index: 150;
+}
+
+.globalPopup {
+    z-index: 151;
+}

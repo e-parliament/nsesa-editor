@@ -1,11 +1,11 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.marker;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
@@ -14,8 +14,6 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
-
-import java.util.ArrayList;
 
 /**
  * Date: 24/06/12 18:42
@@ -30,7 +28,7 @@ public class MarkerController {
 
     private DocumentController documentController;
 
-    private ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private final AmendmentManager amendmentManager;
 
     private final EventBus eventBus;
 
@@ -40,11 +38,11 @@ public class MarkerController {
                 view.clearMarkers();
                 final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
                 final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-                Log.info("Document height is: " + documentHeight);
-                for (final AmendmentController amendmentController : amendmentControllers) {
+//                Log.info("Document height is: " + documentHeight);
+                for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
                     if (amendmentController.getView().asWidget().isAttached()) {
                         final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                        Log.info("Amendment top is: " + amendmentTop);
+//                        Log.info("Amendment top is: " + amendmentTop);
                         double division = (double) documentHeight / (double) amendmentTop;
                         view.addMarker(division);
                     }
@@ -54,11 +52,12 @@ public class MarkerController {
     };
 
     @Inject
-    public MarkerController(final EventBus eventBus, final MarkerView view) {
+    public MarkerController(final EventBus eventBus, final MarkerView view, final AmendmentManager amendmentManager) {
         assert view != null : "View is not set --BUG";
 
         this.eventBus = eventBus;
         this.view = view;
+        this.amendmentManager = amendmentManager;
 
         registerListeners();
     }
@@ -75,7 +74,6 @@ public class MarkerController {
         eventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-                clearAmendmentControllers();
                 clearMarkers();
             }
         });
@@ -83,7 +81,6 @@ public class MarkerController {
         eventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
-                amendmentControllers.add(event.getAmendmentController());
                 drawAmendmentControllers();
             }
         });
@@ -97,10 +94,6 @@ public class MarkerController {
 
     private void clearMarkers() {
         view.clearMarkers();
-    }
-
-    private void clearAmendmentControllers() {
-        amendmentControllers = new ArrayList<AmendmentController>();
     }
 
     public MarkerView getView() {

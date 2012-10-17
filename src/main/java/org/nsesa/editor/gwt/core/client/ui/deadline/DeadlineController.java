@@ -4,6 +4,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.Date;
 
@@ -17,9 +18,11 @@ public class DeadlineController {
 
     private final DeadlineView view;
 
-    private DeadlineTracker deadlineTracker;
+    private final DeadlineTracker deadlineTracker;
 
-    private EventBus eventBus;
+    private DocumentController documentController;
+
+    private final EventBus eventBus;
 
     private Date deadline;
 
@@ -27,31 +30,46 @@ public class DeadlineController {
     public DeadlineController(final EventBus eventBus, final DeadlineTracker deadlineTracker, final DeadlineView view) {
         this.eventBus = eventBus;
         this.deadlineTracker = deadlineTracker;
+        this.deadlineTracker.setDeadlineController(this);
         this.view = view;
 
         registerListeners();
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
+    }
+
+    public DocumentController getDocumentController() {
+        return documentController;
     }
 
     private void registerListeners() {
         eventBus.addHandler(DeadlinePassedEvent.TYPE, new DeadlinePassedEventHandler() {
             @Override
             public void onEvent(DeadlinePassedEvent event) {
-                view.setPastStyle();
-                view.setDeadline(getFormattedDeadline());
+                if (event.getDocumentController() == documentController) {
+                    view.setPastStyle();
+                    view.setDeadline(getFormattedDeadline());
+                }
             }
         });
         eventBus.addHandler(Deadline24HourEvent.TYPE, new Deadline24HourEventHandler() {
             @Override
             public void onEvent(Deadline24HourEvent event) {
-                view.set24HourStyle();
-                view.setDeadline(getFormattedDeadline());
+                if (event.getDocumentController() == documentController) {
+                    view.set24HourStyle();
+                    view.setDeadline(getFormattedDeadline());
+                }
             }
         });
         eventBus.addHandler(Deadline1HourEvent.TYPE, new Deadline1HourEventHandler() {
             @Override
             public void onEvent(Deadline1HourEvent event) {
-                view.set1HourStyle();
-                view.setDeadline(getFormattedDeadline());
+                if (event.getDocumentController() == documentController) {
+                    view.set1HourStyle();
+                    view.setDeadline(getFormattedDeadline());
+                }
             }
         });
     }

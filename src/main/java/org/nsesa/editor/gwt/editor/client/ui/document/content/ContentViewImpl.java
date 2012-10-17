@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.content;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -53,7 +54,10 @@ public class ContentViewImpl extends Composite implements ContentView {
         clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
-                setScrollPanelHeight((event.getHeight() - SCROLLBAR_OFFSET) + "px");
+
+                final int height = event.getHeight() - SCROLLBAR_OFFSET;
+                Log.info("Setting scroll panel to " + height);
+                setScrollPanelHeight(height + "px");
             }
         });
     }

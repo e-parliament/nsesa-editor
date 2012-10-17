@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class DocumentHeaderController {
 
     private final DocumentHeaderView view;
-    private EventBus eventBus;
+    private final EventBus eventBus;
     private DocumentController documentController;
 
     private ArrayList<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();

@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
@@ -40,8 +39,7 @@ import java.util.ArrayList;
  */
 public class DocumentController implements AmendableWidgetListener {
 
-    // we need a separate injector so we can scope the injection to a single document (since there might be more)
-    private final DocumentInjector documentInjector = GWT.create(DocumentInjector.class);
+    private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
     private DocumentView view;
     private DocumentDTO document;
@@ -65,7 +63,8 @@ public class DocumentController implements AmendableWidgetListener {
     private ArrayList<AmendableWidget> amendableWidgets;
 
     @Inject
-    public DocumentController(final ClientFactory clientFactory, final ServiceFactory serviceFactory,
+    public DocumentController(final ClientFactory clientFactory,
+                              final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
                               final OverlayStrategy overlayStrategy,
                               final ActionBarController actionBarController,
@@ -81,21 +80,20 @@ public class DocumentController implements AmendableWidgetListener {
         this.locator = locator;
         this.overlayFactory = overlayFactory;
 
-        // set up via the document injector so they effectively become document-wide singletons
-        this.view = documentInjector.getDocumentView();
-        this.markerController = documentInjector.getMarkerController();
-        this.contentController = documentInjector.getContentController();
-        this.documentHeaderController = documentInjector.getDocumentHeaderController();
-        this.deadlineController = documentInjector.getDeadlineController();
-        this.documentEventBus = documentInjector.getEventBus();
+        this.documentEventBus = injector.getEventBus();
+
+        this.view = injector.getDocumentView();
+        this.markerController = injector.getMarkerController();
+        this.contentController = injector.getContentController();
+        this.documentHeaderController = injector.getDocumentHeaderController();
+        this.deadlineController = injector.getDeadlineController();
 
         // set references in the child controllers
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
-
-        // set up a private event bus
-        this.actionBarController.setDocumentEventBus(documentEventBus);
+        this.actionBarController.setDocumentController(this);
+        this.deadlineController.setDocumentController(this);
 
         registerListeners();
     }
@@ -104,22 +102,23 @@ public class DocumentController implements AmendableWidgetListener {
         contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                documentEventBus.fireEvent(new DocumentScrollEvent(DocumentController.this));
+                clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
             }
         });
 
-        documentEventBus.addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
+        clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
-                scrollTo(event.getTarget());
+                if (event.getDocumentController() == DocumentController.this) {
+                    scrollTo(event.getTarget());
+                }
             }
         });
 
-        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+        clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-                // forward to the parent bus
-                clientFactory.getEventBus().fireEvent(event);
+                event.getDocumentController().documentEventBus.fireEvent(event);
             }
         });
 
@@ -181,7 +180,7 @@ public class DocumentController implements AmendableWidgetListener {
 
     public AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener) {
         // Assert that the element is attached.
-        assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
+        // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
         final AmendableWidget amendableWidget = overlayFactory.getAmendableWidget(element);
         if (amendableWidget != null) {
@@ -283,7 +282,7 @@ public class DocumentController implements AmendableWidgetListener {
 
     public void injectAmendments() {
         for (final AmendableWidget root : amendableWidgets) {
-            amendmentManager.inject(root, documentEventBus);
+            amendmentManager.inject(root, this);
         }
     }
 
@@ -309,5 +308,10 @@ public class DocumentController implements AmendableWidgetListener {
 
     public String getDocumentID() {
         return documentID;
+    }
+
+    @Override
+    public String toString() {
+        return "Document controller " + documentID + " (" + super.toString() + ")";
     }
 }

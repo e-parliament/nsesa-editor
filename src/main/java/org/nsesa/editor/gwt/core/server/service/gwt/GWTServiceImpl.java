@@ -12,7 +12,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  */
 public class GWTServiceImpl extends SpringRemoteServiceServlet implements GWTService {
     @Override
-    public ClientContext authenticate(ClientContext clientContext) {
+    public ClientContext authenticate(final ClientContext clientContext) {
         clientContext.setPrincipal("dummy-" + new DateTime().getMillis());
         clientContext.setRoles(new String[]{"USER", "ADMIN"});
         clientContext.setDocumentIDs(clientContext.getParameter(ClientContext.DOCUMENT_ID));

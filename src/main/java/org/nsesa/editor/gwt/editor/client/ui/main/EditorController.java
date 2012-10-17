@@ -3,8 +3,8 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
@@ -17,7 +17,6 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestE
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.main.*;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentView;
 
 import java.util.ArrayList;
 
@@ -27,20 +26,23 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class EditorController implements BootstrapEventHandler, DocumentRefreshRequestEventHandler {
 
     private final EditorView view;
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
-    private final Injector injector;
     private final AmendmentManager amendmentManager;
     private final AmendmentDialogController amendmentDialogController;
+
+    private Injector injector;
 
     private final ArrayList<DocumentController> documentControllers = new ArrayList<DocumentController>();
 
     @Inject
-    public EditorController(final EditorView view, final ClientFactory clientFactory,
-                            final ServiceFactory serviceFactory, final Injector injector,
+    public EditorController(final EditorView view,
+                            final ClientFactory clientFactory,
+                            final ServiceFactory serviceFactory,
                             final AmendmentManager amendmentManager,
                             final AmendmentDialogController amendmentDialogController) {
         assert view != null : "View is not set --BUG";
@@ -48,7 +50,6 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
         this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-        this.injector = injector;
         this.amendmentManager = amendmentManager;
         this.amendmentDialogController = amendmentDialogController;
 
@@ -104,9 +105,10 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
     public boolean addDocumentController(final DocumentController documentController) {
         boolean added = documentControllers.add(documentController);
         if (added) {
-            final DocumentView documentControllerView = documentController.getView();
-            view.getDocumentsPanel().add(documentControllerView);
+            view.getDocumentsPanel().add(documentController.getView());
             doLayout();
+        } else {
+            throw new RuntimeException("Probably a bug.");
         }
         return added;
     }
@@ -196,12 +198,16 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
         // for an evenly distributed width
         for (final DocumentController d : documentControllers) {
             final String width = (100 / documentControllers.size()) + "%";
-            final CellPanel documentsPanel = view.getDocumentsPanel();
-            documentsPanel.setCellWidth(d.getView(), width);
+            Log.info("Index: " + view.getDocumentsPanel().getWidgetIndex(d.getView()));
+            view.getDocumentsPanel().setCellWidth(d.getView(), width);
         }
     }
 
     public EditorView getView() {
         return view;
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
     }
 }

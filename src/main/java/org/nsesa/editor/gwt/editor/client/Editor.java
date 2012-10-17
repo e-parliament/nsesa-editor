@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.editor.client;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Command;
@@ -32,20 +31,22 @@ import java.util.Map;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class Editor implements EntryPoint {
+public abstract class Editor implements EntryPoint {
+    ;
 
-    private final Injector injector = GWT.create(Injector.class);
+    public abstract Injector getInjector();
 
     private ClientFactory clientFactory;
     private ServiceFactory serviceFactory;
+
 
     @Override
     public void onModuleLoad() {
         // set up the uncaught exception handler before the actual initialization
         Log.setUncaughtExceptionHandler();
-        clientFactory = injector.getClientFactory();
+        clientFactory = getInjector().getClientFactory();
 
-        serviceFactory = injector.getServiceFactory();
+        serviceFactory = getInjector().getServiceFactory();
 
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
@@ -59,7 +60,10 @@ public class Editor implements EntryPoint {
 
     protected void onModuleLoadDeferred() {
         // set up the main window
-        final EditorController editorController = injector.getEditorController();
+        final EditorController editorController = getInjector().getEditorController();
+        // there seems to be no other way to inject this 'injector'
+        editorController.setInjector(getInjector());
+
         final EditorView view = editorController.getView();
         RootLayoutPanel.get().add(view);
 
@@ -171,6 +175,7 @@ public class Editor implements EntryPoint {
 
             @Override
             public void onSuccess(final ClientContext clientContext) {
+                clientFactory.setClientContext(clientContext);
                 eventBus.fireEvent(new AuthenticatedEvent(clientContext));
             }
         });
@@ -185,7 +190,7 @@ public class Editor implements EntryPoint {
      * @param throwable    the throwable, if it exists
      */
     protected void handleError(String errorTitle, String errorMessage, Throwable throwable) {
-        final ErrorController errorController = injector.getErrorController();
+        final ErrorController errorController = getInjector().getErrorController();
         errorController.setError(errorTitle, errorMessage);
         errorController.center();
         Log.error(errorMessage, throwable);

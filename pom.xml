@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.nsesa</groupId>
     <artifactId>editor</artifactId>
-    <packaging>war</packaging>
-    <name>Amendment Editor</name>
+    <packaging>jar</packaging>
+    <name>Core Editor</name>
     <version>0.0.1</version>
 
     <pluginRepositories>
@@ -139,12 +139,6 @@
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwt.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
             <version>${gwt.version}</version>
             <scope>runtime</scope>
@@ -222,11 +216,23 @@
     </dependencies>
 
     <build>
-        <finalName>editor</finalName>
+        <finalName>core-editor</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+            </resource>
+            <!-- make sure the sources are available -->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.java</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.png</include>
+                    <include>**/*.gif</include>
+                    <include>**/*.css</include>
+                    <include>**/*.properties</include>
+                </includes>
             </resource>
         </resources>
         <plugins>
@@ -248,93 +254,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!-- ***************************** Configure GWT plugin    ***************************** -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwtplugin.version}</version>
-                <configuration>
-                    <!--<extraJvmArgs>-Xss2M -XX:MaxPermSize=512M -Xmx2048m -Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=localhost:8008</extraJvmArgs>-->
-                    <extraJvmArgs>-Xss2M -XX:MaxPermSize=512M -Xmx1048m</extraJvmArgs>
-                    <hostedWebapp>web</hostedWebapp>
-                    <modules>
-                        <module>org.nsesa.editor.gwt.editor.Editor</module>
-                    </modules>
-                    <runTarget>editor.html</runTarget>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-user</artifactId>
-                        <version>${gwt.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-dev</artifactId>
-                        <version>${gwt.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>com.google.gwt</groupId>
-                        <artifactId>gwt-servlet</artifactId>
-                        <version>${gwt.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-
-            <!-- ***************************** Configure WAR plugin    ***************************** -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
-                <configuration>
-                    <warSourceDirectory>web</warSourceDirectory>
-                    <webResources>
-                        <resource>
-                            <!-- this is relative to the pom.xml directory -->
-                            <directory>${basedir}/src/env/${env}</directory>
-                            <filtering>true</filtering>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-
-    <!-- ***************************** Profiles ***************************** -->
-    <profiles>
-        <profile>
-            <!-- local development profile -->
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-                    <name>local</name>
-                </property>
-            </activation>
-            <properties>
-                <env>local</env>
-            </properties>
-        </profile>
-        <profile>
-            <!-- Development env. profile -->
-            <id>dev</id>
-            <activation>
-                <property>
-                    <name>dev</name>
-                </property>
-            </activation>
-            <properties>
-                <env>dev</env>
-            </properties>
-        </profile>
-    </profiles>
 </project>

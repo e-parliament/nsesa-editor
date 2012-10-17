@@ -7,9 +7,8 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.TinyMCEModule;
-import org.nsesa.editor.gwt.editor.client.module.AkomaNtoso20Module;
-import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
 import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelModule;
@@ -24,7 +23,7 @@ public class EditorModule extends AbstractGinModule {
     @Override
     protected void configure() {
         install(new CoreModule());
-        install(new ActionBarModule());
+        install(new DocumentModule());
         install(new HeaderModule());
         install(new FooterModule());
         install(new AmendmentModule());
@@ -32,9 +31,6 @@ public class EditorModule extends AbstractGinModule {
         install(new InfoPanelModule());
         install(new AmendmentDialogModule());
         install(new TinyMCEModule());
-
-//        install(new EPModule());
-        install(new AkomaNtoso20Module());
 
         bind(AmendmentManager.class).in(Singleton.class);
     }

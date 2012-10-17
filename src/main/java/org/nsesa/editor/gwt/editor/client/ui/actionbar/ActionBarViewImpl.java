@@ -5,6 +5,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Date: 24/06/12 21:44
@@ -12,6 +13,7 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class ActionBarViewImpl extends Composite implements ActionBarView {
 
     interface MyUiBinder extends UiBinder<Widget, ActionBarViewImpl> {

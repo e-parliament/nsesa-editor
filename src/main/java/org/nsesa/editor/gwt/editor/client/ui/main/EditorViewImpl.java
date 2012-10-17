@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -54,5 +55,11 @@ public class EditorViewImpl extends Composite implements EditorView {
 
     public void switchToTab(int index) {
         tabPanel.selectTab(index);
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        Log.info("Attach: EditorViewImpl");
     }
 }

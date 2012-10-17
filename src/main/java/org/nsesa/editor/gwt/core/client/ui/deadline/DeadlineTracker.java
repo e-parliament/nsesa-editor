@@ -20,9 +20,15 @@ public class DeadlineTracker {
 
     private final EventBus eventBus;
 
+    private DeadlineController deadlineController;
+
     @Inject
-    public DeadlineTracker(EventBus eventBus) {
+    public DeadlineTracker(final EventBus eventBus) {
         this.eventBus = eventBus;
+    }
+
+    public void setDeadlineController(DeadlineController deadlineController) {
+        this.deadlineController = deadlineController;
     }
 
     /**
@@ -102,7 +108,7 @@ public class DeadlineTracker {
     private Timer timer24hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new Deadline24HourEvent());
+            eventBus.fireEvent(new Deadline24HourEvent(deadlineController.getDocumentController()));
             Log.info("24 hour deadline mark passed.");
         }
     };
@@ -110,7 +116,7 @@ public class DeadlineTracker {
     private Timer timer1hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new Deadline1HourEvent());
+            eventBus.fireEvent(new Deadline1HourEvent(deadlineController.getDocumentController()));
             Log.info("1 hour deadline mark passed.");
         }
     };
@@ -118,7 +124,7 @@ public class DeadlineTracker {
     private Timer timer0hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new DeadlinePassedEvent());
+            eventBus.fireEvent(new DeadlinePassedEvent(deadlineController.getDocumentController()));
             Log.info("Deadline mark passed.");
         }
     };

@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.inject.ImplementedBy;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
@@ -12,6 +13,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@ImplementedBy(ClientFactoryImpl.class)
 public interface ClientFactory {
 
     EventBus getEventBus();

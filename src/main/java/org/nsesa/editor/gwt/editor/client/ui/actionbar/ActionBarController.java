@@ -5,13 +5,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 21:42
@@ -19,15 +20,17 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHand
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class ActionBarController {
 
     private final ActionBarView view;
     private final ActionBarViewCss actionBarViewCss;
 
     private final ClientFactory clientFactory;
-    private EventBus documentEventBus;
 
     private AmendableWidget amendableWidget;
+
+    private DocumentController documentController;
 
     @Inject
     public ActionBarController(final ClientFactory clientFactory, final ActionBarView view,
@@ -36,6 +39,10 @@ public class ActionBarController {
         this.view = view;
         this.actionBarViewCss = actionBarViewCss;
         registerListeners();
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 
     private void registerListeners() {
@@ -47,13 +54,12 @@ public class ActionBarController {
                 }
             }
         });
-    }
-
-    private void registerPrivateListeners() {
-        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+        clientFactory.getEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
-                view.asWidget().setVisible(false);
+                if (event.getDocumentController() == documentController) {
+                    view.asWidget().setVisible(false);
+                }
             }
         });
     }
@@ -135,10 +141,5 @@ public class ActionBarController {
 
     public AmendableWidget getAmendableWidget() {
         return amendableWidget;
-    }
-
-    public void setDocumentEventBus(EventBus documentEventBus) {
-        this.documentEventBus = documentEventBus;
-        registerPrivateListeners();
     }
 }
