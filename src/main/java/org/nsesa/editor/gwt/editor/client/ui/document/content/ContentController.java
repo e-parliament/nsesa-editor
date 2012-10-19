@@ -88,6 +88,7 @@ public class ContentController {
      * @param widget the widget to scroll to
      */
     public void scrollTo(final Widget widget) {
+        view.getScrollPanel().scrollToTop();
         view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop());
     }
 }
