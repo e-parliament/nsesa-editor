@@ -40,11 +40,13 @@ public class DefaultLocator implements Locator {
             int count = 1;
             while (iterator.hasNext()) {
                 AmendableWidget aw = iterator.next();
-                if (aw.getType().equalsIgnoreCase(amendableWidget.getType())) {
-                    count++;
-                }
-                if (aw == amendableWidget) {
-                    break;
+                if (aw != null) {
+                    if (aw.getType().equalsIgnoreCase(amendableWidget.getType())) {
+                        count++;
+                    }
+                    if (aw == amendableWidget) {
+                        break;
+                    }
                 }
             }
             return Integer.toString(count);
