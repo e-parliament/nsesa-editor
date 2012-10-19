@@ -43,7 +43,7 @@
         }
 
         .marker {
-            width: 25px;
+            width: 18px;
         }
     </ui:style>
     <g:HTMLPanel>
