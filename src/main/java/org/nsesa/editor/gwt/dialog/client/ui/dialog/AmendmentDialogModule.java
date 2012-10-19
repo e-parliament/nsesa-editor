@@ -6,7 +6,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentBundleController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentMoveController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentTableController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -17,11 +17,13 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetContr
 public class AmendmentDialogModule implements GinModule {
     @Override
     public void configure(GinBinder binder) {
+
+        binder.install(new AmendmentWidgetModule());
+
         binder.bind(AmendmentDialogController.class).in(Singleton.class);
 
         binder.bind(AmendmentBundleController.class).in(Singleton.class);
         binder.bind(AmendmentMoveController.class).in(Singleton.class);
         binder.bind(AmendmentTableController.class).in(Singleton.class);
-        binder.bind(AmendmentWidgetController.class).in(Singleton.class);
     }
 }

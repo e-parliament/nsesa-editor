@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelController;
+import org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelView;
 
 /**
  * Date: 24/06/12 21:44
@@ -39,14 +41,19 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
     @UiField
     TabLayoutPanel tabLayoutPanel;
 
+    @UiField(provided = true)
+    AuthorPanelView authorPanelView;
+
 
     @Inject
     public AmendmentWidgetViewImpl(
             @Named("originalText") final RichTextEditor originalText,
-            @Named("amendmentText") final RichTextEditor amendmentText) {
+            @Named("amendmentText") final RichTextEditor amendmentText,
+            final AuthorPanelController authorPanelController) {
 
         this.originalText = originalText;
         this.amendmentText = amendmentText;
+        this.authorPanelView = authorPanelController.getView();
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);

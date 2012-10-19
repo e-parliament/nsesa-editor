@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:rte='urn:import:org.nsesa.editor.gwt.dialog.client.ui.rte'>
+             xmlns:rte='urn:import:org.nsesa.editor.gwt.dialog.client.ui.rte'
+             xmlns:author='urn:import:org.nsesa.editor.gwt.dialog.client.ui.tab.author'>
     <ui:style field="res">
 
         .header {
@@ -60,7 +61,7 @@
                         <g:tab>
                             <g:header>Authors</g:header>
                             <g:HTMLPanel styleName="{res.authorsPanel}">
-                                <h1>Authors</h1>
+                                <author:AuthorPanelView ui:field="authorPanelView"/>
                             </g:HTMLPanel>
                         </g:tab>
                         <g:tab>
