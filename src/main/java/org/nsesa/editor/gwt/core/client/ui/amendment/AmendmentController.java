@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.core.client.ui.amendment;
 import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 /**
@@ -20,6 +21,8 @@ public class AmendmentController {
     private final AmendmentEventBus amendmentEventBus;
 
     private AmendmentContainerDTO amendment;
+
+    private AmendableWidget amendableWidget;
 
     @Inject
     public AmendmentController(final ClientFactory clientFactory) {
@@ -55,5 +58,9 @@ public class AmendmentController {
 
     public void setTitle(String title) {
         this.view.setTitle(title);
+    }
+
+    public void setAmendableWidget(AmendableWidget amendableWidget) {
+        this.amendableWidget = amendableWidget;
     }
 }

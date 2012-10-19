@@ -98,15 +98,19 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         }
         // physical attach
         add(amendmentController.getView().asWidget(), (com.google.gwt.user.client.Element) getAmendmentHolderElement());
+        // set up a reference to this widget
+        amendmentController.setAmendableWidget(this);
     }
 
     @Override
     public void removeAmendmentController(final AmendmentController amendmentController) {
         if (!amendmentControllers.remove(amendmentController)) {
-            throw new RuntimeException("Child widget not found: " + amendmentController);
+            throw new RuntimeException("Amendment controller not found: " + amendmentController);
         }
         // physical remove
         remove(amendmentController.getView());
+        // clear reference to this widget
+        amendmentController.setAmendableWidget(null);
     }
 
     @Override
@@ -229,6 +233,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public Element getAmendmentHolderElement() {
         if (amendmentHolderElement == null) {
             amendmentHolderElement = DOM.createDiv();
+            final com.google.gwt.user.client.Element titleDiv = DOM.createDiv();
+            titleDiv.setInnerHTML("Amendments<hr/>");
+            amendmentHolderElement.appendChild(titleDiv);
+            amendmentHolderElement.getStyle().setBackgroundColor("#eee");
             if (childAmendableWidgets.isEmpty()) {
                 amendableElement.appendChild(amendmentHolderElement);
             } else {
