@@ -1,9 +1,15 @@
 package org.nsesa.editor.gwt.core.client.amendment;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -11,6 +17,7 @@ import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,6 +29,8 @@ import java.util.List;
 @Singleton
 public class AmendmentManager implements AmendmentInjectionCapable, AmendableWidgetWalker {
 
+    private final ServiceFactory serviceFactory;
+
     private final ClientFactory clientFactory;
 
     private Injector injector;
@@ -29,13 +38,43 @@ public class AmendmentManager implements AmendmentInjectionCapable, AmendableWid
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     @Inject
-    public AmendmentManager(final ClientFactory clientFactory) {
+    public AmendmentManager(final ClientFactory clientFactory, final ServiceFactory serviceFactory) {
         this.clientFactory = clientFactory;
+        this.serviceFactory = serviceFactory;
+        registerListeners();
+    }
+
+    private void registerListeners() {
+        clientFactory.getEventBus().addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerSaveEvent event) {
+                serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(event.getAmendments())), new AsyncCallback<AmendmentContainerDTO[]>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
+                    }
+
+                    @Override
+                    public void onSuccess(AmendmentContainerDTO[] result) {
+                        for (AmendmentContainerDTO amendmentContainerDTO : result) {
+                            final AmendmentController amendmentController = injector.getAmendmentController();
+                            amendmentController.setAmendment(amendmentContainerDTO);
+                            amendmentControllers.add(amendmentController);
+                        }
+                        clientFactory.getEventBus().fireEvent(new AmendmentContainerInjectEvent(result));
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void injectSingleAmendment(final AmendmentContainerDTO amendment, final AmendableWidget root, final DocumentController documentController) {
-        injectInternal(getAmendmentController(amendment), root, documentController);
+        final AmendmentController amendmentController = getAmendmentController(amendment);
+        if (amendmentController == null) {
+            throw new NullPointerException("AmendmentContainer DTO was not yet registered with a controller?");
+        }
+        injectInternal(amendmentController, root, documentController);
     }
 
     @Override

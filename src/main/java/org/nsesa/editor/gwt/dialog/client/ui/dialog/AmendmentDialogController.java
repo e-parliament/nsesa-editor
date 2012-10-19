@@ -92,6 +92,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = event.getAmendmentAction();
+                amendment = new AmendmentContainerDTO();
                 handle();
                 show();
             }

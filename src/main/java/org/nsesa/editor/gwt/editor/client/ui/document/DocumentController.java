@@ -13,10 +13,7 @@ import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
@@ -24,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
@@ -129,6 +127,17 @@ public class DocumentController implements AmendableWidgetListener {
             @Override
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
+            }
+        });
+
+        clientFactory.getEventBus().addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerInjectEvent event) {
+                for (final AmendableWidget amendableWidget : amendableWidgets) {
+                    for (final AmendmentContainerDTO amendmentContainerDTO : event.getAmendments()) {
+                        amendmentManager.injectSingleAmendment(amendmentContainerDTO, amendableWidget, DocumentController.this);
+                    }
+                }
             }
         });
 

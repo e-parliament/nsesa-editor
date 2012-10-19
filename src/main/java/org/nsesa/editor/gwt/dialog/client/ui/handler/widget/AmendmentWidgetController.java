@@ -6,8 +6,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -44,6 +46,15 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
     }
 
     private void registerListeners() {
+        view.getSaveButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
+                clientFactory.getEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
+                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+            }
+        });
+
         view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -62,14 +73,18 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
 
+        if (amendableWidget == null && amendment == null) {
+            throw new NullPointerException("Neither amendment nor amendable widget are set.");
+        }
+
         if (amendableWidget != null) {
             view.setTitle(locator.getLocation(amendableWidget, clientFactory.getClientContext().getDocumentIso(), false));
             view.setOriginalContent(amendableWidget.getContent());
             view.setAmendmentContent(amendableWidget.getContent());
-        } else if (amendment != null) {
+        }
+
+        if (amendment != null) {
             // TODO edit the amendment
-        } else {
-            throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
     }
 }

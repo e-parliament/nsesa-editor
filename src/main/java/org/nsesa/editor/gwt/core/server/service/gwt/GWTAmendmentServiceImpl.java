@@ -51,21 +51,21 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
 
     @Override
     public AmendmentContainerDTO[] saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers) throws UnsupportedOperationException, StaleResourceException {
-        return new AmendmentContainerDTO[0];
+        return amendmentContainers.toArray(new AmendmentContainerDTO[amendmentContainers.size()]);
     }
 
     @Override
     public AmendmentContainerDTO[] deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers) throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException {
-        return new AmendmentContainerDTO[0];
+        return amendmentContainers.toArray(new AmendmentContainerDTO[amendmentContainers.size()]);
     }
 
     @Override
     public AmendmentContainerDTO[] tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers) throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException {
-        return new AmendmentContainerDTO[0];
+        return amendmentContainers.toArray(new AmendmentContainerDTO[amendmentContainers.size()]);
     }
 
     @Override
     public AmendmentContainerDTO[] withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers) throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException {
-        return new AmendmentContainerDTO[0];
+        return amendmentContainers.toArray(new AmendmentContainerDTO[amendmentContainers.size()]);
     }
 }
