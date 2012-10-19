@@ -117,7 +117,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public void setListener(AmendableWidgetListener listener) {
         this.listener = listener;
         // register a listener for the browser events
-        sinkEvents(Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEMOVE);
+        sinkEvents(Event.ONKEYDOWN | Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEMOVE);
     }
 
     @Override

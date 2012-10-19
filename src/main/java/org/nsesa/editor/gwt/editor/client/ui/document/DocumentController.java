@@ -15,6 +15,7 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
+import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentController implements AmendableWidgetListener {
+public class DocumentController implements AmendableWidgetListener, AmendableWidgetWalker {
 
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
@@ -207,7 +208,7 @@ public class DocumentController implements AmendableWidgetListener {
 
         final AmendableWidget root = overlayFactory.getAmendableWidget(element);
         if (root != null) {
-            amendmentManager.walk(root, new AmendableWidgetWalker.AmendableVisitor() {
+            walk(root, new AmendableWidgetWalker.AmendableVisitor() {
                 @Override
                 public boolean visit(AmendableWidget visited) {
                     // if the widget is amendable, register a listener for its events
@@ -221,6 +222,17 @@ public class DocumentController implements AmendableWidgetListener {
         return root;
     }
 
+    @Override
+    public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
+        if (visitor.visit(toVisit)) {
+            if (toVisit != null) {
+                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
+                    walk(child, visitor);
+                }
+            }
+        }
+    }
+
     public DocumentView getView() {
         return view;
     }
@@ -230,48 +242,8 @@ public class DocumentController implements AmendableWidgetListener {
     }
 
     @Override
-    public void onAmend(AmendableWidget sender) {
-        throw new RuntimeException("Not yet migrated away ...");
-    }
-
-    @Override
-    public void onAdd(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild) {
-        throw new RuntimeException("Not yet migrated away ...");
-    }
-
-    @Override
-    public void onAddWithExternalSource(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild) {
-        throw new RuntimeException("Not yet migrated away ...");
-    }
-
-    @Override
-    public void onAmendWithChildren(AmendableWidget sender) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onAmendWithFootnotes(AmendableWidget sender) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onDelete(AmendableWidget sender) {
-        Log.info("[Event: D] " + sender);
-    }
-
-    @Override
-    public void onTranslate(AmendableWidget sender, String languageIso) {
-        Log.info("[Event: Tl] " + sender);
-    }
-
-    @Override
-    public void onTransfer(AmendableWidget sender) {
-        Log.info("[Event: Tr] " + sender);
-    }
-
-    @Override
     public void onClick(AmendableWidget sender) {
-        Log.info("[Event: Cl] " + sender);
+        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender));
     }
 
     @Override

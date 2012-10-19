@@ -7,21 +7,6 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  * @version $Id$
  */
 public interface AmendableWidgetListener {
-    void onAmend(AmendableWidget sender);
-
-    void onAdd(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild);
-
-    void onAddWithExternalSource(AmendableWidget sender, AmendableWidget amendableWidget, boolean asChild);
-
-    void onAmendWithChildren(AmendableWidget sender);
-
-    void onAmendWithFootnotes(AmendableWidget sender);
-
-    void onDelete(AmendableWidget sender);
-
-    void onTranslate(AmendableWidget sender, String languageIso);
-
-    void onTransfer(AmendableWidget sender);
 
     void onClick(AmendableWidget sender);
 

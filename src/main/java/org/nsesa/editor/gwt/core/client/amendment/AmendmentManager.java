@@ -27,7 +27,7 @@ import java.util.List;
  * @version $Id$
  */
 @Singleton
-public class AmendmentManager implements AmendmentInjectionCapable, AmendableWidgetWalker {
+public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final ServiceFactory serviceFactory;
 
@@ -91,7 +91,7 @@ public class AmendmentManager implements AmendmentInjectionCapable, AmendableWid
         final String element = amendmentController.getAmendment().getSourceReference().getElement();
 
         // not in our cache? Can happen if we inject a single amendment
-        walk(root, new AmendableVisitor() {
+        documentController.walk(root, new AmendableWidgetWalker.AmendableVisitor() {
             @Override
             public boolean visit(final AmendableWidget visited) {
                 if (visited != null && element.equalsIgnoreCase(visited.getId())) {
@@ -120,16 +120,6 @@ public class AmendmentManager implements AmendmentInjectionCapable, AmendableWid
         return amendmentController;
     }
 
-    @Override
-    public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
-        if (visitor.visit(toVisit)) {
-            if (toVisit != null) {
-                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
-                    walk(child, visitor);
-                }
-            }
-        }
-    }
 
     public void setAmendmentContainerDTOs(final AmendmentContainerDTO[] amendmentContainerDTOs) {
         for (final AmendmentContainerDTO amendmentContainerDTO : amendmentContainerDTOs) {
