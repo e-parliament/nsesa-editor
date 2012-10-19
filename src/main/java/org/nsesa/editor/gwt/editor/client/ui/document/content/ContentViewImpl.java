@@ -11,9 +11,9 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 /**
  * Date: 24/06/12 16:39
@@ -34,7 +34,7 @@ public class ContentViewImpl extends Composite implements ContentView {
      */
     private static final int SCROLLBAR_OFFSET = 85;
 
-    private final ClientFactory clientFactory;
+    private DocumentEventBus documentEventBus;
 
     @UiField
     ScrollPanel scrollPanel;
@@ -42,8 +42,8 @@ public class ContentViewImpl extends Composite implements ContentView {
     HTML contentPanel;
 
     @Inject
-    public ContentViewImpl(final ClientFactory clientFactory) {
-        this.clientFactory = clientFactory;
+    public ContentViewImpl(final DocumentEventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         registerListeners();
@@ -51,7 +51,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
 

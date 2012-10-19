@@ -10,8 +10,8 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 
@@ -29,16 +29,16 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final EventBus eventBus;
+    private final DocumentEventBus documentEventBus;
     @UiField
     Label documentName;
     @UiField
     ListBox documentTranslations;
 
     @Inject
-    public DocumentHeaderViewImpl(final EventBus eventBus) {
+    public DocumentHeaderViewImpl(final DocumentEventBus documentEventBus) {
 
-        this.eventBus = eventBus;
+        this.documentEventBus = documentEventBus;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);

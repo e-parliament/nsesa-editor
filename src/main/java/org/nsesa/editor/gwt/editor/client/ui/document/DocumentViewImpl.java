@@ -7,7 +7,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerView;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class DocumentViewImpl extends Composite implements DocumentView {
 
     interface MyUiBinder extends UiBinder<Widget, DocumentViewImpl> {
@@ -30,7 +31,7 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final ClientFactory clientFactory;
+    private final DocumentEventBus documentEventBus;
 
     @UiField(provided = true)
     final ContentView contentView;
@@ -42,11 +43,11 @@ public class DocumentViewImpl extends Composite implements DocumentView {
     DeadlineView deadlineView;
 
     @Inject
-    public DocumentViewImpl(final ClientFactory clientFactory, final ContentController contentView,
+    public DocumentViewImpl(final DocumentEventBus documentEventBus, final ContentController contentView,
                             final MarkerController markerController, final DocumentHeaderController documentHeaderController,
                             final DeadlineController deadlineController) {
 
-        this.clientFactory = clientFactory;
+        this.documentEventBus = documentEventBus;
         this.contentView = contentView.getView();
         this.markerView = markerController.getView();
         this.documentHeaderView = documentHeaderController.getView();

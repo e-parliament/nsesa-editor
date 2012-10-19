@@ -10,7 +10,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendmentInjector {
+public interface AmendmentInjectionCapable {
 
     void inject(AmendableWidget root, DocumentController documentController);
 

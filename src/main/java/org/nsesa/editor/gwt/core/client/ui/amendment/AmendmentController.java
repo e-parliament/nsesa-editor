@@ -1,6 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
-import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -11,18 +11,22 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentController extends Composite {
+public class AmendmentController {
+
+    private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);
 
     private final AmendmentView view;
     private final ClientFactory clientFactory;
+    private final AmendmentEventBus amendmentEventBus;
 
     private AmendmentContainerDTO amendment;
 
     @Inject
-    public AmendmentController(final ClientFactory clientFactory, final AmendmentView view) {
+    public AmendmentController(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
-        this.view = view;
 
+        this.view = amendmentInjector.getAmendmentView();
+        this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
         registerListeners();
     }
 
@@ -36,6 +40,9 @@ public class AmendmentController extends Composite {
 
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
+
+        setJustification("Justification for " + amendment.getAmendmentContainerID());
+        setTitle("Title for " + amendment.getAmendmentContainerID());
     }
 
     public AmendmentView getView() {

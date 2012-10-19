@@ -8,7 +8,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendmentWalker {
+public interface AmendableWidgetWalker {
 
     void walk(AmendableWidget root, AmendableVisitor visitor);
 

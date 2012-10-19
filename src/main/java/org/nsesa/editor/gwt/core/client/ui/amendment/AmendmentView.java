@@ -15,4 +15,8 @@ public interface AmendmentView extends IsWidget {
     void setJustification(String justification);
 
     void setTitle(String title);
+
+    void addAmendmentContentPart(final IsWidget part);
+
+    void addOriginalContentPart(final IsWidget part);
 }

@@ -1,12 +1,14 @@
 package org.nsesa.editor.gwt.core.client.amendment;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -19,17 +21,25 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
+@Singleton
+public class AmendmentManager implements AmendmentInjectionCapable, AmendableWidgetWalker {
 
-    private final ClientFactory clientFactory;
+    private ClientFactory clientFactory;
+    private Injector injector;
 
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     private final HashMap<String, AmendableWidget> elementIDCache = new HashMap<String, AmendableWidget>();
 
+    public AmendmentManager() {
+        Log.info("------------- AMENDMENT MANAGER() ------------------");
+    }
+
     @Inject
     public AmendmentManager(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
+        Log.info("------------- AMENDMENT MANAGER() WITH CF ------------------");
+
     }
 
     @Override
@@ -83,7 +93,7 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
     }
 
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendment) {
-        AmendmentController amendmentController = new AmendmentController(clientFactory, new AmendmentViewImpl());
+        AmendmentController amendmentController = injector.getAmendmentController();
         amendmentController.setAmendment(amendment);
         return amendmentController;
     }
@@ -120,5 +130,9 @@ public class AmendmentManager implements AmendmentInjector, AmendmentWalker {
 
     public List<AmendmentController> getAmendmentControllers() {
         return amendmentControllers;
+    }
+
+    public void setInjector(Injector injector) {
+        this.injector = injector;
     }
 }

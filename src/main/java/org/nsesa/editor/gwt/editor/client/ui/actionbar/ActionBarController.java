@@ -6,13 +6,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 /**
  * Date: 24/06/12 21:42
@@ -26,16 +26,16 @@ public class ActionBarController {
     private final ActionBarView view;
     private final ActionBarViewCss actionBarViewCss;
 
-    private final ClientFactory clientFactory;
+    private final DocumentEventBus documentEventBus;
 
     private AmendableWidget amendableWidget;
 
     private DocumentController documentController;
 
     @Inject
-    public ActionBarController(final ClientFactory clientFactory, final ActionBarView view,
+    public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
                                final ActionBarViewCss actionBarViewCss) {
-        this.clientFactory = clientFactory;
+        this.documentEventBus = documentEventBus;
         this.view = view;
         this.actionBarViewCss = actionBarViewCss;
         registerListeners();
@@ -50,11 +50,11 @@ public class ActionBarController {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(amendableWidget, AmendmentAction.MODIFICATION));
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, AmendmentAction.MODIFICATION));
                 }
             }
         });
-        clientFactory.getEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
                 if (event.getDocumentController() == documentController) {

@@ -209,5 +209,7 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
 
     public void setInjector(Injector injector) {
         this.injector = injector;
+        // copy into the amendment manager - there seems to be no other way to do this
+        this.amendmentManager.setInjector(injector);
     }
 }

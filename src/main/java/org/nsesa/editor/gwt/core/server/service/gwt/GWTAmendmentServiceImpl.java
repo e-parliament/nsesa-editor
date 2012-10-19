@@ -26,15 +26,18 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
     public AmendmentContainerDTO[] getAmendmentContainers(ClientContext clientContext) throws UnsupportedOperationException {
 
         AmendmentContainerDTO amendment1 = new AmendmentContainerDTO();
+        amendment1.setAmendmentContainerID("1");
         AmendableWidgetReference reference1 = new AmendableWidgetReference("rec1");
         amendment1.setSourceReference(reference1);
         AmendmentContainerDTO amendment2 = new AmendmentContainerDTO();
+        amendment2.setAmendmentContainerID("2");
         AmendableWidgetReference reference2 = new AmendableWidgetReference("rec2");
         AmendableWidgetReference reference2a = new AmendableWidgetReference("rec3");
         AmendableWidgetReference reference2b = new AmendableWidgetReference("rec1");
         amendment2.setTargetReferences(new ArrayList<AmendableWidgetReference>(Arrays.asList(reference2a, reference2b)));
         amendment2.setSourceReference(reference2);
         AmendmentContainerDTO amendment3 = new AmendmentContainerDTO();
+        amendment3.setAmendmentContainerID("3");
         AmendableWidgetReference reference3 = new AmendableWidgetReference("art2-pnta");
         amendment3.setSourceReference(reference3);
 

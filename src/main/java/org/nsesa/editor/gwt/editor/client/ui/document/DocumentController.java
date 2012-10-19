@@ -8,13 +8,15 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
@@ -54,7 +56,7 @@ public class DocumentController implements AmendableWidgetListener {
     private final DeadlineController deadlineController;
     private final OverlayFactory overlayFactory;
     private final Locator locator;
-    private final EventBus documentEventBus;
+    private final DocumentEventBus documentEventBus;
 
     private final AmendmentManager amendmentManager;
 
@@ -80,7 +82,7 @@ public class DocumentController implements AmendableWidgetListener {
         this.locator = locator;
         this.overlayFactory = overlayFactory;
 
-        this.documentEventBus = injector.getEventBus();
+        this.documentEventBus = injector.getDocumentEventBus();
 
         this.view = injector.getDocumentView();
         this.markerController = injector.getMarkerController();
@@ -118,7 +120,7 @@ public class DocumentController implements AmendableWidgetListener {
         clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-                event.getDocumentController().documentEventBus.fireEvent(event);
+                documentEventBus.fireEvent(event);
             }
         });
 
@@ -127,6 +129,21 @@ public class DocumentController implements AmendableWidgetListener {
             @Override
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
+            }
+        });
+
+        // forward the amendment injected event
+        clientFactory.getEventBus().addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerInjectedEvent event) {
+                event.getDocumentController().documentEventBus.fireEvent(event);
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerCreateEvent event) {
+                clientFactory.getEventBus().fireEvent(event);
             }
         });
     }
@@ -308,6 +325,10 @@ public class DocumentController implements AmendableWidgetListener {
 
     public String getDocumentID() {
         return documentID;
+    }
+
+    public AmendmentManager getAmendmentManager() {
+        return amendmentManager;
     }
 
     @Override

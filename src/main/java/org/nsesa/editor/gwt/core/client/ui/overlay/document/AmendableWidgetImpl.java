@@ -107,7 +107,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             throw new RuntimeException("Child widget not found: " + amendmentController);
         }
         // physical remove
-        remove(amendmentController);
+        remove(amendmentController.getView());
     }
 
     @Override

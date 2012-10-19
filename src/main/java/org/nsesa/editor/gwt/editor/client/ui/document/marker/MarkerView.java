@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.marker;
 
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -11,7 +12,7 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(MarkerViewImpl.class)
 public interface MarkerView extends IsWidget {
-    void addMarker(double top);
+    FocusWidget addMarker(double top);
 
     void clearMarkers();
 

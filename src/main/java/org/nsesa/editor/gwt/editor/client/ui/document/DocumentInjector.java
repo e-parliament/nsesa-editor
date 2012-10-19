@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
@@ -22,7 +21,7 @@ public interface DocumentInjector extends Ginjector {
 
     DeadlineController getDeadlineController();
 
-    EventBus getEventBus();
+    DocumentEventBus getDocumentEventBus();
 
     ContentController getContentController();
 

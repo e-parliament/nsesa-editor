@@ -8,8 +8,8 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 
@@ -24,15 +24,15 @@ public class ContentController {
 
     private ContentView view;
     private DocumentController documentController;
-    private final EventBus eventBus;
+    private final DocumentEventBus documentEventBus;
     private boolean contentLoaded;
 
     @Inject
-    public ContentController(final EventBus eventBus, final ContentView view) {
+    public ContentController(final DocumentEventBus documentEventBus, final ContentView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
-        this.eventBus = eventBus;
+        this.documentEventBus = documentEventBus;
         registerListeners();
     }
 

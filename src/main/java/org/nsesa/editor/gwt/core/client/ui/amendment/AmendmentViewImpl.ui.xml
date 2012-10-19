@@ -4,9 +4,8 @@
               type='org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewCss'/>
     <ui:style field="res">
         .amendmentHolder {
-            background-color: red;
+            border: 1px solid red;
             width: 100%;
-            height: 300px;
         }
     </ui:style>
     <g:HTMLPanel styleName="{res.amendmentHolder}">

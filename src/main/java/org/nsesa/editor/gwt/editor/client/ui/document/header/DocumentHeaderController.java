@@ -5,10 +5,10 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 
@@ -22,17 +22,17 @@ import java.util.ArrayList;
 public class DocumentHeaderController {
 
     private final DocumentHeaderView view;
-    private final EventBus eventBus;
+    private final DocumentEventBus documentEventBus;
     private DocumentController documentController;
 
     private ArrayList<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
 
     @Inject
-    public DocumentHeaderController(final EventBus eventBus, final DocumentHeaderView view) {
+    public DocumentHeaderController(final DocumentEventBus documentEventBus, final DocumentHeaderView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
-        this.eventBus = eventBus;
+        this.documentEventBus = documentEventBus;
         registerListeners();
     }
 
@@ -54,7 +54,7 @@ public class DocumentHeaderController {
                     }
                     documentController.setDocument(document);
                     // fire an update to get the new content
-                    eventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
+                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
                 }
             }
         });

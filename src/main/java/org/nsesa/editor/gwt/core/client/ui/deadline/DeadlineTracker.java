@@ -3,10 +3,10 @@ package org.nsesa.editor.gwt.core.client.ui.deadline;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline1HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline24HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.DeadlinePassedEvent;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.Date;
 
@@ -18,13 +18,13 @@ import java.util.Date;
  */
 public class DeadlineTracker {
 
-    private final EventBus eventBus;
+    private final DocumentEventBus documentEventBus;
 
     private DeadlineController deadlineController;
 
     @Inject
-    public DeadlineTracker(final EventBus eventBus) {
-        this.eventBus = eventBus;
+    public DeadlineTracker(final DocumentEventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
     }
 
     public void setDeadlineController(DeadlineController deadlineController) {
@@ -108,7 +108,7 @@ public class DeadlineTracker {
     private Timer timer24hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new Deadline24HourEvent(deadlineController.getDocumentController()));
+            documentEventBus.fireEvent(new Deadline24HourEvent(deadlineController.getDocumentController()));
             Log.info("24 hour deadline mark passed.");
         }
     };
@@ -116,7 +116,7 @@ public class DeadlineTracker {
     private Timer timer1hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new Deadline1HourEvent(deadlineController.getDocumentController()));
+            documentEventBus.fireEvent(new Deadline1HourEvent(deadlineController.getDocumentController()));
             Log.info("1 hour deadline mark passed.");
         }
     };
@@ -124,7 +124,7 @@ public class DeadlineTracker {
     private Timer timer0hour = new Timer() {
         @Override
         public void run() {
-            eventBus.fireEvent(new DeadlinePassedEvent(deadlineController.getDocumentController()));
+            documentEventBus.fireEvent(new DeadlinePassedEvent(deadlineController.getDocumentController()));
             Log.info("Deadline mark passed.");
         }
     };
