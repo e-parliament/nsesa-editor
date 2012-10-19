@@ -1,9 +1,12 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 /**
@@ -18,6 +21,7 @@ public class AmendmentController {
 
     private final AmendmentView view;
     private final ClientFactory clientFactory;
+    private OverlayFactory overlayFactory;
     private final AmendmentEventBus amendmentEventBus;
 
     private AmendmentContainerDTO amendment;
@@ -27,8 +31,9 @@ public class AmendmentController {
     private AmendableWidget amendmentWidget;
 
     @Inject
-    public AmendmentController(final ClientFactory clientFactory) {
+    public AmendmentController(final ClientFactory clientFactory, final OverlayFactory overlayFactory) {
         this.clientFactory = clientFactory;
+        this.overlayFactory = overlayFactory;
 
         this.view = amendmentInjector.getAmendmentView();
         this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
@@ -71,6 +76,8 @@ public class AmendmentController {
     }
 
     public void setAmendmentWidget(String serializedAmendment) {
-
+        final Element div = DOM.createDiv();
+        div.setInnerHTML(serializedAmendment);
+        setAmendmentWidget(overlayFactory.getAmendableWidget(div.getFirstChildElement()));
     }
 }
