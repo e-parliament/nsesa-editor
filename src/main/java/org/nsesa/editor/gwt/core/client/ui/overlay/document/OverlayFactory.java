@@ -24,5 +24,7 @@ public interface OverlayFactory {
      */
     AmendableWidget getAmendableWidget(Element element);
 
+    AmendableWidget getAmendableWidget(String tag);
+
     AmendableWidget toAmendableWidget(Element element);
 }

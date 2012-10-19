@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 
 /**
@@ -16,6 +17,10 @@ public class DefaultOverlayFactory implements OverlayFactory {
     @Inject
     public DefaultOverlayFactory(OverlayStrategy overlayStrategy) {
         this.overlayStrategy = overlayStrategy;
+    }
+
+    public AmendableWidget getAmendableWidget(String tag) {
+        return getAmendableWidget(DOM.createElement(tag));
     }
 
     @Override
