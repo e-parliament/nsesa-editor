@@ -99,7 +99,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         // physical attach
         add(amendmentController.getView().asWidget(), (com.google.gwt.user.client.Element) getAmendmentHolderElement());
         // set up a reference to this widget
-        amendmentController.setAmendableWidget(this);
+        amendmentController.setParentAmendableWidget(this);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         // physical remove
         remove(amendmentController.getView());
         // clear reference to this widget
-        amendmentController.setAmendableWidget(null);
+        amendmentController.setParentAmendableWidget(null);
     }
 
     @Override

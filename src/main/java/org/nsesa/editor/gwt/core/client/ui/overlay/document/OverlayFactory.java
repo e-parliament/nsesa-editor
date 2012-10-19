@@ -23,4 +23,6 @@ public interface OverlayFactory {
      * @return the amendable widget, or null if it cannot be overlaid.
      */
     AmendableWidget getAmendableWidget(Element element);
+
+    AmendableWidget toAmendableWidget(Element element);
 }

@@ -22,7 +22,9 @@ public class AmendmentController {
 
     private AmendmentContainerDTO amendment;
 
-    private AmendableWidget amendableWidget;
+    private AmendableWidget parentAmendableWidget;
+
+    private AmendableWidget amendmentWidget;
 
     @Inject
     public AmendmentController(final ClientFactory clientFactory) {
@@ -60,7 +62,15 @@ public class AmendmentController {
         this.view.setTitle(title);
     }
 
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
+        this.parentAmendableWidget = parentAmendableWidget;
+    }
+
+    public void setAmendmentWidget(AmendableWidget amendmentWidget) {
+        this.amendmentWidget = amendmentWidget;
+    }
+
+    public void setAmendmentWidget(String serializedAmendment) {
+
     }
 }
