@@ -32,7 +32,6 @@ import java.util.Map;
  * @version $Id$
  */
 public abstract class Editor implements EntryPoint {
-    ;
 
     public abstract Injector getInjector();
 
