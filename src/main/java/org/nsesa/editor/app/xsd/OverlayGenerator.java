@@ -1,7 +1,6 @@
 package org.nsesa.editor.app.xsd;
 
 import com.sun.xml.xsom.*;
-import com.sun.xml.xsom.impl.ElementDecl;
 import com.sun.xml.xsom.parser.XSOMParser;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -9,9 +8,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.nsesa.editor.app.xsd.model.OverlayClass;
-import org.nsesa.editor.app.xsd.model.OverlayProperty;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
+import org.nsesa.editor.app.xsd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
@@ -24,6 +21,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * Generates a hierarchy of Java classes by parsing an XSD Schema
  * Date: 03/08/12 19:25
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -34,7 +32,11 @@ public class OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(OverlayGenerator.class);
 
     private static final String OVERLAY_ELEMENT_TEMPLATE_NAME = "overlayClass.ftl";
+    private static final String OVERLAY_ENUM_TEMPLATE_NAME    = "overlayEnum.ftl";
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
+
+    private static final String BASE_DIRECTORY = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
+    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.";
 
     private File generatedSourcesDirectory;
 
@@ -44,22 +46,30 @@ public class OverlayGenerator {
     // XSOM parser
     private final XSOMParser parser = new XSOMParser();
 
+    private final List<OverlayClass> generatedClasses = new ArrayList<OverlayClass>();
+
     public OverlayGenerator() {
         parser.setErrorHandler(new LoggingErrorHandler());
         configuration.setDefaultEncoding("UTF-8");
     }
 
+    /**
+     * Parse the xsd schema
+     * @param xsd
+     * @throws SAXException
+     */
     public void parse(final String xsd) throws SAXException {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
         try {
-            final File directoryForTemplateLoading = new File(classLoader.getResource(OVERLAY_ELEMENT_TEMPLATE_NAME).getFile()).getParentFile();
+            final File directoryForTemplateLoading =
+                    new File(classLoader.getResource(OVERLAY_ELEMENT_TEMPLATE_NAME).getFile()).getParentFile();
             configuration.setDirectoryForTemplateLoading(directoryForTemplateLoading);
 
             // create the subdirectory name
             final String subDirectory = xsd.contains(".") ? xsd.substring(0, xsd.indexOf(".")) : xsd;
             final File targetDirectoryClasses = new File(classLoader.getResource(".").getFile());
-            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/" + subDirectory + "/gen/");
+            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), BASE_DIRECTORY);
             if (!generatedSourcesDirectory.exists() && !generatedSourcesDirectory.mkdirs()) {
                 throw new RuntimeException("Could not create generated source directory " + generatedSourcesDirectory.getAbsolutePath());
             }
@@ -74,36 +84,115 @@ public class OverlayGenerator {
 
     }
 
+    /**
+     * Analyze the xsd schema and generate overlayclasses
+     * @param packageName
+     * @param xsd
+     * @throws SAXException
+     */
     public void analyze(final String packageName, final String xsd) throws SAXException {
-        final List<OverlayClass> allGeneratedClasses = new ArrayList<OverlayClass>();
         final XSSchemaSet set = parser.getResult();
+        OverlayClassGenerator classGenerator = new OverlayClassGeneratorImpl();
+
         for (final XSSchema schema : set.getSchemas()) {
-            final List<OverlayClass> generatedClasses = new ArrayList<OverlayClass>();
-            final Collection<XSElementDecl> elementDecls = schema.getElementDecls().values();
-            for (final XSElementDecl elementDecl : elementDecls) {
-                // create the filename
-                final File file = new File(generatedSourcesDirectory, StringUtils.capitalize(elementDecl.getName()) + ".java");
-                Map<String, Object> rootMap = new HashMap<String, Object>();
-                final OverlayClass overlayClass = generate(elementDecl, packageName);
-                rootMap.put("overlayClass", overlayClass);
+            final Collection<XSSimpleType> simpleTypes = schema.getSimpleTypes().values();
+            for (final XSSimpleType simpleType : simpleTypes) {
+                OverlayClass overlayClass = classGenerator.generate(simpleType);
                 generatedClasses.add(overlayClass);
-                writeToFile(file, rootMap, OVERLAY_ELEMENT_TEMPLATE_NAME);
             }
 
-            // create the factory
-            final String className = StringUtils.capitalize(xsd.substring(0, xsd.indexOf("."))) + "OverlayFactory";
-            final File file = new File(generatedSourcesDirectory, className + ".java");
+            final Collection<XSComplexType> complexTypes = schema.getComplexTypes().values();
+            for (final XSComplexType complexType : complexTypes) {
+                OverlayClass overlayClass = classGenerator.generate(complexType);
+                generatedClasses.add(overlayClass);
+            }
 
-            Map<String, Object> rootMap = new HashMap<String, Object>();
+            final Collection<XSAttGroupDecl> xsAttGroupDecls = schema.getAttGroupDecls().values();
+            for (final XSAttGroupDecl attGroupDecl : xsAttGroupDecls) {
+                OverlayClass overlayClass = classGenerator.generate(attGroupDecl);
+                generatedClasses.add(overlayClass);
+            }
+            final Collection<XSModelGroupDecl> modelGroupDecls = schema.getModelGroupDecls().values();
+            for (final XSModelGroupDecl modelGroupDecl : modelGroupDecls) {
+                OverlayClass overlayClass = classGenerator.generate(modelGroupDecl);
+                generatedClasses.add(overlayClass);
+            }
 
-            final OverlayClass factoryClass = new OverlayClass();
-            factoryClass.setName(className);
-            factoryClass.setPackageName("org.nsesa.editor.gwt.core.client.ui.overlay.document." + packageName + ".gen");
+            final Collection<XSAttributeDecl> xsAttributeDecls = schema.getAttributeDecls().values();
+            for (final XSAttributeDecl attributeDecl : xsAttributeDecls) {
+                OverlayClass overlayClass = classGenerator.generate(attributeDecl);
+                generatedClasses.add(overlayClass);
+            }
+            final Collection<XSElementDecl> elementDecls = schema.getElementDecls().values();
+            for (final XSElementDecl elementDecl : elementDecls) {
+                OverlayClass overlayClass = classGenerator.generate(elementDecl);
+                generatedClasses.add(overlayClass);
+            }
 
-            rootMap.put("overlayClass", factoryClass);
-            rootMap.put("overlayClasses", generatedClasses);
-            writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
         }
+        Set<String> names = new HashSet<String>();
+        for(OverlayClass overlayClass : generatedClasses) {
+            if (names.contains(overlayClass.getName() + overlayClass.getNameSpace())) {
+                throw new RuntimeException("Stop generation... The class already exists:" + overlayClass.getName() + overlayClass.getNameSpace());
+            }
+            names.add(overlayClass.getName() + overlayClass.getNameSpace());
+        }
+        LOG.info("{0} classes will be generated", generatedClasses.size());
+    }
+
+    /**
+     * Print overlay classes in the files
+     * @param packageName
+     * @param xsd
+     */
+    public void print(String packageName, String xsd) {
+        final PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl(packageName);
+        final PackageNameGenerator directoryNameGenerator = new PackageNameGeneratorImpl("");
+
+        List<OverlayClass> elementClases = new ArrayList<OverlayClass>();
+        for(OverlayClass overlayClass : generatedClasses) {
+            String filePackageName = directoryNameGenerator.getPackageName(overlayClass);
+            File filePackage = new File(generatedSourcesDirectory, filePackageName);
+            if (!filePackage.exists()) {
+                try {
+                    filePackage.mkdir();
+                } catch (Exception e) {
+                    throw new RuntimeException("The directory can not be created" + filePackageName);
+                }
+            }
+
+            final File file = new File(filePackage, StringUtils.capitalize(overlayClass.getName()) + ".java");
+            try {
+                Map<String, Object> rootMap = new HashMap<String, Object>();
+                rootMap.put("overlayClass", overlayClass);
+                rootMap.put("packageNameGenerator", packageNameGenerator);
+                String templateName = OVERLAY_ELEMENT_TEMPLATE_NAME;
+                if (overlayClass.isEnumeration()) {
+                    templateName = OVERLAY_ENUM_TEMPLATE_NAME;
+                }
+                writeToFile(file, rootMap, templateName);
+            } catch(Exception e) {
+                throw new RuntimeException("The class can not be generated " + file.getAbsolutePath());
+            }
+            if (overlayClass.isElement()) {
+                elementClases.add(overlayClass);
+            }
+        }
+            // create the factory
+        final String className = StringUtils.capitalize(xsd.substring(0, xsd.indexOf("."))) + "OverlayFactory";
+        final File file = new File(generatedSourcesDirectory, className + ".java");
+
+        Map<String, Object> rootMap = new HashMap<String, Object>();
+
+        final OverlayClass factoryClass = new OverlayClass();
+        factoryClass.setName(className);
+        factoryClass.setPackageName(BASE_PACKAGE.endsWith(".")
+                ? BASE_PACKAGE.substring(0, BASE_PACKAGE.length() - 1) : BASE_PACKAGE);
+
+        rootMap.put("overlayClass", factoryClass);
+        rootMap.put("overlayClasses", elementClases);
+        rootMap.put("packageNameGenerator", packageNameGenerator);
+        writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
     }
 
     public void writeToFile(File file, Object rootMap, String templateName) {
@@ -128,7 +217,10 @@ public class OverlayGenerator {
         }
     }
 
-
+    /**
+     * The main method
+     * @param args
+     */
     public static void main(String[] args) {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
@@ -136,93 +228,11 @@ public class OverlayGenerator {
         try {
             final String xsd = "akomantoso20.xsd";
             generator.parse(xsd);
-            generator.analyze(xsd.substring(0, xsd.indexOf(".")), xsd);
+            generator.analyze(BASE_PACKAGE, xsd);
+            generator.print(BASE_PACKAGE, xsd);
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }
-    }
-
-    public OverlayClass generate(final XSElementDecl elementDecl, final String packageName) {
-        final OverlayClass overlayClass = new OverlayClass();
-        // TODO: generate the correct package name
-        overlayClass.setPackageName("org.nsesa.editor.gwt.core.client.ui.overlay.document." + packageName + ".gen");
-        // TODO: correct the interfaces/extension
-        //overlayClass.setInterfaces(new Class<?>[]{AmendableWidget.class});
-        overlayClass.setName(elementDecl.getName());
-        // some test classes
-        findSuperClassAndAttributes(overlayClass, elementDecl.getType());
-
-        return overlayClass;
-    }
-
-    public OverlayClass findSuperClassAndAttributes(OverlayClass overlayClass, XSType type) {
-        if (type instanceof XSComplexType && !"AnyType".equals(type.getName())) {
-            XSComplexType complexType = (XSComplexType) type;
-//            overlayClass.setSuperClassName(StringUtils.capitalize(complexType.getName()));
-            overlayClass.setSuperClassName(AmendableWidgetImpl.class.getName());
-            for (XSAttributeUse attr : complexType.getAttributeUses()) {
-                if (!"id".equalsIgnoreCase(attr.getDecl().getName())) {
-                    overlayClass.getProperties().add(new OverlayProperty(overlayClass.getPackageName(), StringUtils.capitalize(attr.getDecl().getType().getName()), attr.getDecl().getName() + "Attribute", false));
-                }
-            }
-            final List<XSElementDecl> allowedChildElements = complexType.getElementDecls();
-            for (XSElementDecl allowedChild : allowedChildElements) {
-                final XSType allowedChildType = allowedChild.getType();
-                if (allowedChildType instanceof XSComplexType) {
-                    boolean isCollection = false;
-                    final XSComplexType xsComplexType = (XSComplexType) allowedChildType;
-                    if (xsComplexType.getContentType() instanceof XSParticle) {
-                        XSParticle xsParticle = (XSParticle) xsComplexType.getContentType();
-                        isCollection = xsParticle.getMaxOccurs().intValue() > 1 || xsParticle.getMaxOccurs().intValue() == -1;
-                    }
-                    if (!"id".equalsIgnoreCase(allowedChild.getName())) {
-                        overlayClass.getProperties().add(new OverlayProperty(overlayClass.getPackageName(), StringUtils.capitalize(allowedChild.getName()), allowedChild.getName() + "Element", isCollection));
-                    }
-                }
-            }
-        }
-        return overlayClass;
-    }
-
-    public static void inspect(XSType type, int depth) {
-        if (type instanceof XSComplexType && !("AnyType".equalsIgnoreCase(type.getName()))) {
-            XSComplexType complexType = (XSComplexType) type;
-            LOG.info(depth(depth) + "which is a {} (subclasses: {})", complexType.getName(), complexType.getSubtypes());
-            // display attributes
-            for (XSAttributeUse attr : complexType.getAttributeUses()) {
-                LOG.info(depth(depth + 1) + "{} (type: {})", attr.getDecl().getName(), attr.getDecl().getType());
-            }
-            // display allowed children
-            final XSContentType contentType = complexType.getContentType();
-            if (contentType instanceof XSParticle) {
-                XSParticle xsParticle = (XSParticle) contentType;
-                final XSTerm term = xsParticle.getTerm();
-                final XSModelGroup modelGroup = term.asModelGroup();
-                for (XSParticle childParticle : modelGroup.getChildren()) {
-                    final XSTerm childParticleTerm = childParticle.getTerm();
-                    if (childParticleTerm instanceof ElementDecl) {
-                        ElementDecl elementDecl = (ElementDecl) childParticleTerm;
-                        LOG.info(depth(depth + 1) + "=> allowed: {} ", elementDecl.getName());
-                    }
-                }
-            }
-
-            inspect(complexType.getBaseType(), ++depth);
-        } else {
-            //LOG.info("Type is {}" + type.getName());
-        }
-    }
-
-    public File getGeneratedSourcesDirectory() {
-        return generatedSourcesDirectory;
-    }
-
-    private static String depth(int times) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < times; i++) {
-            sb.append("   ");
-        }
-        return sb.toString();
     }
 
     private static class LoggingErrorHandler implements ErrorHandler {
@@ -240,9 +250,5 @@ public class OverlayGenerator {
         public void fatalError(SAXParseException e) throws SAXException {
             LOG.error("Fatal: " + e.getMessage(), e);
         }
-    }
-
-    private static class ExposingObjectWrapper extends DefaultObjectWrapper {
-
     }
 }
