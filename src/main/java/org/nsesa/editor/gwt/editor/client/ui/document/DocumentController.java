@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentController implements AmendableWidgetListener, AmendableWidgetWalker {
+public class DocumentController implements AmendableWidgetUIListener, AmendableWidgetWalker {
 
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
@@ -202,7 +202,7 @@ public class DocumentController implements AmendableWidgetListener, AmendableWid
         }
     }
 
-    public AmendableWidget wrap(final com.google.gwt.dom.client.Element element, final AmendableWidgetListener listener) {
+    public AmendableWidget wrap(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
@@ -213,7 +213,7 @@ public class DocumentController implements AmendableWidgetListener, AmendableWid
                 public boolean visit(AmendableWidget visited) {
                     // if the widget is amendable, register a listener for its events
                     if (visited != null && visited.isAmendable() != null && visited.isAmendable()) {
-                        visited.setListener(listener);
+                        visited.setUIListener(UIListener);
                     }
                     return true;
                 }

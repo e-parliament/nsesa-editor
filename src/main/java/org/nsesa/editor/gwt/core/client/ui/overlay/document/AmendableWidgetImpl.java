@@ -20,10 +20,18 @@ import java.util.Collections;
  */
 public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget, HasWidgets {
 
+
+    public static final boolean DEFAULT_ROOT_WIDGET_AMENDABLE = true;
+
     /**
      * The underlying DOM element.
      */
     private final Element amendableElement;
+
+    /**
+     * A listener for all the UI operations to call back on.
+     */
+    private AmendableWidgetUIListener UIListener;
 
     /**
      * A listener for all the amending operations to call back on.
@@ -81,69 +89,128 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public void addAmendableWidget(final AmendableWidget child) {
-        if (!childAmendableWidgets.add(child)) {
-            throw new RuntimeException("Child already exists: " + child);
+        if (child == null) throw new NullPointerException("Cannot add null child!");
+        boolean vetoed = false;
+        if (listener != null)
+            vetoed = listener.beforeAmendableWidgetAdded(this, child);
+
+        if (!vetoed) {
+            if (!childAmendableWidgets.add(child)) {
+                throw new RuntimeException("Child already exists: " + child);
+            }
+            child.setParentAmendableWidget(this);
+            // inform the listener
+            if (listener != null) listener.afterAmendableWidgetAdded(this, child);
+        } else {
+            Log.debug("AmendableWidget listener veto'ed the adding of the amendable widget.");
         }
     }
 
     @Override
     public void removeAmendableWidget(final AmendableWidget child) {
-        if (!childAmendableWidgets.remove(child)) {
-            throw new RuntimeException("Child widget not found: " + child);
+        if (child == null) throw new NullPointerException("Cannot remove null child!");
+
+        boolean vetoed = false;
+        if (listener != null)
+            vetoed = listener.beforeAmendableWidgetAdded(this, child);
+
+        if (!vetoed) {
+            if (!childAmendableWidgets.remove(child)) {
+                throw new RuntimeException("Child widget not found: " + child);
+            }
+            child.setParentAmendableWidget(null);
+            // inform the listener
+            if (listener != null) listener.afterAmendableWidgetRemoved(this, child);
+        } else {
+            Log.debug("AmendableWidget listener veto'ed the removal of the amendable widget.");
         }
     }
 
     @Override
     public void addAmendmentController(final AmendmentController amendmentController) {
-        if (!amendmentControllers.add(amendmentController)) {
-            throw new RuntimeException("Amendment already exists: " + amendmentController);
-        }
-        // physical attach
-        final HTMLPanel holderElement = getAmendmentHolderElement();
-        if (holderElement != null) {
-            holderElement.add(amendmentController.getView());
-            // set up a reference to this widget
-            amendmentController.setParentAmendableWidget(this);
+        if (amendmentController == null) throw new NullPointerException("Cannot add null amendment controller!");
+
+        boolean vetoed = false;
+        if (listener != null)
+            vetoed = listener.beforeAmendmentControllerAdded(this, amendmentController);
+
+        if (!vetoed) {
+            if (!amendmentControllers.add(amendmentController)) {
+                throw new RuntimeException("Amendment already exists: " + amendmentController);
+            }
+            // inform the listener
+            if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
+
+            // physical attach
+            final HTMLPanel holderElement = getAmendmentHolderElement();
+            if (holderElement != null) {
+                holderElement.add(amendmentController.getView());
+                // set up a reference to this widget
+                amendmentController.setParentAmendableWidget(this);
+            } else {
+                Log.warn("No amendment holder panel could be added for this widget " + this);
+            }
         } else {
-            Log.warn("No amendment holder panel could be added for this widget " + this);
+            Log.debug("AmendableWidget listener veto'ed the adding of the amendment controller.");
         }
     }
 
     @Override
     public void removeAmendmentController(final AmendmentController amendmentController) {
-        if (!amendmentControllers.remove(amendmentController)) {
-            throw new RuntimeException("Amendment controller not found: " + amendmentController);
+        if (amendmentController == null) throw new NullPointerException("Cannot remove null amendment controller!");
+
+        boolean vetoed = false;
+        if (listener != null)
+            vetoed = listener.beforeAmendmentControllerRemoved(this, amendmentController);
+
+        if (!vetoed) {
+            if (!amendmentControllers.remove(amendmentController)) {
+                throw new RuntimeException("Amendment controller not found: " + amendmentController);
+            }
+
+            // inform the listener
+            if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
+
+            // physical remove
+            remove(amendmentController.getView());
+            // clear reference to this widget
+            amendmentController.setParentAmendableWidget(null);
+        } else {
+            Log.debug("AmendableWidget listener veto'ed the removal of the amendment controller.");
         }
-        // physical remove
-        remove(amendmentController.getView());
-        // clear reference to this widget
-        amendmentController.setParentAmendableWidget(null);
+    }
+
+    @Override
+    public void setUIListener(final AmendableWidgetUIListener UIListener) {
+        this.UIListener = UIListener;
+        if (UIListener != null) {
+            // register a listener for the browser events
+            sinkEvents(Event.ONKEYDOWN | Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEMOVE);
+        }
     }
 
     @Override
     public void setListener(AmendableWidgetListener listener) {
         this.listener = listener;
-        // register a listener for the browser events
-        sinkEvents(Event.ONKEYDOWN | Event.ONCLICK | Event.ONDBLCLICK | Event.ONMOUSEMOVE);
     }
 
     @Override
-    public void onBrowserEvent(Event event) {
+    public void onBrowserEvent(final Event event) {
         // don't let events bubble up or you'd get parent widgets being invoked as well
         event.stopPropagation();
-        if (listener != null) {
+        if (UIListener != null) {
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    listener.onClick(this);
+                    UIListener.onClick(this);
                     break;
                 case Event.ONDBLCLICK:
-                    listener.onDblClick(this);
+                    UIListener.onDblClick(this);
                     break;
                 case Event.ONMOUSEMOVE:
-                    listener.onMouseOver(this);
+                    UIListener.onMouseOver(this);
                     break;
                 case Event.ONMOUSEOUT:
-                    listener.onMouseOut(this);
+                    UIListener.onMouseOut(this);
                     break;
             }
         }
@@ -152,11 +219,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public void setParentAmendableWidget(AmendableWidget parent) {
         this.parentAmendableWidget = parent;
-    }
-
-    @Override
-    public void postProcess() {
-
     }
 
     @Override
@@ -211,12 +273,19 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return "[Element " + amendableElement.getNodeName() + "]";
     }
 
+    /**
+     * Check if this widget is amendable or not in the editor. If it has not been specified
+     * (when {@code amendable == null}), then we will go up in the tree until the root widget has been found,
+     * in which case the default {@link #DEFAULT_ROOT_WIDGET_AMENDABLE} is returned.
+     *
+     * @return true if the amendment is amendable, false otherwise. Should never return <tt>null</tt>.
+     */
     @Override
     public Boolean isAmendable() {
         // has been set explicitly
         if (amendable != null) return amendable;
-        // walk the parents until we find one that has been set, or default to true for the root
-        return parentAmendableWidget != null ? parentAmendableWidget.isAmendable() : true;
+        // walk the parents until we find one that has been set, or default to DEFAULT_ROOT_WIDGET_AMENDABLE for the root
+        return parentAmendableWidget != null ? parentAmendableWidget.isAmendable() : DEFAULT_ROOT_WIDGET_AMENDABLE;
     }
 
     @Override

@@ -49,7 +49,9 @@ public class DefaultOverlayFactory implements OverlayFactory {
             final Element[] children = overlayStrategy.getChildren(element);
             for (final Element child : children) {
                 final AmendableWidget amendableChild = wrap(amendableWidget, child);
-                amendableWidget.addAmendableWidget(amendableChild);
+                if (amendableChild != null) {
+                    amendableWidget.addAmendableWidget(amendableChild);
+                }
             }
 
             // post process the widget (eg. hide large tables)
