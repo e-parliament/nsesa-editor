@@ -1,11 +1,12 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 /**
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id: RomanConvertor.java 4771 2012-01-20 13:24:50Z pluppens $
+ * @author Fred Swartz - 2006-12-29 - Placed in public domain (MIT License).
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a> (small modifications)
+ * @see <a href="http://www.leepoint.net/notes-java/examples/components/romanNumerals/romanNumeral.html">Origin</a>
  */
 public class RomanConvertor {
-    final static RomanValue[] ROMAN_VALUE_TABLE = {
+    private final static RomanValue[] ROMAN_VALUE_TABLE = {
             new RomanValue(1000, "M"),
             new RomanValue(900, "CM"),
             new RomanValue(500, "D"),
@@ -22,14 +23,10 @@ public class RomanConvertor {
     };
 
     private static class RomanValue {
-        //============================================================== fields
-        //... No need to make this fields private because they are
-        //    used only in this private value class.
-        int intVal;     // Integer value.
-        String romVal;     // Equivalent roman numeral.
+        final int intVal;
+        final String romVal;
 
-        //========================================================= constructor
-        RomanValue(int dec, String rom) {
+        RomanValue(final int dec, final String rom) {
             this.intVal = dec;
             this.romVal = rom;
         }
@@ -39,14 +36,16 @@ public class RomanConvertor {
         if (n >= 4000 || n < 1) {
             throw new NumberFormatException("Numbers must be in range 1-3999");
         }
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
 
-        //... Start with largest value, and work toward smallest.
+        // ... Start with largest value, and work toward smallest
         for (RomanValue equiv : ROMAN_VALUE_TABLE) {
-            //... Remove as many of this value as possible (maybe none).
+            // ... Remove as many of this value as possible (maybe none)
             while (n >= equiv.intVal) {
-                n -= equiv.intVal;            // Subtract value.
-                result.append(equiv.romVal);  // Add roman equivalent.
+                // Subtract value
+                n -= equiv.intVal;
+                // Add roman equivalent
+                result.append(equiv.romVal);
             }
         }
         return result.toString().toLowerCase();
