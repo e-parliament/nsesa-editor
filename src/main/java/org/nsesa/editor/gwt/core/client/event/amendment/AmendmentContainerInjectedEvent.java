@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 20:14
@@ -15,11 +14,9 @@ public class AmendmentContainerInjectedEvent extends GwtEvent<AmendmentContainer
     public static Type<AmendmentContainerInjectedEventHandler> TYPE = new Type<AmendmentContainerInjectedEventHandler>();
 
     private final AmendmentController amendmentController;
-    private final DocumentController documentController;
 
-    public AmendmentContainerInjectedEvent(AmendmentController amendmentController, DocumentController documentController) {
+    public AmendmentContainerInjectedEvent(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
-        this.documentController = documentController;
     }
 
     @Override
@@ -34,9 +31,5 @@ public class AmendmentContainerInjectedEvent extends GwtEvent<AmendmentContainer
 
     public AmendmentController getAmendmentController() {
         return amendmentController;
-    }
-
-    public DocumentController getDocumentController() {
-        return documentController;
     }
 }

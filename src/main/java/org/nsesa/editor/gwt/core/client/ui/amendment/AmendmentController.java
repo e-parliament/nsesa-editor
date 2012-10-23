@@ -1,13 +1,12 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 21:42
@@ -29,6 +28,11 @@ public class AmendmentController {
     private AmendableWidget parentAmendableWidget;
 
     private AmendableWidget amendmentWidget;
+
+    /**
+     * The document controller into which we are injected. If it is not set, we're not injected anywhere.
+     */
+    private DocumentController documentController;
 
     @Inject
     public AmendmentController(final ClientFactory clientFactory, final OverlayFactory overlayFactory) {
@@ -55,6 +59,14 @@ public class AmendmentController {
         setTitle("Title for " + amendment.getAmendmentContainerID());
     }
 
+    public DocumentController getDocumentController() {
+        return documentController;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
+    }
+
     public AmendmentView getView() {
         return view;
     }
@@ -73,11 +85,5 @@ public class AmendmentController {
 
     public void setAmendmentWidget(AmendableWidget amendmentWidget) {
         this.amendmentWidget = amendmentWidget;
-    }
-
-    public void setAmendmentWidget(String serializedAmendment) {
-        final Element div = DOM.createDiv();
-        div.setInnerHTML(serializedAmendment);
-        setAmendmentWidget(overlayFactory.getAmendableWidget(div.getFirstChildElement()));
     }
 }

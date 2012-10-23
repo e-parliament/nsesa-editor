@@ -11,6 +11,8 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
@@ -88,6 +90,13 @@ public class MarkerController {
         documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
+                drawAmendmentControllers();
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 drawAmendmentControllers();
             }
         });

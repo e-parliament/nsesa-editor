@@ -15,6 +15,7 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     private AmendmentAction amendmentAction;
     private String amendmentContainerID;
+    private String amendmentContainerStatus;
 
     private AmendableWidgetReference sourceReference;
     private ArrayList<AmendableWidgetReference> targetReferences = new ArrayList<AmendableWidgetReference>();
@@ -36,6 +37,14 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setAmendmentAction(AmendmentAction amendmentAction) {
         this.amendmentAction = amendmentAction;
+    }
+
+    public String getAmendmentContainerStatus() {
+        return amendmentContainerStatus;
+    }
+
+    public void setAmendmentContainerStatus(String amendmentContainerStatus) {
+        this.amendmentContainerStatus = amendmentContainerStatus;
     }
 
     public AmendableWidgetReference getSourceReference() {

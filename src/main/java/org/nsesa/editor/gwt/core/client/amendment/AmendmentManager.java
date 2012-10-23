@@ -96,7 +96,8 @@ public class AmendmentManager implements AmendmentInjectionCapable {
             public boolean visit(final AmendableWidget visited) {
                 if (visited != null && element.equalsIgnoreCase(visited.getId())) {
                     visited.addAmendmentController(amendmentController);
-                    clientFactory.getEventBus().fireEvent(new AmendmentContainerInjectedEvent(amendmentController, documentController));
+                    amendmentController.setDocumentController(documentController);
+                    clientFactory.getEventBus().fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
                     return false;
                 }
                 return true;

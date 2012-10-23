@@ -138,8 +138,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             if (!amendmentControllers.add(amendmentController)) {
                 throw new RuntimeException("Amendment already exists: " + amendmentController);
             }
-            // inform the listener
-            if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
 
             // physical attach
             final HTMLPanel holderElement = getAmendmentHolderElement();
@@ -147,6 +145,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 holderElement.add(amendmentController.getView());
                 // set up a reference to this widget
                 amendmentController.setParentAmendableWidget(this);
+                // inform the listener
+                if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
             } else {
                 Log.warn("No amendment holder panel could be added for this widget " + this);
             }
@@ -168,13 +168,13 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 throw new RuntimeException("Amendment controller not found: " + amendmentController);
             }
 
-            // inform the listener
-            if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
-
             // physical remove
             remove(amendmentController.getView());
             // clear reference to this widget
             amendmentController.setParentAmendableWidget(null);
+
+            // inform the listener
+            if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
         } else {
             Log.debug("AmendableWidget listener veto'ed the removal of the amendment controller.");
         }
