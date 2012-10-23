@@ -1,9 +1,11 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
@@ -66,7 +68,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * The holder element for the amendments.
      */
-    private Element amendmentHolderElement;
+    private HTMLPanel amendmentHolderElement;
 
     public AmendableWidgetImpl(Element amendableElement) {
         this.amendableElement = amendableElement;
@@ -97,9 +99,14 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             throw new RuntimeException("Amendment already exists: " + amendmentController);
         }
         // physical attach
-        add(amendmentController.getView().asWidget(), (com.google.gwt.user.client.Element) getAmendmentHolderElement());
-        // set up a reference to this widget
-        amendmentController.setParentAmendableWidget(this);
+        final HTMLPanel holderElement = getAmendmentHolderElement();
+        if (holderElement != null) {
+            holderElement.add(amendmentController.getView());
+            // set up a reference to this widget
+            amendmentController.setParentAmendableWidget(this);
+        } else {
+            Log.warn("No amendment holder panel could be added for this widget " + this);
+        }
     }
 
     @Override
@@ -230,17 +237,13 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         this.immutable = immutable;
     }
 
-    public Element getAmendmentHolderElement() {
+    public HTMLPanel getAmendmentHolderElement() {
         if (amendmentHolderElement == null) {
-            amendmentHolderElement = DOM.createDiv();
-            final com.google.gwt.user.client.Element titleDiv = DOM.createDiv();
-            titleDiv.setInnerHTML("Amendments<hr/>");
-            amendmentHolderElement.appendChild(titleDiv);
-            amendmentHolderElement.getStyle().setBackgroundColor("#eee");
-            if (childAmendableWidgets.isEmpty()) {
-                amendableElement.appendChild(amendmentHolderElement);
-            } else {
-                amendableElement.insertFirst(amendmentHolderElement);
+            if (getElement().getParentElement() != null) {
+                amendmentHolderElement = new HTMLPanel("Amendments<hr/>");
+                getElement().insertFirst(amendmentHolderElement.getElement());
+                adopt(amendmentHolderElement);
+                assert amendmentHolderElement.isAttached() : "Amendment Holder element is not attached.";
             }
         }
         return amendmentHolderElement;

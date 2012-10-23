@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -51,4 +52,6 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     String getContent();
 
     void setContent(String amendableContent);
+
+    HTMLPanel getAmendmentHolderElement();
 }
