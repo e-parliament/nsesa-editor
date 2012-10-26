@@ -7,7 +7,7 @@
     <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.place.Place"/>
-
+    <inherits name="com.google.gwt.activity.Activity"/>
     <!--GWT Crypto library for the SHA-1 checksumming-->
     <inherits name="com.googlecode.gwt.crypto.Crypto"/>
 

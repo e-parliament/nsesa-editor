@@ -15,7 +15,6 @@ import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.editor.client.event.main.*;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -59,27 +58,6 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
     private void registerListeners() {
         clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
         clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, this);
-
-        clientFactory.getEventBus().addHandler(ShowDocumentTabEvent.TYPE, new ShowDocumentTabEventHandler() {
-            @Override
-            public void onEvent(ShowDocumentTabEvent event) {
-                view.switchToTab(0);
-            }
-        });
-
-        clientFactory.getEventBus().addHandler(ShowAmendmentsTabEvent.TYPE, new ShowAmendmentsTabEventHandler() {
-            @Override
-            public void onEvent(ShowAmendmentsTabEvent event) {
-                view.switchToTab(1);
-            }
-        });
-
-        clientFactory.getEventBus().addHandler(ShowInfoTabEvent.TYPE, new ShowInfoTabEventHandler() {
-            @Override
-            public void onEvent(ShowInfoTabEvent event) {
-                view.switchToTab(2);
-            }
-        });
     }
 
     @Override

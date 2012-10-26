@@ -1,23 +1,31 @@
 package org.nsesa.editor.gwt.editor.client;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
+import org.nsesa.editor.gwt.editor.client.activity.DefaultEditorPlaceFactory;
+import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
+import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceHistoryMapper;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.core.client.util.Checksum;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
-import org.nsesa.editor.gwt.editor.client.ui.main.EditorView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +45,7 @@ public abstract class Editor implements EntryPoint {
 
     private ClientFactory clientFactory;
     private ServiceFactory serviceFactory;
-
+    private SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
 
     @Override
     public void onModuleLoad() {
@@ -63,8 +71,32 @@ public abstract class Editor implements EntryPoint {
         // there seems to be no other way to inject this 'injector'
         editorController.setInjector(getInjector());
 
-        final EditorView view = editorController.getView();
-        RootLayoutPanel.get().add(view);
+        PlaceController placeController = clientFactory.getPlaceController();
+        EventBus eventBus = clientFactory.getEventBus();
+        // start activityManager for the main widget with our ActivityMapper
+        ActivityMapper activityMapper = getInjector().getActivityMapper();
+        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+        AcceptsOneWidget editorDisplay = new AcceptsOneWidget() {
+       		@Override
+       		public void setWidget(IsWidget activityWidget) {
+       			Widget widget = Widget.asWidgetOrNull(activityWidget);
+                appWidget.setVisible(widget != null);
+                appWidget.setWidget(widget);
+       		}
+       	};
+        activityManager.setDisplay(editorDisplay);
+        EditorPlaceFactory placeFactory = getInjector().getPlaceFactory();
+//
+        // Start PlaceHistoryHandler with our PlaceHistoryMapper
+        EditorPlaceHistoryMapper historyMapper = GWT.create(EditorPlaceHistoryMapper.class);
+        historyMapper.setFactory(placeFactory);
+        Place defaultPlace = placeFactory.getDefaultPlace();
+        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+        historyHandler.register(placeController, eventBus, defaultPlace);
+//
+        RootLayoutPanel.get().add(appWidget);
+        // Goes to the place represented on URL else default place
+        historyHandler.handleCurrentHistory();
 
         registerEventListeners();
 

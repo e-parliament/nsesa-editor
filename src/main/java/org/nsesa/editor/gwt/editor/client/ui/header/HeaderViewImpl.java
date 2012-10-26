@@ -9,10 +9,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.editor.client.event.main.ShowAmendmentsTabEvent;
-import org.nsesa.editor.gwt.editor.client.event.main.ShowDocumentTabEvent;
-import org.nsesa.editor.gwt.editor.client.event.main.ShowInfoTabEvent;
+import org.nsesa.editor.gwt.editor.client.activity.EditorTabbedPlace;
 
 /**
  * Date: 24/06/12 21:44
@@ -28,6 +27,8 @@ public class HeaderViewImpl extends Composite implements HeaderView {
 
     private final ClientFactory clientFactory;
 
+    private Provider<EditorTabbedPlace> editorTabbedPlaceProvider;
+
     @UiField
     Image viewDocument;
     @UiField
@@ -36,24 +37,31 @@ public class HeaderViewImpl extends Composite implements HeaderView {
     Image viewInfo;
 
     @Inject
-    public HeaderViewImpl(final ClientFactory clientFactory) {
+    public HeaderViewImpl(final ClientFactory clientFactory, Provider<EditorTabbedPlace> editorTabbedPlaceProvider) {
         this.clientFactory = clientFactory;
+        this.editorTabbedPlaceProvider = editorTabbedPlaceProvider;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
     @UiHandler("viewDocument")
     void handleDocumentClick(ClickEvent event) {
-        clientFactory.getEventBus().fireEvent(new ShowDocumentTabEvent());
+        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
+        editorTabbedPlace.setPlaceName("0");
+        clientFactory.getPlaceController().goTo(editorTabbedPlace);
     }
 
     @UiHandler("viewAmendments")
     void handleAmendmentsClick(ClickEvent event) {
-        clientFactory.getEventBus().fireEvent(new ShowAmendmentsTabEvent());
+        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
+        editorTabbedPlace.setPlaceName("1");
+        clientFactory.getPlaceController().goTo(editorTabbedPlace);
     }
 
     @UiHandler("viewInfo")
     void handleInfoClick(ClickEvent event) {
-        clientFactory.getEventBus().fireEvent(new ShowInfoTabEvent());
+        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
+        editorTabbedPlace.setPlaceName("2");
+        clientFactory.getPlaceController().goTo(editorTabbedPlace);
     }
 }
