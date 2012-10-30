@@ -18,13 +18,11 @@ import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
-import org.nsesa.editor.gwt.editor.client.activity.DefaultEditorPlaceFactory;
-import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
-import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceHistoryMapper;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
-import org.nsesa.editor.gwt.core.client.util.Checksum;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
+import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceHistoryMapper;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 
 import java.util.Arrays;
@@ -111,12 +109,6 @@ public abstract class Editor implements EntryPoint {
 
         // retrieve the user principal for the client context
         authenticate();
-
-        try {
-            Checksum.checksum("foo");
-        } catch (Exception e) {
-            Log.error("Checksum problem.", e);
-        }
     }
 
     protected void setInitialTitle() {
