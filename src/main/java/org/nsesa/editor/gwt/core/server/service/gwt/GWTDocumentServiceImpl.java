@@ -51,19 +51,19 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
         final DocumentDTO documentDTO1 = new DocumentDTO();
         documentDTO1.setLanguageIso("EN");
         documentDTO1.setName("English");
-        documentDTO1.setDocumentID("1-English");
+        documentDTO1.setDocumentID("1");
         translations.add(documentDTO1);
 
         final DocumentDTO documentDTO2 = new DocumentDTO();
         documentDTO2.setLanguageIso("FR");
         documentDTO2.setName("French");
-        documentDTO2.setDocumentID("1-French");
+        documentDTO2.setDocumentID("2");
         translations.add(documentDTO2);
 
         final DocumentDTO documentDTO3 = new DocumentDTO();
         documentDTO3.setLanguageIso("DE");
         documentDTO3.setName("German");
-        documentDTO3.setDocumentID("1-German");
+        documentDTO3.setDocumentID("3");
         translations.add(documentDTO3);
 
         return translations;
