@@ -1,3 +1,10 @@
+# Maven #
+#########
+target/
+
+# IntelliJ/Eclipse files #
+##########################
+*.iml
 # OS generated files #
 ######################
 .DS_Store
