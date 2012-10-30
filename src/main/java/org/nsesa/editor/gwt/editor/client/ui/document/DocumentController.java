@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -12,8 +13,10 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
@@ -117,18 +120,20 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
-        clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
-            @Override
-            public void onEvent(DocumentRefreshRequestEvent event) {
-                documentEventBus.fireEvent(event);
-            }
-        });
-
         // forward the resize event
         clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
+            }
+        });
+
+        // forward the amendment injected event
+        clientFactory.getEventBus().addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerInjectedEvent event) {
+                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
+                event.getAmendmentController().getDocumentController().documentEventBus.fireEvent(event);
             }
         });
 
@@ -143,19 +148,54 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
-        // forward the amendment injected event
-        clientFactory.getEventBus().addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                event.getAmendmentController().getDocumentController().documentEventBus.fireEvent(event);
-            }
-        });
-
         documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
+        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+            @Override
+            public void onEvent(DocumentRefreshRequestEvent event) {
+                loadDocumentContent();
+            }
+        });
+    }
+
+    public void loadDocument() {
+        serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentID, new AsyncCallback<DocumentDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
+            }
+
+            @Override
+            public void onSuccess(DocumentDTO document) {
+                setDocument(document);
+                final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
+                clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
+                loadDocumentContent();
+            }
+        });
+    }
+
+    public void loadDocumentContent() {
+        assert documentID != null : "No documentID set.";
+        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
+            }
+
+            @Override
+            public void onSuccess(final String content) {
+                setContent(content);
+                wrapContent();
+                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+                injectAmendments();
             }
         });
     }

@@ -1,20 +1,18 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
-import org.nsesa.editor.gwt.core.client.event.*;
+import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
+import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
@@ -26,7 +24,7 @@ import java.util.ArrayList;
  * @version $Id$
  */
 @Singleton
-public class EditorController implements BootstrapEventHandler, DocumentRefreshRequestEventHandler {
+public class EditorController implements BootstrapEventHandler {
 
     private final EditorView view;
     private final ClientFactory clientFactory;
@@ -57,7 +55,6 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
 
     private void registerListeners() {
         clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
-        clientFactory.getEventBus().addHandler(DocumentRefreshRequestEvent.TYPE, this);
     }
 
     @Override
@@ -73,11 +70,6 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
             // get the amendments belonging to this document
             fetchAmendments();
         }
-    }
-
-    @Override
-    public void onEvent(DocumentRefreshRequestEvent event) {
-        fetchContent(event.getDocumentController());
     }
 
     public boolean addDocumentController(final DocumentController documentController) {
@@ -115,49 +107,12 @@ public class EditorController implements BootstrapEventHandler, DocumentRefreshR
                 amendmentManager.setAmendmentContainerDTOs(result);
                 // after the amendments, retrieve the documents
                 for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
-
                     final DocumentController documentController = injector.getDocumentController();
                     documentController.setDocumentID(documentID);
                     addDocumentController(documentController);
                     // request the amendment in the backend
-                    fetchDocument(documentController);
+                    documentController.loadDocument();
                 }
-            }
-        });
-    }
-
-    private void fetchDocument(final DocumentController documentController) {
-        serviceFactory.getGwtDocumentService().getDocument(clientFactory.getClientContext(), documentController.getDocumentID(), new AsyncCallback<DocumentDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                final String message = clientFactory.getCoreMessages().errorDocumentError(documentController.getDocumentID());
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
-            }
-
-            @Override
-            public void onSuccess(DocumentDTO document) {
-                documentController.setDocument(document);
-                final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
-                clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
-                fetchContent(documentController);
-            }
-        });
-    }
-
-    private void fetchContent(final DocumentController documentController) {
-        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentController.getDocumentID(), new AsyncCallback<String>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                final String message = clientFactory.getCoreMessages().errorDocumentError(documentController.getDocumentID());
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
-            }
-
-            @Override
-            public void onSuccess(final String content) {
-                documentController.setContent(content);
-                documentController.wrapContent();
-                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
-                documentController.injectAmendments();
             }
         });
     }
