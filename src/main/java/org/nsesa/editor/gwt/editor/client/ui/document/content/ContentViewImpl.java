@@ -13,7 +13,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 16:39
@@ -22,6 +25,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
  * @version $Id$
  */
 @Singleton
+@Scope(DOCUMENT)
 public class ContentViewImpl extends Composite implements ContentView {
 
     interface MyUiBinder extends UiBinder<Widget, ContentViewImpl> {

@@ -8,6 +8,9 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
  * Date: 24/06/12 21:44
@@ -16,6 +19,7 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
+@Scope(AMENDMENT)
 public class AmendmentViewImpl extends Composite implements AmendmentView {
     interface MyUiBinder extends UiBinder<Widget, AmendmentViewImpl> {
     }

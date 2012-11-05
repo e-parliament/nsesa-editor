@@ -5,8 +5,11 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
  * Date: 24/06/12 21:42
@@ -14,6 +17,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Scope(AMENDMENT)
 public class AmendmentController {
 
     private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);

@@ -11,6 +11,7 @@
             width: 100%;
             position: relative;
             top: -20px;
+            table-layout: fixed;
         }
 
         .content {
@@ -49,7 +50,7 @@
     <g:HTMLPanel>
         <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeader}"/>
         <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
-        <g:HorizontalPanel styleName="{res.document}">
+        <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel">
             <content:ContentView ui:field="contentView" styleName="{res.content}"/>
             <marker:MarkerView ui:field="markerView" styleName="{res.marker}"/>
         </g:HorizontalPanel>

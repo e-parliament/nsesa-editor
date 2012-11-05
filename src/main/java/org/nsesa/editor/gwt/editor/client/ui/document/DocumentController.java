@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
@@ -35,6 +35,8 @@ import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderContr
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 18:42
@@ -46,24 +48,29 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
+    @Scope(DOCUMENT)
     private DocumentView view;
     private DocumentDTO document;
     private String documentID;
 
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
-    private final MarkerController markerController;
-    private final DocumentHeaderController documentHeaderController;
-    private final ContentController contentController;
+
     private final ActionBarController actionBarController;
-    private final DeadlineController deadlineController;
     private final OverlayFactory overlayFactory;
     private final Locator locator;
-    private final DocumentEventBus documentEventBus;
-
     private final AmendmentManager amendmentManager;
 
-    private final OverlayStrategy overlayStrategy;
+    @Scope(DOCUMENT)
+    private final MarkerController markerController;
+    @Scope(DOCUMENT)
+    private final DocumentHeaderController documentHeaderController;
+    @Scope(DOCUMENT)
+    private final ContentController contentController;
+    @Scope(DOCUMENT)
+    private final DeadlineController deadlineController;
+    @Scope(DOCUMENT)
+    private final DocumentEventBus documentEventBus;
 
     private ArrayList<AmendableWidget> amendableWidgets;
 
@@ -71,7 +78,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
-                              final OverlayStrategy overlayStrategy,
                               final ActionBarController actionBarController,
                               final Locator locator,
                               final AmendmentManager amendmentManager) {
@@ -81,12 +87,11 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.actionBarController = actionBarController;
 
         this.amendmentManager = amendmentManager;
-        this.overlayStrategy = overlayStrategy;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
 
+        // document scoped singletons
         this.documentEventBus = injector.getDocumentEventBus();
-
         this.view = injector.getDocumentView();
         this.markerController = injector.getMarkerController();
         this.contentController = injector.getContentController();
@@ -97,8 +102,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
-        this.actionBarController.setDocumentController(this);
         this.deadlineController.setDocumentController(this);
+        this.actionBarController.setDocumentController(this);
 
         registerListeners();
     }

@@ -14,10 +14,13 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInject
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 18:42
@@ -26,6 +29,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
  * @version $Id$
  */
 @Singleton
+@Scope(DOCUMENT)
 public class MarkerController {
 
     private final MarkerView view;

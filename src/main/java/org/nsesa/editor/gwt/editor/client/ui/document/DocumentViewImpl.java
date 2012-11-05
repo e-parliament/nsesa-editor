@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -33,6 +34,9 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
     private final DocumentEventBus documentEventBus;
 
+    @UiField
+    HorizontalPanel horizontalPanel;
+
     @UiField(provided = true)
     final ContentView contentView;
     @UiField(provided = true)
@@ -55,6 +59,10 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+
+        // force 100% width - no way to do it via UI-Binder
+        // note that this does not impact the actual document width, only the content
+        horizontalPanel.setCellWidth(contentView.getView().asWidget(), "100%");
     }
 
     @Override
