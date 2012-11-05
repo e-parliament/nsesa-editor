@@ -2,7 +2,6 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="ContentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.content.ContentViewCss'/>
-    <ui:style src="akomantoso.css"/>
     <ui:style field="res">
         .scrollPanel {
 
