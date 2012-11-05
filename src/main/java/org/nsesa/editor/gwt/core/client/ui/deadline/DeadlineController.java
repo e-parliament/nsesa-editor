@@ -4,10 +4,13 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.Date;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 21:42
@@ -16,6 +19,7 @@ import java.util.Date;
  * @version $Id$
  */
 @Singleton
+@Scope(DOCUMENT)
 public class DeadlineController {
 
     private final DeadlineView view;

@@ -20,6 +20,6 @@ public @interface Scope {
     ScopeValue value() default ScopeValue.EDITOR;
 
     public static enum ScopeValue {
-        EDITOR, DOCUMENT, AMENDMENT
+        EDITOR, DOCUMENT, AMENDMENT, DIALOG
     }
 }

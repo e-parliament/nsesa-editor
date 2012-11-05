@@ -10,12 +10,15 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 24/06/12 18:42
@@ -24,6 +27,7 @@ import java.util.ArrayList;
  * @version $Id$
  */
 @Singleton
+@Scope(EDITOR)
 public class EditorController implements BootstrapEventHandler {
 
     private final EditorView view;

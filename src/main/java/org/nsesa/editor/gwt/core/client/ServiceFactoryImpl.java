@@ -5,6 +5,9 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 26/06/12 17:18
@@ -13,6 +16,7 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
  * @version $Id$
  */
 @Singleton
+@Scope(EDITOR)
 public class ServiceFactoryImpl implements ServiceFactory {
 
     private final GWTServiceAsync gwtService;

@@ -5,6 +5,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 24/06/12 21:44
@@ -13,6 +16,7 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
+@Scope(EDITOR)
 public class InfoPanelViewImpl extends Composite implements InfoPanelView {
     interface MyUiBinder extends UiBinder<Widget, InfoPanelViewImpl> {
     }

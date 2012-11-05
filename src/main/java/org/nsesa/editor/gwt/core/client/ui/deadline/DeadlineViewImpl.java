@@ -8,6 +8,9 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 21:44
@@ -16,6 +19,7 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
+@Scope(DOCUMENT)
 public class DeadlineViewImpl extends Composite implements DeadlineView {
 
     interface MyUiBinder extends UiBinder<Widget, DeadlineViewImpl> {

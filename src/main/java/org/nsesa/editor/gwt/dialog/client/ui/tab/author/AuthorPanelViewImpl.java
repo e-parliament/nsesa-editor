@@ -10,6 +10,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
 /**
  * Date: 24/06/12 21:44
@@ -18,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ServiceFactory;
  * @version $Id$
  */
 @Singleton
+@Scope(DIALOG)
 public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
 
     interface MyUiBinder extends UiBinder<Widget, AuthorPanelViewImpl> {

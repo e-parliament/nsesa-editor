@@ -11,12 +11,15 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentView;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerView;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 16:39
@@ -25,6 +28,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerView;
  * @version $Id$
  */
 @Singleton
+@Scope(DOCUMENT)
 public class DocumentViewImpl extends Composite implements DocumentView {
 
     interface MyUiBinder extends UiBinder<Widget, DocumentViewImpl> {

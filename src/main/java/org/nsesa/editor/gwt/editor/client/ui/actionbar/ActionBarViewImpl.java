@@ -6,6 +6,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 24/06/12 21:44
@@ -14,6 +17,7 @@ import com.google.inject.Singleton;
  * @version $Id$
  */
 @Singleton
+@Scope(EDITOR)
 public class ActionBarViewImpl extends Composite implements ActionBarView {
 
     interface MyUiBinder extends UiBinder<Widget, ActionBarViewImpl> {

@@ -4,6 +4,9 @@ import com.google.gwt.place.shared.Place;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Basic editor place factory. All the places factories will extends this class
@@ -12,6 +15,7 @@ import com.google.inject.Singleton;
  * Time: 12:25
  */
 @Singleton
+@Scope(EDITOR)
 public class DefaultEditorPlaceFactory implements EditorPlaceFactory {
 
     @Inject

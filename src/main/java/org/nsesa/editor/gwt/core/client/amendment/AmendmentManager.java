@@ -12,6 +12,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEv
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
+
 /**
  * Date: 08/07/12 13:56
  *
@@ -27,6 +30,7 @@ import java.util.List;
  * @version $Id$
  */
 @Singleton
+@Scope(EDITOR)
 public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final ServiceFactory serviceFactory;
