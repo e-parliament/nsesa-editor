@@ -5,7 +5,7 @@
     <!-- Note: this size is set in the EditorViewImpl.ui.xml's layout -->
     <g:HTMLPanel>
         <div id="footer">Commit:
-            <ui:text from='{res.gitCommitIdAbbrev}'/> (on '<ui:text from='{res.gitBranch}'/>'branch), built on
+            <ui:text from='{res.gitCommitIdAbbrev}'/> (on '<ui:text from='{res.gitBranch}'/>' branch), built on
             <ui:text from='{res.gitBuildTime}'/>
         </div>
     </g:HTMLPanel>
