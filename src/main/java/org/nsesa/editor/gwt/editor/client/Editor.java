@@ -71,28 +71,27 @@ public abstract class Editor implements EntryPoint {
 
         PlaceController placeController = clientFactory.getPlaceController();
         EventBus eventBus = clientFactory.getEventBus();
-        // start activityManager for the main widget with our ActivityMapper
-        ActivityMapper activityMapper = getInjector().getActivityMapper();
-        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        AcceptsOneWidget editorDisplay = new AcceptsOneWidget() {
-       		@Override
-       		public void setWidget(IsWidget activityWidget) {
-       			Widget widget = Widget.asWidgetOrNull(activityWidget);
+
+        final ActivityManager activityManager = getActivityManager(eventBus);
+        activityManager.setDisplay(new AcceptsOneWidget() {
+            @Override
+            public void setWidget(IsWidget activityWidget) {
+                Widget widget = Widget.asWidgetOrNull(activityWidget);
                 appWidget.setVisible(widget != null);
                 appWidget.setWidget(widget);
-       		}
-       	};
-        activityManager.setDisplay(editorDisplay);
-        EditorPlaceFactory placeFactory = getInjector().getPlaceFactory();
-//
+            }
+        });
+
+        RootLayoutPanel.get().add(appWidget);
+
+        final EditorPlaceFactory placeFactory = getInjector().getPlaceFactory();
         // Start PlaceHistoryHandler with our PlaceHistoryMapper
-        EditorPlaceHistoryMapper historyMapper = GWT.create(EditorPlaceHistoryMapper.class);
+        final EditorPlaceHistoryMapper historyMapper = GWT.create(EditorPlaceHistoryMapper.class);
         historyMapper.setFactory(placeFactory);
         Place defaultPlace = placeFactory.getDefaultPlace();
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
         historyHandler.register(placeController, eventBus, defaultPlace);
-//
-        RootLayoutPanel.get().add(appWidget);
+
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
 
@@ -109,6 +108,11 @@ public abstract class Editor implements EntryPoint {
 
         // retrieve the user principal for the client context
         authenticate();
+    }
+
+    protected ActivityManager getActivityManager(final EventBus eventBus) {
+        final ActivityMapper activityMapper = getInjector().getActivityMapper();
+        return new ActivityManager(activityMapper, eventBus);
     }
 
     protected void setInitialTitle() {
