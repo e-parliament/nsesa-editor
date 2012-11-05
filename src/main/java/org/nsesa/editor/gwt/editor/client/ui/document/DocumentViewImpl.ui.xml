@@ -51,7 +51,7 @@
             width: 18px;
         }
     </ui:style>
-    <g:HTMLPanel>
+    <g:HTMLPanel styleName="document">
         <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeader}"/>
         <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
         <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel">
