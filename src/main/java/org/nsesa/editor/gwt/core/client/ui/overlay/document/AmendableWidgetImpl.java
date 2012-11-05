@@ -223,7 +223,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getType() {
-        return amendableElement.getTagName();
+        return amendableElement.getNodeName();
     }
 
     @Override
