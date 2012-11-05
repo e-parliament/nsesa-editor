@@ -11,7 +11,11 @@
             width: 100%;
             position: relative;
             top: -20px;
-            table-layout: fixed;
+            /* TODO Seems to be ignored in Chrome */
+            max-width: 960px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
         }
 
         .content {
