@@ -12,11 +12,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentViewImpl.class)
 public interface AmendmentView extends IsWidget {
 
-    void setJustification(String justification);
-
     void setTitle(String title);
 
-    void addAmendmentContentPart(final IsWidget part);
-
-    void addOriginalContentPart(final IsWidget part);
+    void setBody(String xmlContent);
 }

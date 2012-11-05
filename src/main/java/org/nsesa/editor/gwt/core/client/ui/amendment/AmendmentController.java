@@ -54,9 +54,12 @@ public class AmendmentController {
 
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
+        setBody(amendment.getXmlContent());
+        setTitle("Amendment "+ amendment.getAmendmentContainerID());
+    }
 
-        setJustification("Justification for " + amendment.getAmendmentContainerID());
-        setTitle("Title for " + amendment.getAmendmentContainerID());
+    private void setBody(String xmlContent) {
+        view.setBody(xmlContent);
     }
 
     public DocumentController getDocumentController() {
@@ -69,10 +72,6 @@ public class AmendmentController {
 
     public AmendmentView getView() {
         return view;
-    }
-
-    public void setJustification(String justification) {
-        this.view.setJustification(justification);
     }
 
     public void setTitle(String title) {

@@ -70,13 +70,13 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
     }
 
     @Override
-    public String getDocumentContent(ClientContext clientContext, String documentID) {
+    public String getDocumentContent(final ClientContext clientContext, final String documentID) {
         final Resource documentResource = documents.get(documentID);
         if (documentResource != null) {
             try {
                 return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
             } catch (IOException e) {
-                throw new RuntimeException("Could not read file.");
+                throw new RuntimeException("Could not read file.", e);
             }
         }
         return null;
@@ -85,7 +85,7 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
     // Spring setters ----------------------
 
 
-    public void setDocuments(Map<String, Resource> documents) {
+    public void setDocuments(final Map<String, Resource> documents) {
         this.documents = documents;
     }
 }
