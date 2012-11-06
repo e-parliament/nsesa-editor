@@ -24,25 +24,23 @@ public class CssOverlayGenerator extends OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(CssOverlayGenerator.class);
     private String fileName;
     private Properties properties;
-    private final List<OverlayClass> generatedClasses;
+    private String templateName;
 
-    public CssOverlayGenerator(Properties properties, String fileName) {
+    public CssOverlayGenerator(Properties properties, String templateName, String fileName) {
         super();
+        this.templateName = templateName;
         this.fileName = fileName;
         this.properties = properties;
-        this.generatedClasses = new ArrayList<OverlayClass>();
     }
 
     public void print() {
-        generatedClasses.addAll(overlayClassGenerator.getResult(OverlayClass.DEFAULT_COMPARATOR));
+        OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getTreeResult();
         Writer writer = null;
         try {
             writer = new FileWriter(fileName, false);
-            OverlayClassProcessor processor = new CssOverlayClassProcessor(properties, writer);
+            OverlayClassProcessor processor = new CssOverlayClassProcessor(properties, templateName, writer);
             LOG.info("Start css processing...");
-            for (OverlayClass aClass : generatedClasses) {
-                aClass.process(processor);
-            }
+            root.process(processor);
             LOG.info("The file {} has been generated.", fileName);
 
         } catch(IOException e ) {
@@ -72,7 +70,7 @@ public class CssOverlayGenerator extends OverlayGenerator {
         props.setProperty("block", "display:block");
         props.setProperty("inline", "display:inline");
 
-        CssOverlayGenerator generator = new CssOverlayGenerator(props, "r:/test.css");
+        CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", "r:/test.css");
         try {
             final String[] xsds = {"xml.xsd", "akomantoso20.xsd"};
             generator.parse(xsds);

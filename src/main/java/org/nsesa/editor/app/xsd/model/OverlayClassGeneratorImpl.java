@@ -213,12 +213,35 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     }
 
     @Override
+    public OverlayRootClass getTreeResult() {
+        return buildTree();
+    }
+
+    @Override
     public List<OverlayClass> getResult() {
         return generatedClasses;
     }
 
     @Override
     public List<OverlayClass> getResult(Comparator<OverlayClass> comparator) {
+        OverlayRootClass rootClass = buildTree();
+        // for every children list apply the comparator
+        Stack<OverlayClass> stack = new Stack<OverlayClass>();
+        List<OverlayClass> result = new ArrayList<OverlayClass>();
+        stack.push(rootClass);
+        while (!stack.isEmpty()) {
+            OverlayClass aClass = stack.pop();
+            result.add(aClass);
+            OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[]{});
+            //Collections.sort(children, comparator);
+            for (int i = children.length -1; i >= 0 ; i--) {
+                stack.push(children[i]);
+            }
+        }
+        return result;
+    }
+
+    private OverlayRootClass buildTree() {
         OverlayRootClass rootClass = new OverlayRootClass();
         cache.put(rootClass, rootClass);
         for (XSSchema schema : schemas) {
@@ -242,21 +265,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             parentClass.getChildren().add(aClass);
             aClass.setParent(parentClass);
         }
-        // for every children list apply the comparator
-        Stack<OverlayClass> stack = new Stack<OverlayClass>();
-        List<OverlayClass> result = new ArrayList<OverlayClass>();
-        stack.push(rootClass);
-        while (!stack.isEmpty()) {
-            OverlayClass aClass = stack.pop();
-            result.add(aClass);
-            List<OverlayClass> children = aClass.getChildren();
-            Collections.sort(children, comparator);
-            for (int i = children.size() -1; i >= 0 ; i--) {
-                stack.push(children.get(i));
-            }
-        }
-        return result;
+        return rootClass;
     }
+
 
     @Override
     public void generate(Collection<XSSchema> schemas) {

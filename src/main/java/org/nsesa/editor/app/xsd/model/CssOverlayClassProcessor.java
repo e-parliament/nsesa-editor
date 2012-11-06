@@ -1,5 +1,11 @@
 package org.nsesa.editor.app.xsd.model;
 
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -14,64 +20,27 @@ import java.util.*;
  */
 public class CssOverlayClassProcessor implements OverlayClassProcessor {
 
-    // keep css definition for a overlay class
-    private static class CssStyle {
-        private OverlayClass aClass;
-        private String name;
-        private Map<String, String> values;
-        CssStyle(OverlayClass aClass) {
-            this.aClass = aClass;
-            this.name = aClass.getName();
-            this.values = new HashMap<String, String>();
-        }
+    //freemarker configuration
+    private Configuration configuration ;
+    private String templateName;
 
-        public CssStyle(String name, Map<String, String> values) {
-            this.name = name;
-            this.values = values;
-
-        }
-
-        String getName() {
-            return name;
-        }
-        Map<String, String> getValues() {
-            return values;
-        }
-
-        public CssStyle cssProcess(String styleName, List<CssStyle> styles) {
-            for(CssStyle cssStyle : styles) {
-                if (styleName.equalsIgnoreCase(cssStyle.getName())) {
-                    values.putAll(cssStyle.getValues());
-                }
-            }
-            return this;
-        };
-
-        public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("/* " +
-                    (aClass != null && aClass.getParent() != null ? aClass.getParent().getName() : "no base") +
-                    " */").append("\n");
-            sb.append(name + " {").append("\n");
-            String delimiter = ";";
-            for (Map.Entry<String,String> entry : values.entrySet()) {
-                sb.append("\t" + entry.getKey() + ":" + entry.getValue()).append(delimiter).append("\n");
-            }
-            sb.append("}\n");
-            return sb.toString();
-        }
-    }
-
-    private List<CssStyle> styles;
+    private List<CssOverlayStyle> styles;
     private Writer out;
 
-    public CssOverlayClassProcessor(Properties properties, Writer out) throws IOException {
+    public CssOverlayClassProcessor(Properties properties, String templateName, Writer out) throws IOException {
+        this.configuration = new Configuration();
+        this.configuration.setDefaultEncoding("UTF-8");
+        this.templateName = templateName;
         this.out = out;
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        File dir = new File(classLoader.getResource(templateName).getFile()).getParentFile();
+        configuration.setDirectoryForTemplateLoading(dir);
+
         initStyles(properties);
     }
 
     private void initStyles(Properties properties) throws IOException {
-        styles = new ArrayList<CssStyle>();
+        styles = new ArrayList<CssOverlayStyle>();
         for (String name : properties.stringPropertyNames()) {
             String[] props = properties.getProperty(name).split(";");
             Map<String, String> values = new HashMap<String, String>();
@@ -79,42 +48,28 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
                 String[] css = value.split(":");
                 values.put(css[0], css[1]);
             }
-            styles.add(new CssStyle(name, values));
+            styles.add(new CssOverlayStyle(name, values));
         }
     }
 
 
     @Override
     public boolean process(OverlayClass overlayClass) {
-        if (canProcess(overlayClass)) {
-            OverlayClass aClass = overlayClass;
-            final CssStyle classStyle = new CssStyle(aClass);
-            while(aClass != null) {
-                classStyle.cssProcess(aClass.getName(), styles);
-                aClass = aClass.getParent();
-            }
-            try {
-                out.write(classStyle.toString());
-            } catch (IOException e) {
-                throw new RuntimeException("The overlay class can not be processed", e);
-            }
-            return true;
+        final CssOverlayStyle overlayStyle = new CssOverlayStyle(overlayClass);
+        try {
+            Map<String, Object> rootMap = new HashMap<String, Object>();
+            rootMap.put("overlayClass", overlayClass);
+            rootMap.put("overlayStyleFactory", CssOverlayStyle.CssOverlayFactory.getInstance());
+            rootMap.put("styles", styles);
+            final Template template = configuration.getTemplate(templateName);
+            final DefaultObjectWrapper wrapper = new DefaultObjectWrapper();
+            template.process(rootMap, out, wrapper);
+        } catch (IOException e) {
+            throw new RuntimeException("The overlay class can not be processed", e);
+        } catch (TemplateException e) {
+            throw new RuntimeException("The overlay css can not be generated", e);
         }
-        return false;
+        return true;
     }
 
-    private boolean canProcess(OverlayClass overlayClass) {
-        if (overlayClass.getNameSpace() == null) {
-            return false;
-        }
-        if (!overlayClass.getNameSpace().equals("http://www.akomantoso.org/2.0")) {
-            return false;
-        }
-        boolean skipped =  EnumSet.of(OverlayType.AttrGroup,
-                            OverlayType.Attribute,
-                            OverlayType.Group,
-                            OverlayType.GroupDecl).contains(overlayClass.getOverlayType());
-
-        return !skipped;
-    }
 }

@@ -54,6 +54,10 @@ public class OverlayClass extends OverlayNode  {
     public List<OverlayClass> getChildren() {
         return children;
     }
+    public List<OverlayClass> getOrderedChildren() {
+        Collections.sort(children, OverlayClass.DEFAULT_COMPARATOR);
+        return children;
+    }
 
     public void setChildren(List<OverlayClass> children) {
         this.children = children;

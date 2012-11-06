@@ -27,6 +27,12 @@ public interface OverlayClassGenerator {
     }
 
     /**
+     * Return tree result of overlay classes
+     * @return
+     */
+    OverlayRootClass getTreeResult();
+
+    /**
      * Returns a flat list of overlay classes
      * @return
      */
