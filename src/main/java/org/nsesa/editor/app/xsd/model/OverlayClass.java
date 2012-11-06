@@ -18,11 +18,11 @@ public class OverlayClass extends OverlayNode  {
     public static Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
         @Override
         public int compare(OverlayClass o1, OverlayClass o2) {
-            int result = o1.getChildren().size() - o2.getChildren().size();
-            if (result != 0) {
-                return result;
-            }
-            result = o1.name.compareTo(o2.name);
+//            int result = o1.getChildren().size() - o2.getChildren().size();
+//            if (result != 0) {
+//                return result;
+//            }
+            int result = o1.name.compareTo(o2.name);
             return result;
         }
     };
@@ -41,6 +41,8 @@ public class OverlayClass extends OverlayNode  {
 
     public OverlayClass() {
         super();
+        this.properties = new ArrayList<OverlayProperty>();
+        this.children = new ArrayList<OverlayClass>();
     }
 
     public OverlayClass(String name, String nameSpace, OverlayType overlayType) {
