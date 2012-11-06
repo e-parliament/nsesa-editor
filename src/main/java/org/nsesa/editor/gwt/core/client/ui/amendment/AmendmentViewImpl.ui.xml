@@ -3,14 +3,9 @@
     <ui:style src="AmendmentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewCss'/>
     <ui:style field="res">
-        .amendmentHolder {
-            border: 1px solid red;
-            width: 100%;
-        }
     </ui:style>
-    <g:HTMLPanel styleName="{res.amendmentHolder}">
-        <div class="amendment">
-
+    <g:HTMLPanel styleName="amendment">
+        <div>
             <div class="header">
                 <div class="title">
                     <g:Label ui:field="title"/>
