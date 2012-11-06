@@ -2,6 +2,7 @@ package org.nsesa.editor.app.xsd.model;
 
 import com.sun.xml.xsom.*;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -37,6 +38,11 @@ public interface OverlayClassGenerator {
      * @return
      */
     List<OverlayClass> getResult(Comparator<OverlayClass> comparator);
+
+    /**
+     * Start generation
+     */
+    void generate(Collection<XSSchema> schemas);
 
     /**
      * Generates overlay class from simple type component

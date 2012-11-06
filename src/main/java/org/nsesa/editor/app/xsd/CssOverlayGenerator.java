@@ -19,49 +19,22 @@ import java.util.*;
  * Generates a hierarchy of css styles by parsing an XSD Schema
  *
  */
-public class CssOverlayGenerator {
+public class CssOverlayGenerator extends OverlayGenerator {
 
     public static final Logger LOG = LoggerFactory.getLogger(CssOverlayGenerator.class);
     private String fileName;
     private Properties properties;
-
-    // XSOM parser
-    private final XSOMParser parser;
-
     private final List<OverlayClass> generatedClasses;
 
     public CssOverlayGenerator(Properties properties, String fileName) {
+        super();
         this.fileName = fileName;
         this.properties = properties;
         this.generatedClasses = new ArrayList<OverlayClass>();
-        this.parser = new XSOMParser();
-        this.parser.setErrorHandler(new LoggingErrorHandler());
-    }
-
-    /**
-     * Parse the xsd schema
-     * @param xsds List of xsd as String
-     * @throws SAXException
-     */
-    public void parse(final String[] xsds) throws SAXException {
-        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        for (String xsd : xsds) {
-            parser.parse(classLoader.getResource(xsd));
-        }
-
-    }
-
-    /**
-     * Analyze the xsd schema and generate overlayclasses
-     * @throws SAXException
-     */
-    public void analyze() throws SAXException {
-        final XSSchemaSet set = parser.getResult();
-        OverlayClassGenerator classGenerator = new OverlayClassGeneratorImpl(set.getSchemas());
-        generatedClasses.addAll(classGenerator.getResult(OverlayClass.DEFAULT_COMPARATOR));
     }
 
     public void print() {
+        generatedClasses.addAll(overlayClassGenerator.getResult(OverlayClass.DEFAULT_COMPARATOR));
         Writer writer = null;
         try {
             writer = new FileWriter(fileName, false);

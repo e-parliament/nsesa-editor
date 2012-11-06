@@ -23,8 +23,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     /**
      * Default constructor
      */
-    public OverlayClassGeneratorImpl(Collection<XSSchema> schemas) {
-        this.schemas = schemas;
+    public OverlayClassGeneratorImpl() {
         this.cache = new HashMap<OverlayClass, OverlayClass>();
     }
 
@@ -215,14 +214,11 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     @Override
     public List<OverlayClass> getResult() {
-        generateClasses();
         return generatedClasses;
     }
 
     @Override
     public List<OverlayClass> getResult(Comparator<OverlayClass> comparator) {
-        generateClasses();
-
         OverlayRootClass rootClass = new OverlayRootClass();
         cache.put(rootClass, rootClass);
         for (XSSchema schema : schemas) {
@@ -248,24 +244,23 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         }
         // for every children list apply the comparator
         Stack<OverlayClass> stack = new Stack<OverlayClass>();
-        generatedClasses = new ArrayList<OverlayClass>();
+        List<OverlayClass> result = new ArrayList<OverlayClass>();
         stack.push(rootClass);
         while (!stack.isEmpty()) {
             OverlayClass aClass = stack.pop();
-            generatedClasses.add(aClass);
+            result.add(aClass);
             List<OverlayClass> children = aClass.getChildren();
             Collections.sort(children, comparator);
             for (int i = children.size() -1; i >= 0 ; i--) {
                 stack.push(children.get(i));
             }
         }
-        return generatedClasses;
+        return result;
     }
 
-    /**
-     * Generates a flat list of classes by parsing the schema
-     */
-    private void generateClasses() {
+    @Override
+    public void generate(Collection<XSSchema> schemas) {
+        this.schemas = schemas;
         generatedClasses = new ArrayList<OverlayClass>();
         for (XSSchema schema : schemas) {
 
