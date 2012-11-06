@@ -82,21 +82,4 @@ public class CssOverlayGenerator extends OverlayGenerator {
             LOG.error("SAX problem.", e);
         }
     }
-
-    private static class LoggingErrorHandler implements ErrorHandler {
-        @Override
-        public void warning(SAXParseException e) throws SAXException {
-            LOG.info("Warning: " + e.getMessage(), e);
-        }
-
-        @Override
-        public void error(SAXParseException e) throws SAXException {
-            LOG.warn("Error: " + e.getMessage(), e);
-        }
-
-        @Override
-        public void fatalError(SAXParseException e) throws SAXException {
-            LOG.error("Fatal: " + e.getMessage(), e);
-        }
-    }
 }
