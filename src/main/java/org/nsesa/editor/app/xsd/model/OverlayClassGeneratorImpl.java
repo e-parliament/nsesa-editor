@@ -31,9 +31,6 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     @Override
     public void generate(XSSimpleType simpleType) {
         LOG.debug("Generate overlayclass from simple type {}", simpleType);
-        if (simpleType.getName().equalsIgnoreCase("String")) {
-            System.out.println("stop");
-        }
         OverlayClass overlayClass = new OverlayClass(simpleType.getName(), simpleType.getTargetNamespace(), OverlayType.SimpleType);
         overlayClass.setClassName(simpleType.getName() + OverlayType.SimpleType);
         if (simpleType.getSimpleBaseType() != null ) {

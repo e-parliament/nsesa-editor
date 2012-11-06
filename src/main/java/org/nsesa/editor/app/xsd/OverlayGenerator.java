@@ -187,7 +187,7 @@ public class OverlayGenerator {
             final String xsd = "akomantoso20.xsd";
             generator.parse(xsd);
             generator.analyze(BASE_PACKAGE, xsd);
-//            generator.print(BASE_PACKAGE, xsd);
+            generator.print(BASE_PACKAGE, xsd);
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }
