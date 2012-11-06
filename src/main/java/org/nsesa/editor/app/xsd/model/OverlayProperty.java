@@ -10,7 +10,7 @@ import java.util.Map;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class OverlayProperty {
+public class OverlayProperty extends OverlayNode {
 
     /**
      * A map of replacements used when getting the name of the property to avoid
@@ -24,19 +24,13 @@ public class OverlayProperty {
         }
     };
 
-    private final String name;
     private String packageName;
-    private final String nameSpace;
-    private final String className;
     private final boolean collection;
-    private final OverlayType overlayType;
 
     public OverlayProperty(OverlayType overlayType, String packageName,
                            String nameSpace, String className, String name, boolean collection) {
-        this.overlayType = overlayType;
-        this.name = name;
+        super(name, nameSpace, overlayType);
         this.packageName = packageName;
-        this.nameSpace = nameSpace;
         this.className = className;
         this.collection = collection;
     }
@@ -47,14 +41,6 @@ public class OverlayProperty {
             result = name;
         }
         return result;
-    }
-
-    public String getNameSpace() {
-        return nameSpace;
-    }
-
-    public String getClassName() {
-        return className;
     }
 
     public boolean isCollection() {
@@ -69,8 +55,30 @@ public class OverlayProperty {
         this.packageName = packageName;
     }
 
-    public OverlayType getOverlayType() {
-        return overlayType;
+    @Override
+    public String toString() {
+        return "OverlayProperty{" +
+                "packageName='" + packageName + '\'' +
+                ", collection=" + collection +
+                "} " + super.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OverlayProperty)) return false;
+        OverlayProperty that = (OverlayProperty) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (overlayType != that.overlayType) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        return result;
+    }
 }

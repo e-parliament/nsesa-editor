@@ -7,6 +7,14 @@ package org.nsesa.editor.app.xsd.model;
  * Time: 11:44
  */
 public interface PackageNameGenerator {
+
+    /**
+     * Generates a package name from {@link OverlayNode} object
+     * @param overlayNode The overlay node processed
+     * @return The package name as String
+     */
+    abstract String getPackageName(OverlayNode overlayNode);
+
     /**
      * Generates a package name from {@link OverlayClass} object
      * @param overlayClass The overlay class processed
@@ -27,4 +35,5 @@ public interface PackageNameGenerator {
      * @return The package name as String
      */
     abstract String getPackageName(String source);
+
 }

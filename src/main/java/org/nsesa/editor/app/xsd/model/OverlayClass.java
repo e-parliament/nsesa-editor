@@ -1,11 +1,10 @@
 package org.nsesa.editor.app.xsd.model;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Bean to keep basic information about class.
@@ -14,64 +13,88 @@ import java.util.Set;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class OverlayClass {
+public class OverlayClass extends OverlayNode  {
+
+    public static Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
+        @Override
+        public int compare(OverlayClass o1, OverlayClass o2) {
+            int result = o1.getChildren().size() - o2.getChildren().size();
+            if (result != 0) {
+                return result;
+            }
+            result = o1.name.compareTo(o2.name);
+            return result;
+        }
+    };
+
+
+    public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
 
     private String packageName;
-    private String nameSpace;
-    private String name;
-    private String superClassName;
-
-    private String superNameSpace;
     private Class<?>[] interfaces;
-
-    private OverlayType overlayType;
-
-    private List<OverlayProperty> properties = new ArrayList<OverlayProperty>();
-
     private SimpleTypeRestriction restriction;
 
+    private OverlayClass parent;
+
+    private List<OverlayClass> children;
+    private List<OverlayProperty> properties;
+
     public OverlayClass() {
-        this(OverlayType.Unknown);
+        super();
     }
 
-    public OverlayClass(OverlayType overlayType) {
-        this.overlayType = overlayType;
+    public OverlayClass(String name, String nameSpace, OverlayType overlayType) {
+        super(name, nameSpace, overlayType);
+        this.properties = new ArrayList<OverlayProperty>();
+        this.children = new ArrayList<OverlayClass>();
+    }
+
+    public List<OverlayClass> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<OverlayClass> children) {
+        this.children = children;
     }
 
     public SimpleTypeRestriction getRestriction() {
         return restriction;
     }
+    public List<OverlayProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<OverlayProperty> properties) {
+        this.properties = properties;
+    }
+
+    public OverlayClass getParent() {
+        return parent;
+    }
+
+    public void setParent(OverlayClass parent) {
+        this.parent = parent;
+    }
 
     public String[] getImports(PackageNameGenerator packageNameGenerator) {
         Set<String> imports = new LinkedHashSet<String>();
-        if (superClassName != null) {
-            String packageName = packageNameGenerator.getPackageName(superNameSpace);
-            imports.add(packageName + "." + StringUtils.capitalize(superClassName));
+        if (parent != null) {
+            String packageName = packageNameGenerator.getPackageName(parent);
+            imports.add(packageName + "." + StringUtils.capitalize(parent.getClassName()));
         }
-        for (OverlayProperty property : properties) {
-            String packageName = packageNameGenerator.getPackageName(property);
+        for (OverlayNode property : properties) {
+            String packageName = null;
+            if (property instanceof OverlayProperty) {
+                packageName = packageNameGenerator.getPackageName((OverlayProperty)property);
+            } else {
+                packageName = packageNameGenerator.getPackageName(property);
+            }
             if ("java.lang".equals(packageName)) {
                 continue;
             }
             imports.add(packageName + "." + StringUtils.capitalize(property.getClassName()));
         }
         return imports.toArray(new String[imports.size()]);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSuperClassName() {
-        return superClassName;
-    }
-
-    public void setSuperClassName(String superClassName) {
-        this.superClassName = superClassName;
     }
 
     public Class<?>[] getInterfaces() {
@@ -82,14 +105,6 @@ public class OverlayClass {
         this.interfaces = interfaces;
     }
 
-    public List<OverlayProperty> getProperties() {
-        return properties;
-    }
-
-    public void setProperties(List<OverlayProperty> properties) {
-        this.properties = properties;
-    }
-
     public String getPackageName() {
         return packageName;
     }
@@ -98,36 +113,12 @@ public class OverlayClass {
         this.packageName = packageName;
     }
 
+    public void process(OverlayClassProcessor processor) {
+        processor.process(this);
+    }
+
     public void setRestriction(SimpleTypeRestriction typeRestriction) {
         this.restriction = typeRestriction;
-    }
-
-    public OverlayType getOverlayType() {
-        return overlayType;
-    }
-    public String getNameSpace() {
-        return nameSpace;
-    }
-
-    public void setNameSpace(String nameSpace) {
-        this.nameSpace = nameSpace;
-    }
-
-    public void setSuperNameSpace(String superNameSpace) {
-        this.superNameSpace = superNameSpace;
-    }
-    public String getSuperNameSpace() {
-        return superNameSpace;
-    }
-
-    public boolean isSimple() {
-        return OverlayType.SimpleType.equals(overlayType);
-    }
-    public boolean isComplex() {
-        return OverlayType.ComplexType.equals(overlayType);
-    }
-    public boolean isElement() {
-        return OverlayType.Element.equals(overlayType);
     }
 
     public boolean isEnumeration() {
@@ -136,4 +127,34 @@ public class OverlayClass {
                 restriction.getEnumeration().length > 0;
     }
 
+
+    @Override
+    public String toString() {
+        return super.toString() + '\'' +
+                "OverlayClass{" +
+                "packageName='" + packageName + '\'' +
+                ", interfaces=" + (interfaces == null ? null : Arrays.asList(interfaces)) +
+                ", restriction=" + restriction +
+                ", parent=" + parent +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OverlayClass)) return false;
+        OverlayClass that = (OverlayClass) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (overlayType != that.overlayType) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        return result;
+    }
 }

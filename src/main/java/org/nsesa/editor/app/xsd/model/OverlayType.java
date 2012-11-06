@@ -12,7 +12,15 @@ public enum OverlayType {
     SimpleType,
     ComplexType,
     Attribute,
+    GroupDecl,
     Group,
     AttrGroup,
-    Element
+    Element,
+    ListType,
+    UnionType,
+    RestrictionType,
+    ExtensionType,
+    FacetType,
+    NotationType,
+    WildcardType
 }

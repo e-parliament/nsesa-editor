@@ -36,12 +36,17 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
     }
 
     @Override
+    public String getPackageName(OverlayNode overlayNode) {
+        String source = overlayNode.getNameSpace();
+        return getPackageName(source);
+    }
+
+    @Override
     public String getPackageName(OverlayClass overlayClass) {
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
         String source = overlayClass.getNameSpace();
-
         return getPackageName(source);
     }
 

@@ -18,6 +18,7 @@ import org.xml.sax.SAXParseException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.*;
 
 /**
@@ -36,7 +37,7 @@ public class OverlayGenerator {
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
 
     private static final String BASE_DIRECTORY = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
-    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.an.client.ui.overlay.document.gen.";
+    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.";
 
     private File generatedSourcesDirectory;
 
@@ -92,52 +93,9 @@ public class OverlayGenerator {
      */
     public void analyze(final String packageName, final String xsd) throws SAXException {
         final XSSchemaSet set = parser.getResult();
-        OverlayClassGenerator classGenerator = new OverlayClassGeneratorImpl();
 
-        for (final XSSchema schema : set.getSchemas()) {
-            final Collection<XSSimpleType> simpleTypes = schema.getSimpleTypes().values();
-            for (final XSSimpleType simpleType : simpleTypes) {
-                OverlayClass overlayClass = classGenerator.generate(simpleType);
-                generatedClasses.add(overlayClass);
-            }
-
-            final Collection<XSComplexType> complexTypes = schema.getComplexTypes().values();
-            for (final XSComplexType complexType : complexTypes) {
-                OverlayClass overlayClass = classGenerator.generate(complexType);
-                generatedClasses.add(overlayClass);
-            }
-
-            final Collection<XSAttGroupDecl> xsAttGroupDecls = schema.getAttGroupDecls().values();
-            for (final XSAttGroupDecl attGroupDecl : xsAttGroupDecls) {
-                OverlayClass overlayClass = classGenerator.generate(attGroupDecl);
-                generatedClasses.add(overlayClass);
-            }
-            final Collection<XSModelGroupDecl> modelGroupDecls = schema.getModelGroupDecls().values();
-            for (final XSModelGroupDecl modelGroupDecl : modelGroupDecls) {
-                OverlayClass overlayClass = classGenerator.generate(modelGroupDecl);
-                generatedClasses.add(overlayClass);
-            }
-
-            final Collection<XSAttributeDecl> xsAttributeDecls = schema.getAttributeDecls().values();
-            for (final XSAttributeDecl attributeDecl : xsAttributeDecls) {
-                OverlayClass overlayClass = classGenerator.generate(attributeDecl);
-                generatedClasses.add(overlayClass);
-            }
-            final Collection<XSElementDecl> elementDecls = schema.getElementDecls().values();
-            for (final XSElementDecl elementDecl : elementDecls) {
-                OverlayClass overlayClass = classGenerator.generate(elementDecl);
-                generatedClasses.add(overlayClass);
-            }
-
-        }
-        Set<String> names = new HashSet<String>();
-        for(OverlayClass overlayClass : generatedClasses) {
-            if (names.contains(overlayClass.getName() + overlayClass.getNameSpace())) {
-                throw new RuntimeException("Stop generation... The class already exists:" + overlayClass.getName() + overlayClass.getNameSpace());
-            }
-            names.add(overlayClass.getName() + overlayClass.getNameSpace());
-        }
-        LOG.info("{0} classes will be generated", generatedClasses.size());
+        OverlayClassGenerator classGenerator = new OverlayClassGeneratorImpl(set.getSchemas());
+        generatedClasses.addAll(classGenerator.getResult());
     }
 
     /**
@@ -161,7 +119,7 @@ public class OverlayGenerator {
                 }
             }
 
-            final File file = new File(filePackage, StringUtils.capitalize(overlayClass.getName()) + ".java");
+            final File file = new File(filePackage, StringUtils.capitalize(overlayClass.getClassName()) + ".java");
             try {
                 Map<String, Object> rootMap = new HashMap<String, Object>();
                 rootMap.put("overlayClass", overlayClass);
@@ -184,8 +142,8 @@ public class OverlayGenerator {
 
         Map<String, Object> rootMap = new HashMap<String, Object>();
 
-        final OverlayClass factoryClass = new OverlayClass();
-        factoryClass.setName(className);
+        final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
+        factoryClass.setClassName(className);
         factoryClass.setPackageName(BASE_PACKAGE.endsWith(".")
                 ? BASE_PACKAGE.substring(0, BASE_PACKAGE.length() - 1) : BASE_PACKAGE);
 
@@ -229,7 +187,7 @@ public class OverlayGenerator {
             final String xsd = "akomantoso20.xsd";
             generator.parse(xsd);
             generator.analyze(BASE_PACKAGE, xsd);
-            generator.print(BASE_PACKAGE, xsd);
+//            generator.print(BASE_PACKAGE, xsd);
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }
