@@ -37,7 +37,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
 
     private static final String BASE_DIRECTORY = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
-    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.";
+    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.an.client.ui.overlay.document.gen.";
 
     private File generatedSourcesDirectory;
 
