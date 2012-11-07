@@ -44,9 +44,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     // Freemarker configuration
     private final Configuration configuration;
 
-    // XSOM parser
-    private final XSOMParser parser = new XSOMParser();
-
     private final List<OverlayClass> generatedClasses = new ArrayList<OverlayClass>();
 
     private String mainSchema;

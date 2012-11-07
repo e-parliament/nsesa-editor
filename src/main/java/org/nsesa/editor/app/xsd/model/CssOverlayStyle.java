@@ -1,9 +1,6 @@
 package org.nsesa.editor.app.xsd.model;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Generates a style on the given overlay class
@@ -84,7 +81,12 @@ import java.util.Map;
         while(aClass != null) {
             for(CssOverlayStyle cssStyle : styles) {
                 if (aClass.getName() != null && aClass.getName().equalsIgnoreCase(cssStyle.getName())) {
-                    values.putAll(cssStyle.getValues());
+                    // if the key already exist do not override it
+                    for (Map.Entry<String, String> entry : cssStyle.values.entrySet()) {
+                        if (!values.containsKey(entry.getKey())) {
+                            values.put(entry.getKey(), entry.getValue());
+                        }
+                    }
                 }
             }
             aClass = aClass.getParent();
