@@ -3,6 +3,8 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 
 /**
  * Date: 17/10/12 21:30
@@ -10,6 +12,7 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class DefaultOverlayFactory implements OverlayFactory {
 
     private final OverlayStrategy overlayStrategy;
@@ -40,8 +43,12 @@ public class DefaultOverlayFactory implements OverlayFactory {
             // process all properties
             amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
             amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+            Integer assignedNumber = LocatorUtil.getAssignedNumber(amendableWidget);
+            amendableWidget.setAssignedNumber(assignedNumber != null ? assignedNumber : 1);
 
             if (amendableWidget.isAmendable()) {
+                amendableWidget.setFormat(overlayStrategy.getFormat(element));
+                amendableWidget.setNumberingType(overlayStrategy.getNumberingType(element, amendableWidget.getAssignedNumber()));
                 amendableWidget.setContent(overlayStrategy.getContent(element));
             }
 

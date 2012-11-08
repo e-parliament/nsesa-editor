@@ -5,7 +5,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * Date: 24/09/12 17:19
@@ -35,23 +34,8 @@ public class DefaultLocator implements Locator {
     }
 
     public String getNum(AmendableWidget amendableWidget) {
-        if (amendableWidget.getParentAmendableWidget() != null) {
-            final Iterator<AmendableWidget> iterator = amendableWidget.getParentAmendableWidget().getChildAmendableWidgets().iterator();
-            int count = 1;
-            while (iterator.hasNext()) {
-                AmendableWidget aw = iterator.next();
-                if (aw != null) {
-                    if (aw.getType().equalsIgnoreCase(amendableWidget.getType())) {
-                        count++;
-                    }
-                    if (aw == amendableWidget) {
-                        break;
-                    }
-                }
-            }
-            return Integer.toString(count);
-        }
-        return "";
+        final Integer assignedNumber = amendableWidget.getAssignedNumber();
+        return assignedNumber != null ? Integer.toString(assignedNumber) : "";
     }
 
     public void hide(Class<? extends AmendableWidget>... amendableWidgetClasses) {
