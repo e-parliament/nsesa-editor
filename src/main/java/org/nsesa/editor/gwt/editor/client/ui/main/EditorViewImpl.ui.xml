@@ -11,7 +11,7 @@
         .header {
             height: 100%;
             width: 100%;
-            background-color: #dc143c;
+            background-color: #ddd;
             z-index: 2;
         }
 
@@ -19,7 +19,7 @@
             position: absolute;
             bottom: 0;
             right: -10px;
-            background-color: #dc143c;
+            background-color: #ddd;
             color: #fff;
             font-size: smaller;
         }
