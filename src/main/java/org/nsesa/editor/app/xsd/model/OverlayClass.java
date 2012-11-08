@@ -84,17 +84,12 @@ public class OverlayClass extends OverlayNode  {
 
     public String[] getImports(PackageNameGenerator packageNameGenerator) {
         Set<String> imports = new LinkedHashSet<String>();
-        if (parent != null) {
+        if (parent != null && (parent.isComplex() || parent.isElement() || parent.isSimple())) {
             String packageName = packageNameGenerator.getPackageName(parent);
             imports.add(packageName + "." + StringUtils.capitalize(parent.getClassName()));
         }
-        for (OverlayNode property : properties) {
-            String packageName = null;
-            if (property instanceof OverlayProperty) {
-                packageName = packageNameGenerator.getPackageName((OverlayProperty)property);
-            } else {
-                packageName = packageNameGenerator.getPackageName(property);
-            }
+        for (OverlayProperty property : properties) {
+            String packageName = packageNameGenerator.getPackageName(property);
             if ("java.lang".equals(packageName)) {
                 continue;
             }
@@ -142,6 +137,21 @@ public class OverlayClass extends OverlayNode  {
             }
         }
         return result;
+    }
+    public Set<String> getAllowedSubTypes() {
+        Set<String> set = new HashSet<String>();
+        OverlayClass aClass = this;
+        while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
+            for (OverlayProperty property : aClass.getProperties()) {
+                if (property.isWildCard()) {
+                    set.add("*");
+                } else {
+                    set.add(property.getClassName());
+                }
+            }
+            aClass = aClass.getParent();
+        }
+        return set;
     }
 
     @Override

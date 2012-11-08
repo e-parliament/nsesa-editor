@@ -40,6 +40,7 @@ import java.util.*;
             boolean skipped =  EnumSet.of(OverlayType.AttrGroup,
                     OverlayType.Attribute,
                     OverlayType.Group,
+                    OverlayType.SimpleType,
                     OverlayType.GroupDecl).contains(overlayClass.getOverlayType());
 
             return !skipped;

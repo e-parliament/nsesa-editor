@@ -30,20 +30,7 @@ public interface OverlayClassGenerator {
      * Return tree result of overlay classes
      * @return
      */
-    OverlayRootClass getTreeResult();
-
-    /**
-     * Returns a flat list of overlay classes
-     * @return
-     */
-    List<OverlayClass> getResult();
-
-    /**
-     * Returns a list of overlay classes sorted by comparator
-     * @param comparator
-     * @return
-     */
-    List<OverlayClass> getResult(Comparator<OverlayClass> comparator);
+    OverlayRootClass getResult();
 
     /**
      * Start generation

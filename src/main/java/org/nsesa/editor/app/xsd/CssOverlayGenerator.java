@@ -34,7 +34,7 @@ public class CssOverlayGenerator extends OverlayGenerator {
     }
 
     public void print() {
-        OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getTreeResult();
+        OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getResult();
         Writer writer = null;
         try {
             writer = new FileWriter(fileName, false);
@@ -50,7 +50,7 @@ public class CssOverlayGenerator extends OverlayGenerator {
                  try {
                      writer.close();
                  } catch (IOException e) {
-                     e.printStackTrace();
+                     LOG.error("Error in closing the writer", e);
                  }
              }
         }
@@ -69,7 +69,12 @@ public class CssOverlayGenerator extends OverlayGenerator {
         props.setProperty("container", "display:block");
         props.setProperty("block", "display:block");
         props.setProperty("inline", "display:inline");
-
+        props.setProperty("basehierarchy", "display:block;text-align:left");
+        props.setProperty("article", "text-align:center");
+        props.setProperty("heading", "text-align:center");
+        props.setProperty("content", "text-align:left");
+        props.setProperty("subparagraph", "display:inline");
+        props.setProperty("introductory", "display:block");
         CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", "r:/test.css");
         try {
             final String[] xsds = {"xml.xsd", "akomantoso20.xsd"};

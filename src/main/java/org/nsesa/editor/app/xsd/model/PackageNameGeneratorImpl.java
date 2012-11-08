@@ -1,5 +1,6 @@
 package org.nsesa.editor.app.xsd.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -61,11 +62,13 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     @Override
     public String getPackageName(String nameSpace) {
+        if (nameSpace == null) {
+            return null;
+        }
         String packageName = cache.get(nameSpace);
         if (packageName != null) {
             return packageName;
         }
-
         int lastIndex = nameSpace.lastIndexOf("/");
         // get previous one
         int previousIndex = nameSpace.lastIndexOf("/", lastIndex - 1);

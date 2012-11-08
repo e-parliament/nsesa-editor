@@ -1,7 +1,5 @@
 package org.nsesa.editor.app.xsd;
 
-import com.sun.xml.xsom.XSSchemaSet;
-import com.sun.xml.xsom.parser.XSOMParser;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -11,17 +9,12 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.nsesa.editor.app.xsd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Generates a hierarchy of Java classes by parsing an XSD Schema
@@ -43,9 +36,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     // Freemarker configuration
     private final Configuration configuration;
-
-    private final List<OverlayClass> generatedClasses = new ArrayList<OverlayClass>();
-
     private String mainSchema;
     private String basePackageName;
 
@@ -81,11 +71,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         final PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl(basePackageName);
         final PackageNameGenerator directoryNameGenerator = new PackageNameGeneratorImpl("");
 
+        List<OverlayClass> generatedClasses = getFlatList(overlayClassGenerator.getResult());
+        // keep only the element overlay classes
         List<OverlayClass> elementClases = new ArrayList<OverlayClass>();
 
-        generatedClasses.addAll(overlayClassGenerator.getResult());
-
         for(OverlayClass overlayClass : generatedClasses) {
+            if (overlayClass instanceof OverlayClassGenerator.OverlayRootClass ||
+                    overlayClass instanceof OverlayClassGenerator.OverlaySchemaClass) {
+                continue;
+            }
+
             String filePackageName = directoryNameGenerator.getPackageName(overlayClass);
             File filePackage = new File(generatedSourcesDirectory, filePackageName);
             if (!filePackage.exists()) {
@@ -168,5 +163,21 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }
+    }
+
+    private List<OverlayClass> getFlatList(OverlayClassGenerator.OverlayRootClass rootClass) {
+        Stack<OverlayClass> stack = new Stack<OverlayClass>();
+        List<OverlayClass> result = new ArrayList<OverlayClass>();
+        stack.push(rootClass);
+        while (!stack.isEmpty()) {
+            OverlayClass aClass = stack.pop();
+            result.add(aClass);
+            OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[]{});
+            //Collections.sort(children, comparator);
+            for (int i = children.length - 1; i >= 0 ; i--) {
+                stack.push(children[i]);
+            }
+        }
+        return result;
     }
 }
