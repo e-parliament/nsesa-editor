@@ -184,6 +184,12 @@
             <version>13.0.1</version>
         </dependency>
 
+        <dependency>
+        	<groupId>name.pehl</groupId>
+        	<artifactId>totoe</artifactId>
+        	<version>0.4</version>
+        </dependency>
+
         <!-- XSD parsing and generation -->
         <dependency>
             <groupId>com.sun.xsom</groupId>

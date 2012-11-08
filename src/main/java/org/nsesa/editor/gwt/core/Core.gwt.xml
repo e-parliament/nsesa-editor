@@ -8,8 +8,12 @@
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.place.Place"/>
     <inherits name="com.google.gwt.activity.Activity"/>
-    <!--GWT Crypto library for the SHA-1 checksumming-->
+    <!-- GWT Crypto library for the SHA-1 checksumming-->
     <inherits name="com.googlecode.gwt.crypto.Crypto"/>
+    <!-- XPath support -->
+    <inherits name="name.pehl.totoe.xml.XML" />
+    <!-- JSONPath support -->
+    <inherits name="name.pehl.totoe.json.JSON" />
 
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
     <inherits name="com.allen_sauer.gwt.log.gwt-log-INFO"/>
