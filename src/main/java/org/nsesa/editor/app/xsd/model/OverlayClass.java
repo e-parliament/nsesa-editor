@@ -133,6 +133,16 @@ public class OverlayClass extends OverlayNode  {
                 restriction.getEnumeration().length > 0;
     }
 
+    public boolean hasWildCardProperties() {
+        boolean result = false;
+        for(OverlayProperty property : properties) {
+            if (property.isWildCard()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
 
     @Override
     public String toString() {

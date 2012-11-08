@@ -163,8 +163,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             }
         }
         if (attrGroup.getAttributeWildcard() != null) {
-            // add wildcard property
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String", "wildcardContent", false);
+            // add wildcard property as an amendable widget
+            OverlayProperty property = new OverlayProperty(OverlayType.WildcardType, "java.lang", null, "String", "wildcardContent", false);
             overlayClass.getProperties().add(property);
         }
 
@@ -421,7 +421,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                     generateProperty(particle, properties, isCollection || wasCollection);
                 }
             } else if (xsParticle.getTerm().isWildcard()) {
-                OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String",
+                OverlayProperty property = new OverlayProperty(OverlayType.WildcardType, "java.lang", null, "String",
                         "wildcardContent" , isCollection || wasCollection);
                 properties.add(property);
             } else {

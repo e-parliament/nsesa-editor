@@ -80,6 +80,9 @@ public class OverlayNode {
     public boolean isElement() {
         return OverlayType.Element.equals(overlayType);
     }
+    public boolean isWildCard() {
+        return OverlayType.WildcardType.equals(overlayType);
+    }
 
     /**
      * Traverse the node and its descendants
