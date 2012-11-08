@@ -4,6 +4,7 @@ import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
@@ -20,6 +21,8 @@ public interface DocumentInjector extends Ginjector {
     DocumentView getDocumentView();
 
     DeadlineController getDeadlineController();
+
+    ActionBarController getActionBarController();
 
     DocumentEventBus getDocumentEventBus();
 

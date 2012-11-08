@@ -56,7 +56,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
 
-    private final ActionBarController actionBarController;
+
     private final OverlayFactory overlayFactory;
     private final Locator locator;
     private final AmendmentManager amendmentManager;
@@ -71,6 +71,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final DeadlineController deadlineController;
     @Scope(DOCUMENT)
     private final DocumentEventBus documentEventBus;
+    @Scope(DOCUMENT)
+    private final ActionBarController actionBarController;
 
     private ArrayList<AmendableWidget> amendableWidgets;
 
@@ -78,13 +80,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
-                              final ActionBarController actionBarController,
                               final Locator locator,
                               final AmendmentManager amendmentManager) {
 
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-        this.actionBarController = actionBarController;
+
 
         this.amendmentManager = amendmentManager;
         this.locator = locator;
@@ -97,6 +98,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.contentController = injector.getContentController();
         this.documentHeaderController = injector.getDocumentHeaderController();
         this.deadlineController = injector.getDeadlineController();
+        this.actionBarController = injector.getActionBarController();
 
         // set references in the child controllers
         this.markerController.setDocumentController(this);

@@ -129,4 +129,6 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     void setContent(String amendableContent);
 
     HTMLPanel getAmendmentHolderElement();
+
+    String[] getAllowedChildTypes();
 }

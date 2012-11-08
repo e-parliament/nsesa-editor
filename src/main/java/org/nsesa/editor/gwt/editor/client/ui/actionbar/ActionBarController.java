@@ -3,6 +3,8 @@ package org.nsesa.editor.gwt.editor.client.ui.actionbar;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -12,10 +14,12 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.create.ActionBarCreatePanelController;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.create.ActionBarCreatePanelView;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 21:42
@@ -24,7 +28,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @version $Id$
  */
 @Singleton
-@Scope(EDITOR)
+@Scope(DOCUMENT)
 public class ActionBarController {
 
     private final ActionBarView view;
@@ -32,16 +36,26 @@ public class ActionBarController {
 
     private final DocumentEventBus documentEventBus;
 
+    private final ActionBarCreatePanelController actionBarCreatePanelController;
+
+    private final PopupPanel popupPanel;
+
     private AmendableWidget amendableWidget;
 
     private DocumentController documentController;
 
     @Inject
     public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
-                               final ActionBarViewCss actionBarViewCss) {
+                               final ActionBarViewCss actionBarViewCss,
+                               final ActionBarCreatePanelController actionBarCreatePanelController) {
         this.documentEventBus = documentEventBus;
         this.view = view;
         this.actionBarViewCss = actionBarViewCss;
+
+        this.actionBarCreatePanelController = actionBarCreatePanelController;
+        this.popupPanel = new DecoratedPopupPanel(true);
+        actionBarCreatePanelController.setActionBarController(this);
+
         registerListeners();
     }
 
@@ -58,10 +72,23 @@ public class ActionBarController {
                 }
             }
         });
+        view.getChildHandler().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (amendableWidget != null) {
+                    actionBarCreatePanelController.setAmendableWidget(amendableWidget);
+                    final ActionBarCreatePanelView panelView = actionBarCreatePanelController.getView();
+                    panelView.asWidget().setVisible(true);
+                    popupPanel.setWidget(panelView);
+                    popupPanel.showRelativeTo(view.getChildHandler());
+                    popupPanel.show();
+                }
+            }
+        });
         documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
-                if (event.getDocumentController() == documentController) {
+                if (event.getDocumentController() == documentController || documentController == null) {
                     view.asWidget().setVisible(false);
                 }
             }
@@ -112,6 +139,8 @@ public class ActionBarController {
                 RootPanel.get().add(view);
             }
 
+            popupPanel.hide();
+
             //make sure it is visible
             view.asWidget().setVisible(true);
 
@@ -130,6 +159,7 @@ public class ActionBarController {
     }
 
     public void adaptPosition() {
+        actionBarCreatePanelController.getView().asWidget().setVisible(false);
         if (amendableWidget != null && amendableWidget.getRoot() != null) {
             final Style style = view.asWidget().getElement().getStyle();
             style.setPosition(Style.Position.ABSOLUTE);

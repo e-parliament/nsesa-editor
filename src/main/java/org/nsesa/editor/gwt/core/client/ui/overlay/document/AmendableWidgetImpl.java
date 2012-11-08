@@ -306,6 +306,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         this.immutable = immutable;
     }
 
+    @Override
     public HTMLPanel getAmendmentHolderElement() {
         if (amendmentHolderElement == null) {
             if (getElement().getParentElement() != null) {
@@ -316,5 +317,16 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             }
         }
         return amendmentHolderElement;
+    }
+
+    /**
+     * Returns an array of the node names that are allowed to be nested.
+     * Note: this can include wildcards (*).
+     * @return the list of allowed child types. Should never return <tt>null</tt>.
+     */
+    @Override
+    public String[] getAllowedChildTypes() {
+        // simple test
+        return new String[]{"p"};
     }
 }
