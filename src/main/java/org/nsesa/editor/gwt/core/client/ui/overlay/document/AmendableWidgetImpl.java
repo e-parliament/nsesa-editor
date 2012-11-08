@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
+import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,11 +69,16 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     private String amendableContent;
 
+    private Format format;
+
+    private NumberingType numberingType;
+
     /**
      * The assigned index: this is used to determine the location in case the index is not sufficient to uniquely
      * identify this widget (eg. in case of indents, bullet points ...)
+     * Note: this number is <strong>1-based</strong>!!
      */
-    private Integer assignedIndex;
+    private Integer assignedNumber;
 
     /**
      * The holder element for the amendments.
@@ -328,5 +335,29 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public String[] getAllowedChildTypes() {
         // simple test
         return new String[]{"p"};
+    }
+
+    public Format getFormat() {
+        return format;
+    }
+
+    public void setFormat(final Format format) {
+        this.format = format;
+    }
+
+    public NumberingType getNumberingType() {
+        return numberingType;
+    }
+
+    public void setNumberingType(final NumberingType numberingType) {
+        this.numberingType = numberingType;
+    }
+
+    public Integer getAssignedNumber() {
+        return assignedNumber;
+    }
+
+    public void setAssignedNumber(final Integer assignedNumber) {
+        this.assignedNumber = assignedNumber;
     }
 }

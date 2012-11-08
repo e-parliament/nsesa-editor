@@ -4,6 +4,8 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
+import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
 import java.util.ArrayList;
 
@@ -131,4 +133,16 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     HTMLPanel getAmendmentHolderElement();
 
     String[] getAllowedChildTypes();
+
+    NumberingType getNumberingType();
+
+    void setNumberingType(NumberingType numberingType);
+
+    Format getFormat();
+
+    void setFormat(Format format);
+
+    Integer getAssignedNumber();
+
+    void setAssignedNumber(Integer assignedNumber);
 }
