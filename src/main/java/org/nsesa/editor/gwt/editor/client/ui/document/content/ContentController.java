@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
@@ -44,7 +45,7 @@ public class ContentController {
         view.getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-
+                documentEventBus.fireEvent(new DocumentScrollEvent(documentController));
             }
         });
     }
