@@ -46,18 +46,20 @@ public class MarkerController {
                 final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
 //                Log.info("Document height is: " + documentHeight);
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getView().asWidget().isAttached()) {
-                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
+                    if (amendmentController.getDocumentController() == documentController) {
+                        if (amendmentController.getView().asWidget().isAttached()) {
+                            final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
 //                        Log.info("Amendment top is: " + amendmentTop);
-                        double division = (double) documentHeight / (double) amendmentTop;
+                            double division = (double) documentHeight / (double) amendmentTop;
 
-                        final FocusWidget focusWidget = view.addMarker(division);
-                        focusWidget.addClickHandler(new ClickHandler() {
-                            @Override
-                            public void onClick(ClickEvent event) {
-                                documentController.scrollTo(amendmentController.getView().asWidget());
-                            }
-                        });
+                            final FocusWidget focusWidget = view.addMarker(division);
+                            focusWidget.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+                                    documentController.scrollTo(amendmentController.getView().asWidget());
+                                }
+                            });
+                        }
                     }
                 }
             }
