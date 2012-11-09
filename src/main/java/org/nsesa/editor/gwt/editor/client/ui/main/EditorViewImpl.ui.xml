@@ -37,7 +37,7 @@
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
-        <g:north size='40'>
+        <g:north size='30'>
             <header:HeaderView ui:field="headerView" styleName="{res.header}"/>
         </g:north>
         <g:center>

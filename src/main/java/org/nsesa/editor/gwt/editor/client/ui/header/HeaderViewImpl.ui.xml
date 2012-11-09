@@ -4,22 +4,36 @@
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources'/>
     <ui:style field="res">
         .logo {
-            color: #000;
             position: relative;
             left: 10px;
             top: 0px;
-            font-size: 40px;
+            font-size: 30px;
             font-weight: bold;
             font-family: fantasy;
+        }
+
+        .logo .part1 {
+            color: #000;
+            position: relative;
+            left: 10px;
+        }
+
+        .logo .part2 {
+            color: #aaa;
+        }
+
+        .logo .part3 {
+            color: #000;
+            position: relative;
+            left: -10px;
         }
 
         .tabHeaders {
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 3px;
             padding: 0;
             margin: 0;
-            width: px;
         }
 
         .tabHeader {
@@ -29,7 +43,9 @@
     </ui:style>
     <g:HTMLPanel>
         <g:HTML styleName="{res.logo}">
-            AT4AM
+            <span class="{res.part1}">AT</span>
+            <span class="{res.part2}">4</span>
+            <span class="{res.part3}">AM</span>
         </g:HTML>
 
         <g:FlowPanel styleName="{res.tabHeaders}">
