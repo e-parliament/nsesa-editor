@@ -357,7 +357,13 @@ public class OverlayStrategySupport {
 
         NodeList<Node> nodes = element.getChildNodes();
         List<Element> amendableElements = new ArrayList<Element>();
-        for (int i = 0; i < nodes.getLength(); i++) {
+        int length = 0;
+        try {
+            length = nodes.getLength();
+        } catch (Exception e) {
+            Log.error("Caught exception (probably under Chrome): " + e, e);
+        }
+        for (int i = 0; i < length; i++) {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element el = nodes.getItem(i).cast();
                 // do not include any of the 'property' tags
