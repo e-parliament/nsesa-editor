@@ -329,12 +329,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * Returns an array of the node names that are allowed to be nested.
      * Note: this can include wildcards (*).
+     * The default implementation throws an exception, since this method is supposed to be overridden.
      * @return the list of allowed child types. Should never return <tt>null</tt>.
      */
     @Override
     public String[] getAllowedChildTypes() {
-        // simple test
-        return new String[]{"p"};
+        throw new UnsupportedOperationException("Should have been overridden in the subclasses.");
     }
 
     public Format getFormat() {
