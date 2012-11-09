@@ -272,7 +272,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public AmendableWidget getRoot() {
-        return getParentAmendableWidget() != null ? getParentAmendableWidget().getParentAmendableWidget() : getParentAmendableWidget();
+        return getParentAmendableWidget() != null ? getParentAmendableWidget() : this;
     }
 
     @Override

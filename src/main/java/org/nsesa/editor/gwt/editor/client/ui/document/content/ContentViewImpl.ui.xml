@@ -4,7 +4,7 @@
               type='org.nsesa.editor.gwt.editor.client.ui.document.content.ContentViewCss'/>
     <ui:style field="res">
         .scrollPanel {
-
+            width: 100%;
         }
 
         .documentPanel {

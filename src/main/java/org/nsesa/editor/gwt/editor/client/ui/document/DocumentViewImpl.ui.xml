@@ -11,15 +11,13 @@
             width: 100%;
             position: relative;
             top: -20px;
-            /* TODO Seems to be ignored in Chrome */
+        }
+
+        .content {
             max-width: 960px;
             left: 0;
             right: 0;
             margin: 0 auto;
-        }
-
-        .content {
-            width: 100%;
         }
 
         .deadline {

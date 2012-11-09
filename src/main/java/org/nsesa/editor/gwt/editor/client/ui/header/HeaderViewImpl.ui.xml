@@ -15,7 +15,7 @@
         .logo .part1 {
             color: #000;
             position: relative;
-            left: 10px;
+            left: 8px;
         }
 
         .logo .part2 {
@@ -25,7 +25,7 @@
         .logo .part3 {
             color: #000;
             position: relative;
-            left: -10px;
+            left: -5px;
         }
 
         .tabHeaders {
