@@ -135,7 +135,6 @@ public class EditorController implements BootstrapEventHandler {
         // for an evenly distributed width
         for (final DocumentController d : documentControllers) {
             final String width = (100 / documentControllers.size()) + "%";
-            Log.info("Index: " + view.getDocumentsPanel().getWidgetIndex(d.getView()));
             view.getDocumentsPanel().setCellWidth(d.getView(), width);
         }
     }

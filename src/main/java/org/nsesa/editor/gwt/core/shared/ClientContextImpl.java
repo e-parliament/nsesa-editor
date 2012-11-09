@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.core.shared;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -35,7 +34,6 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
     private String documentIso = "EN";
 
     public ClientContextImpl() {
-        Log.info("----------------- CLIENT CONTEXT () -------------------------");
     }
 
     public void addParameter(String key, String value) {
