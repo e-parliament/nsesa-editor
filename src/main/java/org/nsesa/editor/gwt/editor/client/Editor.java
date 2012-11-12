@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
@@ -28,6 +27,8 @@ import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Main entry point for the Editor module.
@@ -39,6 +40,8 @@ import java.util.Map;
  */
 public abstract class Editor implements EntryPoint {
 
+    private static final Logger LOG = Logger.getLogger("Editor");
+
     public abstract Injector getInjector();
 
     private ClientFactory clientFactory;
@@ -48,7 +51,7 @@ public abstract class Editor implements EntryPoint {
     @Override
     public void onModuleLoad() {
         // set up the uncaught exception handler before the actual initialization
-        Log.setUncaughtExceptionHandler();
+        //LOG.setUncaughtExceptionHandler();
         clientFactory = getInjector().getClientFactory();
 
         serviceFactory = getInjector().getServiceFactory();
@@ -56,9 +59,9 @@ public abstract class Editor implements EntryPoint {
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
             public void execute() {
-                Log.debug("Deferred Editor module loading started.");
+                LOG.info("Deferred Editor module loading started.");
                 onModuleLoadDeferred();
-                Log.debug("Deferred Editor module loading completed.");
+                LOG.info("Deferred Editor module loading completed.");
             }
         });
     }
@@ -138,7 +141,7 @@ public abstract class Editor implements EntryPoint {
                 final ClientContext clientContext = event.getClientContext();
                 clientFactory.setClientContext(clientContext);
 
-                Log.info("User authenticated as " + clientContext.getPrincipal()
+                LOG.info("User authenticated as " + clientContext.getPrincipal()
                         + " with roles: " + (clientContext.getRoles() != null ? Arrays.asList(clientContext.getRoles()) : "[NONE]"));
 
                 // we're authenticated, time for bootstrapping the rest of the application
@@ -150,7 +153,7 @@ public abstract class Editor implements EntryPoint {
         eventBus.addHandler(SetWindowTitleEvent.TYPE, new SetWindowTitleEventHandler() {
             @Override
             public void onEvent(SetWindowTitleEvent event) {
-                Log.debug("Setting window.title to " + event.getTitle());
+                LOG.info("Setting window.title to " + event.getTitle());
                 Window.setTitle(event.getTitle());
             }
         });
@@ -220,6 +223,6 @@ public abstract class Editor implements EntryPoint {
         final ErrorController errorController = getInjector().getErrorController();
         errorController.setError(errorTitle, errorMessage);
         errorController.center();
-        Log.error(errorMessage, throwable);
+        LOG.log(Level.SEVERE, errorMessage, throwable);
     }
 }

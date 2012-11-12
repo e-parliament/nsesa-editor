@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -17,6 +16,7 @@ import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -29,6 +29,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Singleton
 @Scope(EDITOR)
 public class EditorController implements BootstrapEventHandler {
+
+    private static final Logger LOG = Logger.getLogger("EditorController");
 
     private final EditorView view;
     private final ClientFactory clientFactory;
@@ -63,7 +65,7 @@ public class EditorController implements BootstrapEventHandler {
 
     @Override
     public void onEvent(BootstrapEvent event) {
-        Log.info("Received bootstrap event.");
+        LOG.info("Received bootstrap event.");
         final String[] documentIDs = event.getClientContext().getDocumentIDs();
 
         if (documentIDs == null) {
@@ -107,7 +109,7 @@ public class EditorController implements BootstrapEventHandler {
 
             @Override
             public void onSuccess(AmendmentContainerDTO[] result) {
-                Log.info("Received " + result.length + " amendments.");
+                LOG.info("Received " + result.length + " amendments.");
                 amendmentManager.setAmendmentContainerDTOs(result);
                 // after the amendments, retrieve the documents
                 for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {

@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -35,6 +34,8 @@ import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderContr
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -45,6 +46,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * @version $Id$
  */
 public class DocumentController implements AmendableWidgetUIListener, AmendableWidgetWalker {
+
+    private static final Logger LOG = Logger.getLogger("DocumentController");
 
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
@@ -220,7 +223,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         serviceFactory.getGwtDocumentService().getAvailableTranslations(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<ArrayList<DocumentDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
-                Log.warn("No translations available.", caught);
+                LOG.log(Level.SEVERE, "No translations available.", caught);
             }
 
             @Override

@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -11,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Date: 03/07/12 23:14
@@ -19,6 +20,8 @@ import java.util.List;
  * @version $Id$
  */
 public class OverlayStrategySupport {
+
+    private static final Logger LOG = Logger.getLogger("OverlayStrategySupport");
 
     public static final String TAG_LITERAL_INDEX = "num";
     public static final String TAG_CONTENT = "content";
@@ -229,7 +232,7 @@ public class OverlayStrategySupport {
             try {
                 assignedIndex = Integer.parseInt(assigned);
             } catch (NumberFormatException e) {
-                Log.error("The assigned index '" + assigned + "' on " + element + " is not a number -- ignoring.");
+                LOG.log(Level.SEVERE, "The assigned index '" + assigned + "' on " + element + " is not a number -- ignoring.");
             }
             return assignedIndex;
         }
@@ -361,7 +364,7 @@ public class OverlayStrategySupport {
         try {
             length = nodes.getLength();
         } catch (Exception e) {
-            Log.error("Caught exception (probably under Chrome): " + e, e);
+            LOG.log(Level.WARNING, "Caught exception (probably under Chrome): " + e, e);
         }
         for (int i = 0; i < length; i++) {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -435,11 +438,11 @@ public class OverlayStrategySupport {
                             }
                         }
                     } else {
-                        Log.warn("A 'null' node found -- that's very weird. Running in hosted mode under Chrome perhaps?");
+                        LOG.info("A 'null' node found -- that's very weird. Running in hosted mode under Chrome perhaps?");
                     }
                 }
             } else {
-                Log.warn("Nodes under nextElem are null -- that's very weird. Running in hosted mode under Chrome perhaps?");
+                LOG.info("Nodes under nextElem are null -- that's very weird. Running in hosted mode under Chrome perhaps?");
             }
         }
     }

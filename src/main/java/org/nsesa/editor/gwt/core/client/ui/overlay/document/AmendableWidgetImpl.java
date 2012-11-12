@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -13,6 +12,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.logging.Logger;
 
 /**
  * Date: 27/06/12 17:52
@@ -22,6 +22,7 @@ import java.util.Collections;
  */
 public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget, HasWidgets {
 
+    private static final Logger LOG = Logger.getLogger("AmendableWidgetImpl");
 
     public static final boolean DEFAULT_ROOT_WIDGET_AMENDABLE = true;
 
@@ -109,7 +110,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             // inform the listener
             if (listener != null) listener.afterAmendableWidgetAdded(this, child);
         } else {
-            Log.debug("AmendableWidget listener veto'ed the adding of the amendable widget.");
+            LOG.info("AmendableWidget listener veto'ed the adding of the amendable widget.");
         }
     }
 
@@ -129,7 +130,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             // inform the listener
             if (listener != null) listener.afterAmendableWidgetRemoved(this, child);
         } else {
-            Log.debug("AmendableWidget listener veto'ed the removal of the amendable widget.");
+            LOG.info("AmendableWidget listener veto'ed the removal of the amendable widget.");
         }
     }
 
@@ -155,10 +156,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 // inform the listener
                 if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
             } else {
-                Log.warn("No amendment holder panel could be added for this widget " + this);
+                LOG.severe("No amendment holder panel could be added for this widget " + this);
             }
         } else {
-            Log.debug("AmendableWidget listener veto'ed the adding of the amendment controller.");
+            LOG.info("AmendableWidget listener veto'ed the adding of the amendment controller.");
         }
     }
 
@@ -183,7 +184,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             // inform the listener
             if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
         } else {
-            Log.debug("AmendableWidget listener veto'ed the removal of the amendment controller.");
+            LOG.info("AmendableWidget listener veto'ed the removal of the amendment controller.");
         }
     }
 

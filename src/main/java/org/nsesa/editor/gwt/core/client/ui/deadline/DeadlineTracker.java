@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.core.client.ui.deadline;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline1HourEvent;
@@ -9,6 +8,8 @@ import org.nsesa.editor.gwt.core.client.event.deadline.DeadlinePassedEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Date: 30/07/12 23:31
@@ -17,6 +18,8 @@ import java.util.Date;
  * @version $Id$
  */
 public class DeadlineTracker {
+
+    private static final Logger LOG = Logger.getLogger("DeadlineTracker");
 
     private final DocumentEventBus documentEventBus;
 
@@ -54,12 +57,12 @@ public class DeadlineTracker {
                     // diff until this period
                     long diff = aDayBeforeTheDeadline.getTime() - now.getTime();
                     final long diffHours = diff / (1000 * 60 * 60);
-                    Log.info("Scheduling 24-hour timer to fire in " + diffHours + " hours.");
+                    LOG.info("Scheduling 24-hour timer to fire in " + diffHours + " hours.");
                     if (diffHours < 24 * 3) { // if clients keep open this window longer than 3 days ..
                         try {
                             timer24hour.schedule((int) diff + (60 * 1000));
                         } catch (Exception exception) {
-                            Log.warn("Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                            LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                         }
                     }
                 }
@@ -67,12 +70,12 @@ public class DeadlineTracker {
                     timer1hour.cancel();
                     long diff = anHourBeforeTheDeadline.getTime() - now.getTime();
                     final long diffMinutes = diff / (1000 * 60);
-                    Log.info("Scheduling 60-min. timer to fire in " + diffMinutes + " minutes.");
+                    LOG.info("Scheduling 60-min. timer to fire in " + diffMinutes + " minutes.");
                     if (diffMinutes < 3 * 24 * 60) {
                         try {
                             timer1hour.schedule((int) diff + (60 * 1000));
                         } catch (Exception exception) {
-                            Log.warn("Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                            LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                         }
                     }
                 }
@@ -80,12 +83,12 @@ public class DeadlineTracker {
                 timer0hour.cancel();
                 long diff = deadline.getTime() - now.getTime();
                 final long diffMinutes = diff / (1000 * 60);
-                Log.info("Scheduling deadline timer to fire in " + diffMinutes + " minutes.");
+                LOG.info("Scheduling deadline timer to fire in " + diffMinutes + " minutes.");
                 if (diffMinutes < 3 * 24 * 60) {
                     try {
                         timer0hour.schedule((int) diff + (60 * 1000));
                     } catch (Exception exception) {
-                        Log.warn("Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                        LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                     }
                 }
             }
@@ -109,7 +112,7 @@ public class DeadlineTracker {
         @Override
         public void run() {
             documentEventBus.fireEvent(new Deadline24HourEvent(deadlineController.getDocumentController()));
-            Log.info("24 hour deadline mark passed.");
+            LOG.info("24 hour deadline mark passed.");
         }
     };
 
@@ -117,7 +120,7 @@ public class DeadlineTracker {
         @Override
         public void run() {
             documentEventBus.fireEvent(new Deadline1HourEvent(deadlineController.getDocumentController()));
-            Log.info("1 hour deadline mark passed.");
+            LOG.info("1 hour deadline mark passed.");
         }
     };
 
@@ -125,7 +128,7 @@ public class DeadlineTracker {
         @Override
         public void run() {
             documentEventBus.fireEvent(new DeadlinePassedEvent(deadlineController.getDocumentController()));
-            Log.info("Deadline mark passed.");
+            LOG.info("Deadline mark passed.");
         }
     };
 }

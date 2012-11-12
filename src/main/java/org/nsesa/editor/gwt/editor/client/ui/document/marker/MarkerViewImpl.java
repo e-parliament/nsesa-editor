@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.marker;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -10,6 +9,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -27,6 +28,7 @@ public class MarkerViewImpl extends Composite implements MarkerView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static final Logger LOG = Logger.getLogger("MarkerViewImpl");
 
     private final DocumentEventBus documentEventBus;
     @UiField
@@ -47,7 +49,7 @@ public class MarkerViewImpl extends Composite implements MarkerView {
         int height = getOffsetHeight();
 
         final double v = height / top;
-        Log.info("Drawing marker at " + (int) v);
+        LOG.info("Drawing marker at " + (int) v);
 
         Anchor marker = new Anchor("<div></div>", true);
         mainPanel.add(marker);

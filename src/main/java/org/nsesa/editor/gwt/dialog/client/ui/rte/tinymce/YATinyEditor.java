@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.Style;
@@ -19,6 +18,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * First attempt at using TinyMCE inside GWT via JSNI.
@@ -63,6 +64,8 @@ public class YATinyEditor extends Composite implements RichTextEditor {
 
     private static final String NO_JUSTIFY_TINY_MCE_BUTTONS =
             "spellchecker,separator,undo,redo,separator,sub,sup,separator,charmap";
+
+    private static final Logger LOG = Logger.getLogger("YATinyEditor");
 
     protected boolean readOnly;
     protected final String itemID;
@@ -119,8 +122,8 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     }
 
     private void logEvents(String toLog) {
-        if (Log.isDebugEnabled())
-            Log.debug("-----------> " + toLog);
+        if (LOG.isLoggable(Level.FINE))
+            LOG.log(Level.FINE, "-----------> " + toLog);
     }
 
     private void initialized() {
@@ -360,7 +363,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                 }
             }
         } catch (Exception e) {
-            Log.error("Exception in resizing tiny mce editor in the pane dialog", e);
+            LOG.log(Level.SEVERE, "Exception in resizing tiny mce editor in the pane dialog", e);
         }
     }
 

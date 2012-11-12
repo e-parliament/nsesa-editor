@@ -1,6 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.content;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -15,6 +14,8 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -32,6 +33,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    private static final Logger LOG = Logger.getLogger("DocumentViewImpl");
 
     /**
      * This correction value is supposed to be the height of the header and footer (plus any margin that might come into play)
@@ -60,7 +62,7 @@ public class ContentViewImpl extends Composite implements ContentView {
             public void onEvent(ResizeEvent event) {
 
                 final int height = event.getHeight() - SCROLLBAR_OFFSET;
-                Log.info("Setting scroll panel to " + height);
+                LOG.info("Setting scroll panel to " + height);
                 setScrollPanelHeight(height + "px");
             }
         });
