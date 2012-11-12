@@ -66,8 +66,8 @@ public class CssOverlayGenerator extends OverlayGenerator {
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
 
         Properties props = new Properties();
-        props.setProperty("container", "display:block");
-        props.setProperty("block", "display:block");
+        props.setProperty("container", "display:block;padding-top:10px");
+        props.setProperty("block", "display:block;padding-top:10px");
         props.setProperty("inline", "display:inline");
         props.setProperty("basehierarchy", "display:block;text-align:left");
         props.setProperty("article", "text-align:center");
@@ -75,6 +75,8 @@ public class CssOverlayGenerator extends OverlayGenerator {
         props.setProperty("content", "text-align:left");
         props.setProperty("subparagraph", "display:inline");
         props.setProperty("introductory", "display:block");
+        props.setProperty("itemType", "display:block;padding-top:10px");
+        props.setProperty("blocksreq", "display:block;padding-top:10px");
         CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", "r:/test.css");
         try {
             final String[] xsds = {"xml.xsd", "akomantoso20.xsd"};
