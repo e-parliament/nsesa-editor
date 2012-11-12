@@ -37,9 +37,9 @@
     </repositories>
 
     <properties>
-        <gwt.version>2.4.0</gwt.version>
+        <gwt.version>2.5.0</gwt.version>
         <spring.version>3.1.0.RELEASE</spring.version>
-        <gwtplugin.version>2.4.0</gwtplugin.version>
+        <gwtplugin.version>2.5.0</gwtplugin.version>
         <jdk.source>1.6</jdk.source>
         <jdk.target>1.6</jdk.target>
 
@@ -147,11 +147,6 @@
             <groupId>com.allen-sauer.gwt.dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
             <version>r1137</version>
-        </dependency>
-        <dependency>
-            <groupId>com.allen-sauer.gwt.log</groupId>
-            <artifactId>gwt-log</artifactId>
-            <version>3.1.8</version>
         </dependency>
 
         <dependency>
