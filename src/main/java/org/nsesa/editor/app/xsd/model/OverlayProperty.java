@@ -18,33 +18,55 @@ public class OverlayProperty extends OverlayNode {
      */
     private static Map<String, String> REPLACEMENT_NAMES = new HashMap<String, String>() {
         {
-            put("extends", "extendz");
-            put("content", "contentz");
-            put("type", "typez");
+            put("extends", "extend_");
+            put("content", "content_");
+            put("title", "title_");
         }
     };
 
     private String packageName;
-    private final boolean collection;
+    private boolean collection;
+    private final boolean attribute;
+
+    // the base class
+    private OverlayClass baseClass;
 
     public OverlayProperty(OverlayType overlayType, String packageName,
-                           String nameSpace, String className, String name, boolean collection) {
+                           String nameSpace, String className, String name, boolean collection, boolean attribute) {
         super(name, nameSpace, overlayType);
         this.packageName = packageName;
         this.className = className;
         this.collection = collection;
+        this.attribute = attribute;
+    }
+
+    // simple way to copy a property
+    public OverlayProperty copy() {
+        OverlayProperty newProperty = new OverlayProperty(overlayType, packageName, nameSpace, className, name, collection, attribute);
+        newProperty.setBaseClass(getBaseClass());
+        return newProperty;
     }
 
     public String getName() {
-        String result = REPLACEMENT_NAMES.get(name);
+
+//        String result = REPLACEMENT_NAMES.get(name);
+//        if (result == null) {
+//            result = name;
+//        }
+        String propName = name + (isAttribute() ? "Attr" : "");
+        String result = REPLACEMENT_NAMES.get(propName);
         if (result == null) {
-            result = name;
+            result = propName;
         }
         return result;
     }
 
     public boolean isCollection() {
         return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
     }
 
     public String getPackageName() {
@@ -81,4 +103,17 @@ public class OverlayProperty extends OverlayNode {
         int result = super.hashCode();
         return result;
     }
+
+    public boolean isAttribute() {
+        return attribute;
+    }
+
+    public OverlayClass getBaseClass() {
+        return baseClass;
+    }
+
+    public void setBaseClass(OverlayClass baseClass) {
+        this.baseClass = baseClass;
+    }
+
 }

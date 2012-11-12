@@ -21,9 +21,6 @@ public class OverlayNode {
     protected String className;
     protected OverlayType overlayType;
 
-    // flag for short circuit when creating the tree
-    protected boolean visited;
-
     public OverlayNode() {
     }
 

@@ -32,6 +32,33 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private static final String BASE_DIRECTORY = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
     private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.an.client.ui.overlay.document.gen.";
 
+    // a wrapper over overlay property to keep the collection flag
+    private static final class OverlayPropertyWrapper {
+        private OverlayProperty property;
+        private boolean parentCollection;
+
+        OverlayPropertyWrapper(OverlayProperty property, boolean parentCollection) {
+            this.property = property;
+            this.parentCollection = parentCollection;
+        }
+
+        public boolean isParentCollection() {
+            return parentCollection;
+        }
+
+        public void setParentCollection(boolean parentCollection) {
+            this.parentCollection = parentCollection;
+        }
+
+        public OverlayProperty getProperty() {
+            return property;
+        }
+
+        public void setProperty(OverlayProperty property) {
+            this.property = property;
+        }
+    }
+
     private File generatedSourcesDirectory;
 
     // Freemarker configuration
@@ -71,17 +98,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         final PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl(basePackageName);
         final PackageNameGenerator directoryNameGenerator = new PackageNameGeneratorImpl("");
 
-        List<OverlayClass> generatedClasses = getFlatList(overlayClassGenerator.getResult());
+        List<OverlayClass> generatedClasses = getFlatListWithNoGroups(overlayClassGenerator.getResult());
         // keep only the element overlay classes
         List<OverlayClass> elementClases = new ArrayList<OverlayClass>();
 
         for(OverlayClass overlayClass : generatedClasses) {
-            if (overlayClass instanceof OverlayClassGenerator.OverlayRootClass ||
-                    overlayClass instanceof OverlayClassGenerator.OverlaySchemaClass) {
-                continue;
-            }
 
             String filePackageName = directoryNameGenerator.getPackageName(overlayClass);
+            if (filePackageName == null || filePackageName.length() == 0) {
+                continue;
+            }
             File filePackage = new File(generatedSourcesDirectory, filePackageName);
             if (!filePackage.exists()) {
                 try {
@@ -165,13 +191,30 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
-    private List<OverlayClass> getFlatList(OverlayClassGenerator.OverlayRootClass rootClass) {
+    /**
+     * Returns a flat list of overlay classes by traversing the root class and exclude the root, schema class type
+     * and group classes
+     * @param rootClass The root overlay class that will be traversed
+     * @return A List of overlay classes
+     */
+    private List<OverlayClass> getFlatListWithNoGroups(OverlayClassGenerator.OverlayRootClass rootClass) {
         Stack<OverlayClass> stack = new Stack<OverlayClass>();
         List<OverlayClass> result = new ArrayList<OverlayClass>();
         stack.push(rootClass);
         while (!stack.isEmpty()) {
             OverlayClass aClass = stack.pop();
-            result.add(aClass);
+//            skip creation for such classes
+            if (!(aClass instanceof OverlayClassGenerator.OverlayRootClass ||
+                    aClass instanceof OverlayClassGenerator.OverlaySchemaClass ||
+                    aClass.getOverlayType().equals(OverlayType.GroupDecl) ||
+                    aClass.getOverlayType().equals(OverlayType.Group) ||
+                    aClass.getOverlayType().equals(OverlayType.AttrGroup)
+                    )) {
+                // replace the properties
+                replaceGroupProperties(aClass);
+//                add now in the result
+                result.add(aClass);
+            }
             OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[]{});
             //Collections.sort(children, comparator);
             for (int i = children.length - 1; i >= 0 ; i--) {
@@ -179,5 +222,47 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             }
         }
         return result;
+    }
+
+    // replace the group properties with their collection of simple properties
+    private void replaceGroupProperties(OverlayClass aClass) {
+        List<OverlayPropertyWrapper> stack = new ArrayList<OverlayPropertyWrapper>();
+        List<OverlayProperty> result = new ArrayList<OverlayProperty>();
+        for (OverlayProperty property : aClass.getProperties()) {
+            stack.add(new OverlayPropertyWrapper(property, property.isCollection()));
+        }
+        while (!stack.isEmpty()) {
+            OverlayPropertyWrapper propertyWrapper = stack.remove(0);
+            OverlayProperty property = propertyWrapper.getProperty();
+            Boolean parentCollection = propertyWrapper.isParentCollection();
+            OverlayClass baseClass = property.getBaseClass();
+            if (baseClass != null) {
+                 // check whether is group or attribute group and replace with its properties
+                if (baseClass.getOverlayType().equals(OverlayType.AttrGroup) ||
+                        baseClass.getOverlayType().equals(OverlayType.Group) ||
+                        baseClass.getOverlayType().equals(OverlayType.GroupDecl)) {
+                    // add in the stack the properties of the base class and parent
+                    OverlayClass parent = baseClass;
+                    while (parent != null) {
+                        for (OverlayProperty parentProp : parent.getProperties()) {
+                            // save the previous collection flag
+                            stack.add(new OverlayPropertyWrapper(parentProp, parentCollection || parentProp.isCollection()));
+                        }
+                        parent = parent.getParent();
+                    }
+                } else {
+                    //create a new copy of overlay property and set its collection flag
+                    OverlayProperty newProperty = property.copy();
+                    newProperty.setCollection(parentCollection || property.isCollection());
+                    result.add(newProperty);
+                }
+            } else {
+                    //create a new copy of overlay property and set its collection flag
+                OverlayProperty newProperty = property.copy();
+                newProperty.setCollection(parentCollection || property.isCollection());
+                result.add(newProperty);
+            }
+        }
+        aClass.setProperties(result);
     }
 }

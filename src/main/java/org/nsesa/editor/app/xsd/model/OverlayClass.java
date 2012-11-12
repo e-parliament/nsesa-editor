@@ -14,7 +14,7 @@ import java.util.*;
  * @version $Id$
  */
 public class OverlayClass extends OverlayNode  {
-
+    public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
     public static Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
         @Override
         public int compare(OverlayClass o1, OverlayClass o2) {
@@ -27,8 +27,6 @@ public class OverlayClass extends OverlayNode  {
         }
     };
 
-
-    public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
 
     private String packageName;
     private Class<?>[] interfaces;
@@ -128,6 +126,10 @@ public class OverlayClass extends OverlayNode  {
                 restriction.getEnumeration().length > 0;
     }
 
+    /**
+     * Returns true when it contains wild card properties
+     * @return
+     */
     public boolean hasWildCardProperties() {
         boolean result = false;
         for(OverlayProperty property : properties) {
@@ -138,11 +140,15 @@ public class OverlayClass extends OverlayNode  {
         }
         return result;
     }
+
     public Set<String> getAllowedSubTypes() {
         Set<String> set = new HashSet<String>();
         OverlayClass aClass = this;
         while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
             for (OverlayProperty property : aClass.getProperties()) {
+                if (property.isAttribute()) {
+                    continue;
+                }
                 if (property.isWildCard()) {
                     set.add("*");
                 } else {
