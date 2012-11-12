@@ -29,9 +29,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private static final String OVERLAY_ENUM_TEMPLATE_NAME    = "overlayEnum.ftl";
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
 
-    private static final String BASE_DIRECTORY = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
-    private static final String BASE_PACKAGE = "org.nsesa.editor.gwt.an.client.ui.overlay.document.gen.";
-
     // a wrapper over overlay property to keep the collection flag
     private static final class OverlayPropertyWrapper {
         private OverlayProperty property;
@@ -65,11 +62,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private final Configuration configuration;
     private String mainSchema;
     private String basePackageName;
+    private String targetDirectory;
 
-    public FileClassOverlayGenerator(String mainSchema, String basePackageName) {
+    public FileClassOverlayGenerator(String mainSchema, String basePackageName, String targetDirectory) {
         super();
         this.mainSchema = mainSchema;
         this.basePackageName = basePackageName;
+        this.targetDirectory = targetDirectory;
         configuration = new Configuration();
         configuration.setDefaultEncoding("UTF-8");
     }
@@ -85,7 +84,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             configuration.setDirectoryForTemplateLoading(directoryForTemplateLoading);
             // create the subdirectory name
             final File targetDirectoryClasses = new File(classLoader.getResource(".").getFile());
-            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), BASE_DIRECTORY);
+            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), targetDirectory);
             if (!generatedSourcesDirectory.exists() && !generatedSourcesDirectory.mkdirs()) {
                 throw new RuntimeException("Could not create generated source directory " + generatedSourcesDirectory.getAbsolutePath());
             }
@@ -142,8 +141,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
         final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
         factoryClass.setClassName(className);
-        factoryClass.setPackageName(BASE_PACKAGE.endsWith(".")
-                ? BASE_PACKAGE.substring(0, BASE_PACKAGE.length() - 1) : BASE_PACKAGE);
+        factoryClass.setPackageName(basePackageName.endsWith(".")
+                ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
         rootMap.put("overlayClass", factoryClass);
         rootMap.put("overlayClasses", elementClases);
@@ -178,9 +177,24 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
+        if (args.length != 0 && args.length != 2 ) {
+            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>>");
+            System.exit(1);
+        }
+        String basePackage, targetDirectory;
+        if (args.length == 0) {
+            basePackage = "org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.";
+            targetDirectory = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
+            LOG.warn("The base package will be {} and target directory {}", basePackage, targetDirectory);
+        } else {
+            basePackage = args[0];
+            targetDirectory = args[1];
+        }
+
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
-        FileClassOverlayGenerator generator = new FileClassOverlayGenerator("akomantoso20", BASE_PACKAGE);
+
+        FileClassOverlayGenerator generator = new FileClassOverlayGenerator("akomantoso20", basePackage, targetDirectory);
         try {
             final String[] xsds = {"akomantoso20.xsd", "xml.xsd"};
             generator.parse(xsds);

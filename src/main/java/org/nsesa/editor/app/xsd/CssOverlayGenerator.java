@@ -62,27 +62,22 @@ public class CssOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage java org.nsesa.editor.app.xsd.CssOverlayGenerator <<file_name>>");
+            System.exit(1);
+        }
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
-
-        Properties props = new Properties();
-        props.setProperty("container", "display:block;padding-top:10px");
-        props.setProperty("block", "display:block;padding-top:10px");
-        props.setProperty("inline", "display:inline");
-        props.setProperty("basehierarchy", "display:block;text-align:left");
-        props.setProperty("article", "text-align:center");
-        props.setProperty("heading", "text-align:center");
-        props.setProperty("content", "text-align:left");
-        props.setProperty("subparagraph", "display:inline");
-        props.setProperty("introductory", "display:block");
-        props.setProperty("itemType", "display:block;padding-top:10px");
-        props.setProperty("blocksreq", "display:block;padding-top:10px");
-        CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", "r:/test.css");
         try {
+            DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
+            Properties props = new Properties();
+            props.load(classLoader.getResourceAsStream("overlayCss.properties"));
+            CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", args[0]);
             final String[] xsds = {"xml.xsd", "akomantoso20.xsd"};
             generator.parse(xsds);
             generator.analyze();
             generator.print();
+        } catch (IOException ioe) {
+            LOG.error("IOException .", ioe);
         } catch (SAXException e) {
             LOG.error("SAX problem.", e);
         }
