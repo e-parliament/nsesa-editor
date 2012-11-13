@@ -17,7 +17,10 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Generates a hierarchy of Java classes by parsing an XSD Schema
+ * Generates a hierarchy of Java classes by parsing an XSD schemas. In order to create instances
+ * of those classes a factory class is also generated. There will be a package for each schema and the
+ * classes will be saved under target directory specified when instantiating the generator.
+ *
  * User: sgroza
  * Date: 06/11/12
  * Time: 09:09
@@ -25,16 +28,20 @@ import java.util.*;
 public class FileClassOverlayGenerator extends OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(FileClassOverlayGenerator.class);
 
+    // freemarker templates used to generate classes
     private static final String OVERLAY_ELEMENT_TEMPLATE_NAME = "overlayClass.ftl";
     private static final String OVERLAY_ENUM_TEMPLATE_NAME    = "overlayEnum.ftl";
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
 
-    // a wrapper over overlay property to keep the collection flag
-    private static final class OverlayPropertyWrapper {
+    /**
+     * A holder for overlay property. It will keep a flag to identify whether the parent was
+     * used as a collection or not
+     */
+    private static final class OverlayPropertyHolder {
         private OverlayProperty property;
         private boolean parentCollection;
 
-        OverlayPropertyWrapper(OverlayProperty property, boolean parentCollection) {
+        OverlayPropertyHolder(OverlayProperty property, boolean parentCollection) {
             this.property = property;
             this.parentCollection = parentCollection;
         }
@@ -64,6 +71,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private String basePackageName;
     private String targetDirectory;
 
+    /**
+     * Constructor
+     * @param mainSchema The main schema name used for generation
+     * @param basePackageName The base package name
+     * @param targetDirectory The base location where the files will be saved
+     */
     public FileClassOverlayGenerator(String mainSchema, String basePackageName, String targetDirectory) {
         super();
         this.mainSchema = mainSchema;
@@ -133,7 +146,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                 elementClases.add(overlayClass);
             }
         }
-            // create the factory
+        // create the factory
         final String className = StringUtils.capitalize(mainSchema) + "OverlayFactory";
         final File file = new File(generatedSourcesDirectory, className + ".java");
 
@@ -177,26 +190,27 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length != 0 && args.length != 2 ) {
-            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>>");
+        if (args.length < 4) {
+            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<factory_name>> <<xsd_schema1>> <<xsd_schema2>>...");
+            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.core.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/ akomantoso20 akomantoso20.xsd xml.xsd");
             System.exit(1);
         }
-        String basePackage, targetDirectory;
-        if (args.length == 0) {
-            basePackage = "org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.";
-            targetDirectory = "src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/";
-            LOG.warn("The base package will be {} and target directory {}", basePackage, targetDirectory);
-        } else {
-            basePackage = args[0];
-            targetDirectory = args[1];
+
+        String basePackage = args[0]; //org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.
+        String targetDirectory = args[1]; //src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/
+        String factoryName = args[2];
+        List<String> schemas = new ArrayList<String>();
+        for (int i = 3; i< args.length; i++) {
+            schemas.add(args[i]);
         }
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
+        // the first schema name is the main one
 
-        FileClassOverlayGenerator generator = new FileClassOverlayGenerator("akomantoso20", basePackage, targetDirectory);
+        FileClassOverlayGenerator generator = new FileClassOverlayGenerator(factoryName, basePackage, targetDirectory);
         try {
-            final String[] xsds = {"akomantoso20.xsd", "xml.xsd"};
+            final String[] xsds = schemas.toArray(new String[schemas.size()]);
             generator.parse(xsds);
             generator.analyze();
             generator.print();
@@ -240,13 +254,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     // replace the group properties with their collection of simple properties
     private void replaceGroupProperties(OverlayClass aClass) {
-        List<OverlayPropertyWrapper> stack = new ArrayList<OverlayPropertyWrapper>();
+        List<OverlayPropertyHolder> stack = new ArrayList<OverlayPropertyHolder>();
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         for (OverlayProperty property : aClass.getProperties()) {
-            stack.add(new OverlayPropertyWrapper(property, property.isCollection()));
+            stack.add(new OverlayPropertyHolder(property, property.isCollection()));
         }
         while (!stack.isEmpty()) {
-            OverlayPropertyWrapper propertyWrapper = stack.remove(0);
+            OverlayPropertyHolder propertyWrapper = stack.remove(0);
             OverlayProperty property = propertyWrapper.getProperty();
             Boolean parentCollection = propertyWrapper.isParentCollection();
             OverlayClass baseClass = property.getBaseClass();
@@ -260,7 +274,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     while (parent != null) {
                         for (OverlayProperty parentProp : parent.getProperties()) {
                             // save the previous collection flag
-                            stack.add(new OverlayPropertyWrapper(parentProp, parentCollection || parentProp.isCollection()));
+                            stack.add(new OverlayPropertyHolder(parentProp, parentCollection || parentProp.isCollection()));
                         }
                         parent = parent.getParent();
                     }

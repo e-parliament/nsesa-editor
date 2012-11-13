@@ -11,7 +11,8 @@ import java.io.Writer;
 import java.util.*;
 
 /**
- * Generate css style for the given node based on the pattern defined in properties files.
+ * Generate with freemarker template a list of css selectors for elements which belong to an xsd file.
+ * The css selectors are based on predefined list of styles stored in properties file.
  * The css style will be inherited from the parent node if it is the case.
  * Otherwise a generic css style containing only the node name is generated
  * User: sgroza
@@ -23,10 +24,17 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
     //freemarker configuration
     private Configuration configuration ;
     private String templateName;
-
+    // keep the list of predefined css styles
     private List<CssOverlayStyle> styles;
     private Writer out;
 
+    /**
+     *
+     * @param properties The predefined list of css styles
+     * @param templateName The freemarker template used for css generation
+     * @param out The location where the output is saved
+     * @throws IOException
+     */
     public CssOverlayClassProcessor(Properties properties, String templateName, Writer out) throws IOException {
         this.configuration = new Configuration();
         this.configuration.setDefaultEncoding("UTF-8");
@@ -39,6 +47,11 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
         initStyles(properties);
     }
 
+    /**
+     * Create a list of predefined styles
+     * @param properties The properties whcih store the list of predefined styles
+     * @throws IOException
+     */
     private void initStyles(Properties properties) throws IOException {
         styles = new ArrayList<CssOverlayStyle>();
         for (String name : properties.stringPropertyNames()) {

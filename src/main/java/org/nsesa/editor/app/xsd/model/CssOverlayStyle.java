@@ -3,13 +3,15 @@ package org.nsesa.editor.app.xsd.model;
 import java.util.*;
 
 /**
- * Generates a style on the given overlay class
+ * Keeps style information for a given overlay class
  * User: sgroza
  * Date: 06/11/12
  * Time: 12:46
  */
  public class CssOverlayStyle {
-    // a factory to create styles for the given class
+    /**
+     *   Factory to create styles for the given class
+     */
     public static class CssOverlayFactory {
         private static CssOverlayFactory instance = new CssOverlayFactory();
         public static CssOverlayFactory getInstance() {
@@ -24,11 +26,17 @@ import java.util.*;
             return overlayStyle;
         }
 
+        /**
+         * Check whether or not a css style can be generated for a given overlay class.
+         * Exclude the ones which are not relevant for generation.
+         * @param overlayClass
+         * @return
+         */
         private boolean canProcess(OverlayClass overlayClass) {
             if (overlayClass.getNameSpace() == null) {
                 return false;
             }
-            if (!overlayClass.getNameSpace().equals("http://www.akomantoso.org/2.0")) {
+            if (!"http://www.akomantoso.org/2.0".equalsIgnoreCase(overlayClass.getNameSpace())) {
                 return false;
             }
             if (overlayClass instanceof OverlayClassGenerator.OverlayRootClass) {

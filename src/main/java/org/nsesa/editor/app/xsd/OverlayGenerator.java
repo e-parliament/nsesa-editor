@@ -33,16 +33,19 @@ public abstract class OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(OverlayGenerator.class);
     // XSOM parser
     private final XSOMParser parser;
+
+    // the overlay generator used to parse and analyze xsd schemas
     protected OverlayClassGenerator overlayClassGenerator;
 
     public OverlayGenerator() {
         parser = new XSOMParser();
         parser.setErrorHandler(new LoggingErrorHandler());
+        overlayClassGenerator = new OverlayClassGeneratorImpl();
     }
 
     /**
      * Parse the xsd schema
-     * @param xsds
+     * @param xsds The xsd schemas as array of string
      * @throws SAXException
      */
     public void parse(final String[] xsds) throws SAXException {
@@ -53,16 +56,15 @@ public abstract class OverlayGenerator {
     }
 
     /**
-     * Analyze the xsd schema and generate overlayclasses
+     * Analyze the xsd schema and generate overlay classes
      * @throws SAXException
      */
     public void analyze() throws SAXException {
         final XSSchemaSet set = parser.getResult();
-        overlayClassGenerator = new OverlayClassGeneratorImpl();
         overlayClassGenerator.generate(set.getSchemas());
     }
     /**
-     * Print overlay classes
+     * Print overlay classes in different formats
      */
     public abstract void print();
 

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An implementation of {@link PackageNameGenerator} interface converting the names spaces into a package
+ * A default implementation of {@link PackageNameGenerator} interface converting the names spaces into a package
  * User: sgroza
  * Date: 22/10/12
  * Time: 11:45

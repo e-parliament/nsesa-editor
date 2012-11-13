@@ -40,7 +40,7 @@ public class OverlayProperty extends OverlayNode {
         this.attribute = attribute;
     }
 
-    // simple way to copy a property
+    // simple way to clone an overlay property
     public OverlayProperty copy() {
         OverlayProperty newProperty = new OverlayProperty(overlayType, packageName, nameSpace, className, name, collection, attribute);
         newProperty.setBaseClass(getBaseClass());
@@ -48,11 +48,6 @@ public class OverlayProperty extends OverlayNode {
     }
 
     public String getName() {
-
-//        String result = REPLACEMENT_NAMES.get(name);
-//        if (result == null) {
-//            result = name;
-//        }
         String propName = name + (isAttribute() ? "Attr" : "");
         String result = REPLACEMENT_NAMES.get(propName);
         if (result == null) {
