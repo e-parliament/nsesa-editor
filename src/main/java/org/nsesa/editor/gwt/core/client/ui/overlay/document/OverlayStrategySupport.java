@@ -51,7 +51,7 @@ public class OverlayStrategySupport {
     }
 
     public String getSource(Element element) {
-        String sourceAttribute = element.getAttribute(getSourceAttributeName());
+        String sourceAttribute = getAttribute(element, getSourceAttributeName());
         return sourceAttribute == null || "".equals(sourceAttribute) ? null : sourceAttribute;
     }
 
@@ -65,7 +65,7 @@ public class OverlayStrategySupport {
 
     public Boolean isAmendable(Element element) {
         return true;
-//        String amendableAttribute = element.getAttribute(getAmendableAttributeName());
+//        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
 //        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
     }
 
@@ -74,8 +74,19 @@ public class OverlayStrategySupport {
     }
 
     public Boolean isImmutable(Element element) {
-        String immutable = element.getAttribute(getImmutableAttributeName());
+        String immutable = getAttribute(element, getImmutableAttributeName());
         return immutable == null || "".equals(immutable) ? null : "true".equalsIgnoreCase(immutable);
+    }
+
+    private String getAttribute(final Element element, final String attributeName) {
+        String attribute = null;
+        try {
+            attribute = element.hasAttribute(attributeName) ? element.getAttribute(attributeName) : null;
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Could not retrieve attribute " + attributeName + " from " + element.getTagName());
+            return null;
+        }
+        return attribute;
     }
 
     protected String getImmutableAttributeName() {
@@ -83,7 +94,7 @@ public class OverlayStrategySupport {
     }
 
     public String getType(Element element) {
-        return element.getTagName();
+        return element.getNodeName();
     }
 
     /**
@@ -106,7 +117,7 @@ public class OverlayStrategySupport {
      * @return the numbering type for this element
      */
     public final NumberingType getNumberingType(Element element, int assignedIndex) {
-        final String type = element.getAttribute(ATTRIB_NUMBERING_TYPE);
+        final String type = getAttribute(element, ATTRIB_NUMBERING_TYPE);
         if (type == null || "".equals(type.trim())) {
             // not defined, so try to guess it
             return guessNumberingType(element, assignedIndex);
@@ -191,7 +202,7 @@ public class OverlayStrategySupport {
      * @see org.nsesa.editor.gwt.core.client.ui.overlay.Format
      */
     public final Format getFormat(Element element) {
-        final String format = element.getAttribute(ATTRIB_FORMAT);
+        final String format = getAttribute(element, ATTRIB_FORMAT);
         if (format == null || "".equals(format.trim())) {
             // guess
             return guessFormat(element);
@@ -226,7 +237,7 @@ public class OverlayStrategySupport {
      * @return the assigned index, or null if it hasn't been specified.
      */
     public final Integer getAssignedIndex(Element element) {
-        String assigned = element.getAttribute(ATTRIB_ASSIGNED_INDEX);
+        String assigned = getAttribute(element, ATTRIB_ASSIGNED_INDEX);
         if (assigned != null && !"".equals(assigned)) {
             Integer assignedIndex = null;
             try {
@@ -273,7 +284,7 @@ public class OverlayStrategySupport {
      * @return the translation id or null if it hasn't been specified.
      */
     public final String getTranslationId(Element element) {
-        String t = element.getAttribute(ATTRIB_TRANSLATION_ID);
+        String t = getAttribute(element, ATTRIB_TRANSLATION_ID);
         if (t == null || "".equals(t.trim()))
             return null;
         return t;
@@ -290,7 +301,7 @@ public class OverlayStrategySupport {
      */
     public final String getUnformattedIndex(Element element) {
         // see if we have an original index attribute specified
-        String originalIndex = element.getAttribute(ATTRIB_ORIGINAL_INDEX);
+        String originalIndex = getAttribute(element, ATTRIB_ORIGINAL_INDEX);
         if (originalIndex != null && !"".equals(originalIndex.trim()))
             return originalIndex;
         // if not, work with the literal index
@@ -370,7 +381,7 @@ public class OverlayStrategySupport {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element el = nodes.getItem(i).cast();
                 // do not include any of the 'property' tags
-                if (!asProperties.contains(el.getTagName().toUpperCase())) {
+                if (!asProperties.contains(el.getNodeName().toUpperCase())) {
                     amendableElements.add(el);
                 }
             }
@@ -393,7 +404,7 @@ public class OverlayStrategySupport {
             final Node node = element.getChild(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element el = node.cast();
-                if (el.getAttribute(attributeName).equalsIgnoreCase(attributeValue)) {
+                if (getAttribute(el, attributeName).equalsIgnoreCase(attributeValue)) {
                     return el;
                 }
             }
