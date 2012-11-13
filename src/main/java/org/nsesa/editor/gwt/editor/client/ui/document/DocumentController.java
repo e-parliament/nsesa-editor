@@ -7,6 +7,9 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.NodeList;
+import com.google.gwt.xml.client.XMLParser;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
@@ -34,6 +37,8 @@ import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderContr
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,6 +64,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
 
+    private final HashMap<String, String> namespaces = new HashMap<String, String>();
 
     private final OverlayFactory overlayFactory;
     private final Locator locator;
@@ -203,7 +209,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onSuccess(final String content) {
                 setContent(content);
-                wrapContent();
+                overlay();
                 clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
                 injectAmendments();
             }
@@ -238,22 +244,46 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public void setContent(String documentContent) {
         contentController.setContent(documentContent);
+        parseNamespaces(documentContent);
     }
 
     public void scrollTo(Widget widget) {
         contentController.scrollTo(widget);
     }
 
-    public void wrapContent() {
-        final Element[] contentElements = contentController.getContentElements();
-        if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
-        for (final Element element : contentElements) {
-            final AmendableWidget rootAmendableWidget = wrap(element, this);
-            amendableWidgets.add(rootAmendableWidget);
+    public void parseNamespaces(String documentContent) {
+        com.google.gwt.xml.client.Document parsedDocument = XMLParser.parse(documentContent);
+        collectNamespaces(parsedDocument);
+        namespaces.clear();
+        for(Map.Entry<String, String> entry : namespaces.entrySet()) {
+            LOG.info("Mapped " + entry.getKey() + " --> " + entry.getValue());
         }
     }
 
-    public AmendableWidget wrap(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
+    private void collectNamespaces(Node node) {
+        if (!namespaces.containsKey(node.getPrefix()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
+            namespaces.put(node.getPrefix(), node.getNamespaceURI());
+        }
+        NodeList childNodes = node.getChildNodes();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            collectNamespaces(childNodes.item(i));
+        }
+    }
+
+    public void overlay() {
+        final Element[] contentElements = contentController.getContentElements();
+        if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
+        for (final Element element : contentElements) {
+            try {
+                final AmendableWidget rootAmendableWidget = overlay(element, this);
+                amendableWidgets.add(rootAmendableWidget);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Exception during the overlaying.", e);
+            }
+        }
+    }
+
+    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
