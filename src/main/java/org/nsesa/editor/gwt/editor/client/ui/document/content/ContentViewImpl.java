@@ -33,7 +33,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-    private static final Logger LOG = Logger.getLogger("DocumentViewImpl");
+    private static final Logger LOG = Logger.getLogger(ContentViewImpl.class.getName());
 
     /**
      * This correction value is supposed to be the height of the header and footer (plus any margin that might come into play)

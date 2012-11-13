@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class DeadlineTracker {
 
-    private static final Logger LOG = Logger.getLogger("DeadlineTracker");
+    private static final Logger LOG = Logger.getLogger(DeadlineTracker.class.getName());
 
     private final DocumentEventBus documentEventBus;
 

@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class OverlayStrategySupport {
 
-    private static final Logger LOG = Logger.getLogger("OverlayStrategySupport");
+    private static final Logger LOG = Logger.getLogger(OverlayStrategySupport.class.getName());
 
     public static final String TAG_LITERAL_INDEX = "num";
     public static final String TAG_CONTENT = "content";

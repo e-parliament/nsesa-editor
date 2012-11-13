@@ -47,7 +47,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  */
 public class DocumentController implements AmendableWidgetUIListener, AmendableWidgetWalker {
 
-    private static final Logger LOG = Logger.getLogger("DocumentController");
+    private static final Logger LOG = Logger.getLogger(DocumentController.class.getName());
 
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 

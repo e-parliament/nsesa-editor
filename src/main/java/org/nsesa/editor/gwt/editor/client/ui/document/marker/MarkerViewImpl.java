@@ -28,7 +28,7 @@ public class MarkerViewImpl extends Composite implements MarkerView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-    private static final Logger LOG = Logger.getLogger("MarkerViewImpl");
+    private static final Logger LOG = Logger.getLogger(MarkerViewImpl.class.getName());
 
     private final DocumentEventBus documentEventBus;
     @UiField

@@ -37,7 +37,7 @@ public class DocumentViewImpl extends Composite implements DocumentView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private static final Logger LOG = Logger.getLogger("DocumentViewImpl");
+    private static final Logger LOG = Logger.getLogger(DocumentViewImpl.class.getName());
 
     private final DocumentEventBus documentEventBus;
 

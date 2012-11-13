@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget, HasWidgets {
 
-    private static final Logger LOG = Logger.getLogger("AmendableWidgetImpl");
+    private static final Logger LOG = Logger.getLogger(AmendableWidgetImpl.class.getName());
 
     public static final boolean DEFAULT_ROOT_WIDGET_AMENDABLE = true;
 

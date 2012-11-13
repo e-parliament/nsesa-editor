@@ -30,7 +30,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class EditorController implements BootstrapEventHandler {
 
-    private static final Logger LOG = Logger.getLogger("EditorController");
+    private static final Logger LOG = Logger.getLogger(EditorController.class.getName());
 
     private final EditorView view;
     private final ClientFactory clientFactory;

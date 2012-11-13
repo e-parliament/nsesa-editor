@@ -65,7 +65,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     private static final String NO_JUSTIFY_TINY_MCE_BUTTONS =
             "spellchecker,separator,undo,redo,separator,sub,sup,separator,charmap";
 
-    private static final Logger LOG = Logger.getLogger("YATinyEditor");
+    private static final Logger LOG = Logger.getLogger(YATinyEditor.class.getName());
 
     protected boolean readOnly;
     protected final String itemID;

@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  */
 public abstract class Editor implements EntryPoint {
 
-    private static final Logger LOG = Logger.getLogger("Editor");
+    private static final Logger LOG = Logger.getLogger(Editor.class.getName());
 
     public abstract Injector getInjector();
 
@@ -51,7 +51,7 @@ public abstract class Editor implements EntryPoint {
     @Override
     public void onModuleLoad() {
         // set up the uncaught exception handler before the actual initialization
-        //LOG.setUncaughtExceptionHandler();
+        installUncaughtExceptionHandler();
         clientFactory = getInjector().getClientFactory();
 
         serviceFactory = getInjector().getServiceFactory();
@@ -62,6 +62,15 @@ public abstract class Editor implements EntryPoint {
                 LOG.info("Deferred Editor module loading started.");
                 onModuleLoadDeferred();
                 LOG.info("Deferred Editor module loading completed.");
+            }
+        });
+    }
+
+    protected void installUncaughtExceptionHandler() {
+        GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
+            @Override
+            public void onUncaughtException(Throwable e) {
+                LOG.log(Level.SEVERE, "Uncaught exception: " + e, e);
             }
         });
     }
