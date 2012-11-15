@@ -252,17 +252,19 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     public void parseNamespaces(String documentContent) {
+        namespaces.clear();
         com.google.gwt.xml.client.Document parsedDocument = XMLParser.parse(documentContent);
         collectNamespaces(parsedDocument);
-        namespaces.clear();
-        for(Map.Entry<String, String> entry : namespaces.entrySet()) {
-            LOG.info("Mapped " + entry.getKey() + " --> " + entry.getValue());
+        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
+            LOG.info("Namespace mapping '" + entry.getKey() + "' to URI '" + entry.getValue() + "'");
         }
     }
 
     private void collectNamespaces(Node node) {
-        if (!namespaces.containsKey(node.getPrefix()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
-            namespaces.put(node.getPrefix(), node.getNamespaceURI());
+        if (node.getPrefix() != null) {
+            if (!namespaces.containsKey(node.getPrefix()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
+                namespaces.put(node.getPrefix(), node.getNamespaceURI());
+            }
         }
         NodeList childNodes = node.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
