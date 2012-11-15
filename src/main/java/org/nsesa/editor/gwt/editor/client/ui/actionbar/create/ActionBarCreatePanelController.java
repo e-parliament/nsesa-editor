@@ -8,6 +8,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.LinkedHashMap;
@@ -28,6 +29,7 @@ public class ActionBarCreatePanelController {
     private final ActionBarCreatePanelView view;
     private final DocumentEventBus documentEventBus;
     private final Creator creator;
+    private DocumentController documentController;
 
     private ActionBarController actionBarController;
 
@@ -64,12 +66,12 @@ public class ActionBarCreatePanelController {
         view.clearAmendableWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<String,AmendableWidget> allowedSiblings = creator.getAllowedSiblings(amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedSiblings = creator.getAllowedSiblings(documentController, amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedSiblings.entrySet()) {
             view.addSiblingAmendableWidget(entry.getKey(), entry.getValue());
         }
         // add all the children
-        LinkedHashMap<String, AmendableWidget> allowedChildren = creator.getAllowedChildren(amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedChildren = creator.getAllowedChildren(documentController, amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedChildren.entrySet()) {
             view.addChildAmendableWidget(entry.getKey(), entry.getValue());
         }
@@ -78,11 +80,16 @@ public class ActionBarCreatePanelController {
         view.setSeparatorVisible(!allowedSiblings.isEmpty() && !allowedChildren.isEmpty());
     }
 
+
     public void setActionBarController(ActionBarController actionBarController) {
         this.actionBarController = actionBarController;
     }
 
     public AmendableWidget getAmendableWidget() {
         return amendableWidget;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

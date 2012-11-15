@@ -61,6 +61,7 @@ public class ActionBarController {
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+        this.actionBarCreatePanelController.setDocumentController(documentController);
     }
 
     private void registerListeners() {

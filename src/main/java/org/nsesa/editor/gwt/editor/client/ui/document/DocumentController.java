@@ -197,6 +197,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         });
     }
 
+    public HashMap<String, String> getNamespaces() {
+        return namespaces;
+    }
+
     public void loadDocumentContent() {
         assert documentID != null : "No documentID set.";
         serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
@@ -277,7 +281,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
         for (final Element element : contentElements) {
             try {
-                final AmendableWidget rootAmendableWidget = overlay(element, this);
+                final AmendableWidget rootAmendableWidget = overlay(element, namespaces, this);
                 amendableWidgets.add(rootAmendableWidget);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Exception during the overlaying.", e);
@@ -285,11 +289,11 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         }
     }
 
-    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
+    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final Map<String, String> namespaces, final AmendableWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
-        final AmendableWidget root = overlayFactory.getAmendableWidget(element);
+        final AmendableWidget root = overlayFactory.getAmendableWidget(element, namespaces);
         if (root != null) {
             walk(root, new AmendableWidgetWalker.AmendableVisitor() {
                 @Override

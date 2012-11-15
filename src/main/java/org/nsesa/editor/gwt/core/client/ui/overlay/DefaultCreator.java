@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
 
@@ -24,16 +25,16 @@ public class DefaultCreator implements Creator {
     }
 
     @Override
-    public LinkedHashMap<String, AmendableWidget> getAllowedSiblings(AmendableWidget amendableWidget) {
-        return getAllowedChildren(amendableWidget.getParentAmendableWidget());
+    public LinkedHashMap<String, AmendableWidget> getAllowedSiblings(DocumentController documentController, AmendableWidget amendableWidget) {
+        return getAllowedChildren(documentController, amendableWidget.getParentAmendableWidget());
     }
 
     @Override
-    public LinkedHashMap<String, AmendableWidget> getAllowedChildren(AmendableWidget amendableWidget) {
+    public LinkedHashMap<String, AmendableWidget> getAllowedChildren(DocumentController documentController, AmendableWidget amendableWidget) {
         final LinkedHashMap<String, AmendableWidget> allowedChildren = new LinkedHashMap<String, AmendableWidget>();
         final String[] allowedTypes = amendableWidget.getAllowedChildTypes();
         for (final String type : allowedTypes) {
-            allowedChildren.put(type, overlayFactory.getAmendableWidget(type));
+            allowedChildren.put(type, overlayFactory.getAmendableWidget(type, documentController.getNamespaces()));
         }
         return allowedChildren;
     }

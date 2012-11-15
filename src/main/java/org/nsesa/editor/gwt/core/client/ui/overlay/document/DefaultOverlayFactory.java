@@ -6,6 +6,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 
+import java.util.Map;
+
 /**
  * Date: 17/10/12 21:30
  *
@@ -22,21 +24,21 @@ public class DefaultOverlayFactory implements OverlayFactory {
         this.overlayStrategy = overlayStrategy;
     }
 
-    public AmendableWidget getAmendableWidget(String tag) {
-        return getAmendableWidget(DOM.createElement(tag));
+    public AmendableWidget getAmendableWidget(String tag, Map<String, String> namespaces) {
+        return getAmendableWidget(DOM.createElement(tag), namespaces);
     }
 
     @Override
-    public AmendableWidget getAmendableWidget(Element element) {
-        return wrap(null, element);
+    public AmendableWidget getAmendableWidget(final Element element, final Map<String, String> namespaces) {
+        return wrap(null, element, namespaces);
     }
 
-    public AmendableWidget toAmendableWidget(final Element element) {
+    public AmendableWidget toAmendableWidget(final Element element, Map<String, String> namespaces) {
         return new AmendableWidgetImpl(element);
     }
 
-    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element) {
-        AmendableWidget amendableWidget = toAmendableWidget(element);
+    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, Map<String, String> namespaces) {
+        AmendableWidget amendableWidget = toAmendableWidget(element, namespaces);
         if (amendableWidget != null) {
             amendableWidget.setParentAmendableWidget(parent);
 
@@ -55,7 +57,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             // attach all children (note, this is a recursive call)
             final Element[] children = overlayStrategy.getChildren(element);
             for (final Element child : children) {
-                final AmendableWidget amendableChild = wrap(amendableWidget, child);
+                final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces);
                 if (amendableChild != null) {
                     amendableWidget.addAmendableWidget(amendableChild);
                 }
