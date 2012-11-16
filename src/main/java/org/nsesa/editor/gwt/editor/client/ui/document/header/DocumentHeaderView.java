@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Date: 24/06/12 21:43
@@ -18,7 +18,7 @@ public interface DocumentHeaderView extends IsWidget {
 
     void setDocumentName(String documentName);
 
-    void setAvailableTranslations(ArrayList<DocumentDTO> translations);
+    void setAvailableTranslations(List<DocumentDTO> translations);
 
     HasChangeHandlers getTranslationsListBox();
 

@@ -7,7 +7,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Date: 27/06/12 17:52
@@ -70,14 +70,14 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
      *
      * @return the list of parent amendable widgets - should not return <tt>null</tt>
      */
-    ArrayList<AmendableWidget> getParentAmendableWidgets();
+    List<AmendableWidget> getParentAmendableWidgets();
 
     /**
      * Returns the listing of all amendable children, sorted by their appearance.
      *
      * @return the list of amendable child widgets
      */
-    ArrayList<AmendableWidget> getChildAmendableWidgets();
+    List<AmendableWidget> getChildAmendableWidgets();
 
     /**
      * Get the direct parent amendable widget.

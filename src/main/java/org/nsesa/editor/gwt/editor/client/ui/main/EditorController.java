@@ -16,6 +16,7 @@ import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -40,7 +41,7 @@ public class EditorController implements BootstrapEventHandler {
 
     private Injector injector;
 
-    private final ArrayList<DocumentController> documentControllers = new ArrayList<DocumentController>();
+    private final List<DocumentController> documentControllers = new ArrayList<DocumentController>();
 
     @Inject
     public EditorController(final EditorView view,

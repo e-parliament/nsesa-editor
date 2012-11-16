@@ -12,6 +12,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -29,7 +30,7 @@ public class DocumentHeaderController {
     private final DocumentEventBus documentEventBus;
     private DocumentController documentController;
 
-    private ArrayList<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
+    private List<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
 
     @Inject
     public DocumentHeaderController(final DocumentEventBus documentEventBus, final DocumentHeaderView view) {

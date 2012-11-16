@@ -14,7 +14,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -54,7 +54,7 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     }
 
     @Override
-    public void setAvailableTranslations(final ArrayList<DocumentDTO> translations) {
+    public void setAvailableTranslations(final List<DocumentDTO> translations) {
         this.documentTranslations.clear();
         for (final DocumentDTO translation : translations) {
             documentTranslations.addItem(translation.getName(), translation.getDocumentID());

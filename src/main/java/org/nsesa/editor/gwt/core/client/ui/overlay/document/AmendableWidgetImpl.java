@@ -12,6 +12,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -49,12 +50,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * A list of logical children.
      */
-    private ArrayList<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
+    private List<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
 
     /**
      * A list of all the amendments on this widget.
      */
-    private ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     /**
      * Flag to indicate whether or not this widget is amendable by the user (not, that does not mean there are no
@@ -252,8 +253,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public ArrayList<AmendableWidget> getParentAmendableWidgets() {
-        final ArrayList<AmendableWidget> parents = new ArrayList<AmendableWidget>();
+    public List<AmendableWidget> getParentAmendableWidgets() {
+        final List<AmendableWidget> parents = new ArrayList<AmendableWidget>();
         AmendableWidget parent = getParentAmendableWidget();
         while (parent != null) {
             parents.add(parent);
@@ -264,7 +265,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public ArrayList<AmendableWidget> getChildAmendableWidgets() {
+    public List<AmendableWidget> getChildAmendableWidgets() {
         return childAmendableWidgets;
     }
 

@@ -2,9 +2,9 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Date: 24/09/12 17:19
@@ -22,7 +22,7 @@ public class DefaultLocator implements Locator {
     public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
         StringBuilder location = new StringBuilder();
 
-        final ArrayList<AmendableWidget> parents = amendableWidget.getParentAmendableWidgets();
+        final List<AmendableWidget> parents = amendableWidget.getParentAmendableWidgets();
         for (AmendableWidget parent : parents) {
             if (!hiddenAmendableWidgets.contains(parent.getClass()))
                 location.append(parent.getType()).append(" ").append(getNum(parent)).append(SPLITTER);

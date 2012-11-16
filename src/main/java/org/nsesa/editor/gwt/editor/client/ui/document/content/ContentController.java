@@ -14,6 +14,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -76,7 +77,7 @@ public class ContentController {
         if (!contentLoaded) {
             throw new RuntimeException("Content not yet available.");
         }
-        ArrayList<Element> elements = new ArrayList<Element>();
+        List<Element> elements = new ArrayList<Element>();
         final NodeList<Node> childNodes = view.getContentElement().getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.getItem(i);

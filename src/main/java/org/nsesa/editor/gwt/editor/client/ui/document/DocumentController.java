@@ -38,6 +38,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +84,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Scope(DOCUMENT)
     private final ActionBarController actionBarController;
 
-    private ArrayList<AmendableWidget> amendableWidgets;
+    private List<AmendableWidget> amendableWidgets;
 
     @Inject
     public DocumentController(final ClientFactory clientFactory,
