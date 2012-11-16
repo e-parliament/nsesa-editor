@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class AmendmentContainerSkippedEvent extends GwtEvent<AmendmentContainerSkippedEventHandler> {
 
-    public static Type<AmendmentContainerSkippedEventHandler> TYPE = new Type<AmendmentContainerSkippedEventHandler>();
+    public static final Type<AmendmentContainerSkippedEventHandler> TYPE = new Type<AmendmentContainerSkippedEventHandler>();
 
     public AmendmentContainerSkippedEvent() {
 

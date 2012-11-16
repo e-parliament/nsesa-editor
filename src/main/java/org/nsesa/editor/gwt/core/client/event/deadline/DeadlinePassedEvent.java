@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class DeadlinePassedEvent extends GwtEvent<DeadlinePassedEventHandler> {
 
-    public static Type<DeadlinePassedEventHandler> TYPE = new Type<DeadlinePassedEventHandler>();
+    public static final Type<DeadlinePassedEventHandler> TYPE = new Type<DeadlinePassedEventHandler>();
 
     private final DocumentController documentController;
 

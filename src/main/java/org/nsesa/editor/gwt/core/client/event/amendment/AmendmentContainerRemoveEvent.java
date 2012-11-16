@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class AmendmentContainerRemoveEvent extends GwtEvent<AmendmentContainerRemoveEventHandler> {
 
-    public static Type<AmendmentContainerRemoveEventHandler> TYPE = new Type<AmendmentContainerRemoveEventHandler>();
+    public static final Type<AmendmentContainerRemoveEventHandler> TYPE = new Type<AmendmentContainerRemoveEventHandler>();
 
     public AmendmentContainerRemoveEvent() {
 

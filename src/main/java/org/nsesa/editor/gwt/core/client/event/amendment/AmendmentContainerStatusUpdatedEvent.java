@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  */
 public class AmendmentContainerStatusUpdatedEvent extends GwtEvent<AmendmentContainerStatusUpdatedEventHandler> {
 
-    public static Type<AmendmentContainerStatusUpdatedEventHandler> TYPE = new Type<AmendmentContainerStatusUpdatedEventHandler>();
+    public static final Type<AmendmentContainerStatusUpdatedEventHandler> TYPE = new Type<AmendmentContainerStatusUpdatedEventHandler>();
 
     private final AmendmentContainerDTO amendment;
     private final String oldStatus;

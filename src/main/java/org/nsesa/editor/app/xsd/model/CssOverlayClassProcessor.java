@@ -68,7 +68,6 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
 
     @Override
     public boolean process(OverlayClass overlayClass) {
-        final CssOverlayStyle overlayStyle = new CssOverlayStyle(overlayClass);
         try {
             Map<String, Object> rootMap = new HashMap<String, Object>();
             rootMap.put("overlayClass", overlayClass);

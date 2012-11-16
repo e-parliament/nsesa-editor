@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  */
 public class AuthenticatedEvent extends GwtEvent<AuthenticatedEventHandler> {
 
-    public static Type<AuthenticatedEventHandler> TYPE = new Type<AuthenticatedEventHandler>();
+    public static final Type<AuthenticatedEventHandler> TYPE = new Type<AuthenticatedEventHandler>();
 
     private final ClientContext clientContext;
 

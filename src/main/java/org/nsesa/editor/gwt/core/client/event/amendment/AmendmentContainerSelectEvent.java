@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  */
 public class AmendmentContainerSelectEvent extends GwtEvent<AmendmentContainerSelectEventHandler> {
 
-    public static Type<AmendmentContainerSelectEventHandler> TYPE = new Type<AmendmentContainerSelectEventHandler>();
+    public static final Type<AmendmentContainerSelectEventHandler> TYPE = new Type<AmendmentContainerSelectEventHandler>();
 
     private final AmendableWidget amendableWidget;
 

@@ -220,6 +220,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 case Event.ONMOUSEOUT:
                     UIListener.onMouseOut(this);
                     break;
+                default:
+                    throw new UnsupportedOperationException("Unknown event.");
             }
         }
     }

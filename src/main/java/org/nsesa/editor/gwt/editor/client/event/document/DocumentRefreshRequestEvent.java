@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class DocumentRefreshRequestEvent extends GwtEvent<DocumentRefreshRequestEventHandler> {
 
-    public static Type<DocumentRefreshRequestEventHandler> TYPE = new Type<DocumentRefreshRequestEventHandler>();
+    public static final Type<DocumentRefreshRequestEventHandler> TYPE = new Type<DocumentRefreshRequestEventHandler>();
 
     private final DocumentController documentController;
 

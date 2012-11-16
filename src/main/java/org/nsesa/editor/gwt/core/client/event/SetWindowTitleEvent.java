@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class SetWindowTitleEvent extends GwtEvent<SetWindowTitleEventHandler> {
 
-    public static Type<SetWindowTitleEventHandler> TYPE = new Type<SetWindowTitleEventHandler>();
+    public static final Type<SetWindowTitleEventHandler> TYPE = new Type<SetWindowTitleEventHandler>();
 
     private final String title;
 

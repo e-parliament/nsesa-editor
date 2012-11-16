@@ -32,11 +32,11 @@ public class TextUtils {
     }
 
     public static String capitalize(String input) {
-        assert input != null;
-        if ("".equals(input.trim()))
-            return input;
-        if (input != null)
+        if (input != null) {
+            if ("".equals(input.trim()))
+                return input;
             return input.substring(0, 1).toUpperCase() + input.substring(1);
+        }
         return null;
     }
 

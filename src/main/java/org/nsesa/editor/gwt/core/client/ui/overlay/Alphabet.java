@@ -1,5 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import java.util.Arrays;
+
 /**
  * Date: 05/07/12 21:59
  *
@@ -10,7 +12,7 @@ public class Alphabet {
     /**
      * @see <a href="http://en.wikipedia.org/wiki/Bulgarian_language#Alphabet">Bulgarian Alphabet</a>
      */
-    public static final char[] CYRILLIC_NUMBERING = new char[]{
+    private static final Character[] CYRILLIC_NUMBERING = new Character[]{
             'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З',
             'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
             'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч',
@@ -21,10 +23,14 @@ public class Alphabet {
             'ъ', 'ь', 'ю', 'я'
     };
 
+    public static Character[] getCyrillicNumbering() {
+        return Arrays.asList(CYRILLIC_NUMBERING).toArray(new Character[CYRILLIC_NUMBERING.length]);
+    }
+
     /**
      * @see <a href="http://en.wikipedia.org/wiki/Greek_language#Greek_alphabet">Greek Alphabet</a>
      */
-    public static final char[] GREEK_NUMBERING = new char[]{
+    private static final Character[] GREEK_NUMBERING = new Character[]{
             'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
             'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π',
             'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
@@ -33,4 +39,8 @@ public class Alphabet {
             'ρ', 'σ', 'ς', 'τ', 'υ', 'φ', 'χ', 'ψ',
             'ω'
     };
+
+    public static Character[] getGreekNumbering() {
+        return Arrays.asList(GREEK_NUMBERING).toArray(new Character[GREEK_NUMBERING.length]);
+    }
 }

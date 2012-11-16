@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  */
 public class AmendmentContainerSaveEvent extends GwtEvent<AmendmentContainerSaveEventHandler> {
 
-    public static Type<AmendmentContainerSaveEventHandler> TYPE = new Type<AmendmentContainerSaveEventHandler>();
+    public static final Type<AmendmentContainerSaveEventHandler> TYPE = new Type<AmendmentContainerSaveEventHandler>();
 
     private final AmendmentContainerDTO[] amendments;
 

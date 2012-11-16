@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -14,8 +15,12 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Singleton
 @Scope(EDITOR)
 public class AmendmentsPanelController {
-    private AmendmentsPanelView view;
+    private final AmendmentsPanelView view;
 
+    @Inject
+    public AmendmentsPanelController(AmendmentsPanelView view) {
+        this.view = view;
+    }
 
     public AmendmentsPanelView getView() {
         return view;

@@ -78,7 +78,7 @@ public class DocumentDTO implements IsSerializable, Serializable {
     }
 
     public Date getDeadline() {
-        return deadline;
+        return deadline != null ? new Date(deadline.getTime()) : null;
     }
 
     public void setDeadline(Date deadline) {

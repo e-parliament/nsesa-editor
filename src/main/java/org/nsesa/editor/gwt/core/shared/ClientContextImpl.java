@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -53,7 +54,7 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
     }
 
     public HashMap<String, String[]> getParameters() {
-        return parameters;
+        return parameters != null ? new HashMap<String, String[]>(parameters) : null;
     }
 
     public void setParameters(HashMap<String, String[]> parameters) {
@@ -77,7 +78,7 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
     }
 
     public String[] getRoles() {
-        return roles;
+        return roles != null ? Arrays.asList(roles).toArray(new String[roles.length]) : null;
     }
 
     public void setRoles(String[] roles) {
@@ -85,7 +86,7 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
     }
 
     public String[] getDocumentIDs() {
-        return documentIDs;
+        return documentIDs != null ? Arrays.asList(documentIDs).toArray(new String[documentIDs.length]) : null;
     }
 
     public void setDocumentIDs(String[] documentIDs) {

@@ -185,10 +185,10 @@ public class OverlayStrategySupport {
         // but we rely on this method to detect letters in eg. Bulgarian numbering schemes.
 
         // see if it's in the greek alphabet
-        if (Arrays.binarySearch(Alphabet.GREEK_NUMBERING, c) != -1)
+        if (Arrays.binarySearch(Alphabet.getGreekNumbering(), c) != -1)
             return true;
         // perhaps in cyrillic
-        if (Arrays.binarySearch(Alphabet.CYRILLIC_NUMBERING, c) != -1)
+        if (Arrays.binarySearch(Alphabet.getCyrillicNumbering(), c) != -1)
             return true;
         // nope, guess it's ascii then ..
         return Character.isLetter(c);

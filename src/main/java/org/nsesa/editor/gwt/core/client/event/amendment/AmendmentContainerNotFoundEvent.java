@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class AmendmentContainerNotFoundEvent extends GwtEvent<AmendmentContainerNotFoundEventHandler> {
 
-    public static Type<AmendmentContainerNotFoundEventHandler> TYPE = new Type<AmendmentContainerNotFoundEventHandler>();
+    public static final Type<AmendmentContainerNotFoundEventHandler> TYPE = new Type<AmendmentContainerNotFoundEventHandler>();
 
     public AmendmentContainerNotFoundEvent() {
 

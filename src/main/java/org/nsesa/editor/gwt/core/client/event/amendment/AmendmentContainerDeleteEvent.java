@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  */
 public class AmendmentContainerDeleteEvent extends GwtEvent<AmendmentContainerDeleteEventHandler> {
 
-    public static Type<AmendmentContainerDeleteEventHandler> TYPE = new Type<AmendmentContainerDeleteEventHandler>();
+    public static final Type<AmendmentContainerDeleteEventHandler> TYPE = new Type<AmendmentContainerDeleteEventHandler>();
 
     private final AmendmentController amendmentController;
 

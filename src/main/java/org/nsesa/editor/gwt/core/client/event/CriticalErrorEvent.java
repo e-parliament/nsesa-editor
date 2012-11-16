@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class CriticalErrorEvent extends GwtEvent<CriticalErrorEventHandler> {
 
-    public static Type<CriticalErrorEventHandler> TYPE = new Type<CriticalErrorEventHandler>();
+    public static final Type<CriticalErrorEventHandler> TYPE = new Type<CriticalErrorEventHandler>();
 
     private final String message;
     private Throwable throwable;

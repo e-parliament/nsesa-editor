@@ -12,7 +12,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
  */
 public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEditEventHandler> {
 
-    public static Type<AmendmentContainerEditEventHandler> TYPE = new Type<AmendmentContainerEditEventHandler>();
+    public static final Type<AmendmentContainerEditEventHandler> TYPE = new Type<AmendmentContainerEditEventHandler>();
 
     private final AmendableWidget amendableWidget;
     private final AmendmentContainerDTO amendment;

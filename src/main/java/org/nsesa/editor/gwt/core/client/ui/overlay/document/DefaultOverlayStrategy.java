@@ -13,51 +13,51 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 public class DefaultOverlayStrategy implements OverlayStrategy {
     @Override
     public String getSource(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public String getID(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public Boolean isAmendable(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public Boolean isImmutable(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
     }
 
     @Override
     public String getIndex(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public String getType(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public NumberingType getNumberingType(Element element, int index) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public Format getFormat(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public String getContent(Element element) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     @Override
     public Element[] getChildren(Element element) {
-        return new Element[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return new Element[] {};
     }
 }

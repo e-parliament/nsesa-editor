@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class OverlayClass extends OverlayNode  {
     public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
-    public static Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
+    public static final Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
         @Override
         public int compare(OverlayClass o1, OverlayClass o2) {
 //            int result = o1.getChildren().size() - o2.getChildren().size();

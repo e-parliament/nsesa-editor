@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class DocumentScrollEvent extends GwtEvent<DocumentScrollEventHandler> {
 
-    public static Type<DocumentScrollEventHandler> TYPE = new Type<DocumentScrollEventHandler>();
+    public static final Type<DocumentScrollEventHandler> TYPE = new Type<DocumentScrollEventHandler>();
 
     private final DocumentController documentController;
 

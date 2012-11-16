@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  */
 public class BootstrapEvent extends GwtEvent<BootstrapEventHandler> {
 
-    public static Type<BootstrapEventHandler> TYPE = new Type<BootstrapEventHandler>();
+    public static final Type<BootstrapEventHandler> TYPE = new Type<BootstrapEventHandler>();
 
     private final ClientContext clientContext;
 

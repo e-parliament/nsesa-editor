@@ -12,7 +12,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  */
 public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCreateEventHandler> {
 
-    public static Type<AmendmentContainerCreateEventHandler> TYPE = new Type<AmendmentContainerCreateEventHandler>();
+    public static final Type<AmendmentContainerCreateEventHandler> TYPE = new Type<AmendmentContainerCreateEventHandler>();
 
     private final AmendableWidget amendableWidget;
     private final AmendmentAction amendmentAction;

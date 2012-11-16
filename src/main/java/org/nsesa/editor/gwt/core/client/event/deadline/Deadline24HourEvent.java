@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class Deadline24HourEvent extends GwtEvent<Deadline24HourEventHandler> {
 
-    public static Type<Deadline24HourEventHandler> TYPE = new Type<Deadline24HourEventHandler>();
+    public static final Type<Deadline24HourEventHandler> TYPE = new Type<Deadline24HourEventHandler>();
 
     private final DocumentController documentController;
 

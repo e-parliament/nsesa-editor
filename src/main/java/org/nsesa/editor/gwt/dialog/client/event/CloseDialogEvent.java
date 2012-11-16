@@ -10,7 +10,7 @@ import com.google.gwt.event.shared.GwtEvent;
  */
 public class CloseDialogEvent extends GwtEvent<CloseDialogEventHandler> {
 
-    public static Type<CloseDialogEventHandler> TYPE = new Type<CloseDialogEventHandler>();
+    public static final Type<CloseDialogEventHandler> TYPE = new Type<CloseDialogEventHandler>();
 
     public CloseDialogEvent() {
     }
