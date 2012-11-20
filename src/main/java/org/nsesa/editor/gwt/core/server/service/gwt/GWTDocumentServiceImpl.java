@@ -22,6 +22,7 @@ import java.util.Map;
 public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implements GWTDocumentService {
 
     private Map<String, Resource> documents;
+    private Resource documentTemplate;
 
     @Override
     public HashMap<String, String> getMetaInformation(final ClientContext clientContext, final String documentID) {
@@ -73,10 +74,37 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
     public String getDocumentContent(final ClientContext clientContext, final String documentID) {
         final Resource documentResource = documents.get(documentID);
         if (documentResource != null) {
+            /*
+
+            -- When requiring XML transformations --
+
+            try {
+                byte[] bytes = Files.toByteArray(documentResource.getFile());
+                InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
+                NodeModel model = NodeModel.parse(inputSource);
+                Configuration configuration = new Configuration();
+                configuration.setDefaultEncoding("UTF-8");
+                configuration.setDirectoryForTemplateLoading(documentTemplate.getFile().getParentFile());
+                StringWriter sw = new StringWriter();
+                Map<String, Object> root = new HashMap<String, Object>();
+                root.put("doc", model);
+                configuration.getTemplate(documentTemplate.getFile().getName()).process(root, sw);
+                return sw.toString();
+
+            } catch (IOException e) {
+                throw new RuntimeException("Could not read file.", e);
+            } catch (SAXException e) {
+                throw new RuntimeException("Could not parse file.", e);
+            } catch (ParserConfigurationException e) {
+                throw new RuntimeException("Could not parse file.", e);
+            } catch (TemplateException e) {
+                throw new RuntimeException("Could not load template.", e);
+            }*/
+
             try {
                 return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
             } catch (IOException e) {
-                throw new RuntimeException("Could not read file.", e);
+                throw new RuntimeException("Could not read file resource.", e);
             }
         }
         return null;
@@ -87,5 +115,9 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
 
     public void setDocuments(final Map<String, Resource> documents) {
         this.documents = documents;
+    }
+
+    public void setDocumentTemplate(Resource documentTemplate) {
+        this.documentTemplate = documentTemplate;
     }
 }
