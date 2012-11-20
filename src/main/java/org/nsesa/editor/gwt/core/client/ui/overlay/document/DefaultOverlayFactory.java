@@ -24,6 +24,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
         this.overlayStrategy = overlayStrategy;
     }
 
+    @Override
     public AmendableWidget getAmendableWidget(String tag, Map<String, String> namespaces) {
         return getAmendableWidget(DOM.createElement(tag), namespaces);
     }
@@ -33,8 +34,20 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return wrap(null, element, namespaces);
     }
 
-    public AmendableWidget toAmendableWidget(final Element element, Map<String, String> namespaces) {
-        return new AmendableWidgetImpl(element);
+    @Override
+    public AmendableWidget toAmendableWidget(final Element element, final Map<String, String> namespaces) {
+        if (element.getNodeName().contains(":")) {
+            final String[] prefixAndName = element.getNodeName().split(":");
+            return toAmendableWidget(element, namespaces.get(prefixAndName[0].toLowerCase()));
+        }
+        else {
+            // assume default namespace
+            return toAmendableWidget(element, namespaces.get(""));
+        }
+    }
+
+    public AmendableWidget toAmendableWidget(final Element element, final String namespace) {
+        return null;
     }
 
     protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, Map<String, String> namespaces) {
@@ -45,6 +58,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             // process all properties
             amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
             amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+            amendableWidget.setType(overlayStrategy.getType(element));
             Integer assignedNumber = LocatorUtil.getAssignedNumber(amendableWidget);
             amendableWidget.setAssignedNumber(assignedNumber != null ? assignedNumber : 1);
 
@@ -56,10 +70,12 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
             // attach all children (note, this is a recursive call)
             final Element[] children = overlayStrategy.getChildren(element);
-            for (final Element child : children) {
-                final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces);
-                if (amendableChild != null) {
-                    amendableWidget.addAmendableWidget(amendableChild);
+            if (children != null) {
+                for (final Element child : children) {
+                    final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces);
+                    if (amendableChild != null) {
+                        amendableWidget.addAmendableWidget(amendableChild);
+                    }
                 }
             }
 
