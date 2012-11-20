@@ -7,6 +7,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -151,4 +152,6 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
     Integer getAssignedNumber();
 
     void setAssignedNumber(Integer assignedNumber);
+
+    public LinkedHashMap<String, String> getAttributes();
 }

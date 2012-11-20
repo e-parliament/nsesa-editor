@@ -10,9 +10,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -109,7 +107,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             vetoed = listener.beforeAmendableWidgetAdded(this, child);
 
         if (!vetoed) {
-            /*// see if there is a wildcard
+            // see if there is a wildcard
             if (Arrays.binarySearch(getAllowedChildTypes(), "*") == -1) {
                 // no wildcard - see if the type is supported as a child widget
                 boolean canAdd = false;
@@ -121,7 +119,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 if (!canAdd) {
                     LOG.warning(getType() + " does not support child type:" + child);
                 }
-            }*/
+            }
 
             if (!childAmendableWidgets.add(child)) {
                 throw new RuntimeException("Child already exists: " + child.getType());
@@ -391,5 +389,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     public void setAssignedNumber(final Integer assignedNumber) {
         this.assignedNumber = assignedNumber;
+    }
+
+    @Override
+    public LinkedHashMap<String, String> getAttributes() {
+        return new LinkedHashMap<String, String>();
     }
 }

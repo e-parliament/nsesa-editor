@@ -49,7 +49,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(simpleType);
         overlayClass.setRestriction(typeRestriction);
         if (overlayClass.getParent() == null) {
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang",null, "String","content", false, false);
+            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang",null, "String","value", false, false);
             property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
             overlayClass.getProperties().add(property);
         }
@@ -104,7 +104,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(attribute.getType());
         overlayClass.setRestriction(typeRestriction);
         if (overlayClass.getParent() == null) {
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String","content", false, true);
+            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String","value", false, true);
             property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
             overlayClass.getProperties().add(property);
         }
