@@ -42,6 +42,11 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
     }
 
     @Override
+    public String getNamespaceURI(Element element) {
+        return null;
+    }
+
+    @Override
     public NumberingType getNumberingType(Element element, int index) {
         return null;
     }

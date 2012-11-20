@@ -458,6 +458,10 @@ public class OverlayStrategySupport {
         }
     }
 
+    public String getNamespaceURI(Element element) {
+        return element.hasAttribute("ns") ? element.getAttribute("ns") : null;
+    }
+
     private static interface ElementVisitor {
         boolean visit(Element visited);
     }

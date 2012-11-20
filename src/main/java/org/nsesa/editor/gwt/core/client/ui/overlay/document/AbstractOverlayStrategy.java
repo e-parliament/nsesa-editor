@@ -42,6 +42,11 @@ public abstract class AbstractOverlayStrategy implements OverlayStrategy {
     }
 
     @Override
+    public String getNamespaceURI(Element element) {
+        throw new UnsupportedOperationException("Should be overridden in Module!");
+    }
+
+    @Override
     public NumberingType getNumberingType(Element element, int index) {
         throw new UnsupportedOperationException("Should be overridden in Module!");
     }

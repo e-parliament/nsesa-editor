@@ -6,8 +6,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 
-import java.util.Map;
-
 /**
  * Date: 17/10/12 21:30
  *
@@ -25,33 +23,25 @@ public class DefaultOverlayFactory implements OverlayFactory {
     }
 
     @Override
-    public AmendableWidget getAmendableWidget(String tag, Map<String, String> namespaces) {
-        return getAmendableWidget(DOM.createElement(tag), namespaces);
+    public AmendableWidget getAmendableWidget(String tag) {
+        com.google.gwt.user.client.Element element = DOM.createSpan();
+        element.setAttribute("type", tag);
+        element.setClassName("widget " + tag);
+        return getAmendableWidget(element);
     }
 
     @Override
-    public AmendableWidget getAmendableWidget(final Element element, final Map<String, String> namespaces) {
-        return wrap(null, element, namespaces, 0);
+    public AmendableWidget getAmendableWidget(final Element element) {
+        return wrap(null, element, 0);
     }
 
     @Override
-    public AmendableWidget toAmendableWidget(final Element element, final Map<String, String> namespaces) {
-        if (element.getNodeName().contains(":")) {
-            final String[] prefixAndName = element.getNodeName().split(":");
-            return toAmendableWidget(element, namespaces.get(prefixAndName[0].toLowerCase()));
-        }
-        else {
-            // assume default namespace
-            return toAmendableWidget(element, namespaces.get(""));
-        }
-    }
-
-    public AmendableWidget toAmendableWidget(final Element element, final String namespace) {
+    public AmendableWidget toAmendableWidget(final Element element) {
         return null;
     }
 
-    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, Map<String, String> namespaces, int depth) {
-        AmendableWidget amendableWidget = toAmendableWidget(element, namespaces);
+    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, int depth) {
+        AmendableWidget amendableWidget = toAmendableWidget(element);
         if (amendableWidget != null) {
             amendableWidget.setParentAmendableWidget(parent);
 
@@ -74,7 +64,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             final Element[] children = overlayStrategy.getChildren(element);
             if (children != null) {
                 for (final Element child : children) {
-                    final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces, depth + 1);
+                    final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
                     if (amendableChild != null) {
                         amendableWidget.addAmendableWidget(amendableChild);
                     }

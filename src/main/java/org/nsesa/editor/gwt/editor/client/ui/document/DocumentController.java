@@ -34,9 +34,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderContr
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,8 +59,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
-
-    private final HashMap<String, String> namespaces = new HashMap<String, String>();
 
     private final OverlayFactory overlayFactory;
     private final Locator locator;
@@ -195,10 +191,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         });
     }
 
-    public HashMap<String, String> getNamespaces() {
-        return namespaces;
-    }
-
     public void loadDocumentContent() {
         assert documentID != null : "No documentID set.";
         serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
@@ -246,32 +238,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public void setContent(String documentContent) {
         contentController.setContent(documentContent);
-        parseNamespaces(documentContent);
     }
 
     public void scrollTo(Widget widget) {
         contentController.scrollTo(widget);
-    }
-
-    public void parseNamespaces(String documentContent) {
-        namespaces.clear();
-        collectNamespaces();
-        for (Map.Entry<String, String> entry : namespaces.entrySet()) {
-            LOG.info("Namespace mapping '" + entry.getKey() + "' to URI '" + entry.getValue() + "'");
-        }
-    }
-
-    protected void collectNamespaces() {
-//        com.google.gwt.xml.client.Document parsedDocument = XMLParser.parse(documentContent);
-//        if (node.getPrefix() != null) {
-//            if (!namespaces.containsKey(node.getPrefix().toLowerCase()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
-//                namespaces.put(node.getPrefix().toLowerCase(), node.getNamespaceURI());
-//            }
-//        }
-//        NodeList childNodes = node.getChildNodes();
-//        for (int i = 0; i < childNodes.getLength(); i++) {
-//            collectNamespaces(childNodes.item(i));
-//        }
     }
 
     public void overlay() {
@@ -279,7 +249,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
         for (final Element element : contentElements) {
             try {
-                final AmendableWidget rootAmendableWidget = overlay(element, namespaces, this);
+                final AmendableWidget rootAmendableWidget = overlay(element, this);
                 amendableWidgets.add(rootAmendableWidget);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Exception during the overlaying.", e);
@@ -287,11 +257,11 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         }
     }
 
-    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final Map<String, String> namespaces, final AmendableWidgetUIListener UIListener) {
+    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
-        final AmendableWidget root = overlayFactory.getAmendableWidget(element, namespaces);
+        final AmendableWidget root = overlayFactory.getAmendableWidget(element);
         if (root != null) {
             walk(root, new AmendableWidgetWalker.AmendableVisitor() {
                 @Override

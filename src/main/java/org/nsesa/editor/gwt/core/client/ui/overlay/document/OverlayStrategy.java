@@ -67,6 +67,13 @@ public interface OverlayStrategy {
     String getType(Element element);
 
     /**
+     * Return the namespace URI for this element.
+     * @param element   the element to get the namespace for
+     * @return
+     */
+    String getNamespaceURI(Element element);
+
+    /**
      * Get the numbering type of the given amendable element.
      *
      * @param element the amendable element

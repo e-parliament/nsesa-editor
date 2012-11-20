@@ -34,7 +34,7 @@ public class DefaultCreator implements Creator {
         final LinkedHashMap<String, AmendableWidget> allowedChildren = new LinkedHashMap<String, AmendableWidget>();
         final String[] allowedTypes = amendableWidget.getAllowedChildTypes();
         for (final String type : allowedTypes) {
-            allowedChildren.put(type, overlayFactory.getAmendableWidget(type, documentController.getNamespaces()));
+            allowedChildren.put(type, overlayFactory.getAmendableWidget(type));
         }
         return allowedChildren;
     }

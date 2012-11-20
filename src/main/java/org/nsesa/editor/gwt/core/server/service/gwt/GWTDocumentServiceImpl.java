@@ -87,12 +87,12 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
             */
             try {
                 byte[] bytes = Files.toByteArray(documentResource.getFile());
-                InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
-                NodeModel model = NodeModel.parse(inputSource);
-                Configuration configuration = new Configuration();
+                final InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
+                final NodeModel model = NodeModel.parse(inputSource);
+                final Configuration configuration = new Configuration();
                 configuration.setDefaultEncoding("UTF-8");
                 configuration.setDirectoryForTemplateLoading(documentTemplate.getFile().getParentFile());
-                StringWriter sw = new StringWriter();
+                final StringWriter sw = new StringWriter();
                 Map<String, Object> root = new HashMap<String, Object>();
                 root.put("doc", model);
                 configuration.getTemplate(documentTemplate.getFile().getName()).process(root, sw);
