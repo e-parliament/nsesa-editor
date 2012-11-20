@@ -1,10 +1,11 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.util.ClassUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Date: 24/09/12 17:19
@@ -15,16 +16,25 @@ import java.util.List;
 public class DefaultLocator implements Locator {
 
     protected static final String SPLITTER = " - ";
-    protected HashSet<Class<? extends AmendableWidget>> hiddenAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
-    protected HashSet<Class<? extends AmendableWidget>> hideUnderLayingAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
+    protected Set<Class<? extends AmendableWidget>> hiddenAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
+    protected Set<Class<? extends AmendableWidget>> hideUnderLayingAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
+    protected Set<Class<? extends AmendableWidget>> showAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
 
     @Override
     public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
-        StringBuilder location = new StringBuilder();
+        final StringBuilder location = new StringBuilder();
 
         final List<AmendableWidget> parents = amendableWidget.getParentAmendableWidgets();
-        for (AmendableWidget parent : parents) {
-            if (!hiddenAmendableWidgets.contains(parent.getClass()))
+        for (final AmendableWidget parent : parents) {
+            // filter our not just the same classes, but also any parent classes or interfaces
+            final Collection<Class<? extends AmendableWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends AmendableWidget>>() {
+                @Override
+                public boolean apply(Class<? extends AmendableWidget> input) {
+                    return ClassUtils.isAssignableFrom(input.getClass(), parent.getClass());
+                }
+            });
+
+            if (!filtered.contains(parent.getClass()) || showAmendableWidgets.contains(parent.getClass()))
                 location.append(parent.getType()).append(" ").append(getNum(parent)).append(SPLITTER);
             if (hideUnderLayingAmendableWidgets.contains(parent.getClass())) {
                 break;
@@ -44,5 +54,9 @@ public class DefaultLocator implements Locator {
 
     public void hideUnder(Class<? extends AmendableWidget>... amendableWidgetClasses) {
         hideUnderLayingAmendableWidgets.addAll(Arrays.asList(amendableWidgetClasses));
+    }
+
+    public void show(Class<? extends AmendableWidget>... amendableWidgetClasses) {
+        showAmendableWidgets.addAll(Arrays.asList(amendableWidgetClasses));
     }
 }

@@ -9,6 +9,8 @@
     <inherits name="com.google.gwt.place.Place"/>
     <inherits name="com.google.gwt.activity.Activity"/>
     <inherits name="com.google.gwt.logging.Logging"/>
+    <!-- Guava support -->
+    <inherits name="com.google.common.collect.Collect" />
     <!-- GWT Crypto library for SHA-1 checksum -->
     <inherits name="com.googlecode.gwt.crypto.Crypto"/>
     <!-- XPath support -->
