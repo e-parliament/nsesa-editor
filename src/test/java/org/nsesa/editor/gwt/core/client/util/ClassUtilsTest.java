@@ -3,8 +3,6 @@ package org.nsesa.editor.gwt.core.client.util;
 import junit.framework.Assert;
 import org.junit.Test;
 
-import java.io.Serializable;
-
 /**
  * Date: 20/11/12 11:24
  *
@@ -25,11 +23,6 @@ public class ClassUtilsTest {
     @Test
     public void testIsAssignableFromEqual() throws Exception {
         Assert.assertTrue(ClassUtils.isAssignableFrom(String.class, String.class));
-    }
-
-    @Test
-    public void testIsAssignableFromInterfaces() throws Exception {
-        Assert.assertTrue(ClassUtils.isAssignableFrom(Serializable.class, String.class));
     }
 
     @Test

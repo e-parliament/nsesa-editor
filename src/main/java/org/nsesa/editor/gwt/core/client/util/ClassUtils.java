@@ -17,15 +17,16 @@ public class ClassUtils {
         }
 
         // validate classes
-        Class currentSuperClass = impl.getSuperclass();
         if (validateSuperClassOrInterface(superClass, impl.getSuperclass())) {
             return true;
         }
+        /*
+        // this does NOT work in GWT - Class.getInterfaces() is not supported.
         for (Class<?> inter : impl.getInterfaces()) {
             if (validateSuperClassOrInterface(superClass, inter)) {
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
