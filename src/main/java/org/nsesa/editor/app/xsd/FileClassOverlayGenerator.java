@@ -192,7 +192,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     public static void main(String[] args) {
         if (args.length < 4) {
             System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<factory_name>> <<xsd_schema1>> <<xsd_schema2>>...");
-            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.core.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/ akomantoso20 akomantoso20.xsd xml.xsd");
+            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.an.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/ akomantoso20 akomantoso20.xsd xml.xsd");
             System.exit(1);
         }
 
@@ -200,15 +200,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         String targetDirectory = args[1]; //src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/
         String factoryName = args[2];
         List<String> schemas = new ArrayList<String>();
-        for (int i = 3; i< args.length; i++) {
-            schemas.add(args[i]);
-        }
+        schemas.addAll(Arrays.asList(args).subList(3, args.length));
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
         // the first schema name is the main one
 
-        FileClassOverlayGenerator generator = new FileClassOverlayGenerator(factoryName, basePackage, targetDirectory);
+        final FileClassOverlayGenerator generator = new FileClassOverlayGenerator(factoryName, basePackage, targetDirectory);
         try {
             final String[] xsds = schemas.toArray(new String[schemas.size()]);
             generator.parse(xsds);
@@ -243,7 +241,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 //                add now in the result
                 result.add(aClass);
             }
-            OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[]{});
+            OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[aClass.getChildren().size()]);
             //Collections.sort(children, comparator);
             for (int i = children.length - 1; i >= 0 ; i--) {
                 stack.push(children[i]);
