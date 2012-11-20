@@ -9,7 +9,7 @@
             top: 0px;
             font-size: 30px;
             font-weight: bold;
-            font-family: fantasy;
+            font-family: serif;
         }
 
         .logo .part1 {
