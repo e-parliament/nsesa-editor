@@ -30,7 +30,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * The underlying DOM element.
      */
-    private final Element amendableElement;
+    private transient Element amendableElement;
 
     /**
      * A listener for all the UI operations to call back on.
@@ -63,6 +63,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      */
     private Boolean amendable;
 
+    private String type;
+
     /**
      * Flag to indicate that this widget is immutable. We use this flag to set a single element as non-amendable
      * without having to set each of its children as amendable. Does <strong>not</strong> cascade into its children.
@@ -87,6 +89,9 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      */
     private HTMLPanel amendmentHolderElement;
 
+    public AmendableWidgetImpl() {
+    }
+
     public AmendableWidgetImpl(Element amendableElement) {
         this.amendableElement = amendableElement;
         setElement(amendableElement);
@@ -104,8 +109,22 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             vetoed = listener.beforeAmendableWidgetAdded(this, child);
 
         if (!vetoed) {
+            /*// see if there is a wildcard
+            if (Arrays.binarySearch(getAllowedChildTypes(), "*") == -1) {
+                // no wildcard - see if the type is supported as a child widget
+                boolean canAdd = false;
+                for (String type : getAllowedChildTypes()) {
+                    if (type.equalsIgnoreCase(child.getType())) {
+                        canAdd = true;
+                    }
+                }
+                if (!canAdd) {
+                    LOG.warning(getType() + " does not support child type:" + child);
+                }
+            }*/
+
             if (!childAmendableWidgets.add(child)) {
-                throw new RuntimeException("Child already exists: " + child);
+                throw new RuntimeException("Child already exists: " + child.getType());
             }
             child.setParentAmendableWidget(this);
             // inform the listener
@@ -232,9 +251,18 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         this.parentAmendableWidget = parent;
     }
 
+    /**
+     * Returns the type (its local name, meaning the element without any prefix) in lowercase.
+     * @return
+     */
     @Override
     public String getType() {
-        return amendableElement.getNodeName();
+        return type;
+    }
+
+    @Override
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -334,7 +362,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      * Returns an array of the node names that are allowed to be nested.
      * Note: this can include wildcards (*).
      * The default implementation throws an exception, since this method is supposed to be overridden.
-     * @return the list of allowed child types. Should never return <tt>null</tt>.
+     * @return the list of allowed child types in lower case. Should never return <tt>null</tt> (an empty array is ok though).
      */
     @Override
     public String[] getAllowedChildTypes() {

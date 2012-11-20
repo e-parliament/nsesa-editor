@@ -122,7 +122,13 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
      */
     void removeAmendmentController(AmendmentController amendmentController);
 
+    /**
+     * Returns the type of the amendable widget (defaults to the local node name - so without prefix, if any).
+     * @return  the type
+     */
     String getType();
+
+    void setType(String type);
 
     String getId();
 
