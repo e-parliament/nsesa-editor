@@ -1,6 +1,9 @@
 package org.nsesa.editor.gwt.core.server.service.gwt;
 
 import com.google.common.io.Files;
+import freemarker.ext.dom.NodeModel;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -10,11 +13,16 @@ import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -28,6 +36,7 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
     private static final Logger LOG = LoggerFactory.getLogger(GWTAmendmentServiceImpl.class);
 
     private Map<String, Resource> documents;
+    private Resource documentTemplate;
 
     @Override
     public AmendmentContainerDTO getAmendmentContainer(final ClientContext clientContext, final String id) throws UnsupportedOperationException, ResourceNotFoundException {
@@ -67,7 +76,30 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
     }
 
     private String getAmendmentDocument(String id) throws IOException {
-        return Files.toString(documents.get(id).getFile(), Charset.forName("UTF-8"));
+
+        try {
+            byte[] bytes = Files.toByteArray(documents.get(id).getFile());
+            final InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
+            final NodeModel model = NodeModel.parse(inputSource);
+            final Configuration configuration = new Configuration();
+            configuration.setDefaultEncoding("UTF-8");
+            configuration.setDirectoryForTemplateLoading(documentTemplate.getFile().getParentFile());
+            final StringWriter sw = new StringWriter();
+            Map<String, Object> root = new HashMap<String, Object>();
+            root.put("doc", model);
+            configuration.getTemplate(documentTemplate.getFile().getName()).process(root, sw);
+            return sw.toString();
+
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read file.", e);
+        } catch (SAXException e) {
+            throw new RuntimeException("Could not parse file.", e);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Could not parse file.", e);
+        } catch (TemplateException e) {
+            throw new RuntimeException("Could not load template.", e);
+        }
+
     }
 
     @Override
@@ -100,5 +132,9 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
 
     public void setDocuments(Map<String, Resource> documents) {
         this.documents = documents;
+    }
+
+    public void setDocumentTemplate(Resource documentTemplate) {
+        this.documentTemplate = documentTemplate;
     }
 }

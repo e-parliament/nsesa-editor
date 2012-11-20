@@ -265,7 +265,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getId() {
-        return amendableElement.getId();
+        return amendableElement.getId() != null ? amendableElement.getId().trim() : null;
     }
 
     @Override
