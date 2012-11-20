@@ -94,7 +94,7 @@ public class OverlayStrategySupport {
     }
 
     public String getType(Element element) {
-        return element.getNodeName();
+        return element.hasAttribute("type") ? element.getAttribute("type") : null;
     }
 
     /**
@@ -368,7 +368,6 @@ public class OverlayStrategySupport {
      * @return the list of children.
      */
     public final List<Element> getChildren(Element element) {
-
         NodeList<Node> nodes = element.getChildNodes();
         List<Element> amendableElements = new ArrayList<Element>();
         int length = 0;
@@ -380,10 +379,11 @@ public class OverlayStrategySupport {
         for (int i = 0; i < length; i++) {
             if (nodes.getItem(i).getNodeType() == Node.ELEMENT_NODE) {
                 Element el = nodes.getItem(i).cast();
+
                 // do not include any of the 'property' tags
-                if (!asProperties.contains(el.getNodeName().toUpperCase())) {
+                //if (!asProperties.contains(el.getNodeName().toUpperCase())) {
                     amendableElements.add(el);
-                }
+                //}
             }
         }
         return amendableElements;

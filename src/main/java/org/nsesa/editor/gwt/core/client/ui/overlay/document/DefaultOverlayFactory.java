@@ -17,7 +17,7 @@ import java.util.Map;
 @Singleton
 public class DefaultOverlayFactory implements OverlayFactory {
 
-    private final OverlayStrategy overlayStrategy;
+    protected final OverlayStrategy overlayStrategy;
 
     @Inject
     public DefaultOverlayFactory(OverlayStrategy overlayStrategy) {
@@ -31,7 +31,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
     @Override
     public AmendableWidget getAmendableWidget(final Element element, final Map<String, String> namespaces) {
-        return wrap(null, element, namespaces);
+        return wrap(null, element, namespaces, 0);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return null;
     }
 
-    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, Map<String, String> namespaces) {
+    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, Map<String, String> namespaces, int depth) {
         AmendableWidget amendableWidget = toAmendableWidget(element, namespaces);
         if (amendableWidget != null) {
             amendableWidget.setParentAmendableWidget(parent);
@@ -68,16 +68,19 @@ public class DefaultOverlayFactory implements OverlayFactory {
                 amendableWidget.setContent(overlayStrategy.getContent(element));
             }
 
+//            System.out.println(spaces(depth) + "<"+ amendableWidget.getType() + ">");
+
             // attach all children (note, this is a recursive call)
             final Element[] children = overlayStrategy.getChildren(element);
             if (children != null) {
                 for (final Element child : children) {
-                    final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces);
+                    final AmendableWidget amendableChild = wrap(amendableWidget, child, namespaces, depth + 1);
                     if (amendableChild != null) {
                         amendableWidget.addAmendableWidget(amendableChild);
                     }
                 }
             }
+//            System.out.println(spaces(depth) + "</"+ amendableWidget.getType() + ">");
 
             // post process the widget (eg. hide large tables)
             amendableWidget = postProcess(amendableWidget);
@@ -87,5 +90,13 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
     protected AmendableWidget postProcess(AmendableWidget amendableWidget) {
         return amendableWidget;
+    }
+
+    private String spaces(int number) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < number; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 }

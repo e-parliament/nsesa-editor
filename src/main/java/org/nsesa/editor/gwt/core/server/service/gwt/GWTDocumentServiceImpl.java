@@ -1,13 +1,20 @@
 package org.nsesa.editor.gwt.core.server.service.gwt;
 
 import com.google.common.io.Files;
+import freemarker.ext.dom.NodeModel;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentService;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.springframework.core.io.Resource;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -77,7 +84,7 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
             /*
 
             -- When requiring XML transformations --
-
+            */
             try {
                 byte[] bytes = Files.toByteArray(documentResource.getFile());
                 InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
@@ -99,13 +106,13 @@ public class GWTDocumentServiceImpl extends SpringRemoteServiceServlet implement
                 throw new RuntimeException("Could not parse file.", e);
             } catch (TemplateException e) {
                 throw new RuntimeException("Could not load template.", e);
-            }*/
-
-            try {
-                return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
-            } catch (IOException e) {
-                throw new RuntimeException("Could not read file resource.", e);
             }
+
+//            try {
+//                return Files.toString(documentResource.getFile(), Charset.forName("UTF-8"));
+//            } catch (IOException e) {
+//                throw new RuntimeException("Could not read file resource.", e);
+//            }
         }
         return null;
     }

@@ -30,7 +30,7 @@ public class DefaultLocator implements Locator {
             final Collection<Class<? extends AmendableWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends AmendableWidget>>() {
                 @Override
                 public boolean apply(Class<? extends AmendableWidget> input) {
-                    return ClassUtils.isAssignableFrom(input.getClass(), parent.getClass());
+                    return !ClassUtils.isAssignableFrom(input.getClass(), parent.getClass());
                 }
             });
 

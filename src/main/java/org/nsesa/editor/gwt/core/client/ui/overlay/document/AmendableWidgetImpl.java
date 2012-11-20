@@ -307,7 +307,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String toString() {
-        return "[Element " + amendableElement.getNodeName() + "]";
+        return "[Element " + type + "]";
     }
 
     /**

@@ -7,9 +7,6 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.NodeList;
-import com.google.gwt.xml.client.XMLParser;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
@@ -258,23 +255,23 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public void parseNamespaces(String documentContent) {
         namespaces.clear();
-        com.google.gwt.xml.client.Document parsedDocument = XMLParser.parse(documentContent);
-        collectNamespaces(parsedDocument);
+        collectNamespaces();
         for (Map.Entry<String, String> entry : namespaces.entrySet()) {
             LOG.info("Namespace mapping '" + entry.getKey() + "' to URI '" + entry.getValue() + "'");
         }
     }
 
-    private void collectNamespaces(Node node) {
-        if (node.getPrefix() != null) {
-            if (!namespaces.containsKey(node.getPrefix().toLowerCase()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
-                namespaces.put(node.getPrefix().toLowerCase(), node.getNamespaceURI());
-            }
-        }
-        NodeList childNodes = node.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            collectNamespaces(childNodes.item(i));
-        }
+    protected void collectNamespaces() {
+//        com.google.gwt.xml.client.Document parsedDocument = XMLParser.parse(documentContent);
+//        if (node.getPrefix() != null) {
+//            if (!namespaces.containsKey(node.getPrefix().toLowerCase()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
+//                namespaces.put(node.getPrefix().toLowerCase(), node.getNamespaceURI());
+//            }
+//        }
+//        NodeList childNodes = node.getChildNodes();
+//        for (int i = 0; i < childNodes.getLength(); i++) {
+//            collectNamespaces(childNodes.item(i));
+//        }
     }
 
     public void overlay() {
