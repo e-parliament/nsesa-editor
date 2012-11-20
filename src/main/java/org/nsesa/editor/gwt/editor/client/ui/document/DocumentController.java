@@ -267,8 +267,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private void collectNamespaces(Node node) {
         if (node.getPrefix() != null) {
-            if (!namespaces.containsKey(node.getPrefix()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
-                namespaces.put(node.getPrefix(), node.getNamespaceURI());
+            if (!namespaces.containsKey(node.getPrefix().toLowerCase()) || (node.getNamespaceURI() != null && namespaces.get(node.getPrefix()).equals(""))) {
+                namespaces.put(node.getPrefix().toLowerCase(), node.getNamespaceURI());
             }
         }
         NodeList childNodes = node.getChildNodes();
