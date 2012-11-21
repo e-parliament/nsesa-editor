@@ -4,6 +4,6 @@
     <g:HTMLPanel>
         <g:HTML ui:field="errorTitle"/>
         <g:HTML ui:field="errorMessage"/>
-        <g:Button ui:field="okButton"/>
+        <g:Button ui:field="okButton" text="Understood"/>
     </g:HTMLPanel>
 </ui:UiBinder>
