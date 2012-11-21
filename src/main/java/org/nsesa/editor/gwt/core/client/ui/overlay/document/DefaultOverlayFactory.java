@@ -40,6 +40,12 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return null;
     }
 
+    @Override
+    public String getNamespace() {
+        // no namespace defined for default implementation
+        return null;
+    }
+
     protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, int depth) {
         AmendableWidget amendableWidget = toAmendableWidget(element);
         if (amendableWidget != null) {

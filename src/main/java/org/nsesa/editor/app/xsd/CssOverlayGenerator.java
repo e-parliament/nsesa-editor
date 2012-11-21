@@ -62,8 +62,8 @@ public class CssOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Usage java org.nsesa.editor.app.xsd.CssOverlayGenerator <<file_name>>");
+        if (args.length != 2) {
+            System.out.println("Usage java org.nsesa.editor.app.xsd.CssOverlayGenerator <<file_name>> <xsd_schema>");
             System.exit(1);
         }
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -72,8 +72,8 @@ public class CssOverlayGenerator extends OverlayGenerator {
             Properties props = new Properties();
             props.load(classLoader.getResourceAsStream("overlayCss.properties"));
             CssOverlayGenerator generator = new CssOverlayGenerator(props, "overlayCss.ftl", args[0]);
-            final String[] xsds = {"xml.xsd", "akomantoso20.xsd"};
-            generator.parse(xsds);
+            final String xsd = args[1];
+            generator.parse(xsd);
             generator.analyze();
             generator.print();
         } catch (IOException ioe) {

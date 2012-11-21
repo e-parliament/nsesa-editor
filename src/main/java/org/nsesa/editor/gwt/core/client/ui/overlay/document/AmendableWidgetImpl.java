@@ -28,7 +28,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * The underlying DOM element.
      */
-    private transient Element amendableElement;
+    protected transient Element amendableElement;
 
     /**
      * A listener for all the UI operations to call back on.

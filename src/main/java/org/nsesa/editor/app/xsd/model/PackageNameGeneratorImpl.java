@@ -44,6 +44,9 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     @Override
     public String getPackageName(OverlayClass overlayClass) {
+        if (overlayClass.getName().equalsIgnoreCase("Language")) {
+            System.out.println("stop");
+        }
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
@@ -79,7 +82,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         }
         packageName = packageName.toLowerCase();
 
-        if (Character.isDigit(packageName.charAt(0))) {
+        if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
             packageName = "_" + packageName;
         };
         packageName = basePackage + packageName;

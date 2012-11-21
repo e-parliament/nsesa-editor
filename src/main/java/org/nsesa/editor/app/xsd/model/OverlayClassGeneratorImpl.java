@@ -30,32 +30,11 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     @Override
     public void generate(XSSimpleType simpleType) {
         LOG.debug("Generate overlayclass from simple type {}", simpleType);
-        OverlayClass overlayClass = new OverlayClass(simpleType.getName(), simpleType.getTargetNamespace(), OverlayType.SimpleType);
-        overlayClass.setClassName(simpleType.getName() + OverlayType.SimpleType);
-        if (simpleType.getSimpleBaseType() != null ) {
-            OverlayClass parent = new OverlayClass();
-            parent.setOverlayType(OverlayType.SimpleType);
-            if (simpleType.getSimpleBaseType().isLocal()) {
-                parent.setName(simpleType.getSimpleBaseType().getBaseType().getName());
-                parent.setClassName(parent.getName() + OverlayType.SimpleType);
-                parent.setNameSpace(simpleType.getSimpleBaseType().getBaseType().getTargetNamespace());
-            }  else {
-                parent.setName(simpleType.getSimpleBaseType().getName());
-                parent.setClassName(parent.getName() + OverlayType.SimpleType);
-                parent.setNameSpace(simpleType.getSimpleBaseType().getTargetNamespace());
-            }
-            overlayClass.setParent(parent);
-        }
-        SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(simpleType);
-        overlayClass.setRestriction(typeRestriction);
-        if (overlayClass.getParent() == null) {
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang",null, "String","value", false, false);
-            property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
-            overlayClass.getProperties().add(property);
-        }
-        LOG.debug("Generated overlayclass {}", overlayClass);
-        generatedClasses.add(overlayClass);
+
+        generatedClasses.add(generateClass(simpleType));
     }
+
+
 
     @Override
     public void generate(XSComplexType complexType) {
@@ -82,6 +61,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     @Override
     public void generate(XSAttributeDecl attribute) {
         LOG.debug("Generate overlayclass from attribute type {}", attribute);
+        if ("space".equalsIgnoreCase(attribute.getName())) {
+            System.out.println("stop");
+        }
         OverlayClass overlayClass = new OverlayClass(attribute.getName(), attribute.getTargetNamespace(), OverlayType.Attribute);
         overlayClass.setClassName(attribute.getName() + OverlayType.Attribute);
         if (attribute.getType().isLocal()) {
@@ -443,5 +425,38 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
      */
     private boolean isCollection(XSParticle particle) {
         return particle.getMaxOccurs().intValue() > 1 || particle.getMaxOccurs().intValue() == -1;
+    }
+
+    /**
+     * Generate a class from simple type
+     * @param simpleType
+     * @return
+     */
+    private OverlayClass generateClass(XSSimpleType simpleType) {
+        OverlayClass overlayClass = new OverlayClass(simpleType.getName(), simpleType.getTargetNamespace(), OverlayType.SimpleType);
+        overlayClass.setClassName(simpleType.getName() + OverlayType.SimpleType);
+        if (simpleType.getSimpleBaseType() != null ) {
+            OverlayClass parent = new OverlayClass();
+            parent.setOverlayType(OverlayType.SimpleType);
+            if (simpleType.getSimpleBaseType().isLocal()) {
+                parent.setName(simpleType.getSimpleBaseType().getBaseType().getName());
+                parent.setClassName(parent.getName() + OverlayType.SimpleType);
+                parent.setNameSpace(simpleType.getSimpleBaseType().getBaseType().getTargetNamespace());
+            }  else {
+                parent.setName(simpleType.getSimpleBaseType().getName());
+                parent.setClassName(parent.getName() + OverlayType.SimpleType);
+                parent.setNameSpace(simpleType.getSimpleBaseType().getTargetNamespace());
+            }
+            overlayClass.setParent(parent);
+        }
+        SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(simpleType);
+        overlayClass.setRestriction(typeRestriction);
+        if (overlayClass.getParent() == null) {
+            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang",null, "String","value", false, false);
+            property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
+            overlayClass.getProperties().add(property);
+        }
+        LOG.debug("Generated overlayclass {}", overlayClass);
+        return overlayClass;
     }
 }

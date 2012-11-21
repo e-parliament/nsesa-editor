@@ -36,6 +36,7 @@ public abstract class OverlayGenerator {
 
     // the overlay generator used to parse and analyze xsd schemas
     protected OverlayClassGenerator overlayClassGenerator;
+    protected String xsdSchema;
 
     public OverlayGenerator() {
         parser = new XSOMParser();
@@ -45,14 +46,13 @@ public abstract class OverlayGenerator {
 
     /**
      * Parse the xsd schema
-     * @param xsds The xsd schemas as array of string
+     * @param xsd The xsd schema as string
      * @throws SAXException
      */
-    public void parse(final String[] xsds) throws SAXException {
+    public void parse(String xsd) throws SAXException {
+        this.xsdSchema = xsd;
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        for (String xsd : xsds) {
-            parser.parse(classLoader.getResource(xsd));
-        }
+        parser.parse(classLoader.getResource(xsd));
     }
 
     /**

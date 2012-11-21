@@ -27,4 +27,10 @@ public interface OverlayFactory {
     AmendableWidget getAmendableWidget(String tag);
 
     AmendableWidget toAmendableWidget(Element element);
+
+    /**
+     * Returns the namespace of the overlay factory
+     * @return
+     */
+    String getNamespace();
 }

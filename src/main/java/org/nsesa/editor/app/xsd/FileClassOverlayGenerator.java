@@ -67,19 +67,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     // Freemarker configuration
     private final Configuration configuration;
-    private String mainSchema;
     private String basePackageName;
     private String targetDirectory;
 
     /**
      * Constructor
-     * @param mainSchema The main schema name used for generation
      * @param basePackageName The base package name
      * @param targetDirectory The base location where the files will be saved
      */
-    public FileClassOverlayGenerator(String mainSchema, String basePackageName, String targetDirectory) {
+    public FileClassOverlayGenerator(String basePackageName, String targetDirectory) {
         super();
-        this.mainSchema = mainSchema;
         this.basePackageName = basePackageName;
         this.targetDirectory = targetDirectory;
         configuration = new Configuration();
@@ -110,12 +107,15 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         final PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl(basePackageName);
         final PackageNameGenerator directoryNameGenerator = new PackageNameGeneratorImpl("");
 
-        List<OverlayClass> generatedClasses = getFlatListWithNoGroups(overlayClassGenerator.getResult());
+        //List<OverlayClass> generatedClasses = getFlatListWithNoGroups();
+        // generate classes and factory related for each schema
+        OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getResult();
+        List<OverlayClass> generatedClasses = getFlatListWithNoGroups(root);
         // keep only the element overlay classes
-        List<OverlayClass> elementClases = new ArrayList<OverlayClass>();
+        Map<String, List<OverlayClass>> elementClasses = new HashMap<String, List<OverlayClass>>();
 
-        for(OverlayClass overlayClass : generatedClasses) {
-
+        for (OverlayClass overlayClass : generatedClasses) {
+            // generate directories
             String filePackageName = directoryNameGenerator.getPackageName(overlayClass);
             if (filePackageName == null || filePackageName.length() == 0) {
                 continue;
@@ -128,7 +128,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     throw new RuntimeException("The directory can not be created" + filePackageName);
                 }
             }
-
             final File file = new File(filePackage, StringUtils.capitalize(overlayClass.getClassName()) + ".java");
             try {
                 Map<String, Object> rootMap = new HashMap<String, Object>();
@@ -142,25 +141,42 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             } catch(Exception e) {
                 throw new RuntimeException("The class can not be generated " + file.getAbsolutePath());
             }
+            List<OverlayClass> namespaceElements = elementClasses.get(overlayClass.getNameSpace());
+            if (namespaceElements == null) {
+                namespaceElements = new ArrayList<OverlayClass>();
+                elementClasses.put(overlayClass.getNameSpace(), namespaceElements);
+            }
+            // add only elements
             if (overlayClass.isElement()) {
-                elementClases.add(overlayClass);
+                namespaceElements.add(overlayClass);
             }
         }
-        // create the factory
-        final String className = StringUtils.capitalize(mainSchema) + "OverlayFactory";
-        final File file = new File(generatedSourcesDirectory, className + ".java");
+             // create the factory for each namspace
+        for (String key : elementClasses.keySet()) {
+            String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
+            if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
+                factoryName ="_" + factoryName;
+            }
 
-        Map<String, Object> rootMap = new HashMap<String, Object>();
+            final String className = StringUtils.capitalize(factoryName) + "OverlayFactory";
+            final File file = new File(generatedSourcesDirectory, className + ".java");
 
-        final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
-        factoryClass.setClassName(className);
-        factoryClass.setPackageName(basePackageName.endsWith(".")
-                ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
+            Map<String, Object> rootMap = new HashMap<String, Object>();
 
-        rootMap.put("overlayClass", factoryClass);
-        rootMap.put("overlayClasses", elementClases);
-        rootMap.put("packageNameGenerator", packageNameGenerator);
-        writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
+            final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
+            factoryClass.setClassName(className);
+            factoryClass.setNameSpace(key);
+            factoryClass.setPackageName(basePackageName.endsWith(".")
+                    ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
+
+            rootMap.put("overlayClass", factoryClass);
+            rootMap.put("overlayClasses", elementClasses.get(key));
+            rootMap.put("packageNameGenerator", packageNameGenerator);
+            writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
+        }
+
+
+
     }
 
     public void writeToFile(File file, Object rootMap, String templateName) {
@@ -190,26 +206,23 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length < 4) {
-            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<factory_name>> <<xsd_schema1>> <<xsd_schema2>>...");
-            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.an.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/ akomantoso20 akomantoso20.xsd xml.xsd");
+        if (args.length != 3) {
+            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<xsd_schema>>");
+            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.an.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/ akomantoso20.xsd");
             System.exit(1);
         }
 
         String basePackage = args[0]; //org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.
         String targetDirectory = args[1]; //src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/
-        String factoryName = args[2];
-        List<String> schemas = new ArrayList<String>();
-        schemas.addAll(Arrays.asList(args).subList(3, args.length));
+        String schema = args[2];
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
         // the first schema name is the main one
 
-        final FileClassOverlayGenerator generator = new FileClassOverlayGenerator(factoryName, basePackage, targetDirectory);
+        final FileClassOverlayGenerator generator = new FileClassOverlayGenerator(basePackage, targetDirectory);
         try {
-            final String[] xsds = schemas.toArray(new String[schemas.size()]);
-            generator.parse(xsds);
+            generator.parse(schema);
             generator.analyze();
             generator.print();
         } catch (SAXException e) {
@@ -220,7 +233,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     /**
      * Returns a flat list of overlay classes by traversing the root class and exclude the root, schema class type
      * and group classes
-     * @param rootClass The root overlay class that will be traversed
+     * @param rootClass The schema overlay class that will be traversed
      * @return A List of overlay classes
      */
     private List<OverlayClass> getFlatListWithNoGroups(OverlayClassGenerator.OverlayRootClass rootClass) {
