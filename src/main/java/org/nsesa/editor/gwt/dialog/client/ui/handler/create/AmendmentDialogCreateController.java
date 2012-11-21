@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -21,18 +21,18 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentMoveController extends Composite implements ProvidesResize, AmendmentUIHandler {
+public class AmendmentDialogCreateController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
     private final ClientFactory clientFactory;
 
-    private final AmendmentMoveView view;
+    private final AmendmentDialogCreateView view;
 
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
 
     @Inject
-    public AmendmentMoveController(final ClientFactory clientFactory, final AmendmentMoveView view) {
+    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view) {
         this.clientFactory = clientFactory;
         this.view = view;
         registerListeners();
@@ -48,7 +48,7 @@ public class AmendmentMoveController extends Composite implements ProvidesResize
     }
 
     @Override
-    public AmendmentMoveView getView() {
+    public AmendmentDialogCreateView getView() {
         return view;
     }
 
@@ -58,5 +58,15 @@ public class AmendmentMoveController extends Composite implements ProvidesResize
         assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
+    }
+
+    @Override
+    public void onShow() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onClose() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

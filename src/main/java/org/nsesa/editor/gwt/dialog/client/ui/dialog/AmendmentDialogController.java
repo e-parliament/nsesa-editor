@@ -14,16 +14,18 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentBundleController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentMoveController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentTableController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.widget.AmendmentWidgetController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentDialogBundleController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreateController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
  * column layout (with the original proposed text on the left, and a rich text editor on the right).
  * <p/>
- * Requires an {@link AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget} to be set before it can be displayed.
+ * Requires an {@link AmendmentContainerDTO}, a {@link AmendmentAction} and
+ * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -40,10 +42,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      */
     private final AmendmentDialogView view;
 
-    private final AmendmentBundleController amendmentBundleController;
-    private final AmendmentMoveController amendmentMoveController;
-    private final AmendmentTableController amendmentTableController;
-    private final AmendmentWidgetController amendmentWidgetController;
+    private final AmendmentDialogCreateController amendmentDialogCreateController;
+    private final AmendmentDialogBundleController amendmentDialogBundleController;
+    private final AmendmentDialogMoveController amendmentDialogMoveController;
+    private final AmendmentDialogTableController amendmentDialogTableController;
+    private final AmendmentDialogModifyController amendmentDialogModifyController;
 
     /**
      * The client factory, with access to the {@link com.google.web.bindery.event.shared.EventBus},
@@ -68,17 +71,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     @Inject
     public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view,
-                                     final AmendmentBundleController amendmentBundleController,
-                                     final AmendmentTableController amendmentTableController,
-                                     final AmendmentMoveController amendmentMoveController,
-                                     final AmendmentWidgetController amendmentWidgetController) {
+                                     final AmendmentDialogCreateController amendmentDialogCreateController,
+                                     final AmendmentDialogBundleController amendmentDialogBundleController,
+                                     final AmendmentDialogTableController amendmentDialogTableController,
+                                     final AmendmentDialogMoveController amendmentDialogMoveController,
+                                     final AmendmentDialogModifyController amendmentDialogModifyController) {
         this.clientFactory = clientFactory;
         this.view = view;
 
-        this.amendmentBundleController = amendmentBundleController;
-        this.amendmentTableController = amendmentTableController;
-        this.amendmentMoveController = amendmentMoveController;
-        this.amendmentWidgetController = amendmentWidgetController;
+        this.amendmentDialogCreateController = amendmentDialogCreateController;
+        this.amendmentDialogBundleController = amendmentDialogBundleController;
+        this.amendmentDialogTableController = amendmentDialogTableController;
+        this.amendmentDialogMoveController = amendmentDialogMoveController;
+        this.amendmentDialogModifyController = amendmentDialogModifyController;
 
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
@@ -116,19 +121,22 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     protected AmendmentUIHandler getUIHandler() {
+        if (amendmentAction == AmendmentAction.CREATION) {
+            return amendmentDialogCreateController;
+        }
         if (amendmentAction == AmendmentAction.MOVE) {
-            return amendmentMoveController;
+            return amendmentDialogMoveController;
         }
         if (amendmentAction == AmendmentAction.BUNDLE) {
-            return amendmentBundleController;
+            return amendmentDialogBundleController;
         }
         if ("table".equalsIgnoreCase(amendableWidget.getType()) || "tr".equalsIgnoreCase(amendableWidget.getType())) {
-            return amendmentTableController;
+            return amendmentDialogTableController;
         }
         if ("img".equalsIgnoreCase(amendableWidget.getType())) {
             throw new UnsupportedOperationException("Not yet implemented.");
         }
-        return amendmentWidgetController;
+        return amendmentDialogModifyController;
     }
 
     private void handle() {

@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.table;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -16,9 +16,9 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentMoveViewImpl extends Composite implements AmendmentMoveView {
+public class AmendmentDialogTableViewImpl extends Composite implements AmendmentDialogTableView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentMoveViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogTableViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -30,7 +30,7 @@ public class AmendmentMoveViewImpl extends Composite implements AmendmentMoveVie
     DockLayoutPanel dockPanel;
 
     @Inject
-    public AmendmentMoveViewImpl() {
+    public AmendmentDialogTableViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }

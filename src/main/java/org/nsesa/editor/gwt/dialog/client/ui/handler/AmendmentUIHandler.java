@@ -14,4 +14,8 @@ public interface AmendmentUIHandler {
     void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
 
     IsWidget getView();
+
+    void onShow();
+
+    void onClose();
 }

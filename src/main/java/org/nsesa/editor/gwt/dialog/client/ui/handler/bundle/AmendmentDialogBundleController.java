@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.widget;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.bundle;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -6,10 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
-import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -24,37 +21,24 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentWidgetController extends Composite implements ProvidesResize, AmendmentUIHandler {
+public class AmendmentDialogBundleController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
     private final ClientFactory clientFactory;
 
-    private final AmendmentWidgetView view;
-
-    private final Locator locator;
+    private final AmendmentDialogBundleView view;
 
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
 
     @Inject
-    public AmendmentWidgetController(final ClientFactory clientFactory, final AmendmentWidgetView view,
-                                     final Locator locator) {
+    public AmendmentDialogBundleController(final ClientFactory clientFactory, final AmendmentDialogBundleView view) {
         this.clientFactory = clientFactory;
         this.view = view;
-        this.locator = locator;
         registerListeners();
     }
 
     private void registerListeners() {
-        view.getSaveButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
-                clientFactory.getEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
-                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
-            }
-        });
-
         view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -64,27 +48,25 @@ public class AmendmentWidgetController extends Composite implements ProvidesResi
     }
 
     @Override
-    public AmendmentWidgetView getView() {
+    public AmendmentDialogBundleView getView() {
         return view;
     }
 
     @Override
     public void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
+        assert amendment != null : "Amendment should not be null.";
+        assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
+    }
 
-        if (amendableWidget == null && amendment == null) {
-            throw new NullPointerException("Neither amendment nor amendable widget are set.");
-        }
+    @Override
+    public void onShow() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-        if (amendableWidget != null) {
-            view.setTitle(locator.getLocation(amendableWidget, clientFactory.getClientContext().getDocumentIso(), false));
-            view.setOriginalContent(amendableWidget.getContent());
-            view.setAmendmentContent(amendableWidget.getContent());
-        }
-
-        if (amendment != null) {
-            // TODO edit the amendment
-        }
+    @Override
+    public void onClose() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

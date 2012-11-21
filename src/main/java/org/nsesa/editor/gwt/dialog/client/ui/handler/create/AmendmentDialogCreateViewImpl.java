@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.table;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -16,9 +16,9 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentTableViewImpl extends Composite implements AmendmentTableView {
+public class AmendmentDialogCreateViewImpl extends Composite implements AmendmentDialogCreateView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentTableViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogCreateViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -30,7 +30,7 @@ public class AmendmentTableViewImpl extends Composite implements AmendmentTableV
     DockLayoutPanel dockPanel;
 
     @Inject
-    public AmendmentTableViewImpl() {
+    public AmendmentDialogCreateViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }

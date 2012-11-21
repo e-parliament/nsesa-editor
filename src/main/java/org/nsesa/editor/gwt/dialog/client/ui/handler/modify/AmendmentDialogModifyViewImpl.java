@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.widget;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -7,9 +7,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelView;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
-import org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelController;
-import org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelView;
 
 /**
  * Date: 24/06/12 21:44
@@ -17,9 +17,9 @@ import org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelView;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidgetView {
+public class AmendmentDialogModifyViewImpl extends Composite implements AmendmentDialogModifyView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentWidgetViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogModifyViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -46,7 +46,7 @@ public class AmendmentWidgetViewImpl extends Composite implements AmendmentWidge
 
 
     @Inject
-    public AmendmentWidgetViewImpl(
+    public AmendmentDialogModifyViewImpl(
             @Named("originalText") final RichTextEditor originalText,
             @Named("amendmentText") final RichTextEditor amendmentText,
             final AuthorPanelController authorPanelController) {

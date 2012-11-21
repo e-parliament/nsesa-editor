@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.table;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -12,8 +12,8 @@ import com.google.inject.ImplementedBy;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(AmendmentMoveViewImpl.class)
-public interface AmendmentMoveView extends IsWidget {
+@ImplementedBy(AmendmentDialogTableViewImpl.class)
+public interface AmendmentDialogTableView extends IsWidget {
 
     HasClickHandlers getSaveButton();
 

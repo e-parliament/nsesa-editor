@@ -16,9 +16,9 @@ import com.google.inject.Inject;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentBundleViewImpl extends Composite implements AmendmentBundleView {
+public class AmendmentDialogBundleViewImpl extends Composite implements AmendmentDialogBundleView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentBundleViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogBundleViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -30,7 +30,7 @@ public class AmendmentBundleViewImpl extends Composite implements AmendmentBundl
     DockLayoutPanel dockPanel;
 
     @Inject
-    public AmendmentBundleViewImpl() {
+    public AmendmentDialogBundleViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }

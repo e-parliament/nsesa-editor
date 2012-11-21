@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="AuthorPanelViewImpl.css" field="css"
-              type='org.nsesa.editor.gwt.dialog.client.ui.tab.author.AuthorPanelViewCss'/>
+              type='org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelViewCss'/>
     <ui:style field="res">
         .authorPanel {
 

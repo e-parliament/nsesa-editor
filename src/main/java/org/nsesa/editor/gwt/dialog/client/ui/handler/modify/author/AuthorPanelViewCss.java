@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.tab.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author;
 
 import com.google.gwt.resources.client.CssResource;
 
