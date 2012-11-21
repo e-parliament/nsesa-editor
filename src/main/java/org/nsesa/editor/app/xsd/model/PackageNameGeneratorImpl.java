@@ -18,8 +18,8 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         {
             put("www.", "");
             put(".org", "");
-            put("/", "_");
-            put(".", "_");
+            put("/", "");
+            put(".", "");
         }
     };
     /** an internal cache used to keep generated package names**/
@@ -44,9 +44,6 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     @Override
     public String getPackageName(OverlayClass overlayClass) {
-        if (overlayClass.getName().equalsIgnoreCase("Language")) {
-            System.out.println("stop");
-        }
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
@@ -73,22 +70,29 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
             return packageName;
         }
         int lastIndex = nameSpace.lastIndexOf("/");
-        // get previous one
-        int previousIndex = nameSpace.lastIndexOf("/", lastIndex - 1);
-        packageName = nameSpace.substring(previousIndex + 1);
-        Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
-        for(Map.Entry<String, String> entry : entries) {
-            packageName = packageName.replace(entry.getKey(), entry.getValue());
-        }
-        packageName = packageName.toLowerCase();
-
+        packageName = getEligiblePackageName(nameSpace.substring(lastIndex + 1));
         if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
-            packageName = "_" + packageName;
-        };
+            // we are trying second time
+            int previousIndex = nameSpace.lastIndexOf("/", lastIndex - 1);
+            packageName = getEligiblePackageName(nameSpace.substring(previousIndex + 1));
+            if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
+                packageName = "_" + packageName;
+            };
+        }
         packageName = basePackage + packageName;
         cache.put(nameSpace, packageName);
 
         return packageName;
 
+    }
+
+    // if substr
+    private String getEligiblePackageName(String substr) {
+        Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
+        for(Map.Entry<String, String> entry : entries) {
+            substr = substr.replace(entry.getKey(), entry.getValue());
+        }
+        substr = substr.toLowerCase();
+        return substr;
     }
 }
