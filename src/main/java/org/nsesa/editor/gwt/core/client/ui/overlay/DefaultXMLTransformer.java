@@ -25,13 +25,19 @@ public class DefaultXMLTransformer implements XMLTransformer {
         LinkedHashMap<String, String> attrs = widget.getAttributes();
         if(attrs.size() > 0) {
             for(Map.Entry<String, String> entry : attrs.entrySet()) {
-                sb.append(" ").append(entry.getKey()).append("=").append("\"").append(entry.getValue()).append("\"");
+                if (entry.getValue() != null && entry.getValue().length() > 0) {
+                    sb.append(" ").append(entry.getKey()).append("=").append("\"").append(TextUtils.escapeXML(entry.getValue())).append("\"");
+                }
             }
         }
         sb.append(">");
         // apply xml transformation for children
         for(AmendableWidget child : widget.getChildAmendableWidgets()) {
             sb.append(toXML(child));
+        }
+        String content = widget.getContent();
+        if (content != null && content.length() > 0) {
+            sb.append(TextUtils.escapeXML(content));
         }
         sb.append("</").append(widget.getType()).append(">");
         return sb.toString();

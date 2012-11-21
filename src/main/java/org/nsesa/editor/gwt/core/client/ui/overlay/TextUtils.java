@@ -1,11 +1,23 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 
+import java.util.LinkedHashMap;
+
 /**
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: TextUtils.java 5027 2012-02-17 14:01:17Z pluppens $
  */
 public class TextUtils {
+    // xml conversion: & - &amp; < - &lt; > - &gt; " - &quot; ' - &apos;
+    private static final LinkedHashMap<Character, String> XML_ESCAPER = new LinkedHashMap<Character, String>();
+    static {
+        XML_ESCAPER.put(new Character('&'), "&amp;");
+        XML_ESCAPER.put(new Character('<'), "&lt;");
+        XML_ESCAPER.put(new Character('>'), "&gt;");
+        XML_ESCAPER.put(new Character('"'), "&quot;");
+        XML_ESCAPER.put(new Character('\''), "&apos;");
+    }
+
     public static String stripTags(String html, boolean collapseWhiteSpace) {
         if (html == null)
             return null;
@@ -80,6 +92,8 @@ public class TextUtils {
         return "<span class='bold_italic'>" + input + "</span>";
     }
 
+
+
     public static String dump(StringBuilder sb, int level, Throwable e) {
 
         for (StackTraceElement traceElement : e.getStackTrace()) {
@@ -95,6 +109,22 @@ public class TextUtils {
 
     public static boolean hasLength(String str) {
         return (str != null && str.length() > 0);
+    }
+
+    /**
+     * Escape all xml special chars with their corresponding values as follows
+     * @param str The string to be escaped
+     * @return The string escaped
+     */
+    public static String escapeXML(String str) {
+        if (str == null) return null;
+        StringBuilder sb = new StringBuilder(str.length()*2);
+        for (int i = 0; i < str.length(); i++) {
+            Character ch = new Character(str.charAt(0));
+            String escape = XML_ESCAPER.get(ch);
+            sb.append(escape == null ? ch.charValue() : escape);
+        }
+        return sb.toString();
     }
 
     public static boolean hasText(String str) {
