@@ -5,7 +5,6 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
-import org.nsesa.editor.gwt.editor.client.activity.DefaultEditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
@@ -33,5 +32,4 @@ public interface Injector {
     ActivityMapper getActivityMapper();
 
     EditorPlaceFactory getPlaceFactory();
-
 }

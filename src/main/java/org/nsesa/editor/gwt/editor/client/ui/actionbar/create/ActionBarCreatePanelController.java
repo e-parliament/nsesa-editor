@@ -1,10 +1,8 @@
 package org.nsesa.editor.gwt.editor.client.ui.actionbar.create;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
@@ -22,13 +20,11 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 @Scope(EDITOR)
 public class ActionBarCreatePanelController {
 
     private final ActionBarCreatePanelView view;
     private final DocumentEventBus documentEventBus;
-    private final Creator creator;
     private DocumentController documentController;
 
     private ActionBarController actionBarController;
@@ -37,11 +33,9 @@ public class ActionBarCreatePanelController {
 
     @Inject
     public ActionBarCreatePanelController(final DocumentEventBus documentEventBus,
-                                          final ActionBarCreatePanelView view,
-                                          final Creator creator) {
+                                          final ActionBarCreatePanelView view) {
         this.documentEventBus = documentEventBus;
         this.view = view;
-        this.creator = creator;
         registerListeners();
     }
 
@@ -66,12 +60,12 @@ public class ActionBarCreatePanelController {
         view.clearAmendableWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<String, AmendableWidget> allowedSiblings = creator.getAllowedSiblings(documentController, amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedSiblings = documentController.getCreator().getAllowedSiblings(documentController, amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedSiblings.entrySet()) {
             view.addSiblingAmendableWidget(entry.getKey(), entry.getValue());
         }
         // add all the children
-        LinkedHashMap<String, AmendableWidget> allowedChildren = creator.getAllowedChildren(documentController, amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedChildren = documentController.getCreator().getAllowedChildren(documentController, amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedChildren.entrySet()) {
             view.addChildAmendableWidget(entry.getKey(), entry.getValue());
         }

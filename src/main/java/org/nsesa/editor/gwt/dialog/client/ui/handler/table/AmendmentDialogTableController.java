@@ -59,14 +59,4 @@ public class AmendmentDialogTableController extends Composite implements Provide
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
     }
-
-    @Override
-    public void onShow() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onClose() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 }

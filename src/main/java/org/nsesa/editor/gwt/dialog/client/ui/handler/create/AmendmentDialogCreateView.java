@@ -17,4 +17,6 @@ public interface AmendmentDialogCreateView extends IsWidget {
     HasClickHandlers getSaveButton();
 
     HasClickHandlers getCancelButton();
+
+    void setTitle(String title);
 }

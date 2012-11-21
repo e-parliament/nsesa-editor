@@ -46,7 +46,7 @@
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
         <g:north size='20'>
-            <g:HTML styleName="{res.header}" ui:field="title">HEADER</g:HTML>
+            <g:HTML styleName="{res.header}" ui:field="title" />
         </g:north>
         <g:center>
             <g:DockLayoutPanel unit="PCT">

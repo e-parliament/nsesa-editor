@@ -6,7 +6,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -39,6 +41,15 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     }
 
     private void registerListeners() {
+        view.getSaveButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
+                clientFactory.getEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
+                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+            }
+        });
+
         view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -58,15 +69,6 @@ public class AmendmentDialogCreateController extends Composite implements Provid
         assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
-    }
-
-    @Override
-    public void onShow() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onClose() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        view.setTitle("Create new " + amendableWidget.getType());
     }
 }

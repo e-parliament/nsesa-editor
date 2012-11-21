@@ -1,12 +1,10 @@
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
-import com.google.gwt.inject.client.GinModule;
-import com.google.gwt.inject.client.binder.GinBinder;
+import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentDialogBundleController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreateModule;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyModule;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -14,16 +12,13 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableC
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentDialogModule implements GinModule {
+public class AmendmentDialogModule extends AbstractGinModule {
     @Override
-    public void configure(GinBinder binder) {
+    public void configure() {
+        install(new AuthorPanelModule());
+        install(new AmendmentDialogCreateModule());
+        install(new AmendmentDialogModifyModule());
 
-        binder.install(new AmendmentDialogModifyModule());
-
-        binder.bind(AmendmentDialogController.class).in(Singleton.class);
-
-        binder.bind(AmendmentDialogBundleController.class).in(Singleton.class);
-        binder.bind(AmendmentDialogMoveController.class).in(Singleton.class);
-        binder.bind(AmendmentDialogTableController.class).in(Singleton.class);
+        bind(AmendmentDialogController.class).in(Singleton.class);
     }
 }

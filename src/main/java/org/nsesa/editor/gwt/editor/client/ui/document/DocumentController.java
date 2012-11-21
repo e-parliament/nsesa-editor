@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
@@ -61,6 +62,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final ServiceFactory serviceFactory;
 
     private final OverlayFactory overlayFactory;
+    private final Creator creator;
     private final Locator locator;
     private final AmendmentManager amendmentManager;
 
@@ -84,6 +86,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
                               final Locator locator,
+                              final Creator creator,
                               final AmendmentManager amendmentManager) {
 
         this.clientFactory = clientFactory;
@@ -91,6 +94,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
 
         this.amendmentManager = amendmentManager;
+        this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
 
@@ -349,6 +353,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public AmendmentManager getAmendmentManager() {
         return amendmentManager;
+    }
+
+    public Creator getCreator() {
+        return creator;
     }
 
     @Override
