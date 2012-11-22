@@ -47,13 +47,17 @@ public class OverlayProperty extends OverlayNode {
         return newProperty;
     }
 
-    public String getName() {
+    public String getJavaName() {
         String propName = name + (isAttribute() ? "Attr" : "");
         String result = REPLACEMENT_NAMES.get(propName);
         if (result == null) {
             result = propName;
         }
         return result;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean isCollection() {
