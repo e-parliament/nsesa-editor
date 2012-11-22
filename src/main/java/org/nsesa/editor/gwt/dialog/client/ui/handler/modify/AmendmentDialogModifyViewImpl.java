@@ -7,8 +7,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelView;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
@@ -33,27 +31,16 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     HTML title;
 
     @UiField(provided = true)
-    final RichTextEditor originalText;
-
-    @UiField(provided = true)
     final RichTextEditor amendmentText;
 
     @UiField
     TabLayoutPanel tabLayoutPanel;
 
-    @UiField(provided = true)
-    AuthorPanelView authorPanelView;
-
 
     @Inject
-    public AmendmentDialogModifyViewImpl(
-            @Named("originalText") final RichTextEditor originalText,
-            @Named("amendmentText") final RichTextEditor amendmentText,
-            final AuthorPanelController authorPanelController) {
+    public AmendmentDialogModifyViewImpl(@Named("amendmentText") final RichTextEditor amendmentText) {
 
-        this.originalText = originalText;
         this.amendmentText = amendmentText;
-        this.authorPanelView = authorPanelController.getView();
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
@@ -77,13 +64,13 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     }
 
     @Override
-    public void setOriginalContent(final String originalContent) {
-        this.originalText.setHTML(originalContent);
+    public void setAmendmentContent(final String amendmentContent) {
+        this.amendmentText.setHTML(amendmentContent);
     }
 
     @Override
-    public void setAmendmentContent(final String amendmentContent) {
-        this.amendmentText.setHTML(amendmentContent);
+    public void addView(IsWidget view, String title) {
+        tabLayoutPanel.add(view, title);
     }
 
     @Override

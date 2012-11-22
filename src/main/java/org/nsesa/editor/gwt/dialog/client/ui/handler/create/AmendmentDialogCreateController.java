@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -29,14 +30,17 @@ public class AmendmentDialogCreateController extends Composite implements Provid
 
     private final AmendmentDialogCreateView view;
 
+    private final OverlayFactory overlayFactory;
+
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
 
     @Inject
-    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view) {
+    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view, final OverlayFactory overlayFactory) {
         this.clientFactory = clientFactory;
         this.view = view;
+        this.overlayFactory = overlayFactory;
         registerListeners();
     }
 

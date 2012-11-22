@@ -1,13 +1,10 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.content;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelModule;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.content.ContentPanelModule;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditorListener;
@@ -18,23 +15,20 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditorListener;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentDialogModifyModule extends AbstractGinModule {
+public class ContentPanelModule extends AbstractGinModule {
     @Override
     public void configure() {
-        install(new AuthorPanelModule());
-        install(new ContentPanelModule());
-        bind(AmendmentDialogModifyController.class).in(Singleton.class);
-        bind(RichTextEditor.class).annotatedWith(Names.named("amendmentText")).toProvider(AmendmentTextProvider.class);
+        bind(RichTextEditor.class).annotatedWith(Names.named("originalText")).toProvider(OriginalTextProvider.class);
     }
 
-    public static class AmendmentTextProvider implements Provider<RichTextEditor> {
+    public static class OriginalTextProvider implements Provider<RichTextEditor> {
 
         @Inject
         ClientFactory clientFactory;
 
         @Override
         public RichTextEditor get() {
-            return new YATinyEditor(false, clientFactory, new YATinyEditorListener() {
+            return new YATinyEditor(true, clientFactory, new YATinyEditorListener() {
                 @Override
                 public void onInitialized(YATinyEditor editor) {
                     editor.addStyleName("tiny-editor");

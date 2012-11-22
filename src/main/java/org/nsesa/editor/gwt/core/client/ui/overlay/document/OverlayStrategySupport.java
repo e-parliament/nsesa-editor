@@ -64,7 +64,7 @@ public class OverlayStrategySupport {
     }
 
     public Boolean isAmendable(Element element) {
-        return true;
+        return element.getId() != null && !"".equalsIgnoreCase(element.getId());
 //        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
 //        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
     }
@@ -381,9 +381,11 @@ public class OverlayStrategySupport {
                 Element el = nodes.getItem(i).cast();
 
                 // do not include any of the 'property' tags
-                //if (!asProperties.contains(el.getNodeName().toUpperCase())) {
+                // these elements are not included in our tree, but can be searched by their parent later on, to
+                // get certain properties such as content, num, ...
+//                if (!asProperties.contains(el.getNodeName().toUpperCase())) {
                     amendableElements.add(el);
-                //}
+//                }
             }
         }
         return amendableElements;

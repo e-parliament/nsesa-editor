@@ -8,7 +8,6 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -20,7 +19,6 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 @Scope(DIALOG)
 public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
 

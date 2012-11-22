@@ -16,9 +16,9 @@ public interface AmendmentDialogModifyView extends IsWidget {
 
     void setTitle(String title);
 
-    void setOriginalContent(String originalContent);
-
     void setAmendmentContent(String amendmentContent);
+
+    void addView(IsWidget view, String title);
 
     HasClickHandlers getSaveButton();
 

@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,8 @@ public class AmendmentContainerDTO implements IsSerializable {
     private String amendmentContainerStatus;
 
     private String xmlContent;
+
+    private transient AmendableWidget root;
 
     private AmendableWidgetReference sourceReference;
     private ArrayList<AmendableWidgetReference> targetReferences = new ArrayList<AmendableWidgetReference>();
@@ -71,5 +74,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setXmlContent(String xmlContent) {
         this.xmlContent = xmlContent;
+    }
+
+    public AmendableWidget getRoot() {
+        return root;
+    }
+
+    public void setRoot(AmendableWidget root) {
+        this.root = root;
     }
 }

@@ -42,7 +42,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     AuthorPanelView authorPanelView;
 
     @Inject
-    public AmendmentDialogCreateViewImpl(@Named("originalText") final RichTextEditor newText,
+    public AmendmentDialogCreateViewImpl(@Named("newText") final RichTextEditor newText,
                                          final AuthorPanelController authorPanelController) {
         this.newText = newText;
         this.authorPanelView = authorPanelController.getView();

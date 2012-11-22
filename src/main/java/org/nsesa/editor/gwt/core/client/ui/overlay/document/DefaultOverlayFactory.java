@@ -55,6 +55,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
             amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
             amendableWidget.setType(overlayStrategy.getType(element));
+            amendableWidget.setId(overlayStrategy.getID(element));
             Integer assignedNumber = LocatorUtil.getAssignedNumber(amendableWidget);
             amendableWidget.setAssignedNumber(assignedNumber != null ? assignedNumber : 1);
 
@@ -63,8 +64,6 @@ public class DefaultOverlayFactory implements OverlayFactory {
                 amendableWidget.setNumberingType(overlayStrategy.getNumberingType(element, amendableWidget.getAssignedNumber()));
                 amendableWidget.setContent(overlayStrategy.getContent(element));
             }
-
-//            System.out.println(spaces(depth) + "<"+ amendableWidget.getType() + ">");
 
             // attach all children (note, this is a recursive call)
             final Element[] children = overlayStrategy.getChildren(element);
@@ -76,7 +75,6 @@ public class DefaultOverlayFactory implements OverlayFactory {
                     }
                 }
             }
-//            System.out.println(spaces(depth) + "</"+ amendableWidget.getType() + ">");
 
             // post process the widget (eg. hide large tables)
             amendableWidget = postProcess(amendableWidget);

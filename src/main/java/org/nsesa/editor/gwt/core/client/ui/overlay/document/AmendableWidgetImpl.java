@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -62,6 +63,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     private Boolean amendable;
 
     private String type;
+
+    private String id;
+
+    private AmendableWidgetOrigin origin;
 
     /**
      * Flag to indicate that this widget is immutable. We use this flag to set a single element as non-amendable
@@ -251,6 +256,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     /**
      * Returns the type (its local name, meaning the element without any prefix) in lowercase.
+     *
      * @return
      */
     @Override
@@ -265,7 +271,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getId() {
-        return amendableElement.getId() != null ? amendableElement.getId().trim() : null;
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override
@@ -360,6 +371,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      * Returns an array of the node names that are allowed to be nested.
      * Note: this can include wildcards (*).
      * The default implementation throws an exception, since this method is supposed to be overridden.
+     *
      * @return the list of allowed child types in lower case. Should never return <tt>null</tt> (an empty array is ok though).
      */
     @Override
@@ -367,26 +379,32 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         throw new UnsupportedOperationException("Should have been overridden in the subclasses.");
     }
 
+    @Override
     public Format getFormat() {
         return format;
     }
 
+    @Override
     public void setFormat(final Format format) {
         this.format = format;
     }
 
+    @Override
     public NumberingType getNumberingType() {
         return numberingType;
     }
 
+    @Override
     public void setNumberingType(final NumberingType numberingType) {
         this.numberingType = numberingType;
     }
 
+    @Override
     public Integer getAssignedNumber() {
         return assignedNumber;
     }
 
+    @Override
     public void setAssignedNumber(final Integer assignedNumber) {
         this.assignedNumber = assignedNumber;
     }
@@ -394,5 +412,23 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public LinkedHashMap<String, String> getAttributes() {
         return new LinkedHashMap<String, String>();
+    }
+
+    @Override
+    public void setOrigin(AmendableWidgetOrigin origin) {
+        this.origin = origin;
+    }
+
+    @Override
+    public AmendableWidgetOrigin getOrigin() {
+        return origin;
+    }
+
+    /**
+     * Check if this amendable widget was created by an amendment. Will traverse upwards if the origin was not specified.
+     * @return <tt>true</tt> if this widget was introduced by an amendment.
+     */
+    public boolean isIntroducedByAnAmendment() {
+        return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget().isIntroducedByAnAmendment();
     }
 }

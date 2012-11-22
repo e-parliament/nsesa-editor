@@ -1,9 +1,11 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAwareController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
@@ -14,9 +16,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 @Scope(DIALOG)
-public class AuthorPanelController {
+public class AuthorPanelController implements AmendmentModifyAwareController {
 
     private final AuthorPanelView view;
     private final AuthorPanelViewCss authorPanelViewCss;
@@ -34,15 +35,26 @@ public class AuthorPanelController {
         registerListeners();
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
+    @Override
+    public boolean validate() {
+        return true;
+    }
+
+    @Override
+    public void setAmendmentAndAmendableWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
+        // set up the views
     }
 
     private void registerListeners() {
-
+        // nothing yet
     }
 
     public AuthorPanelView getView() {
         return view;
+    }
+
+    @Override
+    public String getTitle() {
+        return "Author";
     }
 }

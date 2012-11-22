@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -133,6 +134,8 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
 
     String getId();
 
+    void setId(String id);
+
     String getContent();
 
     void setContent(String amendableContent);
@@ -153,5 +156,11 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
 
     void setAssignedNumber(Integer assignedNumber);
 
-    public LinkedHashMap<String, String> getAttributes();
+    LinkedHashMap<String, String> getAttributes();
+
+    void setOrigin(AmendableWidgetOrigin origin);
+
+    AmendableWidgetOrigin getOrigin();
+
+    boolean isIntroducedByAnAmendment();
 }
