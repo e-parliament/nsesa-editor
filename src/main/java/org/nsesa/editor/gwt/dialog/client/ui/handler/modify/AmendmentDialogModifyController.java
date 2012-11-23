@@ -5,11 +5,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -29,23 +29,27 @@ import java.util.List;
  */
 public class AmendmentDialogModifyController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final AmendmentDialogModifyView view;
+    protected final AmendmentDialogModifyView view;
 
-    private final List<AmendmentModifyAwareController> childControllers;
+    protected final List<AmendmentModifyAwareController> childControllers;
 
-    private final Locator locator;
+    protected final OverlayFactory overlayFactory;
 
-    private AmendmentContainerDTO amendment;
+    protected final Locator locator;
 
-    private AmendableWidget amendableWidget;
+    protected AmendmentContainerDTO amendment;
+
+    protected AmendableWidget amendableWidget;
 
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
-                                           @Named("modify.controllers") final List<AmendmentModifyAwareController> childControllers) {
+                                           final OverlayFactory overlayFactory,
+                                           final List<AmendmentModifyAwareController> childControllers) {
         this.clientFactory = clientFactory;
+        this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
         this.childControllers = childControllers;

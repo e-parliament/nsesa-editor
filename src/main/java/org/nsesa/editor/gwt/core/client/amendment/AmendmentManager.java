@@ -11,6 +11,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInject
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -37,30 +38,40 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final ClientFactory clientFactory;
 
+    private final XMLTransformer xmlTransformer;
+
     private Injector injector;
 
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     @Inject
-    public AmendmentManager(final ClientFactory clientFactory, final ServiceFactory serviceFactory) {
+    public AmendmentManager(final ClientFactory clientFactory,
+                            final ServiceFactory serviceFactory,
+                            final XMLTransformer xmlTransformer) {
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
+        this.xmlTransformer = xmlTransformer;
         registerListeners();
     }
 
     private void registerListeners() {
         clientFactory.getEventBus().addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
             @Override
-            public void onEvent(AmendmentContainerSaveEvent event) {
+            public void onEvent(final AmendmentContainerSaveEvent event) {
+
+                // serialize amendable widget into XML content
+                for (final AmendmentContainerDTO amendment : event.getAmendments()) {
+                    amendment.setXmlContent(xmlTransformer.toXML(amendment.getRoot()));
+                }
                 serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(event.getAmendments())), new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
-                    public void onFailure(Throwable caught) {
+                    public void onFailure(final Throwable caught) {
                         clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
                     }
 
                     @Override
                     public void onSuccess(AmendmentContainerDTO[] result) {
-                        for (AmendmentContainerDTO amendmentContainerDTO : result) {
+                        for (final AmendmentContainerDTO amendmentContainerDTO : result) {
                             final AmendmentController amendmentController = injector.getAmendmentController();
                             amendmentController.setAmendment(amendmentContainerDTO);
                             amendmentControllers.add(amendmentController);
@@ -111,7 +122,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
     }
 
     private AmendmentController getAmendmentController(final AmendmentContainerDTO amendment) {
-        for (AmendmentController amendmentController : amendmentControllers) {
+        for (final AmendmentController amendmentController : amendmentControllers) {
             if (amendmentController.getAmendment().equals(amendment)) {
                 return amendmentController;
             }
@@ -120,7 +131,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
     }
 
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendment) {
-        AmendmentController amendmentController = injector.getAmendmentController();
+        final AmendmentController amendmentController = injector.getAmendmentController();
         amendmentController.setAmendment(amendment);
         return amendmentController;
     }
@@ -136,7 +147,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
         return amendmentControllers;
     }
 
-    public void setInjector(Injector injector) {
+    public void setInjector(final Injector injector) {
         this.injector = injector;
     }
 }

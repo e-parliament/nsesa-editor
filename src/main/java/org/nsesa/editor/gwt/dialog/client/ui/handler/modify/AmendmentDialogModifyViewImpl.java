@@ -69,6 +69,11 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public String getAmendmentContent() {
+        return amendmentText.getHTML();
+    }
+
+    @Override
     public void addView(IsWidget view, String title) {
         tabLayoutPanel.add(view, title);
     }

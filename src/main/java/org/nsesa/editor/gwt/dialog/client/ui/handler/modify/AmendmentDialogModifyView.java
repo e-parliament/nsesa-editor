@@ -18,6 +18,8 @@ public interface AmendmentDialogModifyView extends IsWidget {
 
     void setAmendmentContent(String amendmentContent);
 
+    String getAmendmentContent();
+
     void addView(IsWidget view, String title);
 
     HasClickHandlers getSaveButton();
