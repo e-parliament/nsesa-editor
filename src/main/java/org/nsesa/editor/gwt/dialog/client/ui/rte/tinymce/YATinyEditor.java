@@ -234,6 +234,8 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             theme_advanced_buttons1:mceButtons,
             theme_advanced_buttons2:"",
             theme_advanced_buttons3:"",
+            // disable the automatic <p> tag that gets injected every time
+            forced_root_block:"",
             theme_advanced_toolbar_location:"bottom",
             theme_advanced_statusbar_location:"none",
             //theme_advanced_buttons2_add : "tablecontrols",
