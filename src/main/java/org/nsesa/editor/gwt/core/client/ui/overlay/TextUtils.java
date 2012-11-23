@@ -120,7 +120,7 @@ public class TextUtils {
         if (str == null) return null;
         StringBuilder sb = new StringBuilder(str.length()*2);
         for (int i = 0; i < str.length(); i++) {
-            Character ch = new Character(str.charAt(0));
+            Character ch = new Character(str.charAt(i));
             String escape = XML_ESCAPER.get(ch);
             sb.append(escape == null ? ch.charValue() : escape);
         }
