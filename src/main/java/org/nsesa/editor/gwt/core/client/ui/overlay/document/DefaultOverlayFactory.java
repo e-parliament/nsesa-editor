@@ -59,11 +59,9 @@ public class DefaultOverlayFactory implements OverlayFactory {
             Integer assignedNumber = LocatorUtil.getAssignedNumber(amendableWidget);
             amendableWidget.setAssignedNumber(assignedNumber != null ? assignedNumber : 1);
 
-            if (amendableWidget.isAmendable()) {
-                amendableWidget.setFormat(overlayStrategy.getFormat(element));
-                amendableWidget.setNumberingType(overlayStrategy.getNumberingType(element, amendableWidget.getAssignedNumber()));
-                amendableWidget.setContent(overlayStrategy.getContent(element));
-            }
+            amendableWidget.setFormat(overlayStrategy.getFormat(element));
+            amendableWidget.setNumberingType(overlayStrategy.getNumberingType(element, amendableWidget.getAssignedNumber()));
+            amendableWidget.setContent(overlayStrategy.getContent(element));
 
             // attach all children (note, this is a recursive call)
             final Element[] children = overlayStrategy.getChildren(element);
