@@ -1,9 +1,5 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.xml.client.Node;
-import com.google.gwt.xml.client.XMLParser;
-import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 
 import java.util.LinkedHashMap;
@@ -26,7 +22,7 @@ public class DefaultXMLTransformer implements XMLTransformer {
         if(attrs.size() > 0) {
             for(Map.Entry<String, String> entry : attrs.entrySet()) {
                 if (entry.getValue() != null && entry.getValue().length() > 0) {
-                    sb.append(" ").append(entry.getKey()).append("=").append("\"").append(TextUtils.escapeXML(entry.getValue())).append("\"");
+                    sb.append(" ").append(entry.getKey()).append("=").append("\"").append(entry.getValue()).append("\"");
                 }
             }
         }
@@ -37,7 +33,7 @@ public class DefaultXMLTransformer implements XMLTransformer {
         }
         String content = widget.getContent();
         if (content != null && content.length() > 0) {
-            sb.append(TextUtils.escapeXML(content));
+            sb.append(content);
         }
         sb.append("</").append(widget.getType()).append(">");
         return sb.toString();
