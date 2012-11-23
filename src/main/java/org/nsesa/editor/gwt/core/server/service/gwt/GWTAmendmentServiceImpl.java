@@ -20,10 +20,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 /**
  * Date: 24/06/12 19:57
@@ -77,8 +75,13 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
 
     private String getAmendmentDocument(String id) throws IOException {
 
+        byte[] bytes = Files.toByteArray(documents.get(id).getFile());
+        return toHTML(bytes);
+
+    }
+
+    private String toHTML(byte[] bytes) {
         try {
-            byte[] bytes = Files.toByteArray(documents.get(id).getFile());
             final InputSource inputSource = new InputSource(new ByteArrayInputStream(bytes));
             final NodeModel model = NodeModel.parse(inputSource);
             final Configuration configuration = new Configuration();
@@ -99,7 +102,6 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
         } catch (TemplateException e) {
             throw new RuntimeException("Could not load template.", e);
         }
-
     }
 
     @Override
@@ -109,7 +111,21 @@ public class GWTAmendmentServiceImpl extends SpringRemoteServiceServlet implemen
 
     @Override
     public AmendmentContainerDTO[] saveAmendmentContainers(final ClientContext clientContext, final ArrayList<AmendmentContainerDTO> amendmentContainers) throws UnsupportedOperationException, StaleResourceException {
-        return amendmentContainers.toArray(new AmendmentContainerDTO[amendmentContainers.size()]);
+        List<AmendmentContainerDTO> amendmentContainerDTOs = new ArrayList<AmendmentContainerDTO>();
+        for (AmendmentContainerDTO data : amendmentContainers) {
+            /*try {
+                Files.write(data.getXmlContent(), new File(new File("R:/"), "amendment.xml"), Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                LOG.error("Could not write file.", e);
+            }*/
+            try {
+                data.setXmlContent(toHTML(data.getXmlContent().getBytes("UTF-8")));
+            } catch (UnsupportedEncodingException e) {
+                LOG.error("Could not get encoding.", e);
+            }
+            amendmentContainerDTOs.add(data);
+        }
+        return amendmentContainerDTOs.toArray(new AmendmentContainerDTO[amendmentContainerDTOs.size()]);
     }
 
     @Override
