@@ -37,4 +37,9 @@ public class ContentControllerViewImpl extends Composite implements ContentContr
     public void setOriginalText(String content) {
         originalText.setHTML(content);
     }
+
+    @Override
+    public String getOriginalText() {
+        return originalText.getHTML();
+    }
 }

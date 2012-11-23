@@ -14,4 +14,6 @@ import com.google.inject.ImplementedBy;
 public interface ContentControllerView extends IsWidget {
 
     void setOriginalText(String content);
+
+    String getOriginalText();
 }
