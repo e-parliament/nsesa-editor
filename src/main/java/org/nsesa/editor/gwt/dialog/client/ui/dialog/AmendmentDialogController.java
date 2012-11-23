@@ -11,6 +11,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEv
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
@@ -103,7 +104,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = event.getAmendmentAction();
-                amendment = new AmendmentContainerDTO();
+                amendment = createAmendment();
+
                 handle();
                 show();
             }
@@ -124,6 +126,12 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 hide();
             }
         });
+    }
+
+    protected AmendmentContainerDTO createAmendment() {
+        AmendmentContainerDTO dto = new AmendmentContainerDTO();
+        dto.setId(UUID.uuid());
+        return dto;
     }
 
     protected AmendmentUIHandler getUIHandler() {

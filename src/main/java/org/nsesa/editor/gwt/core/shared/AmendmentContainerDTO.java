@@ -14,6 +14,10 @@ import java.util.ArrayList;
  */
 public class AmendmentContainerDTO implements IsSerializable {
 
+    private String id;
+
+    private String languageISO;
+
     private AmendmentAction amendmentAction;
     private String amendmentContainerID;
     private String amendmentContainerStatus;
@@ -82,5 +86,21 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setRoot(AmendableWidget root) {
         this.root = root;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLanguageISO() {
+        return languageISO;
+    }
+
+    public void setLanguageISO(String languageISO) {
+        this.languageISO = languageISO;
     }
 }
