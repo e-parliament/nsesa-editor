@@ -10,6 +10,8 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  */
 public interface AmendableWidgetWalker {
 
+    void walk(AmendableVisitor visitor);
+
     void walk(AmendableWidget root, AmendableVisitor visitor);
 
     public static interface AmendableVisitor {

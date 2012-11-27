@@ -18,6 +18,10 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
+import org.nsesa.editor.gwt.core.client.mode.DiffMode;
+import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
+import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
+import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
@@ -35,7 +39,9 @@ import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderContr
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +87,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private List<AmendableWidget> amendableWidgets;
 
+    private final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
+
     @Inject
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
@@ -115,15 +123,22 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.actionBarController.setDocumentController(this);
 
         registerListeners();
+        registerModes();
     }
 
-    private void registerListeners() {
+    protected void registerModes() {
+        registerMode(DiffMode.KEY, new DiffMode(this));
+        registerMode(DisplayMode.KEY, new DisplayMode(this));
+    }
+
+    protected void registerListeners() {
         contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
                 clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
             }
         });
+
 
         clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
@@ -175,6 +190,15 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 loadDocumentContent();
             }
         });
+    }
+
+    public void registerMode(final String key, final DocumentMode<? extends DocumentState> mode) {
+        if (documentModes.containsKey(key)) {
+            LOG.warning("A mode with key '" + key + "' has already been registered. Overriding.");
+        } else {
+            LOG.info("Installing '" + key + "' mode.");
+        }
+        documentModes.put(key, mode);
     }
 
     public void loadDocument() {
@@ -279,6 +303,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             });
         }
         return root;
+    }
+
+    @Override
+    public void walk(AmendableVisitor visitor) {
+        for (final AmendableWidget root : amendableWidgets) {
+            walk(root, visitor);
+        }
     }
 
     @Override
