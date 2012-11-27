@@ -337,6 +337,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
+    public boolean isAmended() {
+        return !amendmentControllers.isEmpty();
+    }
+
+    @Override
     public void setAmendable(Boolean amendable) {
         this.amendable = amendable;
     }
@@ -426,9 +431,20 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     /**
      * Check if this amendable widget was created by an amendment. Will traverse upwards if the origin was not specified.
+     *
      * @return <tt>true</tt> if this widget was introduced by an amendment.
      */
     public boolean isIntroducedByAnAmendment() {
         return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget().isIntroducedByAnAmendment();
+    }
+
+    @Override
+    public Element getAmendableElement() {
+        return amendableElement;
+    }
+
+    @Override
+    public AmendmentController[] getAmendmentControllers() {
+        return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
     }
 }

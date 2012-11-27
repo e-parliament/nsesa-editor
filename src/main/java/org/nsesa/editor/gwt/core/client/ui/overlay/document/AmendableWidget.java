@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -25,6 +26,13 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
      * @return true if it is amendable, or null if it is not defined.
      */
     Boolean isAmendable();
+
+    /**
+     * Check if this widget has any amendments.
+     *
+     * @return true if the widget has any amendments on it.
+     */
+    boolean isAmended();
 
     /**
      * Sets the flag whether or not this amendment is considered amendable (that is,
@@ -126,41 +134,151 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
 
     /**
      * Returns the type of the amendable widget (defaults to the local node name - so without prefix, if any).
-     * @return  the type
+     *
+     * @return the type
      */
     String getType();
 
+    /**
+     * Set the type of this amendable widget. You are normally not supposed to call this method directly (it will be
+     * set by the {@link OverlayFactory}.
+     *
+     * @param type the type of this amendable widget (eg. chapter, speech, b, ...)
+     */
     void setType(String type);
 
+    /**
+     * Get the id of this amendable widget, if any.
+     *
+     * @return the id of this widget.
+     */
     String getId();
 
+    /**
+     * Set the id of this amendable widget. Must be unique (we won't check for this, so it is your responsibility).
+     *
+     * @param id the id of this widget.
+     */
     void setId(String id);
 
+    /**
+     * Get the child content (text + other elements) for this amendable widget.
+     *
+     * @return the child nodes serialized as a <tt>String</tt>.
+     */
     String getContent();
 
+    /**
+     * Set the text content of this amendable widget. While this technically could contain tags, you are advised
+     * to properly escape any content you wish to set.
+     *
+     * @param amendableContent the text content for this node.
+     */
     void setContent(String amendableContent);
 
+    /**
+     * Get the HTMLPanel to attach the amendments on. If it does not yet exist, it will be created and attached
+     * to the document.
+     *
+     * @return the HTML panel with the amendments, if any.
+     */
     HTMLPanel getAmendmentHolderElement();
 
+    /**
+     * Get a array of the element node names that are allowed under this amendable widget (note, this also includes the
+     * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
+     *
+     * @return the allowed child nodes
+     */
     String[] getAllowedChildTypes();
 
+    /**
+     * Get the numbering type of this amendable widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},
+     * then it will be guessed.
+     *
+     * @return the numbering type, if any.
+     */
     NumberingType getNumberingType();
 
+    /**
+     * Set the numbering type on this amendable widget (eg. '1', 'A', '-', ...). Typically used in conjunction with
+     * {@link #getFormat()} to format the literal index.
+     *
+     * @param numberingType the numbering type to use
+     */
     void setNumberingType(NumberingType numberingType);
 
+    /**
+     * Get the format for this amendable widget. If it was not set using {@link #setFormat(org.nsesa.editor.gwt.core.client.ui.overlay.Format)},
+     * then the format will be guessed.
+     *
+     * @return the format for this literal index, if any.
+     */
     Format getFormat();
 
+    /**
+     * Set the format on this amendable widget (eg. ')', '()', '.', ...). The format is typically used in conjunction with the {@link #getNumberingType()}
+     * to create the literal index.
+     *
+     * @param format the formatter to use for the literal index.
+     */
     void setFormat(Format format);
 
+    /**
+     * Get the assigned number, or <tt>null</tt> if no number was assigned. Note that this is 1-based.
+     *
+     * @return the assigned number.
+     */
     Integer getAssignedNumber();
 
+    /**
+     * Set the assigned number (1-based). This assigned number is then used for location determination in case no
+     * num element is provided.
+     *
+     * @param assignedNumber the assigned number
+     */
     void setAssignedNumber(Integer assignedNumber);
 
+    /**
+     * Get a map of all the attributes, where the key is the attribute name, and the value is the attribute's value.
+     *
+     * @return the map of attributes, should never return <tt>null</tt>
+     */
     LinkedHashMap<String, String> getAttributes();
 
+    /**
+     * Set the origin of this widget.
+     *
+     * @param origin the origin of this widget.
+     */
     void setOrigin(AmendableWidgetOrigin origin);
 
+    /**
+     * Returns the origin of this amendable widget, be it part of the document, or introduced by an amendment.
+     *
+     * @return the origin, cannot be <tt>null</tt>
+     */
     AmendableWidgetOrigin getOrigin();
 
+    /**
+     * Check if this amendable widget is introduced by an amendment (meaning, its {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl#getOrigin()}
+     * is equal to {@link AmendableWidgetOrigin#AMENDMENT}
+     *
+     * @return <tt>true</tt> if it was introduced by an amendment
+     */
     boolean isIntroducedByAnAmendment();
+
+    /**
+     * Get the underlying element. Should never be <tt>null</tt>.
+     *
+     * @return the element.
+     */
+    Element getAmendableElement();
+
+    /**
+     * Returns all amendment controllers on this amendable widget.
+     *
+     * @return the amendment controllers.
+     */
+    AmendmentController[] getAmendmentControllers();
 }
