@@ -447,4 +447,15 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public AmendmentController[] getAmendmentControllers() {
         return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
     }
+
+    //DSL Way
+    public String text() {
+        return getContent();
+    }
+
+    public AmendableWidgetImpl text(String s) {
+        setContent(s);
+        return this;
+    }
+
 }
