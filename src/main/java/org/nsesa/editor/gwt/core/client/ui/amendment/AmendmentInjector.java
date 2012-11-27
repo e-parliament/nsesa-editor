@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
+import com.google.inject.Provider;
 
 /**
  * Date: 19/10/12 10:31
@@ -13,6 +14,7 @@ import com.google.gwt.inject.client.Ginjector;
 public interface AmendmentInjector extends Ginjector {
 
     AmendmentView getAmendmentView();
+    AmendmentView getAmendmentExtendedView();
 
     AmendmentEventBus getAmendmentEventBus();
 }

@@ -31,4 +31,5 @@ public interface DocumentInjector extends Ginjector {
     MarkerController getMarkerController();
 
     DocumentHeaderController getDocumentHeaderController();
+
 }

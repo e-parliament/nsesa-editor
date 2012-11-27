@@ -1,7 +1,9 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
+import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -9,8 +11,9 @@ import com.google.gwt.inject.client.binder.GinBinder;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentsPanelModule implements GinModule {
+public class AmendmentsPanelModule extends AbstractGinModule {
     @Override
-    public void configure(GinBinder binder) {
+    protected void configure() {
+        install(new AmendmentsHeaderModule());
     }
 }

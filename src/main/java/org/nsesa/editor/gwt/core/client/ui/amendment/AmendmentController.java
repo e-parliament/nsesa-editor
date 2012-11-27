@@ -23,6 +23,8 @@ public class AmendmentController {
     private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);
 
     private final AmendmentView view;
+    private final AmendmentView extendedView;
+
     private final ClientFactory clientFactory;
     private OverlayFactory overlayFactory;
     private final AmendmentEventBus amendmentEventBus;
@@ -44,6 +46,7 @@ public class AmendmentController {
         this.overlayFactory = overlayFactory;
 
         this.view = amendmentInjector.getAmendmentView();
+        this.extendedView = amendmentInjector.getAmendmentExtendedView();
         this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
         registerListeners();
     }
@@ -64,6 +67,7 @@ public class AmendmentController {
 
     private void setBody(String xmlContent) {
         view.setBody(xmlContent);
+        extendedView.setBody(xmlContent);
     }
 
     public DocumentController getDocumentController() {
@@ -78,8 +82,13 @@ public class AmendmentController {
         return view;
     }
 
+    public AmendmentView getExtendedView() {
+        return extendedView;
+    }
+
     public void setTitle(String title) {
         this.view.setTitle(title);
+        this.extendedView.setTitle(title);
     }
 
     public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {

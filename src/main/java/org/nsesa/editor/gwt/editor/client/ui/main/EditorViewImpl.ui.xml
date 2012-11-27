@@ -34,6 +34,14 @@
             width: 100%;
             height: 100%;
         }
+
+        .amendmentsPanel {
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+        }
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
@@ -48,7 +56,7 @@
                 </g:tab>
                 <g:tab>
                     <g:header>Amendments</g:header>
-                    <amendments:AmendmentsPanelView ui:field="amendmentsPanelView"/>
+                    <amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
                 <g:tab>
                     <g:header>Info</g:header>
