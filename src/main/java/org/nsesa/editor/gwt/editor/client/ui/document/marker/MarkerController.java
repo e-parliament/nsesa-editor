@@ -20,6 +20,8 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestE
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
+import java.util.logging.Logger;
+
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
@@ -32,6 +34,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 public class MarkerController {
 
+    private static final Logger LOG = Logger.getLogger("MarkerController");
+
     private final MarkerView view;
 
     private DocumentController documentController;
@@ -43,15 +47,14 @@ public class MarkerController {
             if (documentController != null) {
                 view.clearMarkers();
                 final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
-                final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-//                Log.info("Document height is: " + documentHeight);
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
                     if (amendmentController.getDocumentController() == documentController) {
                         if (amendmentController.getView().asWidget().isAttached()) {
+                            final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
+                            LOG.info("Document height is: " + documentHeight);
                             final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-//                        Log.info("Amendment top is: " + amendmentTop);
-                            double division = (double) documentHeight / (double) amendmentTop;
-
+                            final double division = (double) documentHeight / (double) amendmentTop;
+                            LOG.info("Amendment is: " + amendmentTop + ", and division is at " + division);
                             final FocusWidget focusWidget = view.addMarker(division);
                             focusWidget.addClickHandler(new ClickHandler() {
                                 @Override
