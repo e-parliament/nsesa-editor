@@ -2,37 +2,36 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="HeaderViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.header.HeaderViewCss'/>
     <ui:style field="res">
-        .logo {
-            position: relative;
-            left: 10px;
-            top: 0px;
-            font-size: 30px;
-            font-weight: bold;
-            font-family: serif;
-        }
-
-        .logo .part1 {
-            color: #000;
-            position: relative;
-            left: 8px;
-        }
-
-        .logo .part2 {
-            color: #aaa;
-        }
-
-        .logo .part3 {
-            color: #000;
-            position: relative;
-            left: -5px;
-        }
 
     </ui:style>
     <g:HTMLPanel>
-        <g:HTML styleName="{res.logo}">
-            <span class="{res.part1}">AT</span>
-            <span class="{res.part2}">4</span>
-            <span class="{res.part3}">AM</span>
-        </g:HTML>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="#">
+                        AT4AM
+                    </a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="#">Home</a>
+                            </li>
+                            <li>
+                                <a href="#about">About</a>
+                            </li>
+                            <li>
+                                <a href="#contact">Contact</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
     </g:HTMLPanel>
 </ui:UiBinder>

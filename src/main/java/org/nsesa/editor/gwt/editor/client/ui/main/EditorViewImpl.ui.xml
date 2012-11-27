@@ -7,9 +7,6 @@
 
     <ui:style field="res">
         .header {
-            height: 100%;
-            width: 100%;
-            background-color: #ddd;
             z-index: 2;
         }
 
@@ -31,7 +28,7 @@
     </ui:style>
 
     <g:DockLayoutPanel unit="PX">
-        <g:north size='30'>
+        <g:north size='40'>
             <header:HeaderView ui:field="headerView" styleName="{res.header}"/>
         </g:north>
         <g:center>
