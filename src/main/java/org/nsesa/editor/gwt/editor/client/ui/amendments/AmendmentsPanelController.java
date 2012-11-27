@@ -14,6 +14,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ public class AmendmentsPanelController {
     private final ClientFactory clientFactory;
     private final AmendmentsPanelView view;
     private final AmendmentManager amendmentManager;
+
+    private DocumentController documentController;
 
     @Inject
     public AmendmentsPanelController(ClientFactory clientFactory, AmendmentsPanelView view, AmendmentManager amendmentManager) {
@@ -79,5 +82,9 @@ public class AmendmentsPanelController {
             amendmentViews.add(amendmentController.getExtendedView());
         }
         view.refreshAmendments(amendmentViews);
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

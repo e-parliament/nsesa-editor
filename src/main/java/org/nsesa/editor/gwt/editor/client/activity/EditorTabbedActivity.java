@@ -28,14 +28,14 @@ public class EditorTabbedActivity extends AbstractActivity {
     public void init(EditorTabbedPlace editorTabbedPlace) {
         try {
             tabIndex = Integer.valueOf(editorTabbedPlace.getPlaceName());
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             //do nothing
         }
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        editorController.getView().switchToTab(tabIndex);
+        //editorController.getView().switchToTab(tabIndex);
         panel.setWidget(editorController.getView());
     }
 

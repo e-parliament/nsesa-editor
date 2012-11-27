@@ -14,5 +14,9 @@ public interface DocumentView extends IsWidget {
 
     void setWidth(String width);
 
+    void setDocumentHeight(int height);
+
     void setStyleName(String style);
+
+    void switchToTab(int index);
 }

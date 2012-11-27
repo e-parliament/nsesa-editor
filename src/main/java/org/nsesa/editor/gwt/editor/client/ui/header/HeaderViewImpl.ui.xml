@@ -1,7 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="HeaderViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.header.HeaderViewCss'/>
-    <ui:with field='imageResources' type='org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources'/>
     <ui:style field="res">
         .logo {
             position: relative;
@@ -28,18 +27,6 @@
             left: -5px;
         }
 
-        .tabHeaders {
-            position: absolute;
-            right: 10px;
-            top: 3px;
-            padding: 0;
-            margin: 0;
-        }
-
-        .tabHeader {
-            margin: 0;
-            padding: 0;
-        }
     </ui:style>
     <g:HTMLPanel>
         <g:HTML styleName="{res.logo}">
@@ -47,11 +34,5 @@
             <span class="{res.part2}">4</span>
             <span class="{res.part3}">AM</span>
         </g:HTML>
-
-        <g:FlowPanel styleName="{res.tabHeaders}">
-            <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}" ui:field="viewDocument"/>
-            <g:Image resource='{imageResources.viewAmendments}' styleName="{res.tabHeader}" ui:field="viewAmendments"/>
-            <g:Image resource='{imageResources.viewInfo}' styleName="{res.tabHeader}" ui:field="viewInfo"/>
-        </g:FlowPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

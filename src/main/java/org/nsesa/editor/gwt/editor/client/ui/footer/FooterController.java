@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.footer;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -17,6 +18,7 @@ public class FooterController {
 
     private final FooterView view;
 
+    @Inject
     public FooterController(FooterView view) {
         this.view = view;
     }

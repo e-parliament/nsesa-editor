@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.editor.client.ui.info;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -15,7 +16,9 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Singleton
 @Scope(EDITOR)
 public class InfoPanelController {
+
     private final InfoPanelView view;
+    private DocumentController documentController;
 
     @Inject
     public InfoPanelController(InfoPanelView view) {
@@ -24,5 +27,9 @@ public class InfoPanelController {
 
     public InfoPanelView getView() {
         return view;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

@@ -34,9 +34,11 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
+import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelController;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -84,6 +86,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final DocumentEventBus documentEventBus;
     @Scope(DOCUMENT)
     private final ActionBarController actionBarController;
+    @Scope(DOCUMENT)
+    private final AmendmentsPanelController amendmentsPanelController;
+    @Scope(DOCUMENT)
+    private final InfoPanelController infoPanelController;
 
     private List<AmendableWidget> amendableWidgets;
 
@@ -109,6 +115,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         // document scoped singletons
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
+        this.amendmentsPanelController = injector.getAmendmentsPanelController();
+        this.infoPanelController = injector.getInfoPanelController();
         this.markerController = injector.getMarkerController();
         this.contentController = injector.getContentController();
         this.documentHeaderController = injector.getDocumentHeaderController();
@@ -116,6 +124,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.actionBarController = injector.getActionBarController();
 
         // set references in the child controllers
+        this.amendmentsPanelController.setDocumentController(this);
+        this.infoPanelController.setDocumentController(this);
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
@@ -154,6 +164,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
+                view.setDocumentHeight(event.getHeight());
             }
         });
 

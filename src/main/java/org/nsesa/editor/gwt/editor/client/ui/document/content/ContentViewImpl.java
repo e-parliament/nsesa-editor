@@ -38,7 +38,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     /**
      * This correction value is supposed to be the height of the header and footer (plus any margin that might come into play)
      */
-    private static final int SCROLLBAR_OFFSET = 73;
+    private static final int SCROLLBAR_OFFSET = 100;
 
     private DocumentEventBus documentEventBus;
 

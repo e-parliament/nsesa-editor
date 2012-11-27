@@ -6,11 +6,10 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelView;
+import org.nsesa.editor.gwt.editor.client.ui.footer.FooterController;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterView;
+import org.nsesa.editor.gwt.editor.client.ui.header.HeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
-import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelView;
 
 /**
  * Date: 24/06/12 16:39
@@ -18,7 +17,7 @@ import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelView;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class EditorViewImpl extends Composite implements EditorView {
+public class EditorViewImpl extends Composite implements EditorView, ProvidesResize {
 
     interface MyUiBinder extends UiBinder<Widget, EditorViewImpl> {
     }
@@ -33,23 +32,14 @@ public class EditorViewImpl extends Composite implements EditorView {
     HeaderView headerView;
     @UiField(provided = true)
     FooterView footerView;
-    @UiField
-    TabLayoutPanel tabPanel;
-    @UiField(provided = true)
-    AmendmentsPanelView amendmentsPanelView;
-    @UiField(provided = true)
-    InfoPanelView infoPanelView;
 
     @Inject
-    public EditorViewImpl(final ClientFactory clientFactory, final HeaderView headerView,
-                          final FooterView footerView,
-                          final AmendmentsPanelController amendmentsPanelController,
-                          final InfoPanelView infoPanelView) {
+    public EditorViewImpl(final ClientFactory clientFactory, final HeaderController headerController,
+                          final FooterController footerController
+    ) {
         this.clientFactory = clientFactory;
-        this.headerView = headerView;
-        this.footerView = footerView;
-        this.amendmentsPanelView = amendmentsPanelController.getView();
-        this.infoPanelView = infoPanelView;
+        this.headerView = headerController.getView();
+        this.footerView = footerController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
@@ -57,9 +47,5 @@ public class EditorViewImpl extends Composite implements EditorView {
     @Override
     public CellPanel getDocumentsPanel() {
         return documentsPanel;
-    }
-
-    public void switchToTab(int index) {
-        tabPanel.selectTab(index);
     }
 }

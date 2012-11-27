@@ -2,8 +2,6 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.header'
              xmlns:footer='urn:import:org.nsesa.editor.gwt.editor.client.ui.footer'
-             xmlns:amendments='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments'
-             xmlns:info='urn:import:org.nsesa.editor.gwt.editor.client.ui.info'
         >
     <ui:style src="EditorViewImpl.css" field="css" type='org.nsesa.editor.gwt.editor.client.ui.main.EditorViewCss'/>
 
@@ -20,25 +18,13 @@
             bottom: 0;
             right: -10px;
             background-color: #ddd;
-            color: #fff;
+            color: #000;
             font-size: smaller;
-        }
-
-        .tabPanel {
-
         }
 
         .documentsPanel {
             padding: 0px;
             margin: 0px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .amendmentsPanel {
-            left: 0;
-            right: 0;
-            margin: 0 auto;
             width: 100%;
             height: 100%;
         }
@@ -49,20 +35,7 @@
             <header:HeaderView ui:field="headerView" styleName="{res.header}"/>
         </g:north>
         <g:center>
-            <g:TabLayoutPanel ui:field="tabPanel" barHeight="0" styleName="{res.tabPanel}">
-                <g:tab>
-                    <g:header>Documents</g:header>
-                    <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
-                </g:tab>
-                <g:tab>
-                    <g:header>Amendments</g:header>
-                    <amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>
-                </g:tab>
-                <g:tab>
-                    <g:header>Info</g:header>
-                    <info:InfoPanelView ui:field="infoPanelView"/>
-                </g:tab>
-            </g:TabLayoutPanel>
+            <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
         </g:center>
         <g:south size="15">
             <footer:FooterView ui:field="footerView" styleName="{res.footer}"/>
