@@ -3,7 +3,7 @@
         "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to="Core">
     <inherits name="com.google.gwt.user.User"/>
-    <inherits name="com.google.gwt.user.theme.standard.Standard"/>
+    <inherits name="com.google.gwt.user.theme.clean.Clean"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.place.Place"/>

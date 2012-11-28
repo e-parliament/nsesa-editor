@@ -5,33 +5,13 @@
 
     </ui:style>
     <g:HTMLPanel>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </a>
-                    <a class="brand" href="#">
-                        AT4AM
-                    </a>
-                    <div class="nav-collapse collapse">
-                        <ul class="nav">
-                            <li class="active">
-                                <a href="#">Home</a>
-                            </li>
-                            <li>
-                                <a href="#about">About</a>
-                            </li>
-                            <li>
-                                <a href="#contact">Contact</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--/.nav-collapse -->
-                </div>
-            </div>
+        <div class="navbar">
+            <span class="logo">AT4AM</span>
+            <span class="nav">
+                <span class="button">Home</span>
+                <span class="button">About</span>
+                <span class="button">Help</span>
+            </span>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

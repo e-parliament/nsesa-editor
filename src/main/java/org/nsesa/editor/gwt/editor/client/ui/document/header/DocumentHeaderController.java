@@ -78,10 +78,6 @@ public class DocumentHeaderController {
         return view;
     }
 
-    public void setDocumentName(final String documentName) {
-        view.setDocumentName(documentName);
-    }
-
     public void setAvailableTranslations(final ArrayList<DocumentDTO> translations) {
         this.availableTranslations = translations;
         view.setAvailableTranslations(translations);

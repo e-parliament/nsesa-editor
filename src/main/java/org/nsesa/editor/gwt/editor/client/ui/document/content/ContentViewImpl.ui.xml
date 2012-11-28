@@ -4,26 +4,33 @@
               type='org.nsesa.editor.gwt.editor.client.ui.document.content.ContentViewCss'/>
     <ui:style field="res">
         .scrollPanel {
-            width: 100%;
+        }
+
+        .documentPanelOuter {
+            margin: 30px;
         }
 
         .documentPanel {
-            margin: 20px;
-            padding: 8%;
             border: 1px solid black;
-
+            padding: 8%;
+            max-width: 960px;
             -moz-box-shadow: 10px 10px 5px #888;
             -webkit-box-shadow: 10px 10px 5px #888;
             box-shadow: 10px 10px 5px #888;
+            left: 0;
+            right: 0;
+            margin: auto;
         }
 
         .contentPanel {
-            width: 100%;
+
         }
     </ui:style>
     <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
-        <g:HTMLPanel styleName="{res.documentPanel}">
-            <g:HTML ui:field="contentPanel" styleName="{res.contentPanel}"/>
+        <g:HTMLPanel styleName="{res.documentPanelOuter}">
+            <g:HTMLPanel styleName="{res.documentPanel}">
+                <g:HTML ui:field="contentPanel" styleName="{res.contentPanel}"/>
+            </g:HTMLPanel>
         </g:HTMLPanel>
     </g:ScrollPanel>
 </ui:UiBinder>

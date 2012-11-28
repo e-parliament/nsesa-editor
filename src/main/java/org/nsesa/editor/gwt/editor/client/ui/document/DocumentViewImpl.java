@@ -50,6 +50,8 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     @UiField
     HorizontalPanel horizontalPanel;
 
+    @UiField
+    HTMLPanel contentHolder;
     @UiField(provided = true)
     final ContentView contentView;
     @UiField(provided = true)
@@ -61,6 +63,9 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     @UiField
     DockLayoutPanel mainPanel;
+
+    @UiField
+    HTML documentTitle;
 
     @UiField
     TabLayoutPanel tabPanel;
@@ -82,7 +87,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
                             final ClientFactory clientFactory,
                             final AmendmentsPanelController amendmentsPanelController,
                             final InfoPanelController infoPanelController,
-                            final ContentController contentView,
+                            final ContentController contentController,
                             final MarkerController markerController,
                             final DocumentHeaderController documentHeaderController,
                             final DeadlineController deadlineController) {
@@ -91,7 +96,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
         this.clientFactory = clientFactory;
         this.amendmentsPanelView = amendmentsPanelController.getView();
         this.infoPanelView = infoPanelController.getView();
-        this.contentView = contentView.getView();
+        this.contentView = contentController.getView();
         this.markerView = markerController.getView();
         this.documentHeaderView = documentHeaderController.getView();
         this.deadlineView = deadlineController.getView();
@@ -101,13 +106,18 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
         // force 100% width - no way to do it via UI-Binder
         // note that this does not impact the actual document width, only the content
-        horizontalPanel.setCellWidth(contentView.getView().asWidget(), "100%");
+        //horizontalPanel.setCellWidth(contentHolder, "90%");
+        horizontalPanel.setCellWidth(markerView, "18px");
 
         switchToTab(0);
     }
 
     public void setDocumentHeight(final int height) {
         mainPanel.setHeight(height + "px");
+    }
+
+    public void setDocumentTitle(String titleHTML) {
+        documentTitle.setHTML(titleHTML);
     }
 
     @UiHandler("viewDocument")

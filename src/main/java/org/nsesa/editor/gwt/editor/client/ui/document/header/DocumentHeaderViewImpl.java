@@ -49,11 +49,6 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     }
 
     @Override
-    public void setDocumentName(String documentName) {
-        this.documentName.setText(documentName);
-    }
-
-    @Override
     public void setAvailableTranslations(final List<DocumentDTO> translations) {
         this.documentTranslations.clear();
         for (final DocumentDTO translation : translations) {

@@ -13,20 +13,25 @@
     <ui:style field="res">
 
         .mainPanel {
-
+            width: 100%;
         }
 
         .document {
-            width: 100%;
+            /* Note: parent td width is set in the document view!*/
             position: relative;
             top: -20px;
+            width: 100%;
+
+            border-collapse: collapse;
+            border-spacing: inherit;
+            max-width: none;
+        }
+
+        .contentHolder {
         }
 
         .content {
-            max-width: 960px;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
+
         }
 
         .deadline {
@@ -54,16 +59,33 @@
             border-top: clear;
         }
 
+        .documentTitle {
+            font-size: 2em;
+            text-align: center;
+        }
+
         .marker {
-            width: 18px;
+            /* Note: parent td width is set in the document view!*/
+            width: 100%;
         }
 
         .tabPanel {
+            border: 0;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+            width: 100%;
         }
 
         .tabHeaders {
             padding: 0;
             margin: 0;
+            position: relative;
+            right: 12px;
+            top:-24px;
+            float: right;
         }
 
         .tabHeader {
@@ -81,12 +103,16 @@
     </ui:style>
     <g:DockLayoutPanel ui:field="mainPanel" styleName="{res.mainPanel}" unit="PX">
         <g:north size="30">
-            <g:FlowPanel styleName="{res.tabHeaders}">
-                <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}" ui:field="viewDocument"/>
-                <g:Image resource='{imageResources.viewAmendments}' styleName="{res.tabHeader}"
-                         ui:field="viewAmendments"/>
-                <g:Image resource='{imageResources.viewInfo}' styleName="{res.tabHeader}" ui:field="viewInfo"/>
-            </g:FlowPanel>
+            <g:HTMLPanel styleName="{res.header}">
+                <g:HTML text="" styleName="{res.documentTitle} documentTitle" ui:field="documentTitle"/>
+                <g:FlowPanel styleName="{res.tabHeaders}">
+                    <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}"
+                             ui:field="viewDocument"/>
+                    <g:Image resource='{imageResources.viewAmendments}' styleName="{res.tabHeader}"
+                             ui:field="viewAmendments"/>
+                    <g:Image resource='{imageResources.viewInfo}' styleName="{res.tabHeader}" ui:field="viewInfo"/>
+                </g:FlowPanel>
+            </g:HTMLPanel>
         </g:north>
 
         <g:center>
@@ -98,7 +124,9 @@
 
                         <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
                         <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel">
-                            <content:ContentView ui:field="contentView" styleName="{res.content}"/>
+                            <g:HTMLPanel styleName="{res.contentHolder}" ui:field="contentHolder">
+                                <content:ContentView ui:field="contentView" styleName="{res.content}"/>
+                            </g:HTMLPanel>
                             <marker:MarkerView ui:field="markerView" styleName="{res.marker}"/>
                         </g:HorizontalPanel>
 

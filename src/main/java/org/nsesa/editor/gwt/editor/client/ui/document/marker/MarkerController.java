@@ -48,22 +48,18 @@ public class MarkerController {
                 view.clearMarkers();
                 final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getDocumentController() == documentController) {
-                        //if (amendmentController.getView().asWidget().isAttached()) {
-                            final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-                            LOG.info("Document height is: " + documentHeight);
-                            final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                            final double division = (double) documentHeight / (double) amendmentTop;
-                            LOG.info("Amendment is: " + amendmentTop + ", and division is at " + division);
-                            final FocusWidget focusWidget = view.addMarker(division);
-                            focusWidget.addClickHandler(new ClickHandler() {
-                                @Override
-                                public void onClick(ClickEvent event) {
-                                    documentController.scrollTo(amendmentController.getView().asWidget());
-                                }
-                            });
-                        //}
-                    }
+                    final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
+                    LOG.fine("Document height is: " + documentHeight);
+                    final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
+                    final double division = (double) documentHeight / (double) amendmentTop;
+                    LOG.fine("Amendment is: " + amendmentTop + ", and division is at " + division);
+                    final FocusWidget focusWidget = view.addMarker(division);
+                    focusWidget.addClickHandler(new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            documentController.scrollTo(amendmentController.getView().asWidget());
+                        }
+                    });
                 }
             }
         }

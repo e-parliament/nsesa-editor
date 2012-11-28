@@ -16,8 +16,6 @@ import java.util.List;
 @ImplementedBy(DocumentHeaderViewImpl.class)
 public interface DocumentHeaderView extends IsWidget {
 
-    void setDocumentName(String documentName);
-
     void setAvailableTranslations(List<DocumentDTO> translations);
 
     HasChangeHandlers getTranslationsListBox();

@@ -19,4 +19,6 @@ public interface DocumentView extends IsWidget {
     void setStyleName(String style);
 
     void switchToTab(int index);
+
+    void setDocumentTitle(String titleHTML);
 }

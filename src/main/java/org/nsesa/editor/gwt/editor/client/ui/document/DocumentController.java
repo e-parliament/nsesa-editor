@@ -272,8 +272,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.document = document;
         this.documentID = document.getDocumentID();
 
-        // update the header
-        this.documentHeaderController.setDocumentName(document.getName());
+        // update the document title
+        this.view.setDocumentTitle(document.getName());
 
         // set the deadline
         this.deadlineController.setDeadline(document.getDeadline());
