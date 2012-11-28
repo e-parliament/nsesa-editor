@@ -1,16 +1,13 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -36,7 +33,6 @@ public class EditorController implements BootstrapEventHandler {
     private final EditorView view;
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
-    private final AmendmentManager amendmentManager;
     private final AmendmentDialogController amendmentDialogController;
 
     private Injector injector;
@@ -47,14 +43,12 @@ public class EditorController implements BootstrapEventHandler {
     public EditorController(final EditorView view,
                             final ClientFactory clientFactory,
                             final ServiceFactory serviceFactory,
-                            final AmendmentManager amendmentManager,
                             final AmendmentDialogController amendmentDialogController) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-        this.amendmentManager = amendmentManager;
         this.amendmentDialogController = amendmentDialogController;
 
         registerListeners();
@@ -74,8 +68,14 @@ public class EditorController implements BootstrapEventHandler {
             final String message = clientFactory.getCoreMessages().errorDocumentIdMissing();
             clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
         } else {
-            // get the amendments belonging to this document
-            fetchAmendments();
+            // retrieve the documents
+            for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
+                final DocumentController documentController = injector.getDocumentController();
+                documentController.setDocumentID(documentID);
+                addDocumentController(documentController);
+                // request the amendments in the backend, this will fire off the document loading afterwards
+                documentController.fetchAmendments();
+            }
         }
     }
 
@@ -100,29 +100,6 @@ public class EditorController implements BootstrapEventHandler {
         return removed;
     }
 
-    private void fetchAmendments() {
-        serviceFactory.getGwtAmendmentService().getAmendmentContainers(clientFactory.getClientContext(), new AsyncCallback<AmendmentContainerDTO[]>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                final String message = clientFactory.getCoreMessages().errorAmendmentsError();
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
-            }
-
-            @Override
-            public void onSuccess(AmendmentContainerDTO[] result) {
-                LOG.info("Received " + result.length + " amendments.");
-                amendmentManager.setAmendmentContainerDTOs(result);
-                // after the amendments, retrieve the documents
-                for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
-                    final DocumentController documentController = injector.getDocumentController();
-                    documentController.setDocumentID(documentID);
-                    addDocumentController(documentController);
-                    // request the amendment in the backend
-                    documentController.loadDocument();
-                }
-            }
-        });
-    }
 
     private DocumentController getDocumentController(String documentID) {
         for (final DocumentController documentController : documentControllers) {
@@ -148,7 +125,5 @@ public class EditorController implements BootstrapEventHandler {
 
     public void setInjector(Injector injector) {
         this.injector = injector;
-        // copy into the amendment manager - there seems to be no other way to do this
-        this.amendmentManager.setInjector(injector);
     }
 }

@@ -72,8 +72,9 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final OverlayFactory overlayFactory;
     private final Creator creator;
     private final Locator locator;
-    private final AmendmentManager amendmentManager;
 
+    @Scope(DOCUMENT)
+    private final AmendmentManager amendmentManager;
     @Scope(DOCUMENT)
     private final MarkerController markerController;
     @Scope(DOCUMENT)
@@ -100,19 +101,20 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
                               final Locator locator,
-                              final Creator creator,
-                              final AmendmentManager amendmentManager) {
+                              final Creator creator) {
 
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
 
 
-        this.amendmentManager = amendmentManager;
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
 
         // document scoped singletons
+        this.amendmentManager = injector.getAmendmentManager();
+        this.amendmentManager.setInjector(injector);
+
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
         this.amendmentsPanelController = injector.getAmendmentsPanelController();
@@ -245,6 +247,23 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 overlay();
                 clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
                 injectAmendments();
+            }
+        });
+    }
+
+    public void fetchAmendments() {
+        serviceFactory.getGwtAmendmentService().getAmendmentContainers(clientFactory.getClientContext(), new AsyncCallback<AmendmentContainerDTO[]>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                final String message = clientFactory.getCoreMessages().errorAmendmentsError();
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
+            }
+
+            @Override
+            public void onSuccess(AmendmentContainerDTO[] result) {
+                LOG.info("Received " + result.length + " amendments.");
+                amendmentManager.setAmendmentContainerDTOs(result);
+                loadDocument();
             }
         });
     }

@@ -49,7 +49,7 @@ public class MarkerController {
                 final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
                     if (amendmentController.getDocumentController() == documentController) {
-                        if (amendmentController.getView().asWidget().isAttached()) {
+                        //if (amendmentController.getView().asWidget().isAttached()) {
                             final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
                             LOG.info("Document height is: " + documentHeight);
                             final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
@@ -62,7 +62,7 @@ public class MarkerController {
                                     documentController.scrollTo(amendmentController.getView().asWidget());
                                 }
                             });
-                        }
+                        //}
                     }
                 }
             }

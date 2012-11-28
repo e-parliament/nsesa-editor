@@ -15,14 +15,15 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentInjector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 08/07/12 13:56
@@ -31,7 +32,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @version $Id$
  */
 @Singleton
-@Scope(EDITOR)
+@Scope(DOCUMENT)
 public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final ServiceFactory serviceFactory;
@@ -40,17 +41,21 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final XMLTransformer xmlTransformer;
 
-    private Injector injector;
+    private final DocumentEventBus documentEventBus;
+
+    private DocumentInjector injector;
 
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     @Inject
     public AmendmentManager(final ClientFactory clientFactory,
                             final ServiceFactory serviceFactory,
-                            final XMLTransformer xmlTransformer) {
+                            final XMLTransformer xmlTransformer,
+                            final DocumentEventBus documentEventBus) {
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
         this.xmlTransformer = xmlTransformer;
+        this.documentEventBus = documentEventBus;
         registerListeners();
     }
 
@@ -76,7 +81,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                             amendmentController.setAmendment(amendmentContainerDTO);
                             amendmentControllers.add(amendmentController);
                         }
-                        clientFactory.getEventBus().fireEvent(new AmendmentContainerInjectEvent(result));
+                        documentEventBus.fireEvent(new AmendmentContainerInjectEvent(result));
                     }
                 });
             }
@@ -112,7 +117,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                 if (visited != null && element.equalsIgnoreCase(visited.getId())) {
                     visited.addAmendmentController(amendmentController);
                     amendmentController.setDocumentController(documentController);
-                    clientFactory.getEventBus().fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
+                    documentEventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
                     return false;
                 }
                 return true;
@@ -147,7 +152,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
         return amendmentControllers;
     }
 
-    public void setInjector(final Injector injector) {
+    public void setInjector(final DocumentInjector injector) {
         this.injector = injector;
     }
 }

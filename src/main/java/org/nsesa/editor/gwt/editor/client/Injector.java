@@ -3,7 +3,6 @@ package org.nsesa.editor.gwt.editor.client;
 import com.google.gwt.activity.shared.ActivityMapper;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -26,8 +25,6 @@ public interface Injector {
     DocumentController getDocumentController();
 
     ErrorController getErrorController();
-
-    AmendmentController getAmendmentController();
 
     ActivityMapper getActivityMapper();
 
