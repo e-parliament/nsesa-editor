@@ -7,7 +7,7 @@
 
     <ui:style field="res">
         .header {
-            z-index: 2;
+            z-index: 1;
             background-color: #000;
             color:white;
         }
@@ -19,6 +19,7 @@
             background-color: #ddd;
             color: #000;
             font-size: smaller;
+            z-index: 1;
         }
 
         .documentsPanel {

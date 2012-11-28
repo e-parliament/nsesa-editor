@@ -47,8 +47,8 @@
             background-color: #dcdcdc;
             color: #fff;
             font-weight: bold;
-            z-index: 3;
             text-align: center;
+            z-index: 1;
         }
 
         .documentHeader {
