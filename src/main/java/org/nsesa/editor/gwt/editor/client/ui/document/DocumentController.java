@@ -22,6 +22,7 @@ import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
@@ -201,6 +202,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                         amendmentManager.injectSingleAmendment(amendmentContainerDTO, amendableWidget, DocumentController.this);
                     }
                 }
+                // renumber amendments
+                renumberAmendments();
             }
         });
 
@@ -296,6 +299,27 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 documentHeaderController.setAvailableTranslations(translations);
                 // select the correct translation
                 documentHeaderController.setSelectedTranslation(document);
+            }
+        });
+    }
+
+    public void renumberAmendments() {
+        class Counter {
+            int counter = 1;
+            public int incrementAndGet() {
+                return counter++;
+            }
+        }
+        final Counter counter = new Counter();
+        walk(new AmendableVisitor() {
+            @Override
+            public boolean visit(AmendableWidget visited) {
+                if (visited.isAmended()){
+                    for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
+                        amendmentController.setTitle("Amendment " + counter.incrementAndGet());
+                    }
+                }
+                return true;
             }
         });
     }
