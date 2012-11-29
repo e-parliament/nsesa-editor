@@ -4,7 +4,7 @@
               type='org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewCss'/>
     <ui:style field="res">
     </ui:style>
-    <g:HTMLPanel styleName="amendment">
+    <g:HTMLPanel styleName="amendmentHolder">
         <div>
             <div class="header">
                 <div class="title">
