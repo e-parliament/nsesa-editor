@@ -39,7 +39,7 @@
         .amendmentsHeader {
             width: 100%;
             padding: 5px;
-            background-color: #eee;                                        `
+            background-color: #eee;
             border: 1px solid #ccc;
             border-top: clear;
         }
