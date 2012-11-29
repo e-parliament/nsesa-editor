@@ -10,6 +10,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -30,6 +31,7 @@ public class AmendmentDialogTableController extends Composite implements Provide
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
+    private DocumentController documentController;
 
     @Inject
     public AmendmentDialogTableController(final ClientFactory clientFactory, final AmendmentDialogTableView view) {
@@ -58,5 +60,9 @@ public class AmendmentDialogTableController extends Composite implements Provide
         assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

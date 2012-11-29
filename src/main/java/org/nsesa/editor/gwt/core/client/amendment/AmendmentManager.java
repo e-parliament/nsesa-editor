@@ -60,7 +60,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
+        documentEventBus.addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerSaveEvent event) {
 

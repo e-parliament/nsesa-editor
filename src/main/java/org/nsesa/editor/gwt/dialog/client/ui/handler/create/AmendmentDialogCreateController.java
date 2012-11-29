@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -35,6 +36,7 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     private AmendmentContainerDTO amendment;
 
     private AmendableWidget amendableWidget;
+    private DocumentController documentController;
 
     @Inject
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view, final OverlayFactory overlayFactory) {
@@ -74,5 +76,9 @@ public class AmendmentDialogCreateController extends Composite implements Provid
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
         view.setTitle("Create new " + amendableWidget.getType());
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

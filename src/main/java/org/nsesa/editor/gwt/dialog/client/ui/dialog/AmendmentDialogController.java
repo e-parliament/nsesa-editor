@@ -21,6 +21,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreat
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -73,6 +74,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      */
     private AmendableWidget amendableWidget;
 
+    /**
+     * The document controller.
+     */
+    private DocumentController documentController;
+
 
     @Inject
     public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view,
@@ -104,6 +110,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = event.getAmendmentAction();
+                documentController = event.getDocumentController();
                 amendment = createAmendment();
 
                 handle();
@@ -116,6 +123,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 amendment = event.getAmendment();
                 amendableWidget = event.getAmendableWidget();
                 amendmentAction = amendment.getAmendmentAction();
+                documentController = event.getDocumentController();
                 handle();
                 show();
             }
@@ -167,6 +175,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.view.getMainPanel().add(amendmentUIHandler.getView());
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
         amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
+        amendmentUIHandler.setDocumentController(documentController);
     }
 
     /**
@@ -216,5 +225,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     public void setAmendableWidget(AmendableWidget amendableWidget) {
         this.amendableWidget = amendableWidget;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

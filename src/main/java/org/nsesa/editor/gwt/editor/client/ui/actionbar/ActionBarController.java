@@ -69,7 +69,7 @@ public class ActionBarController {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, AmendmentAction.MODIFICATION));
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, AmendmentAction.MODIFICATION, documentController));
                 }
             }
         });

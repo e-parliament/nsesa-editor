@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 20:14
@@ -16,10 +17,12 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
 
     private final AmendableWidget amendableWidget;
     private final AmendmentContainerDTO amendment;
+    private final DocumentController documentController;
 
-    public AmendmentContainerEditEvent(AmendableWidget amendableWidget, AmendmentContainerDTO amendment) {
+    public AmendmentContainerEditEvent(AmendableWidget amendableWidget, AmendmentContainerDTO amendment, DocumentController documentController) {
         this.amendableWidget = amendableWidget;
         this.amendment = amendment;
+        this.documentController = documentController;
     }
 
     @Override
@@ -38,5 +41,9 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
 
     public AmendableWidget getAmendableWidget() {
         return amendableWidget;
+    }
+
+    public DocumentController getDocumentController() {
+        return documentController;
     }
 }

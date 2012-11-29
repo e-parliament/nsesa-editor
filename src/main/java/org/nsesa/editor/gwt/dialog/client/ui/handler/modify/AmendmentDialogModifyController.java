@@ -14,6 +14,7 @@ import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class AmendmentDialogModifyController extends Composite implements Provid
     protected AmendmentContainerDTO amendment;
 
     protected AmendableWidget amendableWidget;
+
+    protected DocumentController documentController;
 
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
@@ -78,7 +81,7 @@ public class AmendmentDialogModifyController extends Composite implements Provid
 
     public void handleSave() {
         amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
-        clientFactory.getEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
+        documentController.getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
 
@@ -112,5 +115,9 @@ public class AmendmentDialogModifyController extends Composite implements Provid
         for (final AmendmentModifyAwareController childController : childControllers) {
             childController.setAmendmentAndAmendableWidget(amendment, amendableWidget);
         }
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

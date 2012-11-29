@@ -147,7 +147,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                clientFactory.getEventBus().fireEvent(new DocumentScrollEvent(DocumentController.this));
+                documentEventBus.fireEvent(new DocumentScrollEvent(DocumentController.this));
             }
         });
 
@@ -170,16 +170,24 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
-        // forward the amendment injected event
-        clientFactory.getEventBus().addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        // forward the amendment injected event to the parent event bus
+        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                event.getAmendmentController().getDocumentController().documentEventBus.fireEvent(event);
+                clientFactory.getEventBus().fireEvent(event);
             }
         });
 
-        clientFactory.getEventBus().addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
+        // forward the create event to the parent event bus
+        documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerCreateEvent event) {
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectEvent event) {
                 for (final AmendableWidget amendableWidget : amendableWidgets) {
@@ -187,13 +195,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                         amendmentManager.injectSingleAmendment(amendmentContainerDTO, amendableWidget, DocumentController.this);
                     }
                 }
-            }
-        });
-
-        documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerCreateEvent event) {
-                clientFactory.getEventBus().fireEvent(event);
             }
         });
 
@@ -368,7 +369,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, AmendmentAction.MODIFICATION));
+        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, AmendmentAction.MODIFICATION, this));
     }
 
     @Override
@@ -418,6 +419,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public Creator getCreator() {
         return creator;
+    }
+
+    public DocumentEventBus getDocumentEventBus() {
+        return documentEventBus;
     }
 
     @Override

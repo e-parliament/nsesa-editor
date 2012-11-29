@@ -44,7 +44,7 @@ public class ActionBarCreatePanelController {
             @Override
             public void onClick(AmendableWidget newChild) {
                 newChild.setParentAmendableWidget(amendableWidget);
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild, AmendmentAction.CREATION));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild, AmendmentAction.CREATION, documentController));
             }
         });
     }
