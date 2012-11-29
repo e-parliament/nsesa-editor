@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
@@ -18,7 +19,7 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidget extends IsWidget, HasWidgets {
+public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWalker {
 
     /**
      * Check if this amendable widget is amendable or not.
@@ -281,4 +282,10 @@ public interface AmendableWidget extends IsWidget, HasWidgets {
      * @return the amendment controllers.
      */
     AmendmentController[] getAmendmentControllers();
+
+    /**
+     * Returns the namespace this amendable widget was generated for.
+     * @return the namespace URI.
+     */
+    String getNamespaceURI();
 }

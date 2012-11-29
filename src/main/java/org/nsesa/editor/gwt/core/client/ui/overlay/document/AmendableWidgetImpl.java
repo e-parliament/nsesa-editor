@@ -458,4 +458,27 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return this;
     }
 
+    /**
+     * Returns the namespace URI of this amendable widget.
+     */
+    @Override
+    public String getNamespaceURI() {
+        throw new NullPointerException("Should be overridden by subclass.");
+    }
+
+    @Override
+    public void walk(AmendableVisitor visitor) {
+        walk(this, visitor);
+    }
+
+    @Override
+    public void walk(AmendableWidget toVisit, AmendableVisitor visitor) {
+        if (visitor.visit(toVisit)) {
+            if (toVisit != null) {
+                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
+                    walk(child, visitor);
+                }
+            }
+        }
+    }
 }
