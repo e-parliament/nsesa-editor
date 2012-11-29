@@ -41,12 +41,15 @@ public class AmendmentController {
     private DocumentController documentController;
 
     @Inject
-    public AmendmentController(final ClientFactory clientFactory, final OverlayFactory overlayFactory) {
+    public AmendmentController(final ClientFactory clientFactory, final OverlayFactory overlayFactory,
+                               final AmendmentView amendmentView, final AmendmentView amendmentExtendedView) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
 
-        this.view = amendmentInjector.getAmendmentView();
-        this.extendedView = amendmentInjector.getAmendmentExtendedView();
+//        this.view = amendmentInjector.getAmendmentView();
+//        this.extendedView = amendmentInjector.getAmendmentExtendedView();
+        this.view = amendmentView;
+        this.extendedView = amendmentExtendedView;
         this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
         registerListeners();
     }
