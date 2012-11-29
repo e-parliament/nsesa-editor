@@ -123,7 +123,7 @@
                         <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeader}"/>
 
                         <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
-                        <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel">
+                        <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel" >
                             <g:HTMLPanel styleName="{res.contentHolder}" ui:field="contentHolder">
                                 <content:ContentView ui:field="contentView" styleName="{res.content}"/>
                             </g:HTMLPanel>

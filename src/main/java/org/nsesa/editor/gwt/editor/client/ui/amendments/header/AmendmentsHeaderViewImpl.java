@@ -8,7 +8,15 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.util.Action;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
+
+import java.util.List;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +25,8 @@ import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
  * Time: 11:51
  * To change this template use File | Settings | File Templates.
  */
+@Singleton
+@Scope(DOCUMENT)
 public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHeaderView {
 
 
@@ -32,8 +42,6 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
 
     public AmendmentsHeaderViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
-        this.selections.addItem("All", "All");
-        this.selections.addItem("None", "None");
         initWidget(widget);
     }
 
@@ -43,13 +51,17 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
     }
 
     @Override
-    public void setSelections() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void setSelections(List<Selection> selections) {
+        for (Selection selection :selections) {
+            this.selections.addItem(selection.getName(), selection.getName());
+        }
     }
 
     @Override
-    public void setActions() {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void setActions(List<Action> actions) {
+        for (Action action :actions) {
+            this.actions.addItem(action.getName(), action.getName());
+        }
     }
 
     @Override
@@ -58,7 +70,17 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
     }
 
     @Override
+    public String getSelectedSelection() {
+        return selections.getValue(selections.getSelectedIndex());
+    }
+
+    @Override
     public HasChangeHandlers getActions() {
         return actions;
+    }
+
+    @Override
+    public String getSelectedAction() {
+        return actions.getValue(actions.getSelectedIndex());
     }
 }

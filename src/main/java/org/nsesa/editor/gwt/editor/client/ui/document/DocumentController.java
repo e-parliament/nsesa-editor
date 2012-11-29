@@ -35,6 +35,7 @@ import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
@@ -90,6 +91,9 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Scope(DOCUMENT)
     private final AmendmentsPanelController amendmentsPanelController;
     @Scope(DOCUMENT)
+    private AmendmentsHeaderController amendmentsHeaderController;
+
+    @Scope(DOCUMENT)
     private final InfoPanelController infoPanelController;
 
     private List<AmendableWidget> amendableWidgets;
@@ -117,7 +121,9 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
+        //this.amendmentsHeaderController = injector.getAmendmentsHeaderController();
         this.amendmentsPanelController = injector.getAmendmentsPanelController();
+
         this.infoPanelController = injector.getInfoPanelController();
         this.markerController = injector.getMarkerController();
         this.contentController = injector.getContentController();
@@ -126,8 +132,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.actionBarController = injector.getActionBarController();
 
         // set references in the child controllers
-        this.amendmentsPanelController.setDocumentController(this);
         this.infoPanelController.setDocumentController(this);
+        this.amendmentsPanelController.setDocumentController(this);
         this.markerController.setDocumentController(this);
         this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);

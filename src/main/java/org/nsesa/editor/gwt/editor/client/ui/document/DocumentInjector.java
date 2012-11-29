@@ -8,6 +8,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
@@ -35,6 +36,8 @@ public interface DocumentInjector extends Ginjector {
     MarkerController getMarkerController();
 
     AmendmentsPanelController getAmendmentsPanelController();
+
+//    AmendmentsHeaderController getAmendmentsHeaderController();
 
     InfoPanelController getInfoPanelController();
 

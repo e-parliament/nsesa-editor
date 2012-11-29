@@ -14,6 +14,8 @@ import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelView;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentView;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
@@ -37,6 +39,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 public class DocumentViewImpl extends Composite implements DocumentView, ProvidesResize {
 
+
     interface MyUiBinder extends UiBinder<Widget, DocumentViewImpl> {
     }
 
@@ -46,6 +49,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     private final DocumentEventBus documentEventBus;
     private final ClientFactory clientFactory;
+    private AmendmentsHeaderController amendmentsHeaderController;
 
     @UiField
     HorizontalPanel horizontalPanel;
@@ -72,6 +76,9 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     @UiField(provided = true)
     AmendmentsPanelView amendmentsPanelView;
+
+    AmendmentsHeaderView amendmentsHeaderView;
+
     @UiField(provided = true)
     InfoPanelView infoPanelView;
 

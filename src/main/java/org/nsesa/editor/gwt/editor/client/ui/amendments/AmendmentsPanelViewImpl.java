@@ -6,13 +6,23 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
+import org.nsesa.editor.gwt.core.client.util.Action;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.pagination.PaginationView;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
@@ -22,36 +32,103 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @version $Id$
  */
 @Singleton
-@Scope(EDITOR)
-public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPanelView {
+@Scope(DOCUMENT)
+public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPanelView, ProvidesResize {
+
+    private DocumentEventBus documentEventBus;
+    private static final int SCROLLBAR_OFFSET = 125;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    @UiField
+    ScrollPanel scrollPanel;
+
     @UiField(provided = true)
     AmendmentsHeaderView amendmentsHeaderView;
 
+    @UiField(provided = true)
+    PaginationView paginationView;
+
     @UiField
-    VerticalPanel amendments;
+    VerticalPanel amendmentsPanel;
+
+    private Map<String, CheckBox> checkBoxes = new LinkedHashMap<String, CheckBox>();
 
     @Inject
-    public AmendmentsPanelViewImpl(final AmendmentsHeaderView amendmentsHeaderView) {
-        this.amendmentsHeaderView = amendmentsHeaderView;
+    public AmendmentsPanelViewImpl(AmendmentsHeaderController amendmentsHeaderController, PaginationView paginationView, DocumentEventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
+        this.amendmentsHeaderView = amendmentsHeaderController.getView();
+        this.paginationView = paginationView;
         final Widget widget = uiBinder.createAndBindUi(this);
 
         initWidget(widget);
+        registerListeners();
+    }
+
+    private void registerListeners() {
+        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                final int height = event.getHeight() - SCROLLBAR_OFFSET;
+                scrollPanel.setHeight(height + "px");
+            }
+        });
+
+    }
+
+
+    @Override
+    public void setAmendments(Map<String, AmendmentView> amendments) {
+        for(Map.Entry<String, AmendmentView> entry : amendments.entrySet()) {
+            HorizontalPanel panel = new HorizontalPanel();
+            //create a check box
+            CheckBox checkBox = new CheckBox();
+            checkBoxes.put(entry.getKey(), checkBox);
+            panel.add(checkBox);
+            panel.add(entry.getValue());
+            amendmentsPanel.add(panel);
+        }
     }
 
     @Override
-    public void refreshAmendments(List<AmendmentView> amendmentsView) {
-        if (amendmentsView != null) {
-            amendments.clear();
-            for(AmendmentView amendmentView : amendmentsView) {
-                amendments.add(amendmentView);
+    public PaginationView getPaginationView() {
+        return paginationView;
+    }
+
+
+    @Override
+    public void refreshAmendments(Map<String, AmendmentView> amendments) {
+        amendmentsPanel.clear();
+        checkBoxes.clear();
+        setAmendments(amendments);
+    }
+
+    @Override
+    public List<String> getSelectedAmendments() {
+        List<String> result = new ArrayList<String>();
+        for(Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
+            if (entry.getValue().getValue()) {
+                result.add(entry.getKey());
             }
 
+        }
+        return result;
+    }
+
+    @Override
+    public void selectAmendments(List<String> ids) {
+        // deselect all
+        for(Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
+            entry.getValue().setValue(false);
+        }
+        for(String id : ids) {
+            CheckBox checkBox = checkBoxes.get(id);
+            if (checkBox != null) {
+                checkBox.setValue(true);
+            }
         }
     }
 
