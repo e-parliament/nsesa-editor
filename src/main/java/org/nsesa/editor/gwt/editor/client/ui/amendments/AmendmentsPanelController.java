@@ -39,15 +39,15 @@ public class AmendmentsPanelController {
 
     private final ClientFactory clientFactory;
     private final AmendmentsPanelView view;
-    private DocumentEventBus documentEventBus;
+    private final DocumentEventBus documentEventBus;
     private DocumentController documentController;
 
     private int amendmentsPerPage = DEFAULT_AMENDMENTS_PER_PAGE;
 
     @Inject
-    public AmendmentsPanelController(ClientFactory clientFactory,
-                                     AmendmentsPanelView view,
-                                     DocumentEventBus documentEventBus) {
+    public AmendmentsPanelController(final ClientFactory clientFactory,
+                                     final AmendmentsPanelView view,
+                                     final DocumentEventBus documentEventBus) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.documentEventBus = documentEventBus;
@@ -58,7 +58,7 @@ public class AmendmentsPanelController {
         return view;
     }
 
-    protected void setAmendmentsPerPage(int amendmentsPerPage) {
+    protected void setAmendmentsPerPage(final int amendmentsPerPage) {
         this.amendmentsPerPage = amendmentsPerPage;
     }
 
@@ -106,13 +106,13 @@ public class AmendmentsPanelController {
     }
 
 
-    public void setDocumentController(DocumentController documentController) {
+    public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
         registerPaginationCallback();
     }
 
-    private void applySelection(Selection<AmendmentController> selection) {
-        List<String> ids = new ArrayList<String>();
+    private void applySelection(final Selection<AmendmentController> selection) {
+        final List<String> ids = new ArrayList<String>();
         for (AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
             if (selection.apply(amendmentController)) {
                 ids.add(amendmentController.getAmendment().getId());
@@ -122,11 +122,11 @@ public class AmendmentsPanelController {
     }
 
     private void refreshTotalPages() {
-        float totalSize = documentController.getAmendmentManager().getAmendmentControllers().size();
+        final float totalSize = documentController.getAmendmentManager().getAmendmentControllers().size();
         getView().getPaginationView().setTotalPages(Math.round(totalSize / amendmentsPerPage));
     }
 
-    private void refreshAmendments(int pageNr) {
+    private void refreshAmendments(final int pageNr) {
         final Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
         final List<AmendmentController> amendmentControllers = documentController.getAmendmentManager().getAmendmentControllers();
         // always sort them according to their order number
