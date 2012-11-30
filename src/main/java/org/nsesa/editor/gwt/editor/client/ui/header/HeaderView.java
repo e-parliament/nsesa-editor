@@ -11,5 +11,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(HeaderViewImpl.class)
 public interface HeaderView extends IsWidget {
+
     void setStyleName(String style);
+
+    void setLoggedInPersonName(String personName);
+
+    void setLoggedInPersonRoles(String[] roles);
 }

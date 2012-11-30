@@ -12,6 +12,10 @@
                 <span class="button">About</span>
                 <span class="button">Help</span>
             </span>
+            <span class="loggedInPerson">
+                <g:Label ui:field="name"/>
+                <g:Label ui:field="roles"/>
+            </span>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>
