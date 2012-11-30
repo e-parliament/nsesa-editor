@@ -19,7 +19,6 @@ public class AmendmentContainerDTO implements IsSerializable {
     private String languageISO;
 
     private AmendmentAction amendmentAction;
-    private String amendmentContainerID;
     private String amendmentContainerStatus;
 
     private String xmlContent;
@@ -30,14 +29,6 @@ public class AmendmentContainerDTO implements IsSerializable {
     private ArrayList<AmendableWidgetReference> targetReferences = new ArrayList<AmendableWidgetReference>();
 
     public AmendmentContainerDTO() {
-    }
-
-    public String getAmendmentContainerID() {
-        return amendmentContainerID;
-    }
-
-    public void setAmendmentContainerID(String amendmentContainerID) {
-        this.amendmentContainerID = amendmentContainerID;
     }
 
     public AmendmentAction getAmendmentAction() {

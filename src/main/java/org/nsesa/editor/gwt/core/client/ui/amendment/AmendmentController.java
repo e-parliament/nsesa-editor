@@ -67,7 +67,6 @@ public class AmendmentController {
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
         setBody(amendment.getXmlContent());
-        setTitle("Amendment "+ amendment.getAmendmentContainerID());
     }
 
     private void setBody(String xmlContent) {

@@ -2,18 +2,13 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
-import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
-import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
-import org.nsesa.editor.gwt.core.client.util.Action;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
@@ -22,19 +17,13 @@ import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEv
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.pagination.PaginationCallback;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
-import org.omg.CORBA.StringHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 24/06/12 21:42
@@ -126,7 +115,7 @@ public class AmendmentsPanelController {
         List<String> ids = new ArrayList<String>();
         for (AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
             if (selection.apply(amendmentController)) {
-                ids.add(amendmentController.getAmendment().getAmendmentContainerID());
+                ids.add(amendmentController.getAmendment().getId());
             }
         }
         view.selectAmendments(ids);
@@ -134,16 +123,27 @@ public class AmendmentsPanelController {
 
     private void refreshTotalPages() {
         float totalSize = documentController.getAmendmentManager().getAmendmentControllers().size();
-        getView().getPaginationView().setTotalPages(Math.round(totalSize/amendmentsPerPage));
+        getView().getPaginationView().setTotalPages(Math.round(totalSize / amendmentsPerPage));
     }
 
     private void refreshAmendments(int pageNr) {
-        Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
-        List<AmendmentController> list = documentController.getAmendmentManager().getAmendmentControllers();
-        for (int i = ((pageNr - 1) * amendmentsPerPage); i < Math.min(pageNr * amendmentsPerPage, list.size()); i++) {
-            amendments.put(list.get(i).getAmendment().getAmendmentContainerID(), list.get(i).getExtendedView());
+        final Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
+        final List<AmendmentController> amendmentControllers = documentController.getAmendmentManager().getAmendmentControllers();
+        // always sort them according to their order number
+        sortAmendments(amendmentControllers);
+        for (int i = ((pageNr - 1) * amendmentsPerPage); i < Math.min(pageNr * amendmentsPerPage, amendmentControllers.size()); i++) {
+            amendments.put(amendmentControllers.get(i).getAmendment().getId(), amendmentControllers.get(i).getExtendedView());
         }
         view.refreshAmendments(amendments);
+    }
+
+    protected void sortAmendments(final List<AmendmentController> toSort) {
+        Collections.sort(toSort, new Comparator<AmendmentController>() {
+            @Override
+            public int compare(AmendmentController a, AmendmentController b) {
+                return Integer.valueOf(a.getOrder()).compareTo(b.getOrder());
+            }
+        });
     }
 
     private void registerPaginationCallback() {
