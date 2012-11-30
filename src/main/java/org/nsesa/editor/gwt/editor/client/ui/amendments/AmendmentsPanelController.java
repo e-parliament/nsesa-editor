@@ -17,7 +17,8 @@ import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEv
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.pagination.PaginationCallback;
+import org.nsesa.editor.gwt.editor.client.event.pagination.PaginationEvent;
+import org.nsesa.editor.gwt.editor.client.event.pagination.PaginationEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
@@ -39,15 +40,14 @@ public class AmendmentsPanelController {
 
     private final ClientFactory clientFactory;
     private final AmendmentsPanelView view;
-    private final DocumentEventBus documentEventBus;
+    private DocumentEventBus documentEventBus;
     private DocumentController documentController;
-
     private int amendmentsPerPage = DEFAULT_AMENDMENTS_PER_PAGE;
 
     @Inject
-    public AmendmentsPanelController(final ClientFactory clientFactory,
-                                     final AmendmentsPanelView view,
-                                     final DocumentEventBus documentEventBus) {
+    public AmendmentsPanelController(ClientFactory clientFactory,
+                                     AmendmentsPanelView view,
+                                     DocumentEventBus documentEventBus) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.documentEventBus = documentEventBus;
@@ -58,7 +58,7 @@ public class AmendmentsPanelController {
         return view;
     }
 
-    protected void setAmendmentsPerPage(final int amendmentsPerPage) {
+    protected void setAmendmentsPerPage(int amendmentsPerPage) {
         this.amendmentsPerPage = amendmentsPerPage;
     }
 
@@ -67,7 +67,7 @@ public class AmendmentsPanelController {
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-                refreshTotalPages();
+                refreshPagination();
                 refreshAmendments(1);
             }
         });
@@ -75,7 +75,7 @@ public class AmendmentsPanelController {
         documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
-                refreshTotalPages();
+                refreshPagination();
                 refreshAmendments(1);
             }
         });
@@ -83,7 +83,7 @@ public class AmendmentsPanelController {
         documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                refreshTotalPages();
+                refreshPagination();
                 refreshAmendments(1);
             }
         });
@@ -98,21 +98,27 @@ public class AmendmentsPanelController {
         documentEventBus.addHandler(AmendmentsActionEvent.TYPE, new AmendmentsActionEventHandler() {
             @Override
             public void onEvent(AmendmentsActionEvent event) {
-                view.getSelectedAmendments();
-                event.getAction().execute();
+                List<String> ids = view.getSelectedAmendments();
+                event.getAction().execute(ids);
+            }
+        });
+
+        documentEventBus.addHandler(PaginationEvent.TYPE, new PaginationEventHandler() {
+            @Override
+            public void onEvent(PaginationEvent event) {
+                refreshAmendments(event.getPage());
             }
         });
 
     }
 
 
-    public void setDocumentController(final DocumentController documentController) {
+    public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
-        registerPaginationCallback();
     }
 
-    private void applySelection(final Selection<AmendmentController> selection) {
-        final List<String> ids = new ArrayList<String>();
+    private void applySelection(Selection<AmendmentController> selection) {
+        List<String> ids = new ArrayList<String>();
         for (AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
             if (selection.apply(amendmentController)) {
                 ids.add(amendmentController.getAmendment().getId());
@@ -121,18 +127,18 @@ public class AmendmentsPanelController {
         view.selectAmendments(ids);
     }
 
-    private void refreshTotalPages() {
-        final float totalSize = documentController.getAmendmentManager().getAmendmentControllers().size();
-        getView().getPaginationView().setTotalPages(Math.round(totalSize / amendmentsPerPage));
+    private void refreshPagination() {
+        float totalSize = documentController.getAmendmentManager().getAmendmentControllers().size();
+        getView().getPaginationView().setCurrentPage(1);
+        getView().getPaginationView().setTotalPages(Math.round(totalSize/amendmentsPerPage));
     }
 
-    private void refreshAmendments(final int pageNr) {
-        final Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
-        final List<AmendmentController> amendmentControllers = documentController.getAmendmentManager().getAmendmentControllers();
-        // always sort them according to their order number
-        sortAmendments(amendmentControllers);
-        for (int i = ((pageNr - 1) * amendmentsPerPage); i < Math.min(pageNr * amendmentsPerPage, amendmentControllers.size()); i++) {
-            amendments.put(amendmentControllers.get(i).getAmendment().getId(), amendmentControllers.get(i).getExtendedView());
+    private void refreshAmendments(int pageNr) {
+        Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
+        List<AmendmentController> list = documentController.getAmendmentManager().getAmendmentControllers();
+        sortAmendments(list);
+        for (int i = ((pageNr - 1) * amendmentsPerPage); i < Math.min(pageNr * amendmentsPerPage, list.size()); i++) {
+            amendments.put(list.get(i).getAmendment().getId(), list.get(i).getExtendedView());
         }
         view.refreshAmendments(amendments);
     }
@@ -145,13 +151,5 @@ public class AmendmentsPanelController {
             }
         });
     }
-
-    private void registerPaginationCallback() {
-        getView().getPaginationView().setCallback(new PaginationCallback() {
-            @Override
-            public void moveToPage(int pageNr) {
-                refreshAmendments(pageNr);
-            }
-        });
-    }
 }
+

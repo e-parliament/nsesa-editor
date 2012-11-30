@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.amendments.pagination;
+package org.nsesa.editor.gwt.editor.client.ui.pagination;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
@@ -13,7 +13,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(PaginationViewImpl.class)
 public interface PaginationView extends IsWidget {
     void setStyleName(String styleName);
-    void setCallback(PaginationCallback callback);
     void setTotalPages(int totalPages);
-    int getCurrentPage();
+    void setCurrentPage(int currentPage);
 }

@@ -12,10 +12,12 @@
             float: left;
         }
     </ui:style>
-    <g:HorizontalPanel>
-        <g:HTMLPanel>
-            <g:ListBox ui:field="selections" styleName="{res.selections}"/>
-            <g:ListBox ui:field="actions" styleName="{res.actions}"/>
-        </g:HTMLPanel>
-    </g:HorizontalPanel>
+    <g:MenuBar ui:field="menu">
+        <g:MenuItem text="Select amendments">
+            <g:MenuBar ui:field="menuSelection" vertical="true"/>
+        </g:MenuItem>
+        <g:MenuItem text="Run action">
+        <g:MenuBar ui:field="menuAction" vertical="true"/>
+        </g:MenuItem>
+    </g:MenuBar>
 </ui:UiBinder>

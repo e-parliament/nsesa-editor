@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.amendments.pagination;
+package org.nsesa.editor.gwt.editor.client.ui.pagination;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -6,51 +6,49 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.event.pagination.PaginationEvent;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Created with IntelliJ IDEA.
+ * Default implementation of pagination view
  * User: groza
  * Date: 28/11/12
  * Time: 13:01
- * To change this template use File | Settings | File Templates.
  */
 @Singleton
 @Scope(DOCUMENT)
 public class PaginationViewImpl extends Composite implements PaginationView {
+    private DocumentEventBus documentEventBus;
+
     interface MyUiBinder extends UiBinder<Widget, PaginationViewImpl> {
     }
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private PaginationCallback callback;
-
     @UiField
-    Button first;
+    Image first;
     @UiField
-    Button last;
+    Image last;
     @UiField
-    Button next;
+    Image next;
     @UiField
-    Button previous;
+    Image previous;
     @UiField
     Label current;
     // start from one
     private int currentPage = 1;
-
     private int totalPages = 1;
 
-    public PaginationViewImpl() {
+    @Inject
+    public PaginationViewImpl(DocumentEventBus documentEventBus) {
+        this.documentEventBus = documentEventBus;
         final Widget widget = uiBinder.createAndBindUi(this);
         displayCurrentPage();
         initWidget(widget);
-    }
-
-    @Override
-    public void setCallback(PaginationCallback callback) {
-        this.callback = callback;
     }
 
     @Override
@@ -60,8 +58,8 @@ public class PaginationViewImpl extends Composite implements PaginationView {
     }
 
     @Override
-    public int getCurrentPage() {
-        return currentPage;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
 
     @UiHandler("first")
@@ -92,9 +90,8 @@ public class PaginationViewImpl extends Composite implements PaginationView {
         } else if (currentPage >= totalPages) {
             currentPage = totalPages;
         }
-        if (callback != null) {
-            callback.moveToPage(currentPage);
-        }
+        //trigger pagination event
+        documentEventBus.fireEvent(new PaginationEvent(currentPage));
         displayCurrentPage();
 
     }

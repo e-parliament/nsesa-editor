@@ -2,12 +2,9 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.pagination.PaginationView;
+import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

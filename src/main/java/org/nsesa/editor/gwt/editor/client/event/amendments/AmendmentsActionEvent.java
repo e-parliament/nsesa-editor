@@ -1,10 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.event.amendments;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.web.bindery.event.shared.Event;
-import org.nsesa.editor.gwt.core.client.util.Action;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +11,9 @@ import java.util.List;
  */
 public class AmendmentsActionEvent extends GwtEvent<AmendmentsActionEventHandler> {
     public static final Type<AmendmentsActionEventHandler> TYPE = new Type<AmendmentsActionEventHandler>();
-    private Action action;
+    private AmendmentsAction action;
 
-    public AmendmentsActionEvent(Action action) {
+    public AmendmentsActionEvent(AmendmentsAction action) {
         this.action = action;
     }
 
@@ -31,7 +27,7 @@ public class AmendmentsActionEvent extends GwtEvent<AmendmentsActionEventHandler
         handler.onEvent(this);
     }
 
-    public Action getAction() {
+    public AmendmentsAction getAction() {
         return action;
     }
 }

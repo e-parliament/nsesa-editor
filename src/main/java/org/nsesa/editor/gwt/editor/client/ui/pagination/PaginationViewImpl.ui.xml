@@ -1,0 +1,23 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="PaginationViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationViewCss'/>
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.editor.client.ui.pagination.resources.Resources'/>
+
+    <ui:style field="res">
+        .label {
+            vertical-align: middle;
+        }
+        .button {
+            width: 2em;
+            height: 2em;
+        }
+    </ui:style>
+    <g:HorizontalPanel>
+        <g:Image ui:field="first" resource="{imageResources.first}"/>
+        <g:Image ui:field="previous" resource="{imageResources.previous}"/>
+        <g:Label ui:field="current" styleName="{res.label}"/>
+        <g:Image ui:field="next" resource="{imageResources.next}"/>
+        <g:Image ui:field="last" resource="{imageResources.last}"/>
+    </g:HorizontalPanel>
+</ui:UiBinder>

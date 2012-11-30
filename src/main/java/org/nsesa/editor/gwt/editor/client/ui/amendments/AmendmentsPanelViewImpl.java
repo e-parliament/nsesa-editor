@@ -9,12 +9,10 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
-import org.nsesa.editor.gwt.core.client.util.Action;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.pagination.PaginationView;
+import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
@@ -23,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
  * Date: 24/06/12 21:44

@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.amendments.pagination;
+package org.nsesa.editor.gwt.editor.client.ui.pagination;
 
 import com.google.gwt.resources.client.CssResource;
 

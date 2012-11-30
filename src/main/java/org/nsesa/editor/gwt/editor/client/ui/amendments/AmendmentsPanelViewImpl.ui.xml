@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.header'
-             xmlns:pagination='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.pagination'
+             xmlns:pagination='urn:import:org.nsesa.editor.gwt.editor.client.ui.pagination'
              >
     <ui:style src="AmendmentsPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelViewCss'/>
