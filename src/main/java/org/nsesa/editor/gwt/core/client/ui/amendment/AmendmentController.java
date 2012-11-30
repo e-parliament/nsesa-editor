@@ -35,6 +35,8 @@ public class AmendmentController {
 
     private AmendableWidget amendmentWidget;
 
+    private int order;
+
     /**
      * The document controller into which we are injected. If it is not set, we're not injected anywhere.
      */
@@ -100,5 +102,15 @@ public class AmendmentController {
 
     public void setAmendmentWidget(AmendableWidget amendmentWidget) {
         this.amendmentWidget = amendmentWidget;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+        view.setTitle("Amendment " + order);
+        extendedView.setTitle("Amendment " + order);
     }
 }

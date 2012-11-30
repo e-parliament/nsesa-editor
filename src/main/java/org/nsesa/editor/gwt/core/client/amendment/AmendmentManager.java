@@ -47,15 +47,23 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
+    private final AmendmentInjectionPointFinder injectionPointFinder;
+
+    private final AmendmentInjectionPointProvider injectionPointProvider;
+
     @Inject
     public AmendmentManager(final ClientFactory clientFactory,
                             final ServiceFactory serviceFactory,
                             final XMLTransformer xmlTransformer,
-                            final DocumentEventBus documentEventBus) {
+                            final DocumentEventBus documentEventBus,
+                            final AmendmentInjectionPointFinder injectionPointFinder,
+                            final AmendmentInjectionPointProvider injectionPointProvider) {
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
         this.xmlTransformer = xmlTransformer;
         this.documentEventBus = documentEventBus;
+        this.injectionPointFinder = injectionPointFinder;
+        this.injectionPointProvider = injectionPointProvider;
         registerListeners();
     }
 
@@ -106,23 +114,20 @@ public class AmendmentManager implements AmendmentInjectionCapable {
     }
 
 
-    private void injectInternal(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
-
-        final String element = amendmentController.getAmendment().getSourceReference().getElement();
-
-        // not in our cache? Can happen if we inject a single amendment
-        documentController.walk(root, new AmendableWidgetWalker.AmendableVisitor() {
-            @Override
-            public boolean visit(final AmendableWidget visited) {
-                if (visited != null && element.equalsIgnoreCase(visited.getId())) {
-                    visited.addAmendmentController(amendmentController);
+    protected void injectInternal(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
+        // find the correct amendable widget(s) to which this amendment applies
+        final List<AmendableWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
+        if (injectionPoints != null) {
+            for (final AmendableWidget injectionPoint : injectionPoints) {
+                // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
+                final AmendableWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
+                if (target != null) {
+                    target.addAmendmentController(amendmentController);
                     amendmentController.setDocumentController(documentController);
                     documentEventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
-                    return false;
                 }
-                return true;
             }
-        });
+        }
 
     }
 

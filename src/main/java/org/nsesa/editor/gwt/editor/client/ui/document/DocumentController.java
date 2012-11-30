@@ -316,7 +316,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             public boolean visit(AmendableWidget visited) {
                 if (visited.isAmended()){
                     for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
-                        amendmentController.setTitle("Amendment " + counter.incrementAndGet());
+                        amendmentController.setOrder(counter.incrementAndGet());
                     }
                 }
                 return true;
