@@ -106,23 +106,30 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public void addAmendableWidget(final AmendableWidget child) {
+        addAmendableWidget(child, false);
+    }
+
+    @Override
+    public void addAmendableWidget(final AmendableWidget child, boolean skipValidation) {
         if (child == null) throw new NullPointerException("Cannot add null child!");
         boolean vetoed = false;
         if (listener != null)
             vetoed = listener.beforeAmendableWidgetAdded(this, child);
 
         if (!vetoed) {
-            // see if there is a wildcard
-            if (Arrays.binarySearch(getAllowedChildTypes(), "*") == -1) {
-                // no wildcard - see if the type is supported as a child widget
-                boolean canAdd = false;
-                for (String type : getAllowedChildTypes()) {
-                    if (type.equalsIgnoreCase(child.getType())) {
-                        canAdd = true;
+            if (!skipValidation) {
+                // see if there is a wildcard
+                if (Arrays.binarySearch(getAllowedChildTypes(), "*") == -1) {
+                    // no wildcard - see if the type is supported as a child widget
+                    boolean canAdd = false;
+                    for (String type : getAllowedChildTypes()) {
+                        if (type.equalsIgnoreCase(child.getType())) {
+                            canAdd = true;
+                        }
                     }
-                }
-                if (!canAdd) {
-                    LOG.warning(getType() + " does not support child type:" + child);
+                    if (!canAdd) {
+                        LOG.warning(getType() + " does not support child type:" + child);
+                    }
                 }
             }
 

@@ -13,7 +13,7 @@
         }
     </ui:style>
 
-    <g:HorizontalPanel>
+    <g:HorizontalPanel ui:field="horizontalPanel">
         <g:HTMLPanel styleName="{res.documentName}">
             <g:Label ui:field="documentName"/>
         </g:HTMLPanel>

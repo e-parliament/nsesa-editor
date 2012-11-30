@@ -4,7 +4,10 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
+
+import java.util.logging.Logger;
 
 /**
  * Date: 17/10/12 21:30
@@ -15,11 +18,15 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 @Singleton
 public class DefaultOverlayFactory implements OverlayFactory {
 
+    private static final Logger LOG = Logger.getLogger(DefaultOverlayFactory.class.getName());
+
     protected final OverlayStrategy overlayStrategy;
+    protected final ClientFactory clientFactory;
 
     @Inject
-    public DefaultOverlayFactory(OverlayStrategy overlayStrategy) {
+    public DefaultOverlayFactory(final OverlayStrategy overlayStrategy, final ClientFactory clientFactory) {
         this.overlayStrategy = overlayStrategy;
+        this.clientFactory = clientFactory;
     }
 
     @Override
@@ -46,8 +53,8 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return null;
     }
 
-    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, int depth) {
-        AmendableWidget amendableWidget = toAmendableWidget(element);
+    protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final int depth) {
+        final AmendableWidget amendableWidget = toAmendableWidget(element);
         if (amendableWidget != null) {
             amendableWidget.setParentAmendableWidget(parent);
 
@@ -69,19 +76,19 @@ public class DefaultOverlayFactory implements OverlayFactory {
                 for (final Element child : children) {
                     final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
                     if (amendableChild != null) {
-                        amendableWidget.addAmendableWidget(amendableChild);
+                        amendableWidget.addAmendableWidget(amendableChild, true);
                     }
                 }
             }
 
             // post process the widget (eg. hide large tables)
-            amendableWidget = postProcess(amendableWidget);
+            postProcess(amendableWidget);
         }
         return amendableWidget;
     }
 
-    protected AmendableWidget postProcess(AmendableWidget amendableWidget) {
-        return amendableWidget;
+    protected void postProcess(final AmendableWidget amendableWidget) {
+
     }
 
     private String spaces(int number) {

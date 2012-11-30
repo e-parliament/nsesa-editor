@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -115,6 +116,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
         // note that this does not impact the actual document width, only the content
         //horizontalPanel.setCellWidth(contentHolder, "90%");
         horizontalPanel.setCellWidth(markerView, "18px");
+        horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
 
         switchToTab(0);
     }

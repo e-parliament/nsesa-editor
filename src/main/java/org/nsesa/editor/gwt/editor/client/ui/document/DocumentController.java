@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
@@ -254,9 +255,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onSuccess(final String content) {
                 setContent(content);
-                overlay();
-                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
-                injectAmendments();
+                clientFactory.getScheduler().scheduleDeferred(new Command() {
+                    @Override
+                    public void execute() {
+                        overlay();
+                        clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+                        injectAmendments();
+                    }
+                });
             }
         });
     }
@@ -306,6 +312,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     public void renumberAmendments() {
         class Counter {
             int counter = 1;
+
             public int incrementAndGet() {
                 return counter++;
             }
@@ -314,7 +321,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         walk(new AmendableVisitor() {
             @Override
             public boolean visit(AmendableWidget visited) {
-                if (visited.isAmended()){
+                if (visited.isAmended()) {
                     for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
                         amendmentController.setOrder(counter.incrementAndGet());
                     }
@@ -334,6 +341,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     public void overlay() {
+        long start = System.currentTimeMillis();
         final Element[] contentElements = contentController.getContentElements();
         if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
         for (final Element element : contentElements) {
@@ -344,6 +352,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 LOG.log(Level.SEVERE, "Exception during the overlaying.", e);
             }
         }
+        LOG.info("Overlaying took " + (System.currentTimeMillis()-start) + "ms.");
     }
 
     public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {

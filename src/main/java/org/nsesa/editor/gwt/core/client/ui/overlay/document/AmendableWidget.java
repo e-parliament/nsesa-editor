@@ -112,6 +112,13 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     void addAmendableWidget(AmendableWidget child);
 
     /**
+     * Add an amendable widget as a child, but do not perform a runtime validation check.
+     * @param child             the child to add
+     * @param skipValidation    <tt>true</tt> to skip validation.
+     */
+    void addAmendableWidget(AmendableWidget child, boolean skipValidation);
+
+    /**
      * Remove an amendable child. Throws an exception if the passed widget is not an actual child (that is,
      * {@link #getChildAmendableWidgets()} contains the widget).
      *

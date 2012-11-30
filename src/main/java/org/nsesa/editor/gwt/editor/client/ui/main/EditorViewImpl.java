@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -42,6 +43,7 @@ public class EditorViewImpl extends Composite implements EditorView, ProvidesRes
         this.footerView = footerController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        documentsPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
     }
 
     @Override

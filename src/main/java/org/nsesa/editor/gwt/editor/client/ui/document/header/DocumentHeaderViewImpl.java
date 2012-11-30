@@ -1,13 +1,11 @@
 package org.nsesa.editor.gwt.editor.client.ui.document.header;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -34,6 +32,9 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     private final DocumentEventBus documentEventBus;
+
+    @UiField
+    HorizontalPanel horizontalPanel;
     @UiField
     Label documentName;
     @UiField
@@ -46,6 +47,7 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
     }
 
     @Override
