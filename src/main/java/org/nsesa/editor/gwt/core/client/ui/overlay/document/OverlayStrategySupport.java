@@ -6,10 +6,7 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.DOM;
 import org.nsesa.editor.gwt.core.client.ui.overlay.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,10 +39,10 @@ public class OverlayStrategySupport {
     public static final String CLASS_OPERATION_PANEL = "ep:operationPanel";
     public static final String CLASS_AMENDMENTS_PANEL = "ep:amendmentsPanel";
 
-    private HashSet<String> asProperties = new HashSet<String>();
+    private Set<String> asProperties = new HashSet<String>();
 
     public void asProperties(Class<? extends AmendableWidget>... widgetClasses) {
-        for (Class<? extends AmendableWidget> clazz : widgetClasses) {
+        for (final Class<? extends AmendableWidget> clazz : widgetClasses) {
             asProperties.add(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1).toUpperCase());
         }
     }
@@ -103,7 +100,9 @@ public class OverlayStrategySupport {
      * @return the amendable content.
      */
     public String getAmendableContent(Element element) {
-        return element != null ? element.getInnerHTML() : null;
+        if (element == null) return null;
+        final Element content = getElementByClassName(element, "content");
+        return content != null ? content.getInnerHTML() : element.getInnerHTML();
     }
 
 
@@ -383,9 +382,9 @@ public class OverlayStrategySupport {
                 // do not include any of the 'property' tags
                 // these elements are not included in our tree, but can be searched by their parent later on, to
                 // get certain properties such as content, num, ...
-//                if (!asProperties.contains(el.getNodeName().toUpperCase())) {
+                if (!asProperties.contains(el.getAttribute("type").toUpperCase())) {
                     amendableElements.add(el);
-//                }
+                }
             }
         }
         return amendableElements;

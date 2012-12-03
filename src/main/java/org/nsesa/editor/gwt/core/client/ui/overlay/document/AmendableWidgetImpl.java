@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
+import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
@@ -40,6 +41,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      * A listener for all the amending operations to call back on.
      */
     private AmendableWidgetListener listener;
+
+    /**
+     * Supports lazy retrieval of properties
+     */
+    private OverlayStrategy overlayStrategy;
 
     /**
      * The logical parent amendable widget. If the parent is null, this is considered a root widget.
@@ -102,6 +108,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         if (!isAttached()) {
             onAttach();
         }
+    }
+
+    @Override
+    public void setOverlayStrategy(OverlayStrategy overlayStrategy) {
+        this.overlayStrategy = overlayStrategy;
     }
 
     @Override
@@ -278,7 +289,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getId() {
-        return id;
+        if (overlayStrategy == null) return id;
+        return id == null ? overlayStrategy.getID(amendableElement) : id;
     }
 
     @Override
@@ -288,7 +300,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getContent() {
-        return amendableContent;
+        if (overlayStrategy == null) return amendableContent;
+        return amendableContent == null ? overlayStrategy.getContent(amendableElement) : null;
     }
 
     @Override
@@ -393,7 +406,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public Format getFormat() {
-        return format;
+        if (overlayStrategy == null) return format;
+        return format == null ? overlayStrategy.getFormat(amendableElement) : format;
     }
 
     @Override
@@ -403,7 +417,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public NumberingType getNumberingType() {
-        return numberingType;
+        if (overlayStrategy == null) return numberingType;
+        return numberingType == null ? overlayStrategy.getNumberingType(amendableElement, getAssignedNumber()) : numberingType;
     }
 
     @Override
@@ -413,7 +428,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public Integer getAssignedNumber() {
-        return assignedNumber;
+        return assignedNumber == null ? LocatorUtil.getAssignedNumber(this) : null;
     }
 
     @Override

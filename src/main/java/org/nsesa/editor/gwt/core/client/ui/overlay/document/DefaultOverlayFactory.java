@@ -1,11 +1,12 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 
 import java.util.logging.Logger;
 
@@ -23,6 +24,8 @@ public class DefaultOverlayFactory implements OverlayFactory {
     protected final OverlayStrategy overlayStrategy;
     protected final ClientFactory clientFactory;
 
+    private Counter elementCounter;
+
     @Inject
     public DefaultOverlayFactory(final OverlayStrategy overlayStrategy, final ClientFactory clientFactory) {
         this.overlayStrategy = overlayStrategy;
@@ -39,7 +42,10 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
     @Override
     public AmendableWidget getAmendableWidget(final Element element) {
-        return wrap(null, element, 0);
+        elementCounter = new Counter();
+        final AmendableWidget root = wrap(null, element, 0);
+        LOG.info("Total number of wrapped elements: " + elementCounter.get());
+        return root;
     }
 
     @Override
@@ -56,33 +62,61 @@ public class DefaultOverlayFactory implements OverlayFactory {
     protected AmendableWidget wrap(final AmendableWidget parent, final com.google.gwt.dom.client.Element element, final int depth) {
         final AmendableWidget amendableWidget = toAmendableWidget(element);
         if (amendableWidget != null) {
-            amendableWidget.setParentAmendableWidget(parent);
+            elementCounter.increment();
+            if (elementCounter.get() % 1000 == 0) {
+                System.out.println("--> splitting for " + elementCounter.get() + " for " + amendableWidget + " with parent " + parent);
+                clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        amendableWidget.setParentAmendableWidget(parent);
 
-            // process all properties
-            amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
-            amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
-            amendableWidget.setType(overlayStrategy.getType(element));
-            amendableWidget.setId(overlayStrategy.getID(element));
-            Integer assignedNumber = LocatorUtil.getAssignedNumber(amendableWidget);
-            amendableWidget.setAssignedNumber(assignedNumber != null ? assignedNumber : 1);
+                        // process all eager properties
+                        amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
+                        amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+                        amendableWidget.setType(overlayStrategy.getType(element));
+                        // set the overlay strategy for lazy processing
+                        amendableWidget.setOverlayStrategy(overlayStrategy);
 
-            amendableWidget.setFormat(overlayStrategy.getFormat(element));
-            amendableWidget.setNumberingType(overlayStrategy.getNumberingType(element, amendableWidget.getAssignedNumber()));
-            amendableWidget.setContent(overlayStrategy.getContent(element));
 
-            // attach all children (note, this is a recursive call)
-            final Element[] children = overlayStrategy.getChildren(element);
-            if (children != null) {
-                for (final Element child : children) {
-                    final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
-                    if (amendableChild != null) {
-                        amendableWidget.addAmendableWidget(amendableChild, true);
+                        // attach all children (note, this is a recursive call)
+                        final Element[] children = overlayStrategy.getChildren(element);
+                        if (children != null) {
+                            for (final Element child : children) {
+                                final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
+                                if (amendableChild != null) {
+                                    amendableWidget.addAmendableWidget(amendableChild, true);
+                                }
+                            }
+                        }
+
+                        // post process the widget (eg. hide large tables)
+                        postProcess(amendableWidget);
+                    }
+                });
+            } else {
+                amendableWidget.setParentAmendableWidget(parent);
+                // process all eager properties
+                amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
+                amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+                amendableWidget.setType(overlayStrategy.getType(element));
+                // set the overlay strategy for lazy processing
+                amendableWidget.setOverlayStrategy(overlayStrategy);
+
+                // attach all children (note, this is a recursive call)
+                final Element[] children = overlayStrategy.getChildren(element);
+                if (children != null) {
+                    for (final Element child : children) {
+                        final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
+                        if (amendableChild != null) {
+                            amendableWidget.addAmendableWidget(amendableChild, true);
+                        }
                     }
                 }
+
+                // post process the widget (eg. hide large tables)
+                postProcess(amendableWidget);
             }
 
-            // post process the widget (eg. hide large tables)
-            postProcess(amendableWidget);
         }
         return amendableWidget;
     }

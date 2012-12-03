@@ -295,4 +295,10 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      * @return the namespace URI.
      */
     String getNamespaceURI();
+
+    /**
+     * Set the overlay strategy (used for lazy loading)
+     * @param overlayStrategy the overlay strategy
+     */
+    void setOverlayStrategy(OverlayStrategy overlayStrategy);
 }
