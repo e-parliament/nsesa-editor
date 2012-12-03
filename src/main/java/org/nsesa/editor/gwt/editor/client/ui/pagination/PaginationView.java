@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.pagination;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -13,6 +14,9 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(PaginationViewImpl.class)
 public interface PaginationView extends IsWidget {
     void setStyleName(String styleName);
-    void setTotalPages(int totalPages);
-    void setCurrentPage(int currentPage);
+    void displayCurrentPage(int currentPage, int totalPages);
+    HasClickHandlers getFirst();
+    HasClickHandlers getLast();
+    HasClickHandlers getNext();
+    HasClickHandlers getPrevious();
 }

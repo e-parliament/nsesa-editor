@@ -14,6 +14,8 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Implementation for AmendmentsHeaderView interface
+ * Implementation for AmendmentsFilterView interface
  * User: groza
  * Date: 26/11/12
  * Time: 11:51

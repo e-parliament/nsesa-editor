@@ -13,15 +13,14 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEv
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentInjector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -159,5 +158,21 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     public void setInjector(final DocumentInjector injector) {
         this.injector = injector;
+    }
+
+    public List<AmendmentController> getAmendmentControllers(Filter filter) {
+        List<AmendmentController> list = new ArrayList<AmendmentController>();
+        int end = Math.min(amendmentControllers.size(), filter.getStart() + filter.getSize());
+        for (int i = filter.getStart(); i < end; i++) {
+            list.add(amendmentControllers.get(i));
+        }
+
+        Collections.sort(list, new Comparator<AmendmentController>() {
+            @Override
+            public int compare(AmendmentController a, AmendmentController b) {
+                return Integer.valueOf(a.getOrder()).compareTo(b.getOrder());
+            }
+        });
+        return list;
     }
 }

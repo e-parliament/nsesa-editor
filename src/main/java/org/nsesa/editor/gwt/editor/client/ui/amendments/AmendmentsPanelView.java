@@ -17,7 +17,6 @@ import java.util.Map;
 @ImplementedBy(AmendmentsPanelViewImpl.class)
 public interface AmendmentsPanelView extends IsWidget {
     public void setAmendments(Map<String, AmendmentView> amendments);
-    public PaginationView getPaginationView();
     public void refreshAmendments(Map<String, AmendmentView> amendments);
     public void setStyleName(String styleName);
     public List<String> getSelectedAmendments();

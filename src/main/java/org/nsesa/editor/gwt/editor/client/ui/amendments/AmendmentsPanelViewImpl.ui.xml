@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.header'
+             xmlns:filter='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.filter'
              xmlns:pagination='urn:import:org.nsesa.editor.gwt.editor.client.ui.pagination'
              >
     <ui:style src="AmendmentsPanelViewImpl.css" field="css"
@@ -51,6 +52,7 @@
     <g:HTMLPanel>
         <g:HorizontalPanel styleName="{res.amendmentsHeader}">
         <header:AmendmentsHeaderView ui:field="amendmentsHeaderView" />
+        <filter:AmendmentsFilterView ui:field="filterView"/>
         </g:HorizontalPanel>
         <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}" >
          <g:VerticalPanel ui:field="amendmentsPanel" />

@@ -10,8 +10,11 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
+import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
@@ -45,7 +48,8 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     @UiField(provided = true)
     AmendmentsHeaderView amendmentsHeaderView;
-
+    @UiField(provided = true)
+    AmendmentsFilterView filterView;
     @UiField(provided = true)
     PaginationView paginationView;
 
@@ -55,10 +59,14 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     private Map<String, CheckBox> checkBoxes = new LinkedHashMap<String, CheckBox>();
 
     @Inject
-    public AmendmentsPanelViewImpl(AmendmentsHeaderController amendmentsHeaderController, PaginationView paginationView, DocumentEventBus documentEventBus) {
+    public AmendmentsPanelViewImpl(AmendmentsHeaderController amendmentsHeaderController,
+                                   PaginationController paginationController,
+                                   AmendmentsFilterController amendmentsFilterController,
+                                   DocumentEventBus documentEventBus) {
         this.documentEventBus = documentEventBus;
         this.amendmentsHeaderView = amendmentsHeaderController.getView();
-        this.paginationView = paginationView;
+        this.filterView = amendmentsFilterController.getView();
+        this.paginationView = paginationController.getPaginationView();
         final Widget widget = uiBinder.createAndBindUi(this);
 
         initWidget(widget);
@@ -89,12 +97,6 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
             amendmentsPanel.add(panel);
         }
     }
-
-    @Override
-    public PaginationView getPaginationView() {
-        return paginationView;
-    }
-
 
     @Override
     public void refreshAmendments(Map<String, AmendmentView> amendments) {

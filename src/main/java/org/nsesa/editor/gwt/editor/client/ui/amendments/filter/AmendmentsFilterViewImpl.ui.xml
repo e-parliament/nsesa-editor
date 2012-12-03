@@ -1,0 +1,12 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="AmendmentsFilterViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterViewCss'/>
+    <ui:style field="res">
+    </ui:style>
+    <g:MenuBar >
+        <g:MenuItem text="Filter">
+            <g:MenuBar ui:field="menuFilter" vertical="true"/>
+        </g:MenuItem>
+    </g:MenuBar>
+</ui:UiBinder>

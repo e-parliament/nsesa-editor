@@ -17,7 +17,7 @@
             <g:MenuBar ui:field="menuSelection" vertical="true"/>
         </g:MenuItem>
         <g:MenuItem text="Run action">
-        <g:MenuBar ui:field="menuAction" vertical="true"/>
+            <g:MenuBar ui:field="menuAction" vertical="true"/>
         </g:MenuItem>
     </g:MenuBar>
 </ui:UiBinder>
