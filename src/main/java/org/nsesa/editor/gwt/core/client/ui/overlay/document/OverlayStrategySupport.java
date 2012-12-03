@@ -102,7 +102,11 @@ public class OverlayStrategySupport {
     public String getAmendableContent(Element element) {
         if (element == null) return null;
         final Element content = getElementByClassName(element, "content");
-        return content != null ? content.getInnerHTML() : element.getInnerHTML();
+        if (content == null) {
+            final Element p = getElementByClassName(element, "p");
+            return p != null ? p.getInnerHTML() : element.getInnerHTML();
+        }
+        return content.getInnerHTML();
     }
 
 

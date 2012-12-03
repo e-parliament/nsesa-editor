@@ -245,6 +245,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public void loadDocumentContent() {
         assert documentID != null : "No documentID set.";
+        // clean up any previous content - if any
+        if (amendableWidgets != null && !amendableWidgets.isEmpty()) {
+            for (final AmendableWidget amendableWidget : amendableWidgets) {
+                amendableWidget.onDetach();
+            }
+        }
         serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -349,10 +355,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 final AmendableWidget rootAmendableWidget = overlay(element, this);
                 amendableWidgets.add(rootAmendableWidget);
             } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Exception during the overlaying.", e);
+                LOG.log(Level.SEVERE, "Exception while overlaying.", e);
             }
         }
-        LOG.info("Overlaying took " + (System.currentTimeMillis()-start) + "ms.");
+        LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
     }
 
     public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
@@ -385,7 +391,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Override
     public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
         if (visitor.visit(toVisit)) {
-            if (toVisit != null) {
+            if (toVisit != null && toVisit.getChildAmendableWidgets() != null) {
                 for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
                     walk(child, visitor);
                 }

@@ -111,6 +111,12 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      */
     void addAmendableWidget(AmendableWidget child);
 
+    void onAttach();
+
+    boolean isAttached();
+
+    void onDetach();
+
     /**
      * Add an amendable widget as a child, but do not perform a runtime validation check.
      * @param child             the child to add

@@ -64,61 +64,45 @@ public class DefaultOverlayFactory implements OverlayFactory {
         if (amendableWidget != null) {
             elementCounter.increment();
             if (elementCounter.get() % 1000 == 0) {
-                System.out.println("--> splitting for " + elementCounter.get() + " for " + amendableWidget + " with parent " + parent);
+                LOG.info("--> overlay process splitting at " + elementCounter.get() + " for " + amendableWidget + " with parent " + parent);
                 clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
                     @Override
                     public void execute() {
-                        amendableWidget.setParentAmendableWidget(parent);
-
-                        // process all eager properties
-                        amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
-                        amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
-                        amendableWidget.setType(overlayStrategy.getType(element));
-                        // set the overlay strategy for lazy processing
-                        amendableWidget.setOverlayStrategy(overlayStrategy);
-
-
-                        // attach all children (note, this is a recursive call)
-                        final Element[] children = overlayStrategy.getChildren(element);
-                        if (children != null) {
-                            for (final Element child : children) {
-                                final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
-                                if (amendableChild != null) {
-                                    amendableWidget.addAmendableWidget(amendableChild, true);
-                                }
-                            }
-                        }
-
-                        // post process the widget (eg. hide large tables)
-                        postProcess(amendableWidget);
+                        setProperties(parent, amendableWidget, element, depth);
                     }
                 });
             } else {
-                amendableWidget.setParentAmendableWidget(parent);
-                // process all eager properties
-                amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
-                amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
-                amendableWidget.setType(overlayStrategy.getType(element));
-                // set the overlay strategy for lazy processing
-                amendableWidget.setOverlayStrategy(overlayStrategy);
-
-                // attach all children (note, this is a recursive call)
-                final Element[] children = overlayStrategy.getChildren(element);
-                if (children != null) {
-                    for (final Element child : children) {
-                        final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
-                        if (amendableChild != null) {
-                            amendableWidget.addAmendableWidget(amendableChild, true);
-                        }
-                    }
-                }
-
-                // post process the widget (eg. hide large tables)
-                postProcess(amendableWidget);
+                setProperties(parent, amendableWidget, element, depth);
             }
 
         }
         return amendableWidget;
+    }
+
+    protected void setProperties(final AmendableWidget parent, final AmendableWidget amendableWidget, final Element element, int depth) {
+        amendableWidget.setParentAmendableWidget(parent);
+
+        // process all eager properties
+        amendableWidget.setAmendable(overlayStrategy.isAmendable(element));
+        amendableWidget.setImmutable(overlayStrategy.isImmutable(element));
+        amendableWidget.setType(overlayStrategy.getType(element));
+        // set the overlay strategy for lazy processing
+        amendableWidget.setOverlayStrategy(overlayStrategy);
+
+
+        // attach all children (note, this is a recursive call)
+        final Element[] children = overlayStrategy.getChildren(element);
+        if (children != null) {
+            for (final Element child : children) {
+                final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
+                if (amendableChild != null) {
+                    amendableWidget.addAmendableWidget(amendableChild, true);
+                }
+            }
+        }
+
+        // post process the widget (eg. hide large tables)
+        postProcess(amendableWidget);
     }
 
     protected void postProcess(final AmendableWidget amendableWidget) {

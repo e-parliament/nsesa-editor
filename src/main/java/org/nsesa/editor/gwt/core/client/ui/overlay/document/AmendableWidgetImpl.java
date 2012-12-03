@@ -121,6 +121,41 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
+    public void onAttach() {
+        super.onAttach();
+    }
+
+    @Override
+    public void onDetach() {
+
+        if (childAmendableWidgets != null) {
+            for (final AmendableWidget child : childAmendableWidgets) {
+                if (child.isAttached()) {
+                    child.onDetach();
+                }
+            }
+        }
+        if (isAttached()) {
+            super.onDetach();
+            this.listener = null;
+            this.overlayStrategy = null;
+            this.origin = null;
+            this.amendable = null;
+            this.amendableContent = null;
+            this.amendableElement = null;
+            this.amendmentControllers = null;
+            this.assignedNumber = null;
+            this.amendmentHolderElement = null;
+            this.childAmendableWidgets = null;
+            this.format = null;
+            this.id = null;
+            this.immutable = null;
+            this.type = null;
+            this.UIListener = null;
+        }
+    }
+
+    @Override
     public void addAmendableWidget(final AmendableWidget child, boolean skipValidation) {
         if (child == null) throw new NullPointerException("Cannot add null child!");
         boolean vetoed = false;
@@ -290,7 +325,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public String getId() {
         if (overlayStrategy == null) return id;
-        return id == null ? overlayStrategy.getID(amendableElement) : id;
+        if (id == null) {
+            id = overlayStrategy.getID(amendableElement);
+        }
+        return id;
     }
 
     @Override
@@ -301,7 +339,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public String getContent() {
         if (overlayStrategy == null) return amendableContent;
-        return amendableContent == null ? overlayStrategy.getContent(amendableElement) : null;
+        if (amendableContent == null) {
+            amendableContent = overlayStrategy.getContent(amendableElement);
+        }
+        return amendableContent;
     }
 
     @Override
@@ -384,7 +425,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         if (amendmentHolderElement == null) {
             if (getElement().getParentElement() != null) {
                 amendmentHolderElement = new HTMLPanel("Amendments<hr/>");
-                getElement().insertFirst(amendmentHolderElement.getElement());
+
+                if (!getChildAmendableWidgets().isEmpty()) {
+                    getElement().insertBefore(amendmentHolderElement.getElement(), getChildAmendableWidgets().get(0).getAmendableElement());
+                } else {
+                    getElement().insertBefore(amendmentHolderElement.getElement(), null);
+                }
                 adopt(amendmentHolderElement);
                 assert amendmentHolderElement.isAttached() : "Amendment Holder element is not attached.";
             }
@@ -407,7 +453,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public Format getFormat() {
         if (overlayStrategy == null) return format;
-        return format == null ? overlayStrategy.getFormat(amendableElement) : format;
+        if (format == null) {
+            format = overlayStrategy.getFormat(amendableElement);
+        }
+        return format;
     }
 
     @Override
@@ -418,7 +467,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public NumberingType getNumberingType() {
         if (overlayStrategy == null) return numberingType;
-        return numberingType == null ? overlayStrategy.getNumberingType(amendableElement, getAssignedNumber()) : numberingType;
+        if (numberingType == null) {
+            numberingType = overlayStrategy.getNumberingType(amendableElement, getAssignedNumber());
+        }
+        return numberingType;
     }
 
     @Override
@@ -428,7 +480,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public Integer getAssignedNumber() {
-        return assignedNumber == null ? LocatorUtil.getAssignedNumber(this) : null;
+        if (assignedNumber == null) {
+            assignedNumber = LocatorUtil.getAssignedNumber(this);
+        }
+        return assignedNumber;
     }
 
     @Override

@@ -48,7 +48,7 @@ public class MarkerController {
                 view.clearMarkers();
                 final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getDocumentController() == documentController) {
+                    if (amendmentController.getDocumentController() == documentController && amendmentController.getView().asWidget().isAttached()) {
                         final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
                         LOG.fine("Document height is: " + documentHeight);
                         final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();

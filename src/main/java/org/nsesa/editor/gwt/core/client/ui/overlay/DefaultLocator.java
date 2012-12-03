@@ -25,6 +25,8 @@ public class DefaultLocator implements Locator {
         final StringBuilder location = new StringBuilder();
 
         final List<AmendableWidget> parents = amendableWidget.getParentAmendableWidgets();
+        // add the current widget as well (since only the parents are retrieved)
+        parents.add(amendableWidget);
         for (final AmendableWidget parent : parents) {
             // filter our not just the same classes, but also any parent classes or interfaces
             final Collection<Class<? extends AmendableWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends AmendableWidget>>() {
