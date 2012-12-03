@@ -51,4 +51,8 @@ public class RomanConvertor {
         return result.toString().toLowerCase();
     }
 
+    public static Integer roman2int(String roman) {
+        return null;
+    }
+
 }
