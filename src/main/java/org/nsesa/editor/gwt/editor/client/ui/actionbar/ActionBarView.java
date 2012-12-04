@@ -27,4 +27,6 @@ public interface ActionBarView extends IsWidget {
     void setLocation(String location);
 
     void attach();
+
+    void setStyleName(String styleName);
 }

@@ -13,6 +13,8 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
@@ -83,6 +85,9 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     @UiField(provided = true)
     InfoPanelView infoPanelView;
 
+    @UiField(provided = true)
+    ActionBarView actionBarView;
+
     @UiField
     Image viewDocument;
     @UiField
@@ -98,7 +103,9 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
                             final ContentController contentController,
                             final MarkerController markerController,
                             final DocumentHeaderController documentHeaderController,
-                            final DeadlineController deadlineController) {
+                            final DeadlineController deadlineController,
+                            final ActionBarController actionBarController
+    ) {
 
         this.documentEventBus = documentEventBus;
         this.clientFactory = clientFactory;
@@ -108,13 +115,12 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
         this.markerView = markerController.getView();
         this.documentHeaderView = documentHeaderController.getView();
         this.deadlineView = deadlineController.getView();
+        this.actionBarView = actionBarController.getView();
+        this.actionBarView.asWidget().setVisible(false);
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
 
-        // force 100% width - no way to do it via UI-Binder
-        // note that this does not impact the actual document width, only the content
-        //horizontalPanel.setCellWidth(contentHolder, "90%");
         horizontalPanel.setCellWidth(markerView, "18px");
         horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
 

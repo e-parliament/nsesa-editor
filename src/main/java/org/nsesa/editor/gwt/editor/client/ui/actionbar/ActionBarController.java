@@ -160,11 +160,11 @@ public class ActionBarController {
     }
 
     public void adaptPosition() {
+        // hide the panel with our creation elements
         actionBarCreatePanelController.getView().asWidget().setVisible(false);
         if (amendableWidget != null && amendableWidget.getRoot() != null) {
             final Style style = view.asWidget().getElement().getStyle();
-            style.setPosition(Style.Position.ABSOLUTE);
-            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1);
+            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 60;
             style.setTop(coordinateY, Style.Unit.PX);
             final int x = amendableWidget.asWidget().getAbsoluteLeft();
             style.setLeft(x, Style.Unit.PX);

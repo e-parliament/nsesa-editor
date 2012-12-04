@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Date: 24/06/12 21:44
@@ -17,7 +17,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @version $Id$
  */
 @Singleton
-@Scope(EDITOR)
+@Scope(DOCUMENT)
 public class ActionBarViewImpl extends Composite implements ActionBarView {
 
     interface MyUiBinder extends UiBinder<Widget, ActionBarViewImpl> {
