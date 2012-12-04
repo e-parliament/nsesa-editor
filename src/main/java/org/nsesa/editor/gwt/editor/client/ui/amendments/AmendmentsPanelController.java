@@ -117,7 +117,7 @@ public class AmendmentsPanelController {
     private void applySelection(Selection<AmendmentController> selection) {
         List<String> ids = new ArrayList<String>();
         for (AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-            if (selection.apply(amendmentController)) {
+            if (selection.select(amendmentController)) {
                 ids.add(amendmentController.getAmendment().getId());
             }
         }

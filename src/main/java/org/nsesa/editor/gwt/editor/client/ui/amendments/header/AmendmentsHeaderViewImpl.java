@@ -27,7 +27,6 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * User: groza
  * Date: 26/11/12
  * Time: 11:51
- * To change this template use File | Settings | File Templates.
  */
 @Singleton
 @Scope(DOCUMENT)

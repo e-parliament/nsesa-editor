@@ -33,7 +33,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 public class AmendmentsHeaderController {
     private static final Selection<AmendmentController> NONE_SELECTION = new Selection<AmendmentController>() {
         @Override
-        public boolean apply(AmendmentController amendmentController) {
+        public boolean select(AmendmentController amendmentController) {
             return false;
         }
 
@@ -44,7 +44,7 @@ public class AmendmentsHeaderController {
     };
     private static final Selection<AmendmentController> ALL_SELECTION = new Selection<AmendmentController>() {
         @Override
-        public boolean apply(AmendmentController amendmentController) {
+        public boolean select(AmendmentController amendmentController) {
             return true;
         }
 
