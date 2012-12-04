@@ -20,13 +20,14 @@ import java.util.*;
  * Time: 14:11
  */
 public class CssOverlayClassProcessor implements OverlayClassProcessor {
-
+    private boolean emptyCssStyles;
     //freemarker configuration
     private Configuration configuration ;
     private String templateName;
     // keep the list of predefined css styles
     private List<CssOverlayStyle> styles;
     private Writer out;
+    private Map<String, Object> cssConfiguration;
 
     /**
      *
@@ -35,7 +36,11 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
      * @param out The location where the output is saved
      * @throws IOException
      */
-    public CssOverlayClassProcessor(Properties properties, String templateName, Writer out) throws IOException {
+    public CssOverlayClassProcessor(Properties properties,
+                                    String templateName,
+                                    Writer out,
+                                    Map<String, Object> cssConfiguration) throws IOException {
+        this.cssConfiguration = cssConfiguration;
         this.configuration = new Configuration();
         this.configuration.setDefaultEncoding("UTF-8");
         this.templateName = templateName;
@@ -73,6 +78,7 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
             rootMap.put("overlayClass", overlayClass);
             rootMap.put("overlayStyleFactory", CssOverlayStyle.CssOverlayFactory.getInstance());
             rootMap.put("styles", styles);
+            rootMap.put("cssConfiguration", cssConfiguration);
             final Template template = configuration.getTemplate(templateName);
             final DefaultObjectWrapper wrapper = new DefaultObjectWrapper();
             template.process(rootMap, out, wrapper);
