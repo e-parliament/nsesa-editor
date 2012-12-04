@@ -9,6 +9,8 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditorListener;
 
+import javax.inject.Named;
+
 /**
  * Date: 24/06/12 15:11
  *
@@ -26,9 +28,13 @@ public class ContentPanelModule extends AbstractGinModule {
         @Inject
         ClientFactory clientFactory;
 
+        @Inject
+        @Named("richTextEditorCss")
+        String cssPath;
+
         @Override
         public RichTextEditor get() {
-            return new YATinyEditor(true, clientFactory, new YATinyEditorListener() {
+            return new YATinyEditor(true, clientFactory, cssPath, new YATinyEditorListener() {
                 @Override
                 public void onInitialized(YATinyEditor editor) {
                     editor.addStyleName("tiny-editor");

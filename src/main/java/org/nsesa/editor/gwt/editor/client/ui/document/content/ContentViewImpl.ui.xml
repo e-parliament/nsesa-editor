@@ -26,10 +26,10 @@
 
         }
     </ui:style>
-    <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
-        <g:HTMLPanel styleName="{res.documentPanelOuter}">
-            <g:HTMLPanel styleName="{res.documentPanel}">
-                <g:HTML ui:field="contentPanel" styleName="{res.contentPanel}"/>
+    <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel} scrollPanel">
+        <g:HTMLPanel styleName="{res.documentPanelOuter} documentPanelOuter">
+            <g:HTMLPanel styleName="{res.documentPanel} documentPanel">
+                <g:HTML ui:field="contentPanel" styleName="{res.contentPanel} contentPanel"/>
             </g:HTMLPanel>
         </g:HTMLPanel>
     </g:ScrollPanel>

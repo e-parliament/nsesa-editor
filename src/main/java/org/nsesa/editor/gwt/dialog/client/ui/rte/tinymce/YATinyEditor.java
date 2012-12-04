@@ -14,10 +14,7 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -71,7 +68,10 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     protected final String itemID;
 
     private final YATinyEditorListener listener;
+
     private final ClientFactory clientFactory;
+
+    private String cssPath;
 
     private int work_width;
     private int work_height;
@@ -80,10 +80,11 @@ public class YATinyEditor extends Composite implements RichTextEditor {
     protected TextArea textArea;
     private FlowPanel mainPanel;
 
-    public YATinyEditor(final boolean readOnly, final ClientFactory clientFactory, final YATinyEditorListener listener) {
+    public YATinyEditor(final boolean readOnly, final ClientFactory clientFactory, String cssPath, final YATinyEditorListener listener) {
         this.readOnly = readOnly;
         this.listener = listener;
         this.clientFactory = clientFactory;
+        this.cssPath = cssPath;
 
         mainPanel = new FlowPanel();
         mainPanel.setStyleName("tinyEditor-mainPanel");
@@ -166,7 +167,13 @@ public class YATinyEditor extends Composite implements RichTextEditor {
 
     private void attachEditor(String isoLanguage, String mceButtons) {
         if (!attached) {
-            String path = GWT.getModuleBaseURL() + "css/editor.css";
+            StringBuilder pathBuilder = new StringBuilder();
+            // expand css directives to include the full path to work around path rewrites
+            for (final String css : cssPath.split(",")) {
+                pathBuilder.append(GWT.getModuleBaseURL()).append("../../editor/").append(css).append("?r=").append(new Date().getTime()).append(",");
+            }
+            String path = pathBuilder.toString();
+            if (path.endsWith(",")) path = path.substring(0, path.length() - 1);
             attachEditor(this, itemID, path, readOnly, generateLanguageSettings(isoLanguage, new HashSet<String>()), mceButtons);
         }
         attached = true;
@@ -229,7 +236,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             convert_urls:false,
             //editor_selector : itemID,
             fix_content_duplication:false,
-            valid_elements:valid_elems,
+            //valid_elements:valid_elems,
             apply_source_formatting:false,
             theme_advanced_buttons1:mceButtons,
             theme_advanced_buttons2:"",
@@ -251,7 +258,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
             spellchecker_languages:defaultLanguages,
             paste_text_sticky:true,
             paste_auto_cleanup_on_paste:true,
-            cleanup_callback:customCleanUpFunc,
+            //cleanup_callback:customCleanUpFunc,
             entity_encoding:"raw",
             setup:function (ed) {
                 ed.onInit.add(function (ed) {
@@ -278,7 +285,11 @@ public class YATinyEditor extends Composite implements RichTextEditor {
 
     private void detachEditor() {
         if (attached) {
-            detachEditor(itemID);
+            try {
+                detachEditor(itemID);
+            } catch (Exception e) {
+                // ignore
+            }
         }
         listener.onDetached();
         attached = false;
@@ -367,7 +378,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                 }
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Exception in resizing tiny mce editor in the pane dialog", e);
+            LOG.log(Level.SEVERE, "Exception in resizing tinyMCE editor.", e);
         }
     }
 
