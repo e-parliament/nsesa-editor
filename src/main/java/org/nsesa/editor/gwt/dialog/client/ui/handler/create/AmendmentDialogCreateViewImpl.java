@@ -62,6 +62,8 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
         dockPanel.setWidth("100%");
         tabLayoutPanel.setWidth("100%");
         tabLayoutPanel.setHeight("100%");
+
+        newText.init();
     }
 
     private void selectTab(final int i) {

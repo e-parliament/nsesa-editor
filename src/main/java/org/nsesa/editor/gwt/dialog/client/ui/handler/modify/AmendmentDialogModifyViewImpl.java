@@ -46,12 +46,14 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
         initWidget(widget);
         dockPanel.setHeight("100%");
         dockPanel.setWidth("100%");
+
     }
 
     @Override
     protected void onAttach() {
         super.onAttach();
         selectTab(0);
+        amendmentText.init();
     }
 
     private void selectTab(final int i) {

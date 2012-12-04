@@ -13,7 +13,5 @@ public interface RichTextEditor extends IsWidget {
 
     String getHTML();
 
-    void onAttach();
-
-    void onDetach();
+    void init();
 }
