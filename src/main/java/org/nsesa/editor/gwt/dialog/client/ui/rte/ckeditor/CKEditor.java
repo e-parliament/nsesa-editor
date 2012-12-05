@@ -85,7 +85,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             toolbarStartupExpanded: !readOnly,
             toolbar:'Basic',
             removePlugins:'elementspath',
-            toolbar_Basic:readOnly ? [[]] : [[ 'Subscript', 'Superscript', '-', 'SpecialChar' ]],
+            toolbar_Basic:readOnly ? [[]] : [[ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar', '-', 'Find', 'Replace', '-', 'SelectAll' ]],
             toolbarLocation:'bottom',
             resize_enabled:false,
             autoParagraph:false,
