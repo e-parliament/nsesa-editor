@@ -3,11 +3,10 @@ package org.nsesa.editor.gwt.editor.client.event.amendments;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
- * Created with IntelliJ IDEA.
+ * An event raised when the user select a specific action
  * User: groza
  * Date: 29/11/12
  * Time: 10:52
- * To change this template use File | Settings | File Templates.
  */
 public class AmendmentsActionEvent extends GwtEvent<AmendmentsActionEventHandler> {
     public static final Type<AmendmentsActionEventHandler> TYPE = new Type<AmendmentsActionEventHandler>();

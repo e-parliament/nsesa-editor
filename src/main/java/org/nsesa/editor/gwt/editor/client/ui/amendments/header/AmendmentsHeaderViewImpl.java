@@ -2,20 +2,13 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments.header;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsAction;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterView;
+import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.List;
@@ -58,24 +51,24 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
     }
 
     @Override
-    public void setSelections(List<Selection> selections) {
-        for (final Selection selection :selections) {
-            this.menuSelection.addItem(selection.getName(), new Scheduler.ScheduledCommand() {
+    public void setSelections(List<String> selections) {
+        for (final String selection :selections) {
+            this.menuSelection.addItem(selection, new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
-                    documentEventBus.fireEvent(new AmendmentsSelectionEvent(selection));
+                    documentEventBus.fireEvent(new MenuClickedEvent(selection, MenuClickedEvent.MenuType.SELECTION));
                 }
             });
         }
     }
 
     @Override
-    public void setActions(List<AmendmentsAction> actions) {
-        for (final AmendmentsAction action :actions) {
-            this.menuAction.addItem(action.getName(), new Scheduler.ScheduledCommand() {
+    public void setActions(List<String> actions) {
+        for (final String action :actions) {
+            this.menuAction.addItem(action, new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
-                    documentEventBus.fireEvent(new AmendmentsActionEvent(action));
+                    documentEventBus.fireEvent(new MenuClickedEvent(action, MenuClickedEvent.MenuType.ACTION));
                 }
             });
         }

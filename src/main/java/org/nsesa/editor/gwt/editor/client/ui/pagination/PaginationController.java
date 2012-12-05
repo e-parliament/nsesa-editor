@@ -89,7 +89,8 @@ public class PaginationController {
             @Override
             public void onEvent(FilterResponseEvent event) {
                 currentFilter = event.getFilter();
-                totalPages = Math.round((float)event.getTotalSize()/currentFilter.getSize());
+                totalPages = (int)Math.ceil((double)event.getTotalSize()/currentFilter.getSize());
+                if (currentPage > totalPages) currentPage = totalPages;
                 displayCurrentPage();
             }
         });

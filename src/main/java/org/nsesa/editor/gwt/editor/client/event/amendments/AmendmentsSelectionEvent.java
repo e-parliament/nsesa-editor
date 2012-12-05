@@ -6,11 +6,10 @@ import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentModeChangeEventHandler;
 
 /**
- * Created with IntelliJ IDEA.
+ * An event raised when the user select a selection
  * User: groza
  * Date: 29/11/12
  * Time: 10:42
- * To change this template use File | Settings | File Templates.
  */
 public class AmendmentsSelectionEvent extends GwtEvent<AmendmentsSelectionEventHandler> {
     public static final Type<AmendmentsSelectionEventHandler> TYPE = new Type<AmendmentsSelectionEventHandler>();

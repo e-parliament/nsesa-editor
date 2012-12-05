@@ -7,17 +7,12 @@ import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsAction;
+import org.nsesa.editor.gwt.editor.client.event.amendments.*;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -68,9 +63,8 @@ public class AmendmentsHeaderController {
         registerSelections();
         // register the actions
         registerActions();
-        this.view.setSelections(Arrays.asList(selections.values().toArray(new Selection[0])));
-        this.view.setActions(Arrays.asList(actions.values().toArray(new AmendmentsAction[0])));
-
+        setSelections();
+        setActions();
     }
 
     public AmendmentsHeaderView getView() {
@@ -104,7 +98,38 @@ public class AmendmentsHeaderController {
         registerSelection(ALL_SELECTION);
     }
 
+    private void setSelections() {
+        List<String> list = new ArrayList<String>();
+        for(final Selection<AmendmentController> selection : selections.values()) {
+            list.add(selection.getName());
+        }
+        this.view.setSelections(list);
+    }
+
+    private void setActions() {
+        List<String> list = new ArrayList<String>();
+        for(final AmendmentsAction action : actions.values()) {
+            list.add(action.getName());
+        }
+        this.view.setActions(list);
+    }
+
     private void registerListeners() {
+        documentEventBus.addHandler(MenuClickedEvent.TYPE, new MenuClickedEventHandler() {
+            @Override
+            public void onEvent(MenuClickedEvent event) {
+                final MenuClickedEvent.MenuType menuType = event.getMenuType();
+                switch(menuType) {
+                    case SELECTION:
+                        documentEventBus.fireEvent(new AmendmentsSelectionEvent(selections.get(event.getOption())));
+                        break;
+                    case ACTION:
+                        documentEventBus.fireEvent(new AmendmentsActionEvent(actions.get(event.getOption())));
+                        break;
+                }
+
+            }
+        });
     }
 
 }

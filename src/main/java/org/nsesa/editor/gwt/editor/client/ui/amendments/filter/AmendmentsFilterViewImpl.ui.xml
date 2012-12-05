@@ -3,10 +3,9 @@
     <ui:style src="AmendmentsFilterViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterViewCss'/>
     <ui:style field="res">
+        .filter {
+            float: right;
+        }
     </ui:style>
-    <g:MenuBar >
-        <g:MenuItem text="Filter">
-            <g:MenuBar ui:field="menuFilter" vertical="true"/>
-        </g:MenuItem>
-    </g:MenuBar>
+    <g:ListBox ui:field="menuFilter" styleName="{res.filter}"/>
 </ui:UiBinder>

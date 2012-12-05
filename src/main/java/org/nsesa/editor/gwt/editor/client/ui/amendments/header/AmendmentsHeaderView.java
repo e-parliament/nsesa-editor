@@ -13,11 +13,10 @@ import java.util.List;
  * User: groza
  * Date: 26/11/12
  * Time: 11:50
- * To change this template use File | Settings | File Templates.
  */
 @ImplementedBy(AmendmentsHeaderViewImpl.class)
 public interface AmendmentsHeaderView extends IsWidget {
-    public void setSelections(List<Selection> selections);
-    public void setActions(List<AmendmentsAction> actions);
+    public void setSelections(List<String> selections);
+    public void setActions(List<String> actions);
     public void setStyleName(String styleName);
 }

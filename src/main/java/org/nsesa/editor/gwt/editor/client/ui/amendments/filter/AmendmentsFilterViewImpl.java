@@ -2,9 +2,12 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -15,6 +18,7 @@ import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsAction;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
+import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEvent;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
@@ -40,7 +44,7 @@ public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFil
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @UiField
-    MenuBar menuFilter;
+    ListBox menuFilter;
 
     @Inject
     public AmendmentsFilterViewImpl(DocumentEventBus documentEventBus) {
@@ -56,13 +60,18 @@ public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFil
     @Override
     public void setFilters(List<String> filterList) {
         for (final String filter : filterList) {
-            this.menuFilter.addItem(filter, new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    documentEventBus.fireEvent(new FilterRequestEvent(new Filter(0,2, "order")));
-                }
-            });
+            this.menuFilter.addItem(filter, filter);
         }
 
+    }
+
+    @Override
+    public HasClickHandlers getFilter() {
+        return menuFilter;
+    }
+
+    @Override
+    public String getSelectedFilter() {
+        return menuFilter.getValue(menuFilter.getSelectedIndex());
     }
 }
