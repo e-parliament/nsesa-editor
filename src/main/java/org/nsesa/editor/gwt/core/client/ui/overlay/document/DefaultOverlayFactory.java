@@ -96,7 +96,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             for (final Element child : children) {
                 final AmendableWidget amendableChild = wrap(amendableWidget, child, depth + 1);
                 if (amendableChild != null) {
-                    amendableWidget.addAmendableWidget(amendableChild, true);
+                    amendableWidget.addAmendableWidget(amendableChild, -1, true);
                 }
             }
         }

@@ -12,7 +12,7 @@ import java.util.List;
  * the given <tt>amendmentController</tt> applies. Note that it is the responsibility of the {@link AmendmentInjectionPointProvider}
  * to actually give the correct amendable widget to add the amendment to, which might be different from the amendable
  * widget the amendment applies to (for example, in the case of a new element).
- *
+ * <p/>
  * Date: 30/11/12 11:10
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -21,4 +21,6 @@ import java.util.List;
 @ImplementedBy(DefaultAmendmentInjectionPointFinder.class)
 public interface AmendmentInjectionPointFinder {
     List<AmendableWidget> findInjectionPoints(AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController);
+
+    String getInjectionPoint(AmendableWidget amendableWidget);
 }

@@ -43,10 +43,13 @@ public class ActionBarCreatePanelController {
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
             public void onClick(final AmendableWidget newChild, final boolean sibling) {
-                // TODO: this is temporary, and technically not correct in case of a sibling. We'll need to adapt the event constructor instead
-                // for now, it's ok to pass the reference widget as the parent
-                newChild.setParentAmendableWidget(amendableWidget);
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild, sibling ? AmendmentAction.CREATION_SIBLING : AmendmentAction.CREATION_CHILD, documentController));
+                if (sibling) {
+                    // at index + 1 because we want if after our current widget
+                    amendableWidget.getParentAmendableWidget().addAmendableWidget(newChild, amendableWidget.getIndex() + 1);
+                } else {
+                    amendableWidget.addAmendableWidget(newChild /*, 0*/);
+                }
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild, AmendmentAction.CREATION, documentController));
             }
         });
     }

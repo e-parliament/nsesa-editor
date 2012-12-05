@@ -111,6 +111,14 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      */
     void addAmendableWidget(AmendableWidget child);
 
+    /**
+     * Add an amendable widget as a child at the given index.
+     *
+     * @param child the child to add.
+     * @param index the index where to add the child (-1 means at the end)
+     */
+    void addAmendableWidget(AmendableWidget child, int index);
+
     void onAttach();
 
     boolean isAttached();
@@ -118,11 +126,13 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     void onDetach();
 
     /**
-     * Add an amendable widget as a child, but do not perform a runtime validation check.
-     * @param child             the child to add
-     * @param skipValidation    <tt>true</tt> to skip validation.
+     * Add an amendable widget as a child at position <tt>index</tt>, but do not perform a runtime validation check.
+     *
+     * @param child          the child to add
+     * @param index          the position to insert the widget at (-1 means it will be added at the end)
+     * @param skipValidation <tt>true</tt> to skip validation.
      */
-    void addAmendableWidget(AmendableWidget child, boolean skipValidation);
+    void addAmendableWidget(AmendableWidget child, int index, boolean skipValidation);
 
     /**
      * Remove an amendable child. Throws an exception if the passed widget is not an actual child (that is,
@@ -297,13 +307,32 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     AmendmentController[] getAmendmentControllers();
 
     /**
+     * Get the index of this widget in its parent's widget collection, but only counting the same types (so, if there
+     * is another widget of another type in between, it will not be counted) and widgets that have not been
+     * introduced by amendments.
+     *
+     * @return the index, filtered by type, or -1 if it cannot be found.
+     */
+    int getTypeIndex();
+
+    /**
+     * Get the index of this widget in its parent's widget collection, but only counting widgets that have not been
+     * introduced by amendments.
+     *
+     * @return the index, or -1 if it cannot be found.
+     */
+    int getIndex();
+
+    /**
      * Returns the namespace this amendable widget was generated for.
+     *
      * @return the namespace URI.
      */
     String getNamespaceURI();
 
     /**
      * Set the overlay strategy (used for lazy loading)
+     *
      * @param overlayStrategy the overlay strategy
      */
     void setOverlayStrategy(OverlayStrategy overlayStrategy);

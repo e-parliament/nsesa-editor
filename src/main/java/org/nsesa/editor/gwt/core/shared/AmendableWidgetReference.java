@@ -10,30 +10,30 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class AmendableWidgetReference implements IsSerializable {
     private boolean creation, sibling;
-    private String element, type;
+    private String path, type;
     private int offset;
 
     public AmendableWidgetReference() {
     }
 
-    public AmendableWidgetReference(String element) {
-        this.element = element;
+    public AmendableWidgetReference(String path) {
+        this.path = path;
     }
 
-    public AmendableWidgetReference(boolean creation, boolean sibling, String element, String type, int offset) {
+    public AmendableWidgetReference(boolean creation, boolean sibling, String path, String type, int offset) {
         this.creation = creation;
         this.sibling = sibling;
-        this.element = element;
+        this.path = path;
         this.type = type;
         this.offset = offset;
     }
 
-    public String getElement() {
-        return element;
+    public String getPath() {
+        return path;
     }
 
-    public void setElement(String element) {
-        this.element = element;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public boolean isCreation() {

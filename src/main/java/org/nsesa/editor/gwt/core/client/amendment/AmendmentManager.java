@@ -21,7 +21,10 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentInjector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -118,8 +121,10 @@ public class AmendmentManager implements AmendmentInjectionCapable {
         // find the correct amendable widget(s) to which this amendment applies
         final List<AmendableWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
         if (injectionPoints != null) {
-            for (final AmendableWidget injectionPoint : injectionPoints) {
+            if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
+            }
+            for (final AmendableWidget injectionPoint : injectionPoints) {
                 final AmendableWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
                 if (target != null) {
                     target.addAmendmentController(amendmentController);

@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
@@ -34,6 +35,7 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     protected final AmendmentDialogCreateView view;
 
     protected final Locator locator;
+    protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
     protected final OverlayFactory overlayFactory;
 
     protected AmendmentContainerDTO amendment;
@@ -42,11 +44,14 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     protected DocumentController documentController;
 
     @Inject
-    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view, final Locator locator, final OverlayFactory overlayFactory) {
+    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
+                                           final Locator locator, final OverlayFactory overlayFactory,
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
+        this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
         registerListeners();
     }
 
@@ -67,16 +72,17 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     }
 
     public void handleSave() {
+
         AmendableWidget parentAmendableWidget = amendableWidget.getParentAmendableWidget();
         if (parentAmendableWidget == null) {
             throw new NullPointerException("No parent amendable widget set on the amendable widget.");
         }
-        int offset = parentAmendableWidget.getAmendmentControllers().length;
         amendment.setSourceReference(new AmendableWidgetReference(true,
-                amendmentAction == AmendmentAction.CREATION_SIBLING,
-                parentAmendableWidget.getId(),
+                amendmentAction == AmendmentAction.CREATION,
+                amendmentInjectionPointFinder.getInjectionPoint(parentAmendableWidget),
                 amendableWidget.getType(),
-                offset + 1));
+                amendableWidget.getIndex()));
+
 
         documentController.getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());

@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @version $Id$
  */
 public interface AmendmentUIHandler {
+
     void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
 
     void setAmendmentAction(AmendmentAction amendmentAction);

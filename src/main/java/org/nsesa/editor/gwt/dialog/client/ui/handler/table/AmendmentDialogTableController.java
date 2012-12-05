@@ -25,14 +25,14 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class AmendmentDialogTableController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final AmendmentDialogTableView view;
+    protected final AmendmentDialogTableView view;
 
-    private AmendmentContainerDTO amendment;
+    protected AmendmentContainerDTO amendment;
     protected AmendmentAction amendmentAction;
-    private AmendableWidget amendableWidget;
-    private DocumentController documentController;
+    protected AmendableWidget amendableWidget;
+    protected DocumentController documentController;
 
     @Inject
     public AmendmentDialogTableController(final ClientFactory clientFactory, final AmendmentDialogTableView view) {

@@ -143,7 +143,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     protected AmendmentUIHandler getUIHandler() {
-        if (amendmentAction == AmendmentAction.CREATION_CHILD || amendmentAction == AmendmentAction.CREATION_SIBLING) {
+        if (amendmentAction == AmendmentAction.CREATION) {
             return amendmentDialogCreateController;
         }
         if (amendmentAction == AmendmentAction.MOVE) {

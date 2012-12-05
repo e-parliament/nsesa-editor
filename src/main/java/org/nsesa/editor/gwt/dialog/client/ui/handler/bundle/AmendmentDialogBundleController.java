@@ -25,14 +25,14 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class AmendmentDialogBundleController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final AmendmentDialogBundleView view;
+    protected final AmendmentDialogBundleView view;
 
-    private AmendmentContainerDTO amendment;
-    private AmendmentAction amendmentAction;
-    private AmendableWidget amendableWidget;
-    private DocumentController documentController;
+    protected AmendmentContainerDTO amendment;
+    protected AmendmentAction amendmentAction;
+    protected AmendableWidget amendableWidget;
+    protected DocumentController documentController;
 
     @Inject
     public AmendmentDialogBundleController(final ClientFactory clientFactory, final AmendmentDialogBundleView view) {

@@ -117,7 +117,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public void addAmendableWidget(final AmendableWidget child) {
-        addAmendableWidget(child, false);
+        addAmendableWidget(child, -1);
+    }
+
+    @Override
+    public void addAmendableWidget(AmendableWidget child, int index) {
+        addAmendableWidget(child, index, false);
     }
 
     @Override
@@ -156,7 +161,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void addAmendableWidget(final AmendableWidget child, boolean skipValidation) {
+    public void addAmendableWidget(final AmendableWidget child, int index, boolean skipValidation) {
         if (child == null) throw new NullPointerException("Cannot add null child!");
         boolean vetoed = false;
         if (listener != null)
@@ -177,10 +182,24 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                         LOG.warning(getType() + " does not support child type:" + child);
                     }
                 }
-            }
 
-            if (!childAmendableWidgets.add(child)) {
-                throw new RuntimeException("Child already exists: " + child.getType());
+                // if our child was somehow still connected to another widget, then clear this reference first
+                if (child.getParentAmendableWidget() != null) {
+                    if (child.getParentAmendableWidget().getChildAmendableWidgets().contains(child)) {
+                        child.getParentAmendableWidget().removeAmendableWidget(child);
+                    }
+                }
+            }
+            if (index == -1) {
+                if (!childAmendableWidgets.add(child)) {
+                    throw new RuntimeException("Child already exists: " + child.getType());
+                }
+            } else {
+                if (index > childAmendableWidgets.size()) {
+                    throw new RuntimeException("Could not insert child amendable widget at index " + index +
+                            " because the size of the amendable children is only " + childAmendableWidgets.size());
+                }
+                childAmendableWidgets.add(index, child);
             }
             child.setParentAmendableWidget(this);
             // inform the listener
@@ -512,7 +531,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      * @return <tt>true</tt> if this widget was introduced by an amendment.
      */
     public boolean isIntroducedByAnAmendment() {
-        return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget().isIntroducedByAnAmendment();
+        return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget() != null && getParentAmendableWidget().isIntroducedByAnAmendment();
     }
 
     @Override
@@ -525,7 +544,51 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
     }
 
-    //DSL Way
+    @Override
+    public int getTypeIndex() {
+        if (getParentAmendableWidget() != null) {
+            final Iterator<AmendableWidget> iterator = getParentAmendableWidget().getChildAmendableWidgets().iterator();
+            int count = 0;
+            while (iterator.hasNext()) {
+                final AmendableWidget aw = iterator.next();
+                if (aw != null) {
+
+                    if (aw == this) {
+                        break;
+                    }
+                    if (!aw.isIntroducedByAnAmendment() && aw.getType().equalsIgnoreCase(getType())) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+        return 0;
+    }
+
+    @Override
+    public int getIndex() {
+        if (getParentAmendableWidget() != null) {
+            final Iterator<AmendableWidget> iterator = getParentAmendableWidget().getChildAmendableWidgets().iterator();
+            int count = 0;
+            while (iterator.hasNext()) {
+                final AmendableWidget aw = iterator.next();
+                if (aw != null) {
+
+                    if (aw == this) {
+                        break;
+                    }
+                    if (!aw.isIntroducedByAnAmendment()) {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+        return -1;
+    }
+
+    // DSL Way
     public String text() {
         return getContent();
     }
