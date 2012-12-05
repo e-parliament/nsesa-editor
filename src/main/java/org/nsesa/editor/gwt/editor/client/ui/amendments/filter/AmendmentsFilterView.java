@@ -1,12 +1,8 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsAction;
 
 import java.util.List;
 

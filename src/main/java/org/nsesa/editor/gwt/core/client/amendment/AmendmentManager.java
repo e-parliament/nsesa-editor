@@ -14,6 +14,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Filter;
+import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -160,19 +161,24 @@ public class AmendmentManager implements AmendmentInjectionCapable {
         this.injector = injector;
     }
 
-    public List<AmendmentController> getAmendmentControllers(Filter filter) {
-        List<AmendmentController> list = new ArrayList<AmendmentController>();
-        int end = Math.min(amendmentControllers.size(), filter.getStart() + filter.getSize());
-        for (int i = filter.getStart(); i < end; i++) {
-            list.add(amendmentControllers.get(i));
-        }
-
-        Collections.sort(list, new Comparator<AmendmentController>() {
-            @Override
-            public int compare(AmendmentController a, AmendmentController b) {
-                return Integer.valueOf(a.getOrder()).compareTo(b.getOrder());
+    public FilterResponse<AmendmentController> getAmendmentControllers(Filter<AmendmentController> filter) {
+        List<AmendmentController> tmpList = new ArrayList<AmendmentController>();
+        // apply comparator
+        Collections.sort(amendmentControllers, filter.getComparator());
+        // apply selection
+        for (AmendmentController amendmentController : amendmentControllers) {
+            if (filter.getSelection().select(amendmentController)) {
+                tmpList.add(amendmentController);
             }
-        });
-        return list;
+        }
+        List<AmendmentController> list = new ArrayList<AmendmentController>();
+
+        int end = Math.min(tmpList.size(), filter.getStart() + filter.getSize());
+        for (int i = filter.getStart(); i < end; i++) {
+            list.add(tmpList.get(i));
+        }
+        FilterResponse<AmendmentController> filterResponse =
+                new FilterResponse<AmendmentController>(filter, tmpList.size(), list);
+        return filterResponse;
     }
 }

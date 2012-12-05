@@ -9,10 +9,12 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInject
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
+import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
@@ -21,11 +23,10 @@ import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEventHandle
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 /**
- * The controller for filter
+ * The controller for pagination functionality
  * User: groza
  * Date: 30/11/12
  * Time: 15:29
- * To change this template use File | Settings | File Templates.
  */
 @Scope(DOCUMENT)
 @Singleton
@@ -47,14 +48,6 @@ public class PaginationController {
 
     public PaginationView getPaginationView() {
         return paginationView;
-    }
-
-    public int getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
     }
 
     private void registerListeners() {
@@ -89,7 +82,9 @@ public class PaginationController {
             @Override
             public void onEvent(FilterResponseEvent event) {
                 currentFilter = event.getFilter();
+                currentPage = currentFilter.getStart() / currentFilter.getSize() + 1;
                 totalPages = (int)Math.ceil((double)event.getTotalSize()/currentFilter.getSize());
+                if (totalPages == 0) totalPages = 1;
                 if (currentPage > totalPages) currentPage = totalPages;
                 displayCurrentPage();
             }

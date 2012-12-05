@@ -1,25 +1,15 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.logical.shared.HasValueChangeHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsAction;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEvent;
-import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.List;

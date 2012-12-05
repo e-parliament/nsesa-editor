@@ -1,6 +1,9 @@
 package org.nsesa.editor.gwt.editor.client.event.amendments;
 
 import com.google.gwt.event.shared.GwtEvent;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsAction;
+
+import javax.naming.Context;
 
 /**
  * An event raised when the user select a specific action

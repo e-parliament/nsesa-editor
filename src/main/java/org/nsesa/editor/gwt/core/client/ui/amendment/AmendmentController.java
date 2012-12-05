@@ -9,6 +9,8 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
+import java.util.Comparator;
+
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
@@ -19,6 +21,13 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  */
 @Scope(AMENDMENT)
 public class AmendmentController {
+
+    public static Comparator<AmendmentController> ORDER_COMPARATOR = new Comparator<AmendmentController>() {
+        @Override
+        public int compare(AmendmentController a, AmendmentController b) {
+            return Integer.valueOf(a.getOrder()).compareTo(b.getOrder());
+        }
+    };
 
     private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);
 

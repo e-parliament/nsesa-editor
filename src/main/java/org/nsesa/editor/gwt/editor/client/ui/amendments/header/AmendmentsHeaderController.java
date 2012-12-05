@@ -1,8 +1,5 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.header;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -10,11 +7,13 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.editor.client.event.amendments.*;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
+import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsAction;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
+import static org.nsesa.editor.gwt.core.client.util.Selection.*;
 
 /**
  * The controller for amendments panel header
@@ -26,28 +25,6 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsHeaderController {
-    private static final Selection<AmendmentController> NONE_SELECTION = new Selection<AmendmentController>() {
-        @Override
-        public boolean select(AmendmentController amendmentController) {
-            return false;
-        }
-
-        @Override
-        public String getName() {
-            return "None";
-        }
-    };
-    private static final Selection<AmendmentController> ALL_SELECTION = new Selection<AmendmentController>() {
-        @Override
-        public boolean select(AmendmentController amendmentController) {
-            return true;
-        }
-
-        @Override
-        public String getName() {
-            return "All";
-        }
-    };
 
     private final AmendmentsHeaderView view;
     private DocumentEventBus documentEventBus;
@@ -94,8 +71,8 @@ public class AmendmentsHeaderController {
 
 
     protected void registerSelections() {
-        registerSelection(NONE_SELECTION);
-        registerSelection(ALL_SELECTION);
+        registerSelection(NONE);
+        registerSelection(ALL);
     }
 
     private void setSelections() {

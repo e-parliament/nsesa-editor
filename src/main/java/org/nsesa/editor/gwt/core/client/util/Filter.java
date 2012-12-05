@@ -1,22 +1,26 @@
 package org.nsesa.editor.gwt.core.client.util;
 
+import java.util.Comparator;
+
 /**
  * A class to keep the filter parameters
  * User: groza
  * Date: 3/12/12
  * Time: 13:49
- * To change this template use File | Settings | File Templates.
  */
-public class Filter {
+public class Filter<T> {
 
     private int start;
     private int size;
-    private String orderBy;
+    private Comparator<T> comparator;
+    private Selection<T> selection;
 
-    public Filter(int start, int size, String orderBy) {
+    public Filter(int start, int size, Comparator<T> comparator, Selection<T> selection) {
         this.start = start;
         this.size = size;
-        this.orderBy = orderBy;
+        this.selection = selection;
+        this.comparator = comparator;
+
     }
 
 
@@ -28,12 +32,15 @@ public class Filter {
         return size;
     }
 
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
-
     public void setStart(int start) {
         this.start = start;
     }
 
+    public Comparator<T> getComparator() {
+        return comparator;
+    }
+
+    public Selection<T> getSelection() {
+        return selection;
+    }
 }

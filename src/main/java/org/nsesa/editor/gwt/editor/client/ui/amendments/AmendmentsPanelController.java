@@ -8,6 +8,7 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatus
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
+import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.client.util.Filter;
@@ -20,7 +21,6 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestE
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEvent;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
@@ -42,14 +42,15 @@ public class AmendmentsPanelController {
     private AmendmentsPanelView view;
     private DocumentEventBus documentEventBus;
     private DocumentController documentController;
-    private Filter currentFilter;
+    private Filter<AmendmentController> currentFilter;
 
     @Inject
     public AmendmentsPanelController(AmendmentsPanelView view,
-                                     AmendmentsFilterController amendmentsFilterController,
                                      DocumentEventBus documentEventBus) {
         this.view = view;
         this.documentEventBus = documentEventBus;
+        this.currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+                                        AmendmentController.ORDER_COMPARATOR, Selection.ALL);
         registerListeners();
     }
 
@@ -125,20 +126,27 @@ public class AmendmentsPanelController {
     }
 
     private void refreshAmendments() {
-        currentFilter = new Filter(0, AMENDMENTS_PER_PAGE, "order");
+        if (currentFilter != null) {
+            currentFilter.setStart(0);
+        } else {
+            currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+                                                            AmendmentController.ORDER_COMPARATOR,
+                                                            Selection.ALL);
+
+        }
         filterAmendments();
     }
 
     private void filterAmendments() {
         Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
-        List<AmendmentController> response = documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
-        for(AmendmentController amendmentController : response) {
+        FilterResponse<AmendmentController> response =
+                documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
+        for(AmendmentController amendmentController : response.getResult()) {
             amendments.put(amendmentController.getAmendment().getId(), amendmentController.getExtendedView());
         }
         view.refreshAmendments(amendments);
         // raise a filter response
-        List<AmendmentController> totalList = documentController.getAmendmentManager().getAmendmentControllers();
-        documentEventBus.fireEvent(new FilterResponseEvent(totalList.size(), currentFilter));
+        documentEventBus.fireEvent(new FilterResponseEvent(response.getTotalSize(), currentFilter));
     }
 }
 

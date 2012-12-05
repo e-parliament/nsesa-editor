@@ -30,7 +30,7 @@ public class AmendmentsFilterController {
     private DocumentEventBus documentEventBus;
     private AmendmentsFilterView view;
 
-    private static Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+    private static Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {
@@ -42,10 +42,13 @@ public class AmendmentsFilterController {
     }
 
     protected void registerFilterActions() {
-        registerFilterAction("All amendments", null);
+        registerFilterAction("All amendments",
+                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, Selection.ALL));
+        registerFilterAction("None",
+                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, Selection.NONE));
     }
 
-    public void registerFilterAction(String filterName, Filter filter) {
+    public void registerFilterAction(String filterName, Filter<AmendmentController> filter) {
         filters.put(filterName, filter);
     }
 

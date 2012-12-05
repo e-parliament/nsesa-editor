@@ -1,9 +1,9 @@
-package org.nsesa.editor.gwt.editor.client.event.amendments;
+package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import java.util.List;
 
 /**
- * Expose an action that could be executed among a group of amendments identified through their id
+ * Expose an action that could be executed among a group of amendments identified through their ids
  * User: groza
  * Date: 28/11/12
  * Time: 10:29
