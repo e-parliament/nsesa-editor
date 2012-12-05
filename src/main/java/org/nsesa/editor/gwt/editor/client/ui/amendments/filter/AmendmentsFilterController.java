@@ -1,8 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -53,12 +51,14 @@ public class AmendmentsFilterController {
     }
 
     protected void registerListeners() {
-        HasClickHandlers filterHandler = view.getFilter();
-        filterHandler.addClickHandler(new ClickHandler() {
+        HasChangeHandlers filterHandler = view.getFilter();
+        filterHandler.addChangeHandler(new ChangeHandler() {
             @Override
-            public void onClick(ClickEvent event) {
-                Filter filter = filters.get(view.getSelectedFilter());
+            public void onChange(ChangeEvent event) {
+                Filter<AmendmentController> filter = filters.get(view.getSelectedFilter());
                 if (filter != null) {
+                    //set the start page to 0
+                    filter.setStart(0);
                     documentEventBus.fireEvent(new FilterRequestEvent(filter));
                 }
             }

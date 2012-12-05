@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -56,7 +57,7 @@ public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFil
     }
 
     @Override
-    public HasClickHandlers getFilter() {
+    public HasChangeHandlers getFilter() {
         return menuFilter;
     }
 

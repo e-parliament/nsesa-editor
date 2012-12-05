@@ -1,6 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -17,6 +17,6 @@ import java.util.List;
 public interface AmendmentsFilterView extends IsWidget {
     public void setStyleName(String styleName);
     public void setFilters(List<String> filterList);
-    public HasClickHandlers getFilter();
+    public HasChangeHandlers getFilter();
     public String getSelectedFilter();
 }
