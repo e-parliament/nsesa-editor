@@ -68,7 +68,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     private native JavaScriptObject getConfiguration(JsArrayString cssPath, boolean readOnly, int height) /*-{
         return {
-            contentsCss:cssPath,
+            //contentsCss:cssPath,
             readOnly:readOnly,
             startupFocus: !readOnly,
             height:height,
