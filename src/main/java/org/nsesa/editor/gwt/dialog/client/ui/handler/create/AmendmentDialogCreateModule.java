@@ -3,7 +3,6 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
@@ -20,7 +19,6 @@ import javax.inject.Named;
 public class AmendmentDialogCreateModule extends AbstractGinModule {
     @Override
     public void configure() {
-        bind(AmendmentDialogCreateController.class).in(Singleton.class);
         bind(RichTextEditor.class).annotatedWith(Names.named("newText")).toProvider(NewTextProvider.class);
     }
 

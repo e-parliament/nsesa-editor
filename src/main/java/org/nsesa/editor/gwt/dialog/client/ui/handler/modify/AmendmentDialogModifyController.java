@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
@@ -41,6 +42,8 @@ public class AmendmentDialogModifyController extends Composite implements Provid
     protected final Locator locator;
 
     protected AmendmentContainerDTO amendment;
+
+    protected AmendmentAction amendmentAction;
 
     protected AmendableWidget amendableWidget;
 
@@ -119,5 +122,10 @@ public class AmendmentDialogModifyController extends Composite implements Provid
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    @Override
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
     }
 }

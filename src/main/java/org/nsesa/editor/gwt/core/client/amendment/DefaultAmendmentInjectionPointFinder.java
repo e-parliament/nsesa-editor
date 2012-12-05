@@ -23,8 +23,10 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
 
             @Override
             public boolean visit(final AmendableWidget visited) {
-                if (visited != null && amendmentController.getAmendment().getSourceReference().getElement().equalsIgnoreCase(visited.getId())) {
-                    injectionPoints.add(visited);
+                if (visited != null) {
+                    if (amendmentController.getAmendment().getSourceReference().getElement().equalsIgnoreCase(visited.getId())) {
+                        injectionPoints.add(visited);
+                    }
                 }
                 return true;
             }

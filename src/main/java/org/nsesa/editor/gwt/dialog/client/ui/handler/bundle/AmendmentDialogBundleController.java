@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -29,7 +30,7 @@ public class AmendmentDialogBundleController extends Composite implements Provid
     private final AmendmentDialogBundleView view;
 
     private AmendmentContainerDTO amendment;
-
+    private AmendmentAction amendmentAction;
     private AmendableWidget amendableWidget;
     private DocumentController documentController;
 
@@ -52,6 +53,11 @@ public class AmendmentDialogBundleController extends Composite implements Provid
     @Override
     public AmendmentDialogBundleView getView() {
         return view;
+    }
+
+    @Override
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
     }
 
     @Override

@@ -7,5 +7,5 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
  * @version $Id$
  */
 public enum AmendmentAction {
-    CREATION, DELETION, MOVE, MODIFICATION, BUNDLE
+    CREATION_CHILD, CREATION_SIBLING, DELETION, MOVE, MODIFICATION, BUNDLE
 }

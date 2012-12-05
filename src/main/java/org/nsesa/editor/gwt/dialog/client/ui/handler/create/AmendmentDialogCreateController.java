@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -27,21 +29,23 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class AmendmentDialogCreateController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final AmendmentDialogCreateView view;
+    protected final AmendmentDialogCreateView view;
 
-    private final OverlayFactory overlayFactory;
+    protected final Locator locator;
+    protected final OverlayFactory overlayFactory;
 
-    private AmendmentContainerDTO amendment;
-
-    private AmendableWidget amendableWidget;
-    private DocumentController documentController;
+    protected AmendmentContainerDTO amendment;
+    protected AmendmentAction amendmentAction;
+    protected AmendableWidget amendableWidget;
+    protected DocumentController documentController;
 
     @Inject
-    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view, final OverlayFactory overlayFactory) {
+    public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view, final Locator locator, final OverlayFactory overlayFactory) {
         this.clientFactory = clientFactory;
         this.view = view;
+        this.locator = locator;
         this.overlayFactory = overlayFactory;
         registerListeners();
     }
@@ -50,18 +54,36 @@ public class AmendmentDialogCreateController extends Composite implements Provid
         view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
-                clientFactory.getEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
-                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+                handleSave();
             }
         });
 
         view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+                handleClose();
             }
         });
+    }
+
+    public void handleSave() {
+        AmendableWidget parentAmendableWidget = amendableWidget.getParentAmendableWidget();
+        if (parentAmendableWidget == null) {
+            throw new NullPointerException("No parent amendable widget set on the amendable widget.");
+        }
+        int offset = parentAmendableWidget.getAmendmentControllers().length;
+        amendment.setSourceReference(new AmendableWidgetReference(true,
+                amendmentAction == AmendmentAction.CREATION_SIBLING,
+                parentAmendableWidget.getId(),
+                amendableWidget.getType(),
+                offset + 1));
+
+        documentController.getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
+        clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+    }
+
+    public void handleClose() {
+        clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
 
     @Override
@@ -80,5 +102,10 @@ public class AmendmentDialogCreateController extends Composite implements Provid
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    @Override
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
     }
 }

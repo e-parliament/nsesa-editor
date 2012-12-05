@@ -14,6 +14,8 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentDialogCreateViewImpl.class)
 public interface AmendmentDialogCreateView extends IsWidget {
 
+    String getAmendmentContent();
+
     HasClickHandlers getSaveButton();
 
     HasClickHandlers getCancelLink();

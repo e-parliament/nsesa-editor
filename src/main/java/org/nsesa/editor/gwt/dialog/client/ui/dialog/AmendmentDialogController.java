@@ -143,7 +143,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     protected AmendmentUIHandler getUIHandler() {
-        if (amendmentAction == AmendmentAction.CREATION) {
+        if (amendmentAction == AmendmentAction.CREATION_CHILD || amendmentAction == AmendmentAction.CREATION_SIBLING) {
             return amendmentDialogCreateController;
         }
         if (amendmentAction == AmendmentAction.MOVE) {
@@ -176,6 +176,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
         amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
         amendmentUIHandler.setDocumentController(documentController);
+        amendmentUIHandler.setAmendmentAction(amendmentAction);
     }
 
     /**

@@ -57,6 +57,11 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public String getAmendmentContent() {
+        return newText.getHTML();
+    }
+
+    @Override
     protected void onAttach() {
         super.onAttach();
         selectTab(0);

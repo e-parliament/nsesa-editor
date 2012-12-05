@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -24,14 +25,14 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public class AmendmentDialogMoveController extends Composite implements ProvidesResize, AmendmentUIHandler {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final AmendmentDialogMoveView view;
+    protected final AmendmentDialogMoveView view;
 
-    private AmendmentContainerDTO amendment;
-
-    private AmendableWidget amendableWidget;
-    private DocumentController documentController;
+    protected AmendmentContainerDTO amendment;
+    protected AmendmentAction amendmentAction;
+    protected AmendableWidget amendableWidget;
+    protected DocumentController documentController;
 
     @Inject
     public AmendmentDialogMoveController(final ClientFactory clientFactory, final AmendmentDialogMoveView view) {
@@ -65,4 +66,8 @@ public class AmendmentDialogMoveController extends Composite implements Provides
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
+    @Override
+        public void setAmendmentAction(AmendmentAction amendmentAction) {
+            this.amendmentAction = amendmentAction;
+        }
 }

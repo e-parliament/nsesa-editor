@@ -61,7 +61,7 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
         w.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                uiListener.onClick(amendableWidget);
+                uiListener.onClick(amendableWidget, false);
             }
         });
         childPanel.add(w);
@@ -73,7 +73,7 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
         w.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        uiListener.onClick(amendableWidget);
+                        uiListener.onClick(amendableWidget, true);
                     }
                 });
         siblingPanel.add(w);

@@ -25,6 +25,6 @@ public interface ActionBarCreatePanelView extends IsWidget {
     void clearAmendableWidgets();
 
     public static interface UIListener {
-        void onClick(AmendableWidget newChild);
+        void onClick(AmendableWidget newChild, boolean sibling);
     }
 }
