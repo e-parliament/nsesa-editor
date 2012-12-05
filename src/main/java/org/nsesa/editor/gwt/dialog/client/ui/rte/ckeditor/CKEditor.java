@@ -74,8 +74,12 @@ public class CKEditor extends Composite implements RichTextEditor {
             height:height,
             toolbarStartupExpanded: readOnly,
             toolbar:'Basic',
-            toolbar_Basic: readOnly ? [[]] : [['Bold', 'Italic']],
-            toolbarLocation:'bottom'
+            toolbar_Basic: readOnly ? [[]] : [['SuperScript', 'SubScript']],
+            toolbarLocation:'bottom',
+            autoParagraph: false,
+            fillEmptyBlocks:false,
+            forcePasteAsPlainText : true,
+            startupShowBorders: false
         }
     }-*/;
 
