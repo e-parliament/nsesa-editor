@@ -53,7 +53,6 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     protected void onAttach() {
         super.onAttach();
         selectTab(0);
-        amendmentText.init();
     }
 
     private void selectTab(final int i) {

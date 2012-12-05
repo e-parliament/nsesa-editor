@@ -53,7 +53,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             for (final String s : cssPath) {
                 jsStrings.push(s);
             }
-            JavaScriptObject configuration = getConfiguration(jsStrings, readOnly, textArea.getOffsetHeight() + (readOnly ? -5 : -45));
+            JavaScriptObject configuration = getConfiguration(jsStrings, readOnly, textArea.getOffsetHeight() + (readOnly ? -21 : -55));
             editorInstance = getEditor(configuration, this.id, temporaryContent);
             if (editorInstance == null) {
                 throw new NullPointerException("Editor instance not created!");

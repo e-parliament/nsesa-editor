@@ -46,6 +46,5 @@ public class ContentControllerViewImpl extends Composite implements ContentContr
     @Override
     protected void onAttach() {
         super.onAttach();
-        this.originalText.init();
     }
 }
