@@ -71,7 +71,7 @@ public class AmendmentDialogModifyController extends Composite implements Provid
             }
         });
 
-        view.getCancelButton().addClickHandler(new ClickHandler() {
+        view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleClose();

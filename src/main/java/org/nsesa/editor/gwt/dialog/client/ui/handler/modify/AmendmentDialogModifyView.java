@@ -24,5 +24,5 @@ public interface AmendmentDialogModifyView extends IsWidget {
 
     HasClickHandlers getSaveButton();
 
-    HasClickHandlers getCancelButton();
+    HasClickHandlers getCancelLink();
 }

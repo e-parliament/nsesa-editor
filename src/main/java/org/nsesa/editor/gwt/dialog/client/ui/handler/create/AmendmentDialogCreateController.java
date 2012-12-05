@@ -56,7 +56,7 @@ public class AmendmentDialogCreateController extends Composite implements Provid
             }
         });
 
-        view.getCancelButton().addClickHandler(new ClickHandler() {
+        view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 clientFactory.getEventBus().fireEvent(new CloseDialogEvent());

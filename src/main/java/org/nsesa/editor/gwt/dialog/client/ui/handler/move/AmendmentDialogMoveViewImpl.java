@@ -4,10 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 
 /**
@@ -23,7 +20,7 @@ public class AmendmentDialogMoveViewImpl extends Composite implements AmendmentD
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
     @UiField
-    Button cancelButton;
+    Anchor cancelLink;
     @UiField
     Button saveButton;
     @UiField
@@ -41,7 +38,7 @@ public class AmendmentDialogMoveViewImpl extends Composite implements AmendmentD
     }
 
     @Override
-    public HasClickHandlers getCancelButton() {
-        return cancelButton;
+    public HasClickHandlers getCancelLink() {
+        return cancelLink;
     }
 }

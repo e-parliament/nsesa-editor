@@ -41,7 +41,7 @@ public class AmendmentDialogMoveController extends Composite implements Provides
     }
 
     private void registerListeners() {
-        view.getCancelButton().addClickHandler(new ClickHandler() {
+        view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 clientFactory.getEventBus().fireEvent(new CloseDialogEvent());

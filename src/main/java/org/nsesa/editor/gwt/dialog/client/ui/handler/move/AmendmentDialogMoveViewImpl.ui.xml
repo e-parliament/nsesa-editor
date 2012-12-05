@@ -12,6 +12,12 @@
             width: 100%;
             text-align: center;
             height: 25px;
+            margin-top: 5px;
+        }
+
+        .cancelLink {
+            padding-right: 10px;
+            cursor: pointer;
         }
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
@@ -30,7 +36,7 @@
         <g:south size="40">
             <g:HTMLPanel styleName="{res.footer}">
                 <g:Button ui:field="saveButton" text="Save"/>
-                <g:Button ui:field="cancelButton" text="Cancel"/>
+                <g:Anchor ui:field="cancelLink" text="Cancel" styleName="{res.cancelLink}"/>
             </g:HTMLPanel>
         </g:south>
     </g:DockLayoutPanel>

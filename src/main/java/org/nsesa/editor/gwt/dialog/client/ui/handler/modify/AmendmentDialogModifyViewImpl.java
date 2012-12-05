@@ -22,7 +22,7 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
     @UiField
-    Button cancelButton;
+    Anchor cancelLink;
     @UiField
     Button saveButton;
     @UiField
@@ -85,7 +85,7 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     }
 
     @Override
-    public HasClickHandlers getCancelButton() {
-        return cancelButton;
+    public HasClickHandlers getCancelLink() {
+        return cancelLink;
     }
 }

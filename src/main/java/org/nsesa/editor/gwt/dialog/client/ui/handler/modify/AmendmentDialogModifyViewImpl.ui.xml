@@ -12,40 +12,22 @@
         .footer {
             width: 100%;
             text-align: center;
-            height: 25px;
-        }
-
-        .originalPanel {
-
-        }
-
-        .originalContent {
-
-        }
-
-        .authorsPanel {
-
-        }
-
-        .additionalPanel {
-
-        }
-
-        .footNotesPanel {
-
+            margin-top:5px;
         }
 
         .amendmentPanel {
 
         }
 
-        .amendmentContent {
-
+        .cancelLink {
+            padding-right: 10px;
+            cursor: pointer;
         }
+
     </ui:style>
     <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
         <g:north size='20'>
-            <g:HTML styleName="{res.header}" ui:field="title" />
+            <g:HTML styleName="{res.header}" ui:field="title"/>
         </g:north>
         <g:center>
             <g:DockLayoutPanel unit="PCT">
@@ -68,7 +50,7 @@
         <g:south size="40">
             <g:HTMLPanel styleName="{res.footer}">
                 <g:Button ui:field="saveButton" text="Save"/>
-                <g:Button ui:field="cancelButton" text="Cancel"/>
+                <g:Anchor ui:field="cancelLink" text="Cancel" styleName="{res.cancelLink}"/>
             </g:HTMLPanel>
         </g:south>
     </g:DockLayoutPanel>

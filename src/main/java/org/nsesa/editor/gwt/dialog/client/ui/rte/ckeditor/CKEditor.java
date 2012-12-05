@@ -35,7 +35,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     public CKEditor(final String toSplit, final boolean readOnly) {
         this.cssPath = toSplit.split(",");
         for (int i = 0; i < cssPath.length; i++) {
-            cssPath[i] = GWT.getModuleBaseURL() + "../" +cssPath[i];
+            cssPath[i] = GWT.getModuleBaseURL() + "../" + cssPath[i];
         }
         this.readOnly = readOnly;
         this.id = "ckEditor" + counter++;
@@ -66,20 +66,32 @@ public class CKEditor extends Composite implements RichTextEditor {
         if (editorInstance != null) editorInstance.destroy();
     }-*/;
 
+    /*
+
+    NOTE: there still is a lot left to do for this editor, the most important being that the inserted content
+    in this RTE must become valid according to the overlay factory (or we'll have problems later on when
+    the content of the amendment gets parsed and serialized to XML).
+
+    Note: this is possible, but at the moment, this is a manual process. We'll improve it by automatically
+    wiring up the overlay factory, but this will take some time.
+
+     */
     private native JavaScriptObject getConfiguration(JsArrayString cssPath, boolean readOnly, int height) /*-{
         return {
             //contentsCss:cssPath,
             readOnly:readOnly,
-            startupFocus: !readOnly,
+            startupFocus:!readOnly,
             height:height,
-            toolbarStartupExpanded: readOnly,
+            toolbarStartupExpanded: !readOnly,
             toolbar:'Basic',
-            toolbar_Basic: readOnly ? [[]] : [['SuperScript', 'SubScript']],
+            removePlugins:'elementspath',
+            toolbar_Basic:readOnly ? [[]] : [[ 'Subscript', 'Superscript', '-', 'SpecialChar' ]],
             toolbarLocation:'bottom',
-            autoParagraph: false,
+            resize_enabled:false,
+            autoParagraph:false,
             fillEmptyBlocks:false,
-            forcePasteAsPlainText : true,
-            startupShowBorders: false
+            forcePasteAsPlainText:true
+            //startupShowBorders:false
         }
     }-*/;
 
@@ -102,8 +114,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     public String getHTML() {
         if (!attached) {
             return temporaryContent;
-        }
-        else
+        } else
             return getHTMLInternal(editorInstance);
     }
 

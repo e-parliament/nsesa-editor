@@ -24,7 +24,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
     @UiField
-    Button cancelButton;
+    Anchor cancelLink;
     @UiField
     Button saveButton;
     @UiField
@@ -48,6 +48,8 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
         this.authorPanelView = authorPanelController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        dockPanel.setHeight("100%");
+        dockPanel.setWidth("100%");
     }
 
     public void setTitle(final String title) {
@@ -58,10 +60,6 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     protected void onAttach() {
         super.onAttach();
         selectTab(0);
-        dockPanel.setHeight("100%");
-        dockPanel.setWidth("100%");
-        tabLayoutPanel.setWidth("100%");
-        tabLayoutPanel.setHeight("100%");
     }
 
     private void selectTab(final int i) {
@@ -74,7 +72,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     }
 
     @Override
-    public HasClickHandlers getCancelButton() {
-        return cancelButton;
+    public HasClickHandlers getCancelLink() {
+        return cancelLink;
     }
 }
