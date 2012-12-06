@@ -49,6 +49,9 @@ public class AmendmentDialogModifyController extends Composite implements Provid
 
     protected DocumentController documentController;
 
+    protected AmendableWidget parentAmendableWidget;
+    private int index;
+
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
@@ -118,6 +121,16 @@ public class AmendmentDialogModifyController extends Composite implements Provid
         for (final AmendmentModifyAwareController childController : childControllers) {
             childController.setAmendmentAndAmendableWidget(amendment, amendableWidget);
         }
+    }
+
+    @Override
+    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
+        this.parentAmendableWidget = parentAmendableWidget;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setDocumentController(DocumentController documentController) {

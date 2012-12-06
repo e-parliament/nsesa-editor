@@ -16,11 +16,15 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
     public static final Type<AmendmentContainerCreateEventHandler> TYPE = new Type<AmendmentContainerCreateEventHandler>();
 
     private final AmendableWidget amendableWidget;
+    private final AmendableWidget parentAmendableWidget;
+    private final int index;
     private final AmendmentAction amendmentAction;
     private final DocumentController documentController;
 
-    public AmendmentContainerCreateEvent(AmendableWidget amendableWidget, AmendmentAction amendmentAction, DocumentController documentController) {
+    public AmendmentContainerCreateEvent(AmendableWidget amendableWidget, AmendableWidget parentAmendableWidget, int index, AmendmentAction amendmentAction, DocumentController documentController) {
         this.amendableWidget = amendableWidget;
+        this.parentAmendableWidget = parentAmendableWidget;
+        this.index = index;
         this.amendmentAction = amendmentAction;
         this.documentController = documentController;
     }
@@ -45,5 +49,13 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
 
     public DocumentController getDocumentController() {
         return documentController;
+    }
+
+    public AmendableWidget getParentAmendableWidget() {
+        return parentAmendableWidget;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

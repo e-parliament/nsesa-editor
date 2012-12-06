@@ -43,13 +43,10 @@ public class ActionBarCreatePanelController {
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
             public void onClick(final AmendableWidget newChild, final boolean sibling) {
-                if (sibling) {
-                    // at index + 1 because we want if after our current widget
-                    amendableWidget.getParentAmendableWidget().addAmendableWidget(newChild, amendableWidget.getIndex() + 1);
-                } else {
-                    amendableWidget.addAmendableWidget(newChild /*, 0*/);
-                }
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild, AmendmentAction.CREATION, documentController));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild,
+                        sibling ? amendableWidget.getParentAmendableWidget() : amendableWidget,
+                        sibling ? amendableWidget.getIndex() + 1 : 0,
+                        AmendmentAction.CREATION, documentController));
             }
         });
     }

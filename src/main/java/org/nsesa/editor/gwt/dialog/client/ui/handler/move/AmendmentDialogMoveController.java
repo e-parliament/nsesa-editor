@@ -33,6 +33,8 @@ public class AmendmentDialogMoveController extends Composite implements Provides
     protected AmendmentAction amendmentAction;
     protected AmendableWidget amendableWidget;
     protected DocumentController documentController;
+    protected AmendableWidget parentAmendableWidget;
+    private int index;
 
     @Inject
     public AmendmentDialogMoveController(final ClientFactory clientFactory, final AmendmentDialogMoveView view) {
@@ -63,11 +65,22 @@ public class AmendmentDialogMoveController extends Composite implements Provides
         this.amendableWidget = amendableWidget;
     }
 
+    @Override
+    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
+        this.parentAmendableWidget = parentAmendableWidget;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
+
     @Override
-        public void setAmendmentAction(AmendmentAction amendmentAction) {
-            this.amendmentAction = amendmentAction;
-        }
+    public void setAmendmentAction(AmendmentAction amendmentAction) {
+        this.amendmentAction = amendmentAction;
+    }
 }

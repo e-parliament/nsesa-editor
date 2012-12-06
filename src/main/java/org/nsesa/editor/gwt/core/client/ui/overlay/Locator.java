@@ -11,5 +11,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  */
 @ImplementedBy(DefaultLocator.class)
 public interface Locator {
+    String getLocation(AmendableWidget amendableWidget, AmendableWidget newChild, String languageIso, boolean childrenIncluded);
+
     String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded);
 }

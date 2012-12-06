@@ -33,6 +33,8 @@ public class AmendmentDialogTableController extends Composite implements Provide
     protected AmendmentAction amendmentAction;
     protected AmendableWidget amendableWidget;
     protected DocumentController documentController;
+    protected AmendableWidget parentAmendableWidget;
+    private int index;
 
     @Inject
     public AmendmentDialogTableController(final ClientFactory clientFactory, final AmendmentDialogTableView view) {
@@ -61,6 +63,16 @@ public class AmendmentDialogTableController extends Composite implements Provide
         assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
+    }
+
+    @Override
+    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
+        this.parentAmendableWidget = parentAmendableWidget;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setDocumentController(DocumentController documentController) {

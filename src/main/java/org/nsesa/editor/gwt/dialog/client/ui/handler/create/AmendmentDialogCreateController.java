@@ -41,6 +41,9 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     protected AmendmentContainerDTO amendment;
     protected AmendmentAction amendmentAction;
     protected AmendableWidget amendableWidget;
+    protected AmendableWidget parentAmendableWidget;
+    protected int index;
+
     protected DocumentController documentController;
 
     @Inject
@@ -72,16 +75,14 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     }
 
     public void handleSave() {
-
-        AmendableWidget parentAmendableWidget = amendableWidget.getParentAmendableWidget();
         if (parentAmendableWidget == null) {
-            throw new NullPointerException("No parent amendable widget set on the amendable widget.");
+            throw new NullPointerException("No parent amendable widget set.");
         }
         amendment.setSourceReference(new AmendableWidgetReference(true,
                 amendmentAction == AmendmentAction.CREATION,
                 amendmentInjectionPointFinder.getInjectionPoint(parentAmendableWidget),
                 amendableWidget.getType(),
-                amendableWidget.getIndex()));
+                index));
 
 
         documentController.getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
@@ -113,5 +114,15 @@ public class AmendmentDialogCreateController extends Composite implements Provid
     @Override
     public void setAmendmentAction(AmendmentAction amendmentAction) {
         this.amendmentAction = amendmentAction;
+    }
+
+    @Override
+    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
+        this.parentAmendableWidget = parentAmendableWidget;
+    }
+
+    @Override
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

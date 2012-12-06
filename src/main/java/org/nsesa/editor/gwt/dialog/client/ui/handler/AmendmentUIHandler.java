@@ -16,6 +16,10 @@ public interface AmendmentUIHandler {
 
     void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
 
+    void setParentAmendableWidget(AmendableWidget parentAmendableWidget);
+
+    void setIndex(int index);
+
     void setAmendmentAction(AmendmentAction amendmentAction);
 
     void setDocumentController(DocumentController documentController);

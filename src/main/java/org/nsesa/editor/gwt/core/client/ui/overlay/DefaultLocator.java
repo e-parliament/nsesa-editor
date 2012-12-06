@@ -22,12 +22,19 @@ public class DefaultLocator implements Locator {
 
     @Override
     public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
+        return getLocation(amendableWidget, null, languageIso, childrenIncluded);
+    }
+
+    @Override
+    public String getLocation(AmendableWidget amendableWidget, AmendableWidget newChild, String languageIso, boolean childrenIncluded) {
         final StringBuilder location = new StringBuilder();
 
-        final List<AmendableWidget> parents = amendableWidget.getParentAmendableWidgets();
-        // add the current widget as well (since only the parents are retrieved)
-        parents.add(amendableWidget);
-        for (final AmendableWidget parent : parents) {
+        final List<AmendableWidget> path = amendableWidget.getParentAmendableWidgets();
+        // add the current widget as well (since only the path are retrieved)
+        path.add(amendableWidget);
+        if (newChild != null)
+            path.add(newChild);
+        for (final AmendableWidget parent : path) {
             // filter our not just the same classes, but also any parent classes or interfaces
             final Collection<Class<? extends AmendableWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends AmendableWidget>>() {
                 @Override

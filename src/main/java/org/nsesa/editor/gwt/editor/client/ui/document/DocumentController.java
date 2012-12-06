@@ -414,7 +414,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, AmendmentAction.MODIFICATION, this));
+        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
     }
 
     @Override

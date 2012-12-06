@@ -24,22 +24,26 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
         final AmendableWidgetReference reference = amendmentController.getAmendment().getSourceReference();
         if (reference.isCreation()) {
             final AmendableWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getType());
+            // mark the origin so we know it was introduced by amendments.
             child.setOrigin(AmendableWidgetOrigin.AMENDMENT);
-            // check if there is already an existing child for to add this amendment to (this can happen if there's
-            // out-of-order injection)
-            if (!root.getChildAmendableWidgets().isEmpty() && root.getChildAmendableWidgets().size() > reference.getOffset()) {
-                if (root.getChildAmendableWidgets().get(reference.getOffset()).getOrigin() == AmendableWidgetOrigin.AMENDMENT) {
-                    // child was already created ...
-                    return root.getChildAmendableWidgets().get(reference.getOffset());
-                }
-            }
+            // make sure we're listening to the UI events
+            child.setUIListener(documentController);
 
             com.google.gwt.user.client.Element parentElement = root.getAmendableElement().cast();
             com.google.gwt.user.client.Element childElement = child.getAmendableElement().cast();
-            root.addAmendableWidget(child, reference.getOffset(), true);
+
             // attach to the DOM
-            // note: do not use the same offset, since other elements might have been introduced ..
-            DOM.insertChild(parentElement, childElement, root.getChildAmendableWidgets().indexOf(child));
+            if (root.getChildAmendableWidgets().isEmpty()) {
+                // ok, insert as the last child
+                DOM.insertChild(parentElement, childElement, parentElement.getChildCount());
+                root.addAmendableWidget(child, -1, false);
+            } else {
+                // insert before the first child amendable widget
+                com.google.gwt.user.client.Element beforeElement = root.getChildAmendableWidgets().get(reference.getOffset()).getAmendableElement().cast();
+                DOM.insertBefore(parentElement, childElement, beforeElement);
+                // logical
+                root.addAmendableWidget(child, reference.getOffset(), true);
+            }
 
             LOG.info("Added new " + child + " as a child to " + root + " at position " + reference.getOffset());
             return child;

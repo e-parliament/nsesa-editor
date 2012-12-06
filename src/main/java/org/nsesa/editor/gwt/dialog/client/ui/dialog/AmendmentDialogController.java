@@ -75,6 +75,16 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private AmendableWidget amendableWidget;
 
     /**
+     * The logical parent amendable widget (only relevant in case of new elements).
+     */
+    private AmendableWidget parentAmendableWidget;
+
+    /**
+     * The index where to position the (new) amendable widget (only relevant in case of new elements).
+     */
+    private int index;
+
+    /**
      * The document controller.
      */
     private DocumentController documentController;
@@ -109,6 +119,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 amendableWidget = event.getAmendableWidget();
+                parentAmendableWidget = event.getParentAmendableWidget();
+                index = event.getIndex();
                 amendmentAction = event.getAmendmentAction();
                 documentController = event.getDocumentController();
                 amendment = createAmendment();
@@ -177,6 +189,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
         amendmentUIHandler.setDocumentController(documentController);
         amendmentUIHandler.setAmendmentAction(amendmentAction);
+        amendmentUIHandler.setParentAmendableWidget(parentAmendableWidget);
+        amendmentUIHandler.setIndex(index);
     }
 
     /**
