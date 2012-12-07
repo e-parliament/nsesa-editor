@@ -366,7 +366,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public String getContent() {
+    public String getInnerHTML() {
         if (overlayStrategy == null) return amendableContent;
         if (amendableContent == null) {
             amendableContent = overlayStrategy.getContent(amendableElement);
@@ -375,7 +375,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void setContent(String amendableContent) {
+    public void setInnerHTML(String amendableContent) {
         this.amendableContent = amendableContent;
     }
 
@@ -623,12 +623,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     // DSL Way
-    public String text() {
-        return getContent();
+    public String html() {
+        return getInnerHTML();
     }
 
-    public AmendableWidgetImpl text(String s) {
-        setContent(s);
+    public AmendableWidgetImpl html(String s) {
+        setInnerHTML(s);
         return this;
     }
 

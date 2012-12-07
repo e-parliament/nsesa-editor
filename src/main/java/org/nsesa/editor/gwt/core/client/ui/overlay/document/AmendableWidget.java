@@ -190,7 +190,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @return the child nodes serialized as a <tt>String</tt>.
      */
-    String getContent();
+    String getInnerHTML();
 
     /**
      * Set the text content of this amendable widget. While this technically could contain tags, you are advised
@@ -198,7 +198,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @param amendableContent the text content for this node.
      */
-    void setContent(String amendableContent);
+    void setInnerHTML(String amendableContent);
 
     /**
      * Get the HTMLPanel to attach the amendments on. If it does not yet exist, it will be created and attached
