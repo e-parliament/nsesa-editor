@@ -68,7 +68,8 @@ public interface OverlayStrategy {
 
     /**
      * Return the namespace URI for this element.
-     * @param element   the element to get the namespace for
+     *
+     * @param element the element to get the namespace for
      * @return
      */
     String getNamespaceURI(Element element);
@@ -105,4 +106,20 @@ public interface OverlayStrategy {
      * @return the children of a given <tt>element</tt>
      */
     Element[] getChildren(Element element);
+
+    /**
+     * Retrieves the formatted index from a given <tt>element</tt>
+     *
+     * @param element the element
+     * @return the formatted index
+     */
+    String getFormattedIndex(Element element);
+
+    /**
+     * Retries the unformatted index from a given <tt>element</tt>
+     *
+     * @param element the element
+     * @return the unformatted index
+     */
+    String getUnFormattedIndex(Element element);
 }

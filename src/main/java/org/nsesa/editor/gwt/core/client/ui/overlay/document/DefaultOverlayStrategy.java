@@ -63,6 +63,16 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
 
     @Override
     public Element[] getChildren(Element element) {
-        return new Element[] {};
+        return new Element[]{};
+    }
+
+    @Override
+    public String getFormattedIndex(Element element) {
+        return null;
+    }
+
+    @Override
+    public String getUnFormattedIndex(Element element) {
+        return null;
     }
 }

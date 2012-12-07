@@ -94,6 +94,16 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     private Integer assignedNumber;
 
     /**
+     * Contains the unformatted index of this amendable widget (eg. 'a', '2', '-', ...)
+     */
+    private String unformattedIndex;
+
+    /**
+     * Contains the formatted, original index of this amendable widget (eg. 'a)', '(2)', '-', '', ...)
+     */
+    private String formattedIndex;
+
+    /**
      * The holder element for the amendments.
      */
     private HTMLPanel amendmentHolderElement;
@@ -523,6 +533,30 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public AmendableWidgetOrigin getOrigin() {
         return origin;
+    }
+
+    public String getFormattedIndex() {
+        if (overlayStrategy == null) return formattedIndex;
+        if (formattedIndex == null) {
+            formattedIndex = overlayStrategy.getFormattedIndex(amendableElement);
+        }
+        return formattedIndex;
+    }
+
+    public void setFormattedIndex(String formattedIndex) {
+        this.formattedIndex = formattedIndex;
+    }
+
+    public String getUnformattedIndex() {
+        if (overlayStrategy == null) return unformattedIndex;
+        if (unformattedIndex == null) {
+            unformattedIndex = overlayStrategy.getUnFormattedIndex(amendableElement);
+        }
+        return unformattedIndex;
+    }
+
+    public void setUnformattedIndex(String unformattedIndex) {
+        this.unformattedIndex = unformattedIndex;
     }
 
     /**

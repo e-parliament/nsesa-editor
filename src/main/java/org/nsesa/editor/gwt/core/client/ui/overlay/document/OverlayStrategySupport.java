@@ -260,7 +260,7 @@ public class OverlayStrategySupport {
      * @return the literal index or null if it hasn't been specified.
      */
     public final String getLiteralIndex(Element element) {
-        Element el = getElementByTag(element, TAG_LITERAL_INDEX);
+        Element el = getElementByClassName(element, TAG_LITERAL_INDEX);
         if (el != null) {
             return TextUtils.stripTags(el.getInnerText().trim());
         } else {
@@ -422,8 +422,11 @@ public class OverlayStrategySupport {
             final Node node = element.getChild(i);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 final Element el = node.cast();
-                if (el.getClassName().equalsIgnoreCase(className)) {
-                    return el;
+                final String classNames = el.getClassName();
+                if (classNames != null) {
+                    final String clean = TextUtils.collapseWhiteSpace(classNames);
+                    if (Arrays.asList(clean.split(" ")).contains(className))
+                        return el;
                 }
             }
         }

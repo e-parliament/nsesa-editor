@@ -21,12 +21,12 @@ public class DefaultLocator implements Locator {
     protected Set<Class<? extends AmendableWidget>> showAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
 
     @Override
-    public String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded) {
+    public String getLocation(final AmendableWidget amendableWidget, final String languageIso, final boolean childrenIncluded) {
         return getLocation(amendableWidget, null, languageIso, childrenIncluded);
     }
 
     @Override
-    public String getLocation(AmendableWidget amendableWidget, AmendableWidget newChild, String languageIso, boolean childrenIncluded) {
+    public String getLocation(final AmendableWidget amendableWidget, final AmendableWidget newChild, final String languageIso, final boolean childrenIncluded) {
         final StringBuilder location = new StringBuilder();
 
         final List<AmendableWidget> path = amendableWidget.getParentAmendableWidgets();
@@ -52,7 +52,16 @@ public class DefaultLocator implements Locator {
         return location.toString().endsWith(SPLITTER) ? location.substring(0, location.length() - SPLITTER.length()) : location.toString();
     }
 
-    public String getNum(AmendableWidget amendableWidget) {
+    public String getNum(final AmendableWidget amendableWidget) {
+
+        // see if we can extract the index
+        final NumberingType numberingType = amendableWidget.getNumberingType();
+        if (numberingType != null) {
+            if (!numberingType.isConstant()) {
+                return amendableWidget.getUnformattedIndex();
+            }
+        }
+
         final Integer assignedNumber = amendableWidget.getAssignedNumber();
         return assignedNumber != null ? Integer.toString(assignedNumber) : "";
     }

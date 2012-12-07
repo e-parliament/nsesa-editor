@@ -336,4 +336,18 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      * @param overlayStrategy the overlay strategy
      */
     void setOverlayStrategy(OverlayStrategy overlayStrategy);
+
+    /**
+     * Get the unformatted index, if any.
+     *
+     * @return the unformatted index.
+     */
+    String getUnformattedIndex();
+
+    /**
+     * Get the formatted index, if any.
+     *
+     * @return the formatted index.
+     */
+    String getFormattedIndex();
 }
