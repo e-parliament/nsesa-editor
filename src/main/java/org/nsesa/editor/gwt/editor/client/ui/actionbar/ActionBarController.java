@@ -164,7 +164,7 @@ public class ActionBarController {
         actionBarCreatePanelController.getView().asWidget().setVisible(false);
         if (amendableWidget != null && amendableWidget.getRoot() != null) {
             final Style style = view.asWidget().getElement().getStyle();
-            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 60;
+            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 70;
             style.setTop(coordinateY, Style.Unit.PX);
             final int x = amendableWidget.asWidget().getAbsoluteLeft();
             style.setLeft(x, Style.Unit.PX);
