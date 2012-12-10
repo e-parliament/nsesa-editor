@@ -1,11 +1,16 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Default implementation of <code>XMLTransformer</code> interface
@@ -17,6 +22,8 @@ public class DefaultXMLTransformer implements XMLTransformer {
 
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     public static final String DEFAULT_NAMESPACE = "";
+
+    private static final Logger LOG = Logger.getLogger(DefaultXMLTransformer.class.getName());
 
     @Override
     public String toXML(final AmendableWidget widget) {
@@ -60,13 +67,53 @@ public class DefaultXMLTransformer implements XMLTransformer {
             }
         }
         sb.append(">");
-        // apply xml transformation for children
-        for (final AmendableWidget child : widget.getChildAmendableWidgets()) {
-            sb.append(toXMLElement(child, namespaces, false));
-        }
-        final String content = widget.getInnerHTML();
-        if (content != null && content.length() > 0) {
-            sb.append(content);
+        Element element = widget.getAmendableElement();
+        NodeList<Node> nodes = element.getChildNodes();
+        int length = nodes.getLength();
+        if (length == 0) {
+            // the root is all the time a new one
+            // apply xml transformation for children
+            for (final AmendableWidget child : widget.getChildAmendableWidgets()) {
+                sb.append(toXMLElement(child, namespaces, false));
+            }
+        } else {
+            for (int i = 0; i < length; i++) {
+                final short nodeType = nodes.getItem(i).getNodeType();
+                Element childElement = nodes.getItem(i).cast();
+                switch (nodeType) {
+                    case Node.ELEMENT_NODE :
+                        // get the amendable widget corresponding to this child and apply xml transformation
+                        // hopefully there is one amendable widget linked to this node
+
+//                        if (i >= widget.getChildAmendableWidgets().size()) {
+//                            LOG.warning("no correlation between amendable widgets and DOM elements");
+//                            break;
+//                        }
+                        //final AmendableWidget child = widget.getChildAmendableWidgets().get(i);
+                        //sb.append(toXMLElement(child, namespaces, false));
+                        AmendableWidget child = null;
+                        // try to find out a amendable widget linked to childElement
+                        for (AmendableWidget aw : widget.getChildAmendableWidgets()) {
+                            if (aw.getAmendableElement().equals(childElement)) {
+                                child = aw;
+                                break;
+                            }
+                        }
+                        if (child != null) {
+                            sb.append(toXMLElement(child, namespaces, false));
+                        } else {
+                            LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
+                        }
+                        break;
+                    case Node.TEXT_NODE:
+                        Element childText = nodes.getItem(i).cast();
+                        sb.append(childText.getInnerText());
+                        break;
+                    case Node.DOCUMENT_NODE:
+                        LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());
+                        break;
+                }
+            }
         }
         sb.append("</").append(widget.getType()).append(">");
         return sb.toString();
