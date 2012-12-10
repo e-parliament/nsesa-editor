@@ -369,7 +369,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public String getInnerHTML() {
         if (overlayStrategy == null) return amendableContent;
         if (amendableContent == null) {
-            amendableContent = overlayStrategy.getContent(amendableElement);
+            amendableContent = overlayStrategy.getInnerHTML(amendableElement);
         }
         return amendableContent;
     }

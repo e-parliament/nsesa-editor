@@ -57,7 +57,7 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
     }
 
     @Override
-    public String getContent(Element element) {
+    public String getInnerHTML(Element element) {
         return null;
     }
 

@@ -62,6 +62,8 @@ public class AmendmentDialogCreateController extends Composite implements Provid
         view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                // set the assigned number on the amendable widget
+                amendableWidget.setAssignedNumber(index);
                 handleSave();
             }
         });

@@ -99,14 +99,9 @@ public class OverlayStrategySupport {
      *
      * @return the amendable content.
      */
-    public String getAmendableContent(Element element) {
+    public String getInnerHTML(Element element) {
         if (element == null) return null;
-        final Element content = getElementByClassName(element, "content");
-        if (content == null) {
-            final Element p = getElementByClassName(element, "p");
-            return p != null ? p.getInnerHTML() : element.getInnerHTML();
-        }
-        return content.getInnerHTML();
+        return element.getInnerHTML();
     }
 
 

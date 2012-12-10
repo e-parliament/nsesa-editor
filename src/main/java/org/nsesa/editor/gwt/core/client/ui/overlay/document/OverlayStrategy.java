@@ -97,7 +97,7 @@ public interface OverlayStrategy {
      * @param element the element
      * @return the content, or <tt>null</tt> if nothing is available
      */
-    String getContent(Element element);
+    String getInnerHTML(Element element);
 
     /**
      * Gather the children of a given <tt>element</tt>.

@@ -47,7 +47,7 @@ public class ContentPanelController implements AmendmentModifyAwareController {
         assert amendableWidget != null : "Amendment Widget should not be null.";
         this.amendment = amendment;
         this.amendableWidget = amendableWidget;
-        view.setOriginalText(amendableWidget.getContent());
+        view.setOriginalText(amendableWidget.getInnerHTML());
     }
 
     @Override

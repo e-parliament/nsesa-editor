@@ -64,7 +64,7 @@ public class DefaultXMLTransformer implements XMLTransformer {
         for (final AmendableWidget child : widget.getChildAmendableWidgets()) {
             sb.append(toXMLElement(child, namespaces, false));
         }
-        final String content = widget.getContent();
+        final String content = widget.getInnerHTML();
         if (content != null && content.length() > 0) {
             sb.append(content);
         }

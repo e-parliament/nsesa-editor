@@ -111,7 +111,7 @@ public class AmendmentDialogModifyController extends Composite implements Provid
 
         if (amendableWidget != null) {
             view.setTitle(locator.getLocation(amendableWidget, clientFactory.getClientContext().getDocumentIso(), false));
-            view.setAmendmentContent(amendableWidget.getContent());
+            view.setAmendmentContent(amendableWidget.getInnerHTML());
         }
 
         if (amendment != null) {
