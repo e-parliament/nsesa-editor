@@ -15,7 +15,7 @@
             cursor: pointer;
         }
     </ui:style>
-    <g:HTMLPanel width="100%" styleName="{res.actionBar}">
+    <g:HTMLPanel width="100%" styleName="{res.actionBar} actionBarView">
         <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
         <g:Anchor ui:field="bundleAnchor" styleName="{res.anchor}" text="Bundle"/>
         <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
