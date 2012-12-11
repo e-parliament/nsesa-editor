@@ -81,7 +81,7 @@ public class DefaultXMLTransformer implements XMLTransformer {
                 final short nodeType = nodes.getItem(i).getNodeType();
                 Element childElement = nodes.getItem(i).cast();
                 switch (nodeType) {
-                    case Node.ELEMENT_NODE :
+                    case Node.ELEMENT_NODE:
                         // get the amendable widget corresponding to this child and apply xml transformation
                         // hopefully there is one amendable widget linked to this node
 
@@ -106,8 +106,7 @@ public class DefaultXMLTransformer implements XMLTransformer {
                         }
                         break;
                     case Node.TEXT_NODE:
-                        Element childText = nodes.getItem(i).cast();
-                        sb.append(childText.getInnerText());
+                        sb.append(nodes.getItem(i).getNodeValue());
                         break;
                     case Node.DOCUMENT_NODE:
                         LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());

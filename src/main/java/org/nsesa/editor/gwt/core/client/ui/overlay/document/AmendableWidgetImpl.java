@@ -28,11 +28,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public static final boolean DEFAULT_ROOT_WIDGET_AMENDABLE = true;
 
     /**
-     * The underlying DOM element.
-     */
-    protected transient Element amendableElement;
-
-    /**
      * A listener for all the UI operations to call back on.
      */
     private AmendableWidgetUIListener UIListener;
@@ -80,8 +75,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      */
     private Boolean immutable;
 
-    private String amendableContent;
-
     private Format format;
 
     private NumberingType numberingType;
@@ -112,7 +105,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     public AmendableWidgetImpl(Element amendableElement) {
-        this.amendableElement = amendableElement;
         setElement(amendableElement);
         // if we're not yet part of the DOM tree, try to attach
         if (!isAttached()) {
@@ -156,8 +148,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             this.overlayStrategy = null;
             this.origin = null;
             this.amendable = null;
-            this.amendableContent = null;
-            this.amendableElement = null;
+            this.setElement(null);
             this.amendmentControllers = null;
             this.assignedNumber = null;
             this.amendmentHolderElement = null;
@@ -355,7 +346,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public String getId() {
         if (overlayStrategy == null) return id;
         if (id == null) {
-            id = overlayStrategy.getID(amendableElement);
+            id = overlayStrategy.getID(getElement());
         }
         return id;
     }
@@ -367,16 +358,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getInnerHTML() {
-        if (overlayStrategy == null) return amendableContent;
-        if (amendableContent == null) {
-            amendableContent = overlayStrategy.getInnerHTML(amendableElement);
-        }
-        return amendableContent;
+        return getElement().getInnerHTML();
     }
 
     @Override
     public void setInnerHTML(String amendableContent) {
-        this.amendableContent = amendableContent;
+        getElement().setInnerHTML(amendableContent);
     }
 
     @Override
@@ -483,7 +470,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public Format getFormat() {
         if (overlayStrategy == null) return format;
         if (format == null) {
-            format = overlayStrategy.getFormat(amendableElement);
+            format = overlayStrategy.getFormat(getElement());
         }
         return format;
     }
@@ -497,7 +484,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public NumberingType getNumberingType() {
         if (overlayStrategy == null) return numberingType;
         if (numberingType == null) {
-            numberingType = overlayStrategy.getNumberingType(amendableElement, getAssignedNumber());
+            numberingType = overlayStrategy.getNumberingType(getElement(), getAssignedNumber());
         }
         return numberingType;
     }
@@ -538,7 +525,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public String getFormattedIndex() {
         if (overlayStrategy == null) return formattedIndex;
         if (formattedIndex == null) {
-            formattedIndex = overlayStrategy.getFormattedIndex(amendableElement);
+            formattedIndex = overlayStrategy.getFormattedIndex(getElement());
         }
         return formattedIndex;
     }
@@ -550,7 +537,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     public String getUnformattedIndex() {
         if (overlayStrategy == null) return unformattedIndex;
         if (unformattedIndex == null) {
-            unformattedIndex = overlayStrategy.getUnFormattedIndex(amendableElement);
+            unformattedIndex = overlayStrategy.getUnFormattedIndex(getElement());
         }
         return unformattedIndex;
     }
@@ -570,7 +557,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public Element getAmendableElement() {
-        return amendableElement;
+        return getElement();
     }
 
     @Override
