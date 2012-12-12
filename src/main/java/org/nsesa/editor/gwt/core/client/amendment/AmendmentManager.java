@@ -6,10 +6,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
@@ -91,6 +88,8 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                             final AmendmentController amendmentController = injector.getAmendmentController();
                             amendmentController.setAmendment(amendmentContainerDTO);
                             amendmentControllers.add(amendmentController);
+                            // inform the document the save has happened
+                            documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
                         }
                         documentEventBus.fireEvent(new AmendmentContainerInjectEvent(result));
                     }
