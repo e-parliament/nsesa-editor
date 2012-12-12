@@ -44,4 +44,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setBody(String xmlContent) {
         body.getElement().setInnerHTML(xmlContent);
     }
+
+    @Override
+    public String getBody() {
+        return body.getElement().getInnerHTML();
+    }
 }

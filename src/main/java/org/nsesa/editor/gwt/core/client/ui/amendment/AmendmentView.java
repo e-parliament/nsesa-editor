@@ -15,4 +15,6 @@ public interface AmendmentView extends IsWidget {
     void setTitle(String title);
 
     void setBody(String xmlContent);
+
+    String getBody();
 }

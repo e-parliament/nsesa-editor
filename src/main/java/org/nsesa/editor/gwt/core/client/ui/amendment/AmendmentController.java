@@ -5,11 +5,13 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.Comparator;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -69,6 +71,35 @@ public class AmendmentController {
 
     public AmendmentContainerDTO getModel() {
         return amendment;
+    }
+
+    // TEMPORARY!!!
+
+    public String getOriginalContent() {
+        final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());
+        return quotedStructures.get(0).getInnerHTML();
+    }
+
+    public void setOriginalContent(final String originalContent) {
+        final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());
+        quotedStructures.get(0).setInnerHTML(originalContent);
+    }
+
+    public String getAmendmenContent() {
+        final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());
+        return quotedStructures.get(1).getInnerHTML();
+    }
+
+    public void setAmendmentContent(final String amendmentContent) {
+        final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());
+        quotedStructures.get(1).setInnerHTML(amendmentContent);
+    }
+
+    protected AmendableWidget overlay() {
+        if (amendmentWidget == null) {
+            amendmentWidget = overlayFactory.getAmendableWidget(view.getBody());
+        }
+        return amendmentWidget;
     }
 
     public void setAmendment(AmendmentContainerDTO amendment) {

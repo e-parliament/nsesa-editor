@@ -2,11 +2,11 @@ package org.nsesa.editor.gwt.core.client.amendment;
 
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.util.Counter;
+import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Date: 30/11/12 11:31
@@ -15,65 +15,16 @@ import java.util.List;
  * @version $Id$
  */
 public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionPointFinder {
+
+    private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointFinder.class.getName());
+
     @Override
     public List<AmendableWidget> findInjectionPoints(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
-        final List<AmendableWidget> injectionPoints = new ArrayList<AmendableWidget>();
         final String path = amendmentController.getModel().getSourceReference().getPath();
-        final AmendableWidgetWalker.AmendableVisitor visitor;
-        if (path.startsWith("#")) {
-            visitor = new AmendableWidgetWalker.AmendableVisitor() {
-                @Override
-                public boolean visit(final AmendableWidget visited) {
-                    if (visited != null) {
-                        if (path.substring(1).equalsIgnoreCase(visited.getId())) {
-                            injectionPoints.add(visited);
-                        }
-                    }
-                    return true;
-                }
-            };
-        } else if (path.startsWith("//")) {
-            // xpath-like expression ...
-            final String[] parts = path.substring(2).split("/"); // strip off '//' at the beginning
-            final Counter tracker = new Counter(0);
-            visitor = new AmendableWidgetWalker.AmendableVisitor() {
-                @Override
-                public boolean visit(final AmendableWidget visited) {
-                    if (visited != null && tracker.get() < parts.length) {
-                        final String part = parts[tracker.get()];
-                        final String partType = part.substring(0, part.indexOf("["));
-                        if (visited.getType().equalsIgnoreCase(partType)) {
-                            // ok, we have a match on the type .. now check our count
-                            final int typeIndex = Integer.parseInt(part.substring(part.indexOf("[") + 1, part.length() - 1));
-                            if (typeIndex == visited.getTypeIndex()) {
-                                // ok, match!
-                                tracker.increment();
-                            }
-                            if (tracker.get() == parts.length) {
-                                // found end node!
-                                injectionPoints.add(visited);
-                                return false;
-                            }
-                        }
-                    }
-                    return true;
-                }
-            };
-        } else {
-            visitor = new AmendableWidgetWalker.AmendableVisitor() {
-                @Override
-                public boolean visit(final AmendableWidget visited) {
-                    if (visited != null) {
-                        if (path.equalsIgnoreCase(visited.getId())) {
-                            injectionPoints.add(visited);
-                        }
-                    }
-                    return true;
-                }
-            };
-        }
-        documentController.walk(root, visitor);
-        return injectionPoints;
+        LOG.info("Trying to find nodes matching " + path);
+        final List<AmendableWidget> amendableWidgets = OverlayUtil.xpath(path, root);
+        LOG.info("Found nodes " + amendableWidgets);
+        return amendableWidgets;
     }
 
     @Override
