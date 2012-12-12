@@ -105,10 +105,10 @@
         .actionBarController {
             position: absolute;
             border: 1px solid gray;
-            height: 25px;
             background-color: #eee;
             min-width: 350px;
             z-index: 1;
+            padding: 5px;
         }
     </ui:style>
     <g:DockLayoutPanel ui:field="mainPanel" styleName="{res.mainPanel}" unit="PX">

@@ -4,7 +4,8 @@
               type='org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarViewCss'/>
     <ui:style field="res">
         .actionBar {
-
+            width: 100%;
+            padding: 5px;
         }
 
         .locationPanel {
@@ -13,9 +14,12 @@
 
         .anchor {
             cursor: pointer;
+            text-decoration: underline;
+            padding-left: 10px;
         }
+
     </ui:style>
-    <g:HTMLPanel width="100%" styleName="{res.actionBar} actionBarView">
+    <g:HTMLPanel styleName="{res.actionBar} actionBarView">
         <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
         <g:Anchor ui:field="bundleAnchor" styleName="{res.anchor}" text="Bundle"/>
         <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
