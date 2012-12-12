@@ -21,7 +21,7 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
     @Override
     public AmendableWidget provideInjectionPoint(AmendmentController amendmentController, AmendableWidget root, DocumentController documentController) {
-        final AmendableWidgetReference reference = amendmentController.getAmendment().getSourceReference();
+        final AmendableWidgetReference reference = amendmentController.getModel().getSourceReference();
         if (reference.isCreation()) {
             final AmendableWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getType());
             // mark the origin so we know it was introduced by amendments.

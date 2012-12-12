@@ -57,8 +57,6 @@ public class AmendmentController {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
 
-//        this.view = amendmentInjector.getAmendmentView();
-//        this.extendedView = amendmentInjector.getAmendmentExtendedView();
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
         this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
@@ -69,7 +67,7 @@ public class AmendmentController {
 
     }
 
-    public AmendmentContainerDTO getAmendment() {
+    public AmendmentContainerDTO getModel() {
         return amendment;
     }
 

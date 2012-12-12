@@ -8,10 +8,10 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatus
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
+import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
@@ -24,7 +24,10 @@ import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -50,7 +53,7 @@ public class AmendmentsPanelController {
         this.view = view;
         this.documentEventBus = documentEventBus;
         this.currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
-                                        AmendmentController.ORDER_COMPARATOR, Selection.ALL);
+                AmendmentController.ORDER_COMPARATOR, Selection.ALL);
         registerListeners();
     }
 
@@ -119,7 +122,7 @@ public class AmendmentsPanelController {
         List<String> ids = new ArrayList<String>();
         for (AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
             if (selection.select(amendmentController)) {
-                ids.add(amendmentController.getAmendment().getId());
+                ids.add(amendmentController.getModel().getId());
             }
         }
         view.selectAmendments(ids);
@@ -130,8 +133,8 @@ public class AmendmentsPanelController {
             currentFilter.setStart(0);
         } else {
             currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
-                                                            AmendmentController.ORDER_COMPARATOR,
-                                                            Selection.ALL);
+                    AmendmentController.ORDER_COMPARATOR,
+                    Selection.ALL);
 
         }
         filterAmendments();
@@ -141,8 +144,8 @@ public class AmendmentsPanelController {
         Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
         FilterResponse<AmendmentController> response =
                 documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
-        for(AmendmentController amendmentController : response.getResult()) {
-            amendments.put(amendmentController.getAmendment().getId(), amendmentController.getExtendedView());
+        for (AmendmentController amendmentController : response.getResult()) {
+            amendments.put(amendmentController.getModel().getId(), amendmentController.getExtendedView());
         }
         view.refreshAmendments(amendments);
         // raise a filter response

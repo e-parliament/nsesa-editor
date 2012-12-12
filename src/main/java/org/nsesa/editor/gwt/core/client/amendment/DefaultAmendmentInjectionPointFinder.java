@@ -18,7 +18,7 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     @Override
     public List<AmendableWidget> findInjectionPoints(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
         final List<AmendableWidget> injectionPoints = new ArrayList<AmendableWidget>();
-        final String path = amendmentController.getAmendment().getSourceReference().getPath();
+        final String path = amendmentController.getModel().getSourceReference().getPath();
         final AmendableWidgetWalker.AmendableVisitor visitor;
         if (path.startsWith("#")) {
             visitor = new AmendableWidgetWalker.AmendableVisitor() {

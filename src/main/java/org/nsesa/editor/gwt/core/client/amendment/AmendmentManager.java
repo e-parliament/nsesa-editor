@@ -137,7 +137,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     private AmendmentController getAmendmentController(final AmendmentContainerDTO amendment) {
         for (final AmendmentController amendmentController : amendmentControllers) {
-            if (amendmentController.getAmendment().equals(amendment)) {
+            if (amendmentController.getModel().equals(amendment)) {
                 return amendmentController;
             }
         }
