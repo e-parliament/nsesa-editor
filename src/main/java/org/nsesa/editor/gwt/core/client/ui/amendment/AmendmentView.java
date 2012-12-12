@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -16,5 +17,5 @@ public interface AmendmentView extends IsWidget {
 
     void setBody(String xmlContent);
 
-    String getBody();
+    Element getBody();
 }

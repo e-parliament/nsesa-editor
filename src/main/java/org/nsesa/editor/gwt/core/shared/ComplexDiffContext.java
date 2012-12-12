@@ -2,9 +2,10 @@ package org.nsesa.editor.gwt.core.shared;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ComplexDiffContext {
+public class ComplexDiffContext implements Serializable {
 
     private String originalChangeTemplate, originalComplexChangeTemplate, complexInsertTemplate, complexDeleteTemplate,
             complexChangeTemplate;

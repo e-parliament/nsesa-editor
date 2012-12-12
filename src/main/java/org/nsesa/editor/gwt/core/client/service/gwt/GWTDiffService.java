@@ -5,7 +5,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.ComplexDiffCommand;
 import org.nsesa.editor.gwt.core.shared.ComplexDiffResult;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Date: 24/06/12 21:05
@@ -22,7 +22,7 @@ public interface GWTDiffService extends RemoteService {
      * @param commands the list of diff commands to execute
      * @return a list of results in the same order as the commands
      */
-    List<ComplexDiffResult> complexDiff(List<ComplexDiffCommand> commands);
+    ArrayList<ComplexDiffResult> complexDiff(ArrayList<ComplexDiffCommand> commands);
 
     /**
      * Returns the current version of this diffing service (so clients now when

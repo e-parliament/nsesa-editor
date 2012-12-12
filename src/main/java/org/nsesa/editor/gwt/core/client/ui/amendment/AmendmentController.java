@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -37,7 +36,7 @@ public class AmendmentController {
     private final AmendmentView extendedView;
 
     private final ClientFactory clientFactory;
-    private OverlayFactory overlayFactory;
+
     private final AmendmentEventBus amendmentEventBus;
 
     private AmendmentContainerDTO amendment;
@@ -54,10 +53,9 @@ public class AmendmentController {
     private DocumentController documentController;
 
     @Inject
-    public AmendmentController(final ClientFactory clientFactory, final OverlayFactory overlayFactory,
+    public AmendmentController(final ClientFactory clientFactory,
                                final AmendmentView amendmentView, final AmendmentView amendmentExtendedView) {
         this.clientFactory = clientFactory;
-        this.overlayFactory = overlayFactory;
 
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
@@ -85,7 +83,7 @@ public class AmendmentController {
         quotedStructures.get(0).setInnerHTML(originalContent);
     }
 
-    public String getAmendmenContent() {
+    public String getAmendmendContent() {
         final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());
         return quotedStructures.get(1).getInnerHTML();
     }
@@ -97,7 +95,7 @@ public class AmendmentController {
 
     protected AmendableWidget overlay() {
         if (amendmentWidget == null) {
-            amendmentWidget = overlayFactory.getAmendableWidget(view.getBody());
+            amendmentWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
         }
         return amendmentWidget;
     }

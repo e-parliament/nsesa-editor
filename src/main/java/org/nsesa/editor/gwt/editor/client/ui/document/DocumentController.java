@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
@@ -33,6 +34,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUILis
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
@@ -79,6 +81,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Scope(DOCUMENT)
     private final AmendmentManager amendmentManager;
     @Scope(DOCUMENT)
+    private final DiffingManager diffingManager;
+    @Scope(DOCUMENT)
     private final MarkerController markerController;
     @Scope(DOCUMENT)
     private final DocumentHeaderController documentHeaderController;
@@ -120,6 +124,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         // document scoped singletons
         this.amendmentManager = injector.getAmendmentManager();
         this.amendmentManager.setInjector(injector);
+        this.amendmentManager.setDocumentController(this);
+        this.diffingManager = injector.getDiffingManager();
 
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
@@ -184,6 +190,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
                 clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerSavedEvent event) {
+                diffingManager.diff("ep", DiffMethod.WORD, event.getAmendmentController());
             }
         });
 

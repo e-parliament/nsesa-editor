@@ -45,6 +45,9 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     private DocumentInjector injector;
 
+    // parent document controller
+    private DocumentController documentController;
+
     private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     private final AmendmentInjectionPointFinder injectionPointFinder;
@@ -87,6 +90,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                         for (final AmendmentContainerDTO amendmentContainerDTO : result) {
                             final AmendmentController amendmentController = injector.getAmendmentController();
                             amendmentController.setAmendment(amendmentContainerDTO);
+                            amendmentController.setDocumentController(documentController);
                             amendmentControllers.add(amendmentController);
                             // inform the document the save has happened
                             documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
@@ -184,5 +188,9 @@ public class AmendmentManager implements AmendmentInjectionCapable {
         FilterResponse<AmendmentController> filterResponse =
                 new FilterResponse<AmendmentController>(filter, tmpList.size(), list);
         return filterResponse;
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }
