@@ -228,7 +228,7 @@ public abstract class Editor implements EntryPoint {
      * @param errorMessage the content of the error message
      * @param throwable    the throwable, if it exists
      */
-    protected void handleError(String errorTitle, String errorMessage, Throwable throwable) {
+    protected void handleError(final String errorTitle, final String errorMessage, final Throwable throwable) {
         final ErrorController errorController = getInjector().getErrorController();
         errorController.setError(errorTitle, errorMessage);
         errorController.center();

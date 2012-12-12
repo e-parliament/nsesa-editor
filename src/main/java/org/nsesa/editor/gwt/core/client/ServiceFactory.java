@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.core.client;
 
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTDiffServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 
@@ -15,6 +16,8 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 public interface ServiceFactory {
 
     GWTServiceAsync getGwtService();
+
+    GWTDiffServiceAsync getGwtDiffService();
 
     GWTAmendmentServiceAsync getGwtAmendmentService();
 
