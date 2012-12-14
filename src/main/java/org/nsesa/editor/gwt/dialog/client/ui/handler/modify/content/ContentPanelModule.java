@@ -31,9 +31,13 @@ public class ContentPanelModule extends AbstractGinModule {
         @Named("richTextEditorCss")
         String cssPath;
 
+        @Inject
+        @Named("richTextEditorBodyClass")
+        String bodyClass;
+
         @Override
         public RichTextEditor get() {
-            return new CKEditor(cssPath, true);
+            return new CKEditor(cssPath, bodyClass, true);
         }
     }
 }

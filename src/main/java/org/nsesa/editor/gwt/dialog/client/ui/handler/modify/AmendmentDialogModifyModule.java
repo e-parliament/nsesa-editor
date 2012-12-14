@@ -32,11 +32,16 @@ public class AmendmentDialogModifyModule extends AbstractGinModule {
         ClientFactory clientFactory;
 
         @Inject
-        @Named("richTextEditorCss") String cssPath;
+        @Named("richTextEditorCss")
+        String cssPath;
+
+        @Inject
+        @Named("richTextEditorBodyClass")
+        String bodyClass;
 
         @Override
         public RichTextEditor get() {
-            return new CKEditor(cssPath, false);
+            return new CKEditor(cssPath, bodyClass, false);
         }
     }
 }

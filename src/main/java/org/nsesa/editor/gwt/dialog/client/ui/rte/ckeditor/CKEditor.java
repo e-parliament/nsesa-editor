@@ -24,6 +24,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     private boolean readOnly;
     private String id;
     private String[] cssPath;
+    private String bodyClass;
 
     private int height;
 
@@ -32,11 +33,12 @@ public class CKEditor extends Composite implements RichTextEditor {
     private final TextArea textArea = new TextArea();
 
 
-    public CKEditor(final String toSplit, final boolean readOnly) {
-        this.cssPath = toSplit.split(",");
+    public CKEditor(final String cssPathToSplit, final String bodyClass, final boolean readOnly) {
+        this.cssPath = cssPathToSplit.split(",");
         for (int i = 0; i < cssPath.length; i++) {
             cssPath[i] = GWT.getModuleBaseURL() + "../" + cssPath[i];
         }
+        this.bodyClass = bodyClass;
         this.readOnly = readOnly;
         this.id = "ckEditor" + counter++;
         textArea.getElement().setId(this.id);
@@ -53,7 +55,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             for (final String s : cssPath) {
                 jsStrings.push(s);
             }
-            JavaScriptObject configuration = getConfiguration(jsStrings, readOnly, textArea.getOffsetHeight() + (readOnly ? -21 : -55));
+            JavaScriptObject configuration = getConfiguration(jsStrings, bodyClass, readOnly, textArea.getOffsetHeight() + (readOnly ? -21 : -55));
             editorInstance = getEditor(configuration, this.id, temporaryContent);
             if (editorInstance == null) {
                 throw new NullPointerException("Editor instance not created!");
@@ -76,21 +78,26 @@ public class CKEditor extends Composite implements RichTextEditor {
     wiring up the overlay factory, but this will take some time.
 
      */
-    private native JavaScriptObject getConfiguration(JsArrayString cssPath, boolean readOnly, int height) /*-{
+    private native JavaScriptObject getConfiguration(JsArrayString cssPath, String bodyClass, boolean readOnly, int height) /*-{
         return {
-            //contentsCss:cssPath,
-            readOnly:readOnly,
-            startupFocus:!readOnly,
-            height:height,
+            contentsCss: cssPath,
+            bodyClass: bodyClass,
+            readOnly: readOnly,
+            startupFocus: !readOnly,
+            height: height,
             toolbarStartupExpanded: !readOnly,
-            toolbar:'Basic',
-            removePlugins:'elementspath',
-            toolbar_Basic:readOnly ? [[]] : [[ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar', '-', 'Find', 'Replace', '-', 'SelectAll' ]],
-            toolbarLocation:'bottom',
-            resize_enabled:false,
-            autoParagraph:false,
-            fillEmptyBlocks:false,
-            forcePasteAsPlainText:true
+            toolbar: 'Basic',
+            removePlugins: 'elementspath',
+            toolbar_Basic: readOnly ? [
+                []
+            ] : [
+                [ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar', '-', 'Find', 'Replace', '-', 'SelectAll' ]
+            ],
+            toolbarLocation: 'bottom',
+            resize_enabled: false,
+            autoParagraph: false,
+            fillEmptyBlocks: false,
+            forcePasteAsPlainText: true
             //startupShowBorders:false
         }
     }-*/;
