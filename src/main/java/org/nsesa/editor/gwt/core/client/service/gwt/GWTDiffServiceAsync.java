@@ -1,8 +1,8 @@
 package org.nsesa.editor.gwt.core.client.service.gwt;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.nsesa.editor.gwt.core.shared.ComplexDiffCommand;
-import org.nsesa.editor.gwt.core.shared.ComplexDiffResult;
+import org.nsesa.editor.gwt.core.shared.DiffRequest;
+import org.nsesa.editor.gwt.core.shared.DiffResult;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public interface GWTDiffServiceAsync {
      * @param commands the list of diff commands to execute
      * @return a list of results in the same order as the commands
      */
-    void complexDiff(ArrayList<ComplexDiffCommand> commands, AsyncCallback<ArrayList<ComplexDiffResult>> asyncCallback);
+    void diff(ArrayList<DiffRequest> commands, AsyncCallback<ArrayList<DiffResult>> asyncCallback);
 
     /**
      * Returns the current version of this diffing service (so clients now when

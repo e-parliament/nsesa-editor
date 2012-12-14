@@ -196,11 +196,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
-                if ("1".equalsIgnoreCase(documentID)) {
-                    diffingManager.diff("ep", DiffMethod.WORD, event.getAmendmentController());
-                } else {
-                    diffingManager.diff("msword", DiffMethod.WORD, event.getAmendmentController());
-                }
+                diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
             }
         });
 
