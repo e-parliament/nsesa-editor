@@ -25,6 +25,8 @@ public interface DocumentInjector extends Ginjector {
 
     DocumentView getDocumentView();
 
+    DocumentViewCss getDocumentViewCss();
+
     DeadlineController getDeadlineController();
 
     ActionBarController getActionBarController();
@@ -48,5 +50,4 @@ public interface DocumentInjector extends Ginjector {
     DiffingManager getDiffingManager();
 
     AmendmentController getAmendmentController();
-
 }

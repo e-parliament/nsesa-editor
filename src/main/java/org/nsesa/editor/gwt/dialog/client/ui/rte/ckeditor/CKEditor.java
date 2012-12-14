@@ -5,6 +5,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
@@ -64,6 +65,13 @@ public class CKEditor extends Composite implements RichTextEditor {
         }
     }
 
+    @Override
+    public void destroy() {
+        destroy(editorInstance);
+        editorInstance = null;
+        attached = false;
+    }
+
     public native void destroy(JavaScriptObject editorInstance) /*-{
         if (editorInstance != null) editorInstance.destroy();
     }-*/;
@@ -91,7 +99,8 @@ public class CKEditor extends Composite implements RichTextEditor {
             toolbar_Basic: readOnly ? [
                 []
             ] : [
-                [ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar', '-', 'Find', 'Replace', '-', 'SelectAll' ]
+                [ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar'],
+                [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Source' ]
             ],
             toolbarLocation: 'bottom',
             resize_enabled: false,
@@ -105,6 +114,15 @@ public class CKEditor extends Composite implements RichTextEditor {
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{
         var editor = $wnd.CKEDITOR.replace(elementID, instanceConfig, content);
         return editor;
+    }-*/;
+
+    @Override
+    public void setAmendableWidget(AmendableWidget amendableWidget) {
+        setBodyClass(editorInstance, bodyClass + " " + amendableWidget.getType());
+    }
+
+    private native void setBodyClass(final JavaScriptObject editorInstance, final String bodyClass) /*-{
+        editorInstance.config.bodyClass = bodyClass;
     }-*/;
 
     @Override
@@ -137,9 +155,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     @Override
     protected void onDetach() {
         super.onDetach();
-        destroy(editorInstance);
-        editorInstance = null;
-        attached = false;
+        destroy();
     }
 
     @Override

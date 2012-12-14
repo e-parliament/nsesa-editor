@@ -4,7 +4,6 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.TinyMCEModule;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
@@ -28,6 +27,5 @@ public class EditorModule extends AbstractGinModule {
         install(new AmendmentsPanelModule());
         install(new InfoPanelModule());
         install(new AmendmentDialogModule());
-        install(new TinyMCEModule());
     }
 }

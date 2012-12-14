@@ -12,4 +12,6 @@ public interface DocumentViewCss extends CssResource {
     String amendable();
 
     String immutable();
+
+    String selected();
 }

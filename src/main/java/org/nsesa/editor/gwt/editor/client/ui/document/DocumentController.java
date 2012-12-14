@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventHandler;
 import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
@@ -44,6 +45,8 @@ import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
 import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelController;
+import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
+import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorController;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -67,7 +70,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final DocumentInjector injector = GWT.create(DocumentInjector.class);
 
     @Scope(DOCUMENT)
-    private DocumentView view;
+    private final DocumentView view;
+    private final DocumentViewCss style;
     private DocumentDTO document;
     private String documentID;
 
@@ -77,6 +81,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final OverlayFactory overlayFactory;
     private final Creator creator;
     private final Locator locator;
+
+    private final InlineEditorController inlineEditorController;
 
     @Scope(DOCUMENT)
     private final AmendmentManager amendmentManager;
@@ -98,11 +104,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private final AmendmentsPanelController amendmentsPanelController;
     @Scope(DOCUMENT)
     private AmendmentsHeaderController amendmentsHeaderController;
-
     @Scope(DOCUMENT)
     private final InfoPanelController infoPanelController;
 
     private List<AmendableWidget> amendableWidgets;
+
+    private AmendableWidget activeAmendableWidget;
 
     private final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
 
@@ -111,7 +118,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
                               final Locator locator,
-                              final Creator creator) {
+                              final Creator creator,
+                              final InlineEditorController inlineEditorController) {
 
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
@@ -120,6 +128,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
+        this.inlineEditorController = inlineEditorController;
 
         // document scoped singletons
         this.amendmentManager = injector.getAmendmentManager();
@@ -129,6 +138,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
+        this.style = injector.getDocumentViewCss();
         //this.amendmentsHeaderController = injector.getAmendmentsHeaderController();
         this.amendmentsPanelController = injector.getAmendmentsPanelController();
 
@@ -218,6 +228,24 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 }
                 // renumber amendments
                 renumberAmendments();
+            }
+        });
+
+        clientFactory.getEventBus().addHandler(AmendableWidgetSelectEvent.TYPE, new AmendableWidgetSelectEventHandler() {
+            @Override
+            public void onEvent(AmendableWidgetSelectEvent event) {
+                boolean alreadySelected = false;
+                if (activeAmendableWidget == event.getAmendableWidget()) {
+                    alreadySelected = true;
+                }
+                if (activeAmendableWidget != null) {
+                    activeAmendableWidget.asWidget().removeStyleName(style.selected());
+                }
+                activeAmendableWidget = event.getAmendableWidget();
+                activeAmendableWidget.asWidget().addStyleName(style.selected());
+                if (alreadySelected) {
+                    clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
+                }
             }
         });
 
@@ -422,7 +450,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender));
+        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
     }
 
     @Override

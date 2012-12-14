@@ -5,3 +5,7 @@
 .immutable {
 
 }
+
+.selected {
+    border: 1px solid red;
+}

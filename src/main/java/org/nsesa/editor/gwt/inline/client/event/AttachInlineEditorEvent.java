@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.core.client.event.widget;
+package org.nsesa.editor.gwt.inline.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
@@ -10,25 +10,25 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendableWidgetSelectEvent extends GwtEvent<AmendableWidgetSelectEventHandler> {
+public class AttachInlineEditorEvent extends GwtEvent<AttachInlineEditorEventHandler> {
 
-    public static final Type<AmendableWidgetSelectEventHandler> TYPE = new Type<AmendableWidgetSelectEventHandler>();
+    public static final Type<AttachInlineEditorEventHandler> TYPE = new Type<AttachInlineEditorEventHandler>();
 
     private final AmendableWidget amendableWidget;
     private final DocumentController documentController;
 
-    public AmendableWidgetSelectEvent(AmendableWidget amendableWidget, DocumentController documentController) {
+    public AttachInlineEditorEvent(AmendableWidget amendableWidget, DocumentController documentController) {
         this.amendableWidget = amendableWidget;
         this.documentController = documentController;
     }
 
     @Override
-    public Type<AmendableWidgetSelectEventHandler> getAssociatedType() {
+    public Type<AttachInlineEditorEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(AmendableWidgetSelectEventHandler handler) {
+    protected void dispatch(AttachInlineEditorEventHandler handler) {
         handler.onEvent(this);
     }
 

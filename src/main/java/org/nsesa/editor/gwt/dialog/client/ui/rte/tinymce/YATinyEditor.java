@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 import java.util.*;
@@ -222,45 +223,45 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         }
 
         var settings = {
-            mode:"none",
+            mode: "none",
             //mode : "specific_textareas",
-            theme:tiny_theme,
-            doctype:doc_type,
-            plugins:plug,
-            cleanup_on_startup:false,
-            cleanup:false,
-            inline_styles:false,
-            content_css:tiny_content_css,
-            verify_html:false,
-            readonly:readOnly,
-            convert_urls:false,
+            theme: tiny_theme,
+            doctype: doc_type,
+            plugins: plug,
+            cleanup_on_startup: false,
+            cleanup: false,
+            inline_styles: false,
+            content_css: tiny_content_css,
+            verify_html: false,
+            readonly: readOnly,
+            convert_urls: false,
             //editor_selector : itemID,
-            fix_content_duplication:false,
+            fix_content_duplication: false,
             //valid_elements:valid_elems,
-            apply_source_formatting:false,
-            theme_advanced_buttons1:mceButtons,
-            theme_advanced_buttons2:"",
-            theme_advanced_buttons3:"",
+            apply_source_formatting: false,
+            theme_advanced_buttons1: mceButtons,
+            theme_advanced_buttons2: "",
+            theme_advanced_buttons3: "",
             // disable the automatic <p> tag that gets injected every time
-            forced_root_block:"",
-            force_br_newlines :false,
-            force_p_newlines :false,
-            theme_advanced_toolbar_location:"bottom",
-            theme_advanced_statusbar_location:"none",
+            forced_root_block: "",
+            force_br_newlines: false,
+            force_p_newlines: false,
+            theme_advanced_toolbar_location: "bottom",
+            theme_advanced_statusbar_location: "none",
             //theme_advanced_buttons2_add : "tablecontrols",
-            table_styles:"Header 1=header1;Header 2=header2;Header 3=header3",
-            table_cell_styles:"Header 1=header1;Header 2=header2;Header3=header3;Table Cell=tableCel1",
-            table_row_styles:"Header 1=header1;Header 2=header2;Header3=header3;Table Row=tableRow1",
-            table_cell_limit:500,
-            table_row_limit:20,
-            table_col_limit:20,
-            spellchecker_rpc_url:tiny_spellchecker_rpc_url,
-            spellchecker_languages:defaultLanguages,
-            paste_text_sticky:true,
-            paste_auto_cleanup_on_paste:true,
+            table_styles: "Header 1=header1;Header 2=header2;Header 3=header3",
+            table_cell_styles: "Header 1=header1;Header 2=header2;Header3=header3;Table Cell=tableCel1",
+            table_row_styles: "Header 1=header1;Header 2=header2;Header3=header3;Table Row=tableRow1",
+            table_cell_limit: 500,
+            table_row_limit: 20,
+            table_col_limit: 20,
+            spellchecker_rpc_url: tiny_spellchecker_rpc_url,
+            spellchecker_languages: defaultLanguages,
+            paste_text_sticky: true,
+            paste_auto_cleanup_on_paste: true,
             //cleanup_callback:customCleanUpFunc,
-            entity_encoding:"raw",
-            setup:function (ed) {
+            entity_encoding: "raw",
+            setup: function (ed) {
                 ed.onInit.add(function (ed) {
                     ed.focus();
                     ed.pasteAsPlainText = true;
@@ -271,9 +272,9 @@ public class YATinyEditor extends Composite implements RichTextEditor {
                         var se = ed.selection, col = se.isCollapsed();
 
                         menu.removeAll();
-                        menu.add({title:'advanced.cut_desc', icon:'cut', cmd:'Cut'}).setDisabled(col);
-                        menu.add({title:'advanced.copy_desc', icon:'copy', cmd:'Copy'}).setDisabled(col);
-                        menu.add({title:'advanced.paste_desc', icon:'paste', cmd:'Paste'});
+                        menu.add({title: 'advanced.cut_desc', icon: 'cut', cmd: 'Cut'}).setDisabled(col);
+                        menu.add({title: 'advanced.copy_desc', icon: 'copy', cmd: 'Copy'}).setDisabled(col);
+                        menu.add({title: 'advanced.paste_desc', icon: 'paste', cmd: 'Paste'});
                     });
                     tinyEditor.@org.nsesa.editor.gwt.dialog.client.ui.rte.tinymce.YATinyEditor::initialized()();
                 });
@@ -299,6 +300,10 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         $wnd.tinyMCE.execCommand('mceRemoveControl', false, itemId);
     }-*/;
 
+    @Override
+    public void setAmendableWidget(AmendableWidget amendableWidget) {
+
+    }
 
     public String getHTML() {
         String html = getHTML(itemID);
@@ -384,6 +389,11 @@ public class YATinyEditor extends Composite implements RichTextEditor {
 
     @Override
     public void init() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void destroy() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
