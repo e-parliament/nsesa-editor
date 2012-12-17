@@ -1,28 +1,5 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-    <ui:style src="DeadlineViewImpl.css" field="style"
-              type='org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineViewCss'>
-
-        .past24hours {
-            background-color: #9cb4cc;
-            font-weight: bold;
-            display: block;
-        }
-
-        .past1hours {
-            background-color: #ff821a;
-            font-weight: bold;
-            display: block;
-        }
-
-        .past {
-            background-color: #ff1825;
-            font-weight: bold;
-            display: block;
-        }
-    </ui:style>
-
-
     <g:HTMLPanel>
         <g:HTML ui:field="deadline"/>
     </g:HTMLPanel>

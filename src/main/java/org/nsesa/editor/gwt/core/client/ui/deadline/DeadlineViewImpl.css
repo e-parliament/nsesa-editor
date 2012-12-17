@@ -1,0 +1,20 @@
+.past24hours {
+    background-color: #9cb4cc;
+    font-weight: bold;
+    display: block;
+    color: #000;
+}
+
+.past1hours {
+    background-color: #ff821a;
+    font-weight: bold;
+    display: block;
+    color: #fff;
+}
+
+.past {
+    background-color: #ff1825;
+    font-weight: bold;
+    display: block;
+    color: #fff;
+}

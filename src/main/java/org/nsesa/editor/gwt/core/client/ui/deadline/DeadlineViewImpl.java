@@ -27,17 +27,17 @@ public class DeadlineViewImpl extends Composite implements DeadlineView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    private final DeadlineViewCss style;
 
     @Inject
-    public DeadlineViewImpl() {
+    public DeadlineViewImpl(final DeadlineViewCss style) {
+        this.style = style;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         if (!GWT.isScript())
             this.setTitle(this.getClass().getName());
     }
 
-    @UiField
-    DeadlineViewCss style;
     @UiField
     HTML deadline;
 

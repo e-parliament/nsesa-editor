@@ -44,4 +44,35 @@ public interface CoreMessages extends Messages {
 
     @Key("error.amendments.error")
     String errorAmendmentsError();
+
+    @Key("document.deadline.default.format")
+    String documentDeadlineDefaultFormat();
+
+    @Key("document.deadline.default.message")
+    String documentDeadlineDefaultMessage(String arg);
+
+    @Key("document.deadline.tomorrow.format")
+    String documentDeadlineTomorrowFormat();
+
+    @Key("document.deadline.tomorrow.message")
+    String documentDeadlineTomorrowMessage(String arg);
+
+    @Key("document.deadline.today.format")
+    String documentDeadlineTodayFormat();
+
+    @Key("document.deadline.today.message")
+    String documentDeadlineTodayMessage(String arg);
+
+    @Key("document.deadline.h1.format")
+    String documentDeadlineH1Format();
+
+    @Key("document.deadline.h1.message")
+    String documentDeadlineH1Message(String arg);
+
+    @Key("document.deadline.passed.format")
+    String documentDeadlinePassedFormat();
+
+    @Key("document.deadline.passed.message")
+    String documentDeadlinePassedMessage(String arg);
+
 }

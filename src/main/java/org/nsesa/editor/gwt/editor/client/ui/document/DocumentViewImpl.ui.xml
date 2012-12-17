@@ -42,13 +42,13 @@
             margin: 0 auto;
             padding-left: 5px;
             padding-right: 5px;
+            padding-top: 5px;
             top: 10px;
             max-width: 350px;
             height: 20px;
-            background-color: #dcdcdc;
-            color: #fff;
             font-weight: bold;
             text-align: center;
+            vertical-align: baseline;
             z-index: 1;
         }
 

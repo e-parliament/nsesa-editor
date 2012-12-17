@@ -4,6 +4,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
+import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
@@ -30,14 +31,20 @@ public class DeadlineController {
 
     private final DocumentEventBus documentEventBus;
 
+    private final CoreMessages coreMessages;
+
     private Date deadline;
 
     @Inject
-    public DeadlineController(final DocumentEventBus documentEventBus, final DeadlineTracker deadlineTracker, final DeadlineView view) {
+    public DeadlineController(final DocumentEventBus documentEventBus,
+                              final DeadlineTracker deadlineTracker,
+                              final DeadlineView view,
+                              final CoreMessages coreMessages) {
         this.documentEventBus = documentEventBus;
         this.deadlineTracker = deadlineTracker;
         this.deadlineTracker.setDeadlineController(this);
         this.view = view;
+        this.coreMessages = coreMessages;
 
         registerListeners();
     }
@@ -82,7 +89,31 @@ public class DeadlineController {
 
 
     protected String getFormattedDeadline() {
-        return DateTimeFormat.getFormat("kk:mm").format(deadline);
+        // TODO switch to gwt-joda-time
+        final Date now = new Date();
+        final Date midnight = new Date(now.getDay(), now.getMonth(), now.getYear(), 0, 0, 0);
+        final Date oneDayBefore = new Date(midnight.getTime() - (24 * 60 * 60 * 1000));
+        final Date oneHourBefore = new Date(deadline.getTime() - (60 * 60 * 1000));
+
+        // check if we already passed the deadline
+        if (now.after(deadline)) {
+            // already passed
+            return coreMessages.documentDeadlinePassedMessage(DateTimeFormat.getFormat(coreMessages.documentDeadlinePassedFormat()).format(deadline));
+        }
+        if (deadline.after(oneHourBefore)) {
+            // deadline in one hour
+            return coreMessages.documentDeadlineH1Message(DateTimeFormat.getFormat(coreMessages.documentDeadlineH1Format()).format(deadline));
+        }
+        if (deadline.after(midnight)) {
+            // deadline is today
+            return coreMessages.documentDeadlineTodayMessage(DateTimeFormat.getFormat(coreMessages.documentDeadlineTodayFormat()).format(deadline));
+        }
+
+        if (deadline.after(oneDayBefore)) {
+            // deadline is tomorrow
+            return coreMessages.documentDeadlineTomorrowMessage(DateTimeFormat.getFormat(coreMessages.documentDeadlineTomorrowFormat()).format(deadline));
+        }
+        return coreMessages.documentDeadlineDefaultMessage(DateTimeFormat.getFormat(coreMessages.documentDeadlineDefaultFormat()).format(deadline));
     }
 
     public void setDeadline(final Date deadline) {
