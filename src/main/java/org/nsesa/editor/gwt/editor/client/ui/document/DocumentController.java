@@ -33,6 +33,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
@@ -357,13 +358,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     public void renumberAmendments() {
-        class Counter {
-            int counter = 1;
-
-            public int incrementAndGet() {
-                return counter++;
-            }
-        }
         final Counter counter = new Counter();
         walk(new AmendableVisitor() {
             @Override
@@ -473,6 +467,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         for (final AmendableWidget root : amendableWidgets) {
             amendmentManager.inject(root, this);
         }
+        // after the injection, renumber all the amendments.
+        renumberAmendments();
     }
 
     public MarkerController getMarkerController() {
