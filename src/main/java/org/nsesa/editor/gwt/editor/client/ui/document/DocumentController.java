@@ -450,7 +450,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
+        //clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
     }
 
     @Override
