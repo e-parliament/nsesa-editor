@@ -2,14 +2,36 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="AmendmentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewCss'/>
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.amendment.resources.Resources'/>
     <ui:style field="res">
+        .tabHeaders {
+            padding: 0;
+            margin: 0;
+            position: relative;
+            top: -56px;
+            float: right;
+        }
+
+        .tabHeader {
+            margin: 0;
+            padding: 0;
+        }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
         <div>
             <div class="header">
-                <div class="title">
+                <span class="title">
                     <g:Label ui:field="title"/>
-                </div>
+                </span>
+                <span>
+                    <g:FlowPanel styleName="{res.tabHeaders}">
+                        <g:Image resource='{imageResources.editOn}' styleName="{res.tabHeader}"
+                                 ui:field="editImage"/>
+                        <g:Image resource='{imageResources.deleteOn}' styleName="{res.tabHeader}"
+                                 ui:field="deleteImage"/>
+                        <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
+                    </g:FlowPanel>
+                </span>
             </div>
             <g:HTMLPanel ui:field="body">
 

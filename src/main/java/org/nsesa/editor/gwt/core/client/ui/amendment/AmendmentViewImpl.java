@@ -4,10 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
@@ -29,6 +26,15 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @UiField
     HTMLPanel body;
+
+    @UiField
+    Image moreImage;
+
+    @UiField
+    Image editImage;
+
+    @UiField
+    Image deleteImage;
 
     public AmendmentViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
