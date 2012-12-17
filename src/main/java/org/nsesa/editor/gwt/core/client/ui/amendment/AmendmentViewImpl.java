@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
@@ -55,5 +56,20 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     @Override
     public Element getBody() {
         return body.getElement();
+    }
+
+    @Override
+    public HasClickHandlers getMoreActionsButton() {
+        return moreImage;
+    }
+
+    @Override
+    public HasClickHandlers getEditButton() {
+        return editImage;
+    }
+
+    @Override
+    public HasClickHandlers getDeleteButton() {
+        return deleteImage;
     }
 }

@@ -8,15 +8,15 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -86,20 +86,19 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
 
     @Override
-    public void setAmendments(Map<String, AmendmentView> amendments) {
-        for(Map.Entry<String, AmendmentView> entry : amendments.entrySet()) {
+    public void setAmendments(Map<String, AmendmentController> amendments) {
+        for (Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
             HorizontalPanel panel = new HorizontalPanel();
             //create a check box
             CheckBox checkBox = new CheckBox();
             checkBoxes.put(entry.getKey(), checkBox);
             panel.add(checkBox);
-            panel.add(entry.getValue());
-            amendmentsPanel.add(panel);
+            amendmentsPanel.add(entry.getValue().getExtendedView());
         }
     }
 
     @Override
-    public void refreshAmendments(Map<String, AmendmentView> amendments) {
+    public void refreshAmendments(Map<String, AmendmentController> amendments) {
         amendmentsPanel.clear();
         checkBoxes.clear();
         setAmendments(amendments);
@@ -108,7 +107,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     @Override
     public List<String> getSelectedAmendments() {
         List<String> result = new ArrayList<String>();
-        for(Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
+        for (Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
             if (entry.getValue().getValue()) {
                 result.add(entry.getKey());
             }
@@ -120,10 +119,10 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     @Override
     public void selectAmendments(List<String> ids) {
         // deselect all
-        for(Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
+        for (Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
             entry.getValue().setValue(false);
         }
-        for(String id : ids) {
+        for (String id : ids) {
             CheckBox checkBox = checkBoxes.get(id);
             if (checkBox != null) {
                 checkBox.setValue(true);

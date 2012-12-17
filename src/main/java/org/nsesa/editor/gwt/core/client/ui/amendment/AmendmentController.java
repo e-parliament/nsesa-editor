@@ -1,8 +1,11 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -41,9 +44,12 @@ public class AmendmentController {
 
     private AmendmentContainerDTO amendment;
 
-    private AmendableWidget parentAmendableWidget;
+    /**
+     * Reference to the parent amendable widget we've been added to.
+     */
+    private AmendableWidget amendedAmendableWidget;
 
-    private AmendableWidget amendmentWidget;
+    private AmendableWidget overlayAmendableWidget;
 
     private int order;
 
@@ -64,7 +70,18 @@ public class AmendmentController {
     }
 
     private void registerListeners() {
-
+        view.getDeleteButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
+            }
+        });
+        extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
+            }
+        });
     }
 
     public AmendmentContainerDTO getModel() {
@@ -94,10 +111,10 @@ public class AmendmentController {
     }
 
     protected AmendableWidget overlay() {
-        if (amendmentWidget == null) {
-            amendmentWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
+        if (overlayAmendableWidget == null) {
+            overlayAmendableWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
         }
-        return amendmentWidget;
+        return overlayAmendableWidget;
     }
 
     public void setAmendment(AmendmentContainerDTO amendment) {
@@ -131,12 +148,12 @@ public class AmendmentController {
         this.extendedView.setTitle(title);
     }
 
-    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
-        this.parentAmendableWidget = parentAmendableWidget;
+    public void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget) {
+        this.amendedAmendableWidget = amendedAmendableWidget;
     }
 
-    public void setAmendmentWidget(AmendableWidget amendmentWidget) {
-        this.amendmentWidget = amendmentWidget;
+    public AmendableWidget getAmendedAmendableWidget() {
+        return amendedAmendableWidget;
     }
 
     public int getOrder() {

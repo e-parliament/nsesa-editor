@@ -2,8 +2,7 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
-import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +15,14 @@ import java.util.Map;
  */
 @ImplementedBy(AmendmentsPanelViewImpl.class)
 public interface AmendmentsPanelView extends IsWidget {
-    public void setAmendments(Map<String, AmendmentView> amendments);
-    public void refreshAmendments(Map<String, AmendmentView> amendments);
+    public void setAmendments(Map<String, AmendmentController> amendments);
+
+    public void refreshAmendments(Map<String, AmendmentController> amendments);
+
     public void setStyleName(String styleName);
+
     public List<String> getSelectedAmendments();
+
     public void selectAmendments(List<String> ids);
 
 }

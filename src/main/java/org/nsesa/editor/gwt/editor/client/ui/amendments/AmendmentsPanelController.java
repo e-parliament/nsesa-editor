@@ -2,12 +2,8 @@ package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -76,6 +72,12 @@ public class AmendmentsPanelController {
                 refreshAmendments();
             }
         });
+        documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerDeletedEvent event) {
+                refreshAmendments();
+            }
+        });
 
         documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
@@ -141,11 +143,10 @@ public class AmendmentsPanelController {
     }
 
     private void filterAmendments() {
-        Map<String, AmendmentView> amendments = new LinkedHashMap<String, AmendmentView>();
-        FilterResponse<AmendmentController> response =
-                documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
-        for (AmendmentController amendmentController : response.getResult()) {
-            amendments.put(amendmentController.getModel().getId(), amendmentController.getExtendedView());
+        final Map<String, AmendmentController> amendments = new LinkedHashMap<String, AmendmentController>();
+        final FilterResponse<AmendmentController> response = documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
+        for (final AmendmentController amendmentController : response.getResult()) {
+            amendments.put(amendmentController.getModel().getId(), amendmentController);
         }
         view.refreshAmendments(amendments);
         // raise a filter response

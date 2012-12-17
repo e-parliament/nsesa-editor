@@ -9,10 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
@@ -91,6 +88,13 @@ public class MarkerController {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 clearMarkers();
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerDeletedEvent event) {
+                drawAmendmentControllers();
             }
         });
 

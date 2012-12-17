@@ -100,6 +100,28 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                 });
             }
         });
+
+        documentEventBus.addHandler(AmendmentContainerDeleteEvent.TYPE, new AmendmentContainerDeleteEventHandler() {
+            @Override
+            public void onEvent(final AmendmentContainerDeleteEvent event) {
+                final ArrayList<AmendmentContainerDTO> amendmentContainers = new ArrayList<AmendmentContainerDTO>();
+                amendmentContainers.add(event.getAmendmentController().getModel());
+                serviceFactory.getGwtAmendmentService().deleteAmendmentContainers(clientFactory.getClientContext(), amendmentContainers, new AsyncCallback<AmendmentContainerDTO[]>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
+                    }
+
+                    @Override
+                    public void onSuccess(AmendmentContainerDTO[] result) {
+                        // delete from the locally downloaded amendments
+                        amendmentControllers.remove(event.getAmendmentController());
+                        // successfully deleted on the server, so inform our document controller to remove the amendment
+                        documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(event.getAmendmentController()));
+                    }
+                });
+            }
+        });
     }
 
     @Override

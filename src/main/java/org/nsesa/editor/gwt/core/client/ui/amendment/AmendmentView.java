@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
@@ -18,4 +19,10 @@ public interface AmendmentView extends IsWidget {
     void setBody(String xmlContent);
 
     Element getBody();
+
+    HasClickHandlers getMoreActionsButton();
+
+    HasClickHandlers getEditButton();
+
+    HasClickHandlers getDeleteButton();
 }

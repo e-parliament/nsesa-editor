@@ -248,7 +248,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             if (holderElement != null) {
                 holderElement.add(amendmentController.getView());
                 // set up a reference to this widget
-                amendmentController.setParentAmendableWidget(this);
+                amendmentController.setAmendedAmendableWidget(this);
                 // inform the listener
                 if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
             } else {
@@ -273,9 +273,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             }
 
             // physical remove
-            remove(amendmentController.getView());
+            amendmentController.getView().asWidget().removeFromParent();
+            amendmentController.getExtendedView().asWidget().removeFromParent();
+
             // clear reference to this widget
-            amendmentController.setParentAmendableWidget(null);
+            amendmentController.setAmendedAmendableWidget(null);
 
             // inform the listener
             if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
