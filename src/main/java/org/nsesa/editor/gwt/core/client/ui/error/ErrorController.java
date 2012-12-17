@@ -22,6 +22,7 @@ public class ErrorController {
     public ErrorController(final ErrorView view) {
         this.view = view;
         this.popupPanel.setWidget(view);
+        this.view.asWidget().setWidth("400px");
         registerListeners();
     }
 
