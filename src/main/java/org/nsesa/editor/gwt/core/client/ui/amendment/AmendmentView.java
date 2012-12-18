@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
@@ -12,7 +13,7 @@ import com.google.inject.ImplementedBy;
  * @version $Id$
  */
 @ImplementedBy(AmendmentViewImpl.class)
-public interface AmendmentView extends IsWidget {
+public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClickHandlers {
 
     void setTitle(String title);
 

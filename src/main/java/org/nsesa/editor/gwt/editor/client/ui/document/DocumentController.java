@@ -204,6 +204,15 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
+        // forward the edit event
+        documentEventBus.addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerEditEvent event) {
+                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
         documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {

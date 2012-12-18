@@ -3,9 +3,12 @@ package org.nsesa.editor.gwt.core.client.ui.amendment;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -36,6 +39,7 @@ public class AmendmentController {
     private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);
 
     private final AmendmentView view;
+
     private final AmendmentView extendedView;
 
     private final ClientFactory clientFactory;
@@ -82,13 +86,43 @@ public class AmendmentController {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
             }
         });
+        view.getEditButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
+            }
+        });
+
+        extendedView.getEditButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
+            }
+        });
+
+        view.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // don't let it bubble up to its parent amended widget
+                event.preventDefault();
+            }
+        });
+
+        view.addDoubleClickHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                // don't let it bubble up to its parent amended widget
+                event.preventDefault();
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
+            }
+        });
     }
 
     public AmendmentContainerDTO getModel() {
         return amendment;
     }
 
-    // TEMPORARY!!!
+    // TEMPORARY!!! (note: ... wanna bet this ends up in production?)
 
     public String getOriginalContent() {
         final List<AmendableWidget> quotedStructures = OverlayUtil.find("quotedStructure", overlay());

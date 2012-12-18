@@ -132,10 +132,10 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
-                amendment = event.getAmendment();
-                amendableWidget = event.getAmendableWidget();
+                amendment = event.getAmendmentController().getModel();
+                amendableWidget = event.getAmendmentController().getAmendedAmendableWidget();
                 amendmentAction = amendment.getAmendmentAction();
-                documentController = event.getDocumentController();
+                documentController = event.getAmendmentController().getDocumentController();
                 handle();
                 show();
             }

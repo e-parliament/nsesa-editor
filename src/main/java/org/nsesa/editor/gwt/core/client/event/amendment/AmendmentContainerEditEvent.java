@@ -1,9 +1,7 @@
 package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
  * Date: 24/06/12 20:14
@@ -15,14 +13,10 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
 
     public static final Type<AmendmentContainerEditEventHandler> TYPE = new Type<AmendmentContainerEditEventHandler>();
 
-    private final AmendableWidget amendableWidget;
-    private final AmendmentContainerDTO amendment;
-    private final DocumentController documentController;
+    private final AmendmentController amendmentController;
 
-    public AmendmentContainerEditEvent(AmendableWidget amendableWidget, AmendmentContainerDTO amendment, DocumentController documentController) {
-        this.amendableWidget = amendableWidget;
-        this.amendment = amendment;
-        this.documentController = documentController;
+    public AmendmentContainerEditEvent(AmendmentController amendmentController) {
+        this.amendmentController = amendmentController;
     }
 
     @Override
@@ -35,15 +29,7 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
         handler.onEvent(this);
     }
 
-    public AmendmentContainerDTO getAmendment() {
-        return amendment;
-    }
-
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
-    }
-
-    public DocumentController getDocumentController() {
-        return documentController;
+    public AmendmentController getAmendmentController() {
+        return amendmentController;
     }
 }
