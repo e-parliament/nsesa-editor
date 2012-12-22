@@ -2,11 +2,9 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author;
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAwareController;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
@@ -24,7 +22,7 @@ public class AuthorPanelController implements AmendmentModifyAwareController {
 
     private final ClientFactory clientFactory;
 
-    private DocumentController documentController;
+    private DialogContext dialogContext;
 
     @Inject
     public AuthorPanelController(final ClientFactory clientFactory, final AuthorPanelView view,
@@ -41,8 +39,8 @@ public class AuthorPanelController implements AmendmentModifyAwareController {
     }
 
     @Override
-    public void setAmendmentAndAmendableWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
-        // set up the views
+    public void setContext(final DialogContext dialogContext) {
+        this.dialogContext = dialogContext;
     }
 
     private void registerListeners() {

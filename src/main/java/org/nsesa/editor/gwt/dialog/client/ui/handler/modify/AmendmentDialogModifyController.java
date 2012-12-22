@@ -2,20 +2,16 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 
 import java.util.List;
 
@@ -29,7 +25,7 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentDialogModifyController extends Composite implements ProvidesResize, AmendmentUIHandler {
+public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
 
     protected final ClientFactory clientFactory;
 
@@ -40,17 +36,6 @@ public class AmendmentDialogModifyController extends Composite implements Provid
     protected final OverlayFactory overlayFactory;
 
     protected final Locator locator;
-
-    protected AmendmentContainerDTO amendment;
-
-    protected AmendmentAction amendmentAction;
-
-    protected AmendableWidget amendableWidget;
-
-    protected DocumentController documentController;
-
-    protected AmendableWidget parentAmendableWidget;
-    private int index;
 
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
@@ -86,8 +71,8 @@ public class AmendmentDialogModifyController extends Composite implements Provid
     }
 
     public void handleSave() {
-        amendment.setSourceReference(new AmendableWidgetReference(amendableWidget.getId()));
-        documentController.getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(amendment));
+        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(dialogContext.getAmendableWidget().getId()));
+        dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
 
@@ -101,44 +86,28 @@ public class AmendmentDialogModifyController extends Composite implements Provid
     }
 
     @Override
-    public void setAmendmentAndWidget(final AmendmentContainerDTO amendment, final AmendableWidget amendableWidget) {
-        this.amendment = amendment;
-        this.amendableWidget = amendableWidget;
+    public void handle() {
+        // make sure to pass the context to the children
+        for (final AmendmentModifyAwareController childController : childControllers) {
+            childController.setContext(dialogContext);
+        }
+        setProperties();
+    }
 
-        if (amendableWidget == null && amendment == null) {
+    public void setProperties() {
+        if (dialogContext.getAmendableWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
 
-        if (amendableWidget != null) {
-            view.setTitle(locator.getLocation(amendableWidget, clientFactory.getClientContext().getDocumentIso(), false));
-            view.setAmendmentContent(amendableWidget.getInnerHTML());
+        if (dialogContext.getAmendmentController() != null) {
+            // get the location from the amendable widget, if it is passed
+            view.setTitle("Edit amendment");
+            view.setAmendmentContent(dialogContext.getAmendmentController().getAmendmendContent());
+        } else {
+            view.setTitle(locator.getLocation(dialogContext.getAmendableWidget(), clientFactory.getClientContext().getDocumentIso(), false));
+            view.setAmendmentContent(dialogContext.getAmendableWidget().getInnerHTML());
         }
 
-        if (amendment != null) {
-            // TODO edit the amendment
-        }
 
-        for (final AmendmentModifyAwareController childController : childControllers) {
-            childController.setAmendmentAndAmendableWidget(amendment, amendableWidget);
-        }
-    }
-
-    @Override
-    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
-        this.parentAmendableWidget = parentAmendableWidget;
-    }
-
-    @Override
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
-    }
-
-    @Override
-    public void setAmendmentAction(AmendmentAction amendmentAction) {
-        this.amendmentAction = amendmentAction;
     }
 }

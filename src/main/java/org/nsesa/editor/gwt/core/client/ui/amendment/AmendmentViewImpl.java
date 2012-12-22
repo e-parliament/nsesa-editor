@@ -6,6 +6,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -19,6 +20,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  */
 @Scope(AMENDMENT)
 public class AmendmentViewImpl extends Composite implements AmendmentView {
+
     interface MyUiBinder extends UiBinder<Widget, AmendmentViewImpl> {
     }
 
@@ -57,6 +59,16 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setTitle(String title) {
         super.setTitle(title);
         this.title.setText(title);
+    }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+        event.stopPropagation();
+        /*switch(DOM.eventGetType(event)) {
+            case Event.ONDBLCLICK :
+
+        }*/
+        super.onBrowserEvent(event);
     }
 
     @Override

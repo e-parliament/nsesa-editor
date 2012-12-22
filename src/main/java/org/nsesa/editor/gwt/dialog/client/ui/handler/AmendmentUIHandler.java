@@ -1,10 +1,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 
 /**
  * Date: 10/07/12 20:34
@@ -14,15 +11,9 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public interface AmendmentUIHandler {
 
-    void setAmendmentAndWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
+    void setContext(DialogContext dialogContext);
 
-    void setParentAmendableWidget(AmendableWidget parentAmendableWidget);
-
-    void setIndex(int index);
-
-    void setAmendmentAction(AmendmentAction amendmentAction);
-
-    void setDocumentController(DocumentController documentController);
+    void handle();
 
     IsWidget getView();
 }

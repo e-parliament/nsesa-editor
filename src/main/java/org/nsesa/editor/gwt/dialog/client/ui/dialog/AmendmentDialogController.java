@@ -9,7 +9,6 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -21,7 +20,6 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreat
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -59,35 +57,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     private final OverlayFactory overlayFactory;
 
-    /**
-     * The amendment to add or edit.
-     */
-    private AmendmentContainerDTO amendment;
-
-    /**
-     * The amendment action (modification, deletion, ..). Can be retrieved via the amendment in case of an edit.
-     */
-    private AmendmentAction amendmentAction;
-
-    /**
-     * The amendable widget.
-     */
-    private AmendableWidget amendableWidget;
-
-    /**
-     * The logical parent amendable widget (only relevant in case of new elements).
-     */
-    private AmendableWidget parentAmendableWidget;
-
-    /**
-     * The index where to position the (new) amendable widget (only relevant in case of new elements).
-     */
-    private int index;
-
-    /**
-     * The document controller.
-     */
-    private DocumentController documentController;
+    private DialogContext dialogContext;
 
 
     @Inject
@@ -118,13 +88,13 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
-                amendableWidget = event.getAmendableWidget();
-                parentAmendableWidget = event.getParentAmendableWidget();
-                index = event.getIndex();
-                amendmentAction = event.getAmendmentAction();
-                documentController = event.getDocumentController();
-                amendment = createAmendment();
-
+                dialogContext = new DialogContext();
+                dialogContext.setAmendableWidget(event.getAmendableWidget());
+                dialogContext.setParentAmendableWidget(event.getParentAmendableWidget());
+                dialogContext.setIndex(event.getIndex());
+                dialogContext.setAmendmentAction(event.getAmendmentAction());
+                dialogContext.setDocumentController(event.getDocumentController());
+                dialogContext.setAmendment(createAmendment());
                 handle();
                 show();
             }
@@ -132,10 +102,12 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
-                amendment = event.getAmendmentController().getModel();
-                amendableWidget = event.getAmendmentController().getAmendedAmendableWidget();
-                amendmentAction = amendment.getAmendmentAction();
-                documentController = event.getAmendmentController().getDocumentController();
+                dialogContext = new DialogContext();
+                dialogContext.setAmendmentController(event.getAmendmentController());
+                dialogContext.setAmendment(event.getAmendmentController().getModel());
+                dialogContext.setAmendableWidget(event.getAmendmentController().getAmendedAmendableWidget());
+                dialogContext.setAmendmentAction(dialogContext.getAmendment().getAmendmentAction());
+                dialogContext.setDocumentController(event.getAmendmentController().getDocumentController());
                 handle();
                 show();
             }
@@ -143,6 +115,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
             @Override
             public void onEvent(CloseDialogEvent event) {
+                dialogContext = new DialogContext();
                 hide();
             }
         });
@@ -155,20 +128,14 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     protected AmendmentUIHandler getUIHandler() {
-        if (amendmentAction == AmendmentAction.CREATION) {
+        if (dialogContext.getAmendmentAction() == AmendmentAction.CREATION) {
             return amendmentDialogCreateController;
         }
-        if (amendmentAction == AmendmentAction.MOVE) {
+        if (dialogContext.getAmendmentAction() == AmendmentAction.MOVE) {
             return amendmentDialogMoveController;
         }
-        if (amendmentAction == AmendmentAction.BUNDLE) {
+        if (dialogContext.getAmendmentAction() == AmendmentAction.BUNDLE) {
             return amendmentDialogBundleController;
-        }
-        if ("table".equalsIgnoreCase(amendableWidget.getType()) || "tr".equalsIgnoreCase(amendableWidget.getType())) {
-            return amendmentDialogTableController;
-        }
-        if ("img".equalsIgnoreCase(amendableWidget.getType())) {
-            throw new UnsupportedOperationException("Not yet implemented.");
         }
         return amendmentDialogModifyController;
     }
@@ -186,11 +153,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
         this.view.getMainPanel().add(amendmentUIHandler.getView());
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
-        amendmentUIHandler.setAmendmentAndWidget(amendment, amendableWidget);
-        amendmentUIHandler.setDocumentController(documentController);
-        amendmentUIHandler.setAmendmentAction(amendmentAction);
-        amendmentUIHandler.setParentAmendableWidget(parentAmendableWidget);
-        amendmentUIHandler.setIndex(index);
+        amendmentUIHandler.setContext(dialogContext);
+        ;
+        amendmentUIHandler.handle();
     }
 
     /**
@@ -214,35 +179,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         popupPanel.hide(true);
     }
 
-    public AmendmentContainerDTO getAmendment() {
-        return amendment;
-    }
-
-    public void setAmendment(AmendmentContainerDTO amendment) {
-        this.amendment = amendment;
-    }
-
     public AmendmentDialogView getView() {
         return view;
-    }
-
-    public AmendmentAction getAmendmentAction() {
-        return amendmentAction;
-    }
-
-    public void setAmendmentAction(AmendmentAction amendmentAction) {
-        this.amendmentAction = amendmentAction;
-    }
-
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
-    }
-
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
-    }
-
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
     }
 }

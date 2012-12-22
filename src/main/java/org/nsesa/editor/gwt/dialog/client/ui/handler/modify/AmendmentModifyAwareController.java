@@ -1,8 +1,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 
 /**
  * Date: 22/11/12 11:43
@@ -18,5 +17,5 @@ public interface AmendmentModifyAwareController {
 
     boolean validate();
 
-    void setAmendmentAndAmendableWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget);
+    void setContext(DialogContext dialogContext);
 }

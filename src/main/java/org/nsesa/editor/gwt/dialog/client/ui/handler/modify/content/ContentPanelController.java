@@ -2,8 +2,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.content;
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAwareController;
 
 /**
@@ -22,9 +21,7 @@ public class ContentPanelController implements AmendmentModifyAwareController {
 
     private final ContentControllerView view;
 
-    private AmendmentContainerDTO amendment;
-
-    private AmendableWidget amendableWidget;
+    private DialogContext dialogContext;
 
     @Inject
     public ContentPanelController(final ClientFactory clientFactory, final ContentControllerView view) {
@@ -42,12 +39,14 @@ public class ContentPanelController implements AmendmentModifyAwareController {
     }
 
     @Override
-    public void setAmendmentAndAmendableWidget(AmendmentContainerDTO amendment, AmendableWidget amendableWidget) {
-        assert amendment != null : "Amendment should not be null.";
-        assert amendableWidget != null : "Amendment Widget should not be null.";
-        this.amendment = amendment;
-        this.amendableWidget = amendableWidget;
-        view.setOriginalText(amendableWidget.getInnerHTML());
+    public void setContext(final DialogContext dialogContext) {
+        this.dialogContext = dialogContext;
+        if (dialogContext.getAmendmentController() != null) {
+            // we're editing
+            view.setOriginalText(dialogContext.getAmendmentController().getOriginalContent());
+        } else {
+            view.setOriginalText(dialogContext.getAmendableWidget().getInnerHTML());
+        }
     }
 
     @Override
