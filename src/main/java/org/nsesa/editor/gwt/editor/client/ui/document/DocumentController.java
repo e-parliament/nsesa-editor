@@ -252,6 +252,18 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
+        documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerUpdatedEvent event) {
+                final AmendableWidget amendableWidget = event.getOldRevision().getAmendedAmendableWidget();
+                if (amendableWidget != null) {
+                    amendableWidget.removeAmendmentController(event.getOldRevision());
+                    amendableWidget.addAmendmentController(event.getNewRevision());
+                    renumberAmendments();
+                }
+            }
+        });
+
         clientFactory.getEventBus().addHandler(AmendableWidgetSelectEvent.TYPE, new AmendableWidgetSelectEventHandler() {
             @Override
             public void onEvent(AmendableWidgetSelectEvent event) {

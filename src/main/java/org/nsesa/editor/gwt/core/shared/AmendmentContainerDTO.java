@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class AmendmentContainerDTO implements IsSerializable {
 
     private String id;
+    private String revisionID;
 
     private String languageISO;
 
@@ -93,5 +94,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setLanguageISO(String languageISO) {
         this.languageISO = languageISO;
+    }
+
+    public String getRevisionID() {
+        return revisionID;
+    }
+
+    public void setRevisionID(String revisionID) {
+        this.revisionID = revisionID;
     }
 }

@@ -239,8 +239,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             vetoed = listener.beforeAmendmentControllerAdded(this, amendmentController);
 
         if (!vetoed) {
-            if (!amendmentControllers.add(amendmentController)) {
+            if (amendmentControllers.contains(amendmentController)) {
                 throw new RuntimeException("Amendment already exists: " + amendmentController);
+            }
+            if (!amendmentControllers.add(amendmentController)) {
+                throw new RuntimeException("Could not add amendment controller: " + amendmentController);
             }
 
             // physical attach
@@ -268,8 +271,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             vetoed = listener.beforeAmendmentControllerRemoved(this, amendmentController);
 
         if (!vetoed) {
-            if (!amendmentControllers.remove(amendmentController)) {
+            if (!amendmentControllers.contains(amendmentController)) {
                 throw new RuntimeException("Amendment controller not found: " + amendmentController);
+            }
+            if (!amendmentControllers.remove(amendmentController)) {
+                throw new RuntimeException("Could not remove amendment controller: " + amendmentController);
             }
 
             // physical remove

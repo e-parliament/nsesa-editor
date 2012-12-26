@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -34,6 +35,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentManager implements AmendmentInjectionCapable {
+
+    private static final Logger LOG = Logger.getLogger(AmendmentManager.class.getName());
 
     private final ServiceFactory serviceFactory;
 
@@ -86,16 +89,42 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                     }
 
                     @Override
-                    public void onSuccess(AmendmentContainerDTO[] result) {
+                    public void onSuccess(final AmendmentContainerDTO[] result) {
                         for (final AmendmentContainerDTO amendmentContainerDTO : result) {
                             final AmendmentController amendmentController = injector.getAmendmentController();
                             amendmentController.setAmendment(amendmentContainerDTO);
                             amendmentController.setDocumentController(documentController);
-                            amendmentControllers.add(amendmentController);
+
+                            // check if we already have an amendment with a similar revisionID
+                            int indexOfOlderRevision = -1;
+                            int counter = 0;
+                            for (final AmendmentController ac : amendmentControllers) {
+
+                                if (amendmentController.getModel().getRevisionID().equals(ac.getModel().getRevisionID())) {
+                                    // aha, we found a controller for an older model
+                                    indexOfOlderRevision = counter;
+                                    break;
+                                }
+                                counter++;
+                            }
+                            if (indexOfOlderRevision != -1) {
+                                final AmendmentController removed = amendmentControllers.remove(indexOfOlderRevision);
+                                amendmentControllers.add(indexOfOlderRevision, amendmentController);
+                                if (!removed.getDocumentController().equals(amendmentController.getDocumentController())) {
+                                    throw new RuntimeException("Newer revision does not match the document controller?");
+                                }
+                                LOG.info("Replacing amendment controller " + removed + " with " + amendmentController);
+                                documentEventBus.fireEvent(new AmendmentContainerUpdatedEvent(removed, amendmentController));
+                            } else {
+                                // new amendment
+                                amendmentControllers.add(amendmentController);
+                                LOG.info("Adding new amendment controller " + amendmentController);
+                                documentEventBus.fireEvent(new AmendmentContainerInjectEvent(result));
+                            }
                             // inform the document the save has happened
                             documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
                         }
-                        documentEventBus.fireEvent(new AmendmentContainerInjectEvent(result));
+
                     }
                 });
             }
@@ -135,7 +164,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
 
     @Override
     public void inject(final AmendableWidget root, final DocumentController documentController) {
-        // if we're going to do multiple injections, it's faster to create a temporary lookup cache with all IDs
+        // TODO if we're going to do multiple injections, it's faster to create a temporary lookup cache with all IDs
         for (final AmendmentController amendmentController : amendmentControllers) {
             injectInternal(amendmentController, root, documentController);
         }
@@ -192,24 +221,22 @@ public class AmendmentManager implements AmendmentInjectionCapable {
     }
 
     public FilterResponse<AmendmentController> getAmendmentControllers(Filter<AmendmentController> filter) {
-        List<AmendmentController> tmpList = new ArrayList<AmendmentController>();
+        final List<AmendmentController> tmpList = new ArrayList<AmendmentController>();
         // apply comparator
         Collections.sort(amendmentControllers, filter.getComparator());
         // apply selection
-        for (AmendmentController amendmentController : amendmentControllers) {
+        for (final AmendmentController amendmentController : amendmentControllers) {
             if (filter.getSelection().select(amendmentController)) {
                 tmpList.add(amendmentController);
             }
         }
-        List<AmendmentController> list = new ArrayList<AmendmentController>();
+        final List<AmendmentController> list = new ArrayList<AmendmentController>();
 
-        int end = Math.min(tmpList.size(), filter.getStart() + filter.getSize());
+        final int end = Math.min(tmpList.size(), filter.getStart() + filter.getSize());
         for (int i = filter.getStart(); i < end; i++) {
             list.add(tmpList.get(i));
         }
-        FilterResponse<AmendmentController> filterResponse =
-                new FilterResponse<AmendmentController>(filter, tmpList.size(), list);
-        return filterResponse;
+        return new FilterResponse<AmendmentController>(filter, tmpList.size(), list);
     }
 
     public void setDocumentController(DocumentController documentController) {

@@ -123,7 +123,10 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     protected AmendmentContainerDTO createAmendment() {
         AmendmentContainerDTO dto = new AmendmentContainerDTO();
+        // set the primary key
         dto.setId(UUID.uuid());
+        // set the revision
+        dto.setRevisionID(UUID.uuid());
         return dto;
     }
 
@@ -154,7 +157,6 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.view.getMainPanel().add(amendmentUIHandler.getView());
         view.getMainPanel().setCellHeight(amendmentUIHandler.getView().asWidget(), "100%");
         amendmentUIHandler.setContext(dialogContext);
-        ;
         amendmentUIHandler.handle();
     }
 
