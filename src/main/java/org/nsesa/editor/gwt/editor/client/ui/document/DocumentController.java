@@ -195,6 +195,24 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
+        clientFactory.getEventBus().addHandler(AmendableWidgetSelectEvent.TYPE, new AmendableWidgetSelectEventHandler() {
+            @Override
+            public void onEvent(AmendableWidgetSelectEvent event) {
+                boolean alreadySelected = false;
+                if (activeAmendableWidget == event.getAmendableWidget()) {
+                    alreadySelected = true;
+                }
+                if (activeAmendableWidget != null) {
+                    activeAmendableWidget.asWidget().removeStyleName(style.selected());
+                }
+                activeAmendableWidget = event.getAmendableWidget();
+                activeAmendableWidget.asWidget().addStyleName(style.selected());
+                if (alreadySelected) {
+                    clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
+                }
+            }
+        });
+
         // forward the amendment injected event to the parent event bus
         documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
@@ -260,24 +278,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                     amendableWidget.removeAmendmentController(event.getOldRevision());
                     amendableWidget.addAmendmentController(event.getNewRevision());
                     renumberAmendments();
-                }
-            }
-        });
-
-        clientFactory.getEventBus().addHandler(AmendableWidgetSelectEvent.TYPE, new AmendableWidgetSelectEventHandler() {
-            @Override
-            public void onEvent(AmendableWidgetSelectEvent event) {
-                boolean alreadySelected = false;
-                if (activeAmendableWidget == event.getAmendableWidget()) {
-                    alreadySelected = true;
-                }
-                if (activeAmendableWidget != null) {
-                    activeAmendableWidget.asWidget().removeStyleName(style.selected());
-                }
-                activeAmendableWidget = event.getAmendableWidget();
-                activeAmendableWidget.asWidget().addStyleName(style.selected());
-                if (alreadySelected) {
-                    clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
                 }
             }
         });
