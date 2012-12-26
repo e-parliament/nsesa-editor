@@ -148,7 +148,6 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             this.overlayStrategy = null;
             this.origin = null;
             this.amendable = null;
-            this.setElement(null);
             this.amendmentControllers = null;
             this.assignedNumber = null;
             this.amendmentHolderElement = null;

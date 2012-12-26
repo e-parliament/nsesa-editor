@@ -285,6 +285,15 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
+
+                // clear the previous amendable widgets
+                amendableWidgets = new ArrayList<AmendableWidget>();
+                // make sure all amendment controllers are 'uninjected'
+                for (final AmendmentController ac : amendmentManager.getAmendmentControllers()) {
+                    if (ac.getDocumentController() == DocumentController.this) {
+                        ac.setDocumentController(null);
+                    }
+                }
                 loadDocumentContent();
             }
         });
