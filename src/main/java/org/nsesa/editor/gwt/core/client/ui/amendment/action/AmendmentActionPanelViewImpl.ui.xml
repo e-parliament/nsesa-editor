@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="AmendmentActionPanelViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelViewCss'/>
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.amendment.action.resources.Resources'/>
+    <ui:style field="res">
+
+    </ui:style>
+    <g:VerticalPanel ui:field="mainPanel">
+        <g:Anchor text="Foo"/>
+        <g:Anchor text="Bar"/>
+        <g:HTMLPanel>
+            <hr/>
+        </g:HTMLPanel>
+        <g:Anchor text="Baz"/>
+    </g:VerticalPanel>
+</ui:UiBinder>

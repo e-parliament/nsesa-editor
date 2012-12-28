@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -9,6 +10,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -42,6 +44,8 @@ public class AmendmentController {
 
     private final AmendmentView extendedView;
 
+    private final AmendmentActionPanelController amendmentActionPanelController;
+
     private final ClientFactory clientFactory;
 
     private final AmendmentEventBus amendmentEventBus;
@@ -64,9 +68,12 @@ public class AmendmentController {
 
     @Inject
     public AmendmentController(final ClientFactory clientFactory,
-                               final AmendmentView amendmentView, final AmendmentView amendmentExtendedView) {
+                               final AmendmentActionPanelController amendmentActionPanelController,
+                               final AmendmentView amendmentView,
+                               final AmendmentView amendmentExtendedView) {
         this.clientFactory = clientFactory;
 
+        this.amendmentActionPanelController = amendmentActionPanelController;
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
         this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
@@ -97,6 +104,22 @@ public class AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
+            }
+        });
+
+        view.getMoreActionsButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                final Element relativeElement = event.getRelativeElement();
+                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+            }
+        });
+
+        extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                final Element relativeElement = event.getRelativeElement();
+                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
         });
 
