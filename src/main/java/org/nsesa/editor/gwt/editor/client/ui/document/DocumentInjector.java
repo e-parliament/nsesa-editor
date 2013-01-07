@@ -39,8 +39,6 @@ public interface DocumentInjector extends Ginjector {
 
     AmendmentsPanelController getAmendmentsPanelController();
 
-//    AmendmentsHeaderController getAmendmentsHeaderController();
-
     InfoPanelController getInfoPanelController();
 
     DocumentHeaderController getDocumentHeaderController();
