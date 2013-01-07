@@ -39,6 +39,6 @@ public class DefaultDiffingManager implements DiffingManager {
     }
 
     public void diff(final DiffMethod method, final AmendmentController... amendmentControllers) {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
+        // default is to not do any diffing at all ..
     }
 }
