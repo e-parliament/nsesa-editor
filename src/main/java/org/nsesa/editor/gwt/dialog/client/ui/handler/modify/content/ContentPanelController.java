@@ -17,11 +17,11 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAware
  */
 public class ContentPanelController implements AmendmentModifyAwareController {
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private final ContentControllerView view;
+    protected final ContentControllerView view;
 
-    private DialogContext dialogContext;
+    protected DialogContext dialogContext;
 
     @Inject
     public ContentPanelController(final ClientFactory clientFactory, final ContentControllerView view) {
@@ -41,12 +41,6 @@ public class ContentPanelController implements AmendmentModifyAwareController {
     @Override
     public void setContext(final DialogContext dialogContext) {
         this.dialogContext = dialogContext;
-        if (dialogContext.getAmendmentController() != null) {
-            // we're editing
-            view.setOriginalText(dialogContext.getAmendmentController().getOriginalContent());
-        } else {
-            view.setOriginalText(dialogContext.getAmendableWidget().getInnerHTML());
-        }
     }
 
     @Override

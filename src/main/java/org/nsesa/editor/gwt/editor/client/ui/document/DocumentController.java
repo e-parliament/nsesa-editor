@@ -118,6 +118,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
+                              final DiffingManager diffingManager,
                               final Locator locator,
                               final Creator creator,
                               final InlineEditorController inlineEditorController) {
@@ -129,13 +130,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
+        this.diffingManager = diffingManager;
+        this.amendmentManager = injector.getAmendmentManager();
         this.inlineEditorController = inlineEditorController;
 
         // document scoped singletons
-        this.amendmentManager = injector.getAmendmentManager();
         this.amendmentManager.setInjector(injector);
         this.amendmentManager.setDocumentController(this);
-        this.diffingManager = injector.getDiffingManager();
 
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();

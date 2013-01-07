@@ -320,4 +320,9 @@ public class AmendableWidgetMockImpl implements AmendableWidget {
     public Widget asWidget() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "[AWMock " + getType() + ":" + getTypeIndex() + " #" + getId() + "]";
+    }
 }

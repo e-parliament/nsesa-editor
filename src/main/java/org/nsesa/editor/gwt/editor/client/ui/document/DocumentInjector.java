@@ -4,7 +4,6 @@ import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
-import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
@@ -44,8 +43,6 @@ public interface DocumentInjector extends Ginjector {
     DocumentHeaderController getDocumentHeaderController();
 
     AmendmentManager getAmendmentManager();
-
-    DiffingManager getDiffingManager();
 
     AmendmentController getAmendmentController();
 }

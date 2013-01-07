@@ -98,16 +98,5 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         if (dialogContext.getAmendableWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
-
-        if (dialogContext.getAmendmentController() != null) {
-            // get the location from the amendable widget, if it is passed
-            view.setTitle("Edit amendment");
-            view.setAmendmentContent(dialogContext.getAmendmentController().getAmendmendContent());
-        } else {
-            view.setTitle(locator.getLocation(dialogContext.getAmendableWidget(), clientFactory.getClientContext().getDocumentIso(), false));
-            view.setAmendmentContent(dialogContext.getAmendableWidget().getInnerHTML());
-        }
-
-
     }
 }
