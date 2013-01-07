@@ -124,6 +124,30 @@ public class OverlayUtilTest {
     }
 
     @Test
+    public void testXpathLevel2ExpressionWithWildCard() throws Exception {
+        final List<AmendableWidget> xpathResult = OverlayUtil.xpath("//rootNode[0]/*[0]/typeC[1]", root);
+        Assert.assertEquals("Ensure one node is found", 1, xpathResult.size());
+        Assert.assertEquals("Ensure the correct node is found.", level32, xpathResult.get(0));
+    }
+
+    @Test
+    public void testXpathMultipleReturnValuesWithWildCard() throws Exception {
+        final List<AmendableWidget> xpathResult = OverlayUtil.xpath("//rootNode[0]/*[0]/*", root);
+        Assert.assertEquals("Ensure three nodes are found", 3, xpathResult.size());
+        Assert.assertEquals("Ensure the correct node is found.", level31, xpathResult.get(0));
+        Assert.assertEquals("Ensure the correct node is found.", level32, xpathResult.get(1));
+        Assert.assertEquals("Ensure the correct node is found.", level33, xpathResult.get(2));
+    }
+
+    @Test
+    public void testXpathMultipleReturnValuesWitType() throws Exception {
+        final List<AmendableWidget> xpathResult = OverlayUtil.xpath("//rootNode[0]/*[0]/typeC", root);
+        Assert.assertEquals("Ensure two nodes are found", 2, xpathResult.size());
+        Assert.assertEquals("Ensure the correct node is found.", level31, xpathResult.get(0));
+        Assert.assertEquals("Ensure the correct node is found.", level32, xpathResult.get(1));
+    }
+
+    @Test
     public void testXpathIDExpression() throws Exception {
         final List<AmendableWidget> xpathResult = OverlayUtil.xpath("#id3-1-1", root);
         Assert.assertEquals("Ensure one node is found", 1, xpathResult.size());
