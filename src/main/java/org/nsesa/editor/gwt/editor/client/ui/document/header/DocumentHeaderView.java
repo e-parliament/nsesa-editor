@@ -18,11 +18,19 @@ public interface DocumentHeaderView extends IsWidget {
 
     void setAvailableTranslations(List<DocumentDTO> translations);
 
+    void setRelatedDocuments(List<DocumentDTO> relatedDocuments);
+
     HasChangeHandlers getTranslationsListBox();
 
-    String getSelectedDocumentID();
+    HasChangeHandlers getRelatedDocumentsListBox();
+
+    String getSelectedRelatedDocumentID();
+
+    String getSelectedTranslationDocumentID();
 
     void setSelectedTranslation(DocumentDTO selectedTranslation);
+
+    void setSelectedRelatedDocument(DocumentDTO selectedRelatedDocument);
 
     void setStyleName(String style);
 }

@@ -63,4 +63,13 @@ public interface GWTDocumentService extends RemoteService {
      * @return the array with the translations that are available.
      */
     ArrayList<DocumentDTO> getAvailableTranslations(ClientContext clientContext, String documentID);
+
+    /**
+     * Retrieves the list of related documents for a given document.
+     *
+     * @param clientContext the client context
+     * @param documentID    the id of the document or revision
+     * @return the array with the related documents (if any)
+     */
+    ArrayList<DocumentDTO> getRelatedDocuments(ClientContext clientContext, String documentID);
 }

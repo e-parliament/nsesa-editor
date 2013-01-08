@@ -397,6 +397,20 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 documentHeaderController.setSelectedTranslation(document);
             }
         });
+
+        serviceFactory.getGwtDocumentService().getRelatedDocuments(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<ArrayList<DocumentDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                LOG.log(Level.SEVERE, "No related documents available.", caught);
+            }
+
+            @Override
+            public void onSuccess(ArrayList<DocumentDTO> translations) {
+                documentHeaderController.setRelatedDocuments(translations);
+                // select the correct translation
+                documentHeaderController.setSelectedRelatedDocument(document);
+            }
+        });
     }
 
     public void renumberAmendments() {

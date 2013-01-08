@@ -55,4 +55,13 @@ public interface GWTDocumentServiceAsync {
      */
     void getDocumentContent(ClientContext clientContext, String documentID, AsyncCallback<String> async);
 
+    /**
+     * Retrieves the list of related documents for a given document.
+     *
+     * @param clientContext the client context
+     * @param documentID    the id of the document or revision
+     * @param async         the callback
+     */
+    void getRelatedDocuments(ClientContext clientContext, String documentID, AsyncCallback<ArrayList<DocumentDTO>> async);
+
 }

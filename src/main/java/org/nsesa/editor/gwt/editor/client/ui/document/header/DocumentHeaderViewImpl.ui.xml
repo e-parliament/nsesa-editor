@@ -18,6 +18,7 @@
             <g:Label ui:field="documentName"/>
         </g:HTMLPanel>
         <g:HTMLPanel styleName="{res.documentTranslations}">
+            <g:ListBox ui:field="relatedDocuments"/>
             <g:ListBox ui:field="documentTranslations"/>
         </g:HTMLPanel>
     </g:HorizontalPanel>

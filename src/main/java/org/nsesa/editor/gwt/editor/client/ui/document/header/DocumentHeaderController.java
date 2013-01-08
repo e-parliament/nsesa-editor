@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.editor.client.ui.document.header;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -31,6 +30,7 @@ public class DocumentHeaderController {
     private DocumentController documentController;
 
     private List<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
+    private List<DocumentDTO> relatedDocuments = new ArrayList<DocumentDTO>();
 
     @Inject
     public DocumentHeaderController(final DocumentEventBus documentEventBus, final DocumentHeaderView view) {
@@ -42,15 +42,14 @@ public class DocumentHeaderController {
     }
 
     private void registerListeners() {
-        final HasChangeHandlers listBox = view.getTranslationsListBox();
-        listBox.addChangeHandler(new ChangeHandler() {
+        view.getTranslationsListBox().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
-                final String documentID = view.getSelectedDocumentID();
+                final String documentID = view.getSelectedTranslationDocumentID();
                 if (documentID != null) {
 
                     // change the document on our parent controller
-                    final DocumentDTO document = getDocument(documentID);
+                    final DocumentDTO document = getTranslationDocument(documentID);
                     if (document == null) {
                         // ? strange, we would not find the document with the given id.
                         // this should only happen if someone changed the list of documents
@@ -63,14 +62,42 @@ public class DocumentHeaderController {
                 }
             }
         });
+        view.getRelatedDocumentsListBox().addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                final String documentID = view.getSelectedRelatedDocumentID();
+                if (documentID != null) {
+
+                    // change the document on our parent controller
+                    final DocumentDTO document = getRelatedDocument(documentID);
+                    if (document == null) {
+                        throw new RuntimeException("Could not find document with documentID " + documentID + " in the list of related documents.");
+                    }
+                    documentController.setDocument(document);
+                    // fire an update to get the new content
+                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
+                }
+            }
+        });
     }
 
-    private DocumentDTO getDocument(String documentID) {
+    private DocumentDTO getTranslationDocument(String documentID) {
         for (final DocumentDTO document : availableTranslations) {
             if (documentID.equals(document.getDocumentID())) {
                 return document;
             }
         }
+
+        return null;
+    }
+
+    private DocumentDTO getRelatedDocument(String documentID) {
+        for (final DocumentDTO document : relatedDocuments) {
+            if (documentID.equals(document.getDocumentID())) {
+                return document;
+            }
+        }
+
         return null;
     }
 
@@ -83,8 +110,17 @@ public class DocumentHeaderController {
         view.setAvailableTranslations(translations);
     }
 
+    public void setRelatedDocuments(final ArrayList<DocumentDTO> relatedDocuments) {
+        this.relatedDocuments = relatedDocuments;
+        view.setRelatedDocuments(relatedDocuments);
+    }
+
     public void setSelectedTranslation(final DocumentDTO selectedTranslation) {
         view.setSelectedTranslation(selectedTranslation);
+    }
+
+    public void setSelectedRelatedDocument(final DocumentDTO selectedRelatedDocument) {
+        view.setSelectedRelatedDocument(selectedRelatedDocument);
     }
 
     public void setDocumentController(DocumentController documentController) {

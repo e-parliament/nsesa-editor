@@ -39,12 +39,12 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     Label documentName;
     @UiField
     ListBox documentTranslations;
+    @UiField
+    ListBox relatedDocuments;
 
     @Inject
     public DocumentHeaderViewImpl(final DocumentEventBus documentEventBus) {
-
         this.documentEventBus = documentEventBus;
-
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
@@ -59,12 +59,45 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     }
 
     @Override
+    public void setRelatedDocuments(List<DocumentDTO> relatedDocuments) {
+        this.relatedDocuments.clear();
+        for (final DocumentDTO related : relatedDocuments) {
+            this.relatedDocuments.addItem(related.getName(), related.getDocumentID());
+        }
+    }
+
+    @Override
+    public void setSelectedRelatedDocument(DocumentDTO selectedRelatedDocument) {
+        for (int i = 0; i < relatedDocuments.getItemCount(); i++) {
+            final String value = relatedDocuments.getValue(i);
+            final String text = relatedDocuments.getItemText(i);
+            if (value.equals(selectedRelatedDocument.getDocumentID())) {
+                relatedDocuments.setSelectedIndex(i);
+                break;
+            }
+        }
+    }
+
+    @Override
     public HasChangeHandlers getTranslationsListBox() {
         return documentTranslations;
     }
 
     @Override
-    public String getSelectedDocumentID() {
+    public HasChangeHandlers getRelatedDocumentsListBox() {
+        return relatedDocuments;
+    }
+
+    @Override
+    public String getSelectedRelatedDocumentID() {
+        if (relatedDocuments.getSelectedIndex() != -1) {
+            return relatedDocuments.getValue(relatedDocuments.getSelectedIndex());
+        }
+        return null;
+    }
+
+    @Override
+    public String getSelectedTranslationDocumentID() {
         if (documentTranslations.getSelectedIndex() != -1) {
             return documentTranslations.getValue(documentTranslations.getSelectedIndex());
         }
