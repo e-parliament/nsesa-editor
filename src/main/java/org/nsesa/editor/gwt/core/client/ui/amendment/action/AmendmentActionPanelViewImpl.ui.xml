@@ -7,11 +7,6 @@
 
     </ui:style>
     <g:VerticalPanel ui:field="mainPanel">
-        <g:Anchor text="Foo"/>
-        <g:Anchor text="Bar"/>
-        <g:HTMLPanel>
-            <hr/>
-        </g:HTMLPanel>
-        <g:Anchor text="Baz"/>
+
     </g:VerticalPanel>
 </ui:UiBinder>

@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.amendment.DefaultAmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
@@ -248,8 +249,8 @@ public class AmendableWidgetMockImpl implements AmendableWidget {
     }
 
     @Override
-    public AmendmentController[] getAmendmentControllers() {
-        return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
+    public DefaultAmendmentController[] getAmendmentControllers() {
+        return amendmentControllers.toArray(new DefaultAmendmentController[amendmentControllers.size()]);
     }
 
     @Override

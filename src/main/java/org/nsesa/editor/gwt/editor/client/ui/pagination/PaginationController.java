@@ -9,18 +9,16 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInject
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
-
-import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEvent;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * The controller for pagination functionality
@@ -83,7 +81,7 @@ public class PaginationController {
             public void onEvent(FilterResponseEvent event) {
                 currentFilter = event.getFilter();
                 currentPage = currentFilter.getStart() / currentFilter.getSize() + 1;
-                totalPages = (int)Math.ceil((double)event.getTotalSize()/currentFilter.getSize());
+                totalPages = (int) Math.ceil((double) event.getTotalSize() / currentFilter.getSize());
                 if (totalPages == 0) totalPages = 1;
                 if (currentPage > totalPages) currentPage = totalPages;
                 displayCurrentPage();
@@ -131,7 +129,7 @@ public class PaginationController {
             currentPage = totalPages;
         }
         //trigger filter event
-        currentFilter.setStart((currentPage - 1)* currentFilter.getSize());
+        currentFilter.setStart((currentPage - 1) * currentFilter.getSize());
         displayCurrentPage();
         documentEventBus.fireEvent(new FilterRequestEvent(currentFilter));
     }

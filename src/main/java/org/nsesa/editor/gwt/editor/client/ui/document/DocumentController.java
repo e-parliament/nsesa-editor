@@ -132,7 +132,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.inlineEditorController = inlineEditorController;
 
         // document scoped singletons
-        this.amendmentManager.setInjector(injector);
         this.amendmentManager.setDocumentController(this);
 
         this.documentEventBus = injector.getDocumentEventBus();
@@ -452,6 +451,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 amendableWidgets.add(rootAmendableWidget);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Exception while overlaying.", e);
+                documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
             }
         }
         LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
@@ -530,6 +530,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         }
         // after the injection, renumber all the amendments.
         renumberAmendments();
+    }
+
+    public DocumentInjector getInjector() {
+        return injector;
     }
 
     public MarkerController getMarkerController() {

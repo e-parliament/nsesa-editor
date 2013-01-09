@@ -1,6 +1,9 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment.action;
 
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -34,6 +37,18 @@ public class AmendmentActionPanelController {
 
     private void registerListeners() {
 
+    }
+
+    public void addWidget(IsWidget widget) {
+        view.getMainPanel().add(widget);
+    }
+
+    public void addWidget(Widget widget) {
+        view.getMainPanel().add(widget);
+    }
+
+    public void addSeparator() {
+        addWidget(new HTML("<hr class='separator'/>"));
     }
 
     public void show(int x, int y) {

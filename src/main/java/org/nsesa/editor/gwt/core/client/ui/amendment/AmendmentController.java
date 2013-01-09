@@ -1,34 +1,20 @@
 package org.nsesa.editor.gwt.core.client.ui.amendment;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
-import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
+import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.Comparator;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
-
 /**
- * Date: 24/06/12 21:42
+ * Date: 09/01/13 16:46
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Scope(AMENDMENT)
-public class AmendmentController {
+@ImplementedBy(DefaultAmendmentController.class)
+public interface AmendmentController {
 
     public static Comparator<AmendmentController> ORDER_COMPARATOR = new Comparator<AmendmentController>() {
         @Override
@@ -37,189 +23,27 @@ public class AmendmentController {
         }
     };
 
-    private final AmendmentInjector amendmentInjector = GWT.create(AmendmentInjector.class);
+    AmendmentContainerDTO getModel();
 
-    private final AmendmentView view;
+    AmendableWidget asAmendableWidget();
 
-    private final AmendmentView extendedView;
+    void setAmendment(AmendmentContainerDTO amendment);
 
-    private final AmendmentActionPanelController amendmentActionPanelController;
+    DocumentController getDocumentController();
 
-    private final ClientFactory clientFactory;
+    void setDocumentController(DocumentController documentController);
 
-    private final AmendmentEventBus amendmentEventBus;
+    AmendmentView getView();
 
-    private AmendmentContainerDTO amendment;
+    AmendmentView getExtendedView();
 
-    /**
-     * Reference to the parent amendable widget we've been added to.
-     */
-    private AmendableWidget amendedAmendableWidget;
+    void setTitle(String title);
 
-    private AmendableWidget overlayAmendableWidget;
+    void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget);
 
-    private int order;
+    AmendableWidget getAmendedAmendableWidget();
 
-    /**
-     * The document controller into which we are injected. If it is not set, we're not injected anywhere.
-     */
-    private DocumentController documentController;
+    int getOrder();
 
-    @Inject
-    public AmendmentController(final ClientFactory clientFactory,
-                               final AmendmentActionPanelController amendmentActionPanelController,
-                               final AmendmentView amendmentView,
-                               final AmendmentView amendmentExtendedView) {
-        this.clientFactory = clientFactory;
-
-        this.amendmentActionPanelController = amendmentActionPanelController;
-        this.view = amendmentView;
-        this.extendedView = amendmentExtendedView;
-        this.amendmentEventBus = amendmentInjector.getAmendmentEventBus();
-        registerListeners();
-    }
-
-    private void registerListeners() {
-
-        final ClickHandler confirmationHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
-            }
-        };
-
-        final ClickHandler cancelHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                // this does not do anything
-            }
-        };
-
-        final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
-                confirmationHandler,
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
-                cancelHandler);
-
-        view.getDeleteButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(confirmationEvent);
-            }
-        });
-        extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(confirmationEvent);
-            }
-        });
-        view.getEditButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
-            }
-        });
-
-        extendedView.getEditButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
-            }
-        });
-
-        view.getMoreActionsButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                final Element relativeElement = event.getRelativeElement();
-                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
-            }
-        });
-
-        extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                final Element relativeElement = event.getRelativeElement();
-                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
-            }
-        });
-
-        view.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                // don't let it bubble up to its parent amended widget
-                event.preventDefault();
-            }
-        });
-
-        view.addDoubleClickHandler(new DoubleClickHandler() {
-            @Override
-            public void onDoubleClick(DoubleClickEvent event) {
-                // don't let it bubble up to its parent amended widget
-                event.preventDefault();
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(AmendmentController.this));
-            }
-        });
-    }
-
-    public AmendmentContainerDTO getModel() {
-        return amendment;
-    }
-
-    public AmendableWidget asAmendableWidget() {
-        if (overlayAmendableWidget == null) {
-            overlayAmendableWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
-        }
-        return overlayAmendableWidget;
-    }
-
-    public void setAmendment(AmendmentContainerDTO amendment) {
-        this.amendment = amendment;
-        setBody(amendment.getXmlContent());
-    }
-
-    private void setBody(String xmlContent) {
-        view.setBody(xmlContent);
-        extendedView.setBody(xmlContent);
-    }
-
-    public DocumentController getDocumentController() {
-        return documentController;
-    }
-
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
-    }
-
-    public AmendmentView getView() {
-        return view;
-    }
-
-    public AmendmentView getExtendedView() {
-        return extendedView;
-    }
-
-    public void setTitle(String title) {
-        this.view.setTitle(title);
-        this.extendedView.setTitle(title);
-    }
-
-    public void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget) {
-        this.amendedAmendableWidget = amendedAmendableWidget;
-    }
-
-    public AmendableWidget getAmendedAmendableWidget() {
-        return amendedAmendableWidget;
-    }
-
-    public int getOrder() {
-        return order;
-    }
-
-    public void setOrder(int order) {
-        this.order = order;
-        view.setTitle("Amendment " + order);
-        extendedView.setTitle("Amendment " + order);
-    }
+    void setOrder(int order);
 }

@@ -1,15 +1,13 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.filter;
 
-import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsActionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentsSelectionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
