@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:rte='urn:import:org.nsesa.editor.gwt.dialog.client.ui.rte'
-             xmlns:author='urn:import:org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author'>
+             xmlns:author='urn:import:org.nsesa.editor.gwt.dialog.client.ui.handler.common.author'>
     <ui:style field="res">
 
         .header {

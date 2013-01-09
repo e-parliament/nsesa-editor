@@ -5,8 +5,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author.AuthorPanelModule;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.content.ContentPanelModule;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditor;
 
@@ -21,8 +19,6 @@ import javax.inject.Named;
 public class AmendmentDialogModifyModule extends AbstractGinModule {
     @Override
     public void configure() {
-        install(new AuthorPanelModule());
-        install(new ContentPanelModule());
         bind(RichTextEditor.class).annotatedWith(Names.named("amendmentText")).toProvider(AmendmentTextProvider.class);
     }
 

@@ -2,7 +2,9 @@ package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogCommonModule;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreateModule;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.delete.AmendmentDialogDeleteModule;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyModule;
 
 /**
@@ -14,7 +16,9 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModif
 public class AmendmentDialogModule extends AbstractGinModule {
     @Override
     public void configure() {
+        install(new AmendmentDialogCommonModule());
         install(new AmendmentDialogCreateModule());
+        install(new AmendmentDialogDeleteModule());
         install(new AmendmentDialogModifyModule());
 
         bind(AmendmentDialogController.class).in(Singleton.class);

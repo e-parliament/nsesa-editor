@@ -1,10 +1,10 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAwareController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
@@ -15,7 +15,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
  * @version $Id$
  */
 @Scope(DIALOG)
-public class AuthorPanelController implements AmendmentModifyAwareController {
+public class AuthorPanelController implements AmendmentDialogAwareController {
 
     private final AuthorPanelView view;
     private final AuthorPanelViewCss authorPanelViewCss;

@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
@@ -9,7 +9,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendmentModifyAwareController {
+public interface AmendmentDialogAwareController {
 
     IsWidget getView();
 

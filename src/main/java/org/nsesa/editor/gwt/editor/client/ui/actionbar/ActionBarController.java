@@ -73,6 +73,14 @@ public class ActionBarController {
                 }
             }
         });
+        view.getDeleteHandler().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (amendableWidget != null) {
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.DELETION, documentController));
+                }
+            }
+        });
         view.getChildHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

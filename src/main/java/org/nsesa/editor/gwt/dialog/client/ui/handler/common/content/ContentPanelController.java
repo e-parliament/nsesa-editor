@@ -1,9 +1,9 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.modify.content;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.content;
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAwareController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -15,7 +15,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentModifyAware
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ContentPanelController implements AmendmentModifyAwareController {
+public class ContentPanelController implements AmendmentDialogAwareController {
 
     protected final ClientFactory clientFactory;
 

@@ -17,6 +17,7 @@ import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.bundle.AmendmentDialogBundleController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreateController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.delete.AmendmentDialogDeleteController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
@@ -44,6 +45,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private final AmendmentDialogView view;
 
     private final AmendmentDialogCreateController amendmentDialogCreateController;
+    private final AmendmentDialogDeleteController amendmentDialogDeleteController;
     private final AmendmentDialogBundleController amendmentDialogBundleController;
     private final AmendmentDialogMoveController amendmentDialogMoveController;
     private final AmendmentDialogTableController amendmentDialogTableController;
@@ -63,6 +65,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     @Inject
     public AmendmentDialogController(final ClientFactory clientFactory, final AmendmentDialogView view,
                                      final AmendmentDialogCreateController amendmentDialogCreateController,
+                                     final AmendmentDialogDeleteController amendmentDialogDeleteController,
                                      final AmendmentDialogBundleController amendmentDialogBundleController,
                                      final AmendmentDialogTableController amendmentDialogTableController,
                                      final AmendmentDialogMoveController amendmentDialogMoveController,
@@ -73,6 +76,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.view = view;
 
         this.amendmentDialogCreateController = amendmentDialogCreateController;
+        this.amendmentDialogDeleteController = amendmentDialogDeleteController;
         this.amendmentDialogBundleController = amendmentDialogBundleController;
         this.amendmentDialogTableController = amendmentDialogTableController;
         this.amendmentDialogMoveController = amendmentDialogMoveController;
@@ -136,6 +140,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         }
         if (dialogContext.getAmendmentAction() == AmendmentAction.MOVE) {
             return amendmentDialogMoveController;
+        }
+        if (dialogContext.getAmendmentAction() == AmendmentAction.DELETION) {
+            return amendmentDialogDeleteController;
         }
         if (dialogContext.getAmendmentAction() == AmendmentAction.BUNDLE) {
             return amendmentDialogBundleController;

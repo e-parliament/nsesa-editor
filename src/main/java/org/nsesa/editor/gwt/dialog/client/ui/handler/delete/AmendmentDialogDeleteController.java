@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.delete;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -26,11 +26,11 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
+public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
 
     protected final ClientFactory clientFactory;
 
-    protected final AmendmentDialogModifyView view;
+    protected final AmendmentDialogDeleteView view;
 
     protected final List<AmendmentDialogAwareController> childControllers;
 
@@ -39,7 +39,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     protected final Locator locator;
 
     @Inject
-    public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
+    public AmendmentDialogDeleteController(final ClientFactory clientFactory, final AmendmentDialogDeleteView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
                                            final List<AmendmentDialogAwareController> childControllers) {
@@ -49,8 +49,8 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         this.locator = locator;
         this.childControllers = childControllers;
 
-        for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
-            view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
+        for (final AmendmentDialogAwareController amendmentDeleteAwareController : this.childControllers) {
+            view.addView(amendmentDeleteAwareController.getView(), amendmentDeleteAwareController.getTitle());
         }
         registerListeners();
     }
@@ -82,7 +82,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     }
 
     @Override
-    public AmendmentDialogModifyView getView() {
+    public AmendmentDialogDeleteView getView() {
         return view;
     }
 

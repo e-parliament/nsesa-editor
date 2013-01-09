@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.delete;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -6,10 +6,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelView;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
  * Date: 24/06/12 21:44
@@ -17,9 +13,9 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendmentDialogCreateViewImpl extends Composite implements AmendmentDialogCreateView {
+public class AmendmentDialogDeleteViewImpl extends Composite implements AmendmentDialogDeleteView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogCreateViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AmendmentDialogDeleteViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -32,33 +28,17 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     @UiField
     HTML title;
 
-    @UiField(provided = true)
-    final RichTextEditor newText;
-
     @UiField
     TabLayoutPanel tabLayoutPanel;
 
-    @UiField(provided = true)
-    AuthorPanelView authorPanelView;
 
     @Inject
-    public AmendmentDialogCreateViewImpl(@Named("newText") final RichTextEditor newText,
-                                         final AuthorPanelController authorPanelController) {
-        this.newText = newText;
-        this.authorPanelView = authorPanelController.getView();
+    public AmendmentDialogDeleteViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         dockPanel.setHeight("100%");
         dockPanel.setWidth("100%");
-    }
 
-    public void setTitle(final String title) {
-        this.title.setHTML(title);
-    }
-
-    @Override
-    public String getAmendmentContent() {
-        return newText.getHTML();
     }
 
     @Override
@@ -69,6 +49,16 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
 
     private void selectTab(final int i) {
         tabLayoutPanel.selectTab(i);
+    }
+
+    @Override
+    public void setTitle(String title) {
+        this.title.setHTML(title);
+    }
+
+    @Override
+    public void addView(IsWidget view, String title) {
+        tabLayoutPanel.add(view, title);
     }
 
     @Override

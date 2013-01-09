@@ -1,0 +1,58 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+        >
+    <ui:style field="res">
+
+        .header {
+            width: 100%;
+            height: 25px;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            width: 100%;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .amendmentPanel {
+
+        }
+
+        .cancelLink {
+            padding-right: 10px;
+            cursor: pointer;
+        }
+
+    </ui:style>
+    <g:DockLayoutPanel unit="PX" ui:field="dockPanel">
+        <g:north size='20'>
+            <g:HTML styleName="{res.header}" ui:field="title"/>
+        </g:north>
+        <g:center>
+            <g:DockLayoutPanel unit="PCT">
+                <g:center size="50">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX" ui:field="tabLayoutPanel">
+                    </g:TabLayoutPanel>
+                </g:center>
+                <g:east size="50">
+                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
+                        <g:tab>
+                            <g:header>Amendment</g:header>
+                            <g:HTMLPanel styleName="{res.amendmentPanel}">
+                                You are deleting this structure.
+                            </g:HTMLPanel>
+                        </g:tab>
+                    </g:TabLayoutPanel>
+                </g:east>
+            </g:DockLayoutPanel>
+        </g:center>
+        <g:south size="40">
+            <g:HTMLPanel styleName="{res.footer}">
+                <g:Button ui:field="saveButton" text="Save"/>
+                <g:Anchor ui:field="cancelLink" text="Cancel" styleName="{res.cancelLink}"/>
+            </g:HTMLPanel>
+        </g:south>
+    </g:DockLayoutPanel>
+
+</ui:UiBinder>
