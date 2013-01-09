@@ -74,6 +74,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
                 amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentAmendableWidget()),
                 dialogContext.getAmendableWidget().getType(),
                 dialogContext.getIndex()));
+        dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
 
 
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
