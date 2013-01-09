@@ -8,6 +8,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationModule;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorModule;
 
 /**
@@ -20,6 +21,7 @@ public class CoreModule extends AbstractGinModule {
     @Override
     public void configure() {
         install(new ErrorModule());
+        install(new ConfirmationModule());
     }
 
     @Singleton

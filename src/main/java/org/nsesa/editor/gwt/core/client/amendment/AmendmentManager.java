@@ -138,7 +138,7 @@ public class AmendmentManager implements AmendmentInjectionCapable {
                 serviceFactory.getGwtAmendmentService().deleteAmendmentContainers(clientFactory.getClientContext(), amendmentContainers, new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
                     public void onFailure(Throwable caught) {
-                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
+                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not delete the amendment(s).", caught));
                     }
 
                     @Override

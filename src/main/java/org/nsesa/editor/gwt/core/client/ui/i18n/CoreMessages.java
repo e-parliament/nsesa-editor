@@ -75,4 +75,15 @@ public interface CoreMessages extends Messages {
     @Key("document.deadline.passed.message")
     String documentDeadlinePassedMessage(String arg);
 
+    @Key("confirmation.amendment.delete.title")
+    String confirmationAmendmentDeleteTitle();
+
+    @Key("confirmation.amendment.delete.message")
+    String confirmationAmendmentDeleteMessage();
+
+    @Key("confirmation.amendment.delete.button.confirm")
+    String confirmationAmendmentDeleteButtonConfirm();
+
+    @Key("confirmation.amendment.delete.button.cancel")
+    String confirmationAmendmentDeleteButtonCancel();
 }

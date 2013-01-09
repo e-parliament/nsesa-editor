@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
@@ -79,16 +80,39 @@ public class AmendmentController {
     }
 
     private void registerListeners() {
-        view.getDeleteButton().addClickHandler(new ClickHandler() {
+
+        final ClickHandler confirmationHandler = new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
+            }
+        };
+
+        final ClickHandler cancelHandler = new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // this does not do anything
+            }
+        };
+
+        final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
+                clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
+                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
+                confirmationHandler,
+                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
+                cancelHandler);
+
+        view.getDeleteButton().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
         extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(AmendmentController.this));
+                documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
         view.getEditButton().addClickHandler(new ClickHandler() {

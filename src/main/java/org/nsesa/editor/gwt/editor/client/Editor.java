@@ -4,6 +4,7 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.place.shared.Place;
@@ -18,6 +19,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
+import org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationController;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
@@ -143,6 +145,15 @@ public abstract class Editor implements EntryPoint {
             }
         });
 
+        // deal with confirmations
+        eventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
+            @Override
+            public void onEvent(ConfirmationEvent event) {
+                handleConfirmation(event.getTitle(), event.getMessage(), event.getConfirmationButtonText(),
+                        event.getConfirmationHandler(), event.getCancelButtonText(), event.getCancelHandler());
+            }
+        });
+
         // handle login & logout
         eventBus.addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
             @Override
@@ -233,5 +244,24 @@ public abstract class Editor implements EntryPoint {
         errorController.setError(errorTitle, errorMessage);
         errorController.center();
         LOG.log(Level.SEVERE, errorMessage, throwable);
+    }
+
+    /**
+     * Handle a confirmation. Contains callbacks to handle confirmations and cancel operations.
+     *
+     * @param confirmationTitle      the title of the confirmation panel
+     * @param confirmationMessage    the message of the confirmation panel
+     * @param confirmationButtonText the confirmation button's text
+     * @param confirmationHandler    the confirmation handler, will be invoked when the user confirms
+     * @param cancelButtonText       the cancel button's text
+     * @param cancelHandler          the cancel handler, will be invoked when the user cancels
+     */
+    protected void handleConfirmation(final String confirmationTitle, final String confirmationMessage,
+                                      final String confirmationButtonText, final ClickHandler confirmationHandler,
+                                      final String cancelButtonText, final ClickHandler cancelHandler) {
+        ConfirmationController confirmationController = getInjector().getConfirmationController();
+        confirmationController.setConfirmation(confirmationTitle, confirmationMessage, confirmationButtonText,
+                confirmationHandler, cancelButtonText, cancelHandler);
+        confirmationController.center();
     }
 }

@@ -14,10 +14,7 @@ import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
-import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
+import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventHandler;
@@ -228,6 +225,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
+        // forward the confirmation event
+        documentEventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
+            @Override
+            public void onEvent(ConfirmationEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
             }
         });

@@ -1,0 +1,41 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="ConfirmationViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationViewCss'/>
+    <ui:style field="res">
+        .confirmationPanel {
+        }
+
+        .primaryActionButton {
+            background-color: #0A246A;
+            color: white;
+        }
+
+        .cancelButton {
+            cursor: pointer;
+        }
+
+        .scrollPanel {
+            height: 100%;
+            width: 100%;
+        }
+
+        .confirmationMessage {
+            vertical-align: middle;
+            padding: 15px;
+        }
+
+        .confirmationTitle {
+            font-size: 1.1em;
+        }
+    </ui:style>
+    <g:HTMLPanel styleName="{res.confirmationPanel} confirmationPanel">
+        <g:HTML ui:field="confirmationTitle" styleName="{res.confirmationTitle} confirmationTitle"/>
+        <g:ScrollPanel styleName="{res.scrollPanel}">
+            <g:HTML ui:field="confirmationMessage" styleName="{res.confirmationMessage} confirmationMessage"/>
+        </g:ScrollPanel>
+        <g:Button ui:field="confirmationButton" text="Ok" styleName="{res.primaryActionButton} primaryActionButton"/>
+        or
+        <g:Anchor ui:field="cancelButton" text="Cancel" styleName="{res.cancelButton} cancelButton"/>
+    </g:HTMLPanel>
+</ui:UiBinder>
