@@ -551,6 +551,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         return documentID;
     }
 
+    public DocumentDTO getDocument() {
+        return document;
+    }
+
     public AmendmentManager getAmendmentManager() {
         return amendmentManager;
     }
