@@ -59,7 +59,6 @@ public class AmendmentActionPanelController {
     }
 
     private void registerListeners() {
-
         anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

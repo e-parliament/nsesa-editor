@@ -14,6 +14,8 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanel
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
@@ -41,6 +43,8 @@ public class DefaultAmendmentController implements AmendmentController {
     private AmendableWidget amendedAmendableWidget;
 
     private AmendableWidget overlayAmendableWidget;
+
+    private AmendmentActionPanelController amendmentActionPanelController;
 
     private int order;
 
@@ -113,7 +117,6 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                final AmendmentActionPanelController amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
                 amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
                 amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
@@ -123,7 +126,6 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                final AmendmentActionPanelController amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
                 amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
                 amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
@@ -180,6 +182,13 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+        this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
+        this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+            @Override
+            public void onEvent(DocumentScrollEvent event) {
+                amendmentActionPanelController.hide();
+            }
+        });
     }
 
     @Override
