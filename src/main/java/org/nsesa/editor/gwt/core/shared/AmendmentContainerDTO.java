@@ -20,7 +20,7 @@ public class AmendmentContainerDTO implements IsSerializable {
     private String languageISO;
 
     private AmendmentAction amendmentAction;
-    private String amendmentContainerStatus;
+    private String amendmentContainerStatus = "CANDIDATE";
 
     private String xmlContent;
 

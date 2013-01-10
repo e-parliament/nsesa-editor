@@ -254,6 +254,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
+        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
+                LOG.info("Amendment " + event.getAmendmentController().getModel() + " had its status updated from "
+                        + event.getOldStatus() + " to " + event.getAmendmentController().getModel().getAmendmentContainerStatus());
+            }
+        });
+
         // forward the create event to the parent event bus
         documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override

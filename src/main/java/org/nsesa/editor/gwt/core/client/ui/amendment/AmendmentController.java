@@ -39,6 +39,8 @@ public interface AmendmentController {
 
     void setTitle(String title);
 
+    void setStatus(String status);
+
     void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget);
 
     AmendableWidget getAmendedAmendableWidget();

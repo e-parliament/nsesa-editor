@@ -44,7 +44,7 @@ public class MarkerViewImpl extends Composite implements MarkerView {
     }
 
     @Override
-    public FocusWidget addMarker(double top) {
+    public FocusWidget addMarker(final double top, final String color) {
 
         int height = getOffsetHeight();
 
@@ -59,7 +59,7 @@ public class MarkerViewImpl extends Composite implements MarkerView {
         style.setWidth(100, Style.Unit.PCT);
         style.setHeight(5, Style.Unit.PX);
         style.setBorderWidth(1.0, Style.Unit.PX);
-        style.setBackgroundColor("blue");
+        style.setBackgroundColor(color);
         return marker;
 
     }

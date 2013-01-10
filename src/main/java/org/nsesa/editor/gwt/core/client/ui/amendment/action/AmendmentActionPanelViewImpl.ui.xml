@@ -4,9 +4,11 @@
               type='org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelViewCss'/>
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.amendment.action.resources.Resources'/>
     <ui:style field="res">
-
+        .amendmentActionPanel {
+            min-width: 200px;
+        }
     </ui:style>
-    <g:VerticalPanel ui:field="mainPanel">
+    <g:VerticalPanel ui:field="mainPanel" styleName="{res.amendmentActionPanel} amendmentActionPanel">
 
     </g:VerticalPanel>
 </ui:UiBinder>

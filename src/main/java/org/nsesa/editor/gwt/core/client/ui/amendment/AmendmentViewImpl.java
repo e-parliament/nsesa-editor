@@ -29,6 +29,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     Label title;
 
     @UiField
+    Label status;
+
+    @UiField
     HTMLPanel body;
 
     @UiField
@@ -59,6 +62,11 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setTitle(String title) {
         super.setTitle(title);
         this.title.setText(title);
+    }
+
+    @Override
+    public void setStatus(String status) {
+        this.status.setText(status);
     }
 
     @Override

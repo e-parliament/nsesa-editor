@@ -1,7 +1,7 @@
 package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
  * Date: 24/06/12 20:14
@@ -13,11 +13,11 @@ public class AmendmentContainerStatusUpdatedEvent extends GwtEvent<AmendmentCont
 
     public static final Type<AmendmentContainerStatusUpdatedEventHandler> TYPE = new Type<AmendmentContainerStatusUpdatedEventHandler>();
 
-    private final AmendmentContainerDTO amendment;
+    private final AmendmentController amendmentController;
     private final String oldStatus;
 
-    public AmendmentContainerStatusUpdatedEvent(final AmendmentContainerDTO amendment, final String oldStatus) {
-        this.amendment = amendment;
+    public AmendmentContainerStatusUpdatedEvent(AmendmentController amendmentController, String oldStatus) {
+        this.amendmentController = amendmentController;
         this.oldStatus = oldStatus;
     }
 
@@ -31,8 +31,8 @@ public class AmendmentContainerStatusUpdatedEvent extends GwtEvent<AmendmentCont
         handler.onEvent(this);
     }
 
-    public AmendmentContainerDTO getAmendment() {
-        return amendment;
+    public AmendmentController getAmendmentController() {
+        return amendmentController;
     }
 
     public String getOldStatus() {

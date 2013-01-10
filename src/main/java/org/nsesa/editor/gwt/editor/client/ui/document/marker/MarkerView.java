@@ -12,7 +12,7 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(MarkerViewImpl.class)
 public interface MarkerView extends IsWidget {
-    FocusWidget addMarker(double top);
+    FocusWidget addMarker(double top, String color);
 
     void clearMarkers();
 

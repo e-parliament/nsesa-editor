@@ -17,6 +17,8 @@ import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestE
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
@@ -39,6 +41,14 @@ public class MarkerController {
 
     private final DocumentEventBus documentEventBus;
 
+    private static final Map<String, String> colorCodes = new HashMap<String, String>() {
+        {
+            put("CANDIDATE", "blue");
+            put("TABLED", "green");
+            put("WITHDRAWN", "brown");
+        }
+    };
+
     private final Timer timer = new Timer() {
         public void run() {
             if (documentController != null) {
@@ -51,7 +61,7 @@ public class MarkerController {
                         final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
                         final double division = (double) documentHeight / (double) amendmentTop;
                         LOG.fine("Amendment is: " + amendmentTop + ", and division is at " + division);
-                        final FocusWidget focusWidget = view.addMarker(division);
+                        final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
                         focusWidget.addClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
@@ -101,6 +111,13 @@ public class MarkerController {
         documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
+                drawAmendmentControllers();
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 drawAmendmentControllers();
             }
         });

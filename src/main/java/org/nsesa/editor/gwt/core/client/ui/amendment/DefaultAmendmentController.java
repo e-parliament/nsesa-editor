@@ -10,6 +10,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -112,7 +113,9 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                documentController.getInjector().getAmendmentActionPanelController().show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                final AmendmentActionPanelController amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
+                amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
+                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
         });
 
@@ -120,7 +123,9 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                documentController.getInjector().getAmendmentActionPanelController().show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                final AmendmentActionPanelController amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
+                amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
+                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
         });
 
@@ -142,10 +147,12 @@ public class DefaultAmendmentController implements AmendmentController {
         });
     }
 
+    @Override
     public AmendmentContainerDTO getModel() {
         return amendment;
     }
 
+    @Override
     public AmendableWidget asAmendableWidget() {
         if (overlayAmendableWidget == null) {
             overlayAmendableWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
@@ -153,9 +160,11 @@ public class DefaultAmendmentController implements AmendmentController {
         return overlayAmendableWidget;
     }
 
+    @Override
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
         setBody(amendment.getXmlContent());
+        setStatus(amendment.getAmendmentContainerStatus());
     }
 
     private void setBody(String xmlContent) {
@@ -163,39 +172,54 @@ public class DefaultAmendmentController implements AmendmentController {
         extendedView.setBody(xmlContent);
     }
 
+    @Override
     public DocumentController getDocumentController() {
         return documentController;
     }
 
+    @Override
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
 
+    @Override
     public AmendmentView getView() {
         return view;
     }
 
+    @Override
     public AmendmentView getExtendedView() {
         return extendedView;
     }
 
+    @Override
     public void setTitle(String title) {
         this.view.setTitle(title);
         this.extendedView.setTitle(title);
     }
 
+    @Override
+    public void setStatus(String status) {
+        this.view.setStatus(status);
+        this.extendedView.setStatus(status);
+    }
+
+    @Override
     public void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget) {
         this.amendedAmendableWidget = amendedAmendableWidget;
     }
 
+    @Override
     public AmendableWidget getAmendedAmendableWidget() {
         return amendedAmendableWidget;
     }
 
+    @Override
     public int getOrder() {
         return order;
     }
 
+    @Override
     public void setOrder(int order) {
         this.order = order;
         view.setTitle("Amendment " + order);

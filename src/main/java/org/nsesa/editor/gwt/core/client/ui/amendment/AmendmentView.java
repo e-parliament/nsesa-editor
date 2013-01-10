@@ -26,4 +26,6 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
     HasClickHandlers getEditButton();
 
     HasClickHandlers getDeleteButton();
+
+    void setStatus(String status);
 }

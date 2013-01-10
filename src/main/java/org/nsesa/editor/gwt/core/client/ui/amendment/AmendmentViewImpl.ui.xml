@@ -23,6 +23,9 @@
                 <span class="title">
                     <g:Label ui:field="title"/>
                 </span>
+                <span class="status">
+                    <g:Label ui:field="status"/>
+                </span>
                 <span>
                     <g:FlowPanel styleName="{res.tabHeaders}">
                         <g:Image resource='{imageResources.editOn}' styleName="{res.tabHeader}"
