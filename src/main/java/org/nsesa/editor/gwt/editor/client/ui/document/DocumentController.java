@@ -65,7 +65,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private static final Logger LOG = Logger.getLogger(DocumentController.class.getName());
 
-    private final DocumentInjector injector = GWT.create(DocumentInjector.class);
+    private final DocumentInjector injector = getInjector();
 
     @Scope(DOCUMENT)
     private final DocumentView view;
@@ -533,7 +533,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     public DocumentInjector getInjector() {
-        return injector;
+        return GWT.create(DocumentInjector.class);
     }
 
     public MarkerController getMarkerController() {
