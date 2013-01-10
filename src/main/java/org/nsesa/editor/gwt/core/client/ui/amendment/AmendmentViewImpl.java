@@ -8,6 +8,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ui.amendment.resources.Messages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
@@ -25,6 +27,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+
+    private final Messages messages;
+
     @UiField
     Label title;
 
@@ -43,7 +48,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     @UiField
     Image deleteImage;
 
-    public AmendmentViewImpl() {
+    @Inject
+    public AmendmentViewImpl(final Messages messages) {
+        this.messages = messages;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
@@ -65,8 +72,15 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     }
 
     @Override
-    public void setStatus(String status) {
-        this.status.setText(status);
+    public void setStatus(final String status) {
+        if (status != null) {
+            // do a lookup ...
+            final String lookup = messages.getString(status.toLowerCase());
+            if (lookup != null)
+                this.status.setText(lookup);
+            else
+                this.status.setText(status);
+        }
     }
 
     @Override

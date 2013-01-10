@@ -87,21 +87,6 @@ public interface CoreMessages extends Messages {
     @Key("confirmation.amendment.delete.button.cancel")
     String confirmationAmendmentDeleteButtonCancel();
 
-    @Key("amendment.status.tabled")
-    String amendmentStatusTabled();
-
-    @Key("amendment.status.deleted")
-    String amendmentStatusDeleted();
-
-    @Key("amendment.status.withdrawn")
-    String amendmentStatusWithdrawn();
-
-    @Key("amendment.status.registered")
-    String amendmentStatusRegistered();
-
-    @Key("amendment.status.returned")
-    String amendmentStatusReturned();
-
     @Key("amendment.action.table")
     String amendmentActionTable();
 
