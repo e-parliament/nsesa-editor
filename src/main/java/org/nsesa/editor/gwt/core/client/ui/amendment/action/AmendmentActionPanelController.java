@@ -7,7 +7,9 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -35,9 +37,11 @@ public class AmendmentActionPanelController {
     // parent amendment controller
     protected AmendmentController amendmentController;
 
-    protected final Anchor anchorTable = new Anchor("Table");
+    protected final Anchor anchorTable = new Anchor();
 
-    protected final Anchor anchorWithdraw = new Anchor("Withdraw");
+    protected final Anchor anchorWithdraw = new Anchor();
+
+    protected final Anchor anchorDelete = new Anchor();
 
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
 
@@ -50,10 +54,16 @@ public class AmendmentActionPanelController {
         this.view = amendmentActionPanelView;
         this.popupPanel.setWidget(amendmentActionPanelView);
 
+        // set the correct anchor labels
+        anchorTable.setText(clientFactory.getCoreMessages().amendmentActionTable());
+        anchorWithdraw.setText(clientFactory.getCoreMessages().amendmentActionWithdraw());
+        anchorDelete.setText(clientFactory.getCoreMessages().amendmentActionDelete());
+
         // create operations on the amendment
         addWidget(anchorTable);
-        addSeparator();
         addWidget(anchorWithdraw);
+        addSeparator();
+        addWidget(anchorDelete);
 
         registerListeners();
     }
@@ -81,6 +91,7 @@ public class AmendmentActionPanelController {
                         });
             }
         });
+
         anchorWithdraw.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -101,6 +112,43 @@ public class AmendmentActionPanelController {
                                 amendmentController.getDocumentController().getDocumentEventBus().fireEvent(updatedEvent);
                             }
                         });
+            }
+        });
+
+        anchorDelete.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                popupPanel.hide();
+                // ask for confirmation
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new ConfirmationEvent(
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(), new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        serviceFactory.getGwtAmendmentService().deleteAmendmentContainers(clientFactory.getClientContext(),
+                                new ArrayList<AmendmentContainerDTO>(Arrays.asList(amendmentController.getModel())),
+                                new AsyncCallback<AmendmentContainerDTO[]>() {
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not delete amendment.", caught));
+                                    }
+
+                                    @Override
+                                    public void onSuccess(AmendmentContainerDTO[] result) {
+                                        amendmentController.setAmendment(result[0]);
+                                        amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+                                    }
+                                });
+                    }
+                }, clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(), new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        // does not do anything
+                    }
+                }
+                ));
+
             }
         });
     }
