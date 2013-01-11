@@ -5,10 +5,16 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditor;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin;
 
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Date: 24/06/12 15:11
@@ -35,9 +41,12 @@ public class ContentPanelModule extends AbstractGinModule {
         @Named("richTextEditorBodyClass")
         String bodyClass;
 
+        @Inject
+        RichTextEditorPlugin plugin;
+
         @Override
         public RichTextEditor get() {
-            return new CKEditor(cssPath, bodyClass, true);
+            return new CKEditor(plugin, cssPath, "", bodyClass, true);
         }
     }
 }

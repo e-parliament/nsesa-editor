@@ -19,4 +19,5 @@ public interface RichTextEditor extends IsWidget {
     void init();
 
     void destroy();
+
 }

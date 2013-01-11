@@ -397,6 +397,7 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
     @Inject
     private String generateLanguageSettings(String isoCode, Set<String> supportedISO) {
         for (String language : supportedISO) {
