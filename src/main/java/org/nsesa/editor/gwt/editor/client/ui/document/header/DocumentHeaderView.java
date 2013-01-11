@@ -2,6 +2,7 @@ package org.nsesa.editor.gwt.editor.client.ui.document.header;
 
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
@@ -33,4 +34,8 @@ public interface DocumentHeaderView extends IsWidget {
     void setSelectedRelatedDocument(DocumentDTO selectedRelatedDocument);
 
     void setStyleName(String style);
+
+    void addWidget(Widget widget);
+
+    void addWidget(IsWidget widget);
 }

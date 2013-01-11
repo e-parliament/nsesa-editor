@@ -55,9 +55,9 @@
         .documentHeader {
             width: 100%;
             padding: 5px;
+            height: 20px;
             background-color: #eee;
             border: 1px solid #ccc;
-            border-top: clear;
         }
 
         .documentTitle {

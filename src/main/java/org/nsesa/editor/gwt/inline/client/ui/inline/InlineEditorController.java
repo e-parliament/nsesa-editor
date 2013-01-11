@@ -10,12 +10,12 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
-import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEventHandler;
+import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEvent;
+import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEventHandler;
 
 import java.util.logging.Logger;
 
@@ -86,16 +86,15 @@ public class InlineEditorController implements ProvidesResize {
                     amendableWidget.asWidget().setVisible(true);
                 }
                 amendableWidget = event.getAmendableWidget();
-                documentController = event.getDocumentController();
                 amendment = createAmendment();
                 show();
 
             }
         });
 
-        clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
+        clientFactory.getEventBus().addHandler(DetachInlineEditorEvent.TYPE, new DetachInlineEditorEventHandler() {
             @Override
-            public void onEvent(CloseDialogEvent event) {
+            public void onEvent(DetachInlineEditorEvent event) {
                 hide();
             }
         });
@@ -112,13 +111,13 @@ public class InlineEditorController implements ProvidesResize {
      * Resizes the dialog, centers and shows the popup.
      */
     public void show() {
-        LOG.info("Inserting before");
         // attach to the parent
         amendableWidget.getParentAmendableWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), amendableWidget.getAmendableElement());
         richTextEditor.setHTML(DOM.toString(amendableWidget.asWidget().getElement()));
         richTextEditor.asWidget().setWidth(amendableWidget.asWidget().getOffsetWidth() + "px");
         richTextEditor.asWidget().setHeight(amendableWidget.asWidget().getOffsetHeight() + 50 + "px");
         richTextEditor.init();
+        richTextEditor.asWidget().setVisible(true);
         richTextEditor.setAmendableWidget(amendableWidget);
         amendableWidget.asWidget().setVisible(false);
         adaptSize();
@@ -132,9 +131,9 @@ public class InlineEditorController implements ProvidesResize {
     }
 
     public void hide() {
-        if (amendableWidget != null) {
-            amendableWidget.asWidget().setVisible(true);
-        }
+        richTextEditor.destroy();
+        richTextEditor.asWidget().setVisible(false);
+        amendableWidget.asWidget().setVisible(true);
     }
 
     public AmendmentContainerDTO getAmendment() {
@@ -154,7 +153,7 @@ public class InlineEditorController implements ProvidesResize {
         this.amendableWidget = amendableWidget;
     }
 
-    public void setDocumentController(DocumentController documentController) {
+    public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
     }
 }

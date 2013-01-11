@@ -2,10 +2,18 @@ package org.nsesa.editor.gwt.editor.client.ui.document.header;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.mode.ActiveState;
+import org.nsesa.editor.gwt.core.client.mode.DiffMode;
+import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
+import org.nsesa.editor.gwt.core.client.mode.InlineEditingMode;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.event.document.DocumentModeChangeEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
@@ -32,12 +40,40 @@ public class DocumentHeaderController {
     private List<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
     private List<DocumentDTO> relatedDocuments = new ArrayList<DocumentDTO>();
 
+    // some example modes
+    private ToggleButton inlineEditingButton = new ToggleButton("Inline", "Inline", new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            final InlineEditingMode inline = (InlineEditingMode) documentController.getMode(InlineEditingMode.KEY);
+            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<InlineEditingMode>(documentController, inline, new ActiveState(!inline.getState().isActive())));
+        }
+    });
+    private ToggleButton diffingButton = new ToggleButton("Diffing", "Diffing", new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            final DiffMode diff = (DiffMode) documentController.getMode(DiffMode.KEY);
+            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<DiffMode>(documentController, diff, new ActiveState(!diff.getState().isActive())));
+        }
+    });
+    private ToggleButton consolidationButton = new ToggleButton("Consolidation", "Consolidation", new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            final DisplayMode displayState = (DisplayMode) documentController.getMode(DisplayMode.KEY);
+            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<DisplayMode>(documentController, displayState, displayState.getState()));
+        }
+    });
+
     @Inject
     public DocumentHeaderController(final DocumentEventBus documentEventBus, final DocumentHeaderView view) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
         this.documentEventBus = documentEventBus;
+
+        view.addWidget(inlineEditingButton);
+        view.addWidget(diffingButton);
+        view.addWidget(consolidationButton);
+
         registerListeners();
     }
 

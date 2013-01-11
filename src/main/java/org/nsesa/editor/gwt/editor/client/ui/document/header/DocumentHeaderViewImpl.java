@@ -36,6 +36,8 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
     @UiField
     HorizontalPanel horizontalPanel;
     @UiField
+    HorizontalPanel extensionPanel;
+    @UiField
     Label documentName;
     @UiField
     ListBox documentTranslations;
@@ -114,5 +116,15 @@ public class DocumentHeaderViewImpl extends Composite implements DocumentHeaderV
                 break;
             }
         }
+    }
+
+    @Override
+    public void addWidget(Widget widget) {
+        extensionPanel.add(widget);
+    }
+
+    @Override
+    public void addWidget(IsWidget widget) {
+        extensionPanel.add(widget);
     }
 }

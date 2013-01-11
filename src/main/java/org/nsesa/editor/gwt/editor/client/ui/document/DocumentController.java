@@ -18,10 +18,7 @@ import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventHandler;
-import org.nsesa.editor.gwt.core.client.mode.DiffMode;
-import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
-import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
-import org.nsesa.editor.gwt.core.client.mode.DocumentState;
+import org.nsesa.editor.gwt.core.client.mode.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
@@ -161,8 +158,9 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     protected void registerModes() {
-        registerMode(DiffMode.KEY, new DiffMode(this));
-        registerMode(DisplayMode.KEY, new DisplayMode(this));
+        registerMode(InlineEditingMode.KEY, new InlineEditingMode(this, clientFactory));
+        registerMode(DiffMode.KEY, new DiffMode(this, clientFactory));
+        registerMode(DisplayMode.KEY, new DisplayMode(this, clientFactory));
     }
 
     protected void registerListeners() {
@@ -204,7 +202,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 }
                 activeAmendableWidget = event.getAmendableWidget();
                 activeAmendableWidget.asWidget().addStyleName(style.selected());
-                if (alreadySelected) {
+                final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
+                if (alreadySelected && inlineEditingMode != null && inlineEditingMode.getState().isActive()) {
                     clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
                 }
             }
@@ -251,6 +250,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                     amendmentController.getAmendedAmendableWidget().removeAmendmentController(amendmentController);
                     renumberAmendments();
                 }
+            }
+        });
+
+        documentEventBus.addHandler(DocumentModeChangeEvent.TYPE, new DocumentModeChangeEventHandler() {
+            @Override
+            public void onEvent(DocumentModeChangeEvent event) {
+                LOG.info("Applying state " + event.getState() + " to mode " + event.getDocumentMode());
+                event.getDocumentMode().apply(event.getState());
             }
         });
 
@@ -319,6 +326,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             LOG.info("Installing '" + key + "' mode.");
         }
         documentModes.put(key, mode);
+    }
+
+    public DocumentMode<? extends DocumentState> getMode(final String key) {
+        return documentModes.get(key);
     }
 
     public void loadDocument() {
@@ -513,7 +524,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onClick(AmendableWidget sender) {
-        //clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
+        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
     }
 
     @Override

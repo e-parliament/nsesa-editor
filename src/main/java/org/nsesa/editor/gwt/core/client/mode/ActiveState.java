@@ -21,4 +21,9 @@ public class ActiveState implements DocumentState {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public String toString() {
+        return "[Active: " + active + "]";
+    }
 }

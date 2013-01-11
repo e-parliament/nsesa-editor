@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.mode;
 
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
@@ -16,11 +17,13 @@ public class DiffMode implements DocumentMode<ActiveState> {
     public static final String KEY = "diff";
 
     private final DocumentController documentController;
+    private final ClientFactory clientFactory;
 
     private ActiveState activeState = new ActiveState(false);
 
-    public DiffMode(DocumentController documentController) {
+    public DiffMode(DocumentController documentController, ClientFactory clientFactory) {
         this.documentController = documentController;
+        this.clientFactory = clientFactory;
     }
 
     @Override
