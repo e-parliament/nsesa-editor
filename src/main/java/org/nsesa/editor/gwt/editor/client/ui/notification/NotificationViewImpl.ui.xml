@@ -1,0 +1,25 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="NotificationViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.notification.NotificationViewCss'/>
+
+    <ui:style field="res">
+        .notificationView {
+        }
+
+        .closeButton {
+            float: right;
+        }
+
+        .message {
+            font-size: 1.2em;
+            padding: 5px;
+        }
+    </ui:style>
+    <g:HTMLPanel styleName="{res.notificationView}">
+        <div class="alert alert-block">
+            <g:Button text="x" styleName="{res.closeButton} close" ui:field="closeButton"/>
+            <g:HTML ui:field="message" styleName="{res.message}"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

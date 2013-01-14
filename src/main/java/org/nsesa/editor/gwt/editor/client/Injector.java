@@ -8,6 +8,7 @@ import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
+import org.nsesa.editor.gwt.editor.client.ui.notification.NotificationController;
 
 /**
  * Date: 24/06/12 15:56
@@ -28,6 +29,8 @@ public interface Injector {
     ErrorController getErrorController();
 
     ConfirmationController getConfirmationController();
+
+    NotificationController getNotificationController();
 
     ActivityMapper getActivityMapper();
 

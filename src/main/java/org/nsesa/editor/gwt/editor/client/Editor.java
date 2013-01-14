@@ -25,6 +25,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceHistoryMapper;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
+import org.nsesa.editor.gwt.editor.client.ui.notification.NotificationController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -178,6 +179,14 @@ public abstract class Editor implements EntryPoint {
             }
         });
 
+        // add notification events
+        eventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
+            @Override
+            public void onEvent(NotificationEvent event) {
+                handleNotification(event.getMessage(), event.getDuration());
+            }
+        });
+
         // handle browser window resizing
         Window.addResizeHandler(new ResizeHandler() {
             @Override
@@ -192,6 +201,10 @@ public abstract class Editor implements EntryPoint {
         });
     }
 
+    /**
+     * Perform the basic layout calls after the initialization.
+     * In this case, we simply remove the margin, but this can be overridden by subclasses.
+     */
     protected void doLayout() {
         // remove the margin
         Window.setMargin("0px");
@@ -201,7 +214,6 @@ public abstract class Editor implements EntryPoint {
      * Gathers the parameters as they have been added to the editor.html url.
      * This allows custom passing of parameters that can be used to identify
      * the requested document.
-     * <p/>
      */
     protected void getParameters() {
         final ClientContext initialClient = clientFactory.getClientContext();
@@ -263,5 +275,19 @@ public abstract class Editor implements EntryPoint {
         confirmationController.setConfirmation(confirmationTitle, confirmationMessage, confirmationButtonText,
                 confirmationHandler, cancelButtonText, cancelHandler);
         confirmationController.center();
+    }
+
+    /**
+     * Handle a notification. Notifications are displayed by default in the top center of the screen. They can be closed,
+     * and in fact must be, when a <tt>duration</tt> of less than 1 second is specified.
+     *
+     * @param message  the message of the notification
+     * @param duration the duration in seconds the notification should be shown before hiding itself
+     */
+    protected void handleNotification(final String message, final int duration) {
+        final NotificationController notificationController = getInjector().getNotificationController();
+        notificationController.setMessage(message);
+        notificationController.setDuration(duration);
+        notificationController.show();
     }
 }

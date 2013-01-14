@@ -235,6 +235,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             }
         });
 
+        // forward the notification event to the parent event bus
+        documentEventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
+            @Override
+            public void onEvent(NotificationEvent event) {
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
         documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
