@@ -133,7 +133,8 @@ public class InlineEditorController implements ProvidesResize {
     public void hide() {
         richTextEditor.destroy();
         richTextEditor.asWidget().setVisible(false);
-        amendableWidget.asWidget().setVisible(true);
+        if (amendableWidget != null)
+            amendableWidget.asWidget().setVisible(true);
     }
 
     public AmendmentContainerDTO getAmendment() {
