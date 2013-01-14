@@ -145,23 +145,38 @@ public class CKEditorConfig implements RichTextEditorConfig {
         return this;
     }
 
-    public CKEditorConfig keepEmptyTag(String tagName) {
+    public static void keepEmptyTag(String tagName) {
         keepNativeEmptyTag(tagName);
-        return this;
     }
 
     public CKEditorConfig replaceSubStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_subscript", "sub", newTag, newClassName, newType, nameSpace);
         return this;
     }
-    public CKEditorConfig replaceSupStyle(String tagName, String className, String newStyle, String nameSpace) {
-        replaceCoreStyle("coreStyles_superscript", "sup", tagName, className, newStyle, nameSpace);
+    public CKEditorConfig replaceSupStyle(String newTag, String newClassName, String newType, String nameSpace) {
+        replaceCoreStyle("coreStyles_superscript", "sup", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    public CKEditorConfig replaceBoldStyle(String newTag, String newClassName, String newType, String nameSpace) {
+        replaceCoreStyle("coreStyles_bold", "b", newTag, newClassName, newType, nameSpace);
+        return this;
+    }
+    public CKEditorConfig replaceItalicStyle(String newTag, String newClassName, String newType, String nameSpace) {
+        replaceCoreStyle("coreStyles_italic", "i", newTag, newClassName, newType, nameSpace);
+        return this;
+    }
+    public CKEditorConfig replaceUnderlineStyle(String newTag, String newClassName, String newType, String nameSpace) {
+        replaceCoreStyle("coreStyles_underline", "u", newTag, newClassName, newType, nameSpace);
+        return this;
+    }
+    public CKEditorConfig replaceStrikeThroughStyle(String newTag, String newClassName, String newType, String nameSpace) {
+        replaceCoreStyle("coreStyles_strikethrough", "strike", newTag, newClassName, newType, nameSpace);
+        return this;
+    }
 
-    private void replaceCoreStyle(String ckStyleName, String styleName, String tagName, String className, String newStyle, String nameSpace) {
-        replaceNativeCoreStyle(ckStyleName, styleName, tagName, className, newStyle, nameSpace);
+    private void replaceCoreStyle(String ckStyleName, String oldTag, String newTag, String newClassName, String newType, String nameSpace) {
+        replaceNativeCoreStyle(ckStyleName, oldTag, newTag, newClassName, newType, nameSpace);
     }
 
     private native void setNativeReadOnly(boolean readOnly) /*-{
@@ -219,12 +234,12 @@ public class CKEditorConfig implements RichTextEditorConfig {
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.forcePasteAsPlainText = forcePasteAsPlainText;
     }-*/;
 
-    private native void keepNativeEmptyTag(String tagName) /*-{
+    private static native void keepNativeEmptyTag(String tagName) /*-{
         $wnd.CKEDITOR.dtd.$removeEmpty[tagName] = 0;
     }-*/;
 
     private native void replaceNativeCoreStyle(String ckStyleName, String oldTag, String newTag, String className, String newType, String nameSpace) /*-{
-        $wnd.CKEDITOR.config[ckStyleName] =
+        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config[ckStyleName] =
         {
             element : newTag,
             attributes : { 'class' : className, 'type' : newType, 'ns' : nameSpace},
