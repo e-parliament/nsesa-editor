@@ -1,17 +1,12 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
-
-import java.util.List;
 
 /**
  * Date: 04/12/12 13:19
@@ -26,31 +21,21 @@ public class CKEditor extends Composite implements RichTextEditor {
     private boolean attached;
 
     private String temporaryContent;
-
-    private boolean readOnly;
     private String id;
-    private String[] cssPath;
-    private String extraPlugins;
-    private String bodyClass;
-
-    private int height;
 
     private JavaScriptObject editorInstance;
 
     private final TextArea textArea = new TextArea();
     // the CK wrapper plugin
     private RichTextEditorPlugin plugin;
+    // the CK editor configuration
+    private RichTextEditorConfig config;
 
-    public CKEditor(RichTextEditorPlugin plugin, final String cssPathToSplit, final String extraPlugins, final String bodyClass, final boolean readOnly) {
+
+    public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config) {
         this.plugin = plugin;
+        this.config = config;
 
-        this.cssPath = cssPathToSplit.split(",");
-        for (int i = 0; i < cssPath.length; i++) {
-            cssPath[i] = GWT.getModuleBaseURL() + "../" + cssPath[i];
-        }
-        this.extraPlugins = extraPlugins;
-        this.bodyClass = bodyClass;
-        this.readOnly = readOnly;
         this.id = "ckEditor" + counter++;
         textArea.getElement().setId(this.id);
         initWidget(textArea);
@@ -66,14 +51,9 @@ public class CKEditor extends Composite implements RichTextEditor {
                 plugin.export();
             }
 
-            final JsArrayString jsStrings = (JsArrayString) JsArrayString.createArray();
+            config.setHeight(textArea.getOffsetHeight() + (config.isReadOnly() ? -21 : -55));
 
-            for (final String s : cssPath) {
-                jsStrings.push(s);
-            }
-
-            JavaScriptObject configuration = getConfiguration(jsStrings, extraPlugins, bodyClass, readOnly, textArea.getOffsetHeight() + (readOnly ? -21 : -55));
-            editorInstance = getEditor(configuration, this.id, temporaryContent);
+            editorInstance = getEditor(config.getConfiguration(), this.id, temporaryContent);
             if (editorInstance == null) {
                 throw new NullPointerException("Editor instance not created!");
             }
@@ -93,57 +73,15 @@ public class CKEditor extends Composite implements RichTextEditor {
         if (editorInstance != null) editorInstance.destroy();
     }-*/;
 
-    /*
-
-    NOTE: there still is a lot left to do for this editor, the most important being that the inserted content
-    in this RTE must become valid according to the overlay factory (or we'll have problems later on when
-    the content of the amendment gets parsed and serialized to XML).
-
-    Note: this is possible, but at the moment, this is a manual export. We'll improve it by automatically
-    wiring up the overlay factory, but this will take some time.
-
-     */
-    private native JavaScriptObject getConfiguration(JsArrayString cssPath, String extraPlugins, String bodyClass, boolean readOnly, int height) /*-{
-        return {
-            contentsCss: cssPath,
-            bodyClass: bodyClass,
-            readOnly: readOnly,
-            startupFocus: !readOnly,
-            height: height,
-            toolbarStartupExpanded: !readOnly,
-            toolbar: 'Basic',
-            removePlugins: 'elementspath',
-            extraPlugins: extraPlugins,
-            toolbar_Basic: readOnly ? [
-                []
-            ] : [
-                [ 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'SpecialChar'],
-                [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Source','PressEnter' ]
-            ],
-            toolbarLocation: 'bottom',
-            resize_enabled: false,
-            autoParagraph: false,
-            fillEmptyBlocks: false,
-            forcePasteAsPlainText: true
-            //startupShowBorders:false
-        }
-    }-*/;
-
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{
         var editor = $wnd.CKEDITOR.replace(elementID, instanceConfig, content);
-        //avoid deletion of empty tags
-        $wnd.CKEDITOR.dtd.$removeEmpty['span'] = 0;
         return editor;
     }-*/;
 
     @Override
     public void setAmendableWidget(AmendableWidget amendableWidget) {
-        setBodyClass(editorInstance, bodyClass + " " + amendableWidget.getType());
+        config.addBodyClass(amendableWidget.getType());
     }
-
-    private native void setBodyClass(final JavaScriptObject editorInstance, final String bodyClass) /*-{
-        editorInstance.config.bodyClass = bodyClass;
-    }-*/;
 
     @Override
     public void setHTML(final String content) {
@@ -185,6 +123,6 @@ public class CKEditor extends Composite implements RichTextEditor {
     }
 
     public void setHeight(int height) {
-        this.height = height;
+        this.config.setHeight(height);
     }
 }
