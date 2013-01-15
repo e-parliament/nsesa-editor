@@ -236,6 +236,26 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
+    public void setAmendmentNum(String num) {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public void setOriginalNum(String num) {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getAmendmentNum() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getOriginalNum() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
     public void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget) {
         this.amendedAmendableWidget = amendedAmendableWidget;
     }

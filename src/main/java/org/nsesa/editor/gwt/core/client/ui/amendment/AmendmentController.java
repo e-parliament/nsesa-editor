@@ -45,6 +45,14 @@ public interface AmendmentController {
 
     void setOriginalContent(String originalContent);
 
+    void setAmendmentNum(String num);
+
+    void setOriginalNum(String num);
+
+    String getAmendmentNum();
+
+    String getOriginalNum();
+
     String getAmendmentContent();
 
     String getOriginalContent();
