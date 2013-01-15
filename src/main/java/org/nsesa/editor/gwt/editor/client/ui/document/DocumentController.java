@@ -159,7 +159,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     protected void registerModes() {
         registerMode(InlineEditingMode.KEY, new InlineEditingMode(this, clientFactory));
-        registerMode(DiffMode.KEY, new DiffMode(this, clientFactory));
+        registerMode(DiffMode.KEY, new DiffMode(this, clientFactory, serviceFactory));
         registerMode(ConsolidationMode.KEY, new ConsolidationMode(this, clientFactory));
     }
 

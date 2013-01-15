@@ -1,10 +1,17 @@
 package org.nsesa.editor.gwt.core.client.mode;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.shared.DiffRequest;
+import org.nsesa.editor.gwt.core.shared.DiffResult;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+
+import java.util.ArrayList;
 
 /**
  * Date: 26/11/12 14:11
@@ -18,12 +25,14 @@ public class DiffMode implements DocumentMode<ActiveState> {
 
     private final DocumentController documentController;
     private final ClientFactory clientFactory;
+    private final ServiceFactory serviceFactory;
 
     private ActiveState activeState = new ActiveState(false);
 
-    public DiffMode(DocumentController documentController, ClientFactory clientFactory) {
+    public DiffMode(DocumentController documentController, ClientFactory clientFactory, ServiceFactory serviceFactory) {
         this.documentController = documentController;
         this.clientFactory = clientFactory;
+        this.serviceFactory = serviceFactory;
     }
 
     @Override
@@ -35,7 +44,20 @@ public class DiffMode implements DocumentMode<ActiveState> {
                 public boolean visit(AmendableWidget visited) {
                     if (visited.isAmended()) {
                         for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
+                            ArrayList<DiffRequest> diffRequests = new ArrayList<DiffRequest>();
+                            diffRequests.add(new DiffRequest(amendmentController.getOriginalContent(), amendmentController.getAmendmentContent()));
+                            serviceFactory.getGwtDiffService().diff(diffRequests, new AsyncCallback<ArrayList<DiffResult>>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    documentController.getDocumentEventBus().fireEvent(new CriticalErrorEvent("Could not perform diffing ...", caught));
+                                }
 
+                                @Override
+                                public void onSuccess(ArrayList<DiffResult> result) {
+                                    amendmentController.setOriginalContent(result.get(0).getOriginal());
+                                    amendmentController.setAmendmentContent(result.get(0).getAmendment());
+                                }
+                            });
                         }
                     }
                     return true;
@@ -47,7 +69,8 @@ public class DiffMode implements DocumentMode<ActiveState> {
                 public boolean visit(AmendableWidget visited) {
                     if (visited.isAmended()) {
                         for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
-
+                            amendmentController.setAmendmentContent(amendmentController.getAmendmentContent());
+                            amendmentController.setOriginalContent(amendmentController.getOriginalContent());
                         }
                     }
                     return true;
