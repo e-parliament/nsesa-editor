@@ -8,6 +8,8 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -55,13 +57,29 @@ public class ContentController {
         return view;
     }
 
-    public boolean isVisible(Widget widget) {
+    public boolean isFullyVisible(Widget widget) {
         if (widget != null) {
-            final int absoluteTop = widget.asWidget().getAbsoluteTop();
-            final int scrollPanelAbsoluteTop = view.getScrollPanel().getAbsoluteTop();
-            return absoluteTop > scrollPanelAbsoluteTop && absoluteTop < (view.getScrollPanel().getOffsetHeight() + scrollPanelAbsoluteTop);
+            final int widgetTop = widget.asWidget().getAbsoluteTop();
+            final int scrollTop = view.getScrollPanel().getAbsoluteTop();
+            final int scrollBarHeight = view.getScrollPanel().getOffsetHeight();
+            return widgetTop > scrollTop && widgetTop < scrollTop + scrollBarHeight;
         }
         return false;
+    }
+
+    public AmendableWidget getCurrentVisibleAmendableWidget() {
+        final AmendableWidget[] temp = new AmendableWidget[1];
+        documentController.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            @Override
+            public boolean visit(AmendableWidget visited) {
+                if (isFullyVisible(visited.asWidget()) && temp[0] == null) {
+                    temp[0] = visited;
+                    return false;
+                }
+                return true;
+            }
+        });
+        return temp[0];
     }
 
     public void setContent(String documentContent) {
@@ -95,6 +113,6 @@ public class ContentController {
      */
     public void scrollTo(final Widget widget) {
         view.getScrollPanel().scrollToTop();
-        view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop());
+        view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop() - view.getScrollPanel().getAbsoluteTop());
     }
 }

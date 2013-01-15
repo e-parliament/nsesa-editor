@@ -327,6 +327,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         });
     }
 
+    public AmendableWidget getTopVisibleAmenableWidget() {
+        return contentController.getCurrentVisibleAmendableWidget();
+    }
+
     public void registerMode(final String key, final DocumentMode<? extends DocumentState> mode) {
         if (documentModes.containsKey(key)) {
             LOG.warning("A mode with key '" + key + "' has already been registered. Overriding.");

@@ -29,29 +29,29 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 @Scope(AMENDMENT)
 public class DefaultAmendmentController implements AmendmentController {
 
-    private final AmendmentView view;
+    protected final AmendmentView view;
 
-    private final AmendmentView extendedView;
+    protected final AmendmentView extendedView;
 
-    private final ClientFactory clientFactory;
+    protected final ClientFactory clientFactory;
 
-    private AmendmentContainerDTO amendment;
+    protected AmendmentContainerDTO amendment;
 
     /**
      * Reference to the parent amendable widget we've been added to.
      */
-    private AmendableWidget amendedAmendableWidget;
+    protected AmendableWidget amendedAmendableWidget;
 
-    private AmendableWidget overlayAmendableWidget;
+    protected AmendableWidget overlayAmendableWidget;
 
-    private AmendmentActionPanelController amendmentActionPanelController;
+    protected AmendmentActionPanelController amendmentActionPanelController;
 
-    private int order;
+    protected int order;
 
     /**
      * The document controller into which we are injected. If it is not set, we're not injected anywhere.
      */
-    private DocumentController documentController;
+    protected DocumentController documentController;
 
     @Inject
     public DefaultAmendmentController(final ClientFactory clientFactory,
@@ -170,6 +170,8 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     private void setBody(String xmlContent) {
+        // reset the overlay, it will be recreated later
+        overlayAmendableWidget = null;
         view.setBody(xmlContent);
         extendedView.setBody(xmlContent);
     }
@@ -211,6 +213,26 @@ public class DefaultAmendmentController implements AmendmentController {
     public void setStatus(String status) {
         this.view.setStatus(status);
         this.extendedView.setStatus(status);
+    }
+
+    @Override
+    public void setAmendmentContent(String amendmentContent) {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public void setOriginalContent(String originalContent) {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getAmendmentContent() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getOriginalContent() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
     }
 
     @Override
