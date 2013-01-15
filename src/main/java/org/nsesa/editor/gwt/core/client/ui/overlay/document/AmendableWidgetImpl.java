@@ -449,12 +449,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             if (getElement().getParentElement() != null) {
                 // TODO: this holder should not be necessary ... should be added directly to to the element.
                 amendmentHolderElement = new HTMLPanel("");
-
-                if (!getChildAmendableWidgets().isEmpty()) {
-                    getElement().insertBefore(amendmentHolderElement.getElement(), getChildAmendableWidgets().get(0).getAmendableElement());
-                } else {
-                    getElement().insertBefore(amendmentHolderElement.getElement(), null);
-                }
+                amendmentHolderElement.getElement().setClassName("amendments");
+                getElement().insertBefore(amendmentHolderElement.getElement(), null);
                 adopt(amendmentHolderElement);
                 assert amendmentHolderElement.isAttached() : "Amendment Holder element is not attached.";
             }
