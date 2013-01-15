@@ -98,6 +98,22 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     AmendableWidget getParentAmendableWidget();
 
     /**
+     * Find the previous sibling that is not introduced by an amendment.
+     *
+     * @param sameType if true, only look for an amendable widget of the same type
+     * @return the sibling, or null if it cannot be found
+     */
+    AmendableWidget getPreviousNonIntroducedAmendableWidget(boolean sameType);
+
+    /**
+     * Find the next sibling that is not introduced by an amendment.
+     *
+     * @param sameType if true, only look for an amendable widget of the same type
+     * @return the sibling, or null if it cannot be found
+     */
+    AmendableWidget getNextNonIntroducedAmendableWidget(boolean sameType);
+
+    /**
      * Returns the widget root - if this is not a root itself, it will reverse the tree until a root element is found.
      *
      * @return the root widget which contains this widget.

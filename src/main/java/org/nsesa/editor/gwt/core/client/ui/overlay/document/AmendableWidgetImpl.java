@@ -414,6 +414,36 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return parentAmendableWidget;
     }
 
+    public AmendableWidget getPreviousNonIntroducedAmendableWidget(final boolean sameType) {
+        // short circuit if we're already the top element
+        if (getIndex() == 0) return null;
+        for (final AmendableWidget amendableWidget : parentAmendableWidget.getChildAmendableWidgets()) {
+            if (!amendableWidget.isIntroducedByAnAmendment()) {
+                if (sameType && amendableWidget.getTypeIndex() == getTypeIndex() - 1) {
+                    return amendableWidget;
+                } else if (!sameType && amendableWidget.getIndex() == getIndex() - 1) {
+                    return amendableWidget;
+                }
+            }
+        }
+        return null;
+    }
+
+    public AmendableWidget getNextNonIntroducedAmendableWidget(final boolean sameType) {
+        // short circuit if we're already the last element
+        if (getIndex() == parentAmendableWidget.getChildAmendableWidgets().size() - 1) return null;
+        for (final AmendableWidget amendableWidget : parentAmendableWidget.getChildAmendableWidgets()) {
+            if (!amendableWidget.isIntroducedByAnAmendment()) {
+                if (sameType && amendableWidget.getTypeIndex() == getTypeIndex() + 1) {
+                    return amendableWidget;
+                } else if (!sameType && amendableWidget.getIndex() == getIndex() + 1) {
+                    return amendableWidget;
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     public AmendableWidget getRoot() {
         return getParentAmendableWidget() != null ? getParentAmendableWidget() : this;

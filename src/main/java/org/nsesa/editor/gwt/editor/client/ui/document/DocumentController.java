@@ -536,7 +536,19 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onClick(AmendableWidget sender) {
+//        printDetails(sender);
         clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
+    }
+
+    private void printDetails(final AmendableWidget amendableWidget) {
+        final AmendableWidget previousNonIntroducedAmendableWidget = amendableWidget.getPreviousNonIntroducedAmendableWidget(false);
+        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget != null ? locator.getLocation(previousNonIntroducedAmendableWidget, "EN", false) : null));
+        final AmendableWidget previousNonIntroducedAmendableWidget1 = amendableWidget.getPreviousNonIntroducedAmendableWidget(true);
+        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget1 != null ? locator.getLocation(previousNonIntroducedAmendableWidget1, "EN", false) : null));
+        final AmendableWidget nextNonIntroducedAmendableWidget = amendableWidget.getNextNonIntroducedAmendableWidget(false);
+        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget != null ? locator.getLocation(nextNonIntroducedAmendableWidget, "EN", false) : null));
+        final AmendableWidget nextNonIntroducedAmendableWidget1 = amendableWidget.getNextNonIntroducedAmendableWidget(true);
+        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget1 != null ? locator.getLocation(nextNonIntroducedAmendableWidget1, "EN", false) : null));
     }
 
     @Override

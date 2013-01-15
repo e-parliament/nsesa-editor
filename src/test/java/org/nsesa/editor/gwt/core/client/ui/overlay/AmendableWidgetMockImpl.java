@@ -300,6 +300,16 @@ public class AmendableWidgetMockImpl implements AmendableWidget {
     }
 
     @Override
+    public AmendableWidget getPreviousNonIntroducedAmendableWidget(boolean sameType) {
+        return null;
+    }
+
+    @Override
+    public AmendableWidget getNextNonIntroducedAmendableWidget(boolean sameType) {
+        return null;
+    }
+
+    @Override
     public void add(Widget w) {
     }
 

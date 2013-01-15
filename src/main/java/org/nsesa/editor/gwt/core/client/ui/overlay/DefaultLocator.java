@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class DefaultLocator implements Locator {
 
-    protected static final String SPLITTER = " - ";
+    protected static final String SPLITTER = " – ";
     protected Set<Class<? extends AmendableWidget>> hiddenAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
     protected Set<Class<? extends AmendableWidget>> hideUnderLayingAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
     protected Set<Class<? extends AmendableWidget>> showAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
@@ -53,17 +53,42 @@ public class DefaultLocator implements Locator {
     }
 
     public String getNum(final AmendableWidget amendableWidget) {
-
-        // see if we can extract the index
-        final NumberingType numberingType = amendableWidget.getNumberingType();
-        if (numberingType != null) {
-            if (!numberingType.isConstant()) {
-                return amendableWidget.getUnformattedIndex();
+        String index;
+        if (amendableWidget.isIntroducedByAnAmendment()) {
+            AmendableWidget previous = amendableWidget.getPreviousNonIntroducedAmendableWidget(true);
+            if (previous == null) {
+                // no previous amendable widget ... check if we're perhaps moved before any existing ones?
+                AmendableWidget next = amendableWidget.getNextNonIntroducedAmendableWidget(true);
+                if (next == null) {
+                    // nope, I guess we're in an all-new collection
+                    index = Integer.toString(amendableWidget.getTypeIndex());
+                } else {
+                    index = next.getUnformattedIndex();
+                }
+            } else {
+                index = previous.getUnformattedIndex();
             }
-        }
+            return index + " " + getNewNotation();
+        } else {
+            // see if we can extract the index
+            final NumberingType numberingType = amendableWidget.getNumberingType();
+            if (numberingType != null) {
+                if (!numberingType.isConstant()) {
+                    return amendableWidget.getUnformattedIndex();
+                }
+            }
 
-        final Integer assignedNumber = amendableWidget.getAssignedNumber();
-        return assignedNumber != null ? Integer.toString(assignedNumber) : "";
+            final Integer assignedNumber = amendableWidget.getAssignedNumber();
+            return assignedNumber != null ? Integer.toString(assignedNumber) : "";
+        }
+    }
+
+    public String getSplitter() {
+        return SPLITTER;
+    }
+
+    public String getNewNotation() {
+        return " (new)";
     }
 
     public void hide(Class<? extends AmendableWidget>... amendableWidgetClasses) {
