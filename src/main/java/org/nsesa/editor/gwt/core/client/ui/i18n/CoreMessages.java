@@ -101,4 +101,22 @@ public interface CoreMessages extends Messages {
 
     @Key("amendment.action.return")
     String amendmentActionReturn();
+
+    @Key("amendment.action.save.successful")
+    String amendmentActionSaveSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.table.successful")
+    String amendmentActionTableSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.withdraw.successful")
+    String amendmentActionWithdrawSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.return.successful")
+    String amendmentActionReturnSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.register.successful")
+    String amendmentActionRegisterSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.delete.successful")
+    String amendmentActionDeleteSuccessful(@PluralCount int arg);
 }

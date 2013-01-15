@@ -9,28 +9,29 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DisplayMode implements DocumentMode<DocumentDisplayState> {
+public class ConsolidationMode implements DocumentMode<ActiveState> {
 
-    public static final String KEY = "display";
+    public static final String KEY = "consolidation";
 
     private final DocumentController documentController;
     private final ClientFactory clientFactory;
 
-    private DocumentDisplayState state = new DocumentDisplayState();
+    private ActiveState state = new ActiveState(false);
 
-    public DisplayMode(DocumentController documentController, ClientFactory clientFactory) {
+    public ConsolidationMode(DocumentController documentController, ClientFactory clientFactory) {
         this.documentController = documentController;
         this.clientFactory = clientFactory;
     }
 
     @Override
-    public boolean apply(final DocumentDisplayState state) {
+    public boolean apply(ActiveState state) {
         this.state = state;
         return true;
     }
 
+
     @Override
-    public DocumentDisplayState getState() {
+    public ActiveState getState() {
         return state;
     }
 }

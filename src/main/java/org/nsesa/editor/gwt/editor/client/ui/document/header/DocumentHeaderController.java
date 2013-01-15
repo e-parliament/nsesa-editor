@@ -8,8 +8,8 @@ import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.mode.ActiveState;
+import org.nsesa.editor.gwt.core.client.mode.ConsolidationMode;
 import org.nsesa.editor.gwt.core.client.mode.DiffMode;
-import org.nsesa.editor.gwt.core.client.mode.DisplayMode;
 import org.nsesa.editor.gwt.core.client.mode.InlineEditingMode;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
@@ -58,8 +58,8 @@ public class DocumentHeaderController {
     private ToggleButton consolidationButton = new ToggleButton("Consolidation", "Consolidation", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            final DisplayMode displayState = (DisplayMode) documentController.getMode(DisplayMode.KEY);
-            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<DisplayMode>(documentController, displayState, displayState.getState()));
+            final ConsolidationMode consolidationMode = (ConsolidationMode) documentController.getMode(ConsolidationMode.KEY);
+            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<ConsolidationMode>(documentController, consolidationMode, new ActiveState(!consolidationMode.getState().isActive())));
         }
     });
 

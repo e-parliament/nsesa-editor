@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
@@ -121,7 +122,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                             // inform the document the save has happened
                             documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
                         }
-
+                        // show notification about our successful save
+                        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionSaveSuccessful(result.length)));
                     }
                 });
             }
@@ -144,6 +146,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                         amendmentControllers.remove(event.getAmendmentController());
                         // successfully deleted on the server, so inform our document controller to remove the amendment
                         documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(event.getAmendmentController()));
+                        // show notification about successful delete
+                        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionDeleteSuccessful(result.length)));
                     }
                 });
             }

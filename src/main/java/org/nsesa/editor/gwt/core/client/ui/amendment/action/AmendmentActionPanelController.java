@@ -9,11 +9,13 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +88,9 @@ public class AmendmentActionPanelController {
                             public void onSuccess(AmendmentContainerDTO[] result) {
                                 amendmentController.setAmendment(result[0]);
                                 final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus);
-                                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(updatedEvent);
+                                final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
+                                documentEventBus.fireEvent(updatedEvent);
+                                documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionTableSuccessful(result.length)));
                             }
                         });
             }
@@ -109,7 +113,9 @@ public class AmendmentActionPanelController {
                             public void onSuccess(AmendmentContainerDTO[] result) {
                                 amendmentController.setAmendment(result[0]);
                                 final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus);
-                                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(updatedEvent);
+                                final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
+                                documentEventBus.fireEvent(updatedEvent);
+                                documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionWithdrawSuccessful(result.length)));
                             }
                         });
             }
@@ -137,7 +143,9 @@ public class AmendmentActionPanelController {
                                     @Override
                                     public void onSuccess(AmendmentContainerDTO[] result) {
                                         amendmentController.setAmendment(result[0]);
-                                        amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+                                        final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
+                                        documentEventBus.fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+                                        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionDeleteSuccessful(result.length)));
                                     }
                                 });
                     }
