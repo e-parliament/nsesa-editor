@@ -1,6 +1,8 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -365,7 +367,20 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getInnerHTML() {
-        return getElement().getInnerHTML();
+        final NodeList<Node> childNodes = getElement().getChildNodes();
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < childNodes.getLength(); i++) {
+            final Node node = childNodes.getItem(i);
+            if (Node.ELEMENT_NODE == node.getNodeType()) {
+                Element element = node.cast();
+                if (element != getAmendmentHolderElement().getElement()) {
+                    sb.append(element.getInnerHTML());
+                }
+            } else if (Node.TEXT_NODE == node.getNodeType()) {
+                sb.append(node.getNodeValue());
+            }
+        }
+        return sb.toString();
     }
 
     @Override
