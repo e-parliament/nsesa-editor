@@ -73,11 +73,13 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
                 var doc = range.document;
                 var isPre = false;
 
+                var ns = editor.getSelection().getStartElement().getAttribute('ns');
                 var lineBreak;
                 //create a span of type br
                 lineBreak = doc.createElement( 'span' );
                 lineBreak.setAttribute('class', 'widget ' + tagName);
                 lineBreak.setAttribute('type', tagName);
+                lineBreak.setAttribute('ns', ns);
 //                var aw = overlayFactory.@org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory::getAmendableWidget(Ljava/lang/String;)('br');
 //                var el = aw.@org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget::getAmendableElement()();
                 range.deleteContents();
