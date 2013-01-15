@@ -57,10 +57,10 @@ public class MarkerController {
                 for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
                     if (amendmentController.getDocumentController() == documentController && amendmentController.getView().asWidget().isAttached()) {
                         final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-                        LOG.fine("Document height is: " + documentHeight);
+//                        LOG.info("Document height is: " + documentHeight);
                         final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
                         final double division = (double) documentHeight / (double) amendmentTop;
-                        LOG.fine("Amendment is: " + amendmentTop + ", and division is at " + division);
+//                        LOG.info("Amendment is: " + amendmentTop + ", and division is at " + division);
                         final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
                         focusWidget.addClickHandler(new ClickHandler() {
                             @Override
@@ -89,7 +89,7 @@ public class MarkerController {
         documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
-                view.asWidget().setHeight((event.getHeight() - 30) + "px");
+                view.asWidget().setHeight((event.getHeight() - documentController.getContentController().getView().getScrollPanel().getAbsoluteTop()) + "px");
                 drawAmendmentControllers();
             }
         });
