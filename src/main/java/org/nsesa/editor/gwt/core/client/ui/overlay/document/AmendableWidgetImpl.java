@@ -374,7 +374,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             if (Node.ELEMENT_NODE == node.getNodeType()) {
                 Element element = node.cast();
                 if (element != getAmendmentHolderElement().getElement()) {
-                    sb.append(element.getInnerHTML());
+                    sb.append(DOM.toString((com.google.gwt.user.client.Element) element));
                 }
             } else if (Node.TEXT_NODE == node.getNodeType()) {
                 sb.append(node.getNodeValue());
@@ -385,6 +385,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public void setInnerHTML(String amendableContent) {
+        // TODO make sure to restore the amendments if this is called
+        if (isAmended()) {
+            throw new RuntimeException("[TODO] We're not yet restoring amendments when the inner HTML is set.");
+        }
         getElement().setInnerHTML(amendableContent);
     }
 
