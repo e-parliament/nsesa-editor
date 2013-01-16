@@ -36,21 +36,25 @@ public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
     }
 
     private native void nativeInit(JavaScriptObject editor) /*-{
-//        function NsesaStyleCommand(style) {
-//            this.style = style;
-//        }
-//        NsesaStyleCommand.prototype = new $wnd.CKEDITOR.styleCommand(style);
 
         var addButtonCommand = function( buttonName, buttonLabel, commandName, styleDefiniton )
         {
-            var style = new $wnd.CKEDITOR.style( styleDefiniton );
-            editor.attachStyleStateChange( style, function( state )
-            {
-                !editor.readOnly && editor.getCommand( commandName ).setState( state );
-            });
+            NsesaStyleCommand = function(styleDefinition) {
+                this.styleDefinition = styleDefinition;
+            }
+            NsesaStyleCommand.prototype = new $wnd.CKEDITOR.styleCommand();
+            NsesaStyleCommand.prototype.exec = function(editor) {
+                this.styleDefinition.attributes['ns'] = editor.getSelection().getStartElement().getAttribute('ns');
+                this.style = new $wnd.CKEDITOR.style( this.styleDefinition);
+                editor.attachStyleStateChange(this.style, function( state )
+                {
+                    !editor.readOnly && editor.getCommand( commandName ).setState( state );
+                });
 
-            editor.addCommand( commandName, new $wnd.CKEDITOR.styleCommand(style));
-
+                $wnd.CKEDITOR.styleCommand.prototype.exec.call(this, editor);
+            }
+            var nsesaStyleCommand = new NsesaStyleCommand(styleDefiniton);
+            editor.addCommand( commandName, nsesaStyleCommand);
             editor.ui.addButton( buttonName,
                     {
                         label : buttonLabel,
