@@ -553,7 +553,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
+        if (documentModes.containsKey(InlineEditingMode.KEY)) {
+            final InlineEditingMode inlineEditingMode = (InlineEditingMode) documentModes.get(InlineEditingMode.KEY);
+            if (!inlineEditingMode.getState().isActive()) {
+                clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
+            }
+        } else {
+            clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
+        }
     }
 
     @Override
