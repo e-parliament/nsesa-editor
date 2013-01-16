@@ -9,6 +9,8 @@ public class DiffRequest implements Serializable {
 
     private DiffMethod diffMethod;
 
+    private String diffStyle = "epStyle"; // or msStyle
+
     public DiffRequest() {
     }
 
@@ -22,6 +24,13 @@ public class DiffRequest implements Serializable {
         this.original = original;
         this.amendment = amendment;
         this.diffMethod = diffMethod;
+    }
+
+    public DiffRequest(String original, String amendment, DiffMethod diffMethod, String diffStyle) {
+        this.original = original;
+        this.amendment = amendment;
+        this.diffMethod = diffMethod;
+        this.diffStyle = diffStyle;
     }
 
     public String getOriginal() {
@@ -46,5 +55,13 @@ public class DiffRequest implements Serializable {
 
     public void setDiffMethod(DiffMethod diffMethod) {
         this.diffMethod = diffMethod;
+    }
+
+    public String getDiffStyle() {
+        return diffStyle;
+    }
+
+    public void setDiffStyle(String diffStyle) {
+        this.diffStyle = diffStyle;
     }
 }
