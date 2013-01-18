@@ -101,7 +101,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     /**
      * The holder element for the amendments.
      */
-    private HTMLPanel amendmentHolderElement;
+    protected HTMLPanel amendmentHolderElement;
 
     public AmendableWidgetImpl() {
     }
@@ -217,7 +217,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendableWidgetAdded(this, child);
+            vetoed = listener.beforeAmendableWidgetRemoved(this, child);
 
         if (!vetoed) {
             if (!childAmendableWidgets.remove(child)) {
@@ -495,7 +495,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public HTMLPanel getAmendmentHolderElement() {
         if (amendmentHolderElement == null) {
-            if (getElement().getParentElement() != null) {
+            if (getElement() != null && getElement().getParentElement() != null) {
                 // TODO: this holder should not be necessary ... should be added directly to to the element.
                 amendmentHolderElement = new HTMLPanel("");
                 amendmentHolderElement.getElement().setClassName("amendments");
@@ -516,7 +516,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      */
     @Override
     public String[] getAllowedChildTypes() {
-        throw new UnsupportedOperationException("Should have been overridden in the subclasses.");
+        return new String[]{};
     }
 
     @Override

@@ -45,7 +45,7 @@ public class DiffMode implements DocumentMode<ActiveState> {
                     if (visited.isAmended()) {
                         for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
                             ArrayList<DiffRequest> diffRequests = new ArrayList<DiffRequest>();
-                            diffRequests.add(new DiffRequest(amendmentController.getOriginalContent(), amendmentController.getAmendmentContent()));
+                            diffRequests.add(new DiffRequest(amendmentController.getOriginalContentFromModel(), amendmentController.getAmendmentContentFromModel()));
                             serviceFactory.getGwtDiffService().diff(diffRequests, new AsyncCallback<ArrayList<DiffResult>>() {
                                 @Override
                                 public void onFailure(Throwable caught) {
@@ -69,8 +69,8 @@ public class DiffMode implements DocumentMode<ActiveState> {
                 public boolean visit(AmendableWidget visited) {
                     if (visited.isAmended()) {
                         for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
-                            amendmentController.setAmendmentContent(amendmentController.getAmendmentContent());
-                            amendmentController.setOriginalContent(amendmentController.getOriginalContent());
+                            amendmentController.setAmendmentContent(amendmentController.getAmendmentContentFromModel());
+                            amendmentController.setOriginalContent(amendmentController.getOriginalContentFromModel());
                         }
                     }
                     return true;

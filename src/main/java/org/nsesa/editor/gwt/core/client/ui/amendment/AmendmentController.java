@@ -51,11 +51,19 @@ public interface AmendmentController {
 
     String getAmendmentNum();
 
+    String getAmendmentNumFromModel();
+
     String getOriginalNum();
+
+    String getOriginalNumFromModel();
 
     String getAmendmentContent();
 
+    String getAmendmentContentFromModel();
+
     String getOriginalContent();
+
+    String getOriginalContentFromModel();
 
     void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget);
 

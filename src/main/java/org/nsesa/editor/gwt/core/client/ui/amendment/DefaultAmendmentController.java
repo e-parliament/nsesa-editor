@@ -42,8 +42,6 @@ public class DefaultAmendmentController implements AmendmentController {
      */
     protected AmendableWidget amendedAmendableWidget;
 
-    protected AmendableWidget overlayAmendableWidget;
-
     protected AmendmentActionPanelController amendmentActionPanelController;
 
     protected int order;
@@ -156,10 +154,7 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Override
     public AmendableWidget asAmendableWidget() {
-        if (overlayAmendableWidget == null) {
-            overlayAmendableWidget = documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
-        }
-        return overlayAmendableWidget;
+        return documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
     }
 
     @Override
@@ -170,8 +165,6 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     private void setBody(String xmlContent) {
-        // reset the overlay, it will be recreated later
-        overlayAmendableWidget = null;
         view.setBody(xmlContent);
         extendedView.setBody(xmlContent);
     }
@@ -252,6 +245,26 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Override
     public String getOriginalNum() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getAmendmentNumFromModel() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getOriginalNumFromModel() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getAmendmentContentFromModel() {
+        throw new UnsupportedOperationException("Should be overridden in subclass.");
+    }
+
+    @Override
+    public String getOriginalContentFromModel() {
         throw new UnsupportedOperationException("Should be overridden in subclass.");
     }
 

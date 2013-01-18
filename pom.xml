@@ -149,6 +149,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.allen-sauer.gwt.dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
             <version>r1137</version>
@@ -179,9 +185,9 @@
         </dependency>
 
         <dependency>
-        	<groupId>name.pehl</groupId>
-        	<artifactId>totoe</artifactId>
-        	<version>0.4</version>
+            <groupId>name.pehl</groupId>
+            <artifactId>totoe</artifactId>
+            <version>0.4</version>
         </dependency>
 
         <!-- XSD parsing and generation -->
@@ -206,7 +212,6 @@
             <version>4.5</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
@@ -218,6 +223,16 @@
             <artifactId>easymockclassextension</artifactId>
             <version>3.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.gwt-test-utils</groupId>
+            <artifactId>gwt-test-utils</artifactId>
+            <version>0.43</version>
+        </dependency>
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.12.1.GA</version>
         </dependency>
     </dependencies>
 
@@ -257,6 +272,50 @@
                         <groupId>org.codehaus.plexus</groupId>
                         <artifactId>plexus-compiler-javac</artifactId>
                         <version>1.8.6</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- ***************************** Surefire plugin    ***************************** -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.13</version>
+                <configuration>
+                    <argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
+                </configuration>
+            </plugin>
+            <!-- ***************************** Configure GWT plugin    ***************************** -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwtplugin.version}</version>
+                <configuration>
+                    <!--<extraJvmArgs>-Xss2M -XX:MaxPermSize=512M -Xmx2048m -Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=localhost:8008</extraJvmArgs>-->
+                    <!--<extraJvmArgs>-Xss1M -XX:MaxPermSize=300M -Xms512M -Xmx512M</extraJvmArgs>-->
+                    <hostedWebapp>web</hostedWebapp>
+                    <modules>
+                        <module>org.nsesa.editor.gwt.editor.Editor</module>
+                    </modules>
+                    <runTarget>editor.html</runTarget>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-user</artifactId>
+                        <version>${gwt.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.gwt</groupId>
+                        <artifactId>gwt-servlet</artifactId>
+                        <version>${gwt.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
