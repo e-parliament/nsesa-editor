@@ -1,0 +1,13 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="DraftingViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.drafting.DraftingViewCss'/>
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.drafting.Resources'/>
+    <ui:style field="res">
+        .draftingPanel {
+            min-width: 200px;
+        }
+    </ui:style>
+    <g:VerticalPanel ui:field="mainPanel" styleName="{res.draftingPanel}">
+    </g:VerticalPanel>
+</ui:UiBinder>

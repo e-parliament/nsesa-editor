@@ -28,13 +28,8 @@ public interface RichTextEditorPlugin {
     abstract void init(JavaScriptObject editor);
 
     /**
-     * Run after initialization
-     * @param editor
-     */
-    abstract void afterInit(JavaScriptObject editor);
-
-    /**
      * Used to export plugin in javascript world if the case
      */
-    abstract void export();
+    abstract void export(RichTextEditorConfig config);
+
 }

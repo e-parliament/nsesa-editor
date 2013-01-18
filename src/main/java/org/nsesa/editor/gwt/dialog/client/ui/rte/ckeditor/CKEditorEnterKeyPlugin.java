@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
 
 /**
@@ -153,19 +154,8 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
     }-*/;
 
     @Override
-    public void afterInit(JavaScriptObject editor) {
-        nativeAfterInit(editor);
+    public void export(RichTextEditorConfig config) {
+        // do nothing
     }
 
-    private native void nativeAfterInit(JavaScriptObject editor) /*-{
-    }-*/;
-
-    @Override
-    public void export() {
-        nativeDoMain(overlayFactory);
-    }
-
-    private native void nativeDoMain(OverlayFactory overlayFactory) /*-{
-
-    }-*/;
 }

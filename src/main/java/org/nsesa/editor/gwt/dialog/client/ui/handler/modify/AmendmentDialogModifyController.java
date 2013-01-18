@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -38,20 +39,25 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
     protected final Locator locator;
 
+    protected final DraftingController draftingController;
+
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
+                                           final DraftingController draftingController,
                                            final List<AmendmentDialogAwareController> childControllers) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
+        this.draftingController = draftingController;
         this.childControllers = childControllers;
 
         for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
             view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
         }
+        view.addDraftingView(draftingController.getView());
         registerListeners();
     }
 

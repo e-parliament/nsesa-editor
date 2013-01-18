@@ -1,9 +1,9 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextCompositePlugin;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
-
-import java.util.List;
 
 /**
  * CK Editor composite plugin which is accessible from javascript world.
@@ -23,20 +23,17 @@ public class CkEditorCompositePlugin extends RichTextCompositePlugin {
     }
 
     @Override
-    public void export() {
-        exportNativePlugin(this);
+    public void export(RichTextEditorConfig config) {
+        nativeExport(config.getConfiguration(), this);
     }
 
-    private native void exportNativePlugin(CkEditorCompositePlugin plugin) /*-{
-        $wnd.CKEDITOR.nsesaBeforeInit = $entry(function(editor) {
-            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin::beforeInit(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
+    private native void nativeExport(JavaScriptObject config, CkEditorCompositePlugin plugin) /*-{
+        //TODO we need to find a better way to expose the plugin in javascript world
+        $wnd.CKEDITOR.nsesaBeforeInit = $entry(function(ed) {
+            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin::beforeInit(Lcom/google/gwt/core/client/JavaScriptObject;)(ed);
         });
-        $wnd.CKEDITOR.nsesaInit = $entry(function(editor) {
-            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin::init(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
-        });
-
-        $wnd.CKEDITOR.nsesaAfterInit = $entry(function(editor) {
-            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin::afterInit(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
+        $wnd.CKEDITOR.nsesaInit = $entry(function(ed) {
+            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CkEditorCompositePlugin::init(Lcom/google/gwt/core/client/JavaScriptObject;)(ed);
         });
     }-*/;
 

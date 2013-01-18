@@ -34,6 +34,9 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     final RichTextEditor amendmentText;
 
     @UiField
+    HTMLPanel draftingPanel;
+
+    @UiField
     TabLayoutPanel tabLayoutPanel;
 
 
@@ -77,6 +80,11 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     @Override
     public void addView(IsWidget view, String title) {
         tabLayoutPanel.add(view, title);
+    }
+
+    @Override
+    public void addDraftingView(IsWidget view) {
+        draftingPanel.add(view);
     }
 
     @Override

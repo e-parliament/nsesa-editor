@@ -45,16 +45,9 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
     }
 
     @Override
-    public void afterInit(JavaScriptObject editor) {
+    public void export(RichTextEditorConfig config) {
         for(RichTextEditorPlugin plugin : plugins) {
-            plugin.afterInit(editor);
-        }
-    }
-
-    @Override
-    public void export() {
-        for(RichTextEditorPlugin plugin : plugins) {
-            plugin.export();
+            plugin.export(config);
         }
     }
 }

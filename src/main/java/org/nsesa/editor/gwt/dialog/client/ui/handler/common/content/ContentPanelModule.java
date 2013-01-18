@@ -6,7 +6,6 @@ import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditor;
 
 /**
@@ -24,15 +23,12 @@ public class ContentPanelModule extends AbstractGinModule {
     public static class OriginalTextProvider implements Provider<RichTextEditor> {
 
         @Inject
-        RichTextEditorPlugin plugin;
-
-        @Inject
         RichTextEditorConfig config;
 
         @Override
         public RichTextEditor get() {
             config.setReadOnly(true);
-            return new CKEditor(plugin, config);
+            return new CKEditor(null, config);
         }
     }
 }

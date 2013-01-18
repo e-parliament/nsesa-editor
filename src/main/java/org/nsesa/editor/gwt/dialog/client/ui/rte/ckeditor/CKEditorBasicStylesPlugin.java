@@ -1,6 +1,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
 
 /**
@@ -26,12 +27,7 @@ public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
     }
 
     @Override
-    public void afterInit(JavaScriptObject editor) {
-        //do nothing
-    }
-
-    @Override
-    public void export() {
+    public void export(RichTextEditorConfig config) {
         //do nothing
     }
 
