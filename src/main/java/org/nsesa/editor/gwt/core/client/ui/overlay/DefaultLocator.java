@@ -43,13 +43,21 @@ public class DefaultLocator implements Locator {
                 }
             });
 
-            if (!filtered.contains(parent.getClass()) || showAmendableWidgets.contains(parent.getClass()))
-                location.append(parent.getType()).append(" ").append(getNum(parent)).append(SPLITTER);
+            if (!filtered.contains(parent.getClass()) || showAmendableWidgets.contains(parent.getClass())) {
+                final String num = getNum(parent);
+                final StringBuilder sb = location.append(parent.getType());
+                if (num != null && !("".equals(num.trim()))) {
+                    sb.append(" ");
+                    sb.append(num);
+                }
+                sb.append(SPLITTER);
+            }
             if (hideUnderLayingAmendableWidgets.contains(parent.getClass())) {
                 break;
             }
         }
-        return location.toString().endsWith(SPLITTER) ? location.substring(0, location.length() - SPLITTER.length()) : location.toString();
+        final String locationString = location.toString().endsWith(SPLITTER) ? location.substring(0, location.length() - SPLITTER.length()) : location.toString();
+        return locationString.trim();
     }
 
     public String getNum(final AmendableWidget amendableWidget) {
