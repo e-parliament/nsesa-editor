@@ -554,6 +554,13 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
+    public void testGetAssignedNumber() throws Exception {
+        AmendableWidgetImpl amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setAssignedNumber(1);
+        Assert.assertEquals(1, (int) amendableWidget.getAssignedNumber());
+    }
+
+    @Test
     public void testGetUnformattedIndex() throws Exception {
         AmendableWidgetImpl amendableWidget = new AmendableWidgetImpl();
         amendableWidget.setUnformattedIndex("15");
