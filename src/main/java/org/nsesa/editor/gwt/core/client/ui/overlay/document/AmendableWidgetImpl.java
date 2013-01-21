@@ -414,32 +414,52 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return parentAmendableWidget;
     }
 
+    @Override
+    public AmendableWidget getPreviousSibling() {
+        if (parentAmendableWidget == null) return null;
+        final int index = parentAmendableWidget.getChildAmendableWidgets().indexOf(this);
+        // short circuit if we're already the first widget
+        if (index == 0) return null;
+        return parentAmendableWidget.getChildAmendableWidgets().get(index - 1);
+    }
+
+    @Override
+    public AmendableWidget getNextSibling() {
+        if (parentAmendableWidget == null) return null;
+        final int index = parentAmendableWidget.getChildAmendableWidgets().indexOf(this);
+        // short circuit if we're already the last widget
+        if (index == parentAmendableWidget.getChildAmendableWidgets().size() - 1) return null;
+        return parentAmendableWidget.getChildAmendableWidgets().get(index + 1);
+    }
+
     public AmendableWidget getPreviousNonIntroducedAmendableWidget(final boolean sameType) {
-        // short circuit if we're already the top element
-        if (getIndex() == 0) return null;
-        for (final AmendableWidget amendableWidget : parentAmendableWidget.getChildAmendableWidgets()) {
-            if (!amendableWidget.isIntroducedByAnAmendment()) {
-                if (sameType && amendableWidget.getTypeIndex() == getTypeIndex() - 1) {
-                    return amendableWidget;
-                } else if (!sameType && amendableWidget.getIndex() == getIndex() - 1) {
-                    return amendableWidget;
+        AmendableWidget previous = getPreviousSibling();
+        while (previous != null) {
+            if (!previous.isIntroducedByAnAmendment()) {
+                if (sameType) {
+                    if (previous.getType().equalsIgnoreCase(getType()))
+                        return previous;
+                } else {
+                    return previous;
                 }
             }
+            previous = previous.getPreviousSibling();
         }
         return null;
     }
 
     public AmendableWidget getNextNonIntroducedAmendableWidget(final boolean sameType) {
-        // short circuit if we're already the last element
-        if (getIndex() == parentAmendableWidget.getChildAmendableWidgets().size() - 1) return null;
-        for (final AmendableWidget amendableWidget : parentAmendableWidget.getChildAmendableWidgets()) {
-            if (!amendableWidget.isIntroducedByAnAmendment()) {
-                if (sameType && amendableWidget.getTypeIndex() == getTypeIndex() + 1) {
-                    return amendableWidget;
-                } else if (!sameType && amendableWidget.getIndex() == getIndex() + 1) {
-                    return amendableWidget;
+        AmendableWidget next = getNextSibling();
+        while (next != null) {
+            if (!next.isIntroducedByAnAmendment()) {
+                if (sameType) {
+                    if (next.getType().equalsIgnoreCase(getType()))
+                        return next;
+                } else {
+                    return next;
                 }
             }
+            next = next.getNextSibling();
         }
         return null;
     }
@@ -620,6 +640,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public int getTypeIndex() {
+        return getTypeIndex(false);
+    }
+
+    @Override
+    public int getTypeIndex(final boolean includeAmendments) {
         if (getParentAmendableWidget() != null) {
             final Iterator<AmendableWidget> iterator = getParentAmendableWidget().getChildAmendableWidgets().iterator();
             int count = 0;
@@ -630,9 +655,16 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                     if (aw == this) {
                         break;
                     }
-                    if (!aw.isIntroducedByAnAmendment() && aw.getType().equalsIgnoreCase(getType())) {
-                        count++;
+                    if (includeAmendments) {
+                        if (aw.getType().equalsIgnoreCase(getType())) {
+                            count++;
+                        }
+                    } else {
+                        if (!aw.isIntroducedByAnAmendment() && aw.getType().equalsIgnoreCase(getType())) {
+                            count++;
+                        }
                     }
+
                 }
             }
             return count;

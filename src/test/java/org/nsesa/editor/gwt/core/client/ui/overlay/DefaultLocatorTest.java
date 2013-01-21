@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayStrategy;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
 /**
  * Date: 21/01/13 11:11
@@ -22,6 +23,26 @@ public class DefaultLocatorTest extends GwtTest {
     private static final String ISO_ENGLISH = "EN";
 
     final Locator locator = new DefaultLocator();
+
+    @Test
+    public void testGetLocationNull() throws Exception {
+        Assert.assertNull(locator.getLocation(null, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testGetLocationWithoutType() throws Exception {
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        Assert.assertEquals("?", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testGetLocationWithSingleParentWithoutType() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        parent.setType("foo");
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        parent.addAmendableWidget(amendableWidget);
+        Assert.assertEquals("foo – ? 1", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+    }
 
     @Test
     public void testGetLocationRoot() throws Exception {
@@ -50,6 +71,20 @@ public class DefaultLocatorTest extends GwtTest {
         amendableWidget.setFormat(Format.INDENT);
         parent.addAmendableWidget(amendableWidget);
         Assert.assertEquals("foo – bar 1", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+
+        final Element amendableWidgetSpan = DOM.createSpan();
+        final AmendableWidget amendableWidget2 = new AmendableWidgetImpl(amendableWidgetSpan);
+        amendableWidget2.setType("bar");
+        final Element span = DOM.createSpan();
+        span.setAttribute("type", "num");
+        span.setClassName("num");
+        span.setInnerHTML("-");
+        amendableWidgetSpan.appendChild(span);
+        amendableWidget2.setOverlayStrategy(new DefaultOverlayStrategy());
+        amendableWidget2.addAmendableWidget(new AmendableWidgetImpl(span));
+
+        parent.addAmendableWidget(amendableWidget2);
+        Assert.assertEquals("foo – bar 2", locator.getLocation(amendableWidget2, ISO_ENGLISH, false));
     }
 
     @Test
@@ -106,6 +141,19 @@ public class DefaultLocatorTest extends GwtTest {
     }
 
     @Test
+    public void testGetLocationMultipleParentsOfTheSameType() throws Exception {
+        final AmendableWidget grandParent = new AmendableWidgetImpl();
+        grandParent.setType("foo");
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        parent.setType("bar");
+        grandParent.addAmendableWidget(parent);
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setType("bar");
+        parent.addAmendableWidget(amendableWidget);
+        Assert.assertEquals("foo – bar 1 – subbar 1", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+    }
+
+    @Test
     public void testGetLocationSingleParentWithSibling() throws Exception {
         final AmendableWidget parent = new AmendableWidgetImpl();
         parent.setType("foo");
@@ -133,5 +181,69 @@ public class DefaultLocatorTest extends GwtTest {
         parent.addAmendableWidget(amendableWidget);
 
         Assert.assertEquals("foo – bar 2", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testGetLocationSingleParentWithIntroducedAmendableWidgetInAllNewCollection() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        parent.setType("foo");
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setType("bar");
+        amendableWidget.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget);
+
+        Assert.assertEquals("foo – bar 1 (new)", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+
+        final AmendableWidget amendableWidget2 = new AmendableWidgetImpl();
+        amendableWidget2.setType("bar");
+        amendableWidget2.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget2);
+
+
+        Assert.assertEquals("foo – bar 2 (new)", locator.getLocation(amendableWidget2, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testGetLocationSingleParentWithIntroducedAmendableWidgetWithPreviousNonIntroducedAmendableWidget() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        parent.setType("foo");
+        final AmendableWidget previous = new AmendableWidgetImpl();
+        previous.setType("bar");
+        parent.addAmendableWidget(previous);
+
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setType("bar");
+        amendableWidget.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget);
+        Assert.assertEquals("foo – bar 1a (new)", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+
+        final AmendableWidget amendableWidget2 = new AmendableWidgetImpl();
+        amendableWidget2.setType("bar");
+        amendableWidget2.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget2);
+
+        Assert.assertEquals("foo – bar 1b (new)", locator.getLocation(amendableWidget2, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testGetLocationSingleParentWithIntroducedAmendableWidgetWithNextNonIntroducedAmendableWidget() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        parent.setType("foo");
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setType("bar");
+        amendableWidget.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget);
+
+        final AmendableWidget amendableWidget2 = new AmendableWidgetImpl();
+        amendableWidget2.setType("bar");
+        amendableWidget2.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget2);
+
+        final AmendableWidget next = new AmendableWidgetImpl();
+        next.setType("bar");
+        parent.addAmendableWidget(next);
+
+        Assert.assertEquals("foo – bar -1a (new)", locator.getLocation(amendableWidget, ISO_ENGLISH, false));
+        Assert.assertEquals("foo – bar -1b (new)", locator.getLocation(amendableWidget2, ISO_ENGLISH, false));
     }
 }

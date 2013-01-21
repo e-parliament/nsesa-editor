@@ -97,6 +97,10 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      */
     AmendableWidget getParentAmendableWidget();
 
+    AmendableWidget getPreviousSibling();
+
+    AmendableWidget getNextSibling();
+
     /**
      * Find the previous sibling that is not introduced by an amendment.
      *
@@ -324,12 +328,22 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
 
     /**
      * Get the index of this widget in its parent's widget collection, but only counting the same types (so, if there
-     * is another widget of another type in between, it will not be counted) and widgets that have not been
-     * introduced by amendments.
+     * is another widget of another type in between, it will not be counted) <b>and</b> widgets that have not been
+     * introduced by amendments (if you wish to control this, use {@link #getTypeIndex(boolean)} instead.
      *
      * @return the index, filtered by type, or -1 if it cannot be found.
      */
     int getTypeIndex();
+
+    /**
+     * Get the index of this widget in its parent's widget collection, but only counting the same types (so, if there
+     * is another widget of another type in between, it will not be counted).
+     *
+     * @param includeAmendments if true, widgets with the same type that have been introduced by amendments, will
+     *                          also be taken into account.
+     * @return the index, filtered by type, or -1 if it cannot be found.
+     */
+    int getTypeIndex(final boolean includeAmendments);
 
     /**
      * Get the index of this widget in its parent's widget collection, but only counting widgets that have not been
