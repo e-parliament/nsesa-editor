@@ -624,5 +624,72 @@ public class AmendableWidgetImplTest extends GwtTest {
                 return true;
             }
         });
+
+        final Counter counter2 = new Counter(0);
+        parent.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            @Override
+            public boolean visit(AmendableWidget visited) {
+                counter2.increment();
+                // stop short
+                return false;
+            }
+        });
+        Assert.assertEquals(1, counter2.get());
+    }
+
+    @Test
+    public void testWalkStop() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        final AmendableWidget neighbour1 = new AmendableWidgetImpl();
+        parent.addAmendableWidget(neighbour1);
+        final AmendableWidget neighbour2 = new AmendableWidgetImpl();
+        parent.addAmendableWidget(neighbour2);
+
+        final Counter counter = new Counter(0);
+        parent.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            @Override
+            public boolean visit(AmendableWidget visited) {
+                counter.increment();
+                // stop short
+                return false;
+            }
+        });
+        Assert.assertEquals("Assert only the first parent node is visited.", 1, counter.get());
+    }
+
+    @Test
+    public void testWalkStopExcludingChildrenOfASingleNode() throws Exception {
+        final AmendableWidget parent = new AmendableWidgetImpl();
+        final AmendableWidget neighbour1 = new AmendableWidgetImpl();
+        parent.addAmendableWidget(neighbour1);
+        final AmendableWidget neighbour2 = new AmendableWidgetImpl();
+        parent.addAmendableWidget(neighbour2);
+        final AmendableWidget amendableWidget = new AmendableWidgetImpl();
+        parent.addAmendableWidget(amendableWidget);
+        final AmendableWidget child1 = new AmendableWidgetImpl();
+        amendableWidget.addAmendableWidget(child1);
+        final AmendableWidget child2 = new AmendableWidgetImpl();
+        amendableWidget.addAmendableWidget(child2);
+
+        final AmendableWidget neighbour3 = new AmendableWidgetImpl();
+        final AmendableWidget child3 = new AmendableWidgetImpl();
+        neighbour3.addAmendableWidget(child3);
+        final AmendableWidget child4 = new AmendableWidgetImpl();
+        neighbour3.addAmendableWidget(child4);
+        parent.addAmendableWidget(neighbour3);
+
+        final Counter counter = new Counter(0);
+        parent.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            @Override
+            public boolean visit(AmendableWidget visited) {
+                counter.increment();
+                // stop short on amendable widget target
+                final boolean keepWalking = amendableWidget != visited;
+                // ensure children are not visited
+                Assert.assertFalse(visited == child1 || visited == child2);
+                return keepWalking;
+            }
+        });
+        Assert.assertEquals("Assert all nodes and child nodes are visited, except for the child nodes 1 & 2", 7, counter.get());
     }
 }
