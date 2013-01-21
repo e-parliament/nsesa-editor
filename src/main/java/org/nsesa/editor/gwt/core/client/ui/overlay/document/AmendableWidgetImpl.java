@@ -685,8 +685,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         walk(this, visitor);
     }
 
-    @Override
-    public void walk(AmendableWidget toVisit, AmendableVisitor visitor) {
+    protected void walk(AmendableWidget toVisit, AmendableVisitor visitor) {
         if (visitor.visit(toVisit)) {
             if (toVisit != null) {
                 for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {

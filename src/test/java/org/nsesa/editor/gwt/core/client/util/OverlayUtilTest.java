@@ -1,9 +1,11 @@
 package org.nsesa.editor.gwt.core.client.util;
 
+import com.googlecode.gwt.test.GwtModule;
+import com.googlecode.gwt.test.GwtTest;
 import junit.framework.Assert;
 import org.junit.Test;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendableWidgetMockImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
 
 import java.util.List;
 
@@ -13,57 +15,57 @@ import java.util.List;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class OverlayUtilTest {
+@GwtModule("org.nsesa.editor.gwt.editor.Editor")
+public class OverlayUtilTest extends GwtTest {
 
-    final AmendableWidgetMockImpl root = new AmendableWidgetMockImpl() {
+    final AmendableWidgetImpl root = new AmendableWidgetImpl() {
         {
-            type = "rootNode";
-            id = "root";
-        }
-    };
-
-    final AmendableWidgetMockImpl level1 = new AmendableWidgetMockImpl() {
-        {
-            type = "typeA";
-            id = "id1";
-        }
-    };
-    final AmendableWidgetMockImpl level2 = new AmendableWidgetMockImpl() {
-        {
-            type = "typeB";
-            id = "id2";
-        }
-    };
-    final AmendableWidgetMockImpl level3 = new AmendableWidgetMockImpl() {
-        {
-            type = "typeC";
-            id = "id3";
+            setType("rootNode");
+            setId("root");
         }
     };
 
-    final AmendableWidgetMockImpl level31 = new AmendableWidgetMockImpl() {
+    final AmendableWidgetImpl level1 = new AmendableWidgetImpl() {
         {
-            type = "typeC";
-            id = "id3-1";
+            setType("typeA");
+            setId("id1");
         }
     };
-    final AmendableWidgetMockImpl level32 = new AmendableWidgetMockImpl() {
+    final AmendableWidgetImpl level2 = new AmendableWidgetImpl() {
         {
-            type = "typeC";
-            id = "id3-2";
-            typeIndex = 1;
+            setType("typeB");
+            setId("id2");
         }
     };
-    final AmendableWidgetMockImpl level33 = new AmendableWidgetMockImpl() {
+    final AmendableWidgetImpl level3 = new AmendableWidgetImpl() {
         {
-            type = "typeD";
-            id = "id3-3";
+            setType("typeC");
+            setId("id3");
         }
     };
-    final AmendableWidgetMockImpl level311 = new AmendableWidgetMockImpl() {
+
+    final AmendableWidgetImpl level31 = new AmendableWidgetImpl() {
         {
-            type = "typeC";
-            id = "id3-1-1";
+            setType("typeC");
+            setId("id3-1");
+        }
+    };
+    final AmendableWidgetImpl level32 = new AmendableWidgetImpl() {
+        {
+            setType("typeC");
+            setId("id3-2");
+        }
+    };
+    final AmendableWidgetImpl level33 = new AmendableWidgetImpl() {
+        {
+            setType("typeD");
+            setId("id3-3");
+        }
+    };
+    final AmendableWidgetImpl level311 = new AmendableWidgetImpl() {
+        {
+            setType("typeC");
+            setId("id3-1-1");
         }
     };
 

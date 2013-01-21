@@ -12,15 +12,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 public interface AmendableWidgetWalker {
 
     /**
-     * This method performs the same as {@link #walk(org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget, org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker.AmendableVisitor)},
-     * but takes the current <tt>AmendableWidget</tt> as the root.
-     *
-     * @param visitor the visitor.
-     */
-    void walk(AmendableVisitor visitor);
-
-    /**
-     * Walks a tree created by traversing the given <tt>root</tt> with a given visitor <tt>visitor</tt>. This will use a
+     * Walks a tree created by traversing this <tt>AmendableWidget</tt> with a given visitor <tt>visitor</tt>. This will use a
      * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget#getChildAmendableWidgets()}.
      * </P>
      * Depending on the visitor's return value from {@link AmendableVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget)},
@@ -29,13 +21,12 @@ public interface AmendableWidgetWalker {
      * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
      * visiting the sibling of a node that has already been visited.
      *
-     * @param root    the root node to start from
      * @param visitor the visitor
      */
-    void walk(AmendableWidget root, AmendableVisitor visitor);
+    void walk(AmendableVisitor visitor);
 
     /**
-     * AmendableVisitor interface (see Visitor Pattern). Used in combination with the {@link AmendableWidget#walk(org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget, org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker.AmendableVisitor)}
+     * AmendableVisitor interface (see Visitor Pattern). Used in combination with the {@link AmendableWidget#walk(org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker.AmendableVisitor)}
      * method to visit each node in the tree of <tt>AmendableWidget</tt>s.
      */
     public static interface AmendableVisitor {

@@ -511,19 +511,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Override
     public void walk(AmendableVisitor visitor) {
         for (final AmendableWidget root : amendableWidgets) {
-            walk(root, visitor);
+            root.walk(visitor);
         }
     }
 
-    @Override
     public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
-        if (visitor.visit(toVisit)) {
-            if (toVisit != null && toVisit.getChildAmendableWidgets() != null) {
-                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
-                    walk(child, visitor);
-                }
-            }
-        }
+        toVisit.walk(visitor);
     }
 
     public DocumentView getView() {
