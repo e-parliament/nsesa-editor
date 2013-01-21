@@ -18,51 +18,51 @@ import java.util.List;
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")
 public class OverlayUtilTest extends GwtTest {
 
-    final AmendableWidgetImpl root = new AmendableWidgetImpl() {
+    final AmendableWidget root = new AmendableWidgetImpl() {
         {
             setType("rootNode");
             setId("root");
         }
     };
 
-    final AmendableWidgetImpl level1 = new AmendableWidgetImpl() {
+    final AmendableWidget level1 = new AmendableWidgetImpl() {
         {
             setType("typeA");
             setId("id1");
         }
     };
-    final AmendableWidgetImpl level2 = new AmendableWidgetImpl() {
+    final AmendableWidget level2 = new AmendableWidgetImpl() {
         {
             setType("typeB");
             setId("id2");
         }
     };
-    final AmendableWidgetImpl level3 = new AmendableWidgetImpl() {
+    final AmendableWidget level3 = new AmendableWidgetImpl() {
         {
             setType("typeC");
             setId("id3");
         }
     };
 
-    final AmendableWidgetImpl level31 = new AmendableWidgetImpl() {
+    final AmendableWidget level31 = new AmendableWidgetImpl() {
         {
             setType("typeC");
             setId("id3-1");
         }
     };
-    final AmendableWidgetImpl level32 = new AmendableWidgetImpl() {
+    final AmendableWidget level32 = new AmendableWidgetImpl() {
         {
             setType("typeC");
             setId("id3-2");
         }
     };
-    final AmendableWidgetImpl level33 = new AmendableWidgetImpl() {
+    final AmendableWidget level33 = new AmendableWidgetImpl() {
         {
             setType("typeD");
             setId("id3-3");
         }
     };
-    final AmendableWidgetImpl level311 = new AmendableWidgetImpl() {
+    final AmendableWidget level311 = new AmendableWidgetImpl() {
         {
             setType("typeC");
             setId("id3-1-1");
