@@ -2,7 +2,6 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
@@ -11,6 +10,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
+import org.nsesa.editor.gwt.core.client.util.NodeUtil;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
 import java.util.*;
@@ -366,20 +366,21 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public String getInnerHTML() {
-        final NodeList<Node> childNodes = getElement().getChildNodes();
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            final Node node = childNodes.getItem(i);
-            if (Node.ELEMENT_NODE == node.getNodeType()) {
-                Element element = node.cast();
-                if (element != getAmendmentHolderElement().getElement()) {
-                    sb.append(DOM.toString((com.google.gwt.user.client.Element) element));
+        final Node clonedNode = getElement().cloneNode(true);
+        NodeUtil.walk(clonedNode, new NodeUtil.NodeVisitor() {
+            @Override
+            public void visit(final Node node) {
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element el = node.cast();
+                    // determine if this is an amendment holder element or not
+                    if (el.getTagName().equals(getAmendmentHolderElement().getElement().getTagName())
+                            && el.getClassName().equals(getAmendmentHolderElement().getElement().getClassName())) {
+                        el.removeFromParent();
+                    }
                 }
-            } else if (Node.TEXT_NODE == node.getNodeType()) {
-                sb.append(node.getNodeValue());
             }
-        }
-        return sb.toString();
+        });
+        return ((Element) clonedNode.cast()).getInnerHTML();
     }
 
     @Override
