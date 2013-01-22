@@ -95,6 +95,8 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
     @Override
     public void handle() {
+        // set the amendable widget in the drafting controller
+        draftingController.setAmendableWidget(dialogContext.getAmendableWidget());
         // make sure to pass the context to the children
         for (final AmendmentDialogAwareController childController : childControllers) {
             childController.setContext(dialogContext);

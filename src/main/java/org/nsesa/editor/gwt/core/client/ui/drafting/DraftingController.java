@@ -50,6 +50,10 @@ public class DraftingController {
         registerListeners();
     }
 
+    public void setAmendableWidget(final AmendableWidget amendableWidget) {
+        refreshView(amendableWidget, null);
+    }
+
     private void registerListeners() {
         eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
             @Override
@@ -66,7 +70,7 @@ public class DraftingController {
     public void refreshView(AmendableWidget amendableWidget, String text) {
         draftingView.clearAll();
         LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
-        for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
+        for (final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
             Anchor anchor = new Anchor(child.getKey());
             anchor.addClickHandler(new ClickHandler() {
                 @Override
