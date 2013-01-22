@@ -80,7 +80,6 @@ import java.util.*;
     public Map<String, String> getValues() {
         return values;
     }
-
     /**
      * Generates css values including the ones from parent class
      * @param styles

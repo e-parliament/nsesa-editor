@@ -80,6 +80,22 @@ public class OverlayClass extends OverlayNode  {
         this.parent = parent;
     }
 
+    public boolean isDescendentOf(String parentName) {
+        boolean result = false;
+        OverlayClass nodeParent = this;
+        if (this.getName().equalsIgnoreCase("inline")) {
+            //System.out.println("stop");
+        }
+        while (nodeParent != null) {
+            if (parentName.equalsIgnoreCase(nodeParent.getName())) {
+                result = true;
+                break;
+            }
+            nodeParent = nodeParent.getParent();
+        }
+        return result;
+    }
+
     public String[] getImports(PackageNameGenerator packageNameGenerator) {
         Set<String> imports = new LinkedHashSet<String>();
         if (parent != null && (parent.isComplex() || parent.isElement() || parent.isSimple())) {

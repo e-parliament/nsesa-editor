@@ -79,6 +79,7 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
             rootMap.put("overlayStyleFactory", CssOverlayStyle.CssOverlayFactory.getInstance());
             rootMap.put("styles", styles);
             rootMap.put("cssConfiguration", cssConfiguration);
+            rootMap.put("colorGenerator", CssColorGenerator.getInstance());
             final Template template = configuration.getTemplate(templateName);
             final DefaultObjectWrapper wrapper = new DefaultObjectWrapper();
             template.process(rootMap, out, wrapper);
