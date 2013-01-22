@@ -432,6 +432,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return parentAmendableWidget.getChildAmendableWidgets().get(index + 1);
     }
 
+    @Override
     public AmendableWidget getPreviousNonIntroducedAmendableWidget(final boolean sameType) {
         AmendableWidget previous = getPreviousSibling();
         while (previous != null) {
@@ -448,6 +449,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return null;
     }
 
+    @Override
     public AmendableWidget getNextNonIntroducedAmendableWidget(final boolean sameType) {
         AmendableWidget next = getNextSibling();
         while (next != null) {
@@ -597,6 +599,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return origin;
     }
 
+    @Override
     public String getFormattedIndex() {
         if (overlayStrategy == null) return formattedIndex;
         if (formattedIndex == null) {
@@ -626,6 +629,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      *
      * @return <tt>true</tt> if this widget was introduced by an amendment.
      */
+    @Override
     public boolean isIntroducedByAnAmendment() {
         return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget() != null && getParentAmendableWidget().isIntroducedByAnAmendment();
     }
