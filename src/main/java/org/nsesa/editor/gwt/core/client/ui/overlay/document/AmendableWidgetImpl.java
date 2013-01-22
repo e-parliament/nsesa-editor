@@ -669,7 +669,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             }
             return count;
         }
-        return -1;
+        return 0; // this is the case for the root node
     }
 
     @Override

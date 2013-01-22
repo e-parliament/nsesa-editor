@@ -606,7 +606,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetTypeCounter() throws Exception {
+    public void getTypeIndex() throws Exception {
         AmendableWidget parent = new AmendableWidgetImpl();
         AmendableWidget neighbour1 = new AmendableWidgetImpl();
         neighbour1.setType("foo");
