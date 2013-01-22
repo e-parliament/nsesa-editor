@@ -555,6 +555,37 @@ public class AmendableWidgetImplTest extends GwtTest {
 
     @Test
     public void testGetAssignedNumber() throws Exception {
+        AmendableWidgetImpl parent = new AmendableWidgetImpl();
+        AmendableWidgetImpl amendableWidget = new AmendableWidgetImpl();
+        amendableWidget.setType("foo");
+        parent.addAmendableWidget(amendableWidget);
+
+        AmendableWidgetImpl amendableWidget2 = new AmendableWidgetImpl();
+        amendableWidget2.setType("foo");
+        parent.addAmendableWidget(amendableWidget2);
+
+        AmendableWidgetImpl amendableWidget3 = new AmendableWidgetImpl();
+        amendableWidget3.setType("foo");
+        amendableWidget3.setOrigin(AmendableWidgetOrigin.AMENDMENT);
+        parent.addAmendableWidget(amendableWidget3);
+
+        AmendableWidgetImpl amendableWidget4 = new AmendableWidgetImpl();
+        amendableWidget4.setType("foo");
+        parent.addAmendableWidget(amendableWidget4);
+
+        AmendableWidgetImpl amendableWidget5 = new AmendableWidgetImpl();
+        amendableWidget5.setType("bar");
+        parent.addAmendableWidget(amendableWidget5);
+
+        Assert.assertEquals(1, (int) amendableWidget.getAssignedNumber());
+        Assert.assertEquals(2, (int) amendableWidget2.getAssignedNumber());
+        Assert.assertEquals(3, (int) amendableWidget3.getAssignedNumber());
+        Assert.assertEquals(3, (int) amendableWidget4.getAssignedNumber());
+        Assert.assertEquals(1, (int) amendableWidget5.getAssignedNumber());
+    }
+
+    @Test
+    public void testGetAssignedNumberSet() throws Exception {
         AmendableWidgetImpl amendableWidget = new AmendableWidgetImpl();
         amendableWidget.setAssignedNumber(1);
         Assert.assertEquals(1, (int) amendableWidget.getAssignedNumber());
@@ -575,20 +606,27 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetTypeIndex() throws Exception {
+    public void testGetTypeCounter() throws Exception {
         AmendableWidget parent = new AmendableWidgetImpl();
         AmendableWidget neighbour1 = new AmendableWidgetImpl();
         neighbour1.setType("foo");
         parent.addAmendableWidget(neighbour1);
+
         AmendableWidget neighbour2 = new AmendableWidgetImpl();
         neighbour2.setType("foo");
         parent.addAmendableWidget(neighbour2);
+
         AmendableWidget neighbour3 = new AmendableWidgetImpl();
         neighbour3.setType("bar");
         parent.addAmendableWidget(neighbour3);
+
         AmendableWidget amendableWidget = new AmendableWidgetImpl();
         amendableWidget.setType("foo");
         parent.addAmendableWidget(amendableWidget);
+
+        Assert.assertEquals(0, neighbour1.getTypeIndex());
+        Assert.assertEquals(1, neighbour2.getTypeIndex());
+        Assert.assertEquals(0, neighbour3.getTypeIndex());
         Assert.assertEquals(2, amendableWidget.getTypeIndex());
         amendableWidget.setType("bar");
         Assert.assertEquals(1, amendableWidget.getTypeIndex());

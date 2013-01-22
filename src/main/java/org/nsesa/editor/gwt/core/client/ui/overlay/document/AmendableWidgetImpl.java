@@ -10,7 +10,6 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
-import org.nsesa.editor.gwt.core.client.ui.overlay.LocatorUtil;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
@@ -570,7 +569,9 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public Integer getAssignedNumber() {
         if (assignedNumber == null) {
-            assignedNumber = LocatorUtil.getAssignedNumber(this);
+            if (parentAmendableWidget != null) {
+                assignedNumber = getTypeIndex(false) + 1;
+            }
         }
         return assignedNumber;
     }
@@ -655,21 +656,20 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                     if (aw == this) {
                         break;
                     }
-                    if (includeAmendments) {
-                        if (aw.getType().equalsIgnoreCase(getType())) {
+                    if (aw.getType().equalsIgnoreCase(getType())) {
+                        if (includeAmendments) {
                             count++;
-                        }
-                    } else {
-                        if (!aw.isIntroducedByAnAmendment() && aw.getType().equalsIgnoreCase(getType())) {
-                            count++;
+                        } else {
+                            if (!aw.isIntroducedByAnAmendment()) {
+                                count++;
+                            }
                         }
                     }
-
                 }
             }
             return count;
         }
-        return 0;
+        return -1;
     }
 
     @Override
