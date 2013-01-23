@@ -86,26 +86,27 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
 
     @Override
-    public void setAmendments(Map<String, AmendmentController> amendments) {
+    public void setAmendmentControllers(Map<String, AmendmentController> amendments) {
         for (Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
             HorizontalPanel panel = new HorizontalPanel();
             //create a check box
             CheckBox checkBox = new CheckBox();
             checkBoxes.put(entry.getKey(), checkBox);
             panel.add(checkBox);
-            amendmentsPanel.add(entry.getValue().getExtendedView());
+            panel.add(entry.getValue().getExtendedView());
+            amendmentsPanel.add(panel);
         }
     }
 
     @Override
-    public void refreshAmendments(Map<String, AmendmentController> amendments) {
+    public void refreshAmendmentControllers(Map<String, AmendmentController> amendments) {
         amendmentsPanel.clear();
         checkBoxes.clear();
-        setAmendments(amendments);
+        setAmendmentControllers(amendments);
     }
 
     @Override
-    public List<String> getSelectedAmendments() {
+    public List<String> getSelectedVisibleAmendmentContainerIds() {
         List<String> result = new ArrayList<String>();
         for (Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
             if (entry.getValue().getValue()) {
@@ -117,7 +118,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     }
 
     @Override
-    public void selectAmendments(List<String> ids) {
+    public void selectAmendmentControllers(List<String> ids) {
         // deselect all
         for (Map.Entry<String, CheckBox> entry : checkBoxes.entrySet()) {
             entry.getValue().setValue(false);

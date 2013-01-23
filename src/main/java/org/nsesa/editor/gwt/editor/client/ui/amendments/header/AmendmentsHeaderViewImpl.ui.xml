@@ -3,21 +3,25 @@
     <ui:style src="AmendmentsHeaderViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderViewCss'/>
     <ui:style field="res">
-        .selections {
-            height: 100%;
-            float: left;
+        .toolbar {
+            vertical-align: bottom;
         }
+
+        .selections {
+            padding: 5px;
+        }
+
         .actions {
-            height: 100%;
-            float: left;
+            padding-right: 5px;
         }
     </ui:style>
-    <g:MenuBar ui:field="menu">
-        <g:MenuItem text="Select amendments">
-            <g:MenuBar ui:field="menuSelection" vertical="true"/>
-        </g:MenuItem>
-        <g:MenuItem text="Run action">
-            <g:MenuBar ui:field="menuAction" vertical="true"/>
-        </g:MenuItem>
-    </g:MenuBar>
+    <g:HTMLPanel>
+        <g:HorizontalPanel styleName="{res.toolbar}">
+            <g:Label text="Select:"/>
+            <g:HorizontalPanel ui:field="selections" styleName="{res.selections}"/>
+
+            <g:Label text="Actions:"/>
+            <g:HorizontalPanel ui:field="actions" styleName="{res.actions}"/>
+        </g:HorizontalPanel>
+    </g:HTMLPanel>
 </ui:UiBinder>

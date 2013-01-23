@@ -10,22 +10,22 @@ import org.nsesa.editor.gwt.core.client.util.Selection;
  * Date: 29/11/12
  * Time: 10:42
  */
-public class AmendmentsSelectionEvent extends GwtEvent<AmendmentsSelectionEventHandler> {
-    public static final Type<AmendmentsSelectionEventHandler> TYPE = new Type<AmendmentsSelectionEventHandler>();
+public class AmendmentControllerSelectionEvent extends GwtEvent<AmendmentControllerSelectionEventHandler> {
+    public static final Type<AmendmentControllerSelectionEventHandler> TYPE = new Type<AmendmentControllerSelectionEventHandler>();
 
     private Selection<AmendmentController> selection;
 
-    public AmendmentsSelectionEvent(Selection<AmendmentController> selection) {
+    public AmendmentControllerSelectionEvent(Selection<AmendmentController> selection) {
         this.selection = selection;
     }
 
     @Override
-    public Type<AmendmentsSelectionEventHandler> getAssociatedType() {
+    public Type<AmendmentControllerSelectionEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(AmendmentsSelectionEventHandler handler) {
+    protected void dispatch(AmendmentControllerSelectionEventHandler handler) {
         handler.onEvent(this);
     }
 

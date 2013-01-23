@@ -28,20 +28,23 @@ public class AmendmentsFilterController {
 
     private static Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
+    private Selection<AmendmentController> ALL = new Selection.AllSelection<AmendmentController>();
+    private Selection<AmendmentController> NONE = new Selection.AllSelection<AmendmentController>();
+
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {
         this.documentEventBus = documentEventBus;
         this.view = view;
         registerFilterActions();
         registerListeners();
-        this.view.setFilters(Arrays.asList(filters.keySet().toArray(new String[0])));
+        this.view.setFilters(Arrays.asList(filters.keySet().toArray(new String[filters.size()])));
     }
 
     protected void registerFilterActions() {
         registerFilterAction("All amendments",
-                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, Selection.ALL));
+                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, ALL));
         registerFilterAction("None",
-                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, Selection.NONE));
+                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, NONE));
     }
 
     public void registerFilterAction(String filterName, Filter<AmendmentController> filter) {

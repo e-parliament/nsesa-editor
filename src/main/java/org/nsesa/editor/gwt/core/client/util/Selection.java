@@ -1,7 +1,5 @@
 package org.nsesa.editor.gwt.core.client.util;
 
-import java.util.Collections;
-
 /**
  * Applies selection over given object
  * User: groza
@@ -9,31 +7,20 @@ import java.util.Collections;
  * Time: 10:28
  */
 public interface Selection<T> {
-    boolean select(T t);
-    String getName();
-    Selection NONE = new NoneSelection();
-    Selection ALL = new AllSelection();
 
-    static class NoneSelection implements Selection {
+    boolean select(T t);
+
+    static class NoneSelection<T> implements Selection<T> {
         @Override
-        public boolean select(Object o) {
+        public boolean select(T o) {
             return false;
         }
-
-        @Override
-        public String getName() {
-            return "None";
-        }
     }
-    static class AllSelection implements Selection {
-        @Override
-        public boolean select(Object o) {
-            return true;
-        }
 
+    static class AllSelection<T> implements Selection<T> {
         @Override
-        public String getName() {
-            return "All";
+        public boolean select(T o) {
+            return true;
         }
     }
 

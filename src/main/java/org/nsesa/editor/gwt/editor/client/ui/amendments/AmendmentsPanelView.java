@@ -15,14 +15,14 @@ import java.util.Map;
  */
 @ImplementedBy(AmendmentsPanelViewImpl.class)
 public interface AmendmentsPanelView extends IsWidget {
-    public void setAmendments(Map<String, AmendmentController> amendments);
+    public void setAmendmentControllers(Map<String, AmendmentController> amendments);
 
-    public void refreshAmendments(Map<String, AmendmentController> amendments);
+    public void refreshAmendmentControllers(Map<String, AmendmentController> amendments);
 
     public void setStyleName(String styleName);
 
-    public List<String> getSelectedAmendments();
+    public List<String> getSelectedVisibleAmendmentContainerIds();
 
-    public void selectAmendments(List<String> ids);
+    public void selectAmendmentControllers(List<String> ids);
 
 }

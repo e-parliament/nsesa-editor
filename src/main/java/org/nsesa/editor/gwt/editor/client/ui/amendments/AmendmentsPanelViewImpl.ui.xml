@@ -3,59 +3,40 @@
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.header'
              xmlns:filter='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments.filter'
              xmlns:pagination='urn:import:org.nsesa.editor.gwt.editor.client.ui.pagination'
-             >
+        >
     <ui:style src="AmendmentsPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelViewCss'/>
     <ui:style field="res">
-        .verticalPanel {
-            width: 100%;
-        }
 
-        .document {
-            width: 100%;
+        .amendmentsPanel {
+            width: 98%;
             position: relative;
-            top: -20px;
+            left: 1%;
         }
 
         .scrollPanel {
             width: 100%;
         }
 
-        .documentPanel {
-            width: 98%;
-            padding: 8%;
-            border: 1px solid black;
-            overflow: auto;
-            -moz-box-shadow: 10px 10px 5px #888;
-            -webkit-box-shadow: 10px 10px 5px #888;
-            box-shadow: 10px 10px 5px #888;
-        }
-
-        .content {
-            max-height: 300px;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-        }
         .amendmentsHeader {
             width: 100%;
             padding: 5px;
             background-color: #eee;
             border: 1px solid #ccc;
-            border-top: clear;
         }
+
         .pagination {
-           float: right;
+            float: right;
         }
 
     </ui:style>
     <g:HTMLPanel>
         <g:HorizontalPanel styleName="{res.amendmentsHeader}">
-        <header:AmendmentsHeaderView ui:field="amendmentsHeaderView" />
-        <filter:AmendmentsFilterView ui:field="filterView"/>
+            <header:AmendmentsHeaderView ui:field="amendmentsHeaderView"/>
+            <filter:AmendmentsFilterView ui:field="filterView"/>
         </g:HorizontalPanel>
-        <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}" >
-         <g:VerticalPanel ui:field="amendmentsPanel" />
+        <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
+            <g:VerticalPanel ui:field="amendmentsPanel" styleName="{res.amendmentsPanel}"/>
         </g:ScrollPanel>
         <g:HorizontalPanel styleName="{res.amendmentsHeader}">
             <pagination:PaginationView ui:field="paginationView" styleName="{res.pagination}"/>

@@ -9,6 +9,6 @@ import com.google.gwt.event.shared.EventHandler;
  * Time: 10:53
  * To change this template use File | Settings | File Templates.
  */
-public interface AmendmentsActionEventHandler extends EventHandler {
-    public void onEvent(AmendmentsActionEvent event);
+public interface AmendmentControllerSelectionEventHandler extends EventHandler {
+    public void onEvent(AmendmentControllerSelectionEvent event);
 }

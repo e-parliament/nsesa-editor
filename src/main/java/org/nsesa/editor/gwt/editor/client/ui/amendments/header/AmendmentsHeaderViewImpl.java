@@ -1,17 +1,16 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments.header;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.editor.client.event.amendments.MenuClickedEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
-
-import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -29,14 +28,13 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsHeaderViewImpl> {
     }
+
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @UiField
-    MenuBar menu;
+    HorizontalPanel selections;
     @UiField
-    MenuBar menuSelection;
-    @UiField
-    MenuBar menuAction;
+    HorizontalPanel actions;
 
     @Inject
     public AmendmentsHeaderViewImpl(DocumentEventBus documentEventBus) {
@@ -51,26 +49,12 @@ public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHea
     }
 
     @Override
-    public void setSelections(List<String> selections) {
-        for (final String selection :selections) {
-            this.menuSelection.addItem(selection, new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    documentEventBus.fireEvent(new MenuClickedEvent(selection, MenuClickedEvent.MenuType.SELECTION));
-                }
-            });
-        }
+    public void addSelection(IsWidget selectionWidget) {
+        this.selections.add(selectionWidget);
     }
 
     @Override
-    public void setActions(List<String> actions) {
-        for (final String action :actions) {
-            this.menuAction.addItem(action, new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    documentEventBus.fireEvent(new MenuClickedEvent(action, MenuClickedEvent.MenuType.ACTION));
-                }
-            });
-        }
+    public void addAction(IsWidget actionWidget) {
+        this.actions.add(actionWidget);
     }
 }
