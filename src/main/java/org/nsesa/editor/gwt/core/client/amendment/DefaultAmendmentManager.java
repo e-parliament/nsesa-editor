@@ -1,5 +1,7 @@
 package org.nsesa.editor.gwt.core.client.amendment;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -132,9 +134,14 @@ public class DefaultAmendmentManager implements AmendmentManager {
         documentEventBus.addHandler(AmendmentContainerDeleteEvent.TYPE, new AmendmentContainerDeleteEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerDeleteEvent event) {
-                final ArrayList<AmendmentContainerDTO> amendmentContainers = new ArrayList<AmendmentContainerDTO>();
-                amendmentContainers.add(event.getAmendmentController().getModel());
-                serviceFactory.getGwtAmendmentService().deleteAmendmentContainers(clientFactory.getClientContext(), amendmentContainers, new AsyncCallback<AmendmentContainerDTO[]>() {
+                final ArrayList<AmendmentContainerDTO> amendmentContainerDTOs = new ArrayList<AmendmentContainerDTO>(Collections2.transform(Arrays.asList(event.getAmendmentControllers()), new Function<AmendmentController, AmendmentContainerDTO>() {
+                    @Override
+                    public AmendmentContainerDTO apply(AmendmentController input) {
+                        return input.getModel();
+                    }
+                }));
+
+                serviceFactory.getGwtAmendmentService().deleteAmendmentContainers(clientFactory.getClientContext(), amendmentContainerDTOs, new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
                     public void onFailure(Throwable caught) {
                         clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Woops, could not delete the amendment(s).", caught));
@@ -143,9 +150,12 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     @Override
                     public void onSuccess(AmendmentContainerDTO[] result) {
                         // delete from the locally downloaded amendments
-                        amendmentControllers.remove(event.getAmendmentController());
+                        amendmentControllers.remove(event.getAmendmentControllers());
                         // successfully deleted on the server, so inform our document controller to remove the amendment
-                        documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(event.getAmendmentController()));
+                        for (int i = 0; i < result.length; i++) {
+                            AmendmentController amendmentController = event.getAmendmentControllers()[i];
+                            documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(amendmentController));
+                        }
                         // show notification about successful delete
                         documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionDeleteSuccessful(result.length)));
                     }

@@ -13,10 +13,10 @@ public class AmendmentContainerDeleteEvent extends GwtEvent<AmendmentContainerDe
 
     public static final Type<AmendmentContainerDeleteEventHandler> TYPE = new Type<AmendmentContainerDeleteEventHandler>();
 
-    private final AmendmentController amendmentController;
+    private final AmendmentController[] amendmentControllers;
 
-    public AmendmentContainerDeleteEvent(AmendmentController amendmentController) {
-        this.amendmentController = amendmentController;
+    public AmendmentContainerDeleteEvent(AmendmentController... amendmentControllers) {
+        this.amendmentControllers = amendmentControllers;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class AmendmentContainerDeleteEvent extends GwtEvent<AmendmentContainerDe
         handler.onEvent(this);
     }
 
-    public AmendmentController getAmendmentController() {
-        return amendmentController;
+    public AmendmentController[] getAmendmentControllers() {
+        return amendmentControllers;
     }
 }

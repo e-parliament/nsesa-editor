@@ -4,24 +4,23 @@
               type='org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderViewCss'/>
     <ui:style field="res">
         .toolbar {
-            vertical-align: bottom;
         }
 
         .selections {
-            padding: 5px;
+            padding-left: 15px;
+            padding-top: 10px;
+            white-space: nowrap;
         }
 
         .actions {
-            padding-right: 5px;
+            white-space: nowrap;
+            padding-left: 25px;
         }
     </ui:style>
     <g:HTMLPanel>
         <g:HorizontalPanel styleName="{res.toolbar}">
-            <g:Label text="Select:"/>
-            <g:HorizontalPanel ui:field="selections" styleName="{res.selections}"/>
-
-            <g:Label text="Actions:"/>
-            <g:HorizontalPanel ui:field="actions" styleName="{res.actions}"/>
+            <g:HTMLPanel ui:field="selections" styleName="{res.selections}"/>
+            <g:HTMLPanel ui:field="actions" styleName="{res.actions}"/>
         </g:HorizontalPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

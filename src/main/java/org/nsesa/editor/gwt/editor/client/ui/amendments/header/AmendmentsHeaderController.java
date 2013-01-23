@@ -7,12 +7,15 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -136,6 +139,37 @@ public class AmendmentsHeaderController {
             }
         });
         view.addAction(withdrawButton);
+
+        final Button deleteButton = new Button(clientFactory.getCoreMessages().amendmentActionDelete());
+        deleteButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentEventBus.fireEvent(new ConfirmationEvent("Please confirm", "Are you sure you want to delete these amendments? This cannot be undone!", "Delete",
+                        new ClickHandler() {
+                            @Override
+                            public void onClick(ClickEvent event) {
+                                documentEventBus.fireEvent(new AmendmentControllerSelectionActionEvent(new AmendmentControllerSelectionActionEvent.Action() {
+                                    @Override
+                                    public void execute(final List<AmendmentController> amendmentControllers) {
+                                        if (!amendmentControllers.isEmpty()) {
+                                            documentEventBus.fireEvent(new AmendmentContainerDeleteEvent(amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()])));
+                                        }
+                                    }
+                                }));
+                            }
+                        },
+                        "Cancel",
+                        new ClickHandler() {
+                            @Override
+                            public void onClick(ClickEvent event) {
+                                // don't do anything special
+                            }
+                        }
+                ));
+
+            }
+        });
+        view.addAction(deleteButton);
     }
 
     private ArrayList<AmendmentContainerDTO> transformToDTOs(final List<AmendmentController> amendmentControllers) {
@@ -149,8 +183,7 @@ public class AmendmentsHeaderController {
 
 
     protected void registerSelections() {
-
-        Anchor selectAll = new Anchor("All");
+        final Anchor selectAll = new Anchor("All");
         selectAll.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -158,7 +191,10 @@ public class AmendmentsHeaderController {
             }
         });
         view.addSelection(selectAll);
-        Anchor selectNone = new Anchor("None");
+
+        view.addSelection(new InlineHTML(", "));
+
+        final Anchor selectNone = new Anchor("None");
         selectNone.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -166,6 +202,54 @@ public class AmendmentsHeaderController {
             }
         });
         view.addSelection(selectNone);
+
+        view.addSelection(new InlineHTML("&nbsp;&nbsp;"));
+
+        final Anchor selectCandidate = new Anchor("Candidate");
+        selectCandidate.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentEventBus.fireEvent(new AmendmentControllerSelectionEvent(new Selection<AmendmentController>() {
+                    @Override
+                    public boolean select(AmendmentController amendmentController) {
+                        return "candidate".equalsIgnoreCase(amendmentController.getModel().getAmendmentContainerStatus());
+                    }
+                }));
+            }
+        });
+        view.addSelection(selectCandidate);
+
+        view.addSelection(new InlineHTML(", "));
+
+        final Anchor selectTabled = new Anchor("Tabled");
+        selectTabled.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentEventBus.fireEvent(new AmendmentControllerSelectionEvent(new Selection<AmendmentController>() {
+                    @Override
+                    public boolean select(AmendmentController amendmentController) {
+                        return "tabled".equalsIgnoreCase(amendmentController.getModel().getAmendmentContainerStatus());
+                    }
+                }));
+            }
+        });
+        view.addSelection(selectTabled);
+
+        view.addSelection(new InlineHTML(", "));
+
+        final Anchor selectWithdrawn = new Anchor("Withdrawn");
+        selectWithdrawn.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                documentEventBus.fireEvent(new AmendmentControllerSelectionEvent(new Selection<AmendmentController>() {
+                    @Override
+                    public boolean select(AmendmentController amendmentController) {
+                        return "withdrawn".equalsIgnoreCase(amendmentController.getModel().getAmendmentContainerStatus());
+                    }
+                }));
+            }
+        });
+        view.addSelection(selectWithdrawn);
     }
 
     private void registerListeners() {
