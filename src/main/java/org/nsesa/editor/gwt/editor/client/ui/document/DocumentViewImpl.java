@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -137,26 +138,17 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     @UiHandler("viewDocument")
     void handleDocumentClick(ClickEvent event) {
-//        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
-//        editorTabbedPlace.setPlaceName("0");
-//        clientFactory.getPlaceController().goTo(editorTabbedPlace);
-        switchToTab(0);
+        documentEventBus.fireEvent(new SwitchTabEvent(0));
     }
 
     @UiHandler("viewAmendments")
     void handleAmendmentsClick(ClickEvent event) {
-//        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
-//        editorTabbedPlace.setPlaceName("1");
-//        clientFactory.getPlaceController().goTo(editorTabbedPlace);
-        switchToTab(1);
+        documentEventBus.fireEvent(new SwitchTabEvent(1));
     }
 
     @UiHandler("viewInfo")
     void handleInfoClick(ClickEvent event) {
-//        EditorTabbedPlace editorTabbedPlace = editorTabbedPlaceProvider.get();
-//        editorTabbedPlace.setPlaceName("2");
-//        clientFactory.getPlaceController().goTo(editorTabbedPlace);
-        switchToTab(2);
+        documentEventBus.fireEvent(new SwitchTabEvent(2));
     }
 
     public void switchToTab(int index) {

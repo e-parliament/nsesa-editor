@@ -363,6 +363,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 removeFromSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
             }
         });
+        documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
+            @Override
+            public void onEvent(SwitchTabEvent event) {
+                view.switchToTab(event.getTabIndex());
+            }
+        });
     }
 
     private void applySelection(final Selection<AmendmentController> selection) {
