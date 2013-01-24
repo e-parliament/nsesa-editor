@@ -1,8 +1,9 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.*;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
@@ -31,6 +32,10 @@ public class CKEditor extends Composite implements RichTextEditor {
     // the CK editor configuration
     private RichTextEditorConfig config;
 
+    //the main panel for ck editor
+    private DockLayoutPanel mainPanel = new DockLayoutPanel(Style.Unit.PX);
+    // the holder for drafting tool
+    private FlowPanel draftHolderPanel = new FlowPanel();
 
     public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config) {
         this.plugin = plugin;
@@ -38,11 +43,14 @@ public class CKEditor extends Composite implements RichTextEditor {
 
         this.id = "ckEditor" + counter++;
         textArea.getElement().setId(this.id);
-        initWidget(textArea);
+        mainPanel.addEast(draftHolderPanel, 1);
+        mainPanel.add(textArea);
+        initWidget(mainPanel);
+        mainPanel.setWidth("100%");
+        mainPanel.setHeight("100%");
         textArea.setWidth("100%");
         textArea.setHeight("100%");
     }
-
     @Override
     public void init() {
         if (!attached) {
@@ -69,8 +77,35 @@ public class CKEditor extends Composite implements RichTextEditor {
         attached = false;
     }
 
+    @Override
+    public void setDraftingTool(IsWidget widget) {
+        draftHolderPanel.add(widget);
+    }
+
+    @Override
+    public void toggleDraftingTool(boolean toggled) {
+        mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+    }
+
+    @Override
+    public void executeCommand(final String command, int delay) {
+        Timer timer = new Timer() {
+            @Override
+            public void run() {
+                executeCommand(editorInstance, command);
+            }
+        };
+        timer.schedule(delay);
+    }
+
     public native void destroy(JavaScriptObject editorInstance) /*-{
         if (editorInstance != null) editorInstance.destroy();
+    }-*/;
+
+    private native void executeCommand(JavaScriptObject editorInstance, String cmdName) /*-{
+        if (editorInstance != null && editorInstance.getCommand(cmdName) != null) {
+            editorInstance.getCommand(cmdName).exec();
+        }
     }-*/;
 
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{

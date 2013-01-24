@@ -18,10 +18,11 @@ public class CKEditorToolbar {
     public static CKEditorToolbar DEFAULT_TOOLBAR = new CKEditorToolbar()
             .add(new ToolbarLine().add(Option.Subscript).add(Option.Superscript).add(Option._))
             .add(new ToolbarLine().add(Option.Undo).add(Option.Redo).add(Option._).add(Option.SpecialChar))
-            .add(new ToolbarLine().add(Option.Find).add(Option.Replace).add(Option._).add(Option.SelectAll).add(Option._).add(Option.Source));
+            .add(new ToolbarLine().add(Option.Find).add(Option.Replace).add(Option._).add(Option.SelectAll).add(Option._).add(Option.Source))
+            .add(new ToolbarLine().add(Option.NsesaToggle).add(Option._));
 
     public static enum Option {
-        Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll,Source, _;
+        NsesaToggle, Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll,Source, _;
     }
 
     public static class ToolbarLine {

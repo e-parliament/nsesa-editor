@@ -35,7 +35,7 @@
                     <g:TabLayoutPanel barHeight="40" barUnit="PX" ui:field="tabLayoutPanel">
                     </g:TabLayoutPanel>
                 </g:west>
-                <g:center size="50">
+                <g:east size="50">
                     <g:TabLayoutPanel barHeight="40" barUnit="PX">
                         <g:tab>
                             <g:header>Amendment</g:header>
@@ -44,21 +44,9 @@
                             </g:HTMLPanel>
                         </g:tab>
                     </g:TabLayoutPanel>
-                </g:center>
-                <g:east size="10">
-                    <g:TabLayoutPanel barHeight="40" barUnit="PX">
-                        <g:tab>
-                            <g:header>Insert</g:header>
-                            <g:ScrollPanel>
-                                <g:HTMLPanel ui:field="draftingPanel">
-                                </g:HTMLPanel>
-                            </g:ScrollPanel>
-                        </g:tab>
-                    </g:TabLayoutPanel>
                 </g:east>
             </g:DockLayoutPanel>
         </g:center>
-
         <g:south size="40">
             <g:HTMLPanel styleName="{res.footer}">
                 <g:Button ui:field="saveButton" text="Save"/>

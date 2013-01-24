@@ -60,7 +60,8 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
     }
 
     private native void insertDrafting(JavaScriptObject editor, Element el) /*-{
-        var toInsert = this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, editor.getSelection().getSelectedText());
+        var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
+        var toInsert = this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
         editor.insertHtml(toInsert);
     }-*/;
 

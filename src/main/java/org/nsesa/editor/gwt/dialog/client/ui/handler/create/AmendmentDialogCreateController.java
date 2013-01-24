@@ -7,6 +7,9 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
@@ -32,17 +35,21 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     protected final AmendmentDialogCreateView view;
 
     protected final Locator locator;
+    final private DraftingController draftingController;
     protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
     protected final OverlayFactory overlayFactory;
 
     @Inject
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
                                            final Locator locator, final OverlayFactory overlayFactory,
+                                           final DraftingController draftingController,
                                            final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
+        this.draftingController = draftingController;
+        view.getRichTextEditor().setDraftingTool(draftingController.getView());
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
         registerListeners();
     }
@@ -63,6 +70,13 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
                 handleClose();
             }
         });
+        clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+            @Override
+            public void onEvent(DraftingToggleEvent event) {
+                view.getRichTextEditor().toggleDraftingTool(event.isShown());
+            }
+        });
+
     }
 
     public void handleSave() {

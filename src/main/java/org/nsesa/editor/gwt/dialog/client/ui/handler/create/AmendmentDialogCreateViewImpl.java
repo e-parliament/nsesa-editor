@@ -57,6 +57,11 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public RichTextEditor getRichTextEditor() {
+        return newText;
+    }
+
+    @Override
     public String getAmendmentContent() {
         return newText.getHTML();
     }
@@ -64,6 +69,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     @Override
     protected void onAttach() {
         super.onAttach();
+        newText.toggleDraftingTool(false);
         selectTab(0);
     }
 

@@ -6,6 +6,8 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
@@ -57,7 +59,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
             view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
         }
-        view.addDraftingView(draftingController.getView());
+        view.getRichTextEditor().setDraftingTool(draftingController.getView());
         registerListeners();
     }
 
@@ -73,6 +75,13 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
             @Override
             public void onClick(ClickEvent event) {
                 handleClose();
+            }
+        });
+
+        clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+            @Override
+            public void onEvent(DraftingToggleEvent event) {
+                view.getRichTextEditor().toggleDraftingTool(event.isShown());
             }
         });
     }

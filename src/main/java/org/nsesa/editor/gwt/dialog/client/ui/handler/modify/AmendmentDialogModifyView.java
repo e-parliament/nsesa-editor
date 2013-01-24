@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
  * Default 'simple' view for the creation and editing of amendments on simple widgets.
@@ -22,7 +23,7 @@ public interface AmendmentDialogModifyView extends IsWidget {
 
     void addView(IsWidget view, String title);
 
-    void addDraftingView(IsWidget view);
+    RichTextEditor getRichTextEditor();
 
     HasClickHandlers getSaveButton();
 

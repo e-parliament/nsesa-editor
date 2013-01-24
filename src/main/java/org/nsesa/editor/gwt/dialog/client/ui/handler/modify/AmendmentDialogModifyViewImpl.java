@@ -34,9 +34,6 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     final RichTextEditor amendmentText;
 
     @UiField
-    HTMLPanel draftingPanel;
-
-    @UiField
     TabLayoutPanel tabLayoutPanel;
 
 
@@ -44,7 +41,6 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     public AmendmentDialogModifyViewImpl(@Named("amendmentText") final RichTextEditor amendmentText) {
 
         this.amendmentText = amendmentText;
-
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         dockPanel.setHeight("100%");
@@ -55,6 +51,10 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     @Override
     protected void onAttach() {
         super.onAttach();
+        amendmentText.toggleDraftingTool(true);
+        //I didnt find any other way to set up the drafting button on initialization unless forcing to execute
+        // a command
+        amendmentText.executeCommand("NsesaToggle", 500);
         selectTab(0);
     }
 
@@ -83,8 +83,8 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     }
 
     @Override
-    public void addDraftingView(IsWidget view) {
-        draftingPanel.add(view);
+    public RichTextEditor getRichTextEditor() {
+        return amendmentText;
     }
 
     @Override

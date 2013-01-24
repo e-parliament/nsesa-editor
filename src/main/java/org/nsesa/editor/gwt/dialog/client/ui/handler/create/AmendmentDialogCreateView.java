@@ -3,6 +3,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
  * View for the creation and editing of amendment bundles.
@@ -21,4 +22,6 @@ public interface AmendmentDialogCreateView extends IsWidget {
     HasClickHandlers getCancelLink();
 
     void setTitle(String title);
+
+    RichTextEditor getRichTextEditor();
 }

@@ -49,11 +49,6 @@
                         <g:center>
                             <rte:RichTextEditor ui:field="newText"/>
                         </g:center>
-                        <g:east size="20">
-                            <g:HTMLPanel>
-                                <h1>Types</h1>
-                            </g:HTMLPanel>
-                        </g:east>
                     </g:DockLayoutPanel>
 
                 </g:tab>
