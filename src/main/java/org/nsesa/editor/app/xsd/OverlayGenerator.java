@@ -1,25 +1,15 @@
 package org.nsesa.editor.app.xsd;
 
-import com.sun.xml.xsom.*;
+import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.parser.XSOMParser;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.xml.DOMConfigurator;
-import org.nsesa.editor.app.xsd.model.*;
+import org.nsesa.editor.app.xsd.model.OverlayAnnotationParserFactory;
+import org.nsesa.editor.app.xsd.model.OverlayClassGenerator;
+import org.nsesa.editor.app.xsd.model.OverlayClassGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.*;
 
 /**
  * An abstract class to to generate different representations based on XSD schema provided
@@ -41,6 +31,7 @@ public abstract class OverlayGenerator {
     public OverlayGenerator() {
         parser = new XSOMParser();
         parser.setErrorHandler(new LoggingErrorHandler());
+        parser.setAnnotationParser(new OverlayAnnotationParserFactory());
         overlayClassGenerator = new OverlayClassGeneratorImpl();
     }
 

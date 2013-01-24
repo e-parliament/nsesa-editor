@@ -1,11 +1,7 @@
 package org.nsesa.editor.app.xsd.model;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
 
 /**
  * Class description
@@ -20,6 +16,7 @@ public class OverlayNode {
     protected String nameSpace;
     protected String className;
     protected OverlayType overlayType;
+    protected String comments;
 
     public OverlayNode() {
     }
@@ -30,7 +27,7 @@ public class OverlayNode {
         this.overlayType = overlayType;
     }
 
-    // a simple way to clone an object by invoking the contructor
+    // a simple way to clone an object by invoking the constructor
     public OverlayNode(OverlayNode toClone) {
         this(toClone.getName(), toClone.getNameSpace(), toClone.getOverlayType());
         this.className = toClone.getClassName();
@@ -210,4 +207,13 @@ public class OverlayNode {
         result = 31 * result + (overlayType != null ? overlayType.hashCode() : 0);
         return result;
     }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
 }
