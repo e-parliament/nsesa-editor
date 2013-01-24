@@ -384,13 +384,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     private boolean addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
         final boolean added = selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
-        if (added) documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
         return added;
     }
 
     private boolean removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
         final boolean removed = selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
-        if (removed) documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
         return removed;
     }
 
