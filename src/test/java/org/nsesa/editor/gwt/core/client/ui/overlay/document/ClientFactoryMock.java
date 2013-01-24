@@ -208,6 +208,46 @@ public class ClientFactoryMock implements ClientFactory {
         public String amendmentActionDeleteSuccessful(@PluralCount int arg) {
             return "amendmentActionDeleteSuccessful";
         }
+
+        @Override
+        public String amendmentStatusCandidate() {
+            return "amendmentStatusCandidate";
+        }
+
+        @Override
+        public String amendmentStatusTabled() {
+            return "amendmentStatusTabled";
+        }
+
+        @Override
+        public String amendmentStatusWithdrawn() {
+            return "amendmentStatusWithdrawn";
+        }
+
+        @Override
+        public String amendmentStatusDeleted() {
+            return "amendmentStatusDeleted";
+        }
+
+        @Override
+        public String amendmentStatusRegistered() {
+            return "amendmentStatusRegistered";
+        }
+
+        @Override
+        public String amendmentStatusReturned() {
+            return "amendmentStatusReturned";
+        }
+
+        @Override
+        public String confirmationAmendmentsDeleteMessage() {
+            return "confirmationAmendmentsDeleteMessage";
+        }
+
+        @Override
+        public String amendmentActionCancel() {
+            return "amendmentActionCancel";
+        }
     };
 
     @Override
