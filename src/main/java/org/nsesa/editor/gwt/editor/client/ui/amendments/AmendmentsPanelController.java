@@ -20,7 +20,10 @@ import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -117,13 +120,6 @@ public class AmendmentsPanelController {
         this.documentController = documentController;
     }
 
-    private void applySelection(final Selection<AmendmentController> selection) {
-        final List<String> ids = new ArrayList<String>();
-        final List<AmendmentController> selected = new ArrayList<AmendmentController>();
-
-        view.selectAmendmentControllers(ids);
-    }
-
     private void refreshAmendments() {
         if (currentFilter != null) {
             currentFilter.setStart(0);
@@ -145,6 +141,13 @@ public class AmendmentsPanelController {
         view.refreshAmendmentControllers(amendments);
         // raise a filter response
         documentEventBus.fireEvent(new FilterResponseEvent(response.getTotalSize(), currentFilter));
+
+        view.selectAmendmentControllers(new ArrayList<String>(Collections2.transform(documentController.getSelectedAmendmentControllers(), new Function<AmendmentController, String>() {
+            @Override
+            public String apply(AmendmentController input) {
+                return input.getModel().getId();
+            }
+        })));
     }
 }
 

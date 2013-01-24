@@ -1,6 +1,8 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -10,6 +12,8 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerAddToSelectionEvent;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerRemoveFromSelectionEvent;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
@@ -86,11 +90,21 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
 
     @Override
-    public void setAmendmentControllers(Map<String, AmendmentController> amendments) {
-        for (Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
+    public void setAmendmentControllers(final Map<String, AmendmentController> amendments) {
+        for (final Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
             HorizontalPanel panel = new HorizontalPanel();
             //create a check box
             CheckBox checkBox = new CheckBox();
+            checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    if (event.getValue()) {
+                        documentEventBus.fireEvent(new AmendmentControllerAddToSelectionEvent(entry.getValue()));
+                    } else {
+                        documentEventBus.fireEvent(new AmendmentControllerRemoveFromSelectionEvent(entry.getValue()));
+                    }
+                }
+            });
             checkBoxes.put(entry.getKey(), checkBox);
             panel.add(checkBox);
             panel.add(entry.getValue().getExtendedView());

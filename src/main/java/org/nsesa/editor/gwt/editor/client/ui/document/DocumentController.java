@@ -45,10 +45,7 @@ import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorController;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -349,16 +346,40 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 applySelection(event.getSelection());
             }
         });
+
+        documentEventBus.addHandler(AmendmentControllerAddToSelectionEvent.TYPE, new AmendmentControllerAddToSelectionEventHandler() {
+            @Override
+            public void onEvent(AmendmentControllerAddToSelectionEvent event) {
+                addToSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
+                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentControllerRemoveFromSelectionEvent.TYPE, new AmendmentControllerRemoveFromSelectionEventHandler() {
+            @Override
+            public void onEvent(AmendmentControllerRemoveFromSelectionEvent event) {
+                removeFromSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
+                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+            }
+        });
     }
 
     private void applySelection(final Selection<AmendmentController> selection) {
         selectedAmendmentControllers.clear();
         for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
             if (selection.select(amendmentController)) {
-                selectedAmendmentControllers.add(amendmentController);
+                addToSelectedAmendmentControllers(amendmentController);
             }
         }
         documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+    }
+
+    private boolean addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
+        return selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
+    }
+
+    private boolean removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
+        return selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
     }
 
     public AmendableWidget getTopVisibleAmenableWidget() {
