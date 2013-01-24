@@ -7,6 +7,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -394,6 +395,21 @@ public class YATinyEditor extends Composite implements RichTextEditor {
 
     @Override
     public void destroy() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void setDraftingTool(IsWidget widget) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void toggleDraftingTool(boolean toggled) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void executeCommand(String command, int delay) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
