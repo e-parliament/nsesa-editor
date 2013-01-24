@@ -29,6 +29,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUILis
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
@@ -345,17 +346,19 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
             @Override
             public void onEvent(AmendmentControllerSelectionEvent event) {
-
-                selectedAmendmentControllers.clear();
-
-                for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
-                    if (event.getSelection().select(amendmentController)) {
-                        selectedAmendmentControllers.add(amendmentController);
-                    }
-                }
-                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+                applySelection(event.getSelection());
             }
         });
+    }
+
+    private void applySelection(final Selection<AmendmentController> selection) {
+        selectedAmendmentControllers.clear();
+        for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
+            if (selection.select(amendmentController)) {
+                selectedAmendmentControllers.add(amendmentController);
+            }
+        }
+        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
     }
 
     public AmendableWidget getTopVisibleAmenableWidget() {
