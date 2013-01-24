@@ -32,6 +32,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
+import org.nsesa.editor.gwt.editor.client.event.amendments.*;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
@@ -105,6 +106,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     private List<AmendableWidget> amendableWidgets;
 
     private AmendableWidget activeAmendableWidget;
+
+    private List<AmendmentController> selectedAmendmentControllers = new ArrayList<AmendmentController>();
 
     private final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
 
@@ -254,7 +257,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 final AmendmentController amendmentController = event.getAmendmentController();
+                // remove from the selection, if it existed
+                selectedAmendmentControllers.remove(amendmentController);
+
                 if (amendmentController.getAmendedAmendableWidget() != null) {
+                    if (amendmentController.getAmendedAmendableWidget() == activeAmendableWidget) {
+                        activeAmendableWidget = null;
+                    }
                     amendmentController.getAmendedAmendableWidget().removeAmendmentController(amendmentController);
                     renumberAmendments();
                 }
@@ -323,6 +332,28 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                     }
                 }
                 loadDocumentContent();
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentControllerSelectionActionEvent.TYPE, new AmendmentControllerSelectionActionEventHandler() {
+            @Override
+            public void onEvent(AmendmentControllerSelectionActionEvent event) {
+                event.getAction().execute(selectedAmendmentControllers);
+            }
+        });
+
+        documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
+            @Override
+            public void onEvent(AmendmentControllerSelectionEvent event) {
+
+                selectedAmendmentControllers.clear();
+
+                for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
+                    if (event.getSelection().select(amendmentController)) {
+                        selectedAmendmentControllers.add(amendmentController);
+                    }
+                }
+                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
             }
         });
     }
@@ -621,6 +652,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public OverlayFactory getOverlayFactory() {
         return overlayFactory;
+    }
+
+    public List<AmendmentController> getSelectedAmendmentControllers() {
+        return selectedAmendmentControllers;
     }
 
     @Override

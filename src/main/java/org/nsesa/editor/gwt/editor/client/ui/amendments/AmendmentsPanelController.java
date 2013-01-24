@@ -1,6 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.amendments;
 
-import com.google.common.base.Predicate;
+import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -10,7 +10,8 @@ import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.*;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectedEvent;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectedEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
@@ -96,24 +97,16 @@ public class AmendmentsPanelController {
                 filterAmendments();
             }
         });
-        documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
+        documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
             @Override
-            public void onEvent(AmendmentControllerSelectionEvent event) {
-                applySelection(event.getSelection());
-            }
-        });
-
-        documentEventBus.addHandler(AmendmentControllerSelectionActionEvent.TYPE, new AmendmentControllerSelectionActionEventHandler() {
-            @Override
-            public void onEvent(AmendmentControllerSelectionActionEvent event) {
-                final List<String> selectedVisibleAmendmentControllers = view.getSelectedVisibleAmendmentContainerIds();
-                final Collection<AmendmentController> selected = Collections2.filter(documentController.getAmendmentManager().getAmendmentControllers(), new Predicate<AmendmentController>() {
+            public void onEvent(AmendmentControllerSelectedEvent event) {
+                final Collection<String> ids = Collections2.transform(event.getSelected(), new Function<AmendmentController, String>() {
                     @Override
-                    public boolean apply(AmendmentController input) {
-                        return selectedVisibleAmendmentControllers.contains(input.getModel().getId());
+                    public String apply(final AmendmentController input) {
+                        return input.getModel().getId();
                     }
                 });
-                event.getAction().execute(new ArrayList<AmendmentController>(selected));
+                view.selectAmendmentControllers(new ArrayList<String>(ids));
             }
         });
 
@@ -127,13 +120,7 @@ public class AmendmentsPanelController {
     private void applySelection(final Selection<AmendmentController> selection) {
         final List<String> ids = new ArrayList<String>();
         final List<AmendmentController> selected = new ArrayList<AmendmentController>();
-        for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-            if (selection.select(amendmentController)) {
-                ids.add(amendmentController.getModel().getId());
-                selected.add(amendmentController);
-            }
-        }
-        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selected));
+
         view.selectAmendmentControllers(ids);
     }
 
