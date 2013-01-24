@@ -207,7 +207,7 @@ public class AmendmentsHeaderController {
         });
         view.addSelection(selectNone);
 
-        view.addSelection(new InlineHTML("&nbsp;&nbsp;"));
+        view.addSelection(new InlineHTML("&nbsp;-&nbsp;"));
 
         final Anchor selectCandidate = new Anchor(clientFactory.getCoreMessages().amendmentStatusCandidate());
         selectCandidate.addClickHandler(new ClickHandler() {
