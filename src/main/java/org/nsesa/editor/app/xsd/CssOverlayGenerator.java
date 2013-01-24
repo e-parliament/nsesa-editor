@@ -68,16 +68,16 @@ public class CssOverlayGenerator extends OverlayGenerator {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length != 5) {
-            System.out.println("Usage java org.nsesa.editor.app.xsd.CssOverlayGenerator <<file_name>> <xsd_schema> <css_template_file_name> <predefined_css_file_name> print_empty_styles(true|false)");
+        if (args.length != 4) {
+            System.out.println("Usage java org.nsesa.editor.app.xsd.CssOverlayGenerator <<file_name>> <xsd_schema> <css_template_file_name> print_empty_styles(true|false)");
             System.exit(1);
         }
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try {
             DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
             Properties props = new Properties();
-            props.load(classLoader.getResourceAsStream(args[3]));
-            CssOverlayGenerator generator = new CssOverlayGenerator(props, args[2], args[0], Boolean.valueOf(args[4]));
+            props.load(classLoader.getResourceAsStream("overlayCss.properties"));
+            CssOverlayGenerator generator = new CssOverlayGenerator(props, args[2], args[0], Boolean.valueOf(args[3]));
             final String xsd = args[1];
             generator.parse(xsd);
             generator.analyze();
