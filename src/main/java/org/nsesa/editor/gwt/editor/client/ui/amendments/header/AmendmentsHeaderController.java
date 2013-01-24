@@ -144,7 +144,8 @@ public class AmendmentsHeaderController {
         deleteButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                documentEventBus.fireEvent(new ConfirmationEvent("Please confirm", "Are you sure you want to delete these amendments? This cannot be undone!", "Delete",
+                documentEventBus.fireEvent(new ConfirmationEvent(
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(), clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(), clientFactory.getCoreMessages().amendmentActionDelete(),
                         new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
@@ -158,7 +159,7 @@ public class AmendmentsHeaderController {
                                 }));
                             }
                         },
-                        "Cancel",
+                        clientFactory.getCoreMessages().amendmentActionCancel(),
                         new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
@@ -205,7 +206,7 @@ public class AmendmentsHeaderController {
 
         view.addSelection(new InlineHTML("&nbsp;&nbsp;"));
 
-        final Anchor selectCandidate = new Anchor("Candidate");
+        final Anchor selectCandidate = new Anchor(clientFactory.getCoreMessages().amendmentStatusCandidate());
         selectCandidate.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -221,7 +222,7 @@ public class AmendmentsHeaderController {
 
         view.addSelection(new InlineHTML(", "));
 
-        final Anchor selectTabled = new Anchor("Tabled");
+        final Anchor selectTabled = new Anchor(clientFactory.getCoreMessages().amendmentStatusTabled());
         selectTabled.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -237,7 +238,7 @@ public class AmendmentsHeaderController {
 
         view.addSelection(new InlineHTML(", "));
 
-        final Anchor selectWithdrawn = new Anchor("Withdrawn");
+        final Anchor selectWithdrawn = new Anchor(clientFactory.getCoreMessages().amendmentStatusWithdrawn());
         selectWithdrawn.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

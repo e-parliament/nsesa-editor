@@ -119,4 +119,28 @@ public interface CoreMessages extends Messages {
 
     @Key("amendment.action.delete.successful")
     String amendmentActionDeleteSuccessful(@PluralCount int arg);
+
+    @Key("amendment.status.candidate")
+    String amendmentStatusCandidate();
+
+    @Key("amendment.status.tabled")
+    String amendmentStatusTabled();
+
+    @Key("amendment.status.withdrawn")
+    String amendmentStatusWithdrawn();
+
+    @Key("amendment.status.deleted")
+    String amendmentStatusDeleted();
+
+    @Key("amendment.status.registered")
+    String amendmentStatusRegistered();
+
+    @Key("amendment.status.returned")
+    String amendmentStatusReturned();
+
+    @Key("confirmation.amendments.delete.message")
+    String confirmationAmendmentsDeleteMessage();
+
+    @Key("amendment.action.cancel")
+    String amendmentActionCancel();
 }
