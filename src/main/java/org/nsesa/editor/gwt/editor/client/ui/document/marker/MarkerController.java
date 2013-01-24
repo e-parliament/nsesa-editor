@@ -9,6 +9,8 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
+import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -125,6 +127,13 @@ public class MarkerController {
         documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
+                drawAmendmentControllers();
+            }
+        });
+
+        documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
+            @Override
+            public void onEvent(SwitchTabEvent event) {
                 drawAmendmentControllers();
             }
         });
