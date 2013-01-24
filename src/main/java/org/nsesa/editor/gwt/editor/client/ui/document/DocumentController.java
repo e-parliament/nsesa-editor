@@ -1,5 +1,7 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -256,7 +258,8 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 final AmendmentController amendmentController = event.getAmendmentController();
                 // remove from the selection, if it existed
-                selectedAmendmentControllers.remove(amendmentController);
+                removeFromSelectedAmendmentControllers(amendmentController);
+                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
 
                 if (amendmentController.getAmendedAmendableWidget() != null) {
                     if (amendmentController.getAmendedAmendableWidget() == activeAmendableWidget) {
@@ -351,7 +354,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(AmendmentControllerAddToSelectionEvent event) {
                 addToSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
-                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
             }
         });
 
@@ -359,27 +361,31 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(AmendmentControllerRemoveFromSelectionEvent event) {
                 removeFromSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
-                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
             }
         });
     }
 
     private void applySelection(final Selection<AmendmentController> selection) {
         selectedAmendmentControllers.clear();
-        for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
-            if (selection.select(amendmentController)) {
-                addToSelectedAmendmentControllers(amendmentController);
+        List<AmendmentController> toAdd = new ArrayList<AmendmentController>(Collections2.filter(amendmentManager.getAmendmentControllers(), new Predicate<AmendmentController>() {
+            @Override
+            public boolean apply(AmendmentController input) {
+                return selection.select(input);
             }
-        }
-        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+        }));
+        addToSelectedAmendmentControllers(toAdd.toArray(new AmendmentController[toAdd.size()]));
     }
 
     private boolean addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        return selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
+        final boolean added = selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
+        if (added) documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+        return added;
     }
 
     private boolean removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        return selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
+        final boolean removed = selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
+        if (removed) documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
+        return removed;
     }
 
     public AmendableWidget getTopVisibleAmenableWidget() {
