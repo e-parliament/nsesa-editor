@@ -51,7 +51,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     // parent document controller
     private DocumentController documentController;
 
-    private final ArrayList<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private final List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
 
     private final AmendmentInjectionPointFinder injectionPointFinder;
 
