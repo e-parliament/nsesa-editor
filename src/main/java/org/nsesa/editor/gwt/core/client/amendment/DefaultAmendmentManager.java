@@ -150,7 +150,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     @Override
                     public void onSuccess(AmendmentContainerDTO[] result) {
                         // delete from the locally downloaded amendments
-                        amendmentControllers.remove(event.getAmendmentControllers());
+                        amendmentControllers.removeAll(Arrays.asList(event.getAmendmentControllers()));
                         // successfully deleted on the server, so inform our document controller to remove the amendment
                         for (int i = 0; i < result.length; i++) {
                             AmendmentController amendmentController = event.getAmendmentControllers()[i];
