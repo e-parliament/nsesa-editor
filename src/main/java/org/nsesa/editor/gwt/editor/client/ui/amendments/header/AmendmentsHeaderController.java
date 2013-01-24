@@ -21,6 +21,8 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectedEvent;
+import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectedEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionActionEvent;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
@@ -45,6 +47,7 @@ public class AmendmentsHeaderController {
     private DocumentEventBus documentEventBus;
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
+    private final InlineHTML selectedAmount = new InlineHTML();
 
     @Inject
     public AmendmentsHeaderController(final AmendmentsHeaderView view,
@@ -251,9 +254,15 @@ public class AmendmentsHeaderController {
             }
         });
         view.addSelection(selectWithdrawn);
+        view.addSelection(selectedAmount);
     }
 
     private void registerListeners() {
-
+        documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
+            @Override
+            public void onEvent(AmendmentControllerSelectedEvent event) {
+                selectedAmount.setHTML("&nbsp;&nbsp;" + event.getSelected().size() + " amendments selected.");
+            }
+        });
     }
 }

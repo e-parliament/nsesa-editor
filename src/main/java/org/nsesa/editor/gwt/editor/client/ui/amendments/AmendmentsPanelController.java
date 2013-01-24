@@ -10,10 +10,7 @@ import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionActionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionActionEventHandler;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionEvent;
-import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerSelectionEventHandler;
+import org.nsesa.editor.gwt.editor.client.event.amendments.*;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
@@ -129,11 +126,14 @@ public class AmendmentsPanelController {
 
     private void applySelection(final Selection<AmendmentController> selection) {
         final List<String> ids = new ArrayList<String>();
+        final List<AmendmentController> selected = new ArrayList<AmendmentController>();
         for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
             if (selection.select(amendmentController)) {
                 ids.add(amendmentController.getModel().getId());
+                selected.add(amendmentController);
             }
         }
+        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selected));
         view.selectAmendmentControllers(ids);
     }
 
