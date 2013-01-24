@@ -382,16 +382,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         addToSelectedAmendmentControllers(toAdd.toArray(new AmendmentController[toAdd.size()]));
     }
 
-    private boolean addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        final boolean added = selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
+    private void addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
+        selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
         documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
-        return added;
     }
 
-    private boolean removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        final boolean removed = selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
+    private void removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
+        selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
         documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
-        return removed;
     }
 
     public AmendableWidget getTopVisibleAmenableWidget() {
