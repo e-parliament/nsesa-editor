@@ -3,11 +3,34 @@
     <ui:style src="DraftingViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.drafting.DraftingViewCss'/>
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.drafting.Resources'/>
+
     <ui:style field="res">
+
         .draftingPanel {
-            min-width: 200px;
+            width: 100%;
+            height: 100%;
+        }
+        .scrollPanel {
+            width: 90%;
+            height: 95%;
+        }
+        .stackPanel {
+            width: 100%;
+            height: 100%;
         }
     </ui:style>
-    <g:VerticalPanel ui:field="mainPanel" styleName="{res.draftingPanel}">
-    </g:VerticalPanel>
+        <g:StackLayoutPanel unit="PX" addStyleNames="{res.stackPanel}">
+            <g:stack>
+                <g:customHeader size="25"><g:Label ui:field="draftTitle"/></g:customHeader>
+                <g:ScrollPanel styleName="{res.scrollPanel}" >
+                    <g:VerticalPanel ui:field="mainPanel" addStyleNames="{res.draftingPanel}">
+                    </g:VerticalPanel>
+                </g:ScrollPanel>
+            </g:stack>
+            <g:stack>
+                <g:customHeader size="25"><g:Label text="[...]"/></g:customHeader>
+                <g:ScrollPanel styleName="{res.scrollPanel}" >
+                </g:ScrollPanel>
+            </g:stack>
+        </g:StackLayoutPanel>
 </ui:UiBinder>

@@ -3,10 +3,11 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHandler;
@@ -51,7 +52,7 @@ public class DraftingController {
     }
 
     public void setAmendableWidget(final AmendableWidget amendableWidget) {
-        refreshView(amendableWidget, null);
+        refreshView(amendableWidget);
     }
 
     private void registerListeners() {
@@ -59,19 +60,28 @@ public class DraftingController {
             @Override
             public void onEvent(SelectionChangedEvent event) {
                 if (event.isMoreTagsSelected()) {
-                    draftingView.clearAll();
+                    //draftingView.clearAll();
                 } else {
-                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
+                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()));
                 }
             }
         });
+        eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerCreateEvent event) {
+                refreshView(event.getAmendableWidget());
+            }
+        });
+
     }
 
-    public void refreshView(AmendableWidget amendableWidget, String text) {
+    public void refreshView(AmendableWidget amendableWidget) {
         draftingView.clearAll();
         LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
-        for (final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
+        draftingView.setDraftTitle(amendableWidget.getType());
+        for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
             Anchor anchor = new Anchor(child.getKey());
+            anchor.getElement().addClassName("drafting-" + child.getKey());
             anchor.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -84,7 +94,7 @@ public class DraftingController {
         }
     }
 
-    public IsWidget getView() {
+    public DraftingView getView() {
         return draftingView;
     }
 }

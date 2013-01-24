@@ -13,4 +13,5 @@ import com.google.inject.ImplementedBy;
 public interface DraftingView extends IsWidget {
     void clearAll();
     void addWidget(IsWidget widget);
+    void setDraftTitle(String title);
 }
