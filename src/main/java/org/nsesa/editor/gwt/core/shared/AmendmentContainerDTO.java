@@ -22,7 +22,7 @@ public class AmendmentContainerDTO implements IsSerializable {
     private AmendmentAction amendmentAction;
     private String amendmentContainerStatus = "CANDIDATE";
 
-    private String xmlContent;
+    private String body;
 
     private transient AmendableWidget root;
 
@@ -64,12 +64,12 @@ public class AmendmentContainerDTO implements IsSerializable {
         this.targetReferences = targetReferences;
     }
 
-    public String getXmlContent() {
-        return xmlContent;
+    public String getBody() {
+        return body;
     }
 
-    public void setXmlContent(String xmlContent) {
-        this.xmlContent = xmlContent;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public AmendableWidget getRoot() {

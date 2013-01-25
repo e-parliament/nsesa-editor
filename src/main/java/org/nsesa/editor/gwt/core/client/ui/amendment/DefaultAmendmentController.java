@@ -160,7 +160,7 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
-        setBody(amendment.getXmlContent());
+        setBody(amendment.getBody());
         setStatus(amendment.getAmendmentContainerStatus());
     }
 

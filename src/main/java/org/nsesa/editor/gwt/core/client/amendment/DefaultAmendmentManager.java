@@ -80,7 +80,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
                 // serialize amendable widget into XML content
                 for (final AmendmentContainerDTO amendment : event.getAmendments()) {
-                    amendment.setXmlContent(transformer.transform(amendment.getRoot()));
+                    amendment.setBody(transformer.transform(amendment.getRoot()));
                 }
                 serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(event.getAmendments())), new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
