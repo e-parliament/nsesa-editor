@@ -88,6 +88,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
                 amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentAmendableWidget()),
                 dialogContext.getAmendableWidget().getType(),
                 dialogContext.getIndex()));
+        dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
 
 

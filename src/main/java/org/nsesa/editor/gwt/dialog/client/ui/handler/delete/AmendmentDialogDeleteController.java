@@ -72,6 +72,7 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
     }
 
     public void handleSave() {
+        dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
         dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(dialogContext.getAmendableWidget().getId()));
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
