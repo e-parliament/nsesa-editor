@@ -18,7 +18,6 @@ import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarView;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelView;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.amendments.header.AmendmentsHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentView;
@@ -53,7 +52,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     private final DocumentEventBus documentEventBus;
     private final ClientFactory clientFactory;
-    private AmendmentsHeaderController amendmentsHeaderController;
+    private final org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources resources;
 
     @UiField
     HorizontalPanel horizontalPanel;
@@ -105,7 +104,8 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
                             final MarkerController markerController,
                             final DocumentHeaderController documentHeaderController,
                             final DeadlineController deadlineController,
-                            final ActionBarController actionBarController
+                            final ActionBarController actionBarController,
+                            final org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources resources
     ) {
 
         this.documentEventBus = documentEventBus;
@@ -118,6 +118,7 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
         this.deadlineView = deadlineController.getView();
         this.actionBarView = actionBarController.getView();
         this.actionBarView.asWidget().setVisible(false);
+        this.resources = resources;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
@@ -152,6 +153,24 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     }
 
     public void switchToTab(int index) {
+        // reset tab images
+        viewDocument.setResource(resources.viewDocument());
+        viewAmendments.setResource(resources.viewAmendments());
+        viewInfo.setResource(resources.viewInfo());
+
+        switch (index) {
+            case 0:
+                viewDocument.setResource(resources.viewDocumentSelected());
+                break;
+            case 1:
+                viewAmendments.setResource(resources.viewAmendmentsSelected());
+                break;
+            case 2:
+                viewInfo.setResource(resources.viewInfoSelected());
+                break;
+            default:
+                break;
+        }
         tabPanel.selectTab(index);
     }
 }
