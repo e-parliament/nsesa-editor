@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * Date: 20/11/12
  * Time: 11:02
  */
-public class DefaultTransformer implements Transformer<String> {
+public class DefaultTransformer implements Transformer {
 
     public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
     public static final String DEFAULT_NAMESPACE = "";

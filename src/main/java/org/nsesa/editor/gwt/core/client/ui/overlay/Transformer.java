@@ -10,12 +10,12 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * Time: 10:59
  */
 @ImplementedBy(DefaultTransformer.class)
-public interface Transformer<T> {
+public interface Transformer {
     /**
      * Transforms an amendable widget into XML representation
      *
      * @param widget The amendable widget that will be XML-ized.
      * @return XML representation as String
      */
-    abstract T transform(AmendableWidget widget);
+    String transform(AmendableWidget widget);
 }
