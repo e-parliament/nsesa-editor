@@ -11,7 +11,7 @@ import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.XMLTransformer;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
@@ -44,7 +44,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     private final ClientFactory clientFactory;
 
-    private final XMLTransformer xmlTransformer;
+    private final Transformer transformer;
 
     private final DocumentEventBus documentEventBus;
 
@@ -60,13 +60,13 @@ public class DefaultAmendmentManager implements AmendmentManager {
     @Inject
     public DefaultAmendmentManager(final ClientFactory clientFactory,
                                    final ServiceFactory serviceFactory,
-                                   final XMLTransformer xmlTransformer,
+                                   final Transformer transformer,
                                    final DocumentEventBus documentEventBus,
                                    final AmendmentInjectionPointFinder injectionPointFinder,
                                    final AmendmentInjectionPointProvider injectionPointProvider) {
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-        this.xmlTransformer = xmlTransformer;
+        this.transformer = transformer;
         this.documentEventBus = documentEventBus;
         this.injectionPointFinder = injectionPointFinder;
         this.injectionPointProvider = injectionPointProvider;
@@ -80,7 +80,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
                 // serialize amendable widget into XML content
                 for (final AmendmentContainerDTO amendment : event.getAmendments()) {
-                    amendment.setXmlContent(xmlTransformer.toXML(amendment.getRoot()));
+                    amendment.setXmlContent(transformer.transform(amendment.getRoot()));
                 }
                 serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(event.getAmendments())), new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
