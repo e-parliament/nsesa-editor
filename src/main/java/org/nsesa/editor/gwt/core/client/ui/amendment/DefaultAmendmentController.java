@@ -175,15 +175,17 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setDocumentController(DocumentController documentController) {
+    public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
-        this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
-        this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
-            @Override
-            public void onEvent(DocumentScrollEvent event) {
-                amendmentActionPanelController.hide();
-            }
-        });
+        if (documentController != null) {
+            this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
+            this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+                @Override
+                public void onEvent(DocumentScrollEvent event) {
+                    amendmentActionPanelController.hide();
+                }
+            });
+        }
     }
 
     @Override
