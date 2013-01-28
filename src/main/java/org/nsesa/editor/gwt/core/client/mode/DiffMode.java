@@ -39,7 +39,7 @@ public class DiffMode implements DocumentMode<ActiveState> {
     public boolean apply(ActiveState state) {
         // TODO: actually change the diffing for the amendments ...
         if (state.isActive()) {
-            documentController.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            documentController.getSourceFileController().walk(new AmendableWidgetWalker.AmendableVisitor() {
                 @Override
                 public boolean visit(AmendableWidget visited) {
                     if (visited.isAmended()) {
@@ -64,7 +64,7 @@ public class DiffMode implements DocumentMode<ActiveState> {
                 }
             });
         } else {
-            documentController.walk(new AmendableWidgetWalker.AmendableVisitor() {
+            documentController.getSourceFileController().walk(new AmendableWidgetWalker.AmendableVisitor() {
                 @Override
                 public boolean visit(AmendableWidget visited) {
                     if (visited.isAmended()) {

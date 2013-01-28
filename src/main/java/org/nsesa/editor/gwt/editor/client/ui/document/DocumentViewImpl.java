@@ -1,7 +1,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.document;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -11,22 +10,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
-import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelView;
-import org.nsesa.editor.gwt.editor.client.ui.document.amendments.header.AmendmentsHeaderView;
-import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
-import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelView;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarView;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentView;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerView;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileView;
 
 import java.util.logging.Logger;
 
@@ -55,20 +45,6 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     private final org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources resources;
 
     @UiField
-    HorizontalPanel horizontalPanel;
-
-    @UiField
-    HTMLPanel contentHolder;
-    @UiField(provided = true)
-    final ContentView contentView;
-    @UiField(provided = true)
-    final MarkerView markerView;
-    @UiField(provided = true)
-    final DocumentHeaderView documentHeaderView;
-    @UiField(provided = true)
-    DeadlineView deadlineView;
-
-    @UiField
     DockLayoutPanel mainPanel;
 
     @UiField
@@ -80,13 +56,11 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     @UiField(provided = true)
     AmendmentsPanelView amendmentsPanelView;
 
-    AmendmentsHeaderView amendmentsHeaderView;
+    @UiField(provided = true)
+    SourceFileView sourceFileView;
 
     @UiField(provided = true)
     InfoPanelView infoPanelView;
-
-    @UiField(provided = true)
-    ActionBarView actionBarView;
 
     @UiField
     Image viewDocument;
@@ -100,31 +74,19 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
                             final ClientFactory clientFactory,
                             final AmendmentsPanelController amendmentsPanelController,
                             final InfoPanelController infoPanelController,
-                            final ContentController contentController,
-                            final MarkerController markerController,
-                            final DocumentHeaderController documentHeaderController,
-                            final DeadlineController deadlineController,
-                            final ActionBarController actionBarController,
+                            final SourceFileController sourceFileController,
                             final org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources resources
     ) {
 
         this.documentEventBus = documentEventBus;
         this.clientFactory = clientFactory;
         this.amendmentsPanelView = amendmentsPanelController.getView();
+        this.sourceFileView = sourceFileController.getView();
         this.infoPanelView = infoPanelController.getView();
-        this.contentView = contentController.getView();
-        this.markerView = markerController.getView();
-        this.documentHeaderView = documentHeaderController.getView();
-        this.deadlineView = deadlineController.getView();
-        this.actionBarView = actionBarController.getView();
-        this.actionBarView.asWidget().setVisible(false);
         this.resources = resources;
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-
-        horizontalPanel.setCellWidth(markerView, "18px");
-        horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
 
         switchToTab(0);
     }

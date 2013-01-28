@@ -16,8 +16,8 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class MarkerController {
 
     private final MarkerView view;
 
-    private DocumentController documentController;
+    private SourceFileController sourceFileController;
 
     private final DocumentEventBus documentEventBus;
 
@@ -53,11 +53,11 @@ public class MarkerController {
 
     private final Timer timer = new Timer() {
         public void run() {
-            if (documentController != null) {
+            if (sourceFileController != null) {
                 view.clearMarkers();
-                final ScrollPanel scrollPanel = documentController.getContentController().getView().getScrollPanel();
-                for (final AmendmentController amendmentController : documentController.getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getDocumentController() == documentController && amendmentController.getView().asWidget().isAttached()) {
+                final ScrollPanel scrollPanel = sourceFileController.getContentController().getView().getScrollPanel();
+                for (final AmendmentController amendmentController : sourceFileController.getDocumentController().getAmendmentManager().getAmendmentControllers()) {
+                    if (amendmentController.getDocumentController() == sourceFileController.getDocumentController() && amendmentController.getView().asWidget().isAttached()) {
                         final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
 //                        LOG.info("Document height is: " + documentHeight);
                         final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
@@ -67,7 +67,7 @@ public class MarkerController {
                         focusWidget.addClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
-                                documentController.scrollTo(amendmentController.getView().asWidget());
+                                sourceFileController.scrollTo(amendmentController.getView().asWidget());
                             }
                         });
                     }
@@ -87,15 +87,6 @@ public class MarkerController {
     }
 
     private void registerListeners() {
-        //Log.info("Registering marker controller with event bus " + documentEventBus);
-        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
-            @Override
-            public void onEvent(ResizeEvent event) {
-                view.asWidget().setHeight((event.getHeight() - documentController.getContentController().getView().getScrollPanel().getAbsoluteTop()) + "px");
-                drawAmendmentControllers();
-            }
-        });
-
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
@@ -153,7 +144,18 @@ public class MarkerController {
         return view;
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
+    public void setSourceFileController(SourceFileController sourceFileController) {
+        this.sourceFileController = sourceFileController;
+        registerPrivateListeners();
+    }
+
+    private void registerPrivateListeners() {
+        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                view.asWidget().setHeight((event.getHeight() - sourceFileController.getContentController().getView().getScrollPanel().getAbsoluteTop()) + "px");
+                drawAmendmentControllers();
+            }
+        });
     }
 }

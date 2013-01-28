@@ -27,7 +27,7 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
             // mark the origin so we know it was introduced by amendments.
             child.setOrigin(AmendableWidgetOrigin.AMENDMENT);
             // make sure we're listening to the UI events
-            child.setUIListener(documentController);
+            child.setUIListener(documentController.getSourceFileController());
 
             com.google.gwt.user.client.Element parentElement = root.getAmendableElement().cast();
             com.google.gwt.user.client.Element childElement = child.getAmendableElement().cast();

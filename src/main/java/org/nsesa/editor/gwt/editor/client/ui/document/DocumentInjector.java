@@ -10,9 +10,7 @@ import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 
 /**
  * Date: 17/10/12 14:53
@@ -29,15 +27,11 @@ public interface DocumentInjector extends Ginjector {
 
     DeadlineController getDeadlineController();
 
-    ActionBarController getActionBarController();
-
     DocumentEventBus getDocumentEventBus();
 
-    ContentController getContentController();
-
-    MarkerController getMarkerController();
-
     AmendmentsPanelController getAmendmentsPanelController();
+
+    SourceFileController getSourceFileController();
 
     AmendmentActionPanelController getAmendmentActionPanelController();
 

@@ -69,7 +69,7 @@ public class ContentController {
 
     public AmendableWidget getCurrentVisibleAmendableWidget() {
         final AmendableWidget[] temp = new AmendableWidget[1];
-        documentController.walk(new AmendableWidgetWalker.AmendableVisitor() {
+        documentController.getSourceFileController().walk(new AmendableWidgetWalker.AmendableVisitor() {
             @Override
             public boolean visit(AmendableWidget visited) {
                 if (isFullyVisible(visited.asWidget()) && temp[0] == null) {

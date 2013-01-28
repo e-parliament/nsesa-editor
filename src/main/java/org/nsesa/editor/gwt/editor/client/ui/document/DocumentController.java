@@ -3,17 +3,12 @@ package org.nsesa.editor.gwt.editor.client.ui.document;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.*;
@@ -23,13 +18,10 @@ import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventH
 import org.nsesa.editor.gwt.core.client.mode.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -38,12 +30,9 @@ import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.amendments.*;
 import org.nsesa.editor.gwt.editor.client.event.document.*;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorController;
 
@@ -59,7 +48,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentController implements AmendableWidgetUIListener, AmendableWidgetWalker {
+public class DocumentController {
 
     private static final Logger LOG = Logger.getLogger(DocumentController.class.getName());
 
@@ -85,27 +74,19 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     @Scope(DOCUMENT)
     private final DiffingManager diffingManager;
     @Scope(DOCUMENT)
-    private final MarkerController markerController;
-    @Scope(DOCUMENT)
     private final DocumentHeaderController documentHeaderController;
-    @Scope(DOCUMENT)
-    private final ContentController contentController;
     @Scope(DOCUMENT)
     private final DeadlineController deadlineController;
     @Scope(DOCUMENT)
-    private final DocumentEventBus documentEventBus;
+    private final SourceFileController sourceFileController;
+
     @Scope(DOCUMENT)
-    private final ActionBarController actionBarController;
+    private final DocumentEventBus documentEventBus;
+
     @Scope(DOCUMENT)
     private final AmendmentsPanelController amendmentsPanelController;
     @Scope(DOCUMENT)
-    private AmendmentsHeaderController amendmentsHeaderController;
-    @Scope(DOCUMENT)
     private final InfoPanelController infoPanelController;
-
-    private List<AmendableWidget> amendableWidgets;
-
-    private AmendableWidget activeAmendableWidget;
 
     private List<AmendmentController> selectedAmendmentControllers = new ArrayList<AmendmentController>();
 
@@ -123,7 +104,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
 
-
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
@@ -131,30 +111,23 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         this.amendmentManager = injector.getAmendmentManager();
         this.inlineEditorController = inlineEditorController;
 
-        // document scoped singletons
-        this.amendmentManager.setDocumentController(this);
-
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
         this.style = injector.getDocumentViewCss();
-        //this.amendmentsHeaderController = injector.getAmendmentsHeaderController();
         this.amendmentsPanelController = injector.getAmendmentsPanelController();
 
         this.infoPanelController = injector.getInfoPanelController();
-        this.markerController = injector.getMarkerController();
-        this.contentController = injector.getContentController();
+        this.sourceFileController = injector.getSourceFileController();
         this.documentHeaderController = injector.getDocumentHeaderController();
         this.deadlineController = injector.getDeadlineController();
-        this.actionBarController = injector.getActionBarController();
 
         // set references in the child controllers
+        this.amendmentManager.setDocumentController(this);
         this.infoPanelController.setDocumentController(this);
+        this.sourceFileController.setDocumentController(this);
         this.amendmentsPanelController.setDocumentController(this);
-        this.markerController.setDocumentController(this);
-        this.contentController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
         this.deadlineController.setDocumentController(this);
-        this.actionBarController.setDocumentController(this);
 
         registerListeners();
         registerModes();
@@ -167,19 +140,12 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     }
 
     protected void registerListeners() {
-        contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
-            @Override
-            public void onScroll(ScrollEvent event) {
-                documentEventBus.fireEvent(new DocumentScrollEvent(DocumentController.this));
-            }
-        });
-
 
         clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
                 if (event.getDocumentController() == DocumentController.this) {
-                    scrollTo(event.getTarget());
+                    sourceFileController.scrollTo(event.getTarget());
                 }
             }
         });
@@ -197,14 +163,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             @Override
             public void onEvent(AmendableWidgetSelectEvent event) {
                 boolean alreadySelected = false;
-                if (activeAmendableWidget == event.getAmendableWidget()) {
+                if (sourceFileController.getActiveAmendableWidget() == event.getAmendableWidget()) {
                     alreadySelected = true;
                 }
-                if (activeAmendableWidget != null) {
-                    activeAmendableWidget.asWidget().removeStyleName(style.selected());
+                if (sourceFileController.getActiveAmendableWidget() != null) {
+                    sourceFileController.getActiveAmendableWidget().asWidget().removeStyleName(style.selected());
                 }
-                activeAmendableWidget = event.getAmendableWidget();
-                activeAmendableWidget.asWidget().addStyleName(style.selected());
+                sourceFileController.setActiveAmendableWidget(event.getAmendableWidget());
+                sourceFileController.getActiveAmendableWidget().asWidget().addStyleName(style.selected());
                 final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
                 if (alreadySelected && inlineEditingMode != null && inlineEditingMode.getState().isActive()) {
                     clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
@@ -262,11 +228,11 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
 
                 if (amendmentController.getAmendedAmendableWidget() != null) {
-                    if (amendmentController.getAmendedAmendableWidget() == activeAmendableWidget) {
-                        activeAmendableWidget = null;
+                    if (amendmentController.getAmendedAmendableWidget() == sourceFileController.getActiveAmendableWidget()) {
+                        sourceFileController.setActiveAmendableWidget(null);
                     }
                     amendmentController.getAmendedAmendableWidget().removeAmendmentController(amendmentController);
-                    renumberAmendments();
+                    sourceFileController.renumberAmendments();
                 }
             }
         });
@@ -298,13 +264,13 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectEvent event) {
-                for (final AmendableWidget amendableWidget : amendableWidgets) {
+                for (final AmendableWidget amendableWidget : sourceFileController.getAmendableWidgets()) {
                     for (final AmendmentContainerDTO amendmentContainerDTO : event.getAmendments()) {
                         amendmentManager.injectSingleAmendment(amendmentContainerDTO, amendableWidget, DocumentController.this);
                     }
                 }
                 // renumber amendments
-                renumberAmendments();
+                sourceFileController.renumberAmendments();
             }
         });
 
@@ -315,7 +281,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
                 if (amendableWidget != null) {
                     amendableWidget.removeAmendmentController(event.getOldRevision());
                     amendableWidget.addAmendmentController(event.getNewRevision());
-                    renumberAmendments();
+                    sourceFileController.renumberAmendments();
                 }
             }
         });
@@ -325,7 +291,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
             public void onEvent(DocumentRefreshRequestEvent event) {
 
                 // clear the previous amendable widgets
-                amendableWidgets = new ArrayList<AmendableWidget>();
+                sourceFileController.clearAmendableWidgets();
                 // make sure all amendment controllers are 'uninjected'
                 for (final AmendmentController ac : amendmentManager.getAmendmentControllers()) {
                     if (ac.getDocumentController() == DocumentController.this) {
@@ -392,10 +358,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
     }
 
-    public AmendableWidget getTopVisibleAmenableWidget() {
-        return contentController.getCurrentVisibleAmendableWidget();
-    }
-
     public void registerMode(final String key, final DocumentMode<? extends DocumentState> mode) {
         if (documentModes.containsKey(key)) {
             LOG.warning("A mode with key '" + key + "' has already been registered. Overriding.");
@@ -430,11 +392,7 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
     public void loadDocumentContent() {
         assert documentID != null : "No documentID set.";
         // clean up any previous content - if any
-        if (amendableWidgets != null && !amendableWidgets.isEmpty()) {
-            for (final AmendableWidget amendableWidget : amendableWidgets) {
-                amendableWidget.onDetach();
-            }
-        }
+
         serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -444,11 +402,11 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
             @Override
             public void onSuccess(final String content) {
-                setContent(content);
+                sourceFileController.setContent(content);
                 clientFactory.getScheduler().scheduleDeferred(new Command() {
                     @Override
                     public void execute() {
-                        overlay();
+                        sourceFileController.overlay();
                         clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
                         injectAmendments();
                     }
@@ -513,76 +471,6 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         });
     }
 
-    public void renumberAmendments() {
-        final Counter counter = new Counter();
-        walk(new AmendableVisitor() {
-            @Override
-            public boolean visit(AmendableWidget visited) {
-                if (visited.isAmended()) {
-                    for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
-                        amendmentController.setOrder(counter.incrementAndGet());
-                    }
-                }
-                return true;
-            }
-        });
-    }
-
-
-    public void setContent(String documentContent) {
-        contentController.setContent(documentContent);
-    }
-
-    public void scrollTo(Widget widget) {
-        contentController.scrollTo(widget);
-    }
-
-    public void overlay() {
-        long start = System.currentTimeMillis();
-        final Element[] contentElements = contentController.getContentElements();
-        if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
-        for (final Element element : contentElements) {
-            try {
-                final AmendableWidget rootAmendableWidget = overlay(element, this);
-                amendableWidgets.add(rootAmendableWidget);
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Exception while overlaying.", e);
-                documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
-            }
-        }
-        LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
-    }
-
-    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
-        // Assert that the element is attached.
-        // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
-
-        final AmendableWidget root = overlayFactory.getAmendableWidget(element);
-        if (root != null) {
-            walk(root, new AmendableWidgetWalker.AmendableVisitor() {
-                @Override
-                public boolean visit(AmendableWidget visited) {
-                    // if the widget is amendable, register a listener for its events
-                    if (visited != null && visited.isAmendable() != null && visited.isAmendable()) {
-                        visited.setUIListener(UIListener);
-                    }
-                    return true;
-                }
-            });
-        }
-        return root;
-    }
-
-    @Override
-    public void walk(AmendableVisitor visitor) {
-        for (final AmendableWidget root : amendableWidgets) {
-            root.walk(visitor);
-        }
-    }
-
-    public void walk(final AmendableWidget toVisit, final AmendableVisitor visitor) {
-        toVisit.walk(visitor);
-    }
 
     public DocumentView getView() {
         return view;
@@ -592,73 +480,18 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         view.setWidth(width);
     }
 
-    @Override
-    public void onClick(AmendableWidget sender) {
-//        printDetails(sender);
-        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, this));
-    }
-
-    private void printDetails(final AmendableWidget amendableWidget) {
-        final AmendableWidget previousNonIntroducedAmendableWidget = amendableWidget.getPreviousNonIntroducedAmendableWidget(false);
-        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget != null ? locator.getLocation(previousNonIntroducedAmendableWidget, "EN", false) : null));
-        final AmendableWidget previousNonIntroducedAmendableWidget1 = amendableWidget.getPreviousNonIntroducedAmendableWidget(true);
-        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget1 != null ? locator.getLocation(previousNonIntroducedAmendableWidget1, "EN", false) : null));
-        final AmendableWidget nextNonIntroducedAmendableWidget = amendableWidget.getNextNonIntroducedAmendableWidget(false);
-        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget != null ? locator.getLocation(nextNonIntroducedAmendableWidget, "EN", false) : null));
-        final AmendableWidget nextNonIntroducedAmendableWidget1 = amendableWidget.getNextNonIntroducedAmendableWidget(true);
-        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget1 != null ? locator.getLocation(nextNonIntroducedAmendableWidget1, "EN", false) : null));
-    }
-
-    @Override
-    public void onDblClick(AmendableWidget sender) {
-        if (documentModes.containsKey(InlineEditingMode.KEY)) {
-            final InlineEditingMode inlineEditingMode = (InlineEditingMode) documentModes.get(InlineEditingMode.KEY);
-            if (!inlineEditingMode.getState().isActive()) {
-                clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
-            }
-        } else {
-            clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, this));
-        }
-    }
-
-    @Override
-    public void onMouseOver(AmendableWidget sender) {
-        actionBarController.attach(sender);
-        actionBarController.setLocation(locator.getLocation(sender, document.getLanguageIso(), false));
-    }
-
-    @Override
-    public void onMouseOut(AmendableWidget sender) {
-        // ignore
-    }
-
     public void injectAmendments() {
-        for (final AmendableWidget root : amendableWidgets) {
+        for (final AmendableWidget root : sourceFileController.getAmendableWidgets()) {
             amendmentManager.inject(root, this);
         }
         // after the injection, renumber all the amendments.
-        renumberAmendments();
+        sourceFileController.renumberAmendments();
     }
 
     public DocumentInjector getInjector() {
         return GWT.create(DocumentInjector.class);
     }
 
-    public MarkerController getMarkerController() {
-        return markerController;
-    }
-
-    public DocumentHeaderController getDocumentHeaderController() {
-        return documentHeaderController;
-    }
-
-    public ContentController getContentController() {
-        return contentController;
-    }
-
-    public ActionBarController getActionBarController() {
-        return actionBarController;
-    }
 
     public void setDocumentID(String documentID) {
         this.documentID = documentID;
@@ -680,6 +513,10 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
         return creator;
     }
 
+    public Locator getLocator() {
+        return locator;
+    }
+
     public DocumentEventBus getDocumentEventBus() {
         return documentEventBus;
     }
@@ -690,6 +527,14 @@ public class DocumentController implements AmendableWidgetUIListener, AmendableW
 
     public List<AmendmentController> getSelectedAmendmentControllers() {
         return selectedAmendmentControllers;
+    }
+
+    public DiffingManager getDiffingManager() {
+        return diffingManager;
+    }
+
+    public SourceFileController getSourceFileController() {
+        return sourceFileController;
     }
 
     @Override
