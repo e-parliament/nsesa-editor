@@ -1,0 +1,13 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="MarkerViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerViewCss'/>
+    <ui:style field="res">
+        .mainPanel {
+            height: 100%;
+        }
+    </ui:style>
+    <g:HTMLPanel ui:field="mainPanel" styleName="{res.mainPanel}">
+
+    </g:HTMLPanel>
+</ui:UiBinder>

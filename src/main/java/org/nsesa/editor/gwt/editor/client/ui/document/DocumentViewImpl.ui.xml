@@ -1,12 +1,12 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:marker='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.marker'
-             xmlns:actionbar='urn:import:org.nsesa.editor.gwt.editor.client.ui.actionbar'
-             xmlns:content='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.content'
+             xmlns:marker='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker'
+             xmlns:actionbar='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar'
+             xmlns:content='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content'
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.header'
              xmlns:deadline='urn:import:org.nsesa.editor.gwt.core.client.ui.deadline'
-             xmlns:amendments='urn:import:org.nsesa.editor.gwt.editor.client.ui.amendments'
-             xmlns:info='urn:import:org.nsesa.editor.gwt.editor.client.ui.info'
+             xmlns:amendments='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.amendments'
+             xmlns:info='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.info'
         >
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources'/>
     <ui:style src="DocumentViewImpl.css" field="css"

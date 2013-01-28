@@ -7,12 +7,12 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
-import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerController;
-import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelController;
+import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
 
 /**
  * Date: 17/10/12 14:53

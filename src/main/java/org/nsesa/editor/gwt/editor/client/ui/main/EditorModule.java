@@ -4,11 +4,11 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
-import org.nsesa.editor.gwt.editor.client.ui.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
-import org.nsesa.editor.gwt.editor.client.ui.info.InfoPanelModule;
 
 /**
  * Date: 24/06/12 15:11

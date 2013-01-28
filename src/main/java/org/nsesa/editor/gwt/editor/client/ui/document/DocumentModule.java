@@ -5,10 +5,10 @@ import com.google.inject.Inject;
 import com.google.inject.Provides;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineModule;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
-import org.nsesa.editor.gwt.editor.client.ui.actionbar.ActionBarModule;
-import org.nsesa.editor.gwt.editor.client.ui.document.content.ContentModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderModule;
-import org.nsesa.editor.gwt.editor.client.ui.document.marker.MarkerModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentModule;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerModule;
 import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorModule;
 
 /**

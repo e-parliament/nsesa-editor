@@ -1,0 +1,17 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="ActionBarCreatePanelViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.create.ActionBarCreatePanelViewCss'/>
+
+    <g:VerticalPanel styleName="{css.actionPanel} actionBarCreatePanelView">
+        <g:Label ui:field="siblingTitle">Extend current structure</g:Label>
+        <g:VerticalPanel width="100%" ui:field="siblingPanel">
+        </g:VerticalPanel>
+        <g:HTMLPanel ui:field="separator">
+            <hr/>
+        </g:HTMLPanel>
+        <g:Label ui:field="childTitle">Create new</g:Label>
+        <g:VerticalPanel width="100%" ui:field="childPanel">
+        </g:VerticalPanel>
+    </g:VerticalPanel>
+</ui:UiBinder>
