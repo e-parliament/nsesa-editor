@@ -14,6 +14,7 @@ import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHand
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
@@ -33,6 +34,7 @@ public class DraftingController {
     private Creator creator;
     private OverlayFactory overlayFactory;
     private DocumentController documentController;
+    private OverlayLocalizableResource overlayResource;
     private EventBus eventBus;
 
 
@@ -41,11 +43,13 @@ public class DraftingController {
                               ClientFactory clientFactory,
                               Creator creator,
                               OverlayFactory overlayFactory,
+                              OverlayLocalizableResource overlayResource,
                               DocumentController documentController) {
         this.draftingView = draftingView;
         this.clientFactory = clientFactory;
         this.creator = creator;
         this.overlayFactory = overlayFactory;
+        this.overlayResource = overlayResource;
         this.documentController = documentController;
         this.eventBus = clientFactory.getEventBus();
         registerListeners();
@@ -80,7 +84,8 @@ public class DraftingController {
         LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
         draftingView.setDraftTitle(amendableWidget.getType());
         for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
-            Anchor anchor = new Anchor(child.getKey());
+            Anchor anchor = new Anchor(overlayResource.getName(child.getValue()));
+            anchor.setTitle(overlayResource.getDescription(child.getValue()));
             anchor.getElement().addClassName("drafting-" + child.getKey());
             anchor.addClickHandler(new ClickHandler() {
                 @Override
