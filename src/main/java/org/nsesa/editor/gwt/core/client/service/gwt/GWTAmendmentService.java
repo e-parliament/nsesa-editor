@@ -49,7 +49,7 @@ public interface GWTAmendmentService extends RemoteService {
             throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**
-     * Save a set of amendment containers to the backend.
+     * Save a given set of amendment containers to the backend.
      *
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to save
@@ -59,7 +59,17 @@ public interface GWTAmendmentService extends RemoteService {
             throws UnsupportedOperationException, StaleResourceException;
 
     /**
-     * Deletes a set of amendment containers.
+     * Check if it is possible to save a given set of amendment containers to the backend.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to save
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be saved
+     */
+    Boolean[] canSaveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, StaleResourceException;
+
+    /**
+     * Deletes a given set of amendment containers.
      *
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to delete
@@ -69,7 +79,17 @@ public interface GWTAmendmentService extends RemoteService {
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 
     /**
-     * Tables a set of amendment containers.
+     * Check if it is possible to delete a given set of amendment containers at the backend.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to delete
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be deleted
+     */
+    Boolean[] canDeleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Tables a given set of amendment containers.
      *
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to table
@@ -79,12 +99,72 @@ public interface GWTAmendmentService extends RemoteService {
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 
     /**
-     * Withdraws a set of amendment containers.
+     * Check if it is possible to tables a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to table
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be tabled
+     */
+    Boolean[] canTableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Withdraws a given set of amendment containers.
      *
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to withdraw
      * @return the withdrawn amendment containers
      */
     AmendmentContainerDTO[] withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Check if it is possible to withdraw a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to withdraw
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be withdrawn
+     */
+    Boolean[] canWithdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Register a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to register
+     * @return the registered amendment containers
+     */
+    AmendmentContainerDTO[] registerAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Check if it is possible to register a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to register
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be registered
+     */
+    Boolean[] canRegisterAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Return a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to return
+     * @return the returned amendment containers
+     */
+    AmendmentContainerDTO[] returnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Check if it is possible to return a given set of amendment containers.
+     *
+     * @param clientContext       the client context
+     * @param amendmentContainers the amendment container(s) to return
+     * @return the array with <tt>true</tt> booleans for each amendment container that can be returned
+     */
+    Boolean[] canReturnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
 }
