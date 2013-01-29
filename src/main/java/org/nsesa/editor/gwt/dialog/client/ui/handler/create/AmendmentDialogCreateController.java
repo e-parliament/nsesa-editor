@@ -108,5 +108,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     @Override
     public void handle() {
         view.setTitle("Create new " + dialogContext.getAmendableWidget().getType());
+        // clear the rte content
+        view.setAmendmentContent("");
     }
 }

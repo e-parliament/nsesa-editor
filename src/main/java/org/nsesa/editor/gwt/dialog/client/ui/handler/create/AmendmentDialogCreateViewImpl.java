@@ -67,6 +67,11 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public void setAmendmentContent(String content) {
+        this.newText.setHTML(content);
+    }
+
+    @Override
     protected void onAttach() {
         super.onAttach();
         newText.toggleDraftingTool(false);
