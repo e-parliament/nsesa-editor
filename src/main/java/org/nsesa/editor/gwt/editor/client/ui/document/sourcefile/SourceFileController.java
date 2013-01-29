@@ -160,10 +160,10 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
         final InlineEditingMode inlineEditingMode = (InlineEditingMode) documentController.getMode(InlineEditingMode.KEY);
         if (inlineEditingMode != null) {
             if (!inlineEditingMode.getState().isActive()) {
-                clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
             }
         } else {
-            clientFactory.getEventBus().fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
+            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
         }
     }
 
