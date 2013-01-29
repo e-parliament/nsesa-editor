@@ -14,8 +14,8 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.create.ActionBarCreatePanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.create.ActionBarCreatePanelView;
 
@@ -42,7 +42,7 @@ public class ActionBarController {
 
     private AmendableWidget amendableWidget;
 
-    private DocumentController documentController;
+    private SourceFileController sourceFileController;
 
     @Inject
     public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
@@ -59,9 +59,9 @@ public class ActionBarController {
         registerListeners();
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
-        this.actionBarCreatePanelController.setDocumentController(documentController);
+    public void setSourceFileController(SourceFileController sourceFileController) {
+        this.sourceFileController = sourceFileController;
+        this.actionBarCreatePanelController.setSourceFileController(sourceFileController);
     }
 
     private void registerListeners() {
@@ -69,7 +69,7 @@ public class ActionBarController {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.MODIFICATION, documentController));
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
                 }
             }
         });
@@ -77,7 +77,7 @@ public class ActionBarController {
             @Override
             public void onClick(ClickEvent event) {
                 if (amendableWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.DELETION, documentController));
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
                 }
             }
         });
@@ -97,7 +97,7 @@ public class ActionBarController {
         documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
-                if (event.getDocumentController() == documentController || documentController == null) {
+                if (event.getDocumentController() == sourceFileController.getDocumentController() || sourceFileController.getDocumentController() == null) {
                     view.asWidget().setVisible(false);
                 }
             }

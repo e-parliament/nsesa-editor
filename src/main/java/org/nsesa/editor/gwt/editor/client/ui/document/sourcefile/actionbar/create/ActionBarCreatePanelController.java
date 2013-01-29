@@ -5,8 +5,8 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
 
 import java.util.LinkedHashMap;
@@ -25,7 +25,7 @@ public class ActionBarCreatePanelController {
 
     private final ActionBarCreatePanelView view;
     private final DocumentEventBus documentEventBus;
-    private DocumentController documentController;
+    private SourceFileController sourceFileController;
 
     private ActionBarController actionBarController;
 
@@ -46,7 +46,7 @@ public class ActionBarCreatePanelController {
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild,
                         sibling ? amendableWidget.getParentAmendableWidget() : amendableWidget,
                         sibling ? amendableWidget.getIndex() + 1 : 0,
-                        AmendmentAction.CREATION, documentController));
+                        AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }
         });
     }
@@ -62,12 +62,12 @@ public class ActionBarCreatePanelController {
         view.clearAmendableWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<String, AmendableWidget> allowedSiblings = documentController.getCreator().getAllowedSiblings(documentController, amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedSiblings.entrySet()) {
             view.addSiblingAmendableWidget(entry.getKey(), entry.getValue());
         }
         // add all the children
-        LinkedHashMap<String, AmendableWidget> allowedChildren = documentController.getCreator().getAllowedChildren(documentController, amendableWidget);
+        LinkedHashMap<String, AmendableWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), amendableWidget);
         for (final Map.Entry<String, AmendableWidget> entry : allowedChildren.entrySet()) {
             view.addChildAmendableWidget(entry.getKey(), entry.getValue());
         }
@@ -85,7 +85,7 @@ public class ActionBarCreatePanelController {
         return amendableWidget;
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
+    public void setSourceFileController(SourceFileController sourceFileController) {
+        this.sourceFileController = sourceFileController;
     }
 }
