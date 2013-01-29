@@ -2,7 +2,7 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.amendments.header'
              xmlns:filter='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.amendments.filter'
-             xmlns:pagination='urn:import:org.nsesa.editor.gwt.editor.client.ui.pagination'
+             xmlns:pagination='urn:import:org.nsesa.editor.gwt.core.client.ui.pagination'
         >
     <ui:style src="AmendmentsPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelViewCss'/>

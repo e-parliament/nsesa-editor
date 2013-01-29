@@ -11,6 +11,8 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
+import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerAddToSelectionEvent;
 import org.nsesa.editor.gwt.editor.client.event.amendments.AmendmentControllerRemoveFromSelectionEvent;
@@ -19,8 +21,6 @@ import org.nsesa.editor.gwt.editor.client.ui.document.amendments.filter.Amendmen
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.header.AmendmentsHeaderView;
-import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationController;
-import org.nsesa.editor.gwt.editor.client.ui.pagination.PaginationView;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

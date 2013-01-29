@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.pagination.resources;
+package org.nsesa.editor.gwt.core.client.ui.pagination.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
@@ -13,10 +13,13 @@ import com.google.gwt.resources.client.ImageResource;
 public interface Resources extends ClientBundle {
     @Source("go-first.png")
     public ImageResource first();
+
     @Source("go-last.png")
     public ImageResource last();
+
     @Source("go-previous.png")
     public ImageResource previous();
+
     @Source("go-next.png")
     public ImageResource next();
 }

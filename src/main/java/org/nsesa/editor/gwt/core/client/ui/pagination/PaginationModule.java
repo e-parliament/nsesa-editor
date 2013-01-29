@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.pagination;
+package org.nsesa.editor.gwt.core.client.ui.pagination;
 
 import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;

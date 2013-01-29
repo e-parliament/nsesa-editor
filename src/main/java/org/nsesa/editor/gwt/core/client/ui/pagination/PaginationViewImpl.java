@@ -1,10 +1,13 @@
-package org.nsesa.editor.gwt.editor.client.ui.pagination;
+package org.nsesa.editor.gwt.core.client.ui.pagination;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -25,6 +28,7 @@ public class PaginationViewImpl extends Composite implements PaginationView {
 
     interface MyUiBinder extends UiBinder<Widget, PaginationViewImpl> {
     }
+
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     @UiField
@@ -63,6 +67,7 @@ public class PaginationViewImpl extends Composite implements PaginationView {
     public HasClickHandlers getPrevious() {
         return previous;
     }
+
     @Override
     public void displayCurrentPage(int currentPage, int totalPages) {
         current.setText("Page " + currentPage + " of " + totalPages);

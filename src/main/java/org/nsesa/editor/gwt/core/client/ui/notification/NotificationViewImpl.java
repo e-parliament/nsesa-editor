@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.editor.client.ui.notification;
+package org.nsesa.editor.gwt.core.client.ui.notification;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;

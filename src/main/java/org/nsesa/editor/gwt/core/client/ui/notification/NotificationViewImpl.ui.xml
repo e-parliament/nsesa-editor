@@ -1,7 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="NotificationViewImpl.css" field="css"
-              type='org.nsesa.editor.gwt.editor.client.ui.notification.NotificationViewCss'/>
+              type='org.nsesa.editor.gwt.core.client.ui.notification.NotificationViewCss'/>
 
     <ui:style field="res">
         .notificationView {

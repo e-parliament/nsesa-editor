@@ -21,11 +21,11 @@ import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationController;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
+import org.nsesa.editor.gwt.core.client.ui.notification.NotificationController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceHistoryMapper;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
-import org.nsesa.editor.gwt.editor.client.ui.notification.NotificationController;
 
 import java.util.Arrays;
 import java.util.List;
