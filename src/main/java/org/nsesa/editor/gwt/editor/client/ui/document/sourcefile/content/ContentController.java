@@ -12,8 +12,8 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 public class ContentController {
 
     private ContentView view;
-    private DocumentController documentController;
+    private SourceFileController sourceFileController;
     private final DocumentEventBus documentEventBus;
     private boolean contentLoaded;
 
@@ -48,7 +48,7 @@ public class ContentController {
         view.getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                documentEventBus.fireEvent(new DocumentScrollEvent(documentController));
+                documentEventBus.fireEvent(new DocumentScrollEvent(sourceFileController.getDocumentController()));
             }
         });
     }
@@ -69,7 +69,7 @@ public class ContentController {
 
     public AmendableWidget getCurrentVisibleAmendableWidget() {
         final AmendableWidget[] temp = new AmendableWidget[1];
-        documentController.getSourceFileController().walk(new AmendableWidgetWalker.AmendableVisitor() {
+        sourceFileController.walk(new AmendableWidgetWalker.AmendableVisitor() {
             @Override
             public boolean visit(AmendableWidget visited) {
                 if (isFullyVisible(visited.asWidget()) && temp[0] == null) {
@@ -87,8 +87,8 @@ public class ContentController {
         this.contentLoaded = true;
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
+    public void setSourceFileController(SourceFileController sourceFileController) {
+        this.sourceFileController = sourceFileController;
     }
 
     public Element[] getContentElements() {

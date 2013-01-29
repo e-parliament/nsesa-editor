@@ -72,11 +72,13 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
         this.view = sourceFileView;
         this.documentEventBus = documentEventBus;
         this.markerController = markerController;
-        this.markerController.setSourceFileController(this);
         this.sourceFileHeaderController = sourceFileHeaderController;
-        this.sourceFileHeaderController.setSourceFileController(this);
         this.contentController = contentController;
         this.actionBarController = actionBarController;
+
+        this.markerController.setSourceFileController(this);
+        this.contentController.setSourceFileController(this);
+        this.sourceFileHeaderController.setSourceFileController(this);
 
         registerListeners();
     }
