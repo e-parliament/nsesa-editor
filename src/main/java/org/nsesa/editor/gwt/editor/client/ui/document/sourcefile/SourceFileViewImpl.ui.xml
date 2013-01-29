@@ -3,14 +3,10 @@
              xmlns:marker='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker'
              xmlns:actionbar='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar'
              xmlns:content='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content'
-             xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.header'
+             xmlns:header='urn:import:org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.header'
              xmlns:deadline='urn:import:org.nsesa.editor.gwt.core.client.ui.deadline'
         >
     <ui:style field="res">
-
-        .mainPanel {
-            width: 100%;
-        }
 
         .document {
             /* Note: parent td width is set in the document view!*/
@@ -47,7 +43,7 @@
             z-index: 1;
         }
 
-        .documentHeader {
+        .sourceFileHeader {
             width: 100%;
             padding: 5px;
             height: 20px;
@@ -55,46 +51,9 @@
             border: 1px solid #ccc;
         }
 
-        .documentTitle {
-            font-size: 2em;
-            text-align: center;
-        }
-
         .marker {
             /* Note: parent td width is set in the document view!*/
             width: 100%;
-        }
-
-        .tabPanel {
-            border: 0;
-        }
-
-        .header {
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        .tabHeaders {
-            padding: 0;
-            margin: 0;
-            position: relative;
-            right: 12px;
-            top: -21px;
-            float: right;
-        }
-
-        .tabHeader {
-            margin: 0;
-            padding: 0;
-        }
-
-        .amendmentsPanel {
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            width: 100%;
-            height: 100%;
         }
 
         .actionBarController {
@@ -107,7 +66,7 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="document">
-        <header:DocumentHeaderView ui:field="documentHeaderView" styleName="{res.documentHeader}"/>
+        <header:SourceFileHeaderView ui:field="sourceFileHeaderView" styleName="{res.sourceFileHeader}"/>
         <actionbar:ActionBarView ui:field="actionBarView" styleName="{res.actionBarController}"/>
         <deadline:DeadlineView ui:field="deadlineView" styleName="{res.deadline}"/>
         <g:HorizontalPanel styleName="{res.document}" ui:field="horizontalPanel">

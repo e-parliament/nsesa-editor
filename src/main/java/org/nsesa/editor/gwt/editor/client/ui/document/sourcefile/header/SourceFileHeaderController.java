@@ -15,8 +15,8 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentModeChangeEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class SourceFileHeaderController {
 
     private final SourceFileHeaderView view;
     private final DocumentEventBus documentEventBus;
-    private DocumentController documentController;
+    private SourceFileController sourceFileController;
 
     private List<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
     private List<DocumentDTO> relatedDocuments = new ArrayList<DocumentDTO>();
@@ -44,22 +44,22 @@ public class SourceFileHeaderController {
     private ToggleButton inlineEditingButton = new ToggleButton("Inline", "Inline", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            final InlineEditingMode inline = (InlineEditingMode) documentController.getMode(InlineEditingMode.KEY);
-            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<InlineEditingMode>(documentController, inline, new ActiveState(!inline.getState().isActive())));
+            final InlineEditingMode inline = (InlineEditingMode) sourceFileController.getDocumentController().getMode(InlineEditingMode.KEY);
+            documentEventBus.fireEvent(new DocumentModeChangeEvent<InlineEditingMode>(sourceFileController.getDocumentController(), inline, new ActiveState(!inline.getState().isActive())));
         }
     });
     private ToggleButton diffingButton = new ToggleButton("Diffing", "Diffing", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            final DiffMode diff = (DiffMode) documentController.getMode(DiffMode.KEY);
-            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<DiffMode>(documentController, diff, new ActiveState(!diff.getState().isActive())));
+            final DiffMode diff = (DiffMode) sourceFileController.getDocumentController().getMode(DiffMode.KEY);
+            documentEventBus.fireEvent(new DocumentModeChangeEvent<DiffMode>(sourceFileController.getDocumentController(), diff, new ActiveState(!diff.getState().isActive())));
         }
     });
     private ToggleButton consolidationButton = new ToggleButton("Consolidation", "Consolidation", new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            final ConsolidationMode consolidationMode = (ConsolidationMode) documentController.getMode(ConsolidationMode.KEY);
-            documentController.getDocumentEventBus().fireEvent(new DocumentModeChangeEvent<ConsolidationMode>(documentController, consolidationMode, new ActiveState(!consolidationMode.getState().isActive())));
+            final ConsolidationMode consolidationMode = (ConsolidationMode) sourceFileController.getDocumentController().getMode(ConsolidationMode.KEY);
+            documentEventBus.fireEvent(new DocumentModeChangeEvent<ConsolidationMode>(sourceFileController.getDocumentController(), consolidationMode, new ActiveState(!consolidationMode.getState().isActive())));
         }
     });
 
@@ -92,9 +92,9 @@ public class SourceFileHeaderController {
                         // but not update the translation list box (or if an incorrect value is specified, of course)
                         throw new RuntimeException("Could not find document with documentID " + documentID + " in the list of translations.");
                     }
-                    documentController.setDocument(document);
+                    sourceFileController.getDocumentController().setDocument(document);
                     // fire an update to get the new content
-                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
+                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(sourceFileController.getDocumentController()));
                 }
             }
         });
@@ -109,9 +109,9 @@ public class SourceFileHeaderController {
                     if (document == null) {
                         throw new RuntimeException("Could not find document with documentID " + documentID + " in the list of related documents.");
                     }
-                    documentController.setDocument(document);
+                    sourceFileController.getDocumentController().setDocument(document);
                     // fire an update to get the new content
-                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(documentController));
+                    documentEventBus.fireEvent(new DocumentRefreshRequestEvent(sourceFileController.getDocumentController()));
                 }
             }
         });
@@ -159,7 +159,7 @@ public class SourceFileHeaderController {
         view.setSelectedRelatedDocument(selectedRelatedDocument);
     }
 
-    public void setDocumentController(DocumentController documentController) {
-        this.documentController = documentController;
+    public void setSourceFileController(SourceFileController sourceFileController) {
+        this.sourceFileController = sourceFileController;
     }
 }

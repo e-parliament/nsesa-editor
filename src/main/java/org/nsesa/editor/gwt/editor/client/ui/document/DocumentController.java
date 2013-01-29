@@ -450,9 +450,9 @@ public class DocumentController {
 
             @Override
             public void onSuccess(ArrayList<DocumentDTO> translations) {
-                documentHeaderController.setAvailableTranslations(translations);
+                sourceFileController.getSourceFileHeaderController().setAvailableTranslations(translations);
                 // select the correct translation
-                documentHeaderController.setSelectedTranslation(document);
+                sourceFileController.getSourceFileHeaderController().setSelectedTranslation(document);
             }
         });
 
@@ -464,9 +464,9 @@ public class DocumentController {
 
             @Override
             public void onSuccess(ArrayList<DocumentDTO> translations) {
-                documentHeaderController.setRelatedDocuments(translations);
+                sourceFileController.getSourceFileHeaderController().setRelatedDocuments(translations);
                 // select the correct translation
-                documentHeaderController.setSelectedRelatedDocument(document);
+                sourceFileController.getSourceFileHeaderController().setSelectedRelatedDocument(document);
             }
         });
     }

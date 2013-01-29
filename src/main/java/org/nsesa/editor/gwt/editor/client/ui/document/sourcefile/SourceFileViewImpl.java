@@ -15,13 +15,13 @@ import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
-import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarView;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentView;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.header.SourceFileHeaderController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.header.SourceFileHeaderView;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerView;
 
@@ -53,7 +53,7 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
     @UiField(provided = true)
     final MarkerView markerView;
     @UiField(provided = true)
-    final DocumentHeaderView documentHeaderView;
+    final SourceFileHeaderView sourceFileHeaderView;
     @UiField(provided = true)
     DeadlineView deadlineView;
 
@@ -67,7 +67,7 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
                               final InfoPanelController infoPanelController,
                               final ContentController contentController,
                               final MarkerController markerController,
-                              final DocumentHeaderController documentHeaderController,
+                              final SourceFileHeaderController sourceFileHeaderController,
                               final DeadlineController deadlineController,
                               final ActionBarController actionBarController,
                               final org.nsesa.editor.gwt.editor.client.ui.header.resources.Resources resources
@@ -77,7 +77,7 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
         this.clientFactory = clientFactory;
         this.contentView = contentController.getView();
         this.markerView = markerController.getView();
-        this.documentHeaderView = documentHeaderController.getView();
+        this.sourceFileHeaderView = sourceFileHeaderController.getView();
         this.deadlineView = deadlineController.getView();
         this.actionBarView = actionBarController.getView();
         this.actionBarView.asWidget().setVisible(false);
