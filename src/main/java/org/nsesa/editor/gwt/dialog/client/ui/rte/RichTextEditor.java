@@ -10,6 +10,11 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @version $Id$
  */
 public interface RichTextEditor extends IsWidget {
+
+    void addBodyClass(String className);
+
+    void resetBodyClass();
+
     void setHTML(String content);
 
     String getHTML();
@@ -22,20 +27,23 @@ public interface RichTextEditor extends IsWidget {
 
     /**
      * Add a drafting tool widget to the editor
+     *
      * @param widget
      */
     void setDraftingTool(IsWidget widget);
 
     /**
      * Toggle the drafting tool in the editor
+     *
      * @param toggled
      */
     void toggleDraftingTool(boolean toggled);
 
     /**
      * Executes a certain command of the editor
+     *
      * @param command The command name
-     * @param delay The delay in milliseconds
+     * @param delay   The delay in milliseconds
      */
     void executeCommand(String command, int delay);
 

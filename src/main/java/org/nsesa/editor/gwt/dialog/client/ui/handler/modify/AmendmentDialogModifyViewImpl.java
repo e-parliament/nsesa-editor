@@ -63,6 +63,16 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public void addBodyClass(String className) {
+        amendmentText.addBodyClass(className);
+    }
+
+    @Override
+    public void resetBodyClass() {
+        amendmentText.resetBodyClass();
+    }
+
+    @Override
     public void setTitle(String title) {
         this.title.setHTML(title);
     }

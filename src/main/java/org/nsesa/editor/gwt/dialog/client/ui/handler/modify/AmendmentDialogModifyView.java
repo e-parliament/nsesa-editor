@@ -15,6 +15,10 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 @ImplementedBy(AmendmentDialogModifyViewImpl.class)
 public interface AmendmentDialogModifyView extends IsWidget {
 
+    void addBodyClass(String className);
+
+    void resetBodyClass();
+
     void setTitle(String title);
 
     void setAmendmentContent(String amendmentContent);

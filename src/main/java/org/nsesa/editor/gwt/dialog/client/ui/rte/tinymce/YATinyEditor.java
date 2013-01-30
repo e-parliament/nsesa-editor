@@ -199,22 +199,22 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         };
 
         var doc_type = "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' "
-                + "'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>";
+            + "'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>";
         var valid_elems = ""
-                + "br[id],"
+            + "br[id],"
             // + "-del[cite|datetime|id|lang],"
             // + "-ins[cite|datetime|id|lang],"
-                + "-p[lang],"
-                + "-span[id|lang],"
-                + "-sub[id|lang],"
-                + "-sup[id|lang],"
-                + "table[id|lang|width],"
+            + "-p[lang],"
+            + "-span[id|lang],"
+            + "-sub[id|lang],"
+            + "-sup[id|lang],"
+            + "table[id|lang|width],"
             // + "tbody[id|lang],"
-                + "td[id|colspan|height|lang|rowspan|width],"
+            + "td[id|colspan|height|lang|rowspan|width],"
             // + "tfoot[id|lang],"
-                + "th[id|colspan|height|lang|rowspan|width],"
+            + "th[id|colspan|height|lang|rowspan|width],"
             // + "thead[id|lang],"
-                + "tr[id|rowspan|lang],";
+            + "tr[id|rowspan|lang],";
 
         //var plug = "paste, noneditable, contextmenu, table, tablecontextmenu";
         var plug = "paste, noneditable, contextmenu";
@@ -413,6 +413,15 @@ public class YATinyEditor extends Composite implements RichTextEditor {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public void addBodyClass(String className) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void resetBodyClass() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     @Inject
     private String generateLanguageSettings(String isoCode, Set<String> supportedISO) {

@@ -51,6 +51,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         textArea.setWidth("100%");
         textArea.setHeight("100%");
     }
+
     @Override
     public void init() {
         if (!attached) {
@@ -159,5 +160,15 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     public void setHeight(int height) {
         this.config.setHeight(height);
+    }
+
+    @Override
+    public void addBodyClass(String className) {
+        this.config.addBodyClass(className);
+    }
+
+    @Override
+    public void resetBodyClass() {
+        config.resetBodyClass();
     }
 }

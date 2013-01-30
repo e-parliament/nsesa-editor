@@ -6,7 +6,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 
 /**
  * Defines configuration environment for CK Editor
- *
+ * <p/>
  * User: groza
  * Date: 11/01/13
  * Time: 15:24
@@ -14,7 +14,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
 public class CKEditorConfig implements RichTextEditorConfig {
 
     private String[] contentCss;
-    private String bodyClass;
+    private String bodyClass, originalBodyClass;
     private boolean readOnly;
     private boolean startupFocus;
     private int height;
@@ -30,7 +30,8 @@ public class CKEditorConfig implements RichTextEditorConfig {
 
     private JavaScriptObject config = JavaScriptObject.createObject();
 
-    public CKEditorConfig() {}
+    public CKEditorConfig() {
+    }
 
     public JavaScriptObject getConfiguration() {
         return config;
@@ -54,8 +55,12 @@ public class CKEditorConfig implements RichTextEditorConfig {
 
     @Override
     public void addBodyClass(String newBodyClass) {
-        String newBody = bodyClass + " " + newBodyClass;
-        setBodyClass(newBody);
+        setBodyClass(this.bodyClass + " " + newBodyClass);
+    }
+
+    @Override
+    public void resetBodyClass() {
+        setBodyClass(this.originalBodyClass == null ? this.bodyClass : this.originalBodyClass);
     }
 
     public CKEditorConfig setContentCss(String[] contentCss) {
@@ -75,10 +80,12 @@ public class CKEditorConfig implements RichTextEditorConfig {
     }
 
     public CKEditorConfig setBodyClass(String bodyClass) {
+        this.originalBodyClass = this.bodyClass;
         this.bodyClass = bodyClass;
         setNativeBodyClass(bodyClass);
         return this;
     }
+
     public CKEditorConfig setStartupFocus(boolean startupFocus) {
         this.startupFocus = startupFocus;
         setNativeStartupFocus(startupFocus);
@@ -153,6 +160,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
         replaceCoreStyle("coreStyles_subscript", "sub", newTag, newClassName, newType, nameSpace);
         return this;
     }
+
     public CKEditorConfig replaceSupStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_superscript", "sup", newTag, newClassName, newType, nameSpace);
         return this;
@@ -162,14 +170,17 @@ public class CKEditorConfig implements RichTextEditorConfig {
         replaceCoreStyle("coreStyles_bold", "b", newTag, newClassName, newType, nameSpace);
         return this;
     }
+
     public CKEditorConfig replaceItalicStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_italic", "i", newTag, newClassName, newType, nameSpace);
         return this;
     }
+
     public CKEditorConfig replaceUnderlineStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_underline", "u", newTag, newClassName, newType, nameSpace);
         return this;
     }
+
     public CKEditorConfig replaceStrikeThroughStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_strikethrough", "strike", newTag, newClassName, newType, nameSpace);
         return this;
@@ -194,6 +205,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private native void setNativeBodyClass(String bodyClass) /*-{
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.bodyClass = bodyClass;
     }-*/;
+
     private native void setNativeStartupFocus(boolean startupFocus) /*-{
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.startupFocus = startupFocus;
     }-*/;
@@ -214,6 +226,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private native void setNativeRemovePlugins(String removePlugins) /*-{
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.removePlugins = removePlugins;
     }-*/;
+
     private native void setNativeToolbarLocation(String toolbarLocation) /*-{
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.toolbarLocation = toolbarLocation;
     }-*/;
@@ -241,9 +254,9 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private native void replaceNativeCoreStyle(String ckStyleName, String oldTag, String newTag, String className, String newType, String nameSpace) /*-{
         this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config[ckStyleName] =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType, 'ns' : nameSpace},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType, 'ns': nameSpace},
+            overrides: oldTag
         };
-      }-*/;
+    }-*/;
 }

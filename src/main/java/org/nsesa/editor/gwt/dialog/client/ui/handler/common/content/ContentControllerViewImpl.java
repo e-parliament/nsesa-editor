@@ -34,6 +34,16 @@ public class ContentControllerViewImpl extends Composite implements ContentContr
     }
 
     @Override
+    public void addBodyClass(String className) {
+        originalText.addBodyClass(className);
+    }
+
+    @Override
+    public void resetBodyClass() {
+        originalText.resetBodyClass();
+    }
+
+    @Override
     public void setOriginalText(String content) {
         originalText.setHTML(content);
     }

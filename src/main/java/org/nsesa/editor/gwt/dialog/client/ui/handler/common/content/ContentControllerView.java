@@ -13,6 +13,10 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ContentControllerViewImpl.class)
 public interface ContentControllerView extends IsWidget {
 
+    void addBodyClass(String className);
+
+    void resetBodyClass();
+
     void setOriginalText(String content);
 
     String getOriginalText();

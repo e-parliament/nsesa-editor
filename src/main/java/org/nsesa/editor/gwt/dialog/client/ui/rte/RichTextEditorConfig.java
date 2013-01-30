@@ -11,28 +11,37 @@ import com.google.gwt.core.client.JavaScriptObject;
 public interface RichTextEditorConfig {
     /**
      * Whether or not the editor is readonly
+     *
      * @param readOnly
      */
-    abstract void setReadOnly(boolean readOnly);
+    void setReadOnly(boolean readOnly);
 
     /**
      * Set the height of the editor
      */
-    abstract void setHeight(int height);
+    void setHeight(int height);
 
     /**
      * Whether or not the editor is readonly
      */
-    abstract boolean isReadOnly();
+    boolean isReadOnly();
 
     /**
      * Add a class to body
+     *
      * @param bodyClass
      */
-    abstract void addBodyClass(String bodyClass);
+    void addBodyClass(String bodyClass);
+
+    /**
+     * Resets the body class.
+     */
+    void resetBodyClass();
+
     /**
      * Return a representation as JavaScriptObject
+     *
      * @return
      */
-    abstract JavaScriptObject getConfiguration();
+    JavaScriptObject getConfiguration();
 }
