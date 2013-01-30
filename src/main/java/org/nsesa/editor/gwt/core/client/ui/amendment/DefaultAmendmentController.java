@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
@@ -155,6 +156,13 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public AmendableWidget asAmendableWidget() {
         return documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
+    }
+
+    @Override
+    public AmendableWidget asAmendableWidgetFromModel() {
+        final com.google.gwt.user.client.Element span = DOM.createSpan();
+        span.setInnerHTML(getModel().getBody());
+        return documentController.getOverlayFactory().getAmendableWidget(span.getFirstChildElement());
     }
 
     @Override

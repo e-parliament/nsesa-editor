@@ -27,6 +27,8 @@ public interface AmendmentController {
 
     AmendableWidget asAmendableWidget();
 
+    AmendableWidget asAmendableWidgetFromModel();
+
     void setAmendment(AmendmentContainerDTO amendment);
 
     DocumentController getDocumentController();
