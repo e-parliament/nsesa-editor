@@ -172,10 +172,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             if (!skipValidation) {
                 // see if there is a wildcard in the allowed subtypes,
                 AmendableWidget wildCard = null;
-                if (!getAllowedSubTypes().containsKey(wildCard)) {
+                if (!getAllowedChildTypes().containsKey(wildCard)) {
                     // no wildcard - see if the type is supported as a child widget
                     boolean canAdd = false;
-                    for (Map.Entry<AmendableWidget, Occurrence> entry : getAllowedSubTypes().entrySet()) {
+                    for (Map.Entry<AmendableWidget, Occurrence> entry : getAllowedChildTypes().entrySet()) {
                         if (entry.getKey().getType().equalsIgnoreCase(child.getType()) &&
                                 entry.getKey().getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
                             canAdd = true;
@@ -532,19 +532,13 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     /**
-     * Returns an array of the node names that are allowed to be nested.
-     * Note: this can include wildcards (*).
-     * The default implementation throws an exception, since this method is supposed to be overridden.
+     * Returns a map of the node names that are allowed to be nested.
+     * Note: this can include wildcards (null keys).
      *
-     * @return the list of allowed child types in lower case. Should never return <tt>null</tt> (an empty array is ok though).
+     * @return the Map of allowed child types (an empty map is ok though).
      */
     @Override
-    public String[] getAllowedChildTypes() {
-        return new String[]{};
-    }
-
-    @Override
-    public Map<AmendableWidget, Occurrence> getAllowedSubTypes() {
+    public Map<AmendableWidget, Occurrence> getAllowedChildTypes() {
         return new HashMap<AmendableWidget, Occurrence>();
     }
 
