@@ -17,6 +17,9 @@ import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
+
+import java.util.List;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -34,6 +37,8 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
     protected final AmendmentDialogCreateView view;
 
+    protected final List<AmendmentDialogAwareController> childControllers;
+
     protected final Locator locator;
     final private DraftingController draftingController;
     protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
@@ -43,14 +48,21 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
                                            final Locator locator, final OverlayFactory overlayFactory,
                                            final DraftingController draftingController,
-                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder,
+                                           final List<AmendmentDialogAwareController> childControllers) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
         this.draftingController = draftingController;
-        view.getRichTextEditor().setDraftingTool(draftingController.getView());
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
+        this.childControllers = childControllers;
+
+        for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
+            //view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
+        }
+        view.getRichTextEditor().setDraftingTool(draftingController.getView());
+
         registerListeners();
     }
 
@@ -107,8 +119,18 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
     @Override
     public void handle() {
-        view.setTitle("Create new " + dialogContext.getAmendableWidget().getType());
-        // clear the rte content
-        view.setAmendmentContent("");
+        // set the amendable widget in the drafting controller
+        draftingController.setAmendableWidget(dialogContext.getAmendableWidget());
+        // make sure to pass the context to the children
+        for (final AmendmentDialogAwareController childController : childControllers) {
+            childController.setContext(dialogContext);
+        }
+        setProperties();
+    }
+
+    public void setProperties() {
+        if (dialogContext.getAmendableWidget() == null && dialogContext.getAmendment() == null) {
+            throw new NullPointerException("Neither amendment nor amendable widget are set.");
+        }
     }
 }
