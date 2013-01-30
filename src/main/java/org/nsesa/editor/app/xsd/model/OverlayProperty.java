@@ -27,12 +27,20 @@ public class OverlayProperty extends OverlayNode {
     private String packageName;
     private boolean collection;
     private final boolean attribute;
-
     // the base class
     private OverlayClass baseClass;
 
-    public OverlayProperty(OverlayType overlayType, String packageName,
-                           String nameSpace, String className, String name, boolean collection, boolean attribute) {
+    private Integer minOccurs = new Integer(0);
+    private Integer maxOccurs = new Integer(-1);
+
+    public OverlayProperty(OverlayType overlayType,
+                           String packageName,
+                           String nameSpace,
+                           String className,
+                           String name,
+                           boolean collection,
+                           boolean attribute)
+    {
         super(name, nameSpace, overlayType);
         this.packageName = packageName;
         this.className = className;
@@ -44,6 +52,8 @@ public class OverlayProperty extends OverlayNode {
     public OverlayProperty copy() {
         OverlayProperty newProperty = new OverlayProperty(overlayType, packageName, nameSpace, className, name, collection, attribute);
         newProperty.setBaseClass(getBaseClass());
+        newProperty.setMinOccurs(getMinOccurs());
+        newProperty.setMaxOccurs(getMaxOccurs());
         return newProperty;
     }
 
@@ -113,6 +123,23 @@ public class OverlayProperty extends OverlayNode {
 
     public void setBaseClass(OverlayClass baseClass) {
         this.baseClass = baseClass;
+    }
+
+    public void setMinOccurs(Integer minOccurs) {
+        this.minOccurs = minOccurs;
+    }
+
+    public void setMaxOccurs(Integer maxOccurs) {
+        this.maxOccurs = maxOccurs;
+    }
+
+
+    public Integer getMinOccurs() {
+        return minOccurs;
+    }
+
+    public Integer getMaxOccurs() {
+        return maxOccurs;
     }
 
 }

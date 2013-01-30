@@ -12,6 +12,7 @@ import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Date: 27/06/12 17:52
@@ -233,8 +234,17 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
      *
      * @return the allowed child nodes
+     * @deprecated
      */
     String[] getAllowedChildTypes();
+
+    /**
+     * Get a map of the element node names that are allowed under this amendable widget (note, this also includes the
+     * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
+     *
+     * @return the allowed child nodes
+     */
+    Map<AmendableWidget, Occurrence> getAllowedSubTypes();
 
     /**
      * Get the numbering type of this amendable widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},

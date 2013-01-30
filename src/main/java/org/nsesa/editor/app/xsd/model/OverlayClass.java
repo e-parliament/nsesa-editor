@@ -83,9 +83,6 @@ public class OverlayClass extends OverlayNode  {
     public boolean isDescendentOf(String parentName) {
         boolean result = false;
         OverlayClass nodeParent = this;
-        if (this.getName().equalsIgnoreCase("inline")) {
-            //System.out.println("stop");
-        }
         while (nodeParent != null) {
             if (parentName.equalsIgnoreCase(nodeParent.getName())) {
                 result = true;
@@ -174,6 +171,21 @@ public class OverlayClass extends OverlayNode  {
             aClass = aClass.getParent();
         }
         return set;
+    }
+
+    public List<OverlayProperty> getAllNonAttributesProperties() {
+        List<OverlayProperty> result = new ArrayList<OverlayProperty>();
+        OverlayClass aClass = this;
+        while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
+            for (OverlayProperty property : aClass.getProperties()) {
+                if (property.isAttribute()) {
+                    continue;
+                }
+                result.add(property);
+            }
+            aClass = aClass.getParent();
+        }
+        return result;
     }
 
     @Override

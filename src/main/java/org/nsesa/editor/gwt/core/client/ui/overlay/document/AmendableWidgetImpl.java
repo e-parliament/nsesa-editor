@@ -170,12 +170,14 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
         if (!vetoed) {
             if (!skipValidation) {
-                // see if there is a wildcard
-                if (Arrays.binarySearch(getAllowedChildTypes(), "*") == -1) {
+                // see if there is a wildcard in the allowed subtypes,
+                AmendableWidget wildCard = null;
+                if (!getAllowedSubTypes().containsKey(wildCard)) {
                     // no wildcard - see if the type is supported as a child widget
                     boolean canAdd = false;
-                    for (String type : getAllowedChildTypes()) {
-                        if (type.equalsIgnoreCase(child.getType())) {
+                    for (Map.Entry<AmendableWidget, Occurrence> entry : getAllowedSubTypes().entrySet()) {
+                        if (entry.getKey().getType().equalsIgnoreCase(child.getType()) &&
+                                entry.getKey().getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
                             canAdd = true;
                         }
                     }
@@ -539,6 +541,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public String[] getAllowedChildTypes() {
         return new String[]{};
+    }
+
+    @Override
+    public Map<AmendableWidget, Occurrence> getAllowedSubTypes() {
+        return new HashMap<AmendableWidget, Occurrence>();
     }
 
     @Override

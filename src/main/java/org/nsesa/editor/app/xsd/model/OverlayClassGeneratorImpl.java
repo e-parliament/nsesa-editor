@@ -335,6 +335,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                                                         nameSpace,
                                                         className + OverlayType.SimpleType,
                                                         attributeDecl.getName(), false, true);
+
         if (attributeDecl.getAnnotation() != null && attributeDecl.getAnnotation().getAnnotation() != null) {
             property.setComments(attributeDecl.getAnnotation().getAnnotation().toString());
         }
@@ -354,7 +355,6 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         if (simpleType.getAnnotation() != null && simpleType.getAnnotation().getAnnotation() != null) {
             property.setComments(simpleType.getAnnotation().getAnnotation().toString());
         }
-
         property.setBaseClass(new OverlayClass("String", "java.lang", OverlayType.Unknown));
         return property;
     }
@@ -422,6 +422,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 property.setBaseClass(new OverlayClass(xsParticle.getTerm().asElementDecl().getName(),
                         xsParticle.getTerm().asElementDecl().getTargetNamespace(),
                         OverlayType.Element));
+                property.setMinOccurs(xsParticle.getMinOccurs().intValue());
+                property.setMaxOccurs(xsParticle.getMaxOccurs().intValue());
 
                 properties.add(property);
             } else if (xsParticle.getTerm().isModelGroupDecl()) {
@@ -432,6 +434,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 property.setBaseClass(new OverlayClass(xsParticle.getTerm().asModelGroupDecl().getName(),
                         xsParticle.getTerm().asModelGroupDecl().getTargetNamespace(),
                         OverlayType.Group));
+                property.setMinOccurs(xsParticle.getMinOccurs().intValue());
+                property.setMaxOccurs(xsParticle.getMaxOccurs().intValue());
+
 
                 properties.add(property);
             } else if (xsParticle.getTerm().isModelGroup()) {
@@ -443,6 +448,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 OverlayProperty property = new OverlayProperty(OverlayType.WildcardType, "java.lang", null, "String",
                         "wildcardContent" , isCollection || wasCollection, false);
                 property.setBaseClass(new OverlayClass("String", "java.lang", OverlayType.WildcardType));
+                property.setMinOccurs(xsParticle.getMinOccurs().intValue());
+                property.setMaxOccurs(xsParticle.getMaxOccurs().intValue());
+
                 properties.add(property);
             } else {
                 LOG.warn("No property is generated for xs particle {}", xsParticle);

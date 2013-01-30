@@ -331,7 +331,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * @param rootClass The schema overlay class that will be traversed
      * @return A List of overlay classes
      */
-    private List<OverlayClass> getFlatListWithNoGroups(OverlayClassGenerator.OverlayRootClass rootClass) {
+    protected List<OverlayClass> getFlatListWithNoGroups(OverlayClassGenerator.OverlayRootClass rootClass) {
         Stack<OverlayClass> stack = new Stack<OverlayClass>();
         List<OverlayClass> result = new ArrayList<OverlayClass>();
         stack.push(rootClass);
