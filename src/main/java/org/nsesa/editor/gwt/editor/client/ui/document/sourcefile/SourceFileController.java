@@ -12,7 +12,6 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
-import org.nsesa.editor.gwt.core.client.mode.InlineEditingMode;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
@@ -42,24 +41,24 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
 
     private static final Logger LOG = Logger.getLogger(SourceFileController.class.getName());
 
-    private final ClientFactory clientFactory;
-    private final ServiceFactory serviceFactory;
+    protected final ClientFactory clientFactory;
+    protected final ServiceFactory serviceFactory;
 
-    private final DocumentEventBus documentEventBus;
+    protected final DocumentEventBus documentEventBus;
 
-    private final MarkerController markerController;
-    private final SourceFileHeaderController sourceFileHeaderController;
-    private final ContentController contentController;
-    private final ActionBarController actionBarController;
+    protected final MarkerController markerController;
+    protected final SourceFileHeaderController sourceFileHeaderController;
+    protected final ContentController contentController;
+    protected final ActionBarController actionBarController;
 
-    private final SourceFileView view;
+    protected final SourceFileView view;
 
     // logical parent
-    private DocumentController documentController;
+    protected DocumentController documentController;
 
-    private List<AmendableWidget> amendableWidgets;
+    protected List<AmendableWidget> amendableWidgets;
 
-    private AmendableWidget activeAmendableWidget;
+    protected AmendableWidget activeAmendableWidget;
 
     @Inject
     public SourceFileController(ClientFactory clientFactory, ServiceFactory serviceFactory,
@@ -162,14 +161,7 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
 
     @Override
     public void onDblClick(AmendableWidget sender) {
-        final InlineEditingMode inlineEditingMode = (InlineEditingMode) documentController.getMode(InlineEditingMode.KEY);
-        if (inlineEditingMode != null) {
-            if (!inlineEditingMode.getState().isActive()) {
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
-            }
-        } else {
-            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
-        }
+        documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
     }
 
     @Override

@@ -100,7 +100,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public Element getBody() {
-        return body.getElement();
+        return (Element) body.getElement().getFirstChildElement();
     }
 
     @Override

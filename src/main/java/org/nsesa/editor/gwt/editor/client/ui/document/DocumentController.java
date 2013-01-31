@@ -15,7 +15,8 @@ import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventHandler;
-import org.nsesa.editor.gwt.core.client.mode.*;
+import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
+import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
@@ -33,7 +34,6 @@ import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanel
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
-import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorController;
 
 import java.util.*;
@@ -134,9 +134,7 @@ public class DocumentController {
     }
 
     protected void registerModes() {
-        registerMode(InlineEditingMode.KEY, new InlineEditingMode(this, clientFactory));
-        registerMode(DiffMode.KEY, new DiffMode(this, clientFactory, serviceFactory));
-        registerMode(ConsolidationMode.KEY, new ConsolidationMode(this, clientFactory));
+
     }
 
     protected void registerListeners() {
@@ -171,10 +169,10 @@ public class DocumentController {
                 }
                 sourceFileController.setActiveAmendableWidget(event.getAmendableWidget());
                 sourceFileController.getActiveAmendableWidget().asWidget().addStyleName(style.selected());
-                final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
+                /*final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
                 if (alreadySelected && inlineEditingMode != null && inlineEditingMode.getState().isActive()) {
                     clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
-                }
+                }*/
             }
         });
 

@@ -171,15 +171,15 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public AmendableWidget asAmendableWidget() {
-        return documentController.getOverlayFactory().getAmendableWidget(view.getBody().getFirstChildElement());
+    public AmendableWidget asAmendableWidget(final String source) {
+        final com.google.gwt.user.client.Element span = DOM.createSpan();
+        span.setInnerHTML(source);
+        return asAmendableWidget(span.getFirstChildElement());
     }
 
     @Override
-    public AmendableWidget asAmendableWidgetFromModel() {
-        final com.google.gwt.user.client.Element span = DOM.createSpan();
-        span.setInnerHTML(getModel().getBody());
-        return documentController.getOverlayFactory().getAmendableWidget(span.getFirstChildElement());
+    public AmendableWidget asAmendableWidget(final Element element) {
+        return documentController.getOverlayFactory().getAmendableWidget(element);
     }
 
     @Override
@@ -233,66 +233,6 @@ public class DefaultAmendmentController implements AmendmentController {
     public void setStatus(String status) {
         this.view.setStatus(status);
         this.extendedView.setStatus(status);
-    }
-
-    @Override
-    public void setAmendmentContent(String amendmentContent) {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public void setOriginalContent(String originalContent) {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getAmendmentContent() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getOriginalContent() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public void setAmendmentNum(String num) {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public void setOriginalNum(String num) {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getAmendmentNum() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getOriginalNum() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getAmendmentNumFromModel() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getOriginalNumFromModel() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getAmendmentContentFromModel() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
-    }
-
-    @Override
-    public String getOriginalContentFromModel() {
-        throw new UnsupportedOperationException("Should be overridden in subclass.");
     }
 
     @Override
