@@ -146,6 +146,23 @@ public class DefaultAmendmentController implements AmendmentController {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
             }
         });
+
+        extendedView.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // don't let it bubble up to its parent amended widget
+                event.preventDefault();
+            }
+        });
+
+        extendedView.addDoubleClickHandler(new DoubleClickHandler() {
+            @Override
+            public void onDoubleClick(DoubleClickEvent event) {
+                // don't let it bubble up to its parent amended widget
+                event.preventDefault();
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
+            }
+        });
     }
 
     @Override
