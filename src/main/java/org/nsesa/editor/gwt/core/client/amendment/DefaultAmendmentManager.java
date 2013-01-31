@@ -81,7 +81,11 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 // serialize amendable widget into XML content
                 for (final AmendmentContainerDTO amendment : event.getAmendments()) {
                     amendment.setBody(transformer.transform(amendment.getRoot()));
+                    // do some checks to make sure all fields are set
+                    if (amendment.getRevisionID() == null)
+                        throw new NullPointerException("No revision id set before sending to the backend. This will cause problems.");
                 }
+
                 serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(event.getAmendments())), new AsyncCallback<AmendmentContainerDTO[]>() {
                     @Override
                     public void onFailure(final Throwable caught) {
