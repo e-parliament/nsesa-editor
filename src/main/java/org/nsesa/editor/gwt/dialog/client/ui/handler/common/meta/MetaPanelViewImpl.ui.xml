@@ -1,0 +1,20 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="MetaPanelViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelViewCss'/>
+    <ui:style field="res">
+        .metaPanel {
+
+        }
+    </ui:style>
+    <g:VerticalPanel width="100%" styleName="{res.metaPanel}">
+        <g:HTMLPanel>
+            <g:HTML text="Justification"/>:
+            <g:TextArea ui:field="justification"/>
+        </g:HTMLPanel>
+        <g:HTMLPanel>
+            <g:HTML text="Notes"/>:
+            <g:TextArea ui:field="notes"/>
+        </g:HTMLPanel>
+    </g:VerticalPanel>
+</ui:UiBinder>
