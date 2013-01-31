@@ -20,7 +20,7 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
 
     private ClientFactory clientFactory;
 
-    private int previousState;
+    private int previousState = -1;
 
     @Inject
     public CKEditorShowDraftingToolPlugin(ClientFactory clientFactory) {
@@ -53,16 +53,24 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
             var toggleDraft = ev.data.nsesaToggleDraft;
             plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(toggleDraft);
         });
+        // save the state before executing source command
+        editor.on( 'beforeCommandExec', function( evt )
+        {
+            if ( evt.data.name == 'source' && evt.editor.mode == 'wysiwyg' )
+            {
+                plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
+            }
+        });
 
         editor.on( 'mode', function()
         {
-            alert(editor.getCommand('NsesaToggle').getState());
-            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState =  editor.getCommand('NsesaToggle').getState();
-
-            if (editor.mode == 'source') {
-                plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState =  editor.getCommand('NsesaToggle').getState();
-            } else {
-                //editor.getCommand('NsesaToggle').setState(plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState);
+            if (editor.mode != 'source') {
+                if (editor.getCommand('NsesaToggle')) {
+                    var state = plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState;
+                    if (state >= 0) {
+                        editor.getCommand('NsesaToggle').setState(state);
+                    }
+                }
             }
         });
 
