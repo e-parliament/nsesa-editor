@@ -11,6 +11,10 @@ import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanel
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.header.SourceFileHeaderController;
+import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerController;
 
 /**
  * Date: 17/10/12 14:53
@@ -32,6 +36,14 @@ public interface DocumentInjector extends Ginjector {
     AmendmentsPanelController getAmendmentsPanelController();
 
     SourceFileController getSourceFileController();
+
+    SourceFileHeaderController getSourceFileHeaderController();
+
+    MarkerController getMarkerController();
+
+    ContentController getContentController();
+
+    ActionBarController getActionBarController();
 
     AmendmentActionPanelController getAmendmentActionPanelController();
 
