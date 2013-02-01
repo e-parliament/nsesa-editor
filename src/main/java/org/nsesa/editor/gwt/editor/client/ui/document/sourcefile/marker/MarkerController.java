@@ -46,9 +46,9 @@ public class MarkerController {
 
     private static final Map<String, String> colorCodes = new HashMap<String, String>() {
         {
-            put("CANDIDATE", "blue");
-            put("TABLED", "green");
-            put("WITHDRAWN", "brown");
+            put("candidate", "blue");
+            put("tabled", "green");
+            put("withdrawn", "brown");
         }
     };
 
