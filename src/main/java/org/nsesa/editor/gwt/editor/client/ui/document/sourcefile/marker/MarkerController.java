@@ -13,6 +13,7 @@ import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
@@ -67,7 +68,25 @@ public class MarkerController {
                         focusWidget.addClickHandler(new ClickHandler() {
                             @Override
                             public void onClick(ClickEvent event) {
-                                sourceFileController.scrollTo(amendmentController.getView().asWidget());
+                                // TODO: this is a very poor solution to find a amendable widget to scroll to ...
+                                if (!amendmentController.getAmendedAmendableWidget().asWidget().isVisible()) {
+                                    final AmendableWidget amendedAmendableWidget = amendmentController.getAmendedAmendableWidget();
+                                    if (amendedAmendableWidget != null) {
+                                        amendedAmendableWidget.getAmendableElement().getPreviousSiblingElement();
+
+                                        AmendableWidget previousNonIntroducedAmendableWidget = amendedAmendableWidget.getPreviousNonIntroducedAmendableWidget(false);
+                                        while (previousNonIntroducedAmendableWidget != null && !previousNonIntroducedAmendableWidget.asWidget().isVisible()) {
+                                            previousNonIntroducedAmendableWidget = previousNonIntroducedAmendableWidget.getPreviousNonIntroducedAmendableWidget(false);
+                                        }
+                                        if (previousNonIntroducedAmendableWidget != null)
+                                            sourceFileController.scrollTo(previousNonIntroducedAmendableWidget.asWidget());
+                                        else {
+                                            sourceFileController.scrollTo(amendedAmendableWidget.getParentAmendableWidget().asWidget());
+                                        }
+                                    }
+                                } else {
+                                    sourceFileController.scrollTo(amendmentController.getView().asWidget());
+                                }
                             }
                         });
                     }
