@@ -44,4 +44,16 @@ public interface RichTextEditorConfig {
      * @return
      */
     JavaScriptObject getConfiguration();
+
+    /**
+     * Return the drafting classname
+     * @return
+     */
+    String getDraftingClassName();
+    /**
+     * Set up the drafting class name
+     * @return
+     */
+    void setDraftingClassName(String draftingClassName);
+
 }

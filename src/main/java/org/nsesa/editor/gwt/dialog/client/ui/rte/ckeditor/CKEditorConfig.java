@@ -27,6 +27,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private boolean autoParagraph;
     private boolean fillEmptyBlocks;
     private boolean forcePasteAsPlainText;
+    private String draftingClassName;
 
     private JavaScriptObject config = JavaScriptObject.createObject();
 
@@ -35,6 +36,16 @@ public class CKEditorConfig implements RichTextEditorConfig {
 
     public JavaScriptObject getConfiguration() {
         return config;
+    }
+
+    @Override
+    public String getDraftingClassName() {
+        return draftingClassName;
+    }
+
+    @Override
+    public void setDraftingClassName(String draftingClassName) {
+        this.draftingClassName = draftingClassName;
     }
 
     @Override

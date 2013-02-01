@@ -31,19 +31,23 @@ public class CKEditor extends Composite implements RichTextEditor {
     private RichTextEditorPlugin plugin;
     // the CK editor configuration
     private RichTextEditorConfig config;
+    private boolean showDraftingTool;
 
     //the main panel for ck editor
     private DockLayoutPanel mainPanel = new DockLayoutPanel(Style.Unit.PX);
     // the holder for drafting tool
     private FlowPanel draftHolderPanel = new FlowPanel();
 
-    public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config) {
+    public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config, boolean showDraftingTool) {
         this.plugin = plugin;
         this.config = config;
+        this.showDraftingTool = showDraftingTool;
 
         this.id = "ckEditor" + counter++;
         textArea.getElement().setId(this.id);
-        mainPanel.addEast(draftHolderPanel, 1);
+        if (showDraftingTool) {
+            mainPanel.addEast(draftHolderPanel, 1);
+        }
         mainPanel.add(textArea);
         initWidget(mainPanel);
         mainPanel.setWidth("100%");
@@ -85,7 +89,15 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     @Override
     public void toggleDraftingTool(boolean toggled) {
-        mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+        if (showDraftingTool) {
+            mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+        }
+        if (toggled) {
+            addBodyClassName(editorInstance, config.getDraftingClassName());
+        } else {
+            removeBodyClassName(editorInstance, config.getDraftingClassName());
+        }
+
     }
 
     @Override
@@ -101,6 +113,16 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     public native void destroy(JavaScriptObject editorInstance) /*-{
         if (editorInstance != null) editorInstance.destroy();
+    }-*/;
+
+    private native void addBodyClassName(JavaScriptObject editorInstance, String className) /*-{
+        if (editorInstance != null && editorInstance.document != null && editorInstance.document.getBody() != null)
+            editorInstance.document.getBody().addClass(className);
+    }-*/;
+
+    private native void removeBodyClassName(JavaScriptObject editorInstance, String className) /*-{
+        if (editorInstance != null && editorInstance.document != null && editorInstance.document.getBody() != null)
+            editorInstance.document.getBody().removeClass(className);
     }-*/;
 
     private native void executeCommand(JavaScriptObject editorInstance, String cmdName) /*-{

@@ -52,6 +52,11 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
         {
             var toggleDraft = ev.data.nsesaToggleDraft;
             plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(toggleDraft);
+//            if (toggleDraft) {
+//                ev.editor.document.getBody().addClass("akomaNtoso");
+//            } else {
+//                ev.editor.document.getBody().removeClass("akomaNtoso");
+//            }
         });
         // save the state before executing source command
         editor.on( 'beforeCommandExec', function( evt )

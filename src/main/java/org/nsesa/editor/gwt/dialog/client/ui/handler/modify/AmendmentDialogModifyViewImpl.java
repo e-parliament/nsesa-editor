@@ -51,10 +51,6 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     @Override
     protected void onAttach() {
         super.onAttach();
-        amendmentText.toggleDraftingTool(true);
-        //I didnt find any other way to set up the drafting button on initialization unless forcing to execute
-        // a command
-        amendmentText.executeCommand("NsesaToggle", 500);
         selectTab(0);
     }
 

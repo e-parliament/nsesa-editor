@@ -54,6 +54,11 @@ public class ContentControllerViewImpl extends Composite implements ContentContr
     }
 
     @Override
+    public RichTextEditor getRichTextEditor() {
+        return originalText;
+    }
+
+    @Override
     protected void onAttach() {
         super.onAttach();
     }

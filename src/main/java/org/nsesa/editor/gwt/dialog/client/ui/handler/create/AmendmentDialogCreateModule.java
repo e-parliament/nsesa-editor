@@ -31,7 +31,7 @@ public class AmendmentDialogCreateModule extends AbstractGinModule {
         @Override
         public RichTextEditor get() {
             config.setReadOnly(false);
-            return new CKEditor(plugin, config);
+            return new CKEditor(plugin, config, true);
         }
     }
 }

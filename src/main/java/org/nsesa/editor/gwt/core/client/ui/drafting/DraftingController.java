@@ -3,6 +3,8 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -56,7 +58,7 @@ public class DraftingController {
     }
 
     public void setAmendableWidget(final AmendableWidget amendableWidget) {
-        refreshView(amendableWidget);
+        refreshView(amendableWidget, null);
     }
 
     private void registerListeners() {
@@ -64,38 +66,50 @@ public class DraftingController {
             @Override
             public void onEvent(SelectionChangedEvent event) {
                 if (event.isMoreTagsSelected()) {
-                    //draftingView.clearAll();
+                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
+                    //eventBus.fireEvent(new CriticalErrorEvent("Too many tags selected..."));
                 } else {
-                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()));
+                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
                 }
             }
         });
         eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
-                refreshView(event.getAmendableWidget());
+                refreshView(event.getAmendableWidget(), null);
             }
         });
 
     }
 
-    public void refreshView(AmendableWidget amendableWidget) {
+    public void refreshView(AmendableWidget amendableWidget, String selectedText) {
         draftingView.clearAll();
         LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
         draftingView.setDraftTitle(amendableWidget.getType());
         for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
-            Anchor anchor = new Anchor(overlayResource.getName(child.getValue()));
-            anchor.setTitle(overlayResource.getDescription(child.getValue()));
-            anchor.getElement().addClassName("drafting-" + child.getKey());
-            anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    // throw a drafting insertion event
-                    clientFactory.getEventBus().fireEvent(
-                            new DraftingInsertionEvent(child.getValue()));
-                }
-            });
-            draftingView.addWidget(anchor);
+            // when selected text is empty do not add any click handler just display the tags
+            IsWidget tagToAdd;
+//            if (selectedText == null || selectedText.length() == 0) {
+//                Label label = new Label(overlayResource.getName(child.getValue()));
+//                label.setTitle(overlayResource.getDescription(child.getValue()));
+//                label.getElement().addClassName("drafting-" + child.getKey());
+//                tagToAdd = label;
+//
+//            } else {
+                Anchor anchor = new Anchor(overlayResource.getName(child.getValue()));
+                anchor.setTitle(overlayResource.getDescription(child.getValue()));
+                anchor.getElement().addClassName("drafting-" + child.getKey());
+                anchor.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        // throw a drafting insertion event
+                        clientFactory.getEventBus().fireEvent(
+                                new DraftingInsertionEvent(child.getValue()));
+                    }
+                });
+                tagToAdd = anchor;
+//            }
+            draftingView.addWidget(tagToAdd);
         }
     }
 

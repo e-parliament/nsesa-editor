@@ -59,28 +59,32 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
                     editor = ev.editor,
                     parentTagType,
                     nameSpace,
-                    moreTagsSelected,
-                    selectedText;
+                    moreTagsSelected = false,
+                    selectedText = selection.getSelectedText();
 
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
-            moreTagsSelected = selection.getRanges().length > 1;
-            selectedText = selection.getSelectedText();
-            if (!moreTagsSelected) {
-                var walker = new $wnd.CKEDITOR.dom.walker(selection.getRanges()[0]), node;
-                while (node = walker.next()) {
-                    moreTagsSelected = true;
-                    break;
-                }
-            }
+//            for (var i = 0; i < selection.getRanges().length; i++) {
+//                range = selection.getRanges()[i];
+//                if (range.startContainer != range.endContainer) {
+//                    moreTagsSelected = true;
+//                }
+//            }
+//            if (!moreTagsSelected) {
+//                var walker = new $wnd.CKEDITOR.dom.walker(, node;
+//                while (node = walker.next()) {
+//                    moreTagsSelected = true;
+//                    break;
+//                }
+//            }
             if (parentTagType) {
-                plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
+                    plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
             }
         });
     }-*/;
 
     private void fireEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
-        LOG.info("Changed event fired with more tags selected: " + moreTagsSelected);
+        LOG.info("Changed event fired with more tags selected: " + moreTagsSelected + " and selected text " + selectedText);
         clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(parentTagType, nameSpace, moreTagsSelected, selectedText));
     }
 }

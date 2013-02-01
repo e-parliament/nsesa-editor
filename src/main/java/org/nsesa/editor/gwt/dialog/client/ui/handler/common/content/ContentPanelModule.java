@@ -28,7 +28,7 @@ public class ContentPanelModule extends AbstractGinModule {
         @Override
         public RichTextEditor get() {
             config.setReadOnly(true);
-            return new CKEditor(null, config);
+            return new CKEditor(null, config, false);
         }
     }
 }
