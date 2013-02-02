@@ -166,8 +166,12 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
 
     @Override
     public void onMouseOver(AmendableWidget sender) {
-        actionBarController.attach(sender);
-        actionBarController.setLocation(documentController.getLocator().getLocation(sender, documentController.getDocument().getLanguageIso(), false));
+        // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
+        // allow the action bar to be shown.
+        if (!sender.isIntroducedByAnAmendment()) {
+            actionBarController.attach(sender);
+            actionBarController.setLocation(documentController.getLocator().getLocation(sender, documentController.getDocument().getLanguageIso(), false));
+        }
     }
 
     @Override
