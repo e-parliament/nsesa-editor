@@ -222,11 +222,13 @@
             <groupId>com.googlecode.gwt-test-utils</groupId>
             <artifactId>gwt-test-utils</artifactId>
             <version>0.43</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <version>3.12.1.GA</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
