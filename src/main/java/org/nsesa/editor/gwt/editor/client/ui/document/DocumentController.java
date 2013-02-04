@@ -34,7 +34,6 @@ import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanel
 import org.nsesa.editor.gwt.editor.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
-import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorController;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -67,8 +66,6 @@ public class DocumentController {
     private final Creator creator;
     private final Locator locator;
 
-    private final InlineEditorController inlineEditorController;
-
     @Scope(DOCUMENT)
     private final AmendmentManager amendmentManager;
     @Scope(DOCUMENT)
@@ -98,8 +95,7 @@ public class DocumentController {
                               final OverlayFactory overlayFactory,
                               final DiffingManager diffingManager,
                               final Locator locator,
-                              final Creator creator,
-                              final InlineEditorController inlineEditorController) {
+                              final Creator creator) {
 
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
@@ -109,7 +105,6 @@ public class DocumentController {
         this.overlayFactory = overlayFactory;
         this.diffingManager = diffingManager;
         this.amendmentManager = injector.getAmendmentManager();
-        this.inlineEditorController = inlineEditorController;
 
         this.documentEventBus = injector.getDocumentEventBus();
         this.view = injector.getDocumentView();
