@@ -1,6 +1,8 @@
 package org.nsesa.editor.gwt.dialog.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig;
 
 /**
  * Defines the configuration required for an editor in order to run it
@@ -8,6 +10,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  * Date: 14/01/13
  * Time: 14:42
  */
+@ImplementedBy(CKEditorConfig.class)
 public interface RichTextEditorConfig {
     /**
      * Whether or not the editor is readonly
@@ -47,11 +50,14 @@ public interface RichTextEditorConfig {
 
     /**
      * Return the drafting classname
+     *
      * @return
      */
     String getDraftingClassName();
+
     /**
      * Set up the drafting class name
+     *
      * @return
      */
     void setDraftingClassName(String draftingClassName);
