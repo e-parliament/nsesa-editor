@@ -10,7 +10,6 @@ import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileContr
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.content.ContentModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.marker.MarkerModule;
-import org.nsesa.editor.gwt.inline.client.ui.inline.InlineEditorModule;
 
 /**
  * Date: 24/06/12 15:11
@@ -27,7 +26,6 @@ public class DocumentModule extends AbstractGinModule {
         install(new DocumentHeaderModule());
         install(new DeadlineModule());
         install(new ActionBarModule());
-        install(new InlineEditorModule());
 
         bind(AmendableWidgetUIListener.class).to(SourceFileController.class);
     }

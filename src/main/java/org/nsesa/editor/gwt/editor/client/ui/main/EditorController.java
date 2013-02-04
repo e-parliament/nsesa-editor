@@ -8,7 +8,6 @@ import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogController;
 import org.nsesa.editor.gwt.editor.client.Injector;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -33,7 +32,6 @@ public class EditorController implements BootstrapEventHandler {
     private final EditorView view;
     private final ClientFactory clientFactory;
     private final ServiceFactory serviceFactory;
-    private final AmendmentDialogController amendmentDialogController;
 
     private Injector injector;
 
@@ -42,14 +40,12 @@ public class EditorController implements BootstrapEventHandler {
     @Inject
     public EditorController(final EditorView view,
                             final ClientFactory clientFactory,
-                            final ServiceFactory serviceFactory,
-                            final AmendmentDialogController amendmentDialogController) {
+                            final ServiceFactory serviceFactory) {
         assert view != null : "View is not set --BUG";
 
         this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-        this.amendmentDialogController = amendmentDialogController;
 
         registerListeners();
     }

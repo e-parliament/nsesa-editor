@@ -3,7 +3,6 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 import com.google.gwt.inject.client.AbstractGinModule;
 import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
-import org.nsesa.editor.gwt.dialog.client.ui.dialog.AmendmentDialogModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.document.info.InfoPanelModule;
@@ -26,6 +25,5 @@ public class EditorModule extends AbstractGinModule {
         install(new AmendmentModule());
         install(new AmendmentsPanelModule());
         install(new InfoPanelModule());
-        install(new AmendmentDialogModule());
     }
 }
