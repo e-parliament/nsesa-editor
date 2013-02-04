@@ -17,6 +17,8 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,32 +37,35 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
     protected final AmendmentDialogModifyView view;
 
-    protected final List<AmendmentDialogAwareController> childControllers;
-
     protected final OverlayFactory overlayFactory;
 
     protected final Locator locator;
 
     protected final DraftingController draftingController;
 
+    protected List<AmendmentDialogAwareController> childControllers = new ArrayList<AmendmentDialogAwareController>();
+
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
-                                           final DraftingController draftingController,
-                                           final List<AmendmentDialogAwareController> childControllers) {
+                                           final DraftingController draftingController) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
         this.draftingController = draftingController;
-        this.childControllers = childControllers;
 
+
+        view.getRichTextEditor().setDraftingTool(draftingController.getView());
+        registerListeners();
+    }
+
+    public void addChildControllers(AmendmentDialogAwareController... amendmentDialogAwareControllers) {
+        this.childControllers.addAll(Arrays.asList(amendmentDialogAwareControllers));
         for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
             view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
         }
-        view.getRichTextEditor().setDraftingTool(draftingController.getView());
-        registerListeners();
     }
 
     private void registerListeners() {
