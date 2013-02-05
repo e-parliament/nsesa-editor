@@ -48,7 +48,8 @@ public class ContentController {
         view.getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                documentEventBus.fireEvent(new DocumentScrollEvent(sourceFileController.getDocumentController()));
+                if (sourceFileController != null)
+                    documentEventBus.fireEvent(new DocumentScrollEvent(sourceFileController.getDocumentController()));
             }
         });
     }
