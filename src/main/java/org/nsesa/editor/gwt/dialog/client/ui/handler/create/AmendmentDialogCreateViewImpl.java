@@ -7,9 +7,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelView;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
 
 /**
  * Date: 24/06/12 21:44

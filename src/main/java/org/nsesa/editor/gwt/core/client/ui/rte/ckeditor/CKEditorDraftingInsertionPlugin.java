@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
@@ -6,8 +6,8 @@ import com.google.gwt.user.client.DOM;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEventHandler;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
  * A CK editor plugin to insert an amendable widget into the editor text
@@ -46,7 +46,7 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
 
     private native void nativeInit(JavaScriptObject editor, CKEditorDraftingInsertionPlugin plugin) /*-{
-        plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::handleDrafting(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
+        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::handleDrafting(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
     }-*/;
 
     private void handleDrafting(final JavaScriptObject editor) {
@@ -61,7 +61,7 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
     private native void insertDrafting(JavaScriptObject editor, Element el) /*-{
         var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
-        var toInsert = this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
+        var toInsert = this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
         editor.insertHtml(toInsert);
     }-*/;
 

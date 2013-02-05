@@ -1,8 +1,8 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 
 /**
  * Defines configuration environment for CK Editor
@@ -202,60 +202,60 @@ public class CKEditorConfig implements RichTextEditorConfig {
     }
 
     private native void setNativeReadOnly(boolean readOnly) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.readOnly = readOnly;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.readOnly = readOnly;
     }-*/;
 
     private native void setNativeContentCss(JsArrayString contentCss) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.contentsCss = contentCss;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.contentsCss = contentCss;
     }-*/;
 
     private native void setNativeExtraPlugins(String extraPlugins) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.extraPlugins = extraPlugins;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.extraPlugins = extraPlugins;
     }-*/;
 
     private native void setNativeBodyClass(String bodyClass) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.bodyClass = bodyClass;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.bodyClass = bodyClass;
     }-*/;
 
     private native void setNativeStartupFocus(boolean startupFocus) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.startupFocus = startupFocus;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.startupFocus = startupFocus;
     }-*/;
 
     private native void setNativeHeight(int height) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.height = height;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.height = height;
     }-*/;
 
     private native void setNativeToolbarStartupExpanded(boolean toolbarStartupExpanded) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.toolbarStartupExpanded = toolbarStartupExpanded;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.toolbarStartupExpanded = toolbarStartupExpanded;
     }-*/;
 
     private native void setNativeToolbar(JavaScriptObject toolbar) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.toolbar = 'temp';
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.toolbar_temp = toolbar;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.toolbar = 'temp';
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.toolbar_temp = toolbar;
     }-*/;
 
     private native void setNativeRemovePlugins(String removePlugins) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.removePlugins = removePlugins;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.removePlugins = removePlugins;
     }-*/;
 
     private native void setNativeToolbarLocation(String toolbarLocation) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.toolbarLocation = toolbarLocation;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.toolbarLocation = toolbarLocation;
     }-*/;
 
     private native void setNativeFillEmptyBlocks(boolean fillEmptyBlocks) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.fillEmptyBlocks = fillEmptyBlocks;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.fillEmptyBlocks = fillEmptyBlocks;
     }-*/;
 
     private native void setNativeResize_enabled(boolean resize_enabled) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.resize_enabled = resize_enabled;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.resize_enabled = resize_enabled;
     }-*/;
 
     private native void setNativeAutoParagraph(boolean autoParagraph) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.autoParagraph = autoParagraph;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.autoParagraph = autoParagraph;
     }-*/;
 
     private native void setNativeForcePasteAsPlainText(boolean forcePasteAsPlainText) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config.forcePasteAsPlainText = forcePasteAsPlainText;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.forcePasteAsPlainText = forcePasteAsPlainText;
     }-*/;
 
     private static native void keepNativeEmptyTag(String tagName) /*-{
@@ -263,7 +263,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     }-*/;
 
     private native void replaceNativeCoreStyle(String ckStyleName, String oldTag, String newTag, String className, String newType, String nameSpace) /*-{
-        this.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig::config[ckStyleName] =
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config[ckStyleName] =
         {
             element: newTag,
             attributes: { 'class': className, 'type': newType, 'ns': nameSpace},

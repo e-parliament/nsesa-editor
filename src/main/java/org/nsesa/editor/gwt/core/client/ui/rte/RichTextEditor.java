@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte;
+package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;

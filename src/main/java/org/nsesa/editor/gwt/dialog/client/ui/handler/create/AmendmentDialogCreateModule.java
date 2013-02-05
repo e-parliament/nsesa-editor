@@ -4,10 +4,10 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditor;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditor;
 
 /**
  * Date: 24/06/12 15:11

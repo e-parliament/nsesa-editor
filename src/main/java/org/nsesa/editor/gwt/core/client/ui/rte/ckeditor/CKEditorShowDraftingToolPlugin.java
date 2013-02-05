@@ -1,11 +1,11 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
@@ -48,10 +48,9 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
     }
 
     private native void nativeInit(JavaScriptObject editor, CKEditorShowDraftingToolPlugin plugin) /*-{
-        editor.on( 'nsesaToggleDraft', function( ev )
-        {
+        editor.on('nsesaToggleDraft', function (ev) {
             var toggleDraft = ev.data.nsesaToggleDraft;
-            plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(toggleDraft);
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(toggleDraft);
 //            if (toggleDraft) {
 //                ev.editor.document.getBody().addClass("akomaNtoso");
 //            } else {
@@ -59,19 +58,16 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
 //            }
         });
         // save the state before executing source command
-        editor.on( 'beforeCommandExec', function( evt )
-        {
-            if ( evt.data.name == 'source' && evt.editor.mode == 'wysiwyg' )
-            {
-                plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
+        editor.on('beforeCommandExec', function (evt) {
+            if (evt.data.name == 'source' && evt.editor.mode == 'wysiwyg') {
+                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
             }
         });
 
-        editor.on( 'mode', function()
-        {
+        editor.on('mode', function () {
             if (editor.mode != 'source') {
                 if (editor.getCommand('NsesaToggle')) {
-                    var state = plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState;
+                    var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState;
                     if (state >= 0) {
                         editor.getCommand('NsesaToggle').setState(state);
                     }

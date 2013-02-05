@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 
 /**
  * Date: 24/06/12 21:44

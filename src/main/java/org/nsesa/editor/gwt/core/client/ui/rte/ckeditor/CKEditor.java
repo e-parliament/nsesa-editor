@@ -1,13 +1,13 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
  * Date: 04/12/12 13:19

@@ -1,8 +1,8 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
  * A plugin to override the default basic styles plugin
@@ -33,29 +33,27 @@ public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
 
     private native void nativeInit(JavaScriptObject editor) /*-{
 
-        var addButtonCommand = function( buttonName, buttonLabel, commandName, styleDefiniton )
-        {
-            NsesaStyleCommand = function(styleDefinition) {
+        var addButtonCommand = function (buttonName, buttonLabel, commandName, styleDefiniton) {
+            NsesaStyleCommand = function (styleDefinition) {
                 this.styleDefinition = styleDefinition;
             }
             NsesaStyleCommand.prototype = new $wnd.CKEDITOR.styleCommand();
-            NsesaStyleCommand.prototype.exec = function(editor) {
+            NsesaStyleCommand.prototype.exec = function (editor) {
                 this.styleDefinition.attributes['ns'] = editor.getSelection().getStartElement().getAttribute('ns');
-                this.style = new $wnd.CKEDITOR.style( this.styleDefinition);
-                editor.attachStyleStateChange(this.style, function( state )
-                {
-                    !editor.readOnly && editor.getCommand( commandName ).setState( state );
+                this.style = new $wnd.CKEDITOR.style(this.styleDefinition);
+                editor.attachStyleStateChange(this.style, function (state) {
+                    !editor.readOnly && editor.getCommand(commandName).setState(state);
                 });
 
                 $wnd.CKEDITOR.styleCommand.prototype.exec.call(this, editor);
             }
             var nsesaStyleCommand = new NsesaStyleCommand(styleDefiniton);
-            editor.addCommand( commandName, nsesaStyleCommand);
-            editor.ui.addButton( buttonName,
-                    {
-                        label : buttonLabel,
-                        command : commandName
-                    });
+            editor.addCommand(commandName, nsesaStyleCommand);
+            editor.ui.addButton(buttonName,
+                {
+                    label: buttonLabel,
+                    command: commandName
+                });
         };
         var config = editor.config,
             lang = editor.lang,
@@ -69,33 +67,33 @@ public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
         className = "widget " + newType;
         config.coreStyles_bold =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType},
+            overrides: oldTag
         };
-        addButtonCommand( 'Bold'		, lang.bold		, 'bold'		, config.coreStyles_bold );
+        addButtonCommand('Bold', lang.bold, 'bold', config.coreStyles_bold);
 
         newType = "i";
         oldTag = "i";
         className = "widget " + newType;
         config.coreStyles_italic =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType},
+            overrides: oldTag
         };
-        addButtonCommand( 'Italic'		, lang.italic		, 'italic'		, config.coreStyles_italic );
+        addButtonCommand('Italic', lang.italic, 'italic', config.coreStyles_italic);
 
         newType = "u";
         oldTag = "u";
         className = "widget " + newType;
         config.coreStyles_underline =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType},
+            overrides: oldTag
         };
-        addButtonCommand( 'Underline'	, lang.underline		, 'underline'	, config.coreStyles_underline );
+        addButtonCommand('Underline', lang.underline, 'underline', config.coreStyles_underline);
 
 //        newType = "strike";
 //        oldTag = "strike";
@@ -112,22 +110,22 @@ public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
         className = "widget " + newType;
         config.coreStyles_subscript =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType},
+            overrides: oldTag
         };
-        addButtonCommand( 'Subscript'	, lang.subscript		, 'subscript'	, config.coreStyles_subscript );
+        addButtonCommand('Subscript', lang.subscript, 'subscript', config.coreStyles_subscript);
 
         newType = "sup";
         oldTag = "sup";
         className = "widget " + newType;
         config.coreStyles_superscript =
         {
-            element : newTag,
-            attributes : { 'class' : className, 'type' : newType},
-            overrides : oldTag
+            element: newTag,
+            attributes: { 'class': className, 'type': newType},
+            overrides: oldTag
         };
-        addButtonCommand( 'Superscript'	, lang.superscript		, 'superscript'	, config.coreStyles_superscript );
+        addButtonCommand('Superscript', lang.superscript, 'superscript', config.coreStyles_superscript);
 
 
     }-*/;

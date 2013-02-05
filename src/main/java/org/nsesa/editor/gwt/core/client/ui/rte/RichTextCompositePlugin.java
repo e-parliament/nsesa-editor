@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte;
+package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -10,7 +10,6 @@ import java.util.List;
  * User: groza
  * Date: 10/01/13
  * Time: 12:05
- *
  */
 public class RichTextCompositePlugin implements RichTextEditorPlugin {
     private String name;
@@ -32,21 +31,21 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
 
     @Override
     public void beforeInit(JavaScriptObject editor) {
-        for(RichTextEditorPlugin plugin : plugins) {
+        for (RichTextEditorPlugin plugin : plugins) {
             plugin.beforeInit(editor);
         }
     }
 
     @Override
     public void init(JavaScriptObject editor) {
-        for(RichTextEditorPlugin plugin : plugins) {
+        for (RichTextEditorPlugin plugin : plugins) {
             plugin.init(editor);
         }
     }
 
     @Override
     public void export(RichTextEditorConfig config) {
-        for(RichTextEditorPlugin plugin : plugins) {
+        for (RichTextEditorPlugin plugin : plugins) {
             plugin.export(config);
         }
     }

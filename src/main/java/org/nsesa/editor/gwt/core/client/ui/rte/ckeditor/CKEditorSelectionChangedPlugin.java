@@ -1,11 +1,11 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
@@ -50,17 +50,16 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     private native void nativeInit(JavaScriptObject editor, CKEditorSelectionChangedPlugin plugin) /*-{
 
-        editor.on( 'selectionChange', function( ev )
-        {
+        editor.on('selectionChange', function (ev) {
             var env = $wnd.CKEDITOR.env,
-                    selection = ev.data.selection,
-                    element = selection.getStartElement(),
-                    html = [],
-                    editor = ev.editor,
-                    parentTagType,
-                    nameSpace,
-                    moreTagsSelected = false,
-                    selectedText = selection.getSelectedText();
+                selection = ev.data.selection,
+                element = selection.getStartElement(),
+                html = [],
+                editor = ev.editor,
+                parentTagType,
+                nameSpace,
+                moreTagsSelected = false,
+                selectedText = selection.getSelectedText();
 
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
@@ -78,7 +77,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 //                }
 //            }
             if (parentTagType) {
-                    plugin.@org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
+                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
             }
         });
     }-*/;

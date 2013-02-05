@@ -1,4 +1,4 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -22,7 +22,7 @@ public class CKEditorToolbar {
             .add(new ToolbarLine().add(Option.NsesaToggle).add(Option._));
 
     public static enum Option {
-        NsesaToggle, Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll,Source, _;
+        NsesaToggle, Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll, Source, _;
     }
 
     public static class ToolbarLine {
@@ -40,9 +40,9 @@ public class CKEditorToolbar {
 
         public JavaScriptObject getRepresentation() {
             JavaScriptObject array = JavaScriptObject.createArray();
-            for(Option opt: options){
+            for (Option opt : options) {
                 final String optToString = opt.equals(Option._) ? "-" : opt.toString();
-                array = addToArray(array,optToString);
+                array = addToArray(array, optToString);
             }
             return array;
         }
@@ -50,19 +50,19 @@ public class CKEditorToolbar {
 
     private List<ToolbarLine> lines;
 
-    public CKEditorToolbar(){
+    public CKEditorToolbar() {
         lines = new ArrayList<ToolbarLine>();
     }
 
-    public CKEditorToolbar add(ToolbarLine l){
+    public CKEditorToolbar add(ToolbarLine l) {
         lines.add(l);
         return this;
     }
 
 
-    public JavaScriptObject getRepresentation(){
+    public JavaScriptObject getRepresentation() {
         JavaScriptObject array = JavaScriptObject.createArray();
-        for(ToolbarLine line:lines){
+        for (ToolbarLine line : lines) {
             JavaScriptObject representation = line.getRepresentation();
             array = addToArray(array, representation);
         }

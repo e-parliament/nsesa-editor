@@ -2,7 +2,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.common.content;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditor;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 
 /**
  * View for the creation and editing of amendment bundles.

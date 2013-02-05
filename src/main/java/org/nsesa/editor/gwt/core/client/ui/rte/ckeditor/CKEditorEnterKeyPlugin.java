@@ -1,10 +1,10 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor;
+package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
  * A CK plugin to handle enter and shift enter keystrokes
@@ -38,16 +38,20 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
     }
 
     private native void nativeInit(JavaScriptObject editor, OverlayFactory overlayFactory, String tagName) /*-{
-        editor.addCommand( 'enter', {
-            modes : { wysiwyg:1 },
-            editorFocus : false,
-            exec : function( editor ){ enter( editor ); }
+        editor.addCommand('enter', {
+            modes: { wysiwyg: 1 },
+            editorFocus: false,
+            exec: function (editor) {
+                enter(editor);
+            }
         });
 
-        editor.addCommand( 'shiftEnter', {
-            modes : { wysiwyg:1 },
-            editorFocus : false,
-            exec : function( editor ){ shiftEnter( editor ); }
+        editor.addCommand('shiftEnter', {
+            modes: { wysiwyg: 1 },
+            editorFocus: false,
+            exec: function (editor) {
+                shiftEnter(editor);
+            }
         });
 
         var keystrokes = editor.keystrokeHandler.keystrokes;
@@ -56,19 +60,17 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
 
         $wnd.CKEDITOR.plugins.enterkey =
         {
-            enterBlock : function( editor, mode, range, forceMode )
-            {
-                enterBr( editor, mode, range, forceMode );
+            enterBlock: function (editor, mode, range, forceMode) {
+                enterBr(editor, mode, range, forceMode);
                 return;
             },
 
-            enterBr : function( editor, mode, range, forceMode )
-            {
+            enterBr: function (editor, mode, range, forceMode) {
                 // Get the range for the current selection.
-                range = range || getRange( editor );
+                range = range || getRange(editor);
                 // We may not have valid ranges to work on, like when inside a
                 // contenteditable=false element.
-                if ( !range )
+                if (!range)
                     return;
 
                 var doc = range.document;
@@ -77,7 +79,7 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
                 var ns = editor.getSelection().getStartElement().getAttribute('ns');
                 var lineBreak;
                 //create a span of type br
-                lineBreak = doc.createElement( 'span' );
+                lineBreak = doc.createElement('span');
                 lineBreak.setAttribute('class', 'widget ' + tagName);
                 lineBreak.setAttribute('type', tagName);
                 lineBreak.setAttribute('ns', ns);
@@ -87,64 +89,59 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
                 range.insertNode(lineBreak);
 
                 // This collapse guarantees the cursor will be blinking.
-                range.collapse( true );
+                range.collapse(true);
 
-                range.select( isPre );
+                range.select(isPre);
             }
         };
 
         var plugin = $wnd.CKEDITOR.plugins.enterkey,
-                enterBr = plugin.enterBr,
-                enterBlock = plugin.enterBlock;
+            enterBr = plugin.enterBr,
+            enterBlock = plugin.enterBlock;
 
-        function shiftEnter( editor )
-        {
+        function shiftEnter(editor) {
             // Only effective within document.
-            if ( editor.mode != 'wysiwyg' )
+            if (editor.mode != 'wysiwyg')
                 return false;
 
             // On SHIFT+ENTER:
             // 1. We want to enforce the mode to be respected, instead
             // of cloning the current block. (#77)
-            return enter( editor, editor.config.shiftEnterMode, 1 );
+            return enter(editor, editor.config.shiftEnterMode, 1);
         }
 
-        function enter( editor, mode, forceMode )
-        {
+        function enter(editor, mode, forceMode) {
             forceMode = editor.config.forceEnterMode || forceMode;
 
             // Only effective within document.
-            if ( editor.mode != 'wysiwyg' )
+            if (editor.mode != 'wysiwyg')
                 return false;
 
-            if ( !mode )
+            if (!mode)
                 mode = editor.config.enterMode;
 
             // Use setTimout so the keys get cancelled immediatelly.
-            setTimeout( function()
-            {
-                editor.fire( 'saveSnapshot' );	// Save undo step.
+            setTimeout(function () {
+                editor.fire('saveSnapshot');	// Save undo step.
 
-                if ( mode == $wnd.CKEDITOR.ENTER_BR )
-                    enterBr( editor, mode, null, forceMode );
+                if (mode == $wnd.CKEDITOR.ENTER_BR)
+                    enterBr(editor, mode, null, forceMode);
                 else
-                    enterBlock( editor, mode, null, forceMode );
+                    enterBlock(editor, mode, null, forceMode);
 
-                editor.fire( 'saveSnapshot' );
+                editor.fire('saveSnapshot');
 
-            }, 0 );
+            }, 0);
 
             return true;
         }
 
-        function getRange( editor )
-        {
+        function getRange(editor) {
             // Get the selection ranges.
-            var ranges = editor.getSelection().getRanges( true );
+            var ranges = editor.getSelection().getRanges(true);
 
             // Delete the contents of all ranges except the first one.
-            for ( var i = ranges.length - 1 ; i > 0 ; i-- )
-            {
+            for (var i = ranges.length - 1; i > 0; i--) {
                 ranges[ i ].deleteContents();
             }
 

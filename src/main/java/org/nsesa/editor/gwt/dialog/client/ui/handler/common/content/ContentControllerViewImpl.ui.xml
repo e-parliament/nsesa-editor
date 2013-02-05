@@ -1,6 +1,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:rte='urn:import:org.nsesa.editor.gwt.dialog.client.ui.rte'>
+             xmlns:rte='urn:import:org.nsesa.editor.gwt.core.client.ui.rte'>
     <ui:style field="res">
 
     </ui:style>

@@ -1,8 +1,8 @@
-package org.nsesa.editor.gwt.dialog.client.ui.rte;
+package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.dialog.client.ui.rte.ckeditor.CKEditorConfig;
+import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig;
 
 /**
  * Defines the configuration required for an editor in order to run it
