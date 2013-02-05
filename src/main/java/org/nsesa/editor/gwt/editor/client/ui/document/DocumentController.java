@@ -373,13 +373,17 @@ public class DocumentController {
             }
 
             @Override
-            public void onSuccess(DocumentDTO document) {
-                setDocument(document);
-                final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
-                clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
-                loadDocumentContent();
+            public void onSuccess(final DocumentDTO document) {
+                onDocumentLoaded(document);
             }
         });
+    }
+
+    protected void onDocumentLoaded(DocumentDTO document) {
+        setDocument(document);
+        final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
+        clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
+        loadDocumentContent();
     }
 
     public void loadDocumentContent() {
@@ -395,15 +399,19 @@ public class DocumentController {
 
             @Override
             public void onSuccess(final String content) {
-                sourceFileController.setContent(content);
-                clientFactory.getScheduler().scheduleDeferred(new Command() {
-                    @Override
-                    public void execute() {
-                        sourceFileController.overlay();
-                        clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
-                        injectAmendments();
-                    }
-                });
+                onDocumentContentLoaded(content);
+            }
+        });
+    }
+
+    protected void onDocumentContentLoaded(final String content) {
+        sourceFileController.setContent(content);
+        clientFactory.getScheduler().scheduleDeferred(new Command() {
+            @Override
+            public void execute() {
+                fetchAmendments();
+                sourceFileController.overlay();
+                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
             }
         });
     }
@@ -417,17 +425,25 @@ public class DocumentController {
             }
 
             @Override
-            public void onSuccess(AmendmentContainerDTO[] result) {
-                LOG.info("Received " + result.length + " amendments.");
-                amendmentManager.setAmendmentContainerDTOs(result);
-                loadDocument();
+            public void onSuccess(AmendmentContainerDTO[] amendments) {
+                onAmendmentContainerDTOsLoaded(amendments);
             }
         });
     }
 
+    protected void onAmendmentContainerDTOsLoaded(AmendmentContainerDTO[] amendments) {
+        LOG.info("Received " + amendments.length + " amendments.");
+        amendmentManager.setAmendmentContainerDTOs(amendments);
+        injectAmendments();
+    }
+
     public void setDocument(final DocumentDTO document) {
+        // TODO check if this is the same document (or, perhaps, keep a cache of documents and their amendments)
         this.document = document;
         this.documentID = document.getDocumentID();
+
+        // clean the amendments
+        amendmentManager.getAmendmentControllers().clear();
 
         // update the document title
         this.view.setDocumentTitle(document.getName());

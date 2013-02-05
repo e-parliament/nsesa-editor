@@ -70,7 +70,7 @@ public class EditorController implements BootstrapEventHandler {
                 documentController.setDocumentID(documentID);
                 addDocumentController(documentController);
                 // request the amendments in the backend, this will fire off the document loading afterwards
-                documentController.fetchAmendments();
+                documentController.loadDocument();
             }
         }
     }
