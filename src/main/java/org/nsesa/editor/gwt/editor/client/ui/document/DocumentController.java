@@ -102,17 +102,20 @@ public class DocumentController {
         this.locator = locator;
         this.overlayFactory = overlayFactory;
         this.diffingManager = diffingManager;
-        this.amendmentManager = getInjector().getAmendmentManager();
+        final DocumentInjector documentInjector = getInjector();
+        if (documentInjector == null)
+            throw new UnsupportedOperationException("getInjector() returned null. Cannot continue.");
 
-        this.documentEventBus = getInjector().getDocumentEventBus();
-        this.view = getInjector().getDocumentView();
-        this.style = getInjector().getDocumentViewCss();
-        this.amendmentsPanelController = getInjector().getAmendmentsPanelController();
+        this.amendmentManager = documentInjector.getAmendmentManager();
+        this.documentEventBus = documentInjector.getDocumentEventBus();
+        this.view = documentInjector.getDocumentView();
+        this.style = documentInjector.getDocumentViewCss();
+        this.amendmentsPanelController = documentInjector.getAmendmentsPanelController();
 
-        this.infoPanelController = getInjector().getInfoPanelController();
-        this.sourceFileController = getInjector().getSourceFileController();
-        this.documentHeaderController = getInjector().getDocumentHeaderController();
-        this.deadlineController = getInjector().getDeadlineController();
+        this.infoPanelController = documentInjector.getInfoPanelController();
+        this.sourceFileController = documentInjector.getSourceFileController();
+        this.documentHeaderController = documentInjector.getDocumentHeaderController();
+        this.deadlineController = documentInjector.getDeadlineController();
 
         // set references in the child controllers
         this.amendmentManager.setDocumentController(this);
