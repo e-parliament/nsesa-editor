@@ -51,39 +51,37 @@ public class DocumentController {
 
     private static final Logger LOG = Logger.getLogger(DocumentController.class.getName());
 
-    private final DocumentInjector injector = getInjector();
+    @Scope(DOCUMENT)
+    protected final DocumentView view;
+    protected final DocumentViewCss style;
+    protected DocumentDTO document;
+    protected String documentID;
+
+    protected final ClientFactory clientFactory;
+    protected final ServiceFactory serviceFactory;
+
+    protected final OverlayFactory overlayFactory;
+    protected final Creator creator;
+    protected final Locator locator;
 
     @Scope(DOCUMENT)
-    private final DocumentView view;
-    private final DocumentViewCss style;
-    private DocumentDTO document;
-    private String documentID;
-
-    private final ClientFactory clientFactory;
-    private final ServiceFactory serviceFactory;
-
-    private final OverlayFactory overlayFactory;
-    private final Creator creator;
-    private final Locator locator;
+    protected final AmendmentManager amendmentManager;
+    @Scope(DOCUMENT)
+    protected final DiffingManager diffingManager;
+    @Scope(DOCUMENT)
+    protected final DocumentHeaderController documentHeaderController;
+    @Scope(DOCUMENT)
+    protected final DeadlineController deadlineController;
+    @Scope(DOCUMENT)
+    protected final SourceFileController sourceFileController;
 
     @Scope(DOCUMENT)
-    private final AmendmentManager amendmentManager;
-    @Scope(DOCUMENT)
-    private final DiffingManager diffingManager;
-    @Scope(DOCUMENT)
-    private final DocumentHeaderController documentHeaderController;
-    @Scope(DOCUMENT)
-    private final DeadlineController deadlineController;
-    @Scope(DOCUMENT)
-    private final SourceFileController sourceFileController;
+    protected final DocumentEventBus documentEventBus;
 
     @Scope(DOCUMENT)
-    private final DocumentEventBus documentEventBus;
-
+    protected final AmendmentsPanelController amendmentsPanelController;
     @Scope(DOCUMENT)
-    private final AmendmentsPanelController amendmentsPanelController;
-    @Scope(DOCUMENT)
-    private final InfoPanelController infoPanelController;
+    protected final InfoPanelController infoPanelController;
 
     private List<AmendmentController> selectedAmendmentControllers = new ArrayList<AmendmentController>();
 
@@ -104,17 +102,17 @@ public class DocumentController {
         this.locator = locator;
         this.overlayFactory = overlayFactory;
         this.diffingManager = diffingManager;
-        this.amendmentManager = injector.getAmendmentManager();
+        this.amendmentManager = getInjector().getAmendmentManager();
 
-        this.documentEventBus = injector.getDocumentEventBus();
-        this.view = injector.getDocumentView();
-        this.style = injector.getDocumentViewCss();
-        this.amendmentsPanelController = injector.getAmendmentsPanelController();
+        this.documentEventBus = getInjector().getDocumentEventBus();
+        this.view = getInjector().getDocumentView();
+        this.style = getInjector().getDocumentViewCss();
+        this.amendmentsPanelController = getInjector().getAmendmentsPanelController();
 
-        this.infoPanelController = injector.getInfoPanelController();
-        this.sourceFileController = injector.getSourceFileController();
-        this.documentHeaderController = injector.getDocumentHeaderController();
-        this.deadlineController = injector.getDeadlineController();
+        this.infoPanelController = getInjector().getInfoPanelController();
+        this.sourceFileController = getInjector().getSourceFileController();
+        this.documentHeaderController = getInjector().getDocumentHeaderController();
+        this.deadlineController = getInjector().getDeadlineController();
 
         // set references in the child controllers
         this.amendmentManager.setDocumentController(this);
