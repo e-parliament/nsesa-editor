@@ -37,7 +37,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     /**
      * The encompassing popup panel used to display this view as a modal dialog.
      */
-    private final PopupPanel popupPanel = new DecoratedPopupPanel(false, true);
+    //if the popup is modal then the CKeditor dialogs will not work properly
+    private final PopupPanel popupPanel = new DecoratedPopupPanel(false, false);
 
     /**
      * The amendment dialog view.
