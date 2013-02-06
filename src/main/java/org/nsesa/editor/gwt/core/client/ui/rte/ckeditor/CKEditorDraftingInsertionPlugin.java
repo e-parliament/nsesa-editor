@@ -17,6 +17,10 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  */
 public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
+    private static enum MarkupOperation {
+        ins, del, mod
+    }
+
     private ClientFactory clientFactory;
 
     public CKEditorDraftingInsertionPlugin(ClientFactory clientFactory) {
@@ -67,6 +71,7 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
     private String text(Element el, String selectedText) {
         el.setInnerHTML(selectedText);
+        el.addClassName(MarkupOperation.ins.name());
         return DOM.toString((com.google.gwt.user.client.Element) el);
     }
 }
