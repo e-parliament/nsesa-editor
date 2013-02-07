@@ -48,38 +48,71 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
         //do nothing
     }
 
-    private native void nativeInit(JavaScriptObject editor, CKEditorSelectionChangedPlugin plugin) /*-{
+    private native void nativeInit(final JavaScriptObject editor, CKEditorSelectionChangedPlugin plugin) /*-{
+        var keyHandler, mouseUpListener, mouseDownListener, keyUpListener;
+        function selectionHandle(ed) {
+            if (ed.document) {
+                ed.document.on('mouseup', function(ev) {
+                    if (ed.getSelection())
+                        checkSelection(ed.getSelection());
+                })
+                ed.document.on('mousedown', function(ev) {
+                    //remove the ranges
+                    if (ed.getSelection()) {
+                        //editor.getSelection().removeAllRanges();
+                        var range = new $wnd.CKEDITOR.dom.range(ed.document);
+                        range.setStart(ed.document.getBody(), 0);
+                        range.setEnd(ed.document.getBody(), 0);
+                        ed.getSelection().selectRanges([range]);
+                    }
+                })
+                ed.document.on('keyup', function(ev) {
+                    $wnd.clearTimeout(keyHandler);
+                    keyHandler = $wnd.setTimeout(function() {
+                        checkSelection(ed.getSelection());
+                    }, 500)
+                })
+            };
 
-        editor.on('selectionChange', function (ev) {
+        }
+        function checkSelection(selection) {
             var env = $wnd.CKEDITOR.env,
-                selection = ev.data.selection,
-                element = selection.getStartElement(),
-                html = [],
-                editor = ev.editor,
-                parentTagType,
-                nameSpace,
-                moreTagsSelected = false,
-                selectedText = selection.getSelectedText();
+                    element = selection.getStartElement(),
+                    html = [],
+                    parentTagType,
+                    nameSpace,
+                    moreTagsSelected = false,
+                    selectedText = selection.getSelectedText();
 
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
-//            for (var i = 0; i < selection.getRanges().length; i++) {
-//                range = selection.getRanges()[i];
-//                if (range.startContainer != range.endContainer) {
-//                    moreTagsSelected = true;
-//                }
-//            }
-//            if (!moreTagsSelected) {
-//                var walker = new $wnd.CKEDITOR.dom.walker(, node;
-//                while (node = walker.next()) {
-//                    moreTagsSelected = true;
-//                    break;
-//                }
-//            }
+            moreTagsSelected = selectMoreTags(selection);
             if (parentTagType) {
                 plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
             }
+        }
+        function selectMoreTags(selection) {
+            var ranges = selection.getRanges( 1 ),
+                    iterator = ranges.createIterator(),
+                    range, startNode, endNode, child, foundMoreTags = false;
+            while ( !foundMoreTags && ( range = iterator.getNextRange() ) ) {
+                startNode = range.startContainer;
+                endNode = range.endContainer;
+                foundMoreTags = !startNode.equals(endNode);
+            }
+            return foundMoreTags;
+        }
+
+        editor.on( 'mode', function() {
+            // get the listeners if they exists
+            if (editor.mode != 'source') {
+                selectionHandle(editor);
+            }
         });
+
+
+
+
     }-*/;
 
     private void fireEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
