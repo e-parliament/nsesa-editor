@@ -1,5 +1,6 @@
 package org.nsesa.editor.gwt.core.client.ui.drafting;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -66,7 +67,7 @@ public class DraftingController {
             @Override
             public void onEvent(SelectionChangedEvent event) {
                 if (event.isMoreTagsSelected()) {
-                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
+                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), "");
                     //eventBus.fireEvent(new CriticalErrorEvent("Too many tags selected..."));
                 } else {
                     refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
@@ -82,35 +83,41 @@ public class DraftingController {
 
     }
 
-    public void refreshView(AmendableWidget amendableWidget, String selectedText) {
-        draftingView.clearAll();
-        LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
-        draftingView.setDraftTitle(amendableWidget.getType());
-        for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
-            // when selected text is empty do not add any click handler just display the tags
-            IsWidget tagToAdd;
-//            if (selectedText == null || selectedText.length() == 0) {
-//                Label label = new Label(overlayResource.getName(child.getValue()));
-//                label.setTitle(overlayResource.getDescription(child.getValue()));
-//                label.getElement().addClassName("drafting-" + child.getKey());
-//                tagToAdd = label;
-//
-//            } else {
-                Anchor anchor = new Anchor(overlayResource.getName(child.getValue()));
-                anchor.setTitle(overlayResource.getDescription(child.getValue()));
-                anchor.getElement().addClassName("drafting-" + child.getKey());
-                anchor.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        // throw a drafting insertion event
-                        clientFactory.getEventBus().fireEvent(
-                                new DraftingInsertionEvent(child.getValue()));
+    public void refreshView(final AmendableWidget amendableWidget, final String selectedText) {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                draftingView.clearAll();
+                LinkedHashMap<String, AmendableWidget> children = creator.getAllowedChildren(documentController, amendableWidget);
+                draftingView.setDraftTitle(amendableWidget.getType());
+                for(final Map.Entry<String, AmendableWidget> child : children.entrySet()) {
+                    // when selected text is empty do not add any click handler just display the tags
+                    IsWidget tagToAdd;
+                    if (selectedText == null || selectedText.length() == 0) {
+                        Label label = new Label(overlayResource.getName(child.getValue()));
+                        label.setTitle(overlayResource.getDescription(child.getValue()));
+                        label.getElement().addClassName("drafting-" + child.getKey());
+                        tagToAdd = label;
+
+                    } else {
+                        Anchor anchor = new Anchor(overlayResource.getName(child.getValue()));
+                        anchor.setTitle(overlayResource.getDescription(child.getValue()));
+                        anchor.getElement().addClassName("drafting-" + child.getKey());
+                        anchor.addClickHandler(new ClickHandler() {
+                            @Override
+                            public void onClick(ClickEvent event) {
+                                // throw a drafting insertion event
+                                clientFactory.getEventBus().fireEvent(
+                                        new DraftingInsertionEvent(child.getValue()));
+                            }
+                        });
+                        tagToAdd = anchor;
                     }
-                });
-                tagToAdd = anchor;
-//            }
-            draftingView.addWidget(tagToAdd);
-        }
+                    draftingView.addWidget(tagToAdd);
+                }
+            }
+        });
+
     }
 
     public DraftingView getView() {
