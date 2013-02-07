@@ -51,6 +51,8 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
     @Override
     protected void onAttach() {
         super.onAttach();
+        //hide the toolbar
+        amendmentText.toggleDraftingTool(false);
         selectTab(0);
     }
 
