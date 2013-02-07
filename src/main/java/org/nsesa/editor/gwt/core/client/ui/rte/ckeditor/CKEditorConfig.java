@@ -28,6 +28,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private boolean fillEmptyBlocks;
     private boolean forcePasteAsPlainText;
     private String draftingClassName;
+    private int zIndex = 10000;
 
     private JavaScriptObject config = JavaScriptObject.createObject();
 
@@ -56,6 +57,12 @@ public class CKEditorConfig implements RichTextEditorConfig {
     public CKEditorConfig readOnly(boolean readOnly) {
         this.readOnly = readOnly;
         setNativeReadOnly(readOnly);
+        return this;
+    }
+
+    public CKEditorConfig setZIndex(int zIndex) {
+        this.zIndex = zIndex;
+        setNativeZIndex(zIndex);
         return this;
     }
 
@@ -203,6 +210,10 @@ public class CKEditorConfig implements RichTextEditorConfig {
 
     private native void setNativeReadOnly(boolean readOnly) /*-{
         this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.readOnly = readOnly;
+    }-*/;
+
+    private native void setNativeZIndex(int zIndex) /*-{
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.baseFloatZIndex = zIndex;
     }-*/;
 
     private native void setNativeContentCss(JsArrayString contentCss) /*-{
