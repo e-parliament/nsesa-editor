@@ -48,30 +48,33 @@ public class CKEditorShowDraftingToolPlugin implements RichTextEditorPlugin {
     }
 
     private native void nativeInit(JavaScriptObject editor, CKEditorShowDraftingToolPlugin plugin) /*-{
-        editor.on('nsesaToggleDraft', function (ev) {
+        editor.on( 'nsesaToggleDraft', function( ev )
+        {
             var toggleDraft = ev.data.nsesaToggleDraft;
             plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(toggleDraft);
-//            if (toggleDraft) {
-//                ev.editor.document.getBody().addClass("akomaNtoso");
-//            } else {
-//                ev.editor.document.getBody().removeClass("akomaNtoso");
-//            }
         });
         // save the state before executing source command
-        editor.on('beforeCommandExec', function (evt) {
-            if (evt.data.name == 'source' && evt.editor.mode == 'wysiwyg') {
-                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
+        editor.on( 'beforeCommandExec', function( evt )
+        {
+            if ( evt.data.name == 'source' && evt.editor.mode == 'wysiwyg' )
+            {
+                if (editor.getCommand('NsesaToggle'))
+                    plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
             }
         });
 
-        editor.on('mode', function () {
+        editor.on( 'mode', function()
+        {
             if (editor.mode != 'source') {
                 if (editor.getCommand('NsesaToggle')) {
                     var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::previousState;
                     if (state >= 0) {
                         editor.getCommand('NsesaToggle').setState(state);
+                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(true);
                     }
                 }
+            } else {
+                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorShowDraftingToolPlugin::fireEvent(Z)(false);
             }
         });
 
