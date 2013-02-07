@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 public class TextUtils {
     // xml conversion: & - &amp; < - &lt; > - &gt; " - &quot; ' - &apos;
     private static final LinkedHashMap<Character, String> XML_ESCAPER = new LinkedHashMap<Character, String>();
+
     static {
         XML_ESCAPER.put(new Character('&'), "&amp;");
         XML_ESCAPER.put(new Character('<'), "&lt;");
@@ -93,7 +94,6 @@ public class TextUtils {
     }
 
 
-
     public static String dump(StringBuilder sb, int level, Throwable e) {
 
         for (StackTraceElement traceElement : e.getStackTrace()) {
@@ -113,12 +113,13 @@ public class TextUtils {
 
     /**
      * Escape all xml special chars with their corresponding values as follows
+     *
      * @param str The string to be escaped
      * @return The string escaped
      */
     public static String escapeXML(String str) {
         if (str == null) return null;
-        StringBuilder sb = new StringBuilder(str.length()*2);
+        StringBuilder sb = new StringBuilder(str.length() * 2);
         for (int i = 0; i < str.length(); i++) {
             Character ch = new Character(str.charAt(i));
             String escape = XML_ESCAPER.get(ch);
@@ -202,10 +203,20 @@ public class TextUtils {
         return html;
     }
 
-    public static String indent(int amount) {
+    /**
+     * Creates a <tt>String</tt> of <tt>amount</tt> * <tt>indent</tt>.
+     *
+     * @param amount the number of times the indent string will be repeated.
+     * @param indent the string part to repeat.
+     * @return the repeated string.
+     */
+    public static String repeat(final int amount, final String indent) {
+        if (amount < 0) throw new IllegalArgumentException("Amount cannot be less than 0.");
+        if (indent == null) return null;
+
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < amount; i++) {
-            sb.append("-");
+            sb.append(indent);
         }
         return sb.toString();
     }

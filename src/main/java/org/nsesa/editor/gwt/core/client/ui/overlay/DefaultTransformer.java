@@ -25,17 +25,20 @@ public class DefaultTransformer implements Transformer {
 
     private static final Logger LOG = Logger.getLogger(DefaultTransformer.class.getName());
 
+    private boolean withIndentation = true;
+
     @Override
     public String transform(final AmendableWidget widget) {
         final Map<String, String> namespaces = gatherNamespaces(widget);
         namespaces.put(widget.getNamespaceURI(), DEFAULT_NAMESPACE);
         final StringBuilder sb = new StringBuilder(XML_DECLARATION);
-        return sb.append(toXMLElement(widget, namespaces, true)).toString();
+        return sb.append(toXMLElement(widget, namespaces, true, 0)).toString();
     }
 
-    public String toXMLElement(final AmendableWidget widget, final Map<String, String> namespaces, final boolean rootNode) {
+    public String toXMLElement(final AmendableWidget widget, final Map<String, String> namespaces, final boolean rootNode, int depth) {
         final StringBuilder sb = new StringBuilder();
-        sb.append("<");
+        final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
+        sb.append(indent).append("<");
         if (rootNode) {
             sb.append(widget.getType());
             for (final Map.Entry<String, String> entry : namespaces.entrySet()) {
@@ -74,7 +77,7 @@ public class DefaultTransformer implements Transformer {
             // the root is all the time a new one
             // apply xml transformation for children
             for (final AmendableWidget child : widget.getChildAmendableWidgets()) {
-                sb.append(toXMLElement(child, namespaces, false));
+                sb.append(toXMLElement(child, namespaces, false, depth + 1));
             }
         } else {
             for (int i = 0; i < length; i++) {
@@ -100,7 +103,7 @@ public class DefaultTransformer implements Transformer {
                             }
                         }
                         if (child != null) {
-                            sb.append(toXMLElement(child, namespaces, false));
+                            sb.append(toXMLElement(child, namespaces, false, depth + 1));
                         } else {
                             LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
                         }
@@ -114,9 +117,10 @@ public class DefaultTransformer implements Transformer {
                 }
             }
         }
-        sb.append("</").append(widget.getType()).append(">");
+        sb.append(indent).append("</").append(widget.getType()).append(">");
         return sb.toString();
     }
+
 
     protected Map<String, String> gatherNamespaces(final AmendableWidget root) {
         final Map<String, String> namespaces = new HashMap<String, String>();
