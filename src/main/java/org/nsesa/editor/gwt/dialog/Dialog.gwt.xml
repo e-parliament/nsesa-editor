@@ -5,6 +5,7 @@
     <inherits name="org.nsesa.editor.gwt.core.Core"/>
 
     <inherits name='com.google.gwt.query.Query'/>
+    <inherits name="org.nsesa.editor.gwt.editor.Editor"/>
 
     <source path="client"/>
     <source path="shared"/>
