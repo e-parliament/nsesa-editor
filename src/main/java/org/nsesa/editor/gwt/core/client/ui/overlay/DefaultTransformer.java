@@ -90,13 +90,6 @@ public class DefaultTransformer implements Transformer {
                     case Node.ELEMENT_NODE:
                         // get the amendable widget corresponding to this child and apply xml transformation
                         // hopefully there is one amendable widget linked to this node
-
-//                        if (i >= widget.getChildAmendableWidgets().size()) {
-//                            LOG.warning("no correlation between amendable widgets and DOM elements");
-//                            break;
-//                        }
-                        //final AmendableWidget child = widget.getChildAmendableWidgets().get(i);
-                        //sb.append(toXMLElement(child, namespaces, false));
                         AmendableWidget child = null;
                         // try to find out a amendable widget linked to childElement
                         for (AmendableWidget aw : widget.getChildAmendableWidgets()) {
