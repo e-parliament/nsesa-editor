@@ -39,7 +39,7 @@ public class DraftingController {
     private DocumentController documentController;
     private OverlayLocalizableResource overlayResource;
     private EventBus eventBus;
-
+    private String originalType;
 
     @Inject
     public DraftingController(DraftingView draftingView,
@@ -59,6 +59,7 @@ public class DraftingController {
     }
 
     public void setAmendableWidget(final AmendableWidget amendableWidget) {
+        originalType = amendableWidget.getType();
         refreshView(amendableWidget, null);
     }
 
@@ -66,11 +67,15 @@ public class DraftingController {
         eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
             @Override
             public void onEvent(SelectionChangedEvent event) {
+                String type = originalType;
+                if (event.getParentTagType() != null && !"".equals(event.getParentTagType())) {
+                    type = event.getParentTagType();
+                }
                 if (event.isMoreTagsSelected()) {
-                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), "");
+                    refreshView(overlayFactory.getAmendableWidget(type), "");
                     //eventBus.fireEvent(new CriticalErrorEvent("Too many tags selected..."));
                 } else {
-                    refreshView(overlayFactory.getAmendableWidget(event.getParentTagType()), event.getSelectedText());
+                    refreshView(overlayFactory.getAmendableWidget(type), event.getSelectedText());
                 }
             }
         });

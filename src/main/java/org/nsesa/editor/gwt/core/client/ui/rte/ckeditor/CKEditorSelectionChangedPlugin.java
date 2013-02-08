@@ -87,20 +87,13 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
             moreTagsSelected = selectMoreTags(selection);
-            if (parentTagType) {
+            //if (parentTagType) {
                 plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
-            }
+            //
         }
         function selectMoreTags(selection) {
-            var ranges = selection.getRanges( 1 ),
-                    iterator = ranges.createIterator(),
-                    range, startNode, endNode, child, foundMoreTags = false;
-            while ( !foundMoreTags && ( range = iterator.getNextRange() ) ) {
-                startNode = range.startContainer;
-                endNode = range.endContainer;
-                foundMoreTags = !startNode.equals(endNode);
-            }
-            return foundMoreTags;
+            var ranges = selection.getRanges();
+            return !ranges[0].startContainer.equals(ranges[ranges.length - 1].endContainer);
         }
 
         editor.on( 'mode', function() {
