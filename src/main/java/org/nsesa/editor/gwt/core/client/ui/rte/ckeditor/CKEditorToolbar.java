@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -22,7 +35,7 @@ public class CKEditorToolbar {
             .add(new ToolbarLine().add(Option.NsesaRemoveFormat).add(Option.NsesaToggle).add(Option._));
 
     public static enum Option {
-        NsesaToggle, NsesaRemoveFormat, Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll,Source, _;
+        NsesaToggle, NsesaRemoveFormat, Subscript, Superscript, Undo, Redo, SpecialChar, Find, Replace, SelectAll, Source, _;
     }
 
     public static class ToolbarLine {
@@ -40,9 +53,9 @@ public class CKEditorToolbar {
 
         public JavaScriptObject getRepresentation() {
             JavaScriptObject array = JavaScriptObject.createArray();
-            for(Option opt: options){
+            for (Option opt : options) {
                 final String optToString = opt.equals(Option._) ? "-" : opt.toString();
-                array = addToArray(array,optToString);
+                array = addToArray(array, optToString);
             }
             return array;
         }
@@ -50,19 +63,19 @@ public class CKEditorToolbar {
 
     private List<ToolbarLine> lines;
 
-    public CKEditorToolbar(){
+    public CKEditorToolbar() {
         lines = new ArrayList<ToolbarLine>();
     }
 
-    public CKEditorToolbar add(ToolbarLine l){
+    public CKEditorToolbar add(ToolbarLine l) {
         lines.add(l);
         return this;
     }
 
 
-    public JavaScriptObject getRepresentation(){
+    public JavaScriptObject getRepresentation() {
         JavaScriptObject array = JavaScriptObject.createArray();
-        for(ToolbarLine line:lines){
+        for (ToolbarLine line : lines) {
             JavaScriptObject representation = line.getRepresentation();
             array = addToArray(array, representation);
         }

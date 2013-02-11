@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd;
 
 import freemarker.template.Configuration;
@@ -20,7 +33,7 @@ import java.util.*;
  * Generates a hierarchy of Java classes by parsing an XSD schemas. In order to create instances
  * of those classes a factory class is also generated. There will be a package for each schema and the
  * classes will be saved under target directory specified when instantiating the generator.
- *
+ * <p/>
  * User: sgroza
  * Date: 06/11/12
  * Time: 09:09
@@ -30,11 +43,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     // freemarker templates used to generate classes
     private static final String OVERLAY_ELEMENT_TEMPLATE_NAME = "overlayClass.ftl";
-    private static final String OVERLAY_ENUM_TEMPLATE_NAME    = "overlayEnum.ftl";
+    private static final String OVERLAY_ENUM_TEMPLATE_NAME = "overlayEnum.ftl";
     private static final String OVERLAY_FACTORY_TEMPLATE_NAME = "overlayFactory.ftl";
     private static final String OVERLAY_RESOURCE_TEMPLATE_NAME = "overlayLocalizableResource.ftl";
-    private static final String OVERLAY_MESSAGE_PROP_TEMPLATE_NAME  = "overlayMessagesProperties.ftl";
-    private static final String OVERLAY_MESSAGE_TEMPLATE_NAME       = "overlayMessages.ftl";
+    private static final String OVERLAY_MESSAGE_PROP_TEMPLATE_NAME = "overlayMessagesProperties.ftl";
+    private static final String OVERLAY_MESSAGE_TEMPLATE_NAME = "overlayMessages.ftl";
+
     /**
      * A holder for overlay property. It will keep a flag to identify whether the parent was
      * used as a collection or not
@@ -74,6 +88,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     /**
      * Constructor
+     *
      * @param basePackageName The base package name
      * @param targetDirectory The base location where the files will be saved
      */
@@ -102,7 +117,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         // generate classes
         generateClasses(generatedClasses, packageNameGenerator, directoryNameGenerator);
 
-        Map<String,List<OverlayClass>> elementClasses = filter(generatedClasses, OverlayType.Element);
+        Map<String, List<OverlayClass>> elementClasses = filter(generatedClasses, OverlayType.Element);
 
         // generate factories for element types
         generateFactories(elementClasses, packageNameGenerator, directoryNameGenerator);
@@ -141,7 +156,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         for (String key : elementClasses.keySet()) {
             String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
-                factoryName ="_" + factoryName;
+                factoryName = "_" + factoryName;
             }
 
             final String className = StringUtils.capitalize(factoryName) + "OverlayLocalizableResource";
@@ -170,7 +185,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         for (String key : elementClasses.keySet()) {
             String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
-                factoryName ="_" + factoryName;
+                factoryName = "_" + factoryName;
             }
 
             final String className = StringUtils.capitalize(factoryName) + "OverlayMessages";
@@ -202,7 +217,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         for (String key : elementClasses.keySet()) {
             String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
-                factoryName ="_" + factoryName;
+                factoryName = "_" + factoryName;
             }
 
             final String className = StringUtils.capitalize(factoryName) + "OverlayFactory";
@@ -251,14 +266,15 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     templateName = OVERLAY_ENUM_TEMPLATE_NAME;
                 }
                 writeToFile(file, rootMap, templateName);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("The class can not be generated " + file.getAbsolutePath());
             }
         }
     }
-    private Map<String,List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
-        Map<String,List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
-        for(OverlayClass generatedClass : generatedClasses) {
+
+    private Map<String, List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
+        Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
+        for (OverlayClass generatedClass : generatedClasses) {
             List<OverlayClass> namespaceElements = result.get(generatedClass.getNameSpace());
             if (namespaceElements == null) {
                 namespaceElements = new ArrayList<OverlayClass>();
@@ -271,7 +287,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
         return result;
     }
-
 
 
     public void writeToFile(File file, Object rootMap, String templateName) {
@@ -298,6 +313,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     /**
      * The main method
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -328,6 +344,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     /**
      * Returns a flat list of overlay classes by traversing the root class and exclude the root, schema class type
      * and group classes
+     *
      * @param rootClass The schema overlay class that will be traversed
      * @return A List of overlay classes
      */
@@ -343,7 +360,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     aClass.getOverlayType().equals(OverlayType.GroupDecl) ||
                     aClass.getOverlayType().equals(OverlayType.Group) ||
                     aClass.getOverlayType().equals(OverlayType.AttrGroup)
-                    )) {
+            )) {
                 // replace the properties
                 replaceGroupProperties(aClass);
 //                add now in the result
@@ -351,13 +368,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             }
             OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[aClass.getChildren().size()]);
             //Collections.sort(children, comparator);
-            for (int i = children.length - 1; i >= 0 ; i--) {
+            for (int i = children.length - 1; i >= 0; i--) {
                 stack.push(children[i]);
             }
         }
         return result;
     }
-
 
 
     // replace the group properties with their collection of simple properties
@@ -373,7 +389,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             Boolean parentCollection = propertyWrapper.isParentCollection();
             OverlayClass baseClass = property.getBaseClass();
             if (baseClass != null) {
-                 // check whether is group or attribute group and replace with its properties
+                // check whether is group or attribute group and replace with its properties
                 if (baseClass.getOverlayType().equals(OverlayType.AttrGroup) ||
                         baseClass.getOverlayType().equals(OverlayType.Group) ||
                         baseClass.getOverlayType().equals(OverlayType.GroupDecl)) {
@@ -393,7 +409,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     result.add(newProperty);
                 }
             } else {
-                    //create a new copy of overlay property and set its collection flag
+                //create a new copy of overlay property and set its collection flag
                 OverlayProperty newProperty = property.copy();
                 newProperty.setCollection(parentCollection || property.isCollection());
                 result.add(newProperty);

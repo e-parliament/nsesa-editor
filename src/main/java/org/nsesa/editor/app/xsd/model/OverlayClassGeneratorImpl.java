@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd.model;
 
 import com.sun.xml.xsom.*;
@@ -20,6 +33,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     private Map<OverlayClass, OverlayClass> cache;
 
     private Collection<XSSchema> schemas;
+
     /**
      * Default constructor
      */
@@ -35,7 +49,6 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     }
 
 
-
     @Override
     public void generate(XSComplexType complexType) {
         LOG.debug("Generate overlayclass from complex type {}", complexType);
@@ -46,7 +59,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         if (complexType.getAnnotation() != null && complexType.getAnnotation().getAnnotation() != null) {
             overlayClass.setComments(complexType.getAnnotation().getAnnotation().toString());
         }
-        overlayClass.setClassName(complexType.getName() + OverlayType.ComplexType) ;
+        overlayClass.setClassName(complexType.getName() + OverlayType.ComplexType);
         if (complexType.getBaseType() != null && !complexType.getBaseType().getName().equalsIgnoreCase("anytype")) {
             OverlayClass parent = new OverlayClass();
             parent.setOverlayType(OverlayType.ComplexType);
@@ -80,7 +93,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             parent.setClassName(parent.getName() + OverlayType.SimpleType);
             parent.setNameSpace(attribute.getType().getBaseType().getTargetNamespace());
             overlayClass.setParent(parent);
-        }  else {
+        } else {
             if (attribute.getType() != null) {
                 OverlayClass parent = new OverlayClass();
                 parent.setOverlayType(OverlayType.SimpleType);
@@ -93,8 +106,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(attribute.getType());
         overlayClass.setRestriction(typeRestriction);
         if (overlayClass.getParent() == null) {
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String","value", false, true);
-            property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
+            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String", "value", false, true);
+            property.setBaseClass(new OverlayClass("String", "java.lang", OverlayType.SimpleType));
             overlayClass.getProperties().add(property);
         }
         LOG.debug("Generated overlayclass {}", overlayClass);
@@ -126,18 +139,18 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 baseName = className;
                 nameSpace = particle.getTerm().asElementDecl().getTargetNamespace();
                 type = OverlayType.Element;
-            } else if (particle.getTerm().asModelGroupDecl() != null){
+            } else if (particle.getTerm().asModelGroupDecl() != null) {
                 name = particle.getTerm().asModelGroupDecl().getName();
                 baseName = particle.getTerm().asModelGroupDecl().getName();
                 className = baseName + OverlayType.Group;
                 nameSpace = particle.getTerm().asModelGroupDecl().getTargetNamespace();
                 type = OverlayType.Group;
-            } else  {
+            } else {
                 throw new RuntimeException("Not implemented yet " + modelGroup.getName());
             }
             boolean isCollection = particle.getMaxOccurs().intValue() > 1 || particle.getMaxOccurs().intValue() == -1;
             OverlayProperty property = new OverlayProperty(type, null, nameSpace, className, name, isCollection, false);
-            property.setBaseClass(new OverlayClass(baseName, nameSpace,type));
+            property.setBaseClass(new OverlayClass(baseName, nameSpace, type));
             overlayClass.getProperties().add(property);
         }
         LOG.debug("Generated overlayclass {}", overlayClass);
@@ -160,7 +173,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         final Collection<? extends XSAttributeUse> declaredAttributeUses = attrGroup.getDeclaredAttributeUses();
         if (declaredAttributeUses != null) {
             final Iterator<? extends XSAttributeUse> iterator = declaredAttributeUses.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 XSAttributeUse attributeUse = iterator.next();
                 overlayClass.getProperties().add(generateProperty(attributeUse.getDecl()));
             }
@@ -168,7 +181,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         final Collection<? extends XSAttGroupDecl> attGroups = attrGroup.getAttGroups();
         if (attGroups != null) {
             final Iterator<? extends XSAttGroupDecl> iterator = attGroups.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 XSAttGroupDecl attGroupDecl = iterator.next();
                 overlayClass.getProperties().add(generateProperty(attGroupDecl));
             }
@@ -206,7 +219,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 overlayClass.setParent(parent);
             }
             generatedClasses.add(overlayClass);
-            return ;
+            return;
         }
 
         if (!xsType.getBaseType().getName().equalsIgnoreCase("AnyType")) {
@@ -295,7 +308,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 generate(elementDecl);
             }
         }
-        for(OverlayClass overlayClass : generatedClasses) {
+        for (OverlayClass overlayClass : generatedClasses) {
             if (cache.containsKey(overlayClass)) {
                 throw new RuntimeException("Stop generation... The class already exists:" + overlayClass);
             }
@@ -307,6 +320,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Generate {@link OverlayProperty} property from xsd group component
+     *
      * @param attGroupDecl The xsd group processed
      * @return An overlay property based on the given xsd group
      */
@@ -323,6 +337,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Generate {@link OverlayProperty} property from xsd attribute component
+     *
      * @param attributeDecl The xsd attribute processed
      * @return An overlay property based on the given xsd attribute
      */
@@ -332,9 +347,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         String nameSpace = attributeDecl.getType().isLocal() ?
                 attributeDecl.getType().getBaseType().getTargetNamespace() : attributeDecl.getType().getTargetNamespace();
         OverlayProperty property = new OverlayProperty(OverlayType.Attribute, null,
-                                                        nameSpace,
-                                                        className + OverlayType.SimpleType,
-                                                        attributeDecl.getName(), false, true);
+                nameSpace,
+                className + OverlayType.SimpleType,
+                attributeDecl.getName(), false, true);
 
         if (attributeDecl.getAnnotation() != null && attributeDecl.getAnnotation().getAnnotation() != null) {
             property.setComments(attributeDecl.getAnnotation().getAnnotation().toString());
@@ -347,11 +362,12 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Generate {@link OverlayProperty} property from xsd simple type component
+     *
      * @param simpleType The xsd simple type processed
      * @return An overlay property based on the given xsd simple type
      */
     private OverlayProperty generateProperty(XSSimpleType simpleType) {
-        OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null,"String", simpleType.getName(), false, false);
+        OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String", simpleType.getName(), false, false);
         if (simpleType.getAnnotation() != null && simpleType.getAnnotation().getAnnotation() != null) {
             property.setComments(simpleType.getAnnotation().getAnnotation().toString());
         }
@@ -361,6 +377,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Generate {@link OverlayProperty} property from xsd complex type component
+     *
      * @param complexType The xsd complex type processed
      * @return A list of overlay properties based on the given xsd complex type
      */
@@ -370,7 +387,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         final Collection<? extends XSAttributeUse> declaredAttributeUses = complexType.getDeclaredAttributeUses();
         if (declaredAttributeUses != null) {
             final Iterator<? extends XSAttributeUse> iterator = declaredAttributeUses.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 XSAttributeUse attributeUse = iterator.next();
                 properties.add(generateProperty(attributeUse.getDecl()));
             }
@@ -379,7 +396,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         final Collection<? extends XSAttGroupDecl> declaredAttrGroups = complexType.getAttGroups();
         if (declaredAttrGroups != null) {
             final Iterator<? extends XSAttGroupDecl> iterator = declaredAttrGroups.iterator();
-            while(iterator.hasNext()) {
+            while (iterator.hasNext()) {
                 XSAttGroupDecl attrGroup = iterator.next();
                 properties.add(generateProperty(attrGroup));
             }
@@ -407,8 +424,9 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * A recursive method to create overlay properties from {@link XSParticle} component
-     * @param xsParticle The particule to be processed
-     * @param properties The list with properties
+     *
+     * @param xsParticle    The particule to be processed
+     * @param properties    The list with properties
      * @param wasCollection Flag to keep the property need to be generated as collection
      */
     private void generateProperty(XSParticle xsParticle, List<OverlayProperty> properties, boolean wasCollection) {
@@ -430,7 +448,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 OverlayProperty property = new OverlayProperty(OverlayType.Group, null,
                         xsParticle.getTerm().asModelGroupDecl().getTargetNamespace(),
                         xsParticle.getTerm().asModelGroupDecl().getName() + OverlayType.Group,
-                        xsParticle.getTerm().asModelGroupDecl().getName() , isCollection || wasCollection, false);
+                        xsParticle.getTerm().asModelGroupDecl().getName(), isCollection || wasCollection, false);
                 property.setBaseClass(new OverlayClass(xsParticle.getTerm().asModelGroupDecl().getName(),
                         xsParticle.getTerm().asModelGroupDecl().getTargetNamespace(),
                         OverlayType.Group));
@@ -441,12 +459,12 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 properties.add(property);
             } else if (xsParticle.getTerm().isModelGroup()) {
                 final XSParticle[] particles = xsParticle.getTerm().asModelGroup().getChildren();
-                for(XSParticle particle : particles) {
+                for (XSParticle particle : particles) {
                     generateProperty(particle, properties, isCollection || wasCollection);
                 }
             } else if (xsParticle.getTerm().isWildcard()) {
                 OverlayProperty property = new OverlayProperty(OverlayType.WildcardType, "java.lang", null, "String",
-                        "wildcardContent" , isCollection || wasCollection, false);
+                        "wildcardContent", isCollection || wasCollection, false);
                 property.setBaseClass(new OverlayClass("String", "java.lang", OverlayType.WildcardType));
                 property.setMinOccurs(xsParticle.getMinOccurs().intValue());
                 property.setMaxOccurs(xsParticle.getMaxOccurs().intValue());
@@ -460,7 +478,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Checks whether or not the xs particle needs to be treated as a collection
-     * @param particle  The particle to be checked
+     *
+     * @param particle The particle to be checked
      * @return True when the particle is a collection
      */
     private boolean isCollection(XSParticle particle) {
@@ -469,6 +488,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
     /**
      * Generate a class from simple type
+     *
      * @param simpleType
      * @return
      */
@@ -479,14 +499,14 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         }
 
         overlayClass.setClassName(simpleType.getName() + OverlayType.SimpleType);
-        if (simpleType.getSimpleBaseType() != null ) {
+        if (simpleType.getSimpleBaseType() != null) {
             OverlayClass parent = new OverlayClass();
             parent.setOverlayType(OverlayType.SimpleType);
             if (simpleType.getSimpleBaseType().isLocal()) {
                 parent.setName(simpleType.getSimpleBaseType().getBaseType().getName());
                 parent.setClassName(parent.getName() + OverlayType.SimpleType);
                 parent.setNameSpace(simpleType.getSimpleBaseType().getBaseType().getTargetNamespace());
-            }  else {
+            } else {
                 parent.setName(simpleType.getSimpleBaseType().getName());
                 parent.setClassName(parent.getName() + OverlayType.SimpleType);
                 parent.setNameSpace(simpleType.getSimpleBaseType().getTargetNamespace());
@@ -496,8 +516,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
         SimpleTypeRestriction typeRestriction = SimpleTypeRestriction.getRestriction(simpleType);
         overlayClass.setRestriction(typeRestriction);
         if (overlayClass.getParent() == null) {
-            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang",null, "String","value", false, false);
-            property.setBaseClass(new OverlayClass("String", "java.lang",OverlayType.SimpleType));
+            OverlayProperty property = new OverlayProperty(OverlayType.SimpleType, "java.lang", null, "String", "value", false, false);
+            property.setBaseClass(new OverlayClass("String", "java.lang", OverlayType.SimpleType));
             overlayClass.getProperties().add(property);
         }
         LOG.debug("Generated overlayclass {}", overlayClass);

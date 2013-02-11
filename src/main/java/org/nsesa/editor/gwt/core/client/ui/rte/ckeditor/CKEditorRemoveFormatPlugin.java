@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -50,14 +63,14 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
     private native void nativeInit(JavaScriptObject editor, CKEditorRemoveFormatPlugin plugin) /*-{
         var buttonName = "NsesaRemoveFormat";
         var cmd = {
-            exec: function(ed) {
+            exec: function (ed) {
                 removeElementFormat(ed);
             }
         }
         editor.addCommand(buttonName, cmd);
-        editor.ui.addButton(buttonName,{
-            label:"Remove format",
-            icon:$wnd.CKEDITOR.basePath + "plugins/nsesa/nsesaRemoveFormat.png",
+        editor.ui.addButton(buttonName, {
+            label: "Remove format",
+            icon: $wnd.CKEDITOR.basePath + "plugins/nsesa/nsesaRemoveFormat.png",
             command: buttonName
         });
 
@@ -66,9 +79,9 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
             if (ed.getSelection()) {
                 //save snapshot before
                 var commonAncestor = ed.getSelection().getCommonAncestor();
-                ed.fire( 'saveSnapshot' );
+                ed.fire('saveSnapshot');
                 if (commonAncestor) {
-                    var text = new $wnd.CKEDITOR.dom.text( commonAncestor.getText());
+                    var text = new $wnd.CKEDITOR.dom.text(commonAncestor.getText());
 
                     var node = commonAncestor;
                     while (node && node.type != $wnd.CKEDITOR.NODE_ELEMENT) {
@@ -80,7 +93,7 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
                             ed.getSelection().getRanges(1)[0].insertNode(text);
                         }
                         //save snapshot after
-                        ed.fire( 'saveSnapshot' );
+                        ed.fire('saveSnapshot');
                     }
                 }
             }

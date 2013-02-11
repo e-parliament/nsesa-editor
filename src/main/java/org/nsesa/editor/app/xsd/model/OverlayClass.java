@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd.model;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +26,7 @@ import java.util.*;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class OverlayClass extends OverlayNode  {
+public class OverlayClass extends OverlayNode {
     public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
     public static final Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
         @Override
@@ -52,6 +65,7 @@ public class OverlayClass extends OverlayNode  {
     public List<OverlayClass> getChildren() {
         return children;
     }
+
     public List<OverlayClass> getOrderedChildren() {
         Collections.sort(children, OverlayClass.DEFAULT_COMPARATOR);
         return children;
@@ -64,6 +78,7 @@ public class OverlayClass extends OverlayNode  {
     public SimpleTypeRestriction getRestriction() {
         return restriction;
     }
+
     public List<OverlayProperty> getProperties() {
         return properties;
     }
@@ -153,11 +168,12 @@ public class OverlayClass extends OverlayNode  {
 
     /**
      * Returns true when it contains wild card properties
+     *
      * @return
      */
     public boolean hasWildCardProperties() {
         boolean result = false;
-        for(OverlayProperty property : properties) {
+        for (OverlayProperty property : properties) {
             if (property.isWildCard()) {
                 result = true;
                 break;

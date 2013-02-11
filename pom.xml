@@ -261,6 +261,35 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <!-- ***************************** Licence plugin    ***************************** -->
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.9.0</version>
+                <configuration>
+                    <header>src/main/resources/header.txt</header>
+                    <strictCheck>true</strictCheck>
+                    <encoding>UTF-8</encoding>
+                    <excludes>
+                        <exclude>web/js/**</exclude>
+                        <exclude>target/**</exclude>
+                        <exclude>.gitignore</exclude>
+                        <exclude>**/*.css</exclude>
+                        <exclude>**/README.md</exclude>
+                        <exclude>**/GitMessages.properties</exclude>
+                        <exclude>licence.txt</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- ***************************** Surefire plugin    ***************************** -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

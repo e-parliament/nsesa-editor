@@ -1,6 +1,18 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +25,9 @@ import java.util.Set;
  */
 public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
-    /** a map of replacements in package name generation**/
+    /**
+     * a map of replacements in package name generation*
+     */
     private static Map<String, String> REPLACEMENTS = new HashMap<String, String>() {
         {
             put("www.", "");
@@ -22,14 +36,19 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
             put(".", "");
         }
     };
-    /** an internal cache used to keep generated package names**/
+    /**
+     * an internal cache used to keep generated package names*
+     */
     private Map<String, String> cache = new HashMap<String, String>();
 
-    /** keep the base package name **/
+    /**
+     * keep the base package name *
+     */
     private String basePackage;
 
     /**
      * Constructor
+     *
      * @param basePackage The base package name as String
      */
     public PackageNameGeneratorImpl(String basePackage) {
@@ -77,7 +96,8 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
             packageName = getEligiblePackageName(nameSpace.substring(previousIndex + 1));
             if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
                 packageName = "_" + packageName;
-            };
+            }
+            ;
         }
         packageName = basePackage + packageName;
         cache.put(nameSpace, packageName);
@@ -89,7 +109,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
     // if substr
     private String getEligiblePackageName(String substr) {
         Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
-        for(Map.Entry<String, String> entry : entries) {
+        for (Map.Entry<String, String> entry : entries) {
             substr = substr.replace(entry.getKey(), entry.getValue());
         }
         substr = substr.toLowerCase();

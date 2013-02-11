@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd.model;
 
 import org.slf4j.Logger;
@@ -68,12 +81,15 @@ public class OverlayNode {
     public boolean isSimple() {
         return OverlayType.SimpleType.equals(overlayType);
     }
+
     public boolean isComplex() {
         return OverlayType.ComplexType.equals(overlayType);
     }
+
     public boolean isElement() {
         return OverlayType.Element.equals(overlayType);
     }
+
     public boolean isWildCard() {
         return OverlayType.WildcardType.equals(overlayType);
     }
@@ -161,17 +177,22 @@ public class OverlayNode {
 //        }
 //    }
 
-    /** Casts this object to OverlayClass if possible, otherwise returns null. */
+    /**
+     * Casts this object to OverlayClass if possible, otherwise returns null.
+     */
     public OverlayClass asOverlayClass() {
         if (this instanceof OverlayClass) {
-            return (OverlayClass)this;
+            return (OverlayClass) this;
         }
         return null;
     }
-    /** Casts this object to OverlayProperty if possible, otherwise returns null. */
+
+    /**
+     * Casts this object to OverlayProperty if possible, otherwise returns null.
+     */
     public OverlayProperty asOverlayProperty() {
         if (this instanceof OverlayProperty) {
-            return (OverlayProperty)this;
+            return (OverlayProperty) this;
         }
         return null;
     }

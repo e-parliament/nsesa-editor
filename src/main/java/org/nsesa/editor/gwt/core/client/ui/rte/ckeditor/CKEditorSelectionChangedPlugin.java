@@ -1,3 +1,16 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -50,13 +63,14 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     private native void nativeInit(final JavaScriptObject editor, CKEditorSelectionChangedPlugin plugin) /*-{
         var keyHandler, mouseUpListener, mouseDownListener, keyUpListener;
+
         function selectionHandle(ed) {
             if (ed.document) {
-                ed.document.on('mouseup', function(ev) {
+                ed.document.on('mouseup', function (ev) {
                     if (ed.getSelection())
                         checkSelection(ed.getSelection());
                 })
-                ed.document.on('mousedown', function(ev) {
+                ed.document.on('mousedown', function (ev) {
                     //remove the ranges
                     if (ed.getSelection()) {
                         //editor.getSelection().removeAllRanges();
@@ -66,44 +80,45 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
                         ed.getSelection().selectRanges([range]);
                     }
                 })
-                ed.document.on('keyup', function(ev) {
+                ed.document.on('keyup', function (ev) {
                     $wnd.clearTimeout(keyHandler);
-                    keyHandler = $wnd.setTimeout(function() {
+                    keyHandler = $wnd.setTimeout(function () {
                         checkSelection(ed.getSelection());
                     }, 500)
                 })
-            };
+            }
+            ;
 
         }
+
         function checkSelection(selection) {
             var env = $wnd.CKEDITOR.env,
-                    element = selection.getStartElement(),
-                    html = [],
-                    parentTagType,
-                    nameSpace,
-                    moreTagsSelected = false,
-                    selectedText = selection.getSelectedText();
+                element = selection.getStartElement(),
+                html = [],
+                parentTagType,
+                nameSpace,
+                moreTagsSelected = false,
+                selectedText = selection.getSelectedText();
 
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
             moreTagsSelected = selectMoreTags(selection);
             //if (parentTagType) {
-                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
             //
         }
+
         function selectMoreTags(selection) {
             var ranges = selection.getRanges();
             return !ranges[0].startContainer.equals(ranges[ranges.length - 1].endContainer);
         }
 
-        editor.on( 'mode', function() {
+        editor.on('mode', function () {
             // get the listeners if they exists
             if (editor.mode != 'source') {
                 selectionHandle(editor);
             }
         });
-
-
 
 
     }-*/;

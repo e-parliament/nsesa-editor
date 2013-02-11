@@ -1,6 +1,22 @@
+/**
+ * Copyright 2013 European Parliament
+ *
+ * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * You may not use this work except in compliance with the Licence.
+ * You may obtain a copy of the Licence at:
+ *
+ * http://joinup.ec.europa.eu/software/page/eupl
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Licence for the specific language governing permissions and limitations under the Licence.
+ */
 package org.nsesa.editor.app.xsd.model;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Keeps style information for a given overlay class
@@ -8,15 +24,17 @@ import java.util.*;
  * Date: 06/11/12
  * Time: 12:46
  */
- public class CssOverlayStyle {
+public class CssOverlayStyle {
     /**
-     *   Factory to create styles for the given class
+     * Factory to create styles for the given class
      */
     public static class CssOverlayFactory {
         private static CssOverlayFactory instance = new CssOverlayFactory();
+
         public static CssOverlayFactory getInstance() {
             return instance;
         }
+
         public CssOverlayStyle create(OverlayClass aClass, List<CssOverlayStyle> styles) {
             if (!canProcess(aClass)) {
                 return new CssOverlayStyle(null, null);
@@ -29,6 +47,7 @@ import java.util.*;
         /**
          * Check whether or not a css style can be generated for a given overlay class.
          * Exclude the ones which are not relevant for generation.
+         *
          * @param overlayClass
          * @return
          */
@@ -45,7 +64,7 @@ import java.util.*;
             if (overlayClass instanceof OverlayClassGenerator.OverlaySchemaClass) {
                 return false;
             }
-            boolean skipped =  EnumSet.of(OverlayType.AttrGroup,
+            boolean skipped = EnumSet.of(OverlayType.AttrGroup,
                     OverlayType.Attribute,
                     OverlayType.Group,
                     OverlayType.SimpleType,
@@ -80,14 +99,16 @@ import java.util.*;
     public Map<String, String> getValues() {
         return values;
     }
+
     /**
      * Generates css values including the ones from parent class
+     *
      * @param styles
      */
     public void cssProcess(List<CssOverlayStyle> styles) {
         OverlayClass aClass = overlayClass;
-        while(aClass != null) {
-            for(CssOverlayStyle cssStyle : styles) {
+        while (aClass != null) {
+            for (CssOverlayStyle cssStyle : styles) {
                 if (aClass.getName() != null && aClass.getName().equalsIgnoreCase(cssStyle.getName())) {
                     // if the key already exist do not override it
                     for (Map.Entry<String, String> entry : cssStyle.values.entrySet()) {
@@ -99,14 +120,16 @@ import java.util.*;
             }
             aClass = aClass.getParent();
         }
-    };
+    }
+
+    ;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(name + " {").append("\n");
         String delimiter = ";";
         if (values != null) {
-            for (Map.Entry<String,String> entry : values.entrySet()) {
+            for (Map.Entry<String, String> entry : values.entrySet()) {
                 sb.append("\t" + entry.getKey() + ":" + entry.getValue()).append(delimiter).append("\n");
             }
         }
