@@ -10,13 +10,11 @@
     <inherits name="com.google.gwt.activity.Activity"/>
     <inherits name="com.google.gwt.logging.Logging"/>
     <!-- Guava support -->
-    <inherits name="com.google.common.collect.Collect" />
-    <!-- GWT Crypto library for SHA-1 checksum -->
-    <inherits name="com.googlecode.gwt.crypto.Crypto"/>
+    <inherits name="com.google.common.collect.Collect"/>
     <!-- XPath support -->
-    <inherits name="name.pehl.totoe.xml.XML" />
+    <inherits name="name.pehl.totoe.xml.XML"/>
     <!-- JSONPath support -->
-    <inherits name="name.pehl.totoe.json.JSON" />
+    <inherits name="name.pehl.totoe.json.JSON"/>
     <!-- Drag & drop -->
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
