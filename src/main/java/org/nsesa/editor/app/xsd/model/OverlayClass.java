@@ -106,6 +106,18 @@ public class OverlayClass extends OverlayNode  {
             }
             imports.add(packageName + "." + StringUtils.capitalize(property.getClassName()));
         }
+        // add imports for parent properties
+        if (getParent() != null) {
+            for (OverlayProperty property : getParent().getAllAttributesProperties()) {
+                String packageName = packageNameGenerator.getPackageName(property);
+                if ("java.lang".equals(packageName)) {
+                    continue;
+                }
+                imports.add(packageName + "." + StringUtils.capitalize(property.getClassName()));
+            }
+        }
+
+
         return imports.toArray(new String[imports.size()]);
     }
 
@@ -173,15 +185,34 @@ public class OverlayClass extends OverlayNode  {
         return set;
     }
 
+    public List<OverlayProperty> getAllAttributesProperties() {
+        OverlayProperty.Filter filter = new OverlayProperty.Filter() {
+            @Override
+            public boolean apply(OverlayProperty property) {
+                return property.isAttribute();
+            }
+        };
+        return getAllFilteredProperties(filter);
+    }
+
     public List<OverlayProperty> getAllNonAttributesProperties() {
+        OverlayProperty.Filter filter = new OverlayProperty.Filter() {
+            @Override
+            public boolean apply(OverlayProperty property) {
+                return !property.isAttribute();
+            }
+        };
+        return getAllFilteredProperties(filter);
+    }
+
+    private List<OverlayProperty> getAllFilteredProperties(OverlayProperty.Filter filter) {
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         OverlayClass aClass = this;
         while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
             for (OverlayProperty property : aClass.getProperties()) {
-                if (property.isAttribute()) {
-                    continue;
+                if (filter.apply(property)) {
+                    result.add(property);
                 }
-                result.add(property);
             }
             aClass = aClass.getParent();
         }

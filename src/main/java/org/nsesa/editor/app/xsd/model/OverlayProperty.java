@@ -142,4 +142,7 @@ public class OverlayProperty extends OverlayNode {
         return maxOccurs;
     }
 
+    public static interface Filter {
+        boolean apply(OverlayProperty property);
+    }
 }
