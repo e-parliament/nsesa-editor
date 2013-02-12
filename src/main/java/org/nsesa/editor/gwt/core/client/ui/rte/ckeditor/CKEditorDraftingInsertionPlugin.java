@@ -19,6 +19,7 @@ import com.google.gwt.user.client.DOM;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEventHandler;
+import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
@@ -71,15 +72,20 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
             @Override
             public void onEvent(DraftingInsertionEvent event) {
                 //change the text editor
-                insertDrafting(editor, event.getAmendableWidget().getAmendableElement());
+                insertDrafting(CKEditorDraftingInsertionPlugin.this, editor, event.getAmendableWidget().getAmendableElement());
             }
         });
     }
 
-    private native void insertDrafting(JavaScriptObject editor, Element el) /*-{
+    private native void insertDrafting(CKEditorDraftingInsertionPlugin plugin, JavaScriptObject editor, Element el) /*-{
         var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
         var toInsert = this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
         editor.insertHtml(toInsert);
+        var endContainer = editor.getSelection().getRanges(1)[0].endContainer;
+        var parentTagType = endContainer.getAttribute('type'),
+            nameSpace = endContainer.getAttribute('ns');
+        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, false, "");
+
     }-*/;
 
     private String text(Element el, String selectedText) {
@@ -87,4 +93,9 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         el.addClassName(MarkupOperation.nsesaIns.name());
         return DOM.toString((com.google.gwt.user.client.Element) el);
     }
+
+    private void fireEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
+        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(parentTagType, nameSpace, moreTagsSelected, selectedText));
+    }
+
 }
