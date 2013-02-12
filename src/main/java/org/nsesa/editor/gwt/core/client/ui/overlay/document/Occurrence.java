@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Date: 29/01/13
  * Time: 11:52
  */
-public class Occurrence implements Serializable {
+public final class Occurrence implements Serializable {
     public static Integer UNBOUNDED = new Integer(-1);
 
     private Integer minOccurs;
