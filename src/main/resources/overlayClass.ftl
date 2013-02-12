@@ -38,9 +38,7 @@ import com.google.gwt.user.client.DOM;
 
 public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple)>extends ${overlayClass.parent.className?cap_first}<#else><#if overlayClass.complex || overlayClass.element>extends AmendableWidgetImpl</#if></#if>  <#if overlayClass.interfaces??>implements <#list overlayClass.interfaces as interface>${interface.getSimpleName()}<#if interface_has_next>, </#if></#list> </#if>{
 <#if overlayClass.complex || overlayClass.element>
-private static Map
-<AmendableWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap
-<AmendableWidget, Occurrence>() {
+private static Map<AmendableWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<AmendableWidget, Occurrence>() {
 {
     <#list overlayClass.allNonAttributesProperties as prop>
         <#if prop.wildCard>
@@ -51,6 +49,7 @@ private static Map
     </#list>
 }
 };
+
 </#if>
 
 
@@ -200,9 +199,8 @@ super();
 * Returns possible children as a map of <tt>AmendableWidget, Occurrence</tt>s.
 */
 @Override
-public Map
-<AmendableWidget, Occurrence> getAllowedChildTypes() {
-return ALLOWED_SUB_TYPES;
+public Map<AmendableWidget, Occurrence> getAllowedChildTypes() {
+return java.util.Collections.unmodifiableMap(ALLOWED_SUB_TYPES);
 }
 
 /**
@@ -214,11 +212,8 @@ return "${overlayClass.nameSpace}";
 }
 
 @Override
-public LinkedHashMap
-<String, String> getAttributes() {
-final LinkedHashMap
-<String, String> attrs = new LinkedHashMap
-<String, String>();
+public LinkedHashMap<String, String> getAttributes() {
+final LinkedHashMap<String, String> attrs = new LinkedHashMap<String, String>();
 attrs.putAll(super.getAttributes());
     <#list overlayClass.properties as property>
         <#if property.attribute>
@@ -306,8 +301,7 @@ private <@propertyClassName property=property/> <#if property.collection><@pl pr
     <@plural propertyName=property.javaName/>
 </#compress></#macro>
 
-<#macro plural propertyName><#compress><#if propertyName?ends_with("y")>${propertyName?substring(0, propertyName?length - 1)}
-    ies<#elseif propertyName?ends_with("s")>${propertyName}es<#else>${propertyName}s</#if></#compress></#macro>
+<#macro plural propertyName><#compress><#if propertyName?ends_with("y")>${propertyName?substring(0, propertyName?length - 1)}ies<#elseif propertyName?ends_with("s")>${propertyName}es<#else>${propertyName}s</#if></#compress></#macro>
 
 <#macro generateField property>
     private <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
