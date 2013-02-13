@@ -96,7 +96,7 @@
             margin: 0;
             position: relative;
             right: 12px;
-            top: -21px;
+            top: -26px;
             float: right;
         }
 
@@ -113,14 +113,6 @@
             height: 100%;
         }
 
-        .actionBarController {
-            position: absolute;
-            border: 1px solid gray;
-            background-color: #eee;
-            min-width: 350px;
-            z-index: 1;
-            padding: 5px;
-        }
     </ui:style>
     <g:DockLayoutPanel ui:field="mainPanel" styleName="{res.mainPanel}" unit="PX">
         <g:north size="30">

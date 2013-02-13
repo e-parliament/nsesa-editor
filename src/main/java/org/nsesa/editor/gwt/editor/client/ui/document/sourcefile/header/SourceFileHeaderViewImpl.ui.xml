@@ -21,10 +21,13 @@
 
 
         .documentName {
+
         }
 
         .horizontalPanel {
             float: right;
+            position: relative;
+            top: -2px;
         }
 
         .documentTranslations {
@@ -37,6 +40,8 @@
 
         .modes {
             padding-right: 10px;
+            position: relative;
+            top: 1px;
         }
     </ui:style>
 

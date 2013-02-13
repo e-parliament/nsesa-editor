@@ -26,7 +26,7 @@
         .document {
             /* Note: parent td width is set in the document view!*/
             position: relative;
-            top: -20px;
+            top: -25px;
             width: 100%;
 
             border-collapse: collapse;
@@ -73,11 +73,11 @@
 
         .actionBarController {
             position: absolute;
-            border: 1px solid gray;
-            background-color: #eee;
+            border-bottom: 1px solid gray;
+            background-color: #fff;
             min-width: 350px;
+            padding: 8px;
             z-index: 1;
-            padding: 5px;
         }
     </ui:style>
     <g:HTMLPanel styleName="document">
