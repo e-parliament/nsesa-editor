@@ -28,7 +28,7 @@ import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
@@ -72,9 +72,9 @@ public class DraftingController {
         registerListeners();
     }
 
-    public void setAmendableWidget(final OverlayWidget overlayWidget) {
-        originalType = overlayWidget.getType();
-        refreshView(overlayWidget, null);
+    public void setAmendableWidget(final AmendableWidget amendableWidget) {
+        originalType = amendableWidget.getType();
+        refreshView(amendableWidget, null);
     }
 
     private void registerListeners() {
@@ -96,20 +96,20 @@ public class DraftingController {
         eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
-                refreshView(event.getOverlayWidget(), null);
+                refreshView(event.getAmendableWidget(), null);
             }
         });
 
     }
 
-    public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
+    public void refreshView(final AmendableWidget amendableWidget, final String selectedText) {
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
                 draftingView.clearAll();
-                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, overlayWidget);
-                draftingView.setDraftTitle(overlayWidget.getType());
-                for (final Map.Entry<OverlayWidget, Occurrence> child : children.entrySet()) {
+                LinkedHashMap<AmendableWidget, Occurrence> children = creator.getAllowedChildren(documentController, amendableWidget);
+                draftingView.setDraftTitle(amendableWidget.getType());
+                for (final Map.Entry<AmendableWidget, Occurrence> child : children.entrySet()) {
                     // when selected text is empty do not add any click handler just display the tags
                     IsWidget allowedChild, mandatoryChild = null;
                     boolean isMandatory;
@@ -139,24 +139,24 @@ public class DraftingController {
     }
 
     //create a label from amendable widget
-    private Label createLabelFrom(OverlayWidget overlayWidget) {
-        Label label = new Label(overlayResource.getName(overlayWidget));
-        label.setTitle(overlayResource.getDescription(overlayWidget));
-        label.getElement().addClassName("drafting-" + overlayWidget.getType());
+    private Label createLabelFrom(AmendableWidget amendableWidget) {
+        Label label = new Label(overlayResource.getName(amendableWidget));
+        label.setTitle(overlayResource.getDescription(amendableWidget));
+        label.getElement().addClassName("drafting-" + amendableWidget.getType());
         return label;
     };
 
     //create an anchor from amendable widget
-    private Anchor createAnchorFrom(final OverlayWidget overlayWidget) {
-        Anchor anchor = new Anchor(overlayResource.getName(overlayWidget));
-        anchor.setTitle(overlayResource.getDescription(overlayWidget));
-        anchor.getElement().addClassName("drafting-" + overlayWidget.getType());
+    private Anchor createAnchorFrom(final AmendableWidget amendableWidget) {
+        Anchor anchor = new Anchor(overlayResource.getName(amendableWidget));
+        anchor.setTitle(overlayResource.getDescription(amendableWidget));
+        anchor.getElement().addClassName("drafting-" + amendableWidget.getType());
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // throw a drafting insertion event
                 clientFactory.getEventBus().fireEvent(
-                        new DraftingInsertionEvent(overlayWidget));
+                        new DraftingInsertionEvent(amendableWidget));
             }
         });
         return anchor;
