@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
@@ -27,12 +28,12 @@ import java.util.LinkedHashMap;
 public class DefaultCreator implements Creator {
 
     @Override
-    public LinkedHashMap<String, AmendableWidget> getAllowedSiblings(DocumentController documentController, AmendableWidget amendableWidget) {
-        return new LinkedHashMap<String, AmendableWidget>();
+    public LinkedHashMap<AmendableWidget, Occurrence> getAllowedSiblings(DocumentController documentController, AmendableWidget amendableWidget) {
+        return new LinkedHashMap<AmendableWidget, Occurrence>();
     }
 
     @Override
-    public LinkedHashMap<String, AmendableWidget> getAllowedChildren(DocumentController documentController, AmendableWidget amendableWidget) {
-        return new LinkedHashMap<String, AmendableWidget>();
+    public LinkedHashMap<AmendableWidget, Occurrence> getAllowedChildren(DocumentController documentController, AmendableWidget amendableWidget) {
+        return new LinkedHashMap<AmendableWidget, Occurrence>();
     }
 }

@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.SourceFileController;
@@ -75,14 +76,14 @@ public class ActionBarCreatePanelController {
         view.clearAmendableWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<String, AmendableWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), amendableWidget);
-        for (final Map.Entry<String, AmendableWidget> entry : allowedSiblings.entrySet()) {
-            view.addSiblingAmendableWidget(entry.getKey(), entry.getValue());
+        LinkedHashMap<AmendableWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), amendableWidget);
+        for (final Map.Entry<AmendableWidget, Occurrence> entry : allowedSiblings.entrySet()) {
+            view.addSiblingAmendableWidget(entry.getKey().getType(), entry.getKey());
         }
         // add all the children
-        LinkedHashMap<String, AmendableWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), amendableWidget);
-        for (final Map.Entry<String, AmendableWidget> entry : allowedChildren.entrySet()) {
-            view.addChildAmendableWidget(entry.getKey(), entry.getValue());
+        LinkedHashMap<AmendableWidget, Occurrence> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), amendableWidget);
+        for (final Map.Entry<AmendableWidget, Occurrence> entry : allowedChildren.entrySet()) {
+            view.addChildAmendableWidget(entry.getKey().getType(), entry.getKey());
         }
 
         // show spacer if both siblings and children are possible

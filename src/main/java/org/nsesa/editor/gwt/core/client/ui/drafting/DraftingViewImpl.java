@@ -39,25 +39,34 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
     Label draftTitle;
 
     @UiField
-    VerticalPanel mainPanel;
+    VerticalPanel allowedPanel;
+
+    @UiField
+    VerticalPanel mandatoryPanel;
 
     @Inject
     public DraftingViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        mainPanel.getElement().addClassName("drafting");
+        allowedPanel.getElement().addClassName("drafting");
+        mandatoryPanel.getElement().addClassName("drafting");
         if (!GWT.isScript())
             this.setTitle(this.getClass().getName());
     }
 
     @Override
     public void clearAll() {
-        mainPanel.clear();
+        allowedPanel.clear();
+        mandatoryPanel.clear();
     }
 
     @Override
-    public void addWidget(IsWidget widget) {
-        mainPanel.add(widget);
+    public void addAllowedChild(IsWidget widget) {
+        allowedPanel.add(widget);
+    }
+
+    public void addMandatoryChild(IsWidget widget) {
+        mandatoryPanel.add(widget);
     }
 
     @Override
