@@ -20,6 +20,12 @@
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="com.google.gwt.user.theme.clean.Clean"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <extend-property name="locale" values="fr"/>
+    <extend-property name="locale" values="ro"/>
+    <extend-property name="locale" values="it"/>
+    <extend-property name="locale" values="nl"/>
+
     <inherits name="com.google.gwt.inject.Inject"/>
     <inherits name="com.google.gwt.place.Place"/>
     <inherits name="com.google.gwt.activity.Activity"/>

@@ -11,28 +11,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.editor.client.ui.header;
+package org.nsesa.editor.gwt.core.client.event;
 
-import com.google.gwt.i18n.shared.GwtLocale;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.inject.ImplementedBy;
-
-import java.util.List;
+import com.google.gwt.event.shared.GwtEvent;
 
 /**
- * Date: 24/06/12 21:44
+ * Date: 24/06/12 18:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(HeaderViewImpl.class)
-public interface HeaderView extends IsWidget {
+public class LocaleChangeEvent extends GwtEvent<LocaleChangeEventHandler> {
 
-    void setStyleName(String style);
+    public static final Type<LocaleChangeEventHandler> TYPE = new Type<LocaleChangeEventHandler>();
 
-    void setLoggedInPersonName(String personName);
+    private final String locale;
 
-    void setLoggedInPersonRoles(String[] roles);
+    public LocaleChangeEvent(String locale) {
+        this.locale = locale;
+    }
 
-    void setAvailableLanguages(List<String> locales);
+    @Override
+    public Type<LocaleChangeEventHandler> getAssociatedType() {
+        return TYPE;
+    }
+
+    @Override
+    protected void dispatch(LocaleChangeEventHandler handler) {
+        handler.onEvent(this);
+    }
+
+    public String getLocale() {
+        return locale;
+    }
 }

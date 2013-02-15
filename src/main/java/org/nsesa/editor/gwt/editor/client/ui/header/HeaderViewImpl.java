@@ -14,16 +14,23 @@
 package org.nsesa.editor.gwt.editor.client.ui.header;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.LocaleChangeEvent;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -41,26 +48,66 @@ public class HeaderViewImpl extends Composite implements HeaderView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    private final ClientFactory clientFactory;
+
     @UiField
     Label name;
     @UiField
     Label roles;
 
+    @UiField
+    ListBox availableLanguages;
+
     @Inject
-    public HeaderViewImpl() {
+    public HeaderViewImpl(final ClientFactory clientFactory) {
+        this.clientFactory = clientFactory;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        registerListeners();
+    }
+
+    private void registerListeners() {
+        availableLanguages.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                clientFactory.getEventBus().fireEvent(new LocaleChangeEvent(availableLanguages.getItemText(availableLanguages.getSelectedIndex())));
+            }
+        });
     }
 
     @Override
-    public void setLoggedInPersonName(String personName) {
+    public void setLoggedInPersonName(final String personName) {
         this.name.setText(personName);
     }
 
     @Override
-    public void setLoggedInPersonRoles(String[] roles) {
+    public void setLoggedInPersonRoles(final String[] roles) {
         if (roles != null) {
             this.roles.setText(Arrays.asList(roles).toString());
+        }
+    }
+
+    @Override
+    public void setAvailableLanguages(final List<String> localeNames) {
+        availableLanguages.setVisible(false);
+        if (localeNames != null || localeNames.size() > 1) {
+            availableLanguages.clear();
+            for (final String locale : localeNames) {
+                // TODO: use resource bundle to translate
+                availableLanguages.addItem(locale, locale);
+            }
+            availableLanguages.setVisible(true);
+        }
+        setSelectedUILanguage();
+    }
+
+    private void setSelectedUILanguage() {
+        final String localeName = LocaleInfo.getCurrentLocale().getLocaleName();
+        for (int i = 0; i < availableLanguages.getItemCount(); i++) {
+            if (localeName.equalsIgnoreCase(availableLanguages.getValue(i))) {
+                availableLanguages.setSelectedIndex(i);
+                break;
+            }
         }
     }
 }

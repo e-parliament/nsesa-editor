@@ -20,6 +20,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -210,6 +211,14 @@ public abstract class Editor implements EntryPoint {
                         eventBus.fireEvent(new org.nsesa.editor.gwt.core.client.event.ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
                     }
                 });
+            }
+        });
+
+        eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
+            @Override
+            public void onEvent(LocaleChangeEvent event) {
+                LOG.info("Changing UI language to " + event.getLocale());
+                Window.Location.assign(Window.Location.createUrlBuilder().setParameter(LocaleInfo.getLocaleQueryParam(), event.getLocale()).buildString());
             }
         });
     }

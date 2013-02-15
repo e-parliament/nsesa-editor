@@ -13,13 +13,19 @@
  */
 package org.nsesa.editor.gwt.editor.client.ui.header;
 
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.AuthenticatedEvent;
 import org.nsesa.editor.gwt.core.client.event.AuthenticatedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
+import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -47,6 +53,13 @@ public class HeaderController {
     }
 
     private void registerListeners() {
+        clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, new BootstrapEventHandler() {
+            @Override
+            public void onEvent(BootstrapEvent event) {
+                setUpLanguages();
+            }
+        });
+
         clientFactory.getEventBus().addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
             @Override
             public void onEvent(AuthenticatedEvent event) {
@@ -54,6 +67,14 @@ public class HeaderController {
                 view.setLoggedInPersonRoles(clientFactory.getClientContext().getRoles());
             }
         });
+    }
+
+    protected void setUpLanguages() {
+        final List<String> locales = new ArrayList<String>();
+        for (final String localeName : LocaleInfo.getAvailableLocaleNames()) {
+            locales.add(localeName);
+        }
+        view.setAvailableLanguages(locales);
     }
 
     public HeaderView getView() {
