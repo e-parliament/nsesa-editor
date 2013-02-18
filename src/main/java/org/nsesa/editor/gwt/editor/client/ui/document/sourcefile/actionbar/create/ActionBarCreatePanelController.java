@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.crea
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
@@ -43,7 +43,7 @@ public class ActionBarCreatePanelController {
 
     private ActionBarController actionBarController;
 
-    private AmendableWidget amendableWidget;
+    private OverlayWidget overlayWidget;
 
     @Inject
     public ActionBarCreatePanelController(final DocumentEventBus documentEventBus,
@@ -56,10 +56,10 @@ public class ActionBarCreatePanelController {
     private void registerListeners() {
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
-            public void onClick(final AmendableWidget newChild, final boolean sibling) {
+            public void onClick(final OverlayWidget newChild, final boolean sibling) {
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild,
-                        sibling ? amendableWidget.getParentAmendableWidget() : amendableWidget,
-                        sibling ? amendableWidget.getIndex() + 1 : 0,
+                        sibling ? overlayWidget.getParentOverlayWidget() : overlayWidget,
+                        sibling ? overlayWidget.getIndex() + 1 : 0,
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }
         });
@@ -69,20 +69,20 @@ public class ActionBarCreatePanelController {
         return view;
     }
 
-    public void setAmendableWidget(final AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public void setOverlayWidget(final OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
 
         // clean up whatever is there
         view.clearAmendableWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<AmendableWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), amendableWidget);
-        for (final Map.Entry<AmendableWidget, Occurrence> entry : allowedSiblings.entrySet()) {
+        LinkedHashMap<OverlayWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedSiblings.entrySet()) {
             view.addSiblingAmendableWidget(entry.getKey().getType(), entry.getKey());
         }
         // add all the children
-        LinkedHashMap<AmendableWidget, Occurrence> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), amendableWidget);
-        for (final Map.Entry<AmendableWidget, Occurrence> entry : allowedChildren.entrySet()) {
+        LinkedHashMap<OverlayWidget, Occurrence> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
+        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedChildren.entrySet()) {
             view.addChildAmendableWidget(entry.getKey().getType(), entry.getKey());
         }
 
@@ -95,8 +95,8 @@ public class ActionBarCreatePanelController {
         this.actionBarController = actionBarController;
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 
     public void setSourceFileController(SourceFileController sourceFileController) {

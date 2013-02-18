@@ -21,7 +21,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -68,25 +68,25 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
         this.uiListener = uiListener;
     }
 
-    public void addChildAmendableWidget(final String title, final AmendableWidget amendableWidget) {
+    public void addChildAmendableWidget(final String title, final OverlayWidget overlayWidget) {
         childTitle.setVisible(true);
         Anchor w = new Anchor(title);
         w.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                uiListener.onClick(amendableWidget, false);
+                uiListener.onClick(overlayWidget, false);
             }
         });
         childPanel.add(w);
     }
 
-    public void addSiblingAmendableWidget(final String title, final AmendableWidget amendableWidget) {
+    public void addSiblingAmendableWidget(final String title, final OverlayWidget overlayWidget) {
         siblingTitle.setVisible(true);
         Anchor w = new Anchor(title);
         w.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                uiListener.onClick(amendableWidget, true);
+                uiListener.onClick(overlayWidget, true);
             }
         });
         siblingPanel.add(w);

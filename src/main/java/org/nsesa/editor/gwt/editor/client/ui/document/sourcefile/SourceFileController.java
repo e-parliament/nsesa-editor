@@ -21,14 +21,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
+import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetUIListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  * @version $Id$
  */
 @Singleton
-public class SourceFileController implements AmendableWidgetUIListener, AmendableWidgetWalker {
+public class SourceFileController implements OverlayWidgetUIListener, OverlayWidgetWalker {
 
     private static final Logger LOG = Logger.getLogger(SourceFileController.class.getName());
 
@@ -69,9 +69,9 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
     // logical parent
     protected DocumentController documentController;
 
-    protected List<AmendableWidget> amendableWidgets;
+    protected List<OverlayWidget> overlayWidgets;
 
-    protected AmendableWidget activeAmendableWidget;
+    protected OverlayWidget activeOverlayWidget;
 
     @Inject
     public SourceFileController(ClientFactory clientFactory, ServiceFactory serviceFactory,
@@ -105,30 +105,30 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
         });
     }
 
-    public AmendableWidget getTopVisibleAmenableWidget() {
+    public OverlayWidget getTopVisibleAmenableWidget() {
         return contentController.getCurrentVisibleAmendableWidget();
     }
 
     public void setContent(String documentContent) {
 
         // clean up
-        if (amendableWidgets != null && !amendableWidgets.isEmpty()) {
-            for (final AmendableWidget amendableWidget : amendableWidgets) {
-                amendableWidget.onDetach();
+        if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
+            for (final OverlayWidget overlayWidget : overlayWidgets) {
+                overlayWidget.onDetach();
             }
         }
         contentController.setContent(documentContent);
     }
 
-    public AmendableWidget overlay(final com.google.gwt.dom.client.Element element, final AmendableWidgetUIListener UIListener) {
+    public OverlayWidget overlay(final com.google.gwt.dom.client.Element element, final OverlayWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
-        final AmendableWidget root = documentController.getOverlayFactory().getAmendableWidget(element);
+        final OverlayWidget root = documentController.getOverlayFactory().getAmendableWidget(element);
         if (root != null) {
-            walk(root, new AmendableWidgetWalker.AmendableVisitor() {
+            walk(root, new OverlayWidgetVisitor() {
                 @Override
-                public boolean visit(AmendableWidget visited) {
+                public boolean visit(OverlayWidget visited) {
                     // if the widget is amendable, register a listener for its events
                     if (visited != null && visited.isAmendable() != null && visited.isAmendable()) {
                         visited.setUIListener(UIListener);
@@ -141,13 +141,13 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
     }
 
     @Override
-    public void walk(AmendableWidgetWalker.AmendableVisitor visitor) {
-        for (final AmendableWidget root : amendableWidgets) {
+    public void walk(OverlayWidgetVisitor visitor) {
+        for (final OverlayWidget root : overlayWidgets) {
             root.walk(visitor);
         }
     }
 
-    public void walk(final AmendableWidget toVisit, final AmendableWidgetWalker.AmendableVisitor visitor) {
+    public void walk(final OverlayWidget toVisit, final OverlayWidgetVisitor visitor) {
         toVisit.walk(visitor);
     }
 
@@ -156,29 +156,29 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
     }
 
     @Override
-    public void onClick(AmendableWidget sender) {
+    public void onClick(OverlayWidget sender) {
         //        printDetails(sender);
         clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, documentController));
     }
 
-    private void printDetails(final AmendableWidget amendableWidget) {
-        final AmendableWidget previousNonIntroducedAmendableWidget = amendableWidget.getPreviousNonIntroducedAmendableWidget(false);
-        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget != null ? documentController.getLocator().getLocation(previousNonIntroducedAmendableWidget, "EN", false) : null));
-        final AmendableWidget previousNonIntroducedAmendableWidget1 = amendableWidget.getPreviousNonIntroducedAmendableWidget(true);
-        System.out.println(">>>> " + (previousNonIntroducedAmendableWidget1 != null ? documentController.getLocator().getLocation(previousNonIntroducedAmendableWidget1, "EN", false) : null));
-        final AmendableWidget nextNonIntroducedAmendableWidget = amendableWidget.getNextNonIntroducedAmendableWidget(false);
-        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget != null ? documentController.getLocator().getLocation(nextNonIntroducedAmendableWidget, "EN", false) : null));
-        final AmendableWidget nextNonIntroducedAmendableWidget1 = amendableWidget.getNextNonIntroducedAmendableWidget(true);
-        System.out.println(">>>> " + (nextNonIntroducedAmendableWidget1 != null ? documentController.getLocator().getLocation(nextNonIntroducedAmendableWidget1, "EN", false) : null));
+    private void printDetails(final OverlayWidget overlayWidget) {
+        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+        System.out.println(">>>> " + (previousNonIntroducedOverlayWidget != null ? documentController.getLocator().getLocation(previousNonIntroducedOverlayWidget, "EN", false) : null));
+        final OverlayWidget previousNonIntroducedOverlayWidget1 = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
+        System.out.println(">>>> " + (previousNonIntroducedOverlayWidget1 != null ? documentController.getLocator().getLocation(previousNonIntroducedOverlayWidget1, "EN", false) : null));
+        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(false);
+        System.out.println(">>>> " + (nextNonIntroducedOverlayWidget != null ? documentController.getLocator().getLocation(nextNonIntroducedOverlayWidget, "EN", false) : null));
+        final OverlayWidget nextNonIntroducedOverlayWidget1 = overlayWidget.getNextNonIntroducedOverlayWidget(true);
+        System.out.println(">>>> " + (nextNonIntroducedOverlayWidget1 != null ? documentController.getLocator().getLocation(nextNonIntroducedOverlayWidget1, "EN", false) : null));
     }
 
     @Override
-    public void onDblClick(AmendableWidget sender) {
+    public void onDblClick(OverlayWidget sender) {
         documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
     }
 
     @Override
-    public void onMouseOver(AmendableWidget sender) {
+    public void onMouseOver(OverlayWidget sender) {
         // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
         // allow the action bar to be shown.
         if (!sender.isIntroducedByAnAmendment()) {
@@ -188,18 +188,18 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
     }
 
     @Override
-    public void onMouseOut(AmendableWidget sender) {
+    public void onMouseOut(OverlayWidget sender) {
         // ignore
     }
 
     public void overlay() {
         long start = System.currentTimeMillis();
         final Element[] contentElements = contentController.getContentElements();
-        if (amendableWidgets == null) amendableWidgets = new ArrayList<AmendableWidget>();
+        if (overlayWidgets == null) overlayWidgets = new ArrayList<OverlayWidget>();
         for (final Element element : contentElements) {
             try {
-                final AmendableWidget rootAmendableWidget = overlay(element, this);
-                amendableWidgets.add(rootAmendableWidget);
+                final OverlayWidget rootOverlayWidget = overlay(element, this);
+                overlayWidgets.add(rootOverlayWidget);
             } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Exception while overlaying.", e);
                 documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
@@ -210,9 +210,9 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
 
     public void renumberAmendments() {
         final Counter counter = new Counter();
-        walk(new AmendableVisitor() {
+        walk(new OverlayWidgetVisitor() {
             @Override
-            public boolean visit(AmendableWidget visited) {
+            public boolean visit(OverlayWidget visited) {
                 if (visited.isAmended()) {
                     for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
                         amendmentController.setOrder(counter.incrementAndGet());
@@ -223,24 +223,24 @@ public class SourceFileController implements AmendableWidgetUIListener, Amendabl
         });
     }
 
-    public AmendableWidget getActiveAmendableWidget() {
-        return activeAmendableWidget;
+    public OverlayWidget getActiveOverlayWidget() {
+        return activeOverlayWidget;
     }
 
-    public void setActiveAmendableWidget(AmendableWidget activeAmendableWidget) {
-        this.activeAmendableWidget = activeAmendableWidget;
+    public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
+        this.activeOverlayWidget = activeOverlayWidget;
     }
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
 
-    public List<AmendableWidget> getAmendableWidgets() {
-        return amendableWidgets;
+    public List<OverlayWidget> getOverlayWidgets() {
+        return overlayWidgets;
     }
 
     public void clearAmendableWidgets() {
-        this.amendableWidgets = new ArrayList<AmendableWidget>();
+        this.overlayWidgets = new ArrayList<OverlayWidget>();
     }
 
     public MarkerController getMarkerController() {

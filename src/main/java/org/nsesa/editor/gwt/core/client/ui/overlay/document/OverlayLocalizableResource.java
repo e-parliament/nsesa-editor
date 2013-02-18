@@ -29,7 +29,7 @@ public interface OverlayLocalizableResource {
      * @param widget
      * @return
      */
-    abstract String getName(AmendableWidget widget);
+    abstract String getName(OverlayWidget widget);
 
     /**
      * Returns localized details for the given amendable widget
@@ -37,5 +37,5 @@ public interface OverlayLocalizableResource {
      * @param widget
      * @return
      */
-    abstract String getDescription(AmendableWidget widget);
+    abstract String getDescription(OverlayWidget widget);
 }

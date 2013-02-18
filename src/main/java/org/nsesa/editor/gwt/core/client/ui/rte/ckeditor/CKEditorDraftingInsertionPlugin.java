@@ -72,7 +72,7 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
             @Override
             public void onEvent(DraftingInsertionEvent event) {
                 //change the text editor
-                insertDrafting(CKEditorDraftingInsertionPlugin.this, editor, event.getAmendableWidget().getAmendableElement());
+                insertDrafting(CKEditorDraftingInsertionPlugin.this, editor, event.getOverlayWidget().getOverlayElement());
             }
         });
     }

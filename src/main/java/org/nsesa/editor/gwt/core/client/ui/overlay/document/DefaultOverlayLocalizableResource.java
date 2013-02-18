@@ -21,12 +21,12 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  */
 public class DefaultOverlayLocalizableResource implements OverlayLocalizableResource {
     @Override
-    public String getName(AmendableWidget widget) {
+    public String getName(OverlayWidget widget) {
         return widget.getType();
     }
 
     @Override
-    public String getDescription(AmendableWidget widget) {
+    public String getDescription(OverlayWidget widget) {
         return widget.getType();
     }
 }

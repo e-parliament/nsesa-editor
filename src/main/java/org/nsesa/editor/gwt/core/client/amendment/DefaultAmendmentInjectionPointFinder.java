@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.amendment;
 
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -32,32 +32,32 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointFinder.class.getName());
 
     @Override
-    public List<AmendableWidget> findInjectionPoints(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
+    public List<OverlayWidget> findInjectionPoints(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         final String path = amendmentController.getModel().getSourceReference().getPath();
         LOG.info("Trying to find nodes matching " + path);
-        final List<AmendableWidget> amendableWidgets = OverlayUtil.xpath(path, root);
-        LOG.info("Found nodes " + amendableWidgets);
-        return amendableWidgets;
+        final List<OverlayWidget> overlayWidgets = OverlayUtil.xpath(path, root);
+        LOG.info("Found nodes " + overlayWidgets);
+        return overlayWidgets;
     }
 
     @Override
-    public String getInjectionPoint(final AmendableWidget amendableWidget) {
-        if (amendableWidget.getId() != null && !"".equals(amendableWidget.getId())) {
+    public String getInjectionPoint(final OverlayWidget overlayWidget) {
+        if (overlayWidget.getId() != null && !"".equals(overlayWidget.getId())) {
             // easy!
-            return "#" + amendableWidget.getId();
+            return "#" + overlayWidget.getId();
         }
 
         // damn, no id - we need an xpath-like expression ...
         final StringBuilder sb = new StringBuilder("//");
-        final List<AmendableWidget> parentAmendableWidgets = amendableWidget.getParentAmendableWidgets();
-        parentAmendableWidgets.add(amendableWidget);
-        for (final AmendableWidget parent : parentAmendableWidgets) {
+        final List<OverlayWidget> parentOverlayWidgets = overlayWidget.getParentOverlayWidgets();
+        parentOverlayWidgets.add(overlayWidget);
+        for (final OverlayWidget parent : parentOverlayWidgets) {
             if (!parent.isIntroducedByAnAmendment()) {
                 sb.append(parent.getType());
                 final int typeIndex = parent.getTypeIndex();
                 // note: type index will be -1 for the root node
                 sb.append("[").append(typeIndex != -1 ? typeIndex : 0).append("]");
-                if (parentAmendableWidgets.indexOf(parent) < parentAmendableWidgets.size() - 1) {
+                if (parentOverlayWidgets.indexOf(parent) < parentOverlayWidgets.size() - 1) {
                     sb.append("/");
                 }
             }

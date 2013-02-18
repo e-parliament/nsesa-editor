@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Date: 06/07/12 17:21
@@ -24,7 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  */
 @ImplementedBy(DefaultLocator.class)
 public interface Locator {
-    String getLocation(AmendableWidget amendableWidget, AmendableWidget newChild, String languageIso, boolean childrenIncluded);
+    String getLocation(OverlayWidget overlayWidget, OverlayWidget newChild, String languageIso, boolean childrenIncluded);
 
-    String getLocation(AmendableWidget amendableWidget, String languageIso, boolean childrenIncluded);
+    String getLocation(OverlayWidget overlayWidget, String languageIso, boolean childrenIncluded);
 }

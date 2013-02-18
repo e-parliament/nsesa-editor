@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
@@ -53,7 +53,7 @@ public class ActionBarController {
 
     private final PopupPanel popupPanel;
 
-    private AmendableWidget amendableWidget;
+    private OverlayWidget overlayWidget;
 
     private SourceFileController sourceFileController;
 
@@ -81,24 +81,24 @@ public class ActionBarController {
         view.getModifyHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (amendableWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
+                if (overlayWidget != null) {
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
                 }
             }
         });
         view.getDeleteHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (amendableWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(amendableWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
+                if (overlayWidget != null) {
+                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
                 }
             }
         });
         view.getChildHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (amendableWidget != null) {
-                    actionBarCreatePanelController.setAmendableWidget(amendableWidget);
+                if (overlayWidget != null) {
+                    actionBarCreatePanelController.setOverlayWidget(overlayWidget);
                     final ActionBarCreatePanelView panelView = actionBarCreatePanelController.getView();
                     panelView.asWidget().setVisible(true);
                     popupPanel.setWidget(panelView);
@@ -121,8 +121,8 @@ public class ActionBarController {
         return view;
     }
 
-    public void setAmendableWidget(final AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public void setOverlayWidget(final OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
     }
 
     public void setAllowDelete(final boolean allowDelete) {
@@ -153,8 +153,8 @@ public class ActionBarController {
         view.setLocation(location);
     }
 
-    public void attach(AmendableWidget target) {
-        if (amendableWidget != target) {
+    public void attach(OverlayWidget target) {
+        if (overlayWidget != target) {
 
             // if our action bar view has not yet been added to the rootpanel, then do so now.
             if (!view.asWidget().isAttached()) {
@@ -168,12 +168,12 @@ public class ActionBarController {
 
             // if we had a previous widget that was selected, make sure to remove its special action css
             // done this way because onmouseout is not reliable enough
-            if (amendableWidget != null) {
-                amendableWidget.asWidget().removeStyleName(actionBarViewCss.hover());
+            if (overlayWidget != null) {
+                overlayWidget.asWidget().removeStyleName(actionBarViewCss.hover());
             }
 
-            this.amendableWidget = target;
-            amendableWidget.asWidget().addStyleName(actionBarViewCss.hover());
+            this.overlayWidget = target;
+            overlayWidget.asWidget().addStyleName(actionBarViewCss.hover());
 
             // position our action bar exactly above the amendable widget
             adaptPosition();
@@ -183,19 +183,19 @@ public class ActionBarController {
     public void adaptPosition() {
         // hide the panel with our creation elements
         actionBarCreatePanelController.getView().asWidget().setVisible(false);
-        if (amendableWidget != null && amendableWidget.getRoot() != null) {
+        if (overlayWidget != null && overlayWidget.getRoot() != null) {
             final Style style = view.asWidget().getElement().getStyle();
-            final int coordinateY = amendableWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 70;
+            final int coordinateY = overlayWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 70;
             style.setTop(coordinateY, Style.Unit.PX);
-            final int x = amendableWidget.asWidget().getAbsoluteLeft();
+            final int x = overlayWidget.asWidget().getAbsoluteLeft();
             style.setLeft(x, Style.Unit.PX);
-            final int width = amendableWidget.getRoot().asWidget().getOffsetWidth();
-            final int offsetRoot = amendableWidget.getRoot().asWidget().getAbsoluteLeft();
+            final int width = overlayWidget.getRoot().asWidget().getOffsetWidth();
+            final int offsetRoot = overlayWidget.getRoot().asWidget().getAbsoluteLeft();
             style.setWidth((width + offsetRoot) - x, Style.Unit.PX);
         }
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 }

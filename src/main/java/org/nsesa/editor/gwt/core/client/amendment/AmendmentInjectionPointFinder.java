@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.core.client.amendment;
 
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
  */
 @ImplementedBy(DefaultAmendmentInjectionPointFinder.class)
 public interface AmendmentInjectionPointFinder {
-    List<AmendableWidget> findInjectionPoints(AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController);
+    List<OverlayWidget> findInjectionPoints(AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController);
 
-    String getInjectionPoint(AmendableWidget amendableWidget);
+    String getInjectionPoint(OverlayWidget overlayWidget);
 }

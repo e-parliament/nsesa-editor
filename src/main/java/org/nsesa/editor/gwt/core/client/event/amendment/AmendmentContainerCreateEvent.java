@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
@@ -28,15 +28,15 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
 
     public static final Type<AmendmentContainerCreateEventHandler> TYPE = new Type<AmendmentContainerCreateEventHandler>();
 
-    private final AmendableWidget amendableWidget;
-    private final AmendableWidget parentAmendableWidget;
+    private final OverlayWidget overlayWidget;
+    private final OverlayWidget parentOverlayWidget;
     private final int index;
     private final AmendmentAction amendmentAction;
     private final DocumentController documentController;
 
-    public AmendmentContainerCreateEvent(AmendableWidget amendableWidget, AmendableWidget parentAmendableWidget, int index, AmendmentAction amendmentAction, DocumentController documentController) {
-        this.amendableWidget = amendableWidget;
-        this.parentAmendableWidget = parentAmendableWidget;
+    public AmendmentContainerCreateEvent(OverlayWidget overlayWidget, OverlayWidget parentOverlayWidget, int index, AmendmentAction amendmentAction, DocumentController documentController) {
+        this.overlayWidget = overlayWidget;
+        this.parentOverlayWidget = parentOverlayWidget;
         this.index = index;
         this.amendmentAction = amendmentAction;
         this.documentController = documentController;
@@ -56,16 +56,16 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
         return amendmentAction;
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 
     public DocumentController getDocumentController() {
         return documentController;
     }
 
-    public AmendableWidget getParentAmendableWidget() {
-        return parentAmendableWidget;
+    public OverlayWidget getParentOverlayWidget() {
+        return parentOverlayWidget;
     }
 
     public int getIndex() {

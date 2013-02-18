@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.util.select;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Date: 07/01/13 14:24
@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @version $Id$
  */
 public interface Matcher {
-    boolean matches(String expression, AmendableWidget amendableWidget);
+    boolean matches(String expression, OverlayWidget overlayWidget);
 
     boolean applicable(String expression);
 }

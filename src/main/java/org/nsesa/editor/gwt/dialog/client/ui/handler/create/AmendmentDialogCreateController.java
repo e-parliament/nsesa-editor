@@ -38,7 +38,7 @@ import java.util.List;
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
  * column layout (with the original proposed text on the left, and a rich text editor on the right).
  * <p/>
- * Requires an {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget} to be set before it can be displayed.
+ * Requires an {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -84,7 +84,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
             @Override
             public void onClick(ClickEvent event) {
                 // set the assigned number on the amendable widget
-                dialogContext.getAmendableWidget().setAssignedNumber(dialogContext.getIndex());
+                dialogContext.getOverlayWidget().setAssignedNumber(dialogContext.getIndex());
                 handleSave();
             }
         });
@@ -105,13 +105,13 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     }
 
     public void handleSave() {
-        if (dialogContext.getParentAmendableWidget() == null) {
+        if (dialogContext.getParentOverlayWidget() == null) {
             throw new NullPointerException("No parent amendable widget set.");
         }
         dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(true,
                 dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
-                amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentAmendableWidget()),
-                dialogContext.getAmendableWidget().getType(),
+                amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
+                dialogContext.getOverlayWidget().getType(),
                 dialogContext.getIndex()));
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
@@ -133,7 +133,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     @Override
     public void handle() {
         // set the amendable widget in the drafting controller
-        draftingController.setAmendableWidget(dialogContext.getAmendableWidget());
+        draftingController.setAmendableWidget(dialogContext.getOverlayWidget());
         // make sure to pass the context to the children
         for (final AmendmentDialogAwareController childController : childControllers) {
             childController.setContext(dialogContext);
@@ -142,7 +142,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     }
 
     public void setProperties() {
-        if (dialogContext.getAmendableWidget() == null && dialogContext.getAmendment() == null) {
+        if (dialogContext.getOverlayWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
     }

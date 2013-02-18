@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
@@ -54,7 +54,7 @@ public class DefaultAmendmentController implements AmendmentController {
     /**
      * Reference to the parent amendable widget we've been added to.
      */
-    protected AmendableWidget amendedAmendableWidget;
+    protected OverlayWidget amendedOverlayWidget;
 
     protected AmendmentActionPanelController amendmentActionPanelController;
 
@@ -184,14 +184,14 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public AmendableWidget asAmendableWidget(final String source) {
+    public OverlayWidget asAmendableWidget(final String source) {
         final com.google.gwt.user.client.Element span = DOM.createSpan();
         span.setInnerHTML(source);
         return asAmendableWidget(span.getFirstChildElement());
     }
 
     @Override
-    public AmendableWidget asAmendableWidget(final Element element) {
+    public OverlayWidget asAmendableWidget(final Element element) {
         return documentController.getOverlayFactory().getAmendableWidget(element);
     }
 
@@ -249,13 +249,13 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget) {
-        this.amendedAmendableWidget = amendedAmendableWidget;
+    public void setAmendedOverlayWidget(OverlayWidget amendedOverlayWidget) {
+        this.amendedOverlayWidget = amendedOverlayWidget;
     }
 
     @Override
-    public AmendableWidget getAmendedAmendableWidget() {
-        return amendedAmendableWidget;
+    public OverlayWidget getAmendedOverlayWidget() {
+        return amendedOverlayWidget;
     }
 
     @Override

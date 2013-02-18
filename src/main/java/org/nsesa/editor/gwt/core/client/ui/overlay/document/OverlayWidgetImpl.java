@@ -24,7 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.client.util.NodeUtil;
-import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
+import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -35,21 +35,21 @@ import java.util.logging.Logger;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget, HasWidgets {
+public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, HasWidgets {
 
-    private static final Logger LOG = Logger.getLogger(AmendableWidgetImpl.class.getName());
+    private static final Logger LOG = Logger.getLogger(OverlayWidgetImpl.class.getName());
 
     public static final boolean DEFAULT_ROOT_WIDGET_AMENDABLE = true;
 
     /**
      * A listener for all the UI operations to call back on.
      */
-    private AmendableWidgetUIListener UIListener;
+    private OverlayWidgetUIListener UIListener;
 
     /**
      * A listener for all the amending operations to call back on.
      */
-    private AmendableWidgetListener listener;
+    private OverlayWidgetListener listener;
 
     /**
      * Supports lazy retrieval of properties
@@ -57,14 +57,14 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     private OverlayStrategy overlayStrategy;
 
     /**
-     * The logical parent amendable widget. If the parent is null, this is considered a root widget.
+     * The logical parent overlay widget. If the parent is null, this is considered a root widget.
      */
-    private AmendableWidget parentAmendableWidget;
+    private OverlayWidget parentOverlayWidget;
 
     /**
      * A list of logical children.
      */
-    private List<AmendableWidget> childAmendableWidgets = new ArrayList<AmendableWidget>();
+    private List<OverlayWidget> childOverlayWidgets = new ArrayList<OverlayWidget>();
 
     /**
      * A list of all the amendments on this widget.
@@ -81,7 +81,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     private String id;
 
-    private AmendableWidgetOrigin origin;
+    private OverlayWidgetOrigin origin;
 
     /**
      * Flag to indicate that this widget is immutable. We use this flag to set a single element as non-amendable
@@ -101,25 +101,25 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     private Integer assignedNumber;
 
     /**
-     * Contains the unformatted index of this amendable widget (eg. 'a', '2', '-', ...)
+     * Contains the unformatted index of this overlay widget (eg. 'a', '2', '-', ...)
      */
     private String unformattedIndex;
 
     /**
-     * Contains the formatted, original index of this amendable widget (eg. 'a)', '(2)', '-', '', ...)
+     * Contains the formatted, original index of this overlay widget (eg. 'a)', '(2)', '-', '', ...)
      */
     private String formattedIndex;
 
     /**
      * The holder element for the amendments.
      */
-    protected HTMLPanel amendmentHolderElement;
+    protected HTMLPanel amendmentControllersHolderElement;
 
-    public AmendableWidgetImpl() {
+    public OverlayWidgetImpl() {
     }
 
-    public AmendableWidgetImpl(Element amendableElement) {
-        setElement(amendableElement);
+    public OverlayWidgetImpl(Element overlayElement) {
+        setElement(overlayElement);
         // if we're not yet part of the DOM tree, try to attach
         if (!isAttached()) {
             onAttach();
@@ -132,13 +132,13 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void addAmendableWidget(final AmendableWidget child) {
-        addAmendableWidget(child, -1);
+    public void addOverlayWidget(final OverlayWidget child) {
+        addOverlayWidget(child, -1);
     }
 
     @Override
-    public void addAmendableWidget(AmendableWidget child, int index) {
-        addAmendableWidget(child, index, false);
+    public void addOverlayWidget(OverlayWidget child, int index) {
+        addOverlayWidget(child, index, false);
     }
 
     @Override
@@ -149,8 +149,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public void onDetach() {
 
-        if (childAmendableWidgets != null) {
-            for (final AmendableWidget child : childAmendableWidgets) {
+        if (childOverlayWidgets != null) {
+            for (final OverlayWidget child : childOverlayWidgets) {
                 if (child.isAttached()) {
                     child.onDetach();
                 }
@@ -164,8 +164,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             this.amendable = null;
             this.amendmentControllers = null;
             this.assignedNumber = null;
-            this.amendmentHolderElement = null;
-            this.childAmendableWidgets = null;
+            this.amendmentControllersHolderElement = null;
+            this.childOverlayWidgets = null;
             this.format = null;
             this.id = null;
             this.immutable = null;
@@ -175,20 +175,20 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void addAmendableWidget(final AmendableWidget child, int index, boolean skipValidation) {
+    public void addOverlayWidget(final OverlayWidget child, int index, boolean skipValidation) {
         if (child == null) throw new NullPointerException("Cannot add null child!");
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendableWidgetAdded(this, child);
+            vetoed = listener.beforeOverlayWidgetAdded(this, child);
 
         if (!vetoed) {
             if (!skipValidation) {
                 // see if there is a wildcard in the allowed subtypes,
-                AmendableWidget wildCard = null;
+                OverlayWidget wildCard = null;
                 if (!getAllowedChildTypes().containsKey(wildCard)) {
                     // no wildcard - see if the type is supported as a child widget
                     boolean canAdd = false;
-                    for (Map.Entry<AmendableWidget, Occurrence> entry : getAllowedChildTypes().entrySet()) {
+                    for (Map.Entry<OverlayWidget, Occurrence> entry : getAllowedChildTypes().entrySet()) {
                         if (entry.getKey().getType().equalsIgnoreCase(child.getType()) &&
                                 entry.getKey().getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
                             canAdd = true;
@@ -200,48 +200,48 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 }
 
                 // if our child was somehow still connected to another widget, then clear this reference first
-                if (child.getParentAmendableWidget() != null) {
-                    if (child.getParentAmendableWidget().getChildAmendableWidgets().contains(child)) {
-                        child.getParentAmendableWidget().removeAmendableWidget(child);
+                if (child.getParentOverlayWidget() != null) {
+                    if (child.getParentOverlayWidget().getChildOverlayWidgets().contains(child)) {
+                        child.getParentOverlayWidget().removeOverlayWidget(child);
                     }
                 }
             }
             if (index == -1) {
-                if (!childAmendableWidgets.add(child)) {
+                if (!childOverlayWidgets.add(child)) {
                     throw new RuntimeException("Child already exists: " + child.getType());
                 }
             } else {
-                if (index > childAmendableWidgets.size()) {
-                    throw new RuntimeException("Could not insert child amendable widget at index " + index +
-                            " because the size of the amendable children is only " + childAmendableWidgets.size());
+                if (index > childOverlayWidgets.size()) {
+                    throw new RuntimeException("Could not insert child Overlay widget at index " + index +
+                            " because the size of the Overlay children is only " + childOverlayWidgets.size());
                 }
-                childAmendableWidgets.add(index, child);
+                childOverlayWidgets.add(index, child);
             }
-            child.setParentAmendableWidget(this);
+            child.setParentOverlayWidget(this);
             // inform the listener
-            if (listener != null) listener.afterAmendableWidgetAdded(this, child);
+            if (listener != null) listener.afterOverlayWidgetAdded(this, child);
         } else {
-            LOG.info("AmendableWidget listener veto'ed the adding of the amendable widget.");
+            LOG.info("OverlayWidget listener veto'ed the adding of the overlay widget.");
         }
     }
 
     @Override
-    public void removeAmendableWidget(final AmendableWidget child) {
+    public void removeOverlayWidget(final OverlayWidget child) {
         if (child == null) throw new NullPointerException("Cannot remove null child!");
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendableWidgetRemoved(this, child);
+            vetoed = listener.beforeOverlayWidgetRemoved(this, child);
 
         if (!vetoed) {
-            if (!childAmendableWidgets.remove(child)) {
+            if (!childOverlayWidgets.remove(child)) {
                 throw new RuntimeException("Child widget not found: " + child);
             }
-            child.setParentAmendableWidget(null);
+            child.setParentOverlayWidget(null);
             // inform the listener
-            if (listener != null) listener.afterAmendableWidgetRemoved(this, child);
+            if (listener != null) listener.afterOverlayWidgetRemoved(this, child);
         } else {
-            LOG.info("AmendableWidget listener veto'ed the removal of the amendable widget.");
+            LOG.info("OverlayWidget listener veto'ed the removal of the overlay widget.");
         }
     }
 
@@ -262,18 +262,18 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             }
 
             // physical attach
-            final HTMLPanel holderElement = getAmendmentHolderElement();
+            final HTMLPanel holderElement = getAmendmentControllersHolderElement();
             if (holderElement != null) {
                 holderElement.add(amendmentController.getView());
                 // set up a reference to this widget
-                amendmentController.setAmendedAmendableWidget(this);
+                amendmentController.setAmendedOverlayWidget(this);
                 // inform the listener
                 if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
             } else {
                 LOG.severe("No amendment holder panel could be added for this widget " + this);
             }
         } else {
-            LOG.info("AmendableWidget listener veto'ed the adding of the amendment controller.");
+            LOG.info("OverlayWidget listener veto'ed the adding of the amendment controller.");
         }
     }
 
@@ -298,17 +298,17 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
             amendmentController.getExtendedView().asWidget().removeFromParent();
 
             // clear reference to this widget
-            amendmentController.setAmendedAmendableWidget(null);
+            amendmentController.setAmendedOverlayWidget(null);
 
             // inform the listener
             if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
         } else {
-            LOG.info("AmendableWidget listener veto'ed the removal of the amendment controller.");
+            LOG.info("OverlayWidget listener veto'ed the removal of the amendment controller.");
         }
     }
 
     @Override
-    public void setUIListener(final AmendableWidgetUIListener UIListener) {
+    public void setUIListener(final OverlayWidgetUIListener UIListener) {
         this.UIListener = UIListener;
         if (UIListener != null) {
             // register a listener for the browser events
@@ -317,7 +317,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void setListener(AmendableWidgetListener listener) {
+    public void setListener(OverlayWidgetListener listener) {
         this.listener = listener;
     }
 
@@ -346,15 +346,10 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void setParentAmendableWidget(AmendableWidget parent) {
-        this.parentAmendableWidget = parent;
+    public void setParentOverlayWidget(OverlayWidget parent) {
+        this.parentOverlayWidget = parent;
     }
 
-    /**
-     * Returns the type (its local name, meaning the element without any prefix) in lowercase.
-     *
-     * @return
-     */
     @Override
     public String getType() {
         return type;
@@ -388,8 +383,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element el = node.cast();
                     // determine if this is an amendment holder element or not
-                    if (el.getTagName().equals(getAmendmentHolderElement().getElement().getTagName())
-                            && el.getClassName().equals(getAmendmentHolderElement().getElement().getClassName())) {
+                    if (el.getTagName().equals(getAmendmentControllersHolderElement().getElement().getTagName())
+                            && el.getClassName().equals(getAmendmentControllersHolderElement().getElement().getClassName())) {
                         el.removeFromParent();
                     }
                 }
@@ -399,57 +394,57 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void setInnerHTML(String amendableContent) {
+    public void setInnerHTML(String innerHTML) {
         // TODO make sure to restore the amendments if this is called
         if (isAmended()) {
             throw new RuntimeException("[TODO] We're not yet restoring amendments when the inner HTML is set.");
         }
-        getElement().setInnerHTML(amendableContent);
+        getElement().setInnerHTML(innerHTML);
     }
 
     @Override
-    public List<AmendableWidget> getParentAmendableWidgets() {
-        final List<AmendableWidget> parents = new ArrayList<AmendableWidget>();
-        AmendableWidget parent = getParentAmendableWidget();
+    public List<OverlayWidget> getParentOverlayWidgets() {
+        final List<OverlayWidget> parents = new ArrayList<OverlayWidget>();
+        OverlayWidget parent = getParentOverlayWidget();
         while (parent != null) {
             parents.add(parent);
-            parent = parent.getParentAmendableWidget();
+            parent = parent.getParentOverlayWidget();
         }
         Collections.reverse(parents);
         return parents;
     }
 
     @Override
-    public List<AmendableWidget> getChildAmendableWidgets() {
-        return childAmendableWidgets;
+    public List<OverlayWidget> getChildOverlayWidgets() {
+        return childOverlayWidgets;
     }
 
     @Override
-    public AmendableWidget getParentAmendableWidget() {
-        return parentAmendableWidget;
+    public OverlayWidget getParentOverlayWidget() {
+        return parentOverlayWidget;
     }
 
     @Override
-    public AmendableWidget getPreviousSibling() {
-        if (parentAmendableWidget == null) return null;
-        final int index = parentAmendableWidget.getChildAmendableWidgets().indexOf(this);
+    public OverlayWidget getPreviousSibling() {
+        if (parentOverlayWidget == null) return null;
+        final int index = parentOverlayWidget.getChildOverlayWidgets().indexOf(this);
         // short circuit if we're already the first widget
         if (index == 0) return null;
-        return parentAmendableWidget.getChildAmendableWidgets().get(index - 1);
+        return parentOverlayWidget.getChildOverlayWidgets().get(index - 1);
     }
 
     @Override
-    public AmendableWidget getNextSibling() {
-        if (parentAmendableWidget == null) return null;
-        final int index = parentAmendableWidget.getChildAmendableWidgets().indexOf(this);
+    public OverlayWidget getNextSibling() {
+        if (parentOverlayWidget == null) return null;
+        final int index = parentOverlayWidget.getChildOverlayWidgets().indexOf(this);
         // short circuit if we're already the last widget
-        if (index == parentAmendableWidget.getChildAmendableWidgets().size() - 1) return null;
-        return parentAmendableWidget.getChildAmendableWidgets().get(index + 1);
+        if (index == parentOverlayWidget.getChildOverlayWidgets().size() - 1) return null;
+        return parentOverlayWidget.getChildOverlayWidgets().get(index + 1);
     }
 
     @Override
-    public AmendableWidget getPreviousNonIntroducedAmendableWidget(final boolean sameType) {
-        AmendableWidget previous = getPreviousSibling();
+    public OverlayWidget getPreviousNonIntroducedOverlayWidget(final boolean sameType) {
+        OverlayWidget previous = getPreviousSibling();
         while (previous != null) {
             if (!previous.isIntroducedByAnAmendment()) {
                 if (sameType) {
@@ -465,8 +460,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public AmendableWidget getNextNonIntroducedAmendableWidget(final boolean sameType) {
-        AmendableWidget next = getNextSibling();
+    public OverlayWidget getNextNonIntroducedOverlayWidget(final boolean sameType) {
+        OverlayWidget next = getNextSibling();
         while (next != null) {
             if (!next.isIntroducedByAnAmendment()) {
                 if (sameType) {
@@ -482,8 +477,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public AmendableWidget getRoot() {
-        return getParentAmendableWidget() != null ? getParentAmendableWidget() : this;
+    public OverlayWidget getRoot() {
+        return getParentOverlayWidget() != null ? getParentOverlayWidget() : this;
     }
 
     @Override
@@ -503,7 +498,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         // has been set explicitly
         if (amendable != null) return amendable;
         // walk the parents until we find one that has been set, or default to DEFAULT_ROOT_WIDGET_AMENDABLE for the root
-        return parentAmendableWidget != null ? parentAmendableWidget.isAmendable() : DEFAULT_ROOT_WIDGET_AMENDABLE;
+        return parentOverlayWidget != null ? parentOverlayWidget.isAmendable() : DEFAULT_ROOT_WIDGET_AMENDABLE;
     }
 
     @Override
@@ -521,7 +516,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         // has been set explicitly
         if (immutable != null) return immutable;
         // walk the parents until we find one that has been set, or default to false for the root
-        return parentAmendableWidget != null ? parentAmendableWidget.isImmutable() : false;
+        return parentOverlayWidget != null ? parentOverlayWidget.isImmutable() : false;
     }
 
     @Override
@@ -530,18 +525,18 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public HTMLPanel getAmendmentHolderElement() {
-        if (amendmentHolderElement == null) {
+    public HTMLPanel getAmendmentControllersHolderElement() {
+        if (amendmentControllersHolderElement == null) {
             if (getElement() != null && getElement().getParentElement() != null) {
                 // TODO: this holder should not be necessary ... should be added directly to to the element.
-                amendmentHolderElement = new HTMLPanel("");
-                amendmentHolderElement.getElement().setClassName("amendments");
-                getElement().insertBefore(amendmentHolderElement.getElement(), null);
-                adopt(amendmentHolderElement);
-                assert amendmentHolderElement.isAttached() : "Amendment Holder element is not attached.";
+                amendmentControllersHolderElement = new HTMLPanel("");
+                amendmentControllersHolderElement.getElement().setClassName("amendments");
+                getElement().insertBefore(amendmentControllersHolderElement.getElement(), null);
+                adopt(amendmentControllersHolderElement);
+                assert amendmentControllersHolderElement.isAttached() : "Amendment Holder element is not attached.";
             }
         }
-        return amendmentHolderElement;
+        return amendmentControllersHolderElement;
     }
 
     /**
@@ -551,8 +546,8 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
      * @return the Map of allowed child types (an empty map is ok though).
      */
     @Override
-    public Map<AmendableWidget, Occurrence> getAllowedChildTypes() {
-        return new HashMap<AmendableWidget, Occurrence>();
+    public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
+        return new HashMap<OverlayWidget, Occurrence>();
     }
 
     @Override
@@ -586,7 +581,7 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     @Override
     public Integer getAssignedNumber() {
         if (assignedNumber == null) {
-            if (parentAmendableWidget != null) {
+            if (parentOverlayWidget != null) {
                 assignedNumber = getTypeIndex(false) + 1;
             }
         }
@@ -604,12 +599,12 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     @Override
-    public void setOrigin(AmendableWidgetOrigin origin) {
+    public void setOrigin(OverlayWidgetOrigin origin) {
         this.origin = origin;
     }
 
     @Override
-    public AmendableWidgetOrigin getOrigin() {
+    public OverlayWidgetOrigin getOrigin() {
         return origin;
     }
 
@@ -639,17 +634,17 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
     }
 
     /**
-     * Check if this amendable widget was created by an amendment. Will traverse upwards if the origin was not specified.
+     * Check if this overlay widget was created by an amendment. Will traverse upwards if the origin was not specified.
      *
      * @return <tt>true</tt> if this widget was introduced by an amendment.
      */
     @Override
     public boolean isIntroducedByAnAmendment() {
-        return origin != null ? origin == AmendableWidgetOrigin.AMENDMENT : getParentAmendableWidget() != null && getParentAmendableWidget().isIntroducedByAnAmendment();
+        return origin != null ? origin == OverlayWidgetOrigin.AMENDMENT : getParentOverlayWidget() != null && getParentOverlayWidget().isIntroducedByAnAmendment();
     }
 
     @Override
-    public Element getAmendableElement() {
+    public Element getOverlayElement() {
         return getElement();
     }
 
@@ -665,11 +660,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public int getTypeIndex(final boolean includeAmendments) {
-        if (getParentAmendableWidget() != null) {
-            final Iterator<AmendableWidget> iterator = getParentAmendableWidget().getChildAmendableWidgets().iterator();
+        if (getParentOverlayWidget() != null) {
+            final Iterator<OverlayWidget> iterator = getParentOverlayWidget().getChildOverlayWidgets().iterator();
             int count = 0;
             while (iterator.hasNext()) {
-                final AmendableWidget aw = iterator.next();
+                final OverlayWidget aw = iterator.next();
                 if (aw != null) {
 
                     if (aw == this) {
@@ -693,11 +688,11 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
 
     @Override
     public int getIndex() {
-        if (getParentAmendableWidget() != null) {
-            final Iterator<AmendableWidget> iterator = getParentAmendableWidget().getChildAmendableWidgets().iterator();
+        if (getParentOverlayWidget() != null) {
+            final Iterator<OverlayWidget> iterator = getParentOverlayWidget().getChildOverlayWidgets().iterator();
             int count = 0;
             while (iterator.hasNext()) {
-                final AmendableWidget aw = iterator.next();
+                final OverlayWidget aw = iterator.next();
                 if (aw != null) {
 
                     if (aw == this) {
@@ -718,28 +713,25 @@ public class AmendableWidgetImpl extends ComplexPanel implements AmendableWidget
         return getInnerHTML();
     }
 
-    public AmendableWidgetImpl html(String s) {
+    public OverlayWidgetImpl html(String s) {
         setInnerHTML(s);
         return this;
     }
 
-    /**
-     * Returns the namespace URI of this amendable widget.
-     */
     @Override
     public String getNamespaceURI() {
         throw new NullPointerException("Should be overridden by subclass.");
     }
 
     @Override
-    public void walk(AmendableVisitor visitor) {
+    public void walk(OverlayWidgetVisitor visitor) {
         walk(this, visitor);
     }
 
-    protected void walk(AmendableWidget toVisit, AmendableVisitor visitor) {
+    protected void walk(OverlayWidget toVisit, OverlayWidgetVisitor visitor) {
         if (visitor.visit(toVisit)) {
             if (toVisit != null) {
-                for (final AmendableWidget child : toVisit.getChildAmendableWidgets()) {
+                for (final OverlayWidget child : toVisit.getChildOverlayWidgets()) {
                     walk(child, visitor);
                 }
             }

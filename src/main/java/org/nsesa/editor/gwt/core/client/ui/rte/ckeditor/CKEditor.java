@@ -17,7 +17,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
@@ -150,8 +150,8 @@ public class CKEditor extends Composite implements RichTextEditor {
     }-*/;
 
     @Override
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
-        config.addBodyClass(amendableWidget.getType());
+    public void setAmendableWidget(OverlayWidget overlayWidget) {
+        config.addBodyClass(overlayWidget.getType());
     }
 
     @Override

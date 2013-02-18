@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.event.widget;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 /**
@@ -27,11 +27,11 @@ public class AmendableWidgetSelectEvent extends GwtEvent<AmendableWidgetSelectEv
 
     public static final Type<AmendableWidgetSelectEventHandler> TYPE = new Type<AmendableWidgetSelectEventHandler>();
 
-    private final AmendableWidget amendableWidget;
+    private final OverlayWidget overlayWidget;
     private final DocumentController documentController;
 
-    public AmendableWidgetSelectEvent(AmendableWidget amendableWidget, DocumentController documentController) {
-        this.amendableWidget = amendableWidget;
+    public AmendableWidgetSelectEvent(OverlayWidget overlayWidget, DocumentController documentController) {
+        this.overlayWidget = overlayWidget;
         this.documentController = documentController;
     }
 
@@ -45,8 +45,8 @@ public class AmendableWidgetSelectEvent extends GwtEvent<AmendableWidgetSelectEv
         handler.onEvent(this);
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 
     public DocumentController getDocumentController() {

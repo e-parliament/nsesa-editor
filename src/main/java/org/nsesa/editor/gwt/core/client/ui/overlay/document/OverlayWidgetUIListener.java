@@ -19,14 +19,14 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidgetUIListener {
+public interface OverlayWidgetUIListener {
 
-    void onClick(AmendableWidget sender);
+    void onClick(OverlayWidget sender);
 
-    void onDblClick(AmendableWidget sender);
+    void onDblClick(OverlayWidget sender);
 
-    void onMouseOver(AmendableWidget sender);
+    void onMouseOver(OverlayWidget sender);
 
-    void onMouseOut(AmendableWidget sender);
+    void onMouseOut(OverlayWidget sender);
 
 }

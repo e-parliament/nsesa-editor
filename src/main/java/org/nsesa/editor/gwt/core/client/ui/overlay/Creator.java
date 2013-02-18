@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -34,7 +34,7 @@ public interface Creator {
      *
      * @return the map of allowed siblings - should never be <tt>null</tt>.
      */
-    LinkedHashMap<AmendableWidget, Occurrence> getAllowedSiblings(DocumentController documentController, AmendableWidget amendableWidget);
+    LinkedHashMap<OverlayWidget, Occurrence> getAllowedSiblings(DocumentController documentController, OverlayWidget overlayWidget);
 
     /**
      * Returns a map of all the amendable widget types that are allowed to be created as a child.
@@ -42,5 +42,5 @@ public interface Creator {
      *
      * @return the map of allowed children - should never be <tt>null</tt>.
      */
-    LinkedHashMap<AmendableWidget, Occurrence> getAllowedChildren(DocumentController documentController, AmendableWidget amendableWidget);
+    LinkedHashMap<OverlayWidget, Occurrence> getAllowedChildren(DocumentController documentController, OverlayWidget overlayWidget);
 }

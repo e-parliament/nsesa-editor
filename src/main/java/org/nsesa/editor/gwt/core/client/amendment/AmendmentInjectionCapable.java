@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.amendment;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
  */
 public interface AmendmentInjectionCapable {
 
-    void inject(AmendableWidget root, DocumentController documentController);
+    void inject(OverlayWidget root, DocumentController documentController);
 
-    void injectSingleAmendment(AmendmentContainerDTO amendment, AmendableWidget root, DocumentController documentController);
+    void injectSingleAmendment(AmendmentContainerDTO amendment, OverlayWidget root, DocumentController documentController);
 }

@@ -21,41 +21,41 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendableWidgetListenerMock implements AmendableWidgetListener {
+public class OverlayWidgetListenerMock implements OverlayWidgetListener {
     @Override
-    public boolean beforeAmendmentControllerAdded(AmendableWidget amendableWidget, AmendmentController amendmentController) {
+    public boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
         return false;
     }
 
     @Override
-    public void afterAmendmentControllerAdded(AmendableWidget amendableWidget, AmendmentController amendmentController) {
+    public void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
     }
 
     @Override
-    public boolean beforeAmendmentControllerRemoved(AmendableWidget amendableWidget, AmendmentController amendmentController) {
+    public boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
         return false;
     }
 
     @Override
-    public void afterAmendmentControllerRemoved(AmendableWidget amendableWidget, AmendmentController amendmentController) {
+    public void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
     }
 
     @Override
-    public boolean beforeAmendableWidgetAdded(AmendableWidget amendableWidget, AmendableWidget child) {
+    public boolean beforeOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child) {
         return false;
     }
 
     @Override
-    public void afterAmendableWidgetAdded(AmendableWidget amendableWidget, AmendableWidget child) {
+    public void afterOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child) {
 
     }
 
     @Override
-    public boolean beforeAmendableWidgetRemoved(AmendableWidget amendableWidget, AmendableWidget child) {
+    public boolean beforeOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child) {
         return false;
     }
 
     @Override
-    public void afterAmendableWidgetRemoved(AmendableWidget amendableWidget, AmendableWidget child) {
+    public void afterOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child) {
     }
 }

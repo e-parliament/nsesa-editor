@@ -34,7 +34,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
@@ -170,14 +170,14 @@ public class DocumentController {
             @Override
             public void onEvent(AmendableWidgetSelectEvent event) {
                 boolean alreadySelected = false;
-                if (sourceFileController.getActiveAmendableWidget() == event.getAmendableWidget()) {
+                if (sourceFileController.getActiveOverlayWidget() == event.getOverlayWidget()) {
                     alreadySelected = true;
                 }
-                if (sourceFileController.getActiveAmendableWidget() != null) {
-                    sourceFileController.getActiveAmendableWidget().asWidget().removeStyleName(style.selected());
+                if (sourceFileController.getActiveOverlayWidget() != null) {
+                    sourceFileController.getActiveOverlayWidget().asWidget().removeStyleName(style.selected());
                 }
-                sourceFileController.setActiveAmendableWidget(event.getAmendableWidget());
-                sourceFileController.getActiveAmendableWidget().asWidget().addStyleName(style.selected());
+                sourceFileController.setActiveOverlayWidget(event.getOverlayWidget());
+                sourceFileController.getActiveOverlayWidget().asWidget().addStyleName(style.selected());
                 /*final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
                 if (alreadySelected && inlineEditingMode != null && inlineEditingMode.getState().isActive()) {
                     clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
@@ -234,11 +234,11 @@ public class DocumentController {
                 removeFromSelectedAmendmentControllers(amendmentController);
                 documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
 
-                if (amendmentController.getAmendedAmendableWidget() != null) {
-                    if (amendmentController.getAmendedAmendableWidget() == sourceFileController.getActiveAmendableWidget()) {
-                        sourceFileController.setActiveAmendableWidget(null);
+                if (amendmentController.getAmendedOverlayWidget() != null) {
+                    if (amendmentController.getAmendedOverlayWidget() == sourceFileController.getActiveOverlayWidget()) {
+                        sourceFileController.setActiveOverlayWidget(null);
                     }
-                    amendmentController.getAmendedAmendableWidget().removeAmendmentController(amendmentController);
+                    amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
                     sourceFileController.renumberAmendments();
                 }
             }
@@ -271,9 +271,9 @@ public class DocumentController {
         documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectEvent event) {
-                for (final AmendableWidget amendableWidget : sourceFileController.getAmendableWidgets()) {
+                for (final OverlayWidget overlayWidget : sourceFileController.getOverlayWidgets()) {
                     for (final AmendmentContainerDTO amendmentContainerDTO : event.getAmendments()) {
-                        amendmentManager.injectSingleAmendment(amendmentContainerDTO, amendableWidget, DocumentController.this);
+                        amendmentManager.injectSingleAmendment(amendmentContainerDTO, overlayWidget, DocumentController.this);
                     }
                 }
                 // renumber amendments
@@ -284,10 +284,10 @@ public class DocumentController {
         documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerUpdatedEvent event) {
-                final AmendableWidget amendableWidget = event.getOldRevision().getAmendedAmendableWidget();
-                if (amendableWidget != null) {
-                    amendableWidget.removeAmendmentController(event.getOldRevision());
-                    amendableWidget.addAmendmentController(event.getNewRevision());
+                final OverlayWidget overlayWidget = event.getOldRevision().getAmendedOverlayWidget();
+                if (overlayWidget != null) {
+                    overlayWidget.removeAmendmentController(event.getOldRevision());
+                    overlayWidget.addAmendmentController(event.getNewRevision());
                     sourceFileController.renumberAmendments();
                 }
             }
@@ -504,7 +504,7 @@ public class DocumentController {
     }
 
     public void injectAmendments() {
-        for (final AmendableWidget root : sourceFileController.getAmendableWidgets()) {
+        for (final OverlayWidget root : sourceFileController.getOverlayWidgets()) {
             amendmentManager.inject(root, this);
         }
         // after the injection, renumber all the amendments.

@@ -54,8 +54,8 @@ public class OverlayStrategySupport {
 
     private Set<String> asProperties = new HashSet<String>();
 
-    public void asProperties(Class<? extends AmendableWidget>... widgetClasses) {
-        for (final Class<? extends AmendableWidget> clazz : widgetClasses) {
+    public void asProperties(Class<? extends OverlayWidget>... widgetClasses) {
+        for (final Class<? extends OverlayWidget> clazz : widgetClasses) {
             asProperties.add(clazz.getName().substring(clazz.getName().lastIndexOf(".") + 1).toUpperCase());
         }
     }

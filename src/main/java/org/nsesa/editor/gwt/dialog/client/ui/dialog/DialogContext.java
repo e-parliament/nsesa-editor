@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -44,12 +44,12 @@ public class DialogContext {
     /**
      * The amendable widget.
      */
-    AmendableWidget amendableWidget;
+    OverlayWidget overlayWidget;
 
     /**
      * The logical parent amendable widget (only relevant in case of new elements).
      */
-    AmendableWidget parentAmendableWidget;
+    OverlayWidget parentOverlayWidget;
 
     /**
      * The index where to position the (new) amendable widget (only relevant in case of new elements).
@@ -85,20 +85,20 @@ public class DialogContext {
         this.amendmentAction = amendmentAction;
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public void setOverlayWidget(OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
     }
 
-    public AmendableWidget getParentAmendableWidget() {
-        return parentAmendableWidget;
+    public OverlayWidget getParentOverlayWidget() {
+        return parentOverlayWidget;
     }
 
-    public void setParentAmendableWidget(AmendableWidget parentAmendableWidget) {
-        this.parentAmendableWidget = parentAmendableWidget;
+    public void setParentOverlayWidget(OverlayWidget parentOverlayWidget) {
+        this.parentOverlayWidget = parentOverlayWidget;
     }
 
     public int getIndex() {

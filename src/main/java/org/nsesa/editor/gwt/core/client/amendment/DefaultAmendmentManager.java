@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -182,7 +182,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     }
 
     @Override
-    public void injectSingleAmendment(final AmendmentContainerDTO amendment, final AmendableWidget root, final DocumentController documentController) {
+    public void injectSingleAmendment(final AmendmentContainerDTO amendment, final OverlayWidget root, final DocumentController documentController) {
         final AmendmentController amendmentController = getAmendmentController(amendment);
         if (amendmentController == null) {
             throw new NullPointerException("AmendmentContainer DTO was not yet registered with a controller?");
@@ -191,7 +191,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     }
 
     @Override
-    public void inject(final AmendableWidget root, final DocumentController documentController) {
+    public void inject(final OverlayWidget root, final DocumentController documentController) {
         // TODO if we're going to do multiple injections, it's faster to create a temporary lookup cache with all IDs
         for (final AmendmentController amendmentController : amendmentControllers) {
             injectInternal(amendmentController, root, documentController);
@@ -199,15 +199,15 @@ public class DefaultAmendmentManager implements AmendmentManager {
     }
 
 
-    protected void injectInternal(final AmendmentController amendmentController, final AmendableWidget root, final DocumentController documentController) {
+    protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
-        final List<AmendableWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
+        final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
         if (injectionPoints != null) {
             if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
             }
-            for (final AmendableWidget injectionPoint : injectionPoints) {
-                final AmendableWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
+            for (final OverlayWidget injectionPoint : injectionPoints) {
+                final OverlayWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
                 if (target != null) {
                     target.addAmendmentController(amendmentController);
                     amendmentController.setDocumentController(documentController);

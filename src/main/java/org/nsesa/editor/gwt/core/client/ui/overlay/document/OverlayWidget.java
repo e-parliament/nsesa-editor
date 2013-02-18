@@ -17,26 +17,27 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
+import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
-import org.nsesa.editor.gwt.core.shared.AmendableWidgetOrigin;
+import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * TODO
  * Date: 27/06/12 17:52
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWalker {
+public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker {
 
     /**
-     * Check if this amendable widget is amendable or not.
+     * Check if this overlay widget is amendable or not.
      *
      * @return true if it is amendable, or null if it is not defined.
      */
@@ -78,80 +79,80 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @param UIListener the listener to set.
      */
-    void setUIListener(AmendableWidgetUIListener UIListener);
+    void setUIListener(OverlayWidgetUIListener UIListener);
 
-    void setListener(AmendableWidgetListener listener);
+    void setListener(OverlayWidgetListener listener);
 
     /**
-     * Sets the logical parent amendable widget - not that this is not necessarily the actual parent element!
+     * Sets the logical parent overlay widget - not that this is not necessarily the actual parent element!
      *
      * @param parent the parent to set.
      */
-    void setParentAmendableWidget(AmendableWidget parent);
+    void setParentOverlayWidget(OverlayWidget parent);
 
     /**
-     * Returns the listing of all the parents amendable widgets, sorted descending by distance to this widget (so
+     * Returns the listing of all the parents overlay widgets, sorted descending by distance to this widget (so
      * first the root, then grandfather, father, ...).
      *
-     * @return the list of parent amendable widgets - should not return <tt>null</tt>
+     * @return the list of parent overlay widgets - should not return <tt>null</tt>
      */
-    List<AmendableWidget> getParentAmendableWidgets();
+    List<OverlayWidget> getParentOverlayWidgets();
 
     /**
-     * Returns the listing of all amendable children, sorted by their appearance.
+     * Returns the listing of all overlay children, sorted by their appearance.
      *
-     * @return the list of amendable child widgets
+     * @return the list of overlay child widgets
      */
-    List<AmendableWidget> getChildAmendableWidgets();
+    List<OverlayWidget> getChildOverlayWidgets();
 
     /**
-     * Get the direct parent amendable widget.
+     * Get the direct parent overlay widget.
      *
      * @return the parent, or <tt>null</tt> if this is a root widget
      */
-    AmendableWidget getParentAmendableWidget();
+    OverlayWidget getParentOverlayWidget();
 
-    AmendableWidget getPreviousSibling();
+    OverlayWidget getPreviousSibling();
 
-    AmendableWidget getNextSibling();
+    OverlayWidget getNextSibling();
 
     /**
      * Find the previous sibling that is not introduced by an amendment.
      *
-     * @param sameType if true, only look for an amendable widget of the same type
+     * @param sameType if true, only look for an overlay widget of the same type
      * @return the sibling, or null if it cannot be found
      */
-    AmendableWidget getPreviousNonIntroducedAmendableWidget(boolean sameType);
+    OverlayWidget getPreviousNonIntroducedOverlayWidget(boolean sameType);
 
     /**
      * Find the next sibling that is not introduced by an amendment.
      *
-     * @param sameType if true, only look for an amendable widget of the same type
+     * @param sameType if true, only look for an overlay widget of the same type
      * @return the sibling, or null if it cannot be found
      */
-    AmendableWidget getNextNonIntroducedAmendableWidget(boolean sameType);
+    OverlayWidget getNextNonIntroducedOverlayWidget(boolean sameType);
 
     /**
      * Returns the widget root - if this is not a root itself, it will reverse the tree until a root element is found.
      *
      * @return the root widget which contains this widget.
      */
-    AmendableWidget getRoot();
+    OverlayWidget getRoot();
 
     /**
-     * Add an amendable widget as a child.
+     * Add an overlay widget as a child.
      *
      * @param child the child to add.
      */
-    void addAmendableWidget(AmendableWidget child);
+    void addOverlayWidget(OverlayWidget child);
 
     /**
-     * Add an amendable widget as a child at the given index.
+     * Add an overlay widget as a child at the given index.
      *
      * @param child the child to add.
      * @param index the index where to add the child (-1 means at the end)
      */
-    void addAmendableWidget(AmendableWidget child, int index);
+    void addOverlayWidget(OverlayWidget child, int index);
 
     void onAttach();
 
@@ -160,79 +161,79 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     void onDetach();
 
     /**
-     * Add an amendable widget as a child at position <tt>index</tt>, but do not perform a runtime validation check.
+     * Add an overlay widget as a child at position <tt>index</tt>, but do not perform a runtime validation check.
      *
      * @param child          the child to add
      * @param index          the position to insert the widget at (-1 means it will be added at the end)
      * @param skipValidation <tt>true</tt> to skip validation.
      */
-    void addAmendableWidget(AmendableWidget child, int index, boolean skipValidation);
+    void addOverlayWidget(OverlayWidget child, int index, boolean skipValidation);
 
     /**
-     * Remove an amendable child. Throws an exception if the passed widget is not an actual child (that is,
-     * {@link #getChildAmendableWidgets()} contains the widget).
+     * Remove an overlay child. Throws an exception if the passed widget is not an actual child (that is,
+     * {@link #getChildOverlayWidgets()} contains the widget).
      *
      * @param child the child widget to remove.
      */
-    void removeAmendableWidget(AmendableWidget child);
+    void removeOverlayWidget(OverlayWidget child);
 
     /**
-     * Add an amendment controller to this amendable widget.
+     * Add an amendment controller to this overlay widget.
      *
      * @param amendmentController the amendment controller to add.
      */
     void addAmendmentController(AmendmentController amendmentController);
 
     /**
-     * Remove an amendment controller from this amendable widget.
+     * Remove an amendment controller from this overlay widget.
      *
      * @param amendmentController the amendment controller to remove.
      */
     void removeAmendmentController(AmendmentController amendmentController);
 
     /**
-     * Returns the type of the amendable widget (defaults to the local node name - so without prefix, if any).
+     * Returns the type of the overlay widget (defaults to the local node name - so without prefix, if any).
      *
      * @return the type
      */
     String getType();
 
     /**
-     * Set the type of this amendable widget. You are normally not supposed to call this method directly (it will be
+     * Set the type of this overlay widget. You are normally not supposed to call this method directly (it will be
      * set by the {@link OverlayFactory}.
      *
-     * @param type the type of this amendable widget (eg. chapter, speech, b, ...)
+     * @param type the type of this overlay widget (eg. chapter, speech, b, ...)
      */
     void setType(String type);
 
     /**
-     * Get the id of this amendable widget, if any.
+     * Get the id of this overlay widget, if any.
      *
      * @return the id of this widget.
      */
     String getId();
 
     /**
-     * Set the id of this amendable widget. Must be unique (we won't check for this, so it is your responsibility).
+     * Set the id of this overlay widget. Must be unique (we won't check for this, so it is your responsibility).
      *
      * @param id the id of this widget.
      */
     void setId(String id);
 
     /**
-     * Get the child content (text + other elements) for this amendable widget.
+     * Get the child content (text + other elements) for this overlay widget.
      *
      * @return the child nodes serialized as a <tt>String</tt>.
      */
     String getInnerHTML();
 
     /**
-     * Set the text content of this amendable widget. While this technically could contain tags, you are advised
+     * Set the text content of this overlay widget. While this technically could contain tags, you are advised
      * to properly escape any content you wish to set.
      *
-     * @param amendableContent the text content for this node.
+     * @param innerHTML the text content for this node.
      */
-    void setInnerHTML(String amendableContent);
+    void setInnerHTML(String innerHTML);
 
     /**
      * Get the HTMLPanel to attach the amendments on. If it does not yet exist, it will be created and attached
@@ -240,18 +241,18 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @return the HTML panel with the amendments, if any.
      */
-    HTMLPanel getAmendmentHolderElement();
+    HTMLPanel getAmendmentControllersHolderElement();
 
     /**
-     * Get a map of the element node names that are allowed under this amendable widget (note, this also includes the
+     * Get a map of the element node names that are allowed under this overlay widget (note, this also includes the
      * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
      *
      * @return the allowed child nodes
      */
-    Map<AmendableWidget, Occurrence> getAllowedChildTypes();
+    Map<OverlayWidget, Occurrence> getAllowedChildTypes();
 
     /**
-     * Get the numbering type of this amendable widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},
+     * Get the numbering type of this overlay widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},
      * then it will be guessed.
      *
      * @return the numbering type, if any.
@@ -259,7 +260,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     NumberingType getNumberingType();
 
     /**
-     * Set the numbering type on this amendable widget (eg. '1', 'A', '-', ...). Typically used in conjunction with
+     * Set the numbering type on this overlay widget (eg. '1', 'A', '-', ...). Typically used in conjunction with
      * {@link #getFormat()} to format the literal index.
      *
      * @param numberingType the numbering type to use
@@ -267,7 +268,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     void setNumberingType(NumberingType numberingType);
 
     /**
-     * Get the format for this amendable widget. If it was not set using {@link #setFormat(org.nsesa.editor.gwt.core.client.ui.overlay.Format)},
+     * Get the format for this overlay widget. If it was not set using {@link #setFormat(org.nsesa.editor.gwt.core.client.ui.overlay.Format)},
      * then the format will be guessed.
      *
      * @return the format for this literal index, if any.
@@ -275,7 +276,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     Format getFormat();
 
     /**
-     * Set the format on this amendable widget (eg. ')', '()', '.', ...). The format is typically used in conjunction with the {@link #getNumberingType()}
+     * Set the format on this overlay widget (eg. ')', '()', '.', ...). The format is typically used in conjunction with the {@link #getNumberingType()}
      * to create the literal index.
      *
      * @param format the formatter to use for the literal index.
@@ -309,18 +310,18 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @param origin the origin of this widget.
      */
-    void setOrigin(AmendableWidgetOrigin origin);
+    void setOrigin(OverlayWidgetOrigin origin);
 
     /**
-     * Returns the origin of this amendable widget, be it part of the document, or introduced by an amendment.
+     * Returns the origin of this overlay widget, be it part of the document, or introduced by an amendment.
      *
      * @return the origin, cannot be <tt>null</tt>
      */
-    AmendableWidgetOrigin getOrigin();
+    OverlayWidgetOrigin getOrigin();
 
     /**
-     * Check if this amendable widget is introduced by an amendment (meaning, its {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl#getOrigin()}
-     * is equal to {@link AmendableWidgetOrigin#AMENDMENT}
+     * Check if this overlay widget is introduced by an amendment (meaning, its {@link OverlayWidgetImpl#getOrigin()}
+     * is equal to {@link org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin#AMENDMENT}
      *
      * @return <tt>true</tt> if it was introduced by an amendment
      */
@@ -331,10 +332,10 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
      *
      * @return the element.
      */
-    Element getAmendableElement();
+    Element getOverlayElement();
 
     /**
-     * Returns all amendment controllers on this amendable widget.
+     * Returns all amendment controllers on this overlay widget.
      *
      * @return the amendment controllers.
      */
@@ -368,7 +369,7 @@ public interface AmendableWidget extends IsWidget, HasWidgets, AmendableWidgetWa
     int getIndex();
 
     /**
-     * Returns the namespace this amendable widget was generated for.
+     * Returns the namespace this overlay widget was generated for.
      *
      * @return the namespace URI.
      */

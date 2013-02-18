@@ -19,6 +19,6 @@ package org.nsesa.editor.gwt.core.shared;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public enum AmendableWidgetOrigin {
+public enum OverlayWidgetOrigin {
     DOCUMENT, AMENDMENT
 }

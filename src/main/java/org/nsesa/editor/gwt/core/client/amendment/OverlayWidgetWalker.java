@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.amendment;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Interface to support the Visitor Pattern. Allows walking the tree that is made up of <tt>AmendableWidget</tt>s.
@@ -22,13 +22,13 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidgetWalker {
+public interface OverlayWidgetWalker {
 
     /**
      * Walks a tree created by traversing this <tt>AmendableWidget</tt> with a given visitor <tt>visitor</tt>. This will use a
-     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget#getChildAmendableWidgets()}.
+     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
-     * Depending on the visitor's return value from {@link AmendableVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget)},
+     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.
      * <p/>
      * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
@@ -36,19 +36,19 @@ public interface AmendableWidgetWalker {
      *
      * @param visitor the visitor
      */
-    void walk(AmendableVisitor visitor);
+    void walk(OverlayWidgetVisitor visitor);
 
     /**
-     * AmendableVisitor interface (see Visitor Pattern). Used in combination with the {@link AmendableWidget#walk(org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker.AmendableVisitor)}
+     * AmendableVisitor interface (see Visitor Pattern). Used in combination with the {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#walk(org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor)}
      * method to visit each node in the tree of <tt>AmendableWidget</tt>s.
      */
-    public static interface AmendableVisitor {
+    public static interface OverlayWidgetVisitor {
         /**
          * Callback method for each <tt>AmendableWidget</tt> that is visited.
          *
          * @param visited the visited <tt>AmendableWidget</tt>
          * @return true if the <tt>AmendableVisitor</tt> should go deeper (aka. visit the children of this node).
          */
-        boolean visit(AmendableWidget visited);
+        boolean visit(OverlayWidget visited);
     }
 }

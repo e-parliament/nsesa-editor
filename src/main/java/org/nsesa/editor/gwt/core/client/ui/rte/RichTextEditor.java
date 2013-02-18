@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Date: 13/07/12 19:39
@@ -32,7 +32,7 @@ public interface RichTextEditor extends IsWidget {
 
     String getHTML();
 
-    void setAmendableWidget(AmendableWidget amendableWidget);
+    void setAmendableWidget(OverlayWidget overlayWidget);
 
     void init();
 

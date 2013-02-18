@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.ClassUtils;
 
 import java.util.*;
@@ -29,32 +29,32 @@ import java.util.*;
 public class DefaultLocator implements Locator {
 
     protected static final String SPLITTER = " – ";
-    protected Set<Class<? extends AmendableWidget>> hiddenAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
-    protected Set<Class<? extends AmendableWidget>> hideUnderLayingAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
-    protected Set<Class<? extends AmendableWidget>> showAmendableWidgets = new HashSet<Class<? extends AmendableWidget>>();
+    protected Set<Class<? extends OverlayWidget>> hiddenAmendableWidgets = new HashSet<Class<? extends OverlayWidget>>();
+    protected Set<Class<? extends OverlayWidget>> hideUnderLayingAmendableWidgets = new HashSet<Class<? extends OverlayWidget>>();
+    protected Set<Class<? extends OverlayWidget>> showAmendableWidgets = new HashSet<Class<? extends OverlayWidget>>();
 
     @Override
-    public String getLocation(final AmendableWidget amendableWidget, final String languageIso, final boolean childrenIncluded) {
-        return getLocation(amendableWidget, null, languageIso, childrenIncluded);
+    public String getLocation(final OverlayWidget overlayWidget, final String languageIso, final boolean childrenIncluded) {
+        return getLocation(overlayWidget, null, languageIso, childrenIncluded);
     }
 
     @Override
-    public String getLocation(final AmendableWidget amendableWidget, final AmendableWidget newChild, final String languageIso, final boolean childrenIncluded) {
+    public String getLocation(final OverlayWidget overlayWidget, final OverlayWidget newChild, final String languageIso, final boolean childrenIncluded) {
 
-        if (amendableWidget == null) return null;
+        if (overlayWidget == null) return null;
 
         final StringBuilder location = new StringBuilder();
 
-        final List<AmendableWidget> path = amendableWidget.getParentAmendableWidgets();
+        final List<OverlayWidget> path = overlayWidget.getParentOverlayWidgets();
         // add the current widget as well (since only the path are retrieved)
-        path.add(amendableWidget);
+        path.add(overlayWidget);
         if (newChild != null)
             path.add(newChild);
-        for (final AmendableWidget aw : path) {
+        for (final OverlayWidget aw : path) {
             // filter our not just the same classes, but also any parent classes or interfaces
-            final Collection<Class<? extends AmendableWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends AmendableWidget>>() {
+            final Collection<Class<? extends OverlayWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends OverlayWidget>>() {
                 @Override
-                public boolean apply(Class<? extends AmendableWidget> input) {
+                public boolean apply(Class<? extends OverlayWidget> input) {
                     return !ClassUtils.isAssignableFrom(input.getClass(), aw.getClass());
                 }
             });
@@ -62,12 +62,12 @@ public class DefaultLocator implements Locator {
             if (!filtered.contains(aw.getClass()) || showAmendableWidgets.contains(aw.getClass())) {
                 final StringBuilder sb = location;
 
-                if (aw.getParentAmendableWidget() == null) {
+                if (aw.getParentOverlayWidget() == null) {
                     sb.append(getRootNotation(aw));
                 } else {
 
                     // check if there is a sub notation going on (point - point would become point - subpoint)
-                    if (aw.getParentAmendableWidget().getType().equalsIgnoreCase(aw.getType())) {
+                    if (aw.getParentOverlayWidget().getType().equalsIgnoreCase(aw.getType())) {
                         // we've got a sub notation!
                         sb.append(getSubNotation(aw));
                     } else {
@@ -91,41 +91,41 @@ public class DefaultLocator implements Locator {
         return locationString.trim();
     }
 
-    public String getNum(final AmendableWidget amendableWidget) {
+    public String getNum(final OverlayWidget overlayWidget) {
         String index;
-        if (amendableWidget.isIntroducedByAnAmendment()) {
-            AmendableWidget previous = amendableWidget.getPreviousNonIntroducedAmendableWidget(true);
+        if (overlayWidget.isIntroducedByAnAmendment()) {
+            OverlayWidget previous = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
             if (previous == null) {
                 // no previous amendable widget ... check if we're perhaps moved before any existing ones?
-                AmendableWidget next = amendableWidget.getNextNonIntroducedAmendableWidget(true);
+                OverlayWidget next = overlayWidget.getNextNonIntroducedOverlayWidget(true);
                 if (next == null) {
                     // we're in an all new collection (meaning all sibling amendable widgets are introduced by amendments)
-                    index = Integer.toString(amendableWidget.getTypeIndex(true) + 1);
+                    index = Integer.toString(overlayWidget.getTypeIndex(true) + 1);
                 } else {
                     // we have an amendable widget that has not been introduced by an amendment
                     // this means our offset will be negative (-1)
                     // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
-                    index = "-1" + NumberingType.LETTER.get(amendableWidget.getTypeIndex(true));
+                    index = "-1" + NumberingType.LETTER.get(overlayWidget.getTypeIndex(true));
                 }
             } else {
                 // we have a previous amendable widget that has not been introduced by an amendment.
                 // this means we'll take the same index
                 // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
                 String previousIndex = previous.getUnformattedIndex() != null ? previous.getUnformattedIndex() : Integer.toString(previous.getTypeIndex() + 1);
-                int offset = amendableWidget.getTypeIndex(true) - previous.getTypeIndex();
+                int offset = overlayWidget.getTypeIndex(true) - previous.getTypeIndex();
                 previousIndex += NumberingType.LETTER.get(offset - 1);
                 index = previousIndex;
             }
             return index + " " + getNewNotation();
         } else {
             // see if we can extract the index
-            final NumberingType numberingType = amendableWidget.getNumberingType();
+            final NumberingType numberingType = overlayWidget.getNumberingType();
             if (numberingType != null) {
                 if (!numberingType.isConstant()) {
-                    return amendableWidget.getUnformattedIndex();
+                    return overlayWidget.getUnformattedIndex();
                 }
             }
-            return Integer.toString(amendableWidget.getTypeIndex() + 1);
+            return Integer.toString(overlayWidget.getTypeIndex() + 1);
         }
     }
 
@@ -133,32 +133,32 @@ public class DefaultLocator implements Locator {
         return SPLITTER;
     }
 
-    public String getRootNotation(final AmendableWidget amendableWidget) {
+    public String getRootNotation(final OverlayWidget overlayWidget) {
         // skip the num for the root
-        return getNotation(amendableWidget);
+        return getNotation(overlayWidget);
     }
 
-    public String getNotation(final AmendableWidget amendableWidget) {
-        return amendableWidget.getType() != null ? amendableWidget.getType() : "?";
+    public String getNotation(final OverlayWidget overlayWidget) {
+        return overlayWidget.getType() != null ? overlayWidget.getType() : "?";
     }
 
-    public String getSubNotation(final AmendableWidget amendableWidget) {
-        return "sub" + getNotation(amendableWidget);
+    public String getSubNotation(final OverlayWidget overlayWidget) {
+        return "sub" + getNotation(overlayWidget);
     }
 
     public String getNewNotation() {
         return "(new)";
     }
 
-    public void hide(Class<? extends AmendableWidget>... amendableWidgetClasses) {
+    public void hide(Class<? extends OverlayWidget>... amendableWidgetClasses) {
         hiddenAmendableWidgets.addAll(Arrays.asList(amendableWidgetClasses));
     }
 
-    public void hideUnder(Class<? extends AmendableWidget>... amendableWidgetClasses) {
+    public void hideUnder(Class<? extends OverlayWidget>... amendableWidgetClasses) {
         hideUnderLayingAmendableWidgets.addAll(Arrays.asList(amendableWidgetClasses));
     }
 
-    public void show(Class<? extends AmendableWidget>... amendableWidgetClasses) {
+    public void show(Class<? extends OverlayWidget>... amendableWidgetClasses) {
         showAmendableWidgets.addAll(Arrays.asList(amendableWidgetClasses));
     }
 }

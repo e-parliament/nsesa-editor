@@ -29,17 +29,17 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultOverlayFactory.class)
 public interface OverlayFactory {
     /**
-     * Translates a given element into an {@link AmendableWidget}. If the overlay does not succeed (eg. because there
-     * is no matching {@link AmendableWidget} found, then null is returned.
+     * Translates a given element into an {@link OverlayWidget}. If the overlay does not succeed (eg. because there
+     * is no matching {@link OverlayWidget} found, then null is returned.
      *
      * @param element the element to get the overlaying element for.
      * @return the amendable widget, or null if it cannot be overlaid.
      */
-    AmendableWidget getAmendableWidget(Element element);
+    OverlayWidget getAmendableWidget(Element element);
 
-    AmendableWidget getAmendableWidget(String tag);
+    OverlayWidget getAmendableWidget(String tag);
 
-    AmendableWidget toAmendableWidget(Element element);
+    OverlayWidget toAmendableWidget(Element element);
 
     /**
      * Returns the namespace of the overlay factory

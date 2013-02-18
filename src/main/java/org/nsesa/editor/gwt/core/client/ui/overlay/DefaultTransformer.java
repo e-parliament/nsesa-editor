@@ -16,8 +16,8 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -41,14 +41,14 @@ public class DefaultTransformer implements Transformer {
     private boolean withIndentation = true;
 
     @Override
-    public String transform(final AmendableWidget widget) {
+    public String transform(final OverlayWidget widget) {
         final Map<String, String> namespaces = gatherNamespaces(widget);
         namespaces.put(widget.getNamespaceURI(), DEFAULT_NAMESPACE);
         final StringBuilder sb = new StringBuilder(XML_DECLARATION).append("\n");
         return sb.append(toXMLElement(widget, namespaces, true, 0)).toString();
     }
 
-    public String toXMLElement(final AmendableWidget widget, final Map<String, String> namespaces, final boolean rootNode, int depth) {
+    public String toXMLElement(final OverlayWidget widget, final Map<String, String> namespaces, final boolean rootNode, int depth) {
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
         sb.append(indent).append("<");
@@ -86,13 +86,13 @@ public class DefaultTransformer implements Transformer {
             }
         }
         sb.append(">");
-        Element element = widget.getAmendableElement();
+        Element element = widget.getOverlayElement();
         NodeList<Node> nodes = element.getChildNodes();
         int length = nodes.getLength();
         if (length == 0) {
             // the root is all the time a new one
             // apply xml transformation for children
-            for (final AmendableWidget child : widget.getChildAmendableWidgets()) {
+            for (final OverlayWidget child : widget.getChildOverlayWidgets()) {
                 sb.append(toXMLElement(child, namespaces, false, depth + 1));
             }
         } else {
@@ -103,10 +103,10 @@ public class DefaultTransformer implements Transformer {
                     case Node.ELEMENT_NODE:
                         // get the amendable widget corresponding to this child and apply xml transformation
                         // hopefully there is one amendable widget linked to this node
-                        AmendableWidget child = null;
+                        OverlayWidget child = null;
                         // try to find out a amendable widget linked to childElement
-                        for (AmendableWidget aw : widget.getChildAmendableWidgets()) {
-                            if (aw.getAmendableElement().equals(childElement)) {
+                        for (OverlayWidget aw : widget.getChildOverlayWidgets()) {
+                            if (aw.getOverlayElement().equals(childElement)) {
                                 child = aw;
                                 break;
                             }
@@ -131,11 +131,11 @@ public class DefaultTransformer implements Transformer {
     }
 
 
-    protected Map<String, String> gatherNamespaces(final AmendableWidget root) {
+    protected Map<String, String> gatherNamespaces(final OverlayWidget root) {
         final Map<String, String> namespaces = new HashMap<String, String>();
-        root.walk(new AmendableWidgetWalker.AmendableVisitor() {
+        root.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
             @Override
-            public boolean visit(AmendableWidget visited) {
+            public boolean visit(OverlayWidget visited) {
                 if (!namespaces.containsKey(visited.getNamespaceURI())) {
                     String prefix = getPrefix(visited.getNamespaceURI());
                     if (prefix == null) {

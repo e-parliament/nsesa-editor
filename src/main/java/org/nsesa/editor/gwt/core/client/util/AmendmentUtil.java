@@ -15,8 +15,8 @@ package org.nsesa.editor.gwt.core.client.util;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 
 /**
  * Date: 30/06/12 17:15
@@ -26,11 +26,11 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
  */
 public class AmendmentUtil {
 
-    public static AmendableWidget createAmendableWidget(AmendableWidget parent, String type) {
+    public static OverlayWidget createAmendableWidget(OverlayWidget parent, String type) {
         final Element element = DOM.createElement(type);
-        AmendableWidget amendableWidget = new AmendableWidgetImpl(element);
-        amendableWidget.setParentAmendableWidget(parent);
-        return amendableWidget;
+        OverlayWidget overlayWidget = new OverlayWidgetImpl(element);
+        overlayWidget.setParentOverlayWidget(parent);
+        return overlayWidget;
     }
 
 }

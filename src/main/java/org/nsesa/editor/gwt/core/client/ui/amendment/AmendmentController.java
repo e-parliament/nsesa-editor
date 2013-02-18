@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.dom.client.Element;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
@@ -39,9 +39,9 @@ public interface AmendmentController {
 
     AmendmentContainerDTO getModel();
 
-    AmendableWidget asAmendableWidget(String source);
+    OverlayWidget asAmendableWidget(String source);
 
-    AmendableWidget asAmendableWidget(Element element);
+    OverlayWidget asAmendableWidget(Element element);
 
     void setAmendment(AmendmentContainerDTO amendment);
 
@@ -57,9 +57,9 @@ public interface AmendmentController {
 
     void setStatus(String status);
 
-    void setAmendedAmendableWidget(AmendableWidget amendedAmendableWidget);
+    void setAmendedOverlayWidget(OverlayWidget amendedOverlayWidget);
 
-    AmendableWidget getAmendedAmendableWidget();
+    OverlayWidget getAmendedOverlayWidget();
 
     int getOrder();
 

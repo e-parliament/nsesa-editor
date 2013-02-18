@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.editor.client.ui.document.sourcefile.actionbar.crea
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Date: 24/06/12 21:44
@@ -29,15 +29,15 @@ public interface ActionBarCreatePanelView extends IsWidget {
 
     void attach();
 
-    void addChildAmendableWidget(String title, AmendableWidget amendableWidget);
+    void addChildAmendableWidget(String title, OverlayWidget overlayWidget);
 
-    void addSiblingAmendableWidget(String title, final AmendableWidget amendableWidget);
+    void addSiblingAmendableWidget(String title, final OverlayWidget overlayWidget);
 
     void setSeparatorVisible(boolean visible);
 
     void clearAmendableWidgets();
 
     public static interface UIListener {
-        void onClick(AmendableWidget newChild, boolean sibling);
+        void onClick(OverlayWidget newChild, boolean sibling);
     }
 }

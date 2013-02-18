@@ -26,7 +26,7 @@ import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
@@ -82,19 +82,19 @@ public class MarkerController {
                             @Override
                             public void onClick(ClickEvent event) {
                                 // TODO: this is a very poor solution to find a amendable widget to scroll to ...
-                                if (!amendmentController.getAmendedAmendableWidget().asWidget().isVisible()) {
-                                    final AmendableWidget amendedAmendableWidget = amendmentController.getAmendedAmendableWidget();
-                                    if (amendedAmendableWidget != null) {
-                                        amendedAmendableWidget.getAmendableElement().getPreviousSiblingElement();
+                                if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
+                                    final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                                    if (amendedOverlayWidget != null) {
+                                        amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
 
-                                        AmendableWidget previousNonIntroducedAmendableWidget = amendedAmendableWidget.getPreviousNonIntroducedAmendableWidget(false);
-                                        while (previousNonIntroducedAmendableWidget != null && !previousNonIntroducedAmendableWidget.asWidget().isVisible()) {
-                                            previousNonIntroducedAmendableWidget = previousNonIntroducedAmendableWidget.getPreviousNonIntroducedAmendableWidget(false);
+                                        OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                        while (previousNonIntroducedOverlayWidget != null && !previousNonIntroducedOverlayWidget.asWidget().isVisible()) {
+                                            previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
                                         }
-                                        if (previousNonIntroducedAmendableWidget != null)
-                                            sourceFileController.scrollTo(previousNonIntroducedAmendableWidget.asWidget());
+                                        if (previousNonIntroducedOverlayWidget != null)
+                                            sourceFileController.scrollTo(previousNonIntroducedOverlayWidget.asWidget());
                                         else {
-                                            sourceFileController.scrollTo(amendedAmendableWidget.getParentAmendableWidget().asWidget());
+                                            sourceFileController.scrollTo(amendedOverlayWidget.getParentOverlayWidget().asWidget());
                                         }
                                     }
                                 } else {

@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.event.drafting;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * An event occured when the user wants to draft an amendment
@@ -26,10 +26,10 @@ public class DraftingInsertionEvent extends GwtEvent<DraftingInsertionEventHandl
 
     public static final Type<DraftingInsertionEventHandler> TYPE = new Type<DraftingInsertionEventHandler>();
 
-    private AmendableWidget amendableWidget;
+    private OverlayWidget overlayWidget;
 
-    public DraftingInsertionEvent(AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public DraftingInsertionEvent(OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class DraftingInsertionEvent extends GwtEvent<DraftingInsertionEventHandl
         handler.onEvent(this);
     }
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 }

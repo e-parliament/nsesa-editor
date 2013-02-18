@@ -21,8 +21,8 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
@@ -81,11 +81,11 @@ public class ContentController {
         return false;
     }
 
-    public AmendableWidget getCurrentVisibleAmendableWidget() {
-        final AmendableWidget[] temp = new AmendableWidget[1];
-        sourceFileController.walk(new AmendableWidgetWalker.AmendableVisitor() {
+    public OverlayWidget getCurrentVisibleAmendableWidget() {
+        final OverlayWidget[] temp = new OverlayWidget[1];
+        sourceFileController.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
             @Override
-            public boolean visit(AmendableWidget visited) {
+            public boolean visit(OverlayWidget visited) {
                 if (isFullyVisible(visited.asWidget()) && temp[0] == null) {
                     temp[0] = visited;
                     return false;

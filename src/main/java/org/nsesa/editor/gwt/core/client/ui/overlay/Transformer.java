@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * An interface to transform <code>AmendableWidget<code/> object into its XML representation
@@ -30,5 +30,5 @@ public interface Transformer {
      * @param widget The amendable widget that will be XML-ized.
      * @return XML representation as String
      */
-    String transform(AmendableWidget widget);
+    String transform(OverlayWidget widget);
 }

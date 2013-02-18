@@ -19,7 +19,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.util.UUID;
@@ -63,12 +63,12 @@ public class InlineEditorController implements ProvidesResize {
     /**
      * The amendable widget.
      */
-    private AmendableWidget amendableWidget;
+    private OverlayWidget overlayWidget;
 
     /**
      * The logical parent amendable widget (only relevant in case of new elements).
      */
-    private AmendableWidget parentAmendableWidget;
+    private OverlayWidget parentOverlayWidget;
 
 
     /**
@@ -93,12 +93,12 @@ public class InlineEditorController implements ProvidesResize {
             @Override
             public void onEvent(AttachInlineEditorEvent event) {
 
-                if (amendableWidget != null) {
+                if (overlayWidget != null) {
                     richTextEditor.destroy();
                     // we're already editing this one ..
-                    amendableWidget.asWidget().setVisible(true);
+                    overlayWidget.asWidget().setVisible(true);
                 }
-                amendableWidget = event.getAmendableWidget();
+                overlayWidget = event.getOverlayWidget();
                 amendment = createAmendment();
                 show();
 
@@ -125,14 +125,14 @@ public class InlineEditorController implements ProvidesResize {
      */
     public void show() {
         // attach to the parent
-        amendableWidget.getParentAmendableWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), amendableWidget.getAmendableElement());
-        richTextEditor.setHTML(DOM.toString(amendableWidget.asWidget().getElement()));
-        richTextEditor.asWidget().setWidth(amendableWidget.asWidget().getOffsetWidth() + "px");
-        richTextEditor.asWidget().setHeight(amendableWidget.asWidget().getOffsetHeight() + 50 + "px");
+        overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), overlayWidget.getOverlayElement());
+        richTextEditor.setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
+        richTextEditor.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
+        richTextEditor.asWidget().setHeight(overlayWidget.asWidget().getOffsetHeight() + 50 + "px");
         richTextEditor.init();
         richTextEditor.asWidget().setVisible(true);
-        richTextEditor.setAmendableWidget(amendableWidget);
-        amendableWidget.asWidget().setVisible(false);
+        richTextEditor.setAmendableWidget(overlayWidget);
+        overlayWidget.asWidget().setVisible(false);
         adaptSize();
     }
 
@@ -146,8 +146,8 @@ public class InlineEditorController implements ProvidesResize {
     public void hide() {
         richTextEditor.destroy();
         richTextEditor.asWidget().setVisible(false);
-        if (amendableWidget != null)
-            amendableWidget.asWidget().setVisible(true);
+        if (overlayWidget != null)
+            overlayWidget.asWidget().setVisible(true);
     }
 
     public AmendmentContainerDTO getAmendment() {
@@ -159,12 +159,12 @@ public class InlineEditorController implements ProvidesResize {
     }
 
 
-    public AmendableWidget getAmendableWidget() {
-        return amendableWidget;
+    public OverlayWidget getOverlayWidget() {
+        return overlayWidget;
     }
 
-    public void setAmendableWidget(AmendableWidget amendableWidget) {
-        this.amendableWidget = amendableWidget;
+    public void setOverlayWidget(OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
     }
 
     public void setDocumentController(final DocumentController documentController) {

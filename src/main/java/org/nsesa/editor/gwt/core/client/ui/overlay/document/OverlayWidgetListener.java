@@ -21,22 +21,21 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface AmendableWidgetListener {
-    // amendment operation callbacks
+public interface OverlayWidgetListener {
 
-    boolean beforeAmendmentControllerAdded(AmendableWidget amendableWidget, AmendmentController amendmentController);
+    boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
-    void afterAmendmentControllerAdded(AmendableWidget amendableWidget, AmendmentController amendmentController);
+    void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
-    boolean beforeAmendmentControllerRemoved(AmendableWidget amendableWidget, AmendmentController amendmentController);
+    boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
-    void afterAmendmentControllerRemoved(AmendableWidget amendableWidget, AmendmentController amendmentController);
+    void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
-    boolean beforeAmendableWidgetAdded(AmendableWidget amendableWidget, AmendableWidget child);
+    boolean beforeOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child);
 
-    void afterAmendableWidgetAdded(AmendableWidget amendableWidget, AmendableWidget child);
+    void afterOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child);
 
-    boolean beforeAmendableWidgetRemoved(AmendableWidget amendableWidget, AmendableWidget child);
+    boolean beforeOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child);
 
-    void afterAmendableWidgetRemoved(AmendableWidget amendableWidget, AmendableWidget child);
+    void afterOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child);
 }

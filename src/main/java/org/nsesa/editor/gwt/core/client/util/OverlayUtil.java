@@ -13,8 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
-import org.nsesa.editor.gwt.core.client.amendment.AmendableWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.select.Selector;
 
 import java.util.ArrayList;
@@ -27,18 +27,18 @@ import java.util.List;
  * @version $Id$
  */
 public class OverlayUtil {
-    public static List<AmendableWidget> xpath(final String path, final AmendableWidget root) {
-        final List<AmendableWidget> injectionPoints = new ArrayList<AmendableWidget>();
-        final AmendableWidgetWalker.AmendableVisitor visitor;
+    public static List<OverlayWidget> xpath(final String path, final OverlayWidget root) {
+        final List<OverlayWidget> injectionPoints = new ArrayList<OverlayWidget>();
+        final OverlayWidgetWalker.OverlayWidgetVisitor visitor;
         if (path.startsWith("//")) {
             // xpath-like expression ...
             Selector selector = new Selector();
             injectionPoints.addAll(selector.select(path.substring(2), root));
         } else {
             if (path.startsWith("#")) {
-                visitor = new AmendableWidgetWalker.AmendableVisitor() {
+                visitor = new OverlayWidgetWalker.OverlayWidgetVisitor() {
                     @Override
-                    public boolean visit(final AmendableWidget visited) {
+                    public boolean visit(final OverlayWidget visited) {
                         if (visited != null) {
                             if (path.substring(1).equalsIgnoreCase(visited.getId())) {
                                 injectionPoints.add(visited);
@@ -48,9 +48,9 @@ public class OverlayUtil {
                     }
                 };
             } else {
-                visitor = new AmendableWidgetWalker.AmendableVisitor() {
+                visitor = new OverlayWidgetWalker.OverlayWidgetVisitor() {
                     @Override
-                    public boolean visit(final AmendableWidget visited) {
+                    public boolean visit(final OverlayWidget visited) {
                         if (visited != null) {
                             if (path.equalsIgnoreCase(visited.getId())) {
                                 injectionPoints.add(visited);
@@ -65,11 +65,11 @@ public class OverlayUtil {
         return injectionPoints;
     }
 
-    public static List<AmendableWidget> find(final String expression, final AmendableWidget root) {
-        final List<AmendableWidget> matches = new ArrayList<AmendableWidget>();
-        root.walk(new AmendableWidgetWalker.AmendableVisitor() {
+    public static List<OverlayWidget> find(final String expression, final OverlayWidget root) {
+        final List<OverlayWidget> matches = new ArrayList<OverlayWidget>();
+        root.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
             @Override
-            public boolean visit(final AmendableWidget visited) {
+            public boolean visit(final OverlayWidget visited) {
                 // only simple tag names atm
                 if (visited.getType().equalsIgnoreCase(expression)) {
                     matches.add(visited);

@@ -40,7 +40,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableC
  * column layout (with the original proposed text on the left, and a rich text editor on the right).
  * <p/>
  * Requires an {@link AmendmentContainerDTO}, a {@link AmendmentAction} and
- * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget} to be set before it can be displayed.
+ * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -107,8 +107,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 dialogContext = new DialogContext();
-                dialogContext.setAmendableWidget(event.getAmendableWidget());
-                dialogContext.setParentAmendableWidget(event.getParentAmendableWidget());
+                dialogContext.setOverlayWidget(event.getOverlayWidget());
+                dialogContext.setParentOverlayWidget(event.getParentOverlayWidget());
                 dialogContext.setIndex(event.getIndex());
                 dialogContext.setAmendmentAction(event.getAmendmentAction());
                 dialogContext.setDocumentController(event.getDocumentController());
@@ -123,8 +123,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 dialogContext = new DialogContext();
                 dialogContext.setAmendmentController(event.getAmendmentController());
                 dialogContext.setAmendment(event.getAmendmentController().getModel());
-                dialogContext.setAmendableWidget(event.getAmendmentController().getAmendedAmendableWidget());
-                dialogContext.setParentAmendableWidget(event.getAmendmentController().getAmendedAmendableWidget().getParentAmendableWidget());
+                dialogContext.setOverlayWidget(event.getAmendmentController().getAmendedOverlayWidget());
+                dialogContext.setParentOverlayWidget(event.getAmendmentController().getAmendedOverlayWidget().getParentOverlayWidget());
                 dialogContext.setAmendmentAction(event.getAmendmentController().getModel().getAmendmentAction());
                 dialogContext.setDocumentController(event.getAmendmentController().getDocumentController());
                 handle();
