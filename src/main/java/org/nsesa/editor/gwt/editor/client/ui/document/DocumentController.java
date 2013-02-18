@@ -296,7 +296,6 @@ public class DocumentController {
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-
                 // clear the previous amendable widgets
                 sourceFileController.clearAmendableWidgets();
                 // make sure all amendment controllers are 'uninjected'
@@ -342,6 +341,10 @@ public class DocumentController {
                 view.switchToTab(event.getTabIndex());
             }
         });
+    }
+
+    private void showLoadingIndicator(boolean show, String message) {
+        view.showLoadingIndicator(show, message);
     }
 
     private void applySelection(final Selection<AmendmentController> selection) {
@@ -403,29 +406,35 @@ public class DocumentController {
     public void loadDocumentContent() {
         assert documentID != null : "No documentID set.";
         // clean up any previous content - if any
-
+        showLoadingIndicator(true, "Retrieving document.");
         serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
+                showLoadingIndicator(false, "Done retrieving document.");
                 final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
                 clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
             }
 
             @Override
             public void onSuccess(final String content) {
+                showLoadingIndicator(false, "Done retrieving document.");
                 onDocumentContentLoaded(content);
             }
         });
     }
 
     protected void onDocumentContentLoaded(final String content) {
+        showLoadingIndicator(true, "Parsing document.");
         sourceFileController.setContent(content);
+        showLoadingIndicator(true, "Building document tree.");
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
             public void execute() {
                 fetchAmendments();
                 sourceFileController.overlay();
+                showLoadingIndicator(true, "Done overlaying document.");
                 clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
+                showLoadingIndicator(false, "Done retrieving document.");
             }
         });
     }

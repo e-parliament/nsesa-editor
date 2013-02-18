@@ -28,56 +28,16 @@
             width: 100%;
         }
 
-        .document {
-            /* Note: parent td width is set in the document view!*/
+        .loadingSpinner {
+            float: left;
             position: relative;
-            top: -20px;
-            width: 100%;
-
-            border-collapse: collapse;
-            border-spacing: inherit;
-            max-width: none;
-        }
-
-        .contentHolder {
-        }
-
-        .content {
-
-        }
-
-        .deadline {
-            position: relative;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 5px;
-            top: 10px;
-            max-width: 350px;
-            height: 20px;
-            font-weight: bold;
-            text-align: center;
-            vertical-align: baseline;
-            z-index: 1;
-        }
-
-        .documentHeader {
-            width: 100%;
-            padding: 5px;
-            height: 20px;
-            background-color: #eee;
-            border: 1px solid #ccc;
+            left: 15px;
+            top: 2px;
         }
 
         .documentTitle {
             font-size: 2em;
             text-align: center;
-        }
-
-        .marker {
-            /* Note: parent td width is set in the document view!*/
             width: 100%;
         }
 
@@ -117,7 +77,12 @@
     <g:DockLayoutPanel ui:field="mainPanel" styleName="{res.mainPanel}" unit="PX">
         <g:north size="30">
             <g:HTMLPanel styleName="{res.header}">
-                <g:HTML text="" styleName="{res.documentTitle} documentTitle" ui:field="documentTitle"/>
+                <g:Image resource="{imageResources.loadingSpinner}" ui:field="loadingIndicator"
+                         styleName="{res.loadingSpinner}"/>
+                <g:Label ui:field="loadingMessage" styleName="" visible="false"/>
+                <g:HTML text="" styleName="{res.documentTitle} documentTitle"
+                        ui:field="documentTitle"/>
+
                 <g:FlowPanel styleName="{res.tabHeaders}">
                     <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}"
                              ui:field="viewDocument"/>

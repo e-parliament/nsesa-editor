@@ -81,6 +81,10 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     Image viewAmendments;
     @UiField
     Image viewInfo;
+    @UiField
+    Image loadingIndicator;
+    @UiField
+    Label loadingMessage;
 
     @Inject
     public DocumentViewImpl(final DocumentEventBus documentEventBus,
@@ -110,6 +114,12 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     public void setDocumentTitle(String titleHTML) {
         documentTitle.setHTML(titleHTML);
+    }
+
+    @Override
+    public void showLoadingIndicator(boolean show, String message) {
+        loadingIndicator.setVisible(show);
+        if (show) { loadingMessage.setText(message); } else { loadingMessage.setText(""); };
     }
 
     @UiHandler("viewDocument")

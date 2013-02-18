@@ -41,4 +41,7 @@ public interface Resources extends ClientBundle {
 
     @Source("document-selected.gif")
     ImageResource viewDocumentSelected();
+
+    @Source("loading-spinner.gif")
+    ImageResource loadingSpinner();
 }

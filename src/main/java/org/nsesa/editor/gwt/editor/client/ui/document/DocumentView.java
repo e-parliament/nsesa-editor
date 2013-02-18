@@ -34,4 +34,6 @@ public interface DocumentView extends IsWidget {
     void switchToTab(int index);
 
     void setDocumentTitle(String titleHTML);
+
+    void showLoadingIndicator(boolean show, String message);
 }

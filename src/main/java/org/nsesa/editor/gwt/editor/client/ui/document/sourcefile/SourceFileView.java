@@ -24,5 +24,5 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(SourceFileViewImpl.class)
 public interface SourceFileView extends IsWidget {
-    public void setStyleName(String styleName);
+    void setStyleName(String styleName);
 }
