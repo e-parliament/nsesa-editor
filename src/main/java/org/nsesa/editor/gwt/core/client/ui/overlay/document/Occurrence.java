@@ -13,8 +13,6 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import java.io.Serializable;
-
 /**
  * Keeps occurrence information (minOccurs, maxOccurs) about an element
  * when it is used as an allowed child of another element
@@ -22,8 +20,8 @@ import java.io.Serializable;
  * Date: 29/01/13
  * Time: 11:52
  */
-public final class Occurrence implements Serializable {
-    public static Integer UNBOUNDED = new Integer(-1);
+public final class Occurrence {
+    public static Integer UNBOUNDED = -1;
 
     private Integer minOccurs;
     private Integer maxOccurs;
@@ -45,4 +43,8 @@ public final class Occurrence implements Serializable {
         return maxOccurs != null && maxOccurs.intValue() == UNBOUNDED.intValue();
     }
 
+    @Override
+    public String toString() {
+        return "[" + minOccurs + ", " + (isUnbounded() ? "*" : maxOccurs) + "]";
+    }
 }
