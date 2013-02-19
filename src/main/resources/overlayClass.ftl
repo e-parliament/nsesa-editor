@@ -23,8 +23,8 @@ import com.google.gwt.dom.client.Element;
 import java.util.ArrayList;
 import java.util.Arrays;
 <#if overlayClass.complex || overlayClass.element || overlayClass.hasWildCardProperties()>
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import java.util.HashMap;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 </#if>
@@ -36,9 +36,9 @@ import com.google.gwt.user.client.DOM;
 * This file is generated. Rather than changing this file, correct the template called <tt>overlayClass.ftl</tt>.
 */
 
-public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple)>extends ${overlayClass.parent.className?cap_first}<#else><#if overlayClass.complex || overlayClass.element>extends AmendableWidgetImpl</#if></#if>  <#if overlayClass.interfaces??>implements <#list overlayClass.interfaces as interface>${interface.getSimpleName()}<#if interface_has_next>, </#if></#list> </#if>{
+public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple)>extends ${overlayClass.parent.className?cap_first}<#else><#if overlayClass.complex || overlayClass.element>extends OverlayWidgetImpl</#if></#if>  <#if overlayClass.interfaces??>implements <#list overlayClass.interfaces as interface>${interface.getSimpleName()}<#if interface_has_next>, </#if></#list> </#if>{
 <#if overlayClass.complex || overlayClass.element>
-private static Map<AmendableWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<AmendableWidget, Occurrence>() {
+private static Map<OverlayWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<OverlayWidget, Occurrence>() {
 {
     <#list overlayClass.allNonAttributesProperties as prop>
         <#if prop.wildCard>
@@ -121,6 +121,13 @@ super();
 
         public void set<@propertyNameCap property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
         this.<@propertyName property = property/> = <@propertyName property = property/>;
+        <#if property.wildCard>
+        getElement().setAttribute("${property.name}",<@propertyName property = property/>);
+        <#elseif property.baseClass?? && property.baseClass.enumeration>
+        getElement().setAttribute("${property.name}",<@propertyName property = property/>.value());
+        <#else>
+        getElement().setAttribute("${property.name}",<@propertyName property = property/>.getValue());
+        </#if>
         }
         //DSL Style set value
         public ${overlayClass.className?cap_first} <@propertyName property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
@@ -131,7 +138,7 @@ super();
             <#if property.collection>
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = new ArrayList<<@elementClassName property=property/>>();
-            for (AmendableWidget widget : getChildAmendableWidgets()) {
+            for (OverlayWidget widget : getChildOverlayWidgets()) {
             if ("<@elementClassName property=property/>".equalsIgnoreCase(widget.getType())) {
             result.add((<@elementClassName property=property/>)widget);
             }
@@ -148,7 +155,7 @@ super();
                 <#if property.wildCard>
                 throw new RuntimeException("Adding wildcard content is not supported yet");
                 <#else>
-                this.addAmendableWidget(${property.javaName}Elem);
+                this.addOverlayWidget(${property.javaName}Elem);
                 return ${property.javaName}Elem;
                 </#if>
             }
@@ -156,7 +163,7 @@ super();
             <#else>
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = null;
-            for (AmendableWidget widget : getChildAmendableWidgets()) {
+            for (OverlayWidget widget : getChildOverlayWidgets()) {
             if ("<@propertyClassName property=property/>".equalsIgnoreCase(widget.getType())) {
             result = (<@propertyClassName property=property/>)widget;
             break;
@@ -174,9 +181,9 @@ super();
                     <@propertyClassName property=property/> result = <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
                 // remove the child of the same type if exist
                 if (result != null) {
-                this.removeAmendableWidget(result);
+                this.removeOverlayWidget(result);
                 }
-                this.addAmendableWidget(${property.javaName}Elem);
+                this.addOverlayWidget(${property.javaName}Elem);
 
                 return ${property.javaName}Elem;
                 </#if>
@@ -196,10 +203,10 @@ super();
     </#if>
 
 /**
-* Returns possible children as a map of <tt>AmendableWidget, Occurrence</tt>s.
+* Returns possible children as a map of <tt>OverlayWidget, Occurrence</tt>s.
 */
 @Override
-public Map<AmendableWidget, Occurrence> getAllowedChildTypes() {
+public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
 return java.util.Collections.unmodifiableMap(ALLOWED_SUB_TYPES);
 }
 
@@ -237,12 +244,12 @@ return attrs;
 }
 
 <#macro propertyClassName property><#compress>
-    <#assign propName="AmendableWidgetImpl">
+    <#assign propName="OverlayWidgetImpl">
     <#if property.wildCard>
         <#if property.attribute>
             <#assign propName="String">
         <#else>
-            <#assign propName="AmendableWidgetImpl">
+            <#assign propName="OverlayWidgetImpl">
         </#if>
     <#else>
         <#assign propName=property.className?cap_first>
@@ -255,12 +262,12 @@ return attrs;
 </#compress></#macro>
 
 <#macro elementClassName property><#compress>
-    <#assign propName="AmendableWidgetImpl">
+    <#assign propName="OverlayWidgetImpl">
     <#if property.wildCard>
         <#if property.attribute>
             <#assign propName="String">
         <#else>
-            <#assign propName="AmendableWidgetImpl">
+            <#assign propName="OverlayWidgetImpl">
         </#if>
     <#else>
         <#assign propName=property.className?cap_first>
@@ -292,7 +299,7 @@ ${propName}
 
 <#macro generateField property>
 private <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
-        <<#if property.wildCard && !property.attribute>AmendableWidgetImpl>
+        <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
         ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
         >();</#if><#else><@propertyName property = property/>;</#if>
 </#macro>
@@ -305,7 +312,7 @@ private <@propertyClassName property=property/> <#if property.collection><@pl pr
 
 <#macro generateField property>
     private <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
-        <<#if property.wildCard && !property.attribute>AmendableWidgetImpl>
+        <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
         ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
         >();</#if><#else><@propertyName property = property/>;</#if>
 </#macro>

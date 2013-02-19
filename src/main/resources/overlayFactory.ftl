@@ -21,8 +21,8 @@ package ${packageNameGenerator.getPackageName(overlayClass)};
 import ${packageNameGenerator.getPackageName(cl)}.${cl.className?cap_first};
 </#list>
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidgetImpl;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayStrategy;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -47,7 +47,7 @@ public String getNamespace() {
 return namespace;
 }
 @Override
-public AmendableWidget toAmendableWidget(final Element element) {
+public OverlayWidget toAmendableWidget(final Element element) {
 final String nodeName = overlayStrategy.getType(element);
 final String namespaceURI = overlayStrategy.getNamespaceURI(element);
 

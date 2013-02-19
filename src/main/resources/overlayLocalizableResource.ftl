@@ -19,7 +19,7 @@ package ${packageNameGenerator.getPackageName(overlayClass)};
 
 import com.google.inject.Inject;
 import com.google.gwt.core.client.GWT;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayLocalizableResource;
 import com.google.gwt.i18n.client.Messages;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ public class ${overlayClass.name?cap_first} extends DefaultOverlayLocalizableRes
 private static ${factoryName?cap_first}OverlayMessages MESSAGES = GWT.create(${factoryName?cap_first}OverlayMessages.class);
 
 @Override
-public String getName(final AmendableWidget widget) {
+public String getName(final OverlayWidget widget) {
 if (widget == null) {
 throw new IllegalArgumentException("Null widget passed.");
 }
@@ -46,7 +46,7 @@ return widget.getType();
 }
 
 @Override
-public String getDescription(final AmendableWidget widget) {
+public String getDescription(final OverlayWidget widget) {
 if (widget == null) {
 throw new IllegalArgumentException("Null widget passed.");
 }
