@@ -42,7 +42,7 @@ public class AmendmentsFilterController {
     private static Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
     private Selection<AmendmentController> ALL = new Selection.AllSelection<AmendmentController>();
-    private Selection<AmendmentController> NONE = new Selection.AllSelection<AmendmentController>();
+    private Selection<AmendmentController> NONE = new Selection.NoneSelection<AmendmentController>();
 
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {

@@ -87,6 +87,14 @@ public class AmendmentsPanelController {
                 refreshAmendments();
             }
         });
+
+        documentEventBus.addHandler(AmendmentContainerSkippedEvent.TYPE, new AmendmentContainerSkippedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerSkippedEvent event) {
+                refreshAmendments();
+            }
+        });
+
         documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {

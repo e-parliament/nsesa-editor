@@ -202,6 +202,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
         final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
+        boolean isInjected = false;
         if (injectionPoints != null) {
             if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
@@ -212,10 +213,13 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     target.addAmendmentController(amendmentController);
                     amendmentController.setDocumentController(documentController);
                     documentEventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
+                    isInjected = true;
                 }
             }
         }
-
+        if (!isInjected) {
+            documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
+        }
     }
 
     private AmendmentController getAmendmentController(final AmendmentContainerDTO amendment) {

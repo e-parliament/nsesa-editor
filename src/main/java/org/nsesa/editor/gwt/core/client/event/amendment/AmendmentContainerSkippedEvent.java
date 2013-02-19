@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
  * Date: 24/06/12 20:14
@@ -25,8 +26,10 @@ public class AmendmentContainerSkippedEvent extends GwtEvent<AmendmentContainerS
 
     public static final Type<AmendmentContainerSkippedEventHandler> TYPE = new Type<AmendmentContainerSkippedEventHandler>();
 
-    public AmendmentContainerSkippedEvent() {
+    private final AmendmentController amendmentController;
 
+    public AmendmentContainerSkippedEvent(AmendmentController amendmentController) {
+        this.amendmentController = amendmentController;
     }
 
     @Override
@@ -37,5 +40,9 @@ public class AmendmentContainerSkippedEvent extends GwtEvent<AmendmentContainerS
     @Override
     protected void dispatch(AmendmentContainerSkippedEventHandler handler) {
         handler.onEvent(this);
+    }
+
+    public AmendmentController getAmendmentController() {
+        return amendmentController;
     }
 }
