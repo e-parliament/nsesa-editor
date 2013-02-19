@@ -13,15 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.drafting;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.resources.client.CssResource;
 
-/**
- *  Responsible to expose i18n drafting messages
- */
-public interface Messages extends ConstantsWithLookup {
-    @Key(value = "drafting.mandatory")
-    public String mandatory();
-    @Key(value = "drafting.attributes.save")
-    public String save();
-
+public interface DraftingAttributesViewCss extends CssResource {
 }

@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.drafting;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
@@ -28,10 +29,10 @@ import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
@@ -47,22 +48,25 @@ import java.util.Map;
 public class DraftingController {
 
     private DraftingView draftingView;
+    private DraftingAttributesView draftingAttributesView;
     private ClientFactory clientFactory;
     private Creator creator;
     private OverlayFactory overlayFactory;
     private DocumentController documentController;
     private OverlayLocalizableResource overlayResource;
     private EventBus eventBus;
-    private String originalType;
+    private OverlayWidget originalOverlayWidget;
 
     @Inject
     public DraftingController(DraftingView draftingView,
+                              DraftingAttributesView draftingAttributesView,
                               ClientFactory clientFactory,
                               Creator creator,
                               OverlayFactory overlayFactory,
                               OverlayLocalizableResource overlayResource,
                               DocumentController documentController) {
         this.draftingView = draftingView;
+        this.draftingAttributesView = draftingAttributesView;
         this.clientFactory = clientFactory;
         this.creator = creator;
         this.overlayFactory = overlayFactory;
@@ -72,47 +76,54 @@ public class DraftingController {
         registerListeners();
     }
 
-    public void setAmendableWidget(final AmendableWidget amendableWidget) {
-        originalType = amendableWidget.getType();
-        refreshView(amendableWidget, null);
+    public void setOverlayWidgetWidget(final OverlayWidget overlayWidget) {
+        refreshView(overlayWidget, null);
     }
 
     private void registerListeners() {
         eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
             @Override
             public void onEvent(SelectionChangedEvent event) {
-                String type = originalType;
-                if (event.getParentTagType() != null && !"".equals(event.getParentTagType())) {
-                    type = event.getParentTagType();
+                Element el = event.getParentElement();
+                if (el == null) {
+                    el = originalOverlayWidget.getOverlayElement();
                 }
-                if (event.isMoreTagsSelected()) {
-                    refreshView(overlayFactory.getAmendableWidget(type), "");
-                    //eventBus.fireEvent(new CriticalErrorEvent("Too many tags selected..."));
-                } else {
-                    refreshView(overlayFactory.getAmendableWidget(type), event.getSelectedText());
+                if (el != null) {
+                    if (event.isMoreTagsSelected()) {
+                        refreshView(overlayFactory.getAmendableWidget(el), "");
+                    } else {
+                        refreshView(overlayFactory.getAmendableWidget(el), event.getSelectedText());
+                    }
                 }
             }
         });
         eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
-                refreshView(event.getAmendableWidget(), null);
+                refreshView(event.getOverlayWidget(), null);
             }
         });
 
     }
 
-    public void refreshView(final AmendableWidget amendableWidget, final String selectedText) {
+    public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
+        if (overlayWidget != null) {
+            this.originalOverlayWidget = overlayWidget;
+        }
+
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
+                //refresh the attributes
+                draftingAttributesView.clearAll();
+                draftingAttributesView.setAttributes(originalOverlayWidget.getAttributes());
+
                 draftingView.clearAll();
-                LinkedHashMap<AmendableWidget, Occurrence> children = creator.getAllowedChildren(documentController, amendableWidget);
-                draftingView.setDraftTitle(amendableWidget.getType());
-                for (final Map.Entry<AmendableWidget, Occurrence> child : children.entrySet()) {
+                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, originalOverlayWidget);
+                draftingView.setDraftTitle(originalOverlayWidget.getType());
+                for (final Map.Entry<OverlayWidget, Occurrence> child : children.entrySet()) {
                     // when selected text is empty do not add any click handler just display the tags
                     IsWidget allowedChild, mandatoryChild = null;
-                    boolean isMandatory;
                     if (selectedText == null || selectedText.length() == 0) {
                         allowedChild = createLabelFrom(child.getKey());
                         if (child.getValue().getMinOccurs() >= 1) {
@@ -138,25 +149,29 @@ public class DraftingController {
         return draftingView;
     }
 
+    public DraftingAttributesView getAttributesView() {
+        return draftingAttributesView;
+    }
+
     //create a label from amendable widget
-    private Label createLabelFrom(AmendableWidget amendableWidget) {
-        Label label = new Label(overlayResource.getName(amendableWidget));
-        label.setTitle(overlayResource.getDescription(amendableWidget));
-        label.getElement().addClassName("drafting-" + amendableWidget.getType());
+    private Label createLabelFrom(OverlayWidget overlayWidget) {
+        Label label = new Label(overlayResource.getName(overlayWidget));
+        label.setTitle(overlayResource.getDescription(overlayWidget));
+        label.getElement().addClassName("drafting-" + overlayWidget.getType());
         return label;
     };
 
     //create an anchor from amendable widget
-    private Anchor createAnchorFrom(final AmendableWidget amendableWidget) {
-        Anchor anchor = new Anchor(overlayResource.getName(amendableWidget));
-        anchor.setTitle(overlayResource.getDescription(amendableWidget));
-        anchor.getElement().addClassName("drafting-" + amendableWidget.getType());
+    private Anchor createAnchorFrom(final OverlayWidget overlayWidget) {
+        Anchor anchor = new Anchor(overlayResource.getName(overlayWidget));
+        anchor.setTitle(overlayResource.getDescription(overlayWidget));
+        anchor.getElement().addClassName("drafting-" + overlayWidget.getType());
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // throw a drafting insertion event
                 clientFactory.getEventBus().fireEvent(
-                        new DraftingInsertionEvent(amendableWidget));
+                        new DraftingInsertionEvent(overlayWidget));
             }
         });
         return anchor;

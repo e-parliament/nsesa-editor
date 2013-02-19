@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Element;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
@@ -68,7 +69,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
             if (ed.document) {
                 ed.document.on('mouseup', function (ev) {
                     if (ed.getSelection())
-                        checkSelection(ed.getSelection());
+                        checkSelection(ed.getSelection(), ed);
                 })
                 ed.document.on('mousedown', function (ev) {
                     //remove the ranges
@@ -83,7 +84,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
                 ed.document.on('keyup', function (ev) {
                     $wnd.clearTimeout(keyHandler);
                     keyHandler = $wnd.setTimeout(function () {
-                        checkSelection(ed.getSelection());
+                        checkSelection(ed.getSelection(), ed);
                     }, 500)
                 })
             }
@@ -91,7 +92,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
         }
 
-        function checkSelection(selection) {
+        function checkSelection(selection, ed) {
             var env = $wnd.CKEDITOR.env,
                 element = selection.getStartElement(),
                 html = [],
@@ -99,12 +100,14 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
                 nameSpace,
                 moreTagsSelected = false,
                 selectedText = selection.getSelectedText();
-
+            //keep a track of the last visited element
+            ed["cachedElement"] = element;
             parentTagType = element.getAttribute('type');
             nameSpace = element.getAttribute('ns');
+
             moreTagsSelected = selectMoreTags(selection);
             //if (parentTagType) {
-            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, moreTagsSelected, selectedText);
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(element.$, moreTagsSelected, selectedText);
             //
         }
 
@@ -123,8 +126,10 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     }-*/;
 
-    private void fireEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
+    private void fireEvent(JavaScriptObject jsObject, boolean moreTagsSelected, String selectedText) {
         LOG.info("Changed event fired with more tags selected: " + moreTagsSelected + " and selected text " + selectedText);
-        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(parentTagType, nameSpace, moreTagsSelected, selectedText));
+        Element el = jsObject.cast();
+        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(el, moreTagsSelected, selectedText));
     }
+
 }

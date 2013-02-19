@@ -84,7 +84,7 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         var endContainer = editor.getSelection().getRanges(1)[0].endContainer;
         var parentTagType = endContainer.getAttribute('type'),
             nameSpace = endContainer.getAttribute('ns');
-        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::fireEvent(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)(parentTagType, nameSpace, false, "");
+        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(endContainer.$, false, "");
 
     }-*/;
 
@@ -94,8 +94,9 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         return DOM.toString((com.google.gwt.user.client.Element) el);
     }
 
-    private void fireEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
-        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(parentTagType, nameSpace, moreTagsSelected, selectedText));
+    private void fireEvent(JavaScriptObject jsObject, boolean moreTagsSelected, String selectedText) {
+        Element el = jsObject.cast();
+        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(el, moreTagsSelected, selectedText));
     }
 
 }

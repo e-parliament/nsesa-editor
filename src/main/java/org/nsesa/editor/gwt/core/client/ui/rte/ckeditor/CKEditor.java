@@ -50,6 +50,9 @@ public class CKEditor extends Composite implements RichTextEditor {
     private DockLayoutPanel mainPanel = new DockLayoutPanel(Style.Unit.PX);
     // the holder for drafting tool
     private FlowPanel draftHolderPanel = new FlowPanel();
+    // the holder for attributes
+    private FlowPanel attributesHolderPanel = new FlowPanel();
+
 
     public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config, boolean showDraftingTool) {
         this.plugin = plugin;
@@ -60,6 +63,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         textArea.getElement().setId(this.id);
         if (showDraftingTool) {
             mainPanel.addEast(draftHolderPanel, 1);
+            mainPanel.addSouth(attributesHolderPanel, 1);
         }
         mainPanel.add(textArea);
         initWidget(mainPanel);
@@ -101,16 +105,22 @@ public class CKEditor extends Composite implements RichTextEditor {
     }
 
     @Override
+    public void setDraftingAttributes(IsWidget widget) {
+        attributesHolderPanel.add(widget);
+    }
+
+    @Override
     public void toggleDraftingTool(boolean toggled) {
         if (showDraftingTool) {
             mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+            mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
+            resize(editorInstance, toggled ? 350 : 450);
         }
         if (toggled) {
             addBodyClassName(editorInstance, config.getDraftingClassName());
         } else {
             removeBodyClassName(editorInstance, config.getDraftingClassName());
         }
-
     }
 
     @Override
@@ -144,10 +154,21 @@ public class CKEditor extends Composite implements RichTextEditor {
         }
     }-*/;
 
+    private native void resize(JavaScriptObject editorInstance, int height) /*-{
+        if (editorInstance) {
+            try {
+                editorInstance.resize('100%', height);
+            } catch(err) {
+                //ugly way to prevent an annoying exception when editor is initialized
+            }
+        }
+    }-*/;
+
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{
         var editor = $wnd.CKEDITOR.replace(elementID, instanceConfig, content);
         return editor;
     }-*/;
+
 
     @Override
     public void setAmendableWidget(OverlayWidget overlayWidget) {

@@ -11,17 +11,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.event.drafting;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- *  Responsible to expose i18n drafting messages
+ * A handler invoked when a drafting modification event occur
+ * User: groza
+ * Date: 17/01/13
+ * Time: 15:25
  */
-public interface Messages extends ConstantsWithLookup {
-    @Key(value = "drafting.mandatory")
-    public String mandatory();
-    @Key(value = "drafting.attributes.save")
-    public String save();
-
+public interface DraftingModificationEventHandler extends EventHandler {
+    void onEvent(DraftingModificationEvent event);
 }

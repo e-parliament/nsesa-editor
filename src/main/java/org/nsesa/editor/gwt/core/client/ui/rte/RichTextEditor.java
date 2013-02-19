@@ -46,6 +46,13 @@ public interface RichTextEditor extends IsWidget {
     void setDraftingTool(IsWidget widget);
 
     /**
+     * Add a drafting attributes widget to the editor
+     *
+     * @param widget
+     */
+    void setDraftingAttributes(IsWidget widget);
+
+    /**
      * Toggle the drafting tool in the editor
      *
      * @param toggled

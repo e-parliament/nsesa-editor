@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.event.drafting;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
@@ -25,15 +26,13 @@ import com.google.gwt.event.shared.GwtEvent;
 public class SelectionChangedEvent extends GwtEvent<SelectionChangedEventHandler> {
     public static final Type<SelectionChangedEventHandler> TYPE = new Type<SelectionChangedEventHandler>();
 
-    private String parentTagType;
+    private Element parentElement;
     private boolean moreTagsSelected;
-    private String nameSpace;
     private String selectedText;
 
-    public SelectionChangedEvent(String parentTagType, String nameSpace, boolean moreTagsSelected, String selectedText) {
-        this.parentTagType = parentTagType;
+    public SelectionChangedEvent(Element parentElement, boolean moreTagsSelected, String selectedText) {
+        this.parentElement = parentElement;
         this.moreTagsSelected = moreTagsSelected;
-        this.nameSpace = nameSpace;
         this.selectedText = selectedText;
     }
 
@@ -47,8 +46,8 @@ public class SelectionChangedEvent extends GwtEvent<SelectionChangedEventHandler
         handler.onEvent(this);
     }
 
-    public String getParentTagType() {
-        return parentTagType;
+    public Element getParentElement() {
+        return parentElement;
     }
 
     public boolean isMoreTagsSelected() {

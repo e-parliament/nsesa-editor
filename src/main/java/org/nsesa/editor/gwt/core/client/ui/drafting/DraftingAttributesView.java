@@ -13,15 +13,16 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.drafting;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.ImplementedBy;
 
-/**
- *  Responsible to expose i18n drafting messages
- */
-public interface Messages extends ConstantsWithLookup {
-    @Key(value = "drafting.mandatory")
-    public String mandatory();
-    @Key(value = "drafting.attributes.save")
-    public String save();
+import java.util.Map;
+@ImplementedBy(DraftingAttributesViewImpl.class)
+public interface DraftingAttributesView extends IsWidget {
+    void clearAll();
+
+    void setAttributes(Map<String, String> attributes);
+
+    public Map<String, String> getAttributes();
 
 }
