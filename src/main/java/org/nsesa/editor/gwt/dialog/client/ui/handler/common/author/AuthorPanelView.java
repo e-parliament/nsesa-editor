@@ -13,8 +13,12 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
  * Date: 24/06/12 21:44
@@ -24,5 +28,6 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(AuthorPanelViewImpl.class)
 public interface AuthorPanelView extends IsWidget {
-
+    SuggestBox getSuggestBox();
+    ComplexPanel getAuthorsPanel();
 }

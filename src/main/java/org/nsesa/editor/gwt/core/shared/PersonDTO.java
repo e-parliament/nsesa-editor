@@ -58,6 +58,10 @@ public class PersonDTO implements IsSerializable, Serializable {
         return result;
     }
 
+    public String getDisplayName() {
+        return name + " " + lastName.toUpperCase();
+    }
+
     public String getId() {
         return id;
     }
@@ -88,5 +92,10 @@ public class PersonDTO implements IsSerializable, Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 }

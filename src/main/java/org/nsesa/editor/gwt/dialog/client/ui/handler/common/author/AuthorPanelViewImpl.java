@@ -17,10 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
@@ -45,21 +42,37 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
     private final ServiceFactory serviceFactory;
     private final ClientFactory clientFactory;
 
+    private final PersonMultiWordSuggestionOracle oracle;
+
     @UiField
     SuggestBox suggestBox;
+
+    @UiField
+    HTMLPanel authorsPanel;
+    @UiField
+    HorizontalPanel form;
 
     @Inject
     public AuthorPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
         this.serviceFactory = serviceFactory;
         this.clientFactory = clientFactory;
+        oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
     @UiFactory
     SuggestBox createSuggestBox() {
-        MultiWordSuggestOracle oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);
+
         return new SuggestBox(oracle);
     }
 
+    public SuggestBox getSuggestBox() {
+        return suggestBox;
+    }
+
+    @Override
+    public ComplexPanel getAuthorsPanel() {
+        return authorsPanel;
+    }
 }

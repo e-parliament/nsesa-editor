@@ -30,7 +30,7 @@ public class PersonMultiWordSuggestion extends MultiWordSuggestOracle.MultiWordS
     }
 
     public PersonMultiWordSuggestion(PersonDTO person) {
-        super(person.getId(), person.getLastName() + " " + person.getName());
+        super(person.getLastName() + " " + person.getName(), person.getLastName() + " " + person.getName());
         this.person = person;
     }
 
