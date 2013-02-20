@@ -63,7 +63,7 @@ public class HeaderController {
         clientFactory.getEventBus().addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
             @Override
             public void onEvent(AuthenticatedEvent event) {
-                view.setLoggedInPersonName(clientFactory.getClientContext().getPrincipal());
+                view.setLoggedInPersonName(clientFactory.getClientContext().getLoggedInPerson().getName());
                 view.setLoggedInPersonRoles(clientFactory.getClientContext().getRoles());
             }
         });

@@ -176,7 +176,7 @@ public abstract class Editor implements EntryPoint {
                 final ClientContext clientContext = event.getClientContext();
                 clientFactory.setClientContext(clientContext);
 
-                LOG.info("User authenticated as " + clientContext.getPrincipal()
+                LOG.info("User authenticated as " + clientContext.getLoggedInPerson().getUsername()
                         + " with roles: " + (clientContext.getRoles() != null ? Arrays.asList(clientContext.getRoles()) : "[NONE]"));
 
                 // we're authenticated, time for bootstrapping the rest of the application

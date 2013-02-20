@@ -35,7 +35,7 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
 
     private HashMap<String, String[]> parameters = new HashMap<String, String[]>();
 
-    private String principal;
+    private PersonDTO loggedInPerson;
 
     private String[] roles;
 
@@ -74,12 +74,12 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
         this.parameters = parameters;
     }
 
-    public String getPrincipal() {
-        return principal;
+    public PersonDTO getLoggedInPerson() {
+        return loggedInPerson;
     }
 
-    public void setPrincipal(String principal) {
-        this.principal = principal;
+    public void setLoggedInPerson(PersonDTO loggedInPerson) {
+        this.loggedInPerson = loggedInPerson;
     }
 
     public String getSessionID() {

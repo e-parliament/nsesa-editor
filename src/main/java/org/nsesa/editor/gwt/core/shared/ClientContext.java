@@ -42,9 +42,9 @@ public interface ClientContext extends Serializable, IsSerializable {
 
     void setParameters(HashMap<String, String[]> parameters);
 
-    String getPrincipal();
+    PersonDTO getLoggedInPerson();
 
-    void setPrincipal(String principal);
+    void setLoggedInPerson(PersonDTO person);
 
     String getSessionID();
 
