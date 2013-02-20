@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.service.gwt;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 import java.util.ArrayList;
 
@@ -162,4 +163,12 @@ public interface GWTAmendmentServiceAsync {
      */
     void canReturnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
     ;
+
+    /**
+     * Return a list of potential authors for an amendment based on a given query.
+     *
+     * @param query the query to find available authors
+     * @return the list of available authors for a given query
+     */
+    void getAvailableAuthors(ClientContext clientContext, String query, AsyncCallback<ArrayList<PersonDTO>> async);
 }

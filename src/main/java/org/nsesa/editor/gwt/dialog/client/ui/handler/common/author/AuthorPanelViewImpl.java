@@ -15,12 +15,14 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -41,31 +43,23 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     private final ServiceFactory serviceFactory;
+    private final ClientFactory clientFactory;
 
-    @UiField(provided = true)
+    @UiField
     SuggestBox suggestBox;
 
     @Inject
-    public AuthorPanelViewImpl(final ServiceFactory serviceFactory) {
+    public AuthorPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
         this.serviceFactory = serviceFactory;
-
-        createSuggestBox();
-
+        this.clientFactory = clientFactory;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
-    private void createSuggestBox() {
-        MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
-        serviceFactory.getGwtDocumentService();
-        oracle.add("test1");
-        oracle.add("test2");
-        oracle.add("test3");
-        oracle.add("mep1");
-        oracle.add("mep2");
-        oracle.add("mep3");
-
-        suggestBox = new SuggestBox(oracle);
+    @UiFactory
+    SuggestBox createSuggestBox() {
+        MultiWordSuggestOracle oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);
+        return new SuggestBox(oracle);
     }
 
 }

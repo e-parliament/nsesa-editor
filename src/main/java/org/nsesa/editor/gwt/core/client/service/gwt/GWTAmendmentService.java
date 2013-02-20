@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.PersonDTO;
 import org.nsesa.editor.gwt.core.shared.exception.ResourceNotFoundException;
 import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
 
@@ -180,4 +181,11 @@ public interface GWTAmendmentService extends RemoteService {
      */
     Boolean[] canReturnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
             throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+
+    /**
+     * Return a list of potential authors for an amendment based on a given query.
+     * @param query the query to find available authors
+     * @return  the list of available authors for a given query
+     */
+    ArrayList<PersonDTO> getAvailableAuthors(ClientContext clientContext, String query);
 }
