@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.validation;
 
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
+import org.junit.Before;
 import org.junit.Test;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -23,9 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * Date: 19/02/13 14:25
@@ -36,9 +35,17 @@ import static junit.framework.Assert.assertTrue;
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")
 public class OverlayWidgetValidatorTest extends GwtTest {
 
-    @Test
-    public void testValidate() throws Exception {
-        final OverlayWidget parent = new OverlayWidgetImpl() {
+    OverlayWidget parent;
+
+    final OverlayWidget childA1 = getOverlayWidget("typeA");
+    final OverlayWidget childA2 = getOverlayWidget("typeA");
+    final OverlayWidget childB1 = getOverlayWidget("typeB");
+    final OverlayWidget childC1 = getOverlayWidget("typeC");
+    final OverlayWidget childD1 = getOverlayWidget("typeD");
+
+    @Before
+    public void setup() throws Exception {
+        parent = new OverlayWidgetImpl() {
             @Override
             public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
                 Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
@@ -58,40 +65,84 @@ public class OverlayWidgetValidatorTest extends GwtTest {
                 return "typeA";
             }
         };
-
-        final OverlayWidget childA1 = getOverlayWidget("typeA");
-        final OverlayWidget childA2 = getOverlayWidget("typeA");
-        final OverlayWidget childB1 = getOverlayWidget("typeB");
-        final OverlayWidget childC1 = getOverlayWidget("typeC");
-        final OverlayWidget childD1 = getOverlayWidget("typeD");
-
         parent.addOverlayWidget(childA1);
         parent.addOverlayWidget(childA2);
         parent.addOverlayWidget(childB1);
         parent.addOverlayWidget(childC1);
         parent.addOverlayWidget(childD1);
-
-        OverlayWidgetValidator validator = new OverlayWidgetValidator();
-        final ValidationResult result1 = validator.validate(childA1);
-        assertNotNull(result1);
-        assertTrue(result1.isSuccessful());
-
-        final ValidationResult result2 = validator.validate(childA2);
-        assertNotNull(result2);
-        assertFalse(result2.getErrorMessage(), result2.isSuccessful());
-
-        final ValidationResult result3 = validator.validate(childB1);
-        assertNotNull(result3);
-        assertTrue(result3.isSuccessful());
-
-        final ValidationResult result4 = validator.validate(childC1);
-        assertNotNull(result4);
-        assertTrue(result4.isSuccessful());
-
-        final ValidationResult result5 = validator.validate(childD1);
-        assertNotNull(result5);
-        assertFalse(result5.getErrorMessage(), result5.isSuccessful());
     }
+
+    @Test
+    public void testValidate() throws Exception {
+        OverlayWidgetValidator validator = new OverlayWidgetValidator();
+        final ValidationResult result = validator.validate(childA1);
+        assertNotNull(result);
+        assertTrue(result.isSuccessful());
+    }
+
+    @Test
+    public void testValidateMaxOccurence() throws Exception {
+        OverlayWidgetValidator validator = new OverlayWidgetValidator();
+        final ValidationResult result1 = validator.validate(childA2);
+        assertNotNull(result1);
+        assertFalse("Max occurrence for typA has been passed!", result1.isSuccessful());
+
+        // check max occurrence for typeB, which is unbounded
+        final OverlayWidget childB2 = getOverlayWidget("typeB");
+        parent.addOverlayWidget(childB2);
+        final OverlayWidget childB3 = getOverlayWidget("typeB");
+        parent.addOverlayWidget(childB3);
+        final ValidationResult result2 = validator.validate(childB2);
+        assertTrue(result2.isSuccessful());
+        final ValidationResult result3 = validator.validate(childB3);
+        assertTrue(result3.isSuccessful());
+    }
+
+    @Test
+    public void testValidateMinOccurence() throws Exception {
+        OverlayWidgetValidator validator = new OverlayWidgetValidator();
+
+        final OverlayWidget missingOccurrence = new OverlayWidgetImpl() {
+            @Override
+            public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
+                Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
+                allowedChildTypes.put(getOverlayWidget("typeA"), new Occurrence(1, -1));
+                return allowedChildTypes;
+            }
+
+            @Override
+            public String getNamespaceURI() {
+                return "myNameSpaceURI";
+            }
+
+            @Override
+            public String getType() {
+                return "typeA";
+            }
+        };
+        assertFalse(validator.validate(missingOccurrence).isSuccessful());
+
+        final OverlayWidget noOccurrence = new OverlayWidgetImpl() {
+            @Override
+            public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
+                Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
+                allowedChildTypes.put(getOverlayWidget("typeA"), new Occurrence(0, -1));
+                return allowedChildTypes;
+            }
+
+            @Override
+            public String getNamespaceURI() {
+                return "myNameSpaceURI";
+            }
+
+            @Override
+            public String getType() {
+                return "typeA";
+            }
+        };
+        assertTrue(validator.validate(noOccurrence).isSuccessful());
+    }
+
 
     private OverlayWidget getOverlayWidget(final String type) {
         return new OverlayWidgetImpl() {

@@ -58,33 +58,32 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
                     if (!typeAllowed) {
                         validationResults[0] = new ValidationResultImpl(false, "Type " + visited.getType() + " not allowed under " + parent.getType());
-                    } else {
-
-                        // validate the min occurrences goes via the children
-                        Map<String, Integer> children = new LinkedHashMap<String, Integer>();
-                        for (final OverlayWidget child : parent.getChildOverlayWidgets()) {
-                            final String key = child.getNamespaceURI() + ":" + child.getType();
-                            if (children.containsKey(key)) {
-                                children.put(key, children.get(key) + 1);
-                            } else {
-                                children.put(key, 1);
-                            }
-                        }
-                        // validate the map
-                        for (Map.Entry<OverlayWidget, Occurrence> entry : allowedChildTypes.entrySet()) {
-
-                            Integer count = children.get(entry.getKey().getNamespaceURI() + ":" + entry.getKey().getType());
-                            if (count == null) count = 0;
-                            if (entry.getValue().getMinOccurs() > 0) {
-                                // validate min occurrences
-                                if (count < entry.getValue().getMinOccurs()) {
-                                    validationResults[0] = new ValidationResultImpl(false, "Min occurrence of " + entry.getValue().getMinOccurs() + " not honored for " + entry.getKey().getType() + " under " + parent.getType());
-                                }
-                            }
-
+                    }
+                }
+                if (validationResults[0] == null) {
+                    // validate the min occurrences goes via the children
+                    Map<String, Integer> children = new LinkedHashMap<String, Integer>();
+                    for (final OverlayWidget child : visited.getChildOverlayWidgets()) {
+                        final String key = child.getNamespaceURI() + ":" + child.getType();
+                        if (children.containsKey(key)) {
+                            children.put(key, children.get(key) + 1);
+                        } else {
+                            children.put(key, 1);
                         }
                     }
+                    // validate the map
+                    for (Map.Entry<OverlayWidget, Occurrence> entry : visited.getAllowedChildTypes().entrySet()) {
 
+                        Integer count = children.get(entry.getKey().getNamespaceURI() + ":" + entry.getKey().getType());
+                        if (count == null) count = 0;
+                        if (entry.getValue().getMinOccurs() > 0) {
+                            // validate min occurrences
+                            if (count < entry.getValue().getMinOccurs()) {
+                                validationResults[0] = new ValidationResultImpl(false, "Min occurrence of " + entry.getValue().getMinOccurs() + " not honored for " + entry.getKey().getType() + " under " + visited.getType());
+                            }
+                        }
+
+                    }
                 }
                 return true;
             }
