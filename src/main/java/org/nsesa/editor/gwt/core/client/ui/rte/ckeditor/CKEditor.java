@@ -63,7 +63,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         textArea.getElement().setId(this.id);
         if (showDraftingTool) {
             mainPanel.addEast(draftHolderPanel, 1);
-            mainPanel.addSouth(attributesHolderPanel, 1);
+            mainPanel.addSouth(attributesHolderPanel, 0);
         }
         mainPanel.add(textArea);
         initWidget(mainPanel);
@@ -113,8 +113,6 @@ public class CKEditor extends Composite implements RichTextEditor {
     public void toggleDraftingTool(boolean toggled) {
         if (showDraftingTool) {
             mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
-            mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
-            resize(editorInstance, toggled ? 350 : 450);
         }
         if (toggled) {
             addBodyClassName(editorInstance, config.getDraftingClassName());
@@ -132,6 +130,12 @@ public class CKEditor extends Composite implements RichTextEditor {
             }
         };
         timer.schedule(delay);
+    }
+
+    @Override
+    public void toggleDraftingAttributes(boolean toggled) {
+        mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
+        resize(editorInstance, toggled ? 300 : 420);
     }
 
     public native void destroy(JavaScriptObject editorInstance) /*-{
@@ -157,6 +161,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     private native void resize(JavaScriptObject editorInstance, int height) /*-{
         if (editorInstance) {
             try {
+//                alert(editorInstance.config.height);
                 editorInstance.resize('100%', height);
             } catch(err) {
                 //ugly way to prevent an annoying exception when editor is initialized

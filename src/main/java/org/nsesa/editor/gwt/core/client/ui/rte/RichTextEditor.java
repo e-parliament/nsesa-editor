@@ -67,4 +67,10 @@ public interface RichTextEditor extends IsWidget {
      */
     void executeCommand(String command, int delay);
 
+    /**
+     * Toggle the drafting attributes in the editor
+     *
+     * @param toggled
+     */
+    void toggleDraftingAttributes(boolean toggled);
 }

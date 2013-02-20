@@ -99,6 +99,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
         super.onAttach();
         //newText.toggleDraftingTool(true);
         newText.executeCommand("NsesaToggle", 500);
+        newText.executeCommand("NsesaToggleAttributes", 500);
         selectTab(0);
     }
 

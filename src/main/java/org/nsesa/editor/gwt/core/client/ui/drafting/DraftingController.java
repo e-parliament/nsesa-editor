@@ -37,6 +37,7 @@ import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Controls the elaboration of a amendment by displaying a list of possible children
@@ -77,6 +78,7 @@ public class DraftingController {
     }
 
     public void setOverlayWidgetWidget(final OverlayWidget overlayWidget) {
+        this.originalOverlayWidget = overlayWidget;
         refreshView(overlayWidget, null);
     }
 
@@ -107,20 +109,20 @@ public class DraftingController {
     }
 
     public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
-        if (overlayWidget != null) {
-            this.originalOverlayWidget = overlayWidget;
-        }
+
+        final OverlayWidget widget = (overlayWidget == null) ? originalOverlayWidget : overlayWidget;
 
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
             public void execute() {
                 //refresh the attributes
                 draftingAttributesView.clearAll();
-                draftingAttributesView.setAttributes(originalOverlayWidget.getAttributes());
+                if (!widget.equals(originalOverlayWidget))
+                    draftingAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
 
                 draftingView.clearAll();
-                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, originalOverlayWidget);
-                draftingView.setDraftTitle(originalOverlayWidget.getType());
+                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, widget);
+                draftingView.setDraftTitle(widget.getType());
                 for (final Map.Entry<OverlayWidget, Occurrence> child : children.entrySet()) {
                     // when selected text is empty do not add any click handler just display the tags
                     IsWidget allowedChild, mandatoryChild = null;

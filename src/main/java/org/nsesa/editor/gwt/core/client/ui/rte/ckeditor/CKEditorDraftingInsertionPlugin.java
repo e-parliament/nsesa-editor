@@ -78,13 +78,15 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
     }
 
     private native void insertDrafting(CKEditorDraftingInsertionPlugin plugin, JavaScriptObject editor, Element el) /*-{
-        var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
-        var toInsert = this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
-        editor.insertHtml(toInsert);
-        var endContainer = editor.getSelection().getRanges(1)[0].endContainer;
-        var parentTagType = endContainer.getAttribute('type'),
-            nameSpace = endContainer.getAttribute('ns');
-        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(endContainer.$, false, "");
+        if (editor.getSelection()) {
+            var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
+            var toInsert = this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
+            editor.insertHtml(toInsert);
+            var endContainer = editor.getSelection().getRanges(1)[0].endContainer;
+            var parentTagType = endContainer.getAttribute('type'),
+                    nameSpace = endContainer.getAttribute('ns');
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(endContainer.$, false, "");
+        }
 
     }-*/;
 

@@ -15,6 +15,8 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.common.content;
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
@@ -50,6 +52,12 @@ public class ContentPanelController implements AmendmentDialogAwareController {
             @Override
             public void onEvent(DraftingToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
+            }
+        });
+        clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+            @Override
+            public void onEvent(DraftingAttributesToggleEvent event) {
+                view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
 

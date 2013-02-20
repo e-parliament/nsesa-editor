@@ -20,6 +20,8 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
@@ -100,6 +102,12 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
             @Override
             public void onEvent(DraftingToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
+            }
+        });
+        clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+            @Override
+            public void onEvent(DraftingAttributesToggleEvent event) {
+                view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
 
