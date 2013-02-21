@@ -62,7 +62,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         this.id = "ckEditor" + counter++;
         textArea.getElement().setId(this.id);
         if (showDraftingTool) {
-            mainPanel.addEast(draftHolderPanel, 1);
+            mainPanel.addEast(draftHolderPanel, 0);
             mainPanel.addSouth(attributesHolderPanel, 0);
         }
         mainPanel.add(textArea);
@@ -134,8 +134,10 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     @Override
     public void toggleDraftingAttributes(boolean toggled) {
-        mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
-        resize(editorInstance, toggled ? 300 : 420);
+        if (showDraftingTool) {
+            mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
+            resize(editorInstance, toggled ? 300 : 420);
+        }
     }
 
     public native void destroy(JavaScriptObject editorInstance) /*-{

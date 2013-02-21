@@ -111,6 +111,7 @@ public class DraftingController {
     public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
 
         final OverlayWidget widget = (overlayWidget == null) ? originalOverlayWidget : overlayWidget;
+        if (widget == null) return;
 
         Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
             @Override
