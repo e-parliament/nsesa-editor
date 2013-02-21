@@ -43,4 +43,6 @@ public interface AmendmentDialogCreateView extends IsWidget {
     void setTitle(String title);
 
     RichTextEditor getRichTextEditor();
+
+    void addView(IsWidget view, String title);
 }

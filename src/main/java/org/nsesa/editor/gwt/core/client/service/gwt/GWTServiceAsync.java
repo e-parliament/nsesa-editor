@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.service.gwt;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 public interface GWTServiceAsync {
 
@@ -22,4 +23,6 @@ public interface GWTServiceAsync {
      * Authenticate the client context (set the principal and roles).
      */
     void authenticate(ClientContext clientContext, AsyncCallback<ClientContext> async);
+
+    void getPerson(ClientContext clientContext, String id, AsyncCallback<PersonDTO> async);
 }

@@ -34,6 +34,8 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
     protected final AmendmentDialogCreateView view;
 
-    protected final List<AmendmentDialogAwareController> childControllers;
+    protected final List<AmendmentDialogAwareController> childControllers = new ArrayList<AmendmentDialogAwareController>();
 
     protected final Locator locator;
     final private DraftingController draftingController;
@@ -63,24 +65,26 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
                                            final Locator locator, final OverlayFactory overlayFactory,
                                            final DraftingController draftingController,
-                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder,
-                                           final List<AmendmentDialogAwareController> childControllers) {
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
         this.draftingController = draftingController;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
-        this.childControllers = childControllers;
 
-        for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
-            //view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
-        }
         view.getRichTextEditor().setDraftingTool(draftingController.getView());
         view.getRichTextEditor().setDraftingAttributes(draftingController.getAttributesView());
 
         registerListeners();
     }
+
+    public void addChildControllers(AmendmentDialogAwareController... amendmentDialogAwareControllers) {
+            this.childControllers.addAll(Arrays.asList(amendmentDialogAwareControllers));
+            for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
+                view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
+            }
+        }
 
     private void registerListeners() {
         view.getSaveButton().addClickHandler(new ClickHandler() {

@@ -52,4 +52,24 @@ public class MetaPanelViewImpl extends Composite implements MetaPanelView {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
+
+    @Override
+    public void setJustification(String justification) {
+        this.justification.setText(justification);
+    }
+
+    @Override
+    public void setNotes(String notes) {
+        this.notes.setText(notes);
+    }
+
+    @Override
+    public String getJustification() {
+        return this.justification.getText();
+    }
+
+    @Override
+    public String getNotes() {
+        return this.notes.getText();
+    }
 }

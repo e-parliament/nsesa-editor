@@ -27,6 +27,8 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +47,7 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
 
     protected final AmendmentDialogDeleteView view;
 
-    protected final List<AmendmentDialogAwareController> childControllers;
+    protected final List<AmendmentDialogAwareController> childControllers = new ArrayList<AmendmentDialogAwareController>();
 
     protected final OverlayFactory overlayFactory;
 
@@ -54,18 +56,19 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
     @Inject
     public AmendmentDialogDeleteController(final ClientFactory clientFactory, final AmendmentDialogDeleteView view,
                                            final Locator locator,
-                                           final OverlayFactory overlayFactory,
-                                           final List<AmendmentDialogAwareController> childControllers) {
+                                           final OverlayFactory overlayFactory) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
-        this.childControllers = childControllers;
-
-        for (final AmendmentDialogAwareController amendmentDeleteAwareController : this.childControllers) {
-            view.addView(amendmentDeleteAwareController.getView(), amendmentDeleteAwareController.getTitle());
-        }
         registerListeners();
+    }
+
+    public void addChildControllers(AmendmentDialogAwareController... amendmentDialogAwareControllers) {
+        this.childControllers.addAll(Arrays.asList(amendmentDialogAwareControllers));
+        for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
+            view.addView(amendmentModifyAwareController.getView(), amendmentModifyAwareController.getTitle());
+        }
     }
 
     private void registerListeners() {

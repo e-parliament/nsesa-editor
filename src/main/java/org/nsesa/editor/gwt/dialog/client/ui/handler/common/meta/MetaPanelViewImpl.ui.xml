@@ -19,17 +19,31 @@
               type='org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelViewCss'/>
     <ui:style field="res">
         .metaPanel {
+            width: 98%;
+        }
 
+        .justification {
+            width: 100%;
+            height: 120px;
+        }
+
+        .notes {
+            width: 100%;
+            height: 120px;
+        }
+
+        .division {
+            padding: 10px;
         }
     </ui:style>
-    <g:VerticalPanel width="100%" styleName="{res.metaPanel}">
-        <g:HTMLPanel>
-            <g:HTML text="Justification"/>:
-            <g:TextArea ui:field="justification"/>
+    <g:VerticalPanel styleName="{res.metaPanel}">
+        <g:HTMLPanel styleName="{res.division}">
+            <g:HTML text="Justification"/>
+            <g:TextArea ui:field="justification" styleName="{res.justification}"/>
         </g:HTMLPanel>
-        <g:HTMLPanel>
-            <g:HTML text="Notes"/>:
-            <g:TextArea ui:field="notes"/>
+        <g:HTMLPanel styleName="{res.division}">
+            <g:HTML text="Notes"/>
+            <g:TextArea ui:field="notes" styleName="{res.notes}"/>
         </g:HTMLPanel>
     </g:VerticalPanel>
 </ui:UiBinder>

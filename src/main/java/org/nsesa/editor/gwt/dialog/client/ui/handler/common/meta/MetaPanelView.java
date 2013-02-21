@@ -24,5 +24,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(MetaPanelViewImpl.class)
 public interface MetaPanelView extends IsWidget {
+    void setJustification(String justification);
+    void setNotes(String notes);
 
+    String getJustification();
+
+    String getNotes();
 }

@@ -68,4 +68,22 @@ public class MetaPanelController implements AmendmentDialogAwareController {
     public String getTitle() {
         return "Meta";
     }
+
+    public void setNotes(final String notes) {
+        this.view.setNotes(notes);
+    }
+
+    public String getNotes() {
+        final String notes = view.getNotes();
+        return notes != null ? notes.trim() : null;
+    }
+
+    public void setJustification(final String justification) {
+        this.view.setJustification(justification);
+    }
+
+    public String getJustification() {
+        final String justification = view.getJustification();
+        return justification != null ? justification.trim() : null;
+    }
 }

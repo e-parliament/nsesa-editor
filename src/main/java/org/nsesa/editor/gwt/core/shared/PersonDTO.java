@@ -34,6 +34,13 @@ public class PersonDTO implements IsSerializable, Serializable {
     public PersonDTO() {
     }
 
+    public PersonDTO(String id, String username, String name, String lastName) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        this.lastName = lastName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

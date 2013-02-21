@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
@@ -68,16 +69,21 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         return selectedPersons;
     }
 
-    private void addPerson(PersonDTO person) {
+    public void addPerson(PersonDTO person) {
         if (selectedPersons.add(person)) {
             drawPersons();
         }
     }
 
-    private void removePerson(PersonDTO person) {
+    public void removePerson(PersonDTO person) {
         if (selectedPersons.remove(person)) {
             drawPersons();
         }
+    }
+
+    public void clear() {
+        this.selectedPersons.clear();
+        this.view.getAuthorsPanel().clear();
     }
 
     private void drawPersons() {
@@ -103,8 +109,6 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
     @Override
     public void setContext(final DialogContext dialogContext) {
         this.dialogContext = dialogContext;
-        selectedPersons = new LinkedHashSet<PersonDTO>();
-        drawPersons();
     }
 
     private void registerListeners() {

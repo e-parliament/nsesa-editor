@@ -51,14 +51,10 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     @UiField
     TabLayoutPanel tabLayoutPanel;
 
-    @UiField(provided = true)
-    AuthorPanelView authorPanelView;
 
     @Inject
-    public AmendmentDialogCreateViewImpl(@Named("newText") final RichTextEditor newText,
-                                         final AuthorPanelController authorPanelController) {
+    public AmendmentDialogCreateViewImpl(@Named("newText") final RichTextEditor newText) {
         this.newText = newText;
-        this.authorPanelView = authorPanelController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         dockPanel.setHeight("100%");
@@ -67,6 +63,11 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
 
     public void setTitle(final String title) {
         this.title.setHTML(title);
+    }
+
+    @Override
+    public void addView(IsWidget view, String title) {
+        tabLayoutPanel.add(view, title);
     }
 
     @Override

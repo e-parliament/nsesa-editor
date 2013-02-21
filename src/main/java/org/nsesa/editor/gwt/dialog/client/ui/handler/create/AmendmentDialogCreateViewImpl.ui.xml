@@ -15,8 +15,7 @@
 -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:rte='urn:import:org.nsesa.editor.gwt.core.client.ui.rte'
-             xmlns:author='urn:import:org.nsesa.editor.gwt.dialog.client.ui.handler.common.author'>
+             xmlns:rte='urn:import:org.nsesa.editor.gwt.core.client.ui.rte'>
     <ui:style field="res">
 
         .header {
@@ -29,22 +28,6 @@
             width: 100%;
             text-align: center;
             margin-top: 5px;
-        }
-
-        .newPanel {
-
-        }
-
-        .authorsPanel {
-
-        }
-
-        .additionalPanel {
-
-        }
-
-        .footNotesPanel {
-
         }
 
         .cancelLink {
@@ -66,24 +49,6 @@
                         </g:center>
                     </g:DockLayoutPanel>
 
-                </g:tab>
-                <g:tab>
-                    <g:header>Authors</g:header>
-                    <g:HTMLPanel styleName="{res.authorsPanel}">
-                        <author:AuthorPanelView ui:field="authorPanelView"/>
-                    </g:HTMLPanel>
-                </g:tab>
-                <g:tab>
-                    <g:header>Footnotes</g:header>
-                    <g:HTMLPanel styleName="{res.footNotesPanel}">
-                        <h1>Footnotes</h1>
-                    </g:HTMLPanel>
-                </g:tab>
-                <g:tab>
-                    <g:header>Additional</g:header>
-                    <g:HTMLPanel styleName="{res.additionalPanel}">
-                        <h1>Additional</h1>
-                    </g:HTMLPanel>
                 </g:tab>
             </g:TabLayoutPanel>
         </g:center>
