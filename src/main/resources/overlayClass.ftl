@@ -234,6 +234,13 @@ attrs.putAll(super.getAttributes());
     </#list>
 return attrs;
 }
+
+//DSL Style for html method
+@Override
+public ${overlayClass.className?cap_first} html(String s) {
+    super.html(s);
+    return this;
+}
 </#if>
 <#if overlayClass.simple>
     <#list overlayClass.properties as property>
