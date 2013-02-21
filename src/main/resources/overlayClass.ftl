@@ -79,19 +79,23 @@ super(element);
 public ${overlayClass.className?cap_first}() {
 super();
 }
+public ${overlayClass.className?cap_first}(String value) {
+super();
+this.value = value;
+}
 </#if>
 
 // FIELDS ------------------
 <#if overlayClass.complex || overlayClass.element>
     <#list overlayClass.properties as property>
         <#if property.attribute>
-            <@generateField property=property/>
+            <@generateField property=property accessType="private"/>
         </#if>
     </#list>
 </#if>
 <#if overlayClass.simple>
     <#list overlayClass.properties as property>
-        <@generateField property=property/>
+        <@generateField property=property accessType="protected"/>
     </#list>
 </#if>
 <#if overlayClass.complex || overlayClass.element>
@@ -297,21 +301,14 @@ ${propName}
     </#if>
 </#compress></#macro>
 
-<#macro generateField property>
-private <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
-        <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
-        ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
-        >();</#if><#else><@propertyName property = property/>;</#if>
-</#macro>
-
 <#macro pl property><#compress>
     <@plural propertyName=property.javaName/>
 </#compress></#macro>
 
 <#macro plural propertyName><#compress><#if propertyName?ends_with("y")>${propertyName?substring(0, propertyName?length - 1)}ies<#elseif propertyName?ends_with("s")>${propertyName}es<#else>${propertyName}s</#if></#compress></#macro>
 
-<#macro generateField property>
-    private <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
+<#macro generateField property accessType>
+    ${accessType} <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
         <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
         ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
         >();</#if><#else><@propertyName property = property/>;</#if>
