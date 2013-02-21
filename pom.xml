@@ -10,6 +10,18 @@
     <name>Core Editor</name>
     <version>0.0.1</version>
 
+    <organization>
+        <url>http://www.europarl.europa.eu/</url>
+        <name>European Parliament</name>
+    </organization>
+    <licenses>
+        <license>
+            <name>European Union Public Licence (EUPL)</name>
+            <url>http://joinup.ec.europa.eu/software/page/eupl</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
+
     <pluginRepositories>
         <pluginRepository>
             <id>gwt-maven</id>
