@@ -49,7 +49,7 @@ public class PersonMultiWordSuggestionOracle extends MultiWordSuggestOracle {
     @Override
     public void requestSuggestions(final Request request, final Callback callback) {
 
-        serviceFactory.getGwtAmendmentService().getAvailableAuthors(clientFactory.getClientContext(), request.getQuery(), new AsyncCallback<ArrayList<PersonDTO>>() {
+        serviceFactory.getGwtAmendmentService().getAvailableAuthors(clientFactory.getClientContext(), request.getQuery(), request.getLimit(), new AsyncCallback<ArrayList<PersonDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
                 // woops? No suggestions available ...

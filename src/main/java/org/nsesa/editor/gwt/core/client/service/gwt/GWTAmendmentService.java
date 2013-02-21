@@ -185,7 +185,8 @@ public interface GWTAmendmentService extends RemoteService {
     /**
      * Return a list of potential authors for an amendment based on a given query.
      * @param query the query to find available authors
+     * @param limit the maximum amount of suggestions to return
      * @return  the list of available authors for a given query
      */
-    ArrayList<PersonDTO> getAvailableAuthors(ClientContext clientContext, String query);
+    ArrayList<PersonDTO> getAvailableAuthors(ClientContext clientContext, String query, int limit);
 }
