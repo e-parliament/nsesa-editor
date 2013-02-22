@@ -55,15 +55,15 @@ public class DefaultTransformer implements Transformer {
         if (rootNode) {
             sb.append(widget.getType());
             // add the default namespace for xsi
-            sb.append("\n\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
+//            sb.append("\n\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
             // TODO: we need to see if we can find a good way to reference the XSD and plug it in via a subclass
             for (final Map.Entry<String, String> entry : namespaces.entrySet()) {
                 if (DEFAULT_NAMESPACE.equals(entry.getValue())) {
                     // this is the default namespace
-                    sb.append("\n\txmlns=\"").append(widget.getNamespaceURI()).append("\"");
+                    sb.append(" xmlns=\"").append(widget.getNamespaceURI()).append("\"");
                 } else {
                     // prefixed namespace
-                    sb.append("\n\txmlns:").append(entry.getValue()).append("=\"").append(entry.getKey()).append("\"");
+                    sb.append(" xmlns:").append(entry.getValue()).append("=\"").append(entry.getKey()).append("\"");
                 }
             }
         } else {
@@ -93,7 +93,7 @@ public class DefaultTransformer implements Transformer {
             // the root is all the time a new one
             // apply xml transformation for children
             for (final OverlayWidget child : widget.getChildOverlayWidgets()) {
-                sb.append(toXMLElement(child, namespaces, false, depth + 1));
+                sb.append(toXMLElement(child, namespaces, false, depth + 1).trim());
             }
         } else {
             for (int i = 0; i < length; i++) {
@@ -112,13 +112,13 @@ public class DefaultTransformer implements Transformer {
                             }
                         }
                         if (child != null) {
-                            sb.append(toXMLElement(child, namespaces, false, depth + 1));
+                            sb.append(toXMLElement(child, namespaces, false, depth + 1).trim());
                         } else {
                             LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
                         }
                         break;
                     case Node.TEXT_NODE:
-                        sb.append(nodes.getItem(i).getNodeValue());
+                        sb.append(nodes.getItem(i).getNodeValue().trim());
                         break;
                     case Node.DOCUMENT_NODE:
                         LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());
@@ -126,7 +126,7 @@ public class DefaultTransformer implements Transformer {
                 }
             }
         }
-        sb.append(indent).append("</").append(widget.getType()).append(">");
+        sb.append("</").append(widget.getType()).append(">");
         return sb.toString();
     }
 
