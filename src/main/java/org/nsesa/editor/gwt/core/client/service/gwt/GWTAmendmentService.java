@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 import org.nsesa.editor.gwt.core.shared.exception.ResourceNotFoundException;
 import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
+import org.nsesa.editor.gwt.core.shared.exception.ValidationException;
 
 import java.util.ArrayList;
 
@@ -70,7 +71,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the array of amendment containers
      */
     AmendmentContainerDTO[] saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, StaleResourceException;
+            throws UnsupportedOperationException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to save a given set of amendment containers to the backend.

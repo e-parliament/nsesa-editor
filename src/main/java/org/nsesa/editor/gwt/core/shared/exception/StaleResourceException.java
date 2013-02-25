@@ -14,10 +14,26 @@
 package org.nsesa.editor.gwt.core.shared.exception;
 
 /**
+ * An exception thrown if the resource requested is stale (used in combination with optimistic locking).
  * Date: 24/06/12 22:19
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class StaleResourceException extends Exception {
+    public StaleResourceException() {
+        super();
+    }
+
+    public StaleResourceException(String s) {
+        super(s);
+    }
+
+    public StaleResourceException(String s, Throwable throwable) {
+        super(s, throwable);
+    }
+
+    public StaleResourceException(Throwable throwable) {
+        super(throwable);
+    }
 }

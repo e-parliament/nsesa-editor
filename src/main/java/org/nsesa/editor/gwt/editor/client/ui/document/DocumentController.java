@@ -203,6 +203,14 @@ public class DocumentController {
             }
         });
 
+        // forward the critical error event
+        documentEventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
+            @Override
+            public void onEvent(CriticalErrorEvent event) {
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
         // forward the confirmation event
         documentEventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
             @Override

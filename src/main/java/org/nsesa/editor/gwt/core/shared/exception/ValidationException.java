@@ -14,26 +14,28 @@
 package org.nsesa.editor.gwt.core.shared.exception;
 
 /**
- * An exception thrown when a resource is not found in the backend.
- * Date: 24/06/12 22:19
+ * An exception thrown if the validation of the payload of an amendment is not valid according to the
+ * frontend or backend.
+ * <p/>
+ * Date: 22/02/13 16:30
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ResourceNotFoundException extends Exception {
-    public ResourceNotFoundException() {
-        super();
+public class ValidationException extends Exception {
+    public ValidationException(Throwable throwable) {
+        super(throwable);
     }
 
-    public ResourceNotFoundException(String s) {
-        super(s);
-    }
-
-    public ResourceNotFoundException(String s, Throwable throwable) {
+    public ValidationException(String s, Throwable throwable) {
         super(s, throwable);
     }
 
-    public ResourceNotFoundException(Throwable throwable) {
-        super(throwable);
+    public ValidationException(String s) {
+        super(s);
+    }
+
+    public ValidationException() {
+        super();
     }
 }
