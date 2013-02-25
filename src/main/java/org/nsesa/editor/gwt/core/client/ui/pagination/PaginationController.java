@@ -24,12 +24,12 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatus
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEvent;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.editor.client.event.filter.FilterRequestEvent;
-import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEvent;
-import org.nsesa.editor.gwt.editor.client.event.filter.FilterResponseEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEvent;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 

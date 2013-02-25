@@ -24,7 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEventHandler;
 import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEvent;

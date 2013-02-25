@@ -18,7 +18,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline1HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline24HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.DeadlinePassedEvent;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.Date;
 import java.util.logging.Level;

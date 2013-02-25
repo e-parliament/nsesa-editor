@@ -17,7 +17,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
  * Date: 21/12/12 16:03

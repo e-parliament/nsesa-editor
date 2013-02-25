@@ -33,7 +33,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

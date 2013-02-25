@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
  * Date: 24/06/12 20:14

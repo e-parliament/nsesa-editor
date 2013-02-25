@@ -28,9 +28,9 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanel
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.editor.client.event.document.DocumentScrollEventHandler;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 

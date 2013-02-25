@@ -1,0 +1,114 @@
+<!--
+
+    Copyright 2013 European Parliament
+
+    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+    http://joinup.ec.europa.eu/software/page/eupl
+
+    Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:sourcefile='urn:import:org.nsesa.editor.gwt.core.client.ui.document.sourcefile'
+             xmlns:amendments='urn:import:org.nsesa.editor.gwt.core.client.ui.document.amendments'
+             xmlns:info='urn:import:org.nsesa.editor.gwt.core.client.ui.document.info'
+        >
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.document.resources.Resources'/>
+    <ui:style src="DocumentViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.document.DocumentViewCss'/>
+    <ui:style field="res">
+
+        .mainPanel {
+            width: 100%;
+        }
+
+        .loadingSpinner {
+            float: left;
+            position: relative;
+            left: 15px;
+            top: 2px;
+        }
+
+        .documentTitle {
+            font-size: 2em;
+            text-align: center;
+            width: 100%;
+        }
+
+        .tabPanel {
+            border: 0;
+        }
+
+        .header {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .tabHeaders {
+            padding: 0;
+            margin: 0;
+            position: relative;
+            right: 12px;
+            top: -26px;
+            float: right;
+        }
+
+        .tabHeader {
+            margin: 0;
+            padding: 0;
+        }
+
+        .amendmentsPanel {
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+        }
+
+    </ui:style>
+    <g:DockLayoutPanel ui:field="mainPanel" styleName="{res.mainPanel}" unit="PX">
+        <g:north size="30">
+            <g:HTMLPanel styleName="{res.header}">
+                <g:Image resource="{imageResources.loadingSpinner}" ui:field="loadingIndicator"
+                         styleName="{res.loadingSpinner}"/>
+                <g:Label ui:field="loadingMessage" styleName="" visible="false"/>
+                <g:HTML text="" styleName="{res.documentTitle} documentTitle"
+                        ui:field="documentTitle"/>
+
+                <g:FlowPanel styleName="{res.tabHeaders}">
+                    <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}"
+                             ui:field="viewDocument"/>
+                    <g:Image resource='{imageResources.viewAmendments}' styleName="{res.tabHeader}"
+                             ui:field="viewAmendments"/>
+                    <g:Image resource='{imageResources.viewInfo}' styleName="{res.tabHeader}" ui:field="viewInfo"/>
+                </g:FlowPanel>
+            </g:HTMLPanel>
+        </g:north>
+
+        <g:center>
+            <g:TabLayoutPanel ui:field="tabPanel" barHeight="0" styleName="{res.tabPanel}">
+                <g:tab>
+                    <g:header>Document</g:header>
+                    <sourcefile:SourceFileView ui:field="sourceFileView" styleName="{res.amendmentsPanel}"/>
+                </g:tab>
+                <g:tab>
+                    <g:header>Amendments</g:header>
+                    <amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>
+                </g:tab>
+                <g:tab>
+                    <g:header>Info</g:header>
+                    <info:InfoPanelView ui:field="infoPanelView"/>
+                </g:tab>
+            </g:TabLayoutPanel>
+        </g:center>
+    </g:DockLayoutPanel>
+
+</ui:UiBinder>

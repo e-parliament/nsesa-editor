@@ -1,0 +1,51 @@
+<!--
+
+    Copyright 2013 European Parliament
+
+    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+    http://joinup.ec.europa.eu/software/page/eupl
+
+    Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="ContentViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentViewCss'/>
+    <ui:style field="res">
+        .scrollPanel {
+        }
+
+        .documentPanelOuter {
+            margin: 30px;
+        }
+
+        .documentPanel {
+            border: 1px solid black;
+            padding: 8%;
+            max-width: 780px;
+            -moz-box-shadow: 10px 10px 5px #888;
+            -webkit-box-shadow: 10px 10px 5px #888;
+            box-shadow: 10px 10px 5px #888;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+        .contentPanel {
+
+        }
+    </ui:style>
+    <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel} scrollPanel">
+        <g:HTMLPanel styleName="{res.documentPanelOuter} documentPanelOuter">
+            <g:HTMLPanel styleName="{res.documentPanel} documentPanel">
+                <g:HTML ui:field="contentPanel" styleName="{res.contentPanel} contentPanel"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+    </g:ScrollPanel>
+</ui:UiBinder>

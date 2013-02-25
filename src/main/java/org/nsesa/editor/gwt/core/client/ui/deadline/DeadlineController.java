@@ -19,8 +19,8 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.editor.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.Date;
 

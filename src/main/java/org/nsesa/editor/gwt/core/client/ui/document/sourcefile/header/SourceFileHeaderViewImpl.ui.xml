@@ -1,0 +1,64 @@
+<!--
+
+    Copyright 2013 European Parliament
+
+    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+    http://joinup.ec.europa.eu/software/page/eupl
+
+    Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="SourceFileHeaderViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderViewCss'/>
+    <ui:style field="res">
+
+
+        .documentName {
+
+        }
+
+        .horizontalPanel {
+            float: right;
+            position: relative;
+            top: -2px;
+        }
+
+        .documentTranslations {
+            padding-right: 10px;
+        }
+
+        .relatedDocuments {
+            padding-right: 10px;
+        }
+
+        .modes {
+            padding-right: 10px;
+            position: relative;
+            top: 1px;
+        }
+    </ui:style>
+
+    <g:HTMLPanel>
+        <g:HorizontalPanel ui:field="horizontalPanel" styleName="{res.horizontalPanel}">
+            <g:HTMLPanel styleName="{res.documentName}">
+                <g:Label ui:field="documentName"/>
+            </g:HTMLPanel>
+            <g:HTMLPanel styleName="{res.modes} modes">
+                <g:HorizontalPanel ui:field="extensionPanel"/>
+            </g:HTMLPanel>
+            <g:HTMLPanel styleName="{res.relatedDocuments} relatedDocuments">
+                <g:ListBox ui:field="relatedDocuments"/>
+            </g:HTMLPanel>
+            <g:HTMLPanel styleName="{res.documentTranslations} documentTranslations">
+                <g:ListBox ui:field="documentTranslations"/>
+            </g:HTMLPanel>
+        </g:HorizontalPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>
