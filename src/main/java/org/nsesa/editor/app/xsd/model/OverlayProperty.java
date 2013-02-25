@@ -46,6 +46,8 @@ public class OverlayProperty extends OverlayNode {
     private Integer minOccurs = new Integer(0);
     private Integer maxOccurs = new Integer(-1);
 
+    private boolean required;
+
     public OverlayProperty(OverlayType overlayType,
                            String packageName,
                            String nameSpace,
@@ -66,6 +68,7 @@ public class OverlayProperty extends OverlayNode {
         newProperty.setBaseClass(getBaseClass());
         newProperty.setMinOccurs(getMinOccurs());
         newProperty.setMaxOccurs(getMaxOccurs());
+        newProperty.setRequired(isRequired());
         return newProperty;
     }
 
@@ -152,6 +155,14 @@ public class OverlayProperty extends OverlayNode {
 
     public Integer getMaxOccurs() {
         return maxOccurs;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
     }
 
     public static interface Filter {

@@ -77,9 +77,6 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     @Override
     public void generate(XSAttributeDecl attribute) {
         LOG.debug("Generate overlayclass from attribute type {}", attribute);
-        if ("space".equalsIgnoreCase(attribute.getName())) {
-            System.out.println("stop");
-        }
         OverlayClass overlayClass = new OverlayClass(attribute.getName(), attribute.getTargetNamespace(), OverlayType.Attribute);
         if (attribute.getAnnotation() != null && attribute.getAnnotation().getAnnotation() != null) {
             overlayClass.setComments(attribute.getAnnotation().getAnnotation().toString());
@@ -175,7 +172,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             final Iterator<? extends XSAttributeUse> iterator = declaredAttributeUses.iterator();
             while (iterator.hasNext()) {
                 XSAttributeUse attributeUse = iterator.next();
-                overlayClass.getProperties().add(generateProperty(attributeUse.getDecl()));
+                overlayClass.getProperties().add(generateProperty(attributeUse));
             }
         }
         final Collection<? extends XSAttGroupDecl> attGroups = attrGroup.getAttGroups();
@@ -338,10 +335,11 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     /**
      * Generate {@link OverlayProperty} property from xsd attribute component
      *
-     * @param attributeDecl The xsd attribute processed
+     * @param attributeUse The xsd attribute processed
      * @return An overlay property based on the given xsd attribute
      */
-    private OverlayProperty generateProperty(XSAttributeDecl attributeDecl) {
+    private OverlayProperty generateProperty(XSAttributeUse attributeUse) {
+        final XSAttributeDecl attributeDecl = attributeUse.getDecl();
         String className = attributeDecl.getType().isLocal() ?
                 attributeDecl.getType().getBaseType().getName() : attributeDecl.getType().getName();
         String nameSpace = attributeDecl.getType().isLocal() ?
@@ -350,6 +348,8 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 nameSpace,
                 className + OverlayType.SimpleType,
                 attributeDecl.getName(), false, true);
+
+        property.setRequired(attributeUse.isRequired());
 
         if (attributeDecl.getAnnotation() != null && attributeDecl.getAnnotation().getAnnotation() != null) {
             property.setComments(attributeDecl.getAnnotation().getAnnotation().toString());
@@ -389,7 +389,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             final Iterator<? extends XSAttributeUse> iterator = declaredAttributeUses.iterator();
             while (iterator.hasNext()) {
                 XSAttributeUse attributeUse = iterator.next();
-                properties.add(generateProperty(attributeUse.getDecl()));
+                properties.add(generateProperty(attributeUse));
             }
         }
 

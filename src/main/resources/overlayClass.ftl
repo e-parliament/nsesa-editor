@@ -68,6 +68,23 @@ public ${overlayClass.className?cap_first}() {
 super(create());
 setType("${overlayClass.className}");
 }
+
+<#assign requiredConstructor = false>
+<#list overlayClass.allAttributesProperties as prop>
+<#if prop.required><#assign requiredConstructor = true></#if>
+</#list>
+<#if requiredConstructor>
+//Constructor with the required attributes
+public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
+this();
+    <#list overlayClass.allAttributesProperties as property>
+        <#if property.required>
+set<@propertyNameCap property = property/>(<@propertyName property = property/>);
+        </#if>
+    </#list>
+}
+</#if>
+
 </#if>
 
 <#if overlayClass.complex || overlayClass.element>
