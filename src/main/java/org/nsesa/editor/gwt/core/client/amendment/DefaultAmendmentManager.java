@@ -55,10 +55,6 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentManager.class.getName());
 
-    private final ServiceFactory serviceFactory;
-
-    private final ClientFactory clientFactory;
-
     private final Transformer transformer;
 
     private final DocumentEventBus documentEventBus;
@@ -73,22 +69,21 @@ public class DefaultAmendmentManager implements AmendmentManager {
     private final AmendmentInjectionPointProvider injectionPointProvider;
 
     @Inject
-    public DefaultAmendmentManager(final ClientFactory clientFactory,
-                                   final ServiceFactory serviceFactory,
-                                   final Transformer transformer,
+    public DefaultAmendmentManager(final Transformer transformer,
                                    final DocumentEventBus documentEventBus,
                                    final AmendmentInjectionPointFinder injectionPointFinder,
                                    final AmendmentInjectionPointProvider injectionPointProvider) {
-        this.clientFactory = clientFactory;
-        this.serviceFactory = serviceFactory;
         this.transformer = transformer;
         this.documentEventBus = documentEventBus;
         this.injectionPointFinder = injectionPointFinder;
         this.injectionPointProvider = injectionPointProvider;
-        registerListeners();
     }
 
     private void registerListeners() {
+
+        final ServiceFactory serviceFactory = documentController.getServiceFactory();
+        final ClientFactory clientFactory = documentController.getClientFactory();
+
         documentEventBus.addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerSaveEvent event) {
@@ -278,5 +273,6 @@ public class DefaultAmendmentManager implements AmendmentManager {
     @Override
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
+        registerListeners();
     }
 }

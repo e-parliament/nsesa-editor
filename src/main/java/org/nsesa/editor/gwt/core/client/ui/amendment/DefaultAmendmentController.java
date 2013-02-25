@@ -47,8 +47,6 @@ public class DefaultAmendmentController implements AmendmentController {
 
     protected final AmendmentView extendedView;
 
-    protected final ClientFactory clientFactory;
-
     protected AmendmentContainerDTO amendment;
 
     /**
@@ -66,13 +64,10 @@ public class DefaultAmendmentController implements AmendmentController {
     protected DocumentController documentController;
 
     @Inject
-    public DefaultAmendmentController(final ClientFactory clientFactory,
-                                      final AmendmentView amendmentView,
+    public DefaultAmendmentController(final AmendmentView amendmentView,
                                       final AmendmentView amendmentExtendedView) {
-        this.clientFactory = clientFactory;
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
-        registerListeners();
     }
 
     private void registerListeners() {
@@ -91,6 +86,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         };
 
+        final ClientFactory clientFactory = documentController.getClientFactory();
         final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
                 clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
                 clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
@@ -216,6 +212,7 @@ public class DefaultAmendmentController implements AmendmentController {
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
         if (documentController != null) {
+            registerListeners();
             this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
             this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
                 @Override

@@ -20,7 +20,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -51,8 +50,6 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
 
     private final DocumentEventBus documentEventBus;
 
-    private final ClientFactory clientFactory;
-
     @UiField
     HorizontalPanel horizontalPanel;
 
@@ -72,7 +69,6 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
 
     @Inject
     public SourceFileViewImpl(final DocumentEventBus documentEventBus,
-                              final ClientFactory clientFactory,
                               final AmendmentsPanelController amendmentsPanelController,
                               final InfoPanelController infoPanelController,
                               final ContentController contentController,
@@ -84,7 +80,6 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
     ) {
 
         this.documentEventBus = documentEventBus;
-        this.clientFactory = clientFactory;
         this.contentView = contentController.getView();
         this.markerView = markerController.getView();
         this.sourceFileHeaderView = sourceFileHeaderController.getView();

@@ -53,6 +53,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPanelView, ProvidesResize {
 
     private DocumentEventBus documentEventBus;
+
     private static final int SCROLLBAR_OFFSET = 125;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {

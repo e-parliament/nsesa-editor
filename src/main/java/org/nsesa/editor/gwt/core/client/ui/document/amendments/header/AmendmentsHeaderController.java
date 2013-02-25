@@ -30,15 +30,16 @@ import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectionActionEvent;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectionEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,25 +59,15 @@ public class AmendmentsHeaderController {
 
     private final AmendmentsHeaderView view;
     private DocumentEventBus documentEventBus;
-    private final ClientFactory clientFactory;
-    private final ServiceFactory serviceFactory;
+    private DocumentController documentController;
     private final InlineHTML selectedAmount = new InlineHTML();
 
     @Inject
     public AmendmentsHeaderController(final AmendmentsHeaderView view,
-                                      final ClientFactory clientFactory,
-                                      final ServiceFactory serviceFactory,
                                       final DocumentEventBus documentEventBus
     ) {
         this.view = view;
         this.documentEventBus = documentEventBus;
-        this.clientFactory = clientFactory;
-        this.serviceFactory = serviceFactory;
-        registerListeners();
-        // register the selections
-        registerSelections();
-        // register the actions
-        registerActions();
     }
 
     public AmendmentsHeaderView getView() {
@@ -84,6 +75,10 @@ public class AmendmentsHeaderController {
     }
 
     protected void registerActions() {
+
+        final ClientFactory clientFactory = documentController.getClientFactory();
+        final ServiceFactory serviceFactory = documentController.getServiceFactory();
+
         final Button tableButton = new Button(clientFactory.getCoreMessages().amendmentActionTable());
         tableButton.addClickHandler(new ClickHandler() {
             @Override
@@ -200,6 +195,8 @@ public class AmendmentsHeaderController {
 
 
     protected void registerSelections() {
+        final ClientFactory clientFactory = documentController.getClientFactory();
+
         final Anchor selectAll = new Anchor("All");
         selectAll.addClickHandler(new ClickHandler() {
             @Override
@@ -277,5 +274,14 @@ public class AmendmentsHeaderController {
                 selectedAmount.setHTML("&nbsp;&nbsp;" + event.getSelected().size() + " amendments selected.");
             }
         });
+    }
+
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
+        registerListeners();
+        // register the selections
+        registerSelections();
+        // register the actions
+        registerActions();
     }
 }

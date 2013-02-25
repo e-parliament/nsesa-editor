@@ -19,24 +19,22 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
-import org.nsesa.editor.gwt.core.client.util.Counter;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +51,6 @@ import java.util.logging.Logger;
 public class SourceFileController implements OverlayWidgetUIListener, OverlayWidgetWalker {
 
     private static final Logger LOG = Logger.getLogger(SourceFileController.class.getName());
-
-    protected final ClientFactory clientFactory;
-    protected final ServiceFactory serviceFactory;
 
     protected final DocumentEventBus documentEventBus;
 
@@ -74,13 +69,10 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     protected OverlayWidget activeOverlayWidget;
 
     @Inject
-    public SourceFileController(ClientFactory clientFactory, ServiceFactory serviceFactory,
-                                DocumentEventBus documentEventBus, MarkerController markerController,
+    public SourceFileController(DocumentEventBus documentEventBus, MarkerController markerController,
                                 SourceFileHeaderController sourceFileHeaderController,
                                 SourceFileView sourceFileView,
                                 ContentController contentController, ActionBarController actionBarController) {
-        this.clientFactory = clientFactory;
-        this.serviceFactory = serviceFactory;
         this.view = sourceFileView;
         this.documentEventBus = documentEventBus;
         this.markerController = markerController;
@@ -158,7 +150,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     @Override
     public void onClick(OverlayWidget sender) {
         //        printDetails(sender);
-        clientFactory.getEventBus().fireEvent(new AmendableWidgetSelectEvent(sender, documentController));
+        documentEventBus.fireEvent(new AmendableWidgetSelectEvent(sender, documentController));
     }
 
     private void printDetails(final OverlayWidget overlayWidget) {

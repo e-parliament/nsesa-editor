@@ -54,7 +54,6 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     private static final Logger LOG = Logger.getLogger(DocumentViewImpl.class.getName());
 
     private final DocumentEventBus documentEventBus;
-    private final ClientFactory clientFactory;
     private final org.nsesa.editor.gwt.core.client.ui.document.resources.Resources resources;
 
     @UiField
@@ -88,7 +87,6 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     @Inject
     public DocumentViewImpl(final DocumentEventBus documentEventBus,
-                            final ClientFactory clientFactory,
                             final AmendmentsPanelController amendmentsPanelController,
                             final InfoPanelController infoPanelController,
                             final SourceFileController sourceFileController,
@@ -96,7 +94,6 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     ) {
 
         this.documentEventBus = documentEventBus;
-        this.clientFactory = clientFactory;
         this.amendmentsPanelView = amendmentsPanelController.getView();
         this.sourceFileView = sourceFileController.getView();
         this.infoPanelView = infoPanelController.getView();

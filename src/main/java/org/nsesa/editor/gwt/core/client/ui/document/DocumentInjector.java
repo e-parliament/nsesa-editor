@@ -15,12 +15,13 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import org.nsesa.editor.gwt.core.client.CoreModule;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
+import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -35,7 +36,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerCont
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@GinModules({DocumentModule.class, CoreModule.class})
+@GinModules({DocumentModule.class})
 public interface DocumentInjector extends Ginjector {
 
     DocumentView getDocumentView();
@@ -67,4 +68,8 @@ public interface DocumentInjector extends Ginjector {
     AmendmentManager getAmendmentManager();
 
     AmendmentController getAmendmentController();
+
+    AmendmentsHeaderController getAmendmentsHeaderController();
+
+    DiffingManager getDiffingManager();
 }

@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -36,22 +37,20 @@ public class DefaultDiffingManager implements DiffingManager {
 
     private static final Logger LOG = Logger.getLogger(DefaultDiffingManager.class.getName());
 
-    protected final ServiceFactory serviceFactory;
-
-    protected final ClientFactory clientFactory;
-
+    protected DocumentController documentController;
     protected final DocumentEventBus documentEventBus;
 
     @Inject
-    public DefaultDiffingManager(final ServiceFactory serviceFactory,
-                                 final ClientFactory clientFactory,
-                                 final DocumentEventBus documentEventBus) {
-        this.serviceFactory = serviceFactory;
-        this.clientFactory = clientFactory;
+    public DefaultDiffingManager(final DocumentEventBus documentEventBus) {
         this.documentEventBus = documentEventBus;
     }
 
     public void diff(final DiffMethod method, final AmendmentController... amendmentControllers) {
         // default is to not do any diffing at all ..
+    }
+
+    @Override
+    public void setDocumentController(DocumentController documentController) {
+        this.documentController = documentController;
     }
 }

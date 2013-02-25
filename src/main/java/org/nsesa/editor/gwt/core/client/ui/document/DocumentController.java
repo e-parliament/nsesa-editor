@@ -32,6 +32,7 @@ import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
+import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -89,6 +90,9 @@ public class DocumentController {
     protected final SourceFileController sourceFileController;
 
     @Scope(DOCUMENT)
+    protected final AmendmentsHeaderController amendmentsHeaderController;
+
+    @Scope(DOCUMENT)
     protected final DocumentEventBus documentEventBus;
 
     @Scope(DOCUMENT)
@@ -104,7 +108,6 @@ public class DocumentController {
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
                               final OverlayFactory overlayFactory,
-                              final DiffingManager diffingManager,
                               final Locator locator,
                               final Creator creator) {
 
@@ -114,7 +117,6 @@ public class DocumentController {
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
-        this.diffingManager = diffingManager;
         final DocumentInjector documentInjector = getInjector();
         if (documentInjector == null)
             throw new UnsupportedOperationException("getInjector() returned null. Cannot continue.");
@@ -125,18 +127,22 @@ public class DocumentController {
         this.style = documentInjector.getDocumentViewCss();
         this.amendmentsPanelController = documentInjector.getAmendmentsPanelController();
 
+        this.diffingManager = documentInjector.getDiffingManager();
         this.infoPanelController = documentInjector.getInfoPanelController();
         this.sourceFileController = documentInjector.getSourceFileController();
         this.documentHeaderController = documentInjector.getDocumentHeaderController();
         this.deadlineController = documentInjector.getDeadlineController();
+        this.amendmentsHeaderController = documentInjector.getAmendmentsHeaderController();
 
         // set references in the child controllers
+        this.diffingManager.setDocumentController(this);
         this.amendmentManager.setDocumentController(this);
         this.infoPanelController.setDocumentController(this);
         this.sourceFileController.setDocumentController(this);
         this.amendmentsPanelController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
         this.deadlineController.setDocumentController(this);
+        this.amendmentsHeaderController.setDocumentController(this);
 
         registerListeners();
         registerModes();
@@ -555,6 +561,14 @@ public class DocumentController {
 
     public Locator getLocator() {
         return locator;
+    }
+
+    public ClientFactory getClientFactory() {
+        return clientFactory;
+    }
+
+    public ServiceFactory getServiceFactory() {
+        return serviceFactory;
     }
 
     public DocumentEventBus getDocumentEventBus() {

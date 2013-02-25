@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 
 import java.util.logging.Logger;
@@ -35,14 +34,14 @@ public class DefaultOverlayFactory implements OverlayFactory {
     private static final Logger LOG = Logger.getLogger(DefaultOverlayFactory.class.getName());
 
     protected final OverlayStrategy overlayStrategy;
-    protected final ClientFactory clientFactory;
+    protected final Scheduler scheduler;
 
     private Counter elementCounter;
 
     @Inject
-    public DefaultOverlayFactory(final OverlayStrategy overlayStrategy, final ClientFactory clientFactory) {
+    public DefaultOverlayFactory(final OverlayStrategy overlayStrategy) {
         this.overlayStrategy = overlayStrategy;
-        this.clientFactory = clientFactory;
+        this.scheduler = Scheduler.get();
     }
 
     @Override
@@ -78,7 +77,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
             elementCounter.increment();
             if (elementCounter.get() % 1000 == 0) {
                 LOG.info("--> overlay process splitting at " + elementCounter.get() + " for " + overlayWidget + " with parent " + parent);
-                clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
                     @Override
                     public void execute() {
                         setProperties(parent, overlayWidget, element, depth);

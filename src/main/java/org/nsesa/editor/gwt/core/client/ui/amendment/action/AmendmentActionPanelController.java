@@ -26,9 +26,9 @@ import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,9 +46,6 @@ public class AmendmentActionPanelController {
 
     protected final AmendmentActionPanelView view;
 
-    protected final ClientFactory clientFactory;
-    protected final ServiceFactory serviceFactory;
-
     // parent amendment controller
     protected AmendmentController amendmentController;
 
@@ -61,29 +58,27 @@ public class AmendmentActionPanelController {
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
 
     @Inject
-    public AmendmentActionPanelController(final ClientFactory clientFactory,
-                                          final ServiceFactory serviceFactory,
-                                          final AmendmentActionPanelView amendmentActionPanelView) {
-        this.clientFactory = clientFactory;
-        this.serviceFactory = serviceFactory;
+    public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView) {
         this.view = amendmentActionPanelView;
         this.popupPanel.setWidget(amendmentActionPanelView);
-
-        // set the correct anchor labels
-        anchorTable.setText(clientFactory.getCoreMessages().amendmentActionTable());
-        anchorWithdraw.setText(clientFactory.getCoreMessages().amendmentActionWithdraw());
-        anchorDelete.setText(clientFactory.getCoreMessages().amendmentActionDelete());
 
         // create operations on the amendment
         addWidget(anchorTable);
         addWidget(anchorWithdraw);
         addSeparator();
         addWidget(anchorDelete);
-
-        registerListeners();
     }
 
     private void registerListeners() {
+
+        final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+        final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
+
+        // set the correct anchor labels
+        anchorTable.setText(clientFactory.getCoreMessages().amendmentActionTable());
+        anchorWithdraw.setText(clientFactory.getCoreMessages().amendmentActionWithdraw());
+        anchorDelete.setText(clientFactory.getCoreMessages().amendmentActionDelete());
+
         anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -197,5 +192,6 @@ public class AmendmentActionPanelController {
 
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
+        registerListeners();
     }
 }

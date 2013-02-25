@@ -44,20 +44,16 @@ public class DeadlineController {
 
     private final DocumentEventBus documentEventBus;
 
-    private final CoreMessages coreMessages;
-
     private Date deadline;
 
     @Inject
     public DeadlineController(final DocumentEventBus documentEventBus,
                               final DeadlineTracker deadlineTracker,
-                              final DeadlineView view,
-                              final CoreMessages coreMessages) {
+                              final DeadlineView view) {
         this.documentEventBus = documentEventBus;
         this.deadlineTracker = deadlineTracker;
         this.deadlineTracker.setDeadlineController(this);
         this.view = view;
-        this.coreMessages = coreMessages;
 
         registerListeners();
     }
@@ -108,6 +104,7 @@ public class DeadlineController {
         final Date oneDayBefore = new Date(midnight.getTime() - (24 * 60 * 60 * 1000));
         final Date oneHourBefore = new Date(deadline.getTime() - (60 * 60 * 1000));
 
+        final CoreMessages coreMessages = documentController.getClientFactory().getCoreMessages();
         // check if we already passed the deadline
         if (now.after(deadline)) {
             // already passed

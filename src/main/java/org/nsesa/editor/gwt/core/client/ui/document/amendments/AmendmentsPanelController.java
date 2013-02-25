@@ -73,7 +73,6 @@ public class AmendmentsPanelController {
     }
 
     private void registerListeners() {
-        //EventBus eventBus = clientFactory.getEventBus();
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {

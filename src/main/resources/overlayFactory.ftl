@@ -39,8 +39,8 @@ private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first
 private final String namespace = "${overlayClass.nameSpace}";
 
 @Inject
-public ${overlayClass.name?cap_first}(final OverlayStrategy overlayStrategy, final ClientFactory clientFactory) {
-super(overlayStrategy, clientFactory);
+public ${overlayClass.name?cap_first}(final OverlayStrategy overlayStrategy) {
+super(overlayStrategy);
 }
 @Override
 public String getNamespace() {
