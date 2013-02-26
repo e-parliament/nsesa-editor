@@ -14,6 +14,8 @@
 package org.nsesa.editor.gwt.core.client.util;
 
 /**
+ * A simple counter class implementation to work around the ugliness when dealing with anonymous inner classes
+ * when doing visitor-based tree walking (so we can make the instance final).
  * Date: 03/12/12 11:06
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

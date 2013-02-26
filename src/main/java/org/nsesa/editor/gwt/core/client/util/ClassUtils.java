@@ -14,12 +14,22 @@
 package org.nsesa.editor.gwt.core.client.util;
 
 /**
+ * Utility class to deal with {@link Class}es.
  * Date: 20/11/12 11:12
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ClassUtils {
+
+    /**
+     * Check if a given class <tt>impl</tt> is a subclass of a given <tt>superclass</tt>.
+     * <p/>
+     * <strong>Note that this does NOT work for interfaces due to limitations in the GWT emulation.</strong>
+     * @param superClass    the superclass to check against.
+     * @param impl          the implementation to check.
+     * @return true if the class <tt>impl</tt> is a subclass of the given class <tt>superclass</tt>
+     */
     public static boolean isAssignableFrom(Class<?> superClass, Class<?> impl) {
         if (impl == null) {
             return false;
@@ -44,12 +54,14 @@ public class ClassUtils {
     }
 
     private static boolean validateSuperClassOrInterface(Class<?> superClass, Class<?> currentSuperClass) {
+        // walk up the class hierarchy until we find a superclass that has the same name
         while (currentSuperClass != null) {
             if (currentSuperClass.equals(superClass)) {
                 return true;
             }
             currentSuperClass = currentSuperClass.getSuperclass();
         }
+        // we never found one, so nope
         return false;
     }
 }
