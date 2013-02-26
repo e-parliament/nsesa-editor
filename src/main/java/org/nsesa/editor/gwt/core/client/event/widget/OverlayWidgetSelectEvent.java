@@ -18,30 +18,31 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * An event indicating a selection of an {@link OverlayWidget}.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AmendableWidgetSelectEvent extends GwtEvent<AmendableWidgetSelectEventHandler> {
+public class OverlayWidgetSelectEvent extends GwtEvent<OverlayWidgetSelectEventHandler> {
 
-    public static final Type<AmendableWidgetSelectEventHandler> TYPE = new Type<AmendableWidgetSelectEventHandler>();
+    public static final Type<OverlayWidgetSelectEventHandler> TYPE = new Type<OverlayWidgetSelectEventHandler>();
 
     private final OverlayWidget overlayWidget;
     private final DocumentController documentController;
 
-    public AmendableWidgetSelectEvent(OverlayWidget overlayWidget, DocumentController documentController) {
+    public OverlayWidgetSelectEvent(OverlayWidget overlayWidget, DocumentController documentController) {
         this.overlayWidget = overlayWidget;
         this.documentController = documentController;
     }
 
     @Override
-    public Type<AmendableWidgetSelectEventHandler> getAssociatedType() {
+    public Type<OverlayWidgetSelectEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(AmendableWidgetSelectEventHandler handler) {
+    protected void dispatch(OverlayWidgetSelectEventHandler handler) {
         handler.onEvent(this);
     }
 
