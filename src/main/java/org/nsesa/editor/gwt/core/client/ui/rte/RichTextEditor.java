@@ -73,4 +73,11 @@ public interface RichTextEditor extends IsWidget {
      * @param toggled
      */
     void toggleDraftingAttributes(boolean toggled);
+
+    /**
+     * Resize the editor
+     * @param width The width
+     * @param height The height
+     */
+    void resize(String width, String height);
 }

@@ -53,6 +53,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     // the holder for attributes
     private FlowPanel attributesHolderPanel = new FlowPanel();
 
+    private int height;
 
     public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config, boolean showDraftingTool) {
         this.plugin = plugin;
@@ -80,8 +81,8 @@ public class CKEditor extends Composite implements RichTextEditor {
             if (plugin != null) {
                 plugin.export(config);
             }
-
-            config.setHeight(textArea.getOffsetHeight() + (config.isReadOnly() ? -21 : -55));
+            this.height = textArea.getOffsetHeight() + (config.isReadOnly() ? -21 : -55);
+            config.setHeight(this.height);
 
             editorInstance = getEditor(config.getConfiguration(), this.id, temporaryContent);
             if (editorInstance == null) {
@@ -111,13 +112,16 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     @Override
     public void toggleDraftingTool(boolean toggled) {
-        if (showDraftingTool) {
-            mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
-        }
-        if (toggled) {
-            addBodyClassName(editorInstance, config.getDraftingClassName());
-        } else {
-            removeBodyClassName(editorInstance, config.getDraftingClassName());
+        //toggle the view when the editor is attached to DOM
+        if (isAttached()) {
+            if (showDraftingTool) {
+                mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+            }
+            if (toggled) {
+                addBodyClassName(editorInstance, config.getDraftingClassName());
+            } else {
+                removeBodyClassName(editorInstance, config.getDraftingClassName());
+            }
         }
     }
 
@@ -134,10 +138,18 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     @Override
     public void toggleDraftingAttributes(boolean toggled) {
-        if (showDraftingTool) {
-            mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
-            resize(editorInstance, toggled ? 300 : 420);
+        //toggle the view when the editor is attached to DOM
+        if (isAttached()) {
+            if (showDraftingTool) {
+                mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
+                resize("100%", (toggled ? (height - 100) + "" : height +""));
+            }
         }
+    }
+
+    @Override
+    public void resize(String width, String height) {
+        resize(editorInstance, width, height);
     }
 
     public native void destroy(JavaScriptObject editorInstance) /*-{
@@ -160,15 +172,10 @@ public class CKEditor extends Composite implements RichTextEditor {
         }
     }-*/;
 
-    private native void resize(JavaScriptObject editorInstance, int height) /*-{
-        if (editorInstance) {
-            try {
-//                alert(editorInstance.config.height);
-                editorInstance.resize('100%', height);
-            } catch(err) {
-                //ugly way to prevent an annoying exception when editor is initialized
-            }
-        }
+    private native void resize(JavaScriptObject editorInstance, String width, String height) /*-{
+        try{
+            editorInstance.resize(width, height, true);
+        } catch(e){}
     }-*/;
 
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{
@@ -213,6 +220,9 @@ public class CKEditor extends Composite implements RichTextEditor {
     protected void onDetach() {
         super.onDetach();
         destroy();
+        if (showDraftingTool) {
+            mainPanel.setWidgetSize(attributesHolderPanel, 0);
+        }
     }
 
     @Override

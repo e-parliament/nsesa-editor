@@ -21,8 +21,6 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelView;
 
 /**
  * Date: 24/06/12 21:44
@@ -98,9 +96,7 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     @Override
     protected void onAttach() {
         super.onAttach();
-        //newText.toggleDraftingTool(true);
         newText.executeCommand("NsesaToggle", 500);
-        newText.executeCommand("NsesaToggleAttributes", 500);
         selectTab(0);
     }
 
