@@ -80,8 +80,9 @@ public class CKEditorDraftingAttributesPlugin implements RichTextEditorPlugin {
         // save the state before executing source command
         editor.on('beforeCommandExec', function (evt) {
             if (evt.data.name == 'source' && evt.editor.mode == 'wysiwyg') {
-                if (editor.getCommand(buttonName))
+                if (editor.getCommand(buttonName)) {
                     plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingAttributesPlugin::previousState = editor.getCommand(buttonName).state;
+                }
             }
         });
 
@@ -91,7 +92,7 @@ public class CKEditorDraftingAttributesPlugin implements RichTextEditorPlugin {
                     var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingAttributesPlugin::previousState;
                     if (state >= 0) {
                         editor.getCommand(buttonName).setState(state);
-                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingAttributesPlugin::fireEvent(Z)(true);
+                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingAttributesPlugin::fireEvent(Z)(state == 1);
                     }
                 }
             } else {

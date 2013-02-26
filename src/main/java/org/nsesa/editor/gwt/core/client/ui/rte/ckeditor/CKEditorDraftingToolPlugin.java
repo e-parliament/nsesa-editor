@@ -91,7 +91,7 @@ public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
                     var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::previousState;
                     if (state >= 0) {
                         editor.getCommand('NsesaToggle').setState(state);
-                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::fireEvent(Z)(true);
+                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::fireEvent(Z)(state == 1);
                     }
                 }
             } else {
