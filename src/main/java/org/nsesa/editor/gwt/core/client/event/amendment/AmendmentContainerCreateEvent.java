@@ -19,6 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * Event for indicating a request to create a new amendment in the UI.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

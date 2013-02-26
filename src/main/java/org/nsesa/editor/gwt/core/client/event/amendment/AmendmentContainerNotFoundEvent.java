@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
+ * An (unused) event indicating that an amendment container could not be found.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

@@ -18,6 +18,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
 /**
+ * An event indicating a request to perform a diffing on a set of amendment controllers.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

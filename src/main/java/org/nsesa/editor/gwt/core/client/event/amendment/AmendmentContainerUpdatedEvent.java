@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
+ * An event indicating that an amendment controller has been updated and replaced by a new revision.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

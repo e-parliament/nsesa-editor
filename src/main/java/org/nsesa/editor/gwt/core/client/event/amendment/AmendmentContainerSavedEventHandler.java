@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.event.amendment;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
+ * Handler interface for the {@link AmendmentContainerSavedEvent}.
  * Date: 24/06/12 18:15
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

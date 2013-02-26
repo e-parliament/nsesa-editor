@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 /**
+ * An event indicating a request to save an amendment container to the backend.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

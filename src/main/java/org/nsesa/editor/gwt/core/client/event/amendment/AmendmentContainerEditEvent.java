@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
+ * A request to edit a given amendment controller.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

@@ -17,6 +17,8 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
+ * An event indicating that an amendment was not injected into a document controller (because its element could not
+ * be found or provided, or because its language was not matching).
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
