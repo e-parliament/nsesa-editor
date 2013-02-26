@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.validation;
 
 /**
+ * Default implementation of the {@link ValidationResult}.
  * Date: 19/02/13 13:50
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.validation;
 
 /**
+ * A interface for a result of a validation done by a {@link Validator}.
  * Date: 19/02/13 13:45
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -27,5 +28,9 @@ public interface ValidationResult {
      */
     boolean isSuccessful();
 
+    /**
+     * If the validation was not successful, retrieve the error message.
+     * @return the error message, or <tt>null</tt> if no error message was given.
+     */
     String getErrorMessage();
 }

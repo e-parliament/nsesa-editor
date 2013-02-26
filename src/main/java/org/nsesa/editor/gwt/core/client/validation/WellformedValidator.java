@@ -17,19 +17,25 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 
 /**
+ * A simple validator to check if the passed String containing serialized XML is well-formed.
  * Date: 19/02/13 13:56
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class WellformedValidator implements Validator<String> {
+    /**
+     * Validate that the given serialized XML content is well-formed by using {@link XMLParser#parse(String)}.
+     * @param input the input document as serialized XML
+     * @return the validation result
+     */
     @Override
     public ValidationResult validate(final String input) {
         try {
             final Document document = XMLParser.parse(input);
         } catch (Exception e) {
-            return new ValidationResultImpl(false, "Not wellformed " + e.getMessage());
+            return new ValidationResultImpl(false, "Not well-formed " + e.getMessage());
         }
-        return new ValidationResultImpl(true, "Well formed.");
+        return new ValidationResultImpl(true, null);
     }
 }

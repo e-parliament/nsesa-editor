@@ -21,12 +21,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
+ * A more complex validation of a given overlay widget. Allows for validation of leaves and branches of a tree.
+ * This validation currently check the given min/max occurrences of both the children and the current overlay widget.
  * Date: 19/02/13 14:03
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayWidgetValidator implements Validator<OverlayWidget> {
+
+    /**
+     * Validate a given {@link OverlayWidget} <tt>toValidate</tt> for the min/max occurrences.
+     * @param toValidate the instance to validate
+     * @return the validation result
+     */
     @Override
     public ValidationResult validate(final OverlayWidget toValidate) {
 
@@ -88,6 +96,6 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
                 return true;
             }
         });
-        return validationResults[0] != null ? validationResults[0] : new ValidationResultImpl(true, "All ok.");
+        return validationResults[0] != null ? validationResults[0] : new ValidationResultImpl(true, null);
     }
 }
