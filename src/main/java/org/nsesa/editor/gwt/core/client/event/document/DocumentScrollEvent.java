@@ -17,6 +17,8 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * An event indicating that a document controller's {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController}
+ * has been scrolled.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
