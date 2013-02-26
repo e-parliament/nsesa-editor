@@ -18,6 +18,8 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * An interface expressing the capability to inject one or more {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}s.
+ *
  * Date: 07/07/12 23:21
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,7 +27,18 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  */
 public interface AmendmentInjectionCapable {
 
+    /**
+     * Requests an injection on a given <tt>root</tt> for a given <tt>documentController</tt>.
+     * @param root                  the root overlay widget node
+     * @param documentController    the containing document controller
+     */
     void inject(OverlayWidget root, DocumentController documentController);
 
+    /**
+     * Requests the injection of a given amendment container object in to a given <tt>root</tt> overlay widget node.
+     * @param amendment             the amendment to inject
+     * @param root                  the root overlay widget node
+     * @param documentController    the containing document controller
+     */
     void injectSingleAmendment(AmendmentContainerDTO amendment, OverlayWidget root, DocumentController documentController);
 }

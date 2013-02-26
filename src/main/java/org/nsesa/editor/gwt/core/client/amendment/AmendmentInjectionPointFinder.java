@@ -26,6 +26,8 @@ import java.util.List;
  * to actually give the correct amendable widget to add the amendment to, which might be different from the amendable
  * widget the amendment applies to (for example, in the case of a new element).
  * <p/>
+ * At the same time, this allows us to get the expression to find a unique {@link OverlayWidget} in the tree.
+ *
  * Date: 30/11/12 11:10
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -33,7 +35,24 @@ import java.util.List;
  */
 @ImplementedBy(DefaultAmendmentInjectionPointFinder.class)
 public interface AmendmentInjectionPointFinder {
+
+    /**
+     * Finds the injection points where an <tt>amendmentController</tt> would need to be injected in. Note that we do
+     * not actually inject the amendment.
+     * @param amendmentController   the amendment controller to find the injection points for
+     * @param root                  the root overlay widget node
+     * @param documentController    the containing document controller
+     * @return the list of {@link OverlayWidget}s where to which the amendment controller applies, and should be
+     * injected in.
+     */
     List<OverlayWidget> findInjectionPoints(AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController);
 
+    /**
+     * Returns an expression that can be used to uniquely identify the given <tt>overlayWidget</tt> within its tree
+     * (note that the overlay widget is inherently part of a tree). The expression can then subsequently be used
+     * by passing it to {@link org.nsesa.editor.gwt.core.client.util.OverlayUtil}.
+     * @param overlayWidget the overlay widget to find the position expression for
+     * @return  the expression that can be used to find this <tt>overlayWidget</tt>
+     */
     String getInjectionPoint(OverlayWidget overlayWidget);
 }

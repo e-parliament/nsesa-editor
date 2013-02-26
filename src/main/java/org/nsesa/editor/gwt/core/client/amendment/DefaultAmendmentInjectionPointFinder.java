@@ -19,9 +19,12 @@ import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * The default implementation of the {@link AmendmentInjectionPointFinder}. Capable of doing simple lookups based on
+ * the {@link OverlayUtil} expression support.
  * Date: 30/11/12 11:31
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -31,15 +34,33 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointFinder.class.getName());
 
+    /**
+     * Finds injection points for amendments based on the {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getSourceReference()}.
+     *
+     * @param amendmentController   the amendment controller to find the injection points for
+     * @param root                  the root overlay widget node
+     * @param documentController    the containing document controller
+     * @return  the list of injection points (that is, overlay widgets which should get the amendment controller)
+     */
     @Override
     public List<OverlayWidget> findInjectionPoints(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         final String path = amendmentController.getModel().getSourceReference().getPath();
-        LOG.info("Trying to find nodes matching " + path);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("Trying to find nodes matching '" + path + "'");
+        }
         final List<OverlayWidget> overlayWidgets = OverlayUtil.xpath(path, root);
-        LOG.info("Found nodes " + overlayWidgets);
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("Found nodes " + overlayWidgets);
+        }
         return overlayWidgets;
     }
 
+    /**
+     * Get the injection point expression for a given <tt>overlayWidget</tt>. This expression uniquely identifies the
+     * position within its own branch up to the root.
+     * @param overlayWidget the overlay widget to find the position expression for
+     * @return the injection point expression (xpath like).
+     */
     @Override
     public String getInjectionPoint(final OverlayWidget overlayWidget) {
         if (overlayWidget.getId() != null && !"".equals(overlayWidget.getId())) {

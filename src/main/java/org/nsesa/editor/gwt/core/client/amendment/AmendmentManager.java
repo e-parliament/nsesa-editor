@@ -15,14 +15,18 @@ package org.nsesa.editor.gwt.core.client.amendment;
 
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import java.util.List;
 
 /**
+ * The {@link AmendmentManager} is responsible for keeping a single copy of the amendments that are available in the
+ * application, so that other components can request (a subset of) the amendments. It is responsible for the
+ * translation from {@link AmendmentContainerDTO}s into {@link AmendmentController}s.
+ * <p/>
  * Date: 09/01/13 17:16
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,11 +34,33 @@ import java.util.List;
  */
 @ImplementedBy(DefaultAmendmentManager.class)
 public interface AmendmentManager extends AmendmentInjectionCapable {
+
+    /**
+     * Sets a list of available amendment container DTOs.
+     *
+     * @param amendmentContainerDTOs the amendment container DTOs.
+     */
     void setAmendmentContainerDTOs(AmendmentContainerDTO[] amendmentContainerDTOs);
 
+    /**
+     * Get the full list of amendment controllers container within this {@link AmendmentManager}.
+     *
+     * @return the full list of amendment controllers.
+     */
     List<AmendmentController> getAmendmentControllers();
 
+    /**
+     * Get (a potential subset of) the amendment controllers that adhere to the specifications in the
+     * given {@link Filter} <tt>filter</tt>.
+     *
+     * @param filter the filter with the specifications
+     * @return the response of the filtering request
+     */
     FilterResponse<AmendmentController> getAmendmentControllers(Filter<AmendmentController> filter);
 
+    /**
+     * Sets the parent {@link DocumentController}.
+     * @param documentController the parent document controller
+     */
     void setDocumentController(DocumentController documentController);
 }
