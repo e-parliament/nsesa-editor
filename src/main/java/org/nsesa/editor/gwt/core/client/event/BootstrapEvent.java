@@ -17,6 +17,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
+ * An event fired when the application is bootstrapped and ready to start building its UI component(s).
  * Date: 24/06/12 18:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

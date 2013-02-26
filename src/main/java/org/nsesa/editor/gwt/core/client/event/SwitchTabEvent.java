@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
+ * An event indicating that the document tab(s) have been requested to change.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
