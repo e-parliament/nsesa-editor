@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.mode;
 
 /**
+ * Represents a state a {@link DocumentMode} can be in.
  * Date: 23/11/12 23:05
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

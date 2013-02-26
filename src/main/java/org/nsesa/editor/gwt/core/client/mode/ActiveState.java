@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.mode;
 
 /**
+ * A simple {@link DocumentState} implementation based on a active flag.
  * Date: 26/11/12 11:52
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -21,8 +22,15 @@ package org.nsesa.editor.gwt.core.client.mode;
  */
 public class ActiveState implements DocumentState {
 
+    /**
+     * The boolean flag to indicate if this state is active or not.
+     */
     boolean active;
 
+    /**
+     * Default constructor.
+     * @param active the active flag; <tt>true</tt> indicates this state is active.
+     */
     public ActiveState(boolean active) {
         this.active = active;
     }
