@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * Default implementation of the {@link DiffingManager}. This manager does <strong>NOT</strong> perform any actual diffing.
  * Date: 08/07/12 13:56
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -35,9 +36,14 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 public class DefaultDiffingManager implements DiffingManager {
 
-    private static final Logger LOG = Logger.getLogger(DefaultDiffingManager.class.getName());
-
+    /**
+     * Reference to the parent document controller.
+     */
     protected DocumentController documentController;
+
+    /**
+     * Reference to the parent document event bus.
+     */
     protected final DocumentEventBus documentEventBus;
 
     @Inject
@@ -45,10 +51,19 @@ public class DefaultDiffingManager implements DiffingManager {
         this.documentEventBus = documentEventBus;
     }
 
+    /**
+     * Default no-diffing.
+     * @param method                the diff method
+     * @param amendmentControllers  the amendment controllers to do the diff-ing on
+     */
     public void diff(final DiffMethod method, final AmendmentController... amendmentControllers) {
         // default is to not do any diffing at all ..
     }
 
+    /**
+     * Sets the parent document controller.
+     * @param documentController the document controller
+     */
     @Override
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
