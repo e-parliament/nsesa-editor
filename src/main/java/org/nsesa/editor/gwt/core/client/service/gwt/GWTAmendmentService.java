@@ -25,6 +25,7 @@ import org.nsesa.editor.gwt.core.shared.exception.ValidationException;
 import java.util.ArrayList;
 
 /**
+ * Service interface for the amendment RPC.
  * Date: 24/06/12 21:05
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

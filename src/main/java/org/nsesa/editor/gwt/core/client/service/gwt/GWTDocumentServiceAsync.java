@@ -20,6 +20,9 @@ import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Async interface of the {@link GWTDocumentService}.
+ */
 public interface GWTDocumentServiceAsync {
     /**
      * Retrieves the meta information about a certain document. This can include things like the author,

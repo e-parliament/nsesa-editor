@@ -17,6 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
+/**
+ * Async interface of the {@link GWTService}.
+ */
 public interface GWTServiceAsync {
 
     /**
@@ -24,5 +27,11 @@ public interface GWTServiceAsync {
      */
     void authenticate(ClientContext clientContext, AsyncCallback<ClientContext> async);
 
+    /**
+     * Get a given {@link PersonDTO} based on a given <tt>id</tt>.
+     * @param clientContext the client context.
+     * @param id            the id of the person
+     * @param async         the callback
+     */
     void getPerson(ClientContext clientContext, String id, AsyncCallback<PersonDTO> async);
 }

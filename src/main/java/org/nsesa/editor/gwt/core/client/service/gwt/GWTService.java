@@ -19,6 +19,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
+ * Service interface for general RPC.
  * Date: 24/06/12 19:58
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -32,5 +33,12 @@ public interface GWTService extends RemoteService {
      */
     ClientContext authenticate(ClientContext clientContext);
 
+    /**
+     * Get a given {@link PersonDTO} based on a given <tt>id</tt>.
+     *
+     * @param clientContext the client context.
+     * @param id            the id of the person
+     * @return the person DTO, or <tt>null</tt> if it cannot be found.
+     */
     PersonDTO getPerson(ClientContext clientContext, String id);
 }

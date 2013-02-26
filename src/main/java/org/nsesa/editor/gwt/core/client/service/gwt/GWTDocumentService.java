@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * Service interface for document related RPC.
  * Date: 24/06/12 21:05
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

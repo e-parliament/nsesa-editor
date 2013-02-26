@@ -20,6 +20,9 @@ import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 import java.util.ArrayList;
 
+/**
+ * Generated async interface of the {@link GWTAmendmentService}.
+ */
 public interface GWTAmendmentServiceAsync {
 
     /**

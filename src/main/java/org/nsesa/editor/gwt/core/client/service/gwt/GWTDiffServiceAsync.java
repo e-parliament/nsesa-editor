@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.shared.DiffResult;
 import java.util.ArrayList;
 
 /**
+ * Async interface for the {@link GWTDiffService}.
  * Date: 24/06/12 21:05
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
