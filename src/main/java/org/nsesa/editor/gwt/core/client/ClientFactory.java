@@ -21,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
+ * A client factory to give access to local core dependencies.
  * Date: 25/06/12 21:54
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -29,15 +30,39 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
 @ImplementedBy(ClientFactoryImpl.class)
 public interface ClientFactory {
 
+    /**
+     * Returns the global event bus.
+     * @return the global event bus.
+     */
     EventBus getEventBus();
 
+    /**
+     * The (unused) place controller to control activities and history state management.
+     * @return the place controller.
+     */
     PlaceController getPlaceController();
 
+    /**
+     * The default scheduler.
+     * @return the default scheduler.
+     */
     Scheduler getScheduler();
 
+    /**
+     * The client context. Gives access to details about the current client and the current environment.
+     * @return the client context.
+     */
     ClientContext getClientContext();
 
+    /**
+     * Sets the client context on the client factory as soon as it has been authenticated.
+     * @param clientContext the (authenticated) client context.
+     */
     void setClientContext(ClientContext clientContext);
 
+    /**
+     * Returns the core messages.
+     * @return the core messages.
+     */
     CoreMessages getCoreMessages();
 }

@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTDocumentServiceAsync;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 
 /**
+ * The {@link ServiceFactory} gives access to RPC services to communicate with the server side.
  * Date: 25/06/12 21:54
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,11 +29,27 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 @ImplementedBy(ServiceFactoryImpl.class)
 public interface ServiceFactory {
 
+    /**
+     * Get a reference to the default GWT RPC service.
+     * @return the default GWT service
+     */
     GWTServiceAsync getGwtService();
 
+    /**
+     * Get a reference to the GWT Diff RPC service.
+     * @return the Diff service
+     */
     GWTDiffServiceAsync getGwtDiffService();
 
+    /**
+     * Get a reference to the GWT Amendment RPC service.
+     * @return the amendment service
+     */
     GWTAmendmentServiceAsync getGwtAmendmentService();
 
+    /**
+     * Get a reference to the GWT document RPC service.
+     * @return the document service
+     */
     GWTDocumentServiceAsync getGwtDocumentService();
 }

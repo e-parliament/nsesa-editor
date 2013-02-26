@@ -25,6 +25,10 @@ import org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationModule;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorModule;
 
 /**
+ * Core GIN module, installs the {@link ErrorModule} and {@link ConfirmationModule}.
+ * Provides implementations for the {@link EventBus}, the {@link Scheduler} and the
+ * {@link PlaceController}.
+ *
  * Date: 24/06/12 15:10
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

@@ -22,6 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
 /**
+ * Default singleton implementation of the {@link ClientFactory}.
  * Date: 25/06/12 21:59
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -38,7 +39,11 @@ public class ClientFactoryImpl implements ClientFactory {
     private ClientContext clientContext;
 
     @Inject
-    public ClientFactoryImpl(EventBus eventBus, PlaceController placeController, Scheduler scheduler, ClientContext clientContext, CoreMessages coreMessages) {
+    public ClientFactoryImpl(final EventBus eventBus,
+                             final PlaceController placeController,
+                             final Scheduler scheduler,
+                             final ClientContext clientContext,
+                             final CoreMessages coreMessages) {
         this.eventBus = eventBus;
         this.placeController = placeController;
         this.scheduler = scheduler;
