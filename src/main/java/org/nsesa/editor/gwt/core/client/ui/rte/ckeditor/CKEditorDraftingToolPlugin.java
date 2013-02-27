@@ -23,16 +23,24 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import java.util.logging.Logger;
 
 /**
- * Adds a button to CKEditor to fire nsesaToggleDraft event
- * User: groza
- * Date: 22/01/13
- * Time: 12:42
+ * Add a button to CKEditor to fire <code>DraftingToggleEvent</code> GWT event.
+ * The event is propagated further through the event bus and is handled by <code>DraftingController</code> controller
+ * to show/hide drafting tool widget.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 12:32
  */
 public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
     private static final Logger LOG = Logger.getLogger(CKEditorDraftingToolPlugin.class.getName());
 
+    /**
+     * The client factory used to get event bus
+     */
     private ClientFactory clientFactory;
 
+    /**
+     * Keep previous state of the button
+     */
     private int previousState = -1;
 
     @Inject
@@ -45,21 +53,43 @@ public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
         return "nsesa-draftingtoolbar";
     }
 
+    /**
+     * No beforeInit operation performed
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+    /**
+     * The main method responsible to create a CK editor button, to attach to editor instance and
+     * to raise <code>DraftingToggleEvent</code> as soon as the button is pressed.
+     * Be carefully, the button name shall be the same with the one defined in <code>CKEditorToolbar</code>
+     * toolbar configuration.
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
     }
 
+    /**
+     * No export operation performed
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         //do nothing
     }
 
+    /**
+     * Creates <code>NsesaToggle</code> button and raise the specific event when the button is pressed.
+     * Since the action of the <code>Source</code> could alter the state of <code>NsesaToggle</code> button
+     * there is also a handler to preserve the state of this new button
+     * @param editor
+     * @param plugin
+     */
     private native void nativeInit(JavaScriptObject editor, CKEditorDraftingToolPlugin plugin) /*-{
         var buttonName = "NsesaToggle";
         var cmd = {

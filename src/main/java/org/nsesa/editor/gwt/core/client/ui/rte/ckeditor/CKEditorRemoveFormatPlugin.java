@@ -22,18 +22,17 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import java.util.logging.Logger;
 
 /**
- * Adds a button to CKEditor to remove the format for the selected element.
- * Replace the common ancestor node of the selection with the selected text
- * User: groza
- * Date: 22/01/13
- * Time: 12:42
+ * Adds a button to CKEditor to remove the format of the selected element.
+ * Replace the common ancestor node of the selection with the selected text.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 12:42
+ *
  */
 public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
     private static final Logger LOG = Logger.getLogger(CKEditorRemoveFormatPlugin.class.getName());
 
     private ClientFactory clientFactory;
-
-    private int previousState = -1;
 
     @Inject
     public CKEditorRemoveFormatPlugin(ClientFactory clientFactory) {
@@ -45,21 +44,42 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
         return "nsesa-removeformat";
     }
 
+    /**
+     * No before init operation performed
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+    /**
+     * Call a native method that will transform the common ancestor of the selected element
+     * into a text node
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
     }
 
+    /**
+     * No export operation performed
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         //do nothing
     }
 
+    /**
+     * Native method responsible to create a <code>NsesaRemoveFormat</code>button. Same button name shall
+     * be used also in <code>CKEditorToolbar</code> configuration.
+     * When button is pressed the common ancestor of the selected element will be transformed into a text node.
+     *
+     * @param editor
+     * @param plugin
+     */
     private native void nativeInit(JavaScriptObject editor, CKEditorRemoveFormatPlugin plugin) /*-{
         var buttonName = "NsesaRemoveFormat";
         var cmd = {

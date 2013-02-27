@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.GwtEvent;
 /**
  * An event occurred on drafting an amendment by changing the cursor location or selecting a text
  * inside of an amendment
+ *
  * User: groza
  * Date: 17/01/13
  * Time: 9:59

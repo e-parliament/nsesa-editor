@@ -17,10 +17,10 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
- * An event occured when the user wants to draft an amendment
- * User: groza
- * Date: 17/01/13
- * Time: 15:24
+ * An event occurred when the user wants to add a new overlay widget into editor area.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 15:24
  */
 public class DraftingInsertionEvent extends GwtEvent<DraftingInsertionEventHandler> {
 
@@ -42,6 +42,10 @@ public class DraftingInsertionEvent extends GwtEvent<DraftingInsertionEventHandl
         handler.onEvent(this);
     }
 
+    /**
+     * The insertion element
+     * @return
+     */
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
     }

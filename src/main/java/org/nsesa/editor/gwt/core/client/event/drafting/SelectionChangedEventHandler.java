@@ -16,10 +16,10 @@ package org.nsesa.editor.gwt.core.client.event.drafting;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * A handler for <code>SelectionChangedEvent</code> GWT event
- * User: groza
- * Date: 17/01/13
- * Time: 10:00
+ * An interface to handle <code>SelectionChangedEvent</code> GWT event.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 10:15
  */
 public interface SelectionChangedEventHandler extends EventHandler {
     void onEvent(SelectionChangedEvent event);

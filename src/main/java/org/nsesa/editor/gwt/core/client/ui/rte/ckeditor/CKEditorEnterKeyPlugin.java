@@ -20,10 +20,10 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
- * A CK plugin to handle enter and shift enter keystrokes
- * User: groza
- * Date: 10/01/13
- * Time: 12:16
+ * A CK Editor plugin to handle enter and shift enter keystrokes.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 10/01/13 12:16
  */
 public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
     private OverlayFactory overlayFactory;
@@ -40,11 +40,19 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
         return "nsesaEnterKey";
     }
 
+    /**
+     * No before init operation performed
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+    /**
+     * Use a native javascript call to handle enter and shift enter keysstrokes
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, overlayFactory, tagName);
@@ -163,6 +171,10 @@ public class CKEditorEnterKeyPlugin implements RichTextEditorPlugin {
         }
     }-*/;
 
+    /**
+     * No export operation performed
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         // do nothing

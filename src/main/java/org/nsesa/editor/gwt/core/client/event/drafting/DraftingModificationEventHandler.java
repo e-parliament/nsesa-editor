@@ -16,10 +16,10 @@ package org.nsesa.editor.gwt.core.client.event.drafting;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * A handler invoked when a drafting modification event occur
- * User: groza
- * Date: 17/01/13
- * Time: 15:25
+ * An interface to handle <code>DraftingModificationEvent</code> GWT event.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 15:25
  */
 public interface DraftingModificationEventHandler extends EventHandler {
     void onEvent(DraftingModificationEvent event);

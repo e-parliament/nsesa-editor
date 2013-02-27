@@ -24,16 +24,23 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import java.util.logging.Logger;
 
 /**
- * A Ck editor plugin which raise GWT application event whenever the user move the cursor
- * or make a selection
- * User: groza
- * Date: 17/01/13
- * Time: 9:38
+ * CK editor plugin which raise <code>SelectionChangedEvent</code>GWT application event whenever the user move
+ * the cursor, press a key or make a selection in the editor area. The event is propagated further through
+ * event bus and can be handled by different controllers like <code>DraftingController</code>
+ * ({@link org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController})
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 9:38
  */
 public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
-
+    /**
+     * The Logger
+     */
     private static final Logger LOG = Logger.getLogger(CKEditorSelectionChangedPlugin.class.getName());
 
+    /**
+     * The Client factory
+     */
     private ClientFactory clientFactory;
 
     @Inject
@@ -46,25 +53,48 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
         return "nsesa-selectionChanged";
     }
 
+    /**
+     * No before init operation performed
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+    /**
+     * Catch any  mouseup, mousedown or keypress browser events.
+     * In such cases raise a <code>SelectionChangedEvent</code> and pass further the start element whereas
+     * the selection occurs, among with the selected text from the editor area and a flag to see whether more
+     * tag elements have been included in the selection.
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
     }
 
-
+    /**
+     * No export operation performed
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         //do nothing
     }
 
+    /**
+     * Catch any mouseup, mousedown or keypress browser events.
+     * In such cases raise a <code>SelectionChangedEvent</code> and pass further the start element whereas
+     * the selection occurs, among with the selected text from the editor area and a flag to see whether more
+     * tag elements have been included in the selection
+     * @param editor  The JavaScriptObject editor instance
+     * @param plugin  The CKEditorSelectionChangedPlugin instance
+     */
     private native void nativeInit(final JavaScriptObject editor, CKEditorSelectionChangedPlugin plugin) /*-{
         var keyHandler, mouseUpListener, mouseDownListener, keyUpListener;
 
+        //handle the selection when mouseup, mouse down, keypress
         function selectionHandle(ed) {
             if (ed.document) {
                 ed.document.on('mouseup', function (ev) {
@@ -112,6 +142,9 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
         }
 
         function selectMoreTags(selection) {
+            if (selection.getType == $wnd.CKEDITOR.SELECTION_TEXT) {
+                return false;
+            }
             var ranges = selection.getRanges();
             return !ranges[0].startContainer.equals(ranges[ranges.length - 1].endContainer);
         }
@@ -126,6 +159,12 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     }-*/;
 
+    /**
+     * A convenient way to fire an event from java code
+     * @param jsObject The parent element
+     * @param moreTagsSelected True when more tag elements have been selected
+     * @param selectedText The selected text from the editor area
+     */
     private void fireEvent(JavaScriptObject jsObject, boolean moreTagsSelected, String selectedText) {
         LOG.info("Changed event fired with more tags selected: " + moreTagsSelected + " and selected text " + selectedText);
         Element el = jsObject.cast();

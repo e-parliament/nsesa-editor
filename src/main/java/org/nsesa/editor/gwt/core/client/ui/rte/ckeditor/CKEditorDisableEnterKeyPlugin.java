@@ -19,9 +19,10 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
  * Disable enter and shift enter keys in the editor
- * User: groza
- * Date: 31/01/13
- * Time: 8:40
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 31/01/13 08:40
+ *
  */
 public class CKEditorDisableEnterKeyPlugin implements RichTextEditorPlugin {
     @Override

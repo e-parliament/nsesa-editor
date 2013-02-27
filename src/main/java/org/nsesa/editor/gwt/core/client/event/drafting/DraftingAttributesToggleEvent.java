@@ -16,10 +16,11 @@ package org.nsesa.editor.gwt.core.client.event.drafting;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
- * An event used to show/hide the drafting tool
- * User: groza
- * Date: 22/01/13
- * Time: 13:14
+ * An event used to show/hide the drafting attributes widget tool
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 13:14
+ *
  */
 public class DraftingAttributesToggleEvent extends GwtEvent<DraftingAttributesToggleEventHandler> {
 

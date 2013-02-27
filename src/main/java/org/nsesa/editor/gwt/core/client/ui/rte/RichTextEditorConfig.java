@@ -18,17 +18,18 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig;
 
 /**
- * Defines the configuration required for an editor in order to run it
- * User: groza
- * Date: 14/01/13
- * Time: 14:42
+ * Defines the configuration required for a rich text editor in order to run it
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 14/01/13 14:42
+ *
  */
 @ImplementedBy(CKEditorConfig.class)
 public interface RichTextEditorConfig {
     /**
-     * Whether or not the editor is readonly
+     * Whether or not the editor is readonly.
      *
-     * @param readOnly
+     * @param readOnly When true no changes are allowed over the content data of the editor
      */
     void setReadOnly(boolean readOnly);
 
@@ -43,33 +44,33 @@ public interface RichTextEditorConfig {
     boolean isReadOnly();
 
     /**
-     * Add a class to body
+     * Add a class to document body of the editor.
      *
-     * @param bodyClass
+     * @param bodyClass The css class name as String
      */
     void addBodyClass(String bodyClass);
 
     /**
-     * Resets the body class.
+     * Reset the document body class of the editor to the original value.
      */
     void resetBodyClass();
 
     /**
-     * Return a representation as JavaScriptObject
+     * Return a editor configuration representation as JavaScriptObject
      *
-     * @return
+     * @return The editor configuration as JavaScriptObject
      */
     JavaScriptObject getConfiguration();
 
     /**
-     * Return the drafting classname
+     * Return the drafting css class name
      *
-     * @return
+     * @return The drafting class name as String
      */
     String getDraftingClassName();
 
     /**
-     * Set up the drafting class name
+     * Set up the drafting css class name in the draft tool widget
      *
      * @return
      */

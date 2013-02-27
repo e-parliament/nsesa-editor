@@ -24,16 +24,13 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import java.util.Map;
 
 /**
- * A CK editor plugin to modify the content into the editor text
- * User: groza
- * Date: 17/01/13
- * Time: 15:33
+ * A CK editor plugin to handle <code>DraftingModificationEvent</code> GWT event by changing the attributes of the
+ * selected element in the editor area.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 13:27
  */
 public class CKEditorDraftingModificationPlugin implements RichTextEditorPlugin {
-
-    private static enum MarkupOperation {
-        nsesaMod
-    }
 
     private ClientFactory clientFactory;
 
@@ -51,9 +48,14 @@ public class CKEditorDraftingModificationPlugin implements RichTextEditorPlugin 
         //do nothing
     }
 
+    /**
+     * Main method to modify the attributes of the selected element in the editor area as soon as a
+     * <code>DraftingModificationEvent</code> GWT event is raised by other components.
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
-        nativeInit(editor, this);
+        handleDrafting(editor);
     }
 
 
@@ -62,11 +64,10 @@ public class CKEditorDraftingModificationPlugin implements RichTextEditorPlugin 
         //do nothing
     }
 
-
-    private native void nativeInit(JavaScriptObject editor, CKEditorDraftingModificationPlugin plugin) /*-{
-        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingModificationPlugin::handleDrafting(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
-    }-*/;
-
+    /**
+     * Handle <code>DraftingModificationEvent</code> GWT event
+     * @param editor
+     */
     private void handleDrafting(final JavaScriptObject editor) {
         clientFactory.getEventBus().addHandler(DraftingModificationEvent.TYPE, new DraftingModificationEventHandler() {
             @Override
@@ -84,6 +85,13 @@ public class CKEditorDraftingModificationPlugin implements RichTextEditorPlugin 
         });
     }
 
+    /**
+     * Identify the selected element from editor area and change its attribute values
+     * @param plugin
+     * @param editor
+     * @param keys The attributes keys
+     * @param values The new attributes values
+     */
     private native void modify(CKEditorDraftingModificationPlugin plugin, JavaScriptObject editor, JsArrayString keys, JsArrayString values) /*-{
         if (editor.cachedElement) {
             var range = new $wnd.CKEDITOR.dom.range(editor.document);

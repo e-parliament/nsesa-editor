@@ -24,17 +24,24 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
- * A CK editor plugin to insert an amendable widget into the editor text
- * User: groza
- * Date: 17/01/13
- * Time: 15:33
+ * A CK editor plugin to handle a <code>DraftingInsertionEvent</code> GWT event by inserting a DOM element into the
+ * editor area.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 13:27
  */
 public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
+    /**
+     * Enum used to markup a newly introduced element in the editor area.
+     */
     private static enum MarkupOperation {
         nsesaIns, nsesaDel, nsesaMod
     }
 
+    /**
+     * Used to get a reference to event bus
+     */
     private ClientFactory clientFactory;
 
     public CKEditorDraftingInsertionPlugin(ClientFactory clientFactory) {
@@ -46,11 +53,19 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         return "nsesa-draftinginsertion";
     }
 
+    /**
+     * Empty method
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+    /**
+     *
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
@@ -67,6 +82,10 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingInsertionPlugin::handleDrafting(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);
     }-*/;
 
+    /**
+     * Add a handler for <code>DraftingInsertionEvent</code>
+     * @param editor
+     */
     private void handleDrafting(final JavaScriptObject editor) {
         clientFactory.getEventBus().addHandler(DraftingInsertionEvent.TYPE, new DraftingInsertionEventHandler() {
             @Override
@@ -77,6 +96,13 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
         });
     }
 
+    /**
+     * Insert a new element in the editor area at the cursor position and raise a <code>SelectionChangedEvent</code>
+     * GWT event to refresh if the case other views interested in editor changes.
+     * @param plugin
+     * @param editor
+     * @param el
+     */
     private native void insertDrafting(CKEditorDraftingInsertionPlugin plugin, JavaScriptObject editor, Element el) /*-{
         if (editor.getSelection()) {
             var text = editor.getSelection() != null ? editor.getSelection().getSelectedText() : "";
@@ -90,6 +116,12 @@ public class CKEditorDraftingInsertionPlugin implements RichTextEditorPlugin {
 
     }-*/;
 
+    /**
+     * Get a string representation of the element
+     * @param el The element that will be processed
+     * @param selectedText The inner html that will be added for the given element
+     * @return String representation of the given element
+     */
     private String text(Element el, String selectedText) {
         el.setInnerHTML(selectedText);
         el.addClassName(MarkupOperation.nsesaIns.name());

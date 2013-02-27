@@ -19,15 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A composite plugin used to run all the included plugins.
- * User: groza
- * Date: 10/01/13
- * Time: 12:05
+ * A type of <code>RichTextEditorPlugin</code> that wrap a list of plugins, hiding the wrapped plugins
+ * methods.
+ *
+ * <p>
+ * The composite is useful for creating a single plugin out of an aggregate of
+ * multiple other plugins.
+ * </p>
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 10/01/13 12:05
  */
 public class RichTextCompositePlugin implements RichTextEditorPlugin {
     private String name;
     protected List<RichTextEditorPlugin> plugins;
 
+    /**
+     * Default constructor
+     */
     public RichTextCompositePlugin() {
         this("RichTextCompositePlugin", new ArrayList<RichTextEditorPlugin>());
     }
@@ -42,6 +50,10 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
         return name;
     }
 
+    /**
+     * Call <code>beforeInit<code/> method for all wrapped plugins
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         for (RichTextEditorPlugin plugin : plugins) {
@@ -49,6 +61,10 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
         }
     }
 
+    /**
+     * Call <code>init<code/> method for all wrapped plugins
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         for (RichTextEditorPlugin plugin : plugins) {
@@ -56,6 +72,10 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
         }
     }
 
+    /**
+     * Call <code>export<code/> method for all wrapped plugins
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         for (RichTextEditorPlugin plugin : plugins) {

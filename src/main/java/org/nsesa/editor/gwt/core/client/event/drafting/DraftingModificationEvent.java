@@ -18,10 +18,11 @@ import com.google.gwt.event.shared.GwtEvent;
 import java.util.Map;
 
 /**
- * An event occured when the user wants to modify the attributes of an amendable widget
- * User: groza
- * Date: 17/01/13
- * Time: 15:24
+ * An event occurred when the user wants to modify element attributes.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 15:24
+ *
  */
 public class DraftingModificationEvent extends GwtEvent<DraftingModificationEventHandler> {
 

@@ -18,10 +18,11 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
- * A plugin to override the default basic styles plugin
- * User: groza
- * Date: 15/01/13
- * Time: 13:04
+ * A plugin to override the default basic styles (bold, italic, underline, subscript, superscript) of CK editor.
+ * The basic styles representation is replaced by spans.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 15/01/13 13:24
  */
 public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
     @Override

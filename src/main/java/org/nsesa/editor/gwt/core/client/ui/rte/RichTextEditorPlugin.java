@@ -17,36 +17,39 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.ImplementedBy;
 
 /**
- * Defines a plugin attached to a rich text editor
- * User: groza
- * Date: 9/01/13
- * Time: 11:06
+ * Provides possibility to customize the rich text editor functionality without bloating the editor with unneeded
+ * features.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 09/01/13 11:06
  */
 @ImplementedBy(RichTextCompositePlugin.class)
 public interface RichTextEditorPlugin {
     /**
      * Return the plugin name
      *
-     * @return The plugin name
+     * @return The plugin name as String
      */
     abstract String getName();
 
     /**
-     * Run before initialization
+     * Run before editor initialization
      *
-     * @param editor
+     * @param editor The Rich Text editor as JavaScriptObject
      */
     abstract void beforeInit(JavaScriptObject editor);
 
     /**
-     * Run during initialization
+     * Run during editor initialization
      *
-     * @param editor
+     * @param editor The Rich Text editor as JavaScriptObject
      */
     abstract void init(JavaScriptObject editor);
 
     /**
-     * Used to export plugin in javascript world if the case
+     * Used to export the plugin in the javascript world if the case
+     *
+     * @param config The Rich Text editor configuration as JavaScriptObject
      */
     abstract void export(RichTextEditorConfig config);
 

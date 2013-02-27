@@ -18,11 +18,12 @@ import com.google.gwt.core.client.JsArrayString;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 
 /**
- * Defines configuration environment for CK Editor
- * <p/>
- * User: groza
- * Date: 11/01/13
- * Time: 15:24
+ * Defines configuration settings for CK Editor.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 11/01/13 15:24
+ *
+ * @see <a href="http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html">CkEditor configuration</a>
  */
 public class CKEditorConfig implements RichTextEditorConfig {
 
@@ -67,12 +68,22 @@ public class CKEditorConfig implements RichTextEditorConfig {
         readOnly(readOnly);
     }
 
+    /**
+     * If true, makes the editor start in read-only state.
+     * @param readOnly
+     * @return editor instance
+     */
     public CKEditorConfig readOnly(boolean readOnly) {
         this.readOnly = readOnly;
         setNativeReadOnly(readOnly);
         return this;
     }
 
+    /**
+     * Set the base Z-index for floating dialog windows and popups.
+     * @param zIndex
+     * @return editor instance
+     */
     public CKEditorConfig setZIndex(int zIndex) {
         this.zIndex = zIndex;
         setNativeZIndex(zIndex);
@@ -94,6 +105,11 @@ public class CKEditorConfig implements RichTextEditorConfig {
         setBodyClass(this.originalBodyClass == null ? this.bodyClass : this.originalBodyClass);
     }
 
+    /**
+     * Set the CSS file(s) to be used to apply style to editor contents.
+     * @param contentCss
+     * @return
+     */
     public CKEditorConfig setContentCss(String[] contentCss) {
         this.contentCss = contentCss;
         final JsArrayString jsStrings = (JsArrayString) JsArrayString.createArray();
@@ -104,12 +120,22 @@ public class CKEditorConfig implements RichTextEditorConfig {
         return this;
     }
 
+    /**
+     * Set a list of additional plugins to be loaded.
+     * @param extraPlugins A list of plugins separated by quota
+     * @return
+     */
     public CKEditorConfig setExtraPlugins(String extraPlugins) {
         this.extraPlugins = extraPlugins;
         setNativeExtraPlugins(extraPlugins);
         return this;
     }
 
+    /**
+     * Sets the class attribute to be used on the body element of the editing area
+     * @param bodyClass
+     * @return
+     */
     public CKEditorConfig setBodyClass(String bodyClass) {
         this.originalBodyClass = this.bodyClass;
         this.bodyClass = bodyClass;
@@ -117,101 +143,204 @@ public class CKEditorConfig implements RichTextEditorConfig {
         return this;
     }
 
+    /**
+     * Sets whether the editor should have the focus when the page loads.
+     * @param startupFocus
+     * @return
+     */
     public CKEditorConfig setStartupFocus(boolean startupFocus) {
         this.startupFocus = startupFocus;
         setNativeStartupFocus(startupFocus);
         return this;
     }
 
+    /**
+     * Sets the height of the editor when the editor is first displayed.
+     * @param height
+     */
     public void setHeight(int height) {
         height(height);
     }
 
+    /**
+     * Sets the height of the editor when the editor is first displayed.
+     * @param height
+     */
     public CKEditorConfig height(int height) {
         this.height = height;
         setNativeHeight(height);
         return this;
     }
 
+    /**
+     * Whether the toolbar must start expanded when the editor is loaded
+     * @param toolbarStartupExpanded
+     * @return
+     */
     public CKEditorConfig setToolbarStartupExpanded(boolean toolbarStartupExpanded) {
         this.toolbarStartupExpanded = toolbarStartupExpanded;
         setNativeToolbarStartupExpanded(toolbarStartupExpanded);
         return this;
     }
 
+    /**
+     * Set the toolbox (alias toolbar) definition.
+     * @param toolbar
+     * @return
+     */
     public CKEditorConfig setToolbar(CKEditorToolbar toolbar) {
         this.toolbar = toolbar;
         setNativeToolbar(toolbar.getRepresentation());
         return this;
     }
 
+    /**
+     * Set a list of plugins that must not be loaded
+     * @param removePlugins List of plugins separated by quota
+     * @return
+     */
     public CKEditorConfig setRemovePlugins(String removePlugins) {
         this.removePlugins = removePlugins;
         setNativeRemovePlugins(removePlugins);
         return this;
     }
 
-
+    /**
+     * Set the space where the toolbar is rendered
+     * @param toolbarLocation Possible values top or bottom
+     * @return
+     */
     public CKEditorConfig setToolbarLocation(String toolbarLocation) {
         this.toolbarLocation = toolbarLocation;
         setNativeToolbarLocation(toolbarLocation);
         return this;
     }
 
-
+    /**
+     * Whether to enable the resizing feature.
+     * @param resize_enabled
+     * @return
+     */
     public CKEditorConfig setResize_enabled(boolean resize_enabled) {
         this.resize_enabled = resize_enabled;
         setNativeResize_enabled(resize_enabled);
         return this;
     }
 
+    /**
+     * Whether automatically create wrapping blocks around inline contents inside document body
+     * @param autoParagraph
+     * @return
+     */
     public CKEditorConfig setAutoParagraph(boolean autoParagraph) {
         this.autoParagraph = autoParagraph;
         setNativeAutoParagraph(autoParagraph);
         return this;
     }
 
+    /**
+     * Whether a filler text (non-breaking space entity -  ) will be inserted into empty block elements in HTML output
+     * @param fillEmptyBlocks
+     * @return
+     */
     public CKEditorConfig setFillEmptyBlocks(boolean fillEmptyBlocks) {
         this.fillEmptyBlocks = fillEmptyBlocks;
         setNativeFillEmptyBlocks(fillEmptyBlocks);
         return this;
     }
 
+    /**
+     * Whether to force all pasting operations to insert on plain text into the editor
+     * @param forcePasteAsPlainText
+     * @return
+     */
     public CKEditorConfig setForcePasteAsPlainText(boolean forcePasteAsPlainText) {
         this.forcePasteAsPlainText = forcePasteAsPlainText;
         setNativeForcePasteAsPlainText(forcePasteAsPlainText);
         return this;
     }
 
+    /**
+     * Whether to force editor to keep empty tags like span
+     * @param tagName
+     */
     public static void keepEmptyTag(String tagName) {
         keepNativeEmptyTag(tagName);
     }
 
+    /**
+     * Replace <code>sub</code> core style with a new defined one
+     * @param newTag The new tag name for <code>sub</code> style
+     * @param newClassName The new class name for <code>sub</code> style
+     * @param newType The new type as attribute for <code>sub</code> style
+     * @param nameSpace The new namespace as attribute for <code>sub</code> style
+     * @return
+     */
     public CKEditorConfig replaceSubStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_subscript", "sub", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    /**
+     * Replace <code>sup</code> core style with a new defined one
+     * @param newTag The new tag name for <code>sup</code> style
+     * @param newClassName The new class name for <code>sup</code> style
+     * @param newType The new type as attribute for <code>sup</code> style
+     * @param nameSpace The new namespace as attribute for <code>sup</code> style
+     * @return
+     */
     public CKEditorConfig replaceSupStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_superscript", "sup", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    /**
+     * Replace <code>b</code> core style with a new defined one
+     * @param newTag The new tag name for <code>b</code> style
+     * @param newClassName The new class name for <code>b</code> style
+     * @param newType The new type as attribute for <code>b</code> style
+     * @param nameSpace The new namespace as attribute for <code>b</code> style
+     * @return
+     */
     public CKEditorConfig replaceBoldStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_bold", "b", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    /**
+     * Replace <code>i</code> core style with a new defined one
+     * @param newTag The new tag name for <code>i</code> style
+     * @param newClassName The new class name for <code>i</code> style
+     * @param newType The new type as attribute for <code>i</code> style
+     * @param nameSpace The new namespace as attribute for <code>i</code> style
+     * @return
+     */
     public CKEditorConfig replaceItalicStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_italic", "i", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    /**
+     * Replace <code>u</code> core style with a new defined one
+     * @param newTag The new tag name for <code>u</code> style
+     * @param newClassName The new class name for <code>u</code> style
+     * @param newType The new type as attribute for <code>u</code> style
+     * @param nameSpace The new namespace as attribute for <code>u</code> style
+     * @return
+     */
     public CKEditorConfig replaceUnderlineStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_underline", "u", newTag, newClassName, newType, nameSpace);
         return this;
     }
 
+    /**
+     * Replace <code>strike</code> core style with a new defined one
+     * @param newTag The new tag name for <code>strike</code> style
+     * @param newClassName The new class name for <code>strike</code> style
+     * @param newType The new type as attribute for <code>strike</code> style
+     * @param nameSpace The new namespace as attribute for <code>strike</code> style
+     * @return
+     */
     public CKEditorConfig replaceStrikeThroughStyle(String newTag, String newClassName, String newType, String nameSpace) {
         replaceCoreStyle("coreStyles_strikethrough", "strike", newTag, newClassName, newType, nameSpace);
         return this;

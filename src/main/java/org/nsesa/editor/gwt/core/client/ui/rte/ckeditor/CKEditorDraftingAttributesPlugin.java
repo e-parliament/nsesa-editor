@@ -23,16 +23,24 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import java.util.logging.Logger;
 
 /**
- * Adds a button to CKEditor to fire nsesaToggleDraftAttributes event
- * User: groza
- * Date: 22/01/13
- * Time: 12:42
+ * Add a button to CKEditor to fire <code>DraftingAttributesToggleEvent</code> GWT event.
+ * The event is propagated further through the event bus and is handled by <code>DraftingController</code> controller
+ * to show/hide drafting attributes tool widget.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/01/13 12:27
+ *
  */
 public class CKEditorDraftingAttributesPlugin implements RichTextEditorPlugin {
     private static final Logger LOG = Logger.getLogger(CKEditorDraftingAttributesPlugin.class.getName());
 
+    /**
+     * The client factory used to get event bus
+     */
     private ClientFactory clientFactory;
-
+    /**
+     * Keep previous state of the button
+     */
     private int previousState = -1;
 
     @Inject
@@ -45,16 +53,31 @@ public class CKEditorDraftingAttributesPlugin implements RichTextEditorPlugin {
         return "nsesa-draftingattributestoolbar";
     }
 
+    /**
+     * Empty method
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
     }
 
+     /**
+     * The main method responsible to create a CK editor button, to attach to the editor instance and
+     * to raise <code>DraftingAttributesToggleEvent</code> as soon as the button is pressed.
+     * Be carefully, the button name shall be the same with the one defined in <code>CKEditorToolbar</code>
+     * toolbar configuration.
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
     }
 
+    /**
+     * Empty method
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         //do nothing

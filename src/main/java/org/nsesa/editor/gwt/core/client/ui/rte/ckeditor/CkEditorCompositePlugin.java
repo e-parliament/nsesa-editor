@@ -19,15 +19,11 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
- * CK Editor composite plugin which is accessible from javascript world.
- * When exporting the plugin, 3 functions could be accessed from outside:
- * CKEDITOR.nsesaBeforeInit
- * CKEDITOR.nsesaInit
- * CKEDITOR.nsesaAfterInit
- * <p/>
- * User: groza
- * Date: 10/01/13
- * Time: 12:45
+ * Make possible to run Java plugins from an external Java script code.
+ * There is a wrapper plugin under js CK editor plugins folder (nsesa) responsible to load this java plugin.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 10/01/13 12:24
  */
 public class CkEditorCompositePlugin extends RichTextCompositePlugin {
 
@@ -35,11 +31,20 @@ public class CkEditorCompositePlugin extends RichTextCompositePlugin {
         super();
     }
 
+    /**
+     * Assigns beforeInit and init methods of java plugin to visible javascript <code>CKEDITOR</code> object.
+     * @param config The Rich Text editor configuration as JavaScriptObject
+     */
     @Override
     public void export(RichTextEditorConfig config) {
         nativeExport(config.getConfiguration(), this);
     }
 
+    /**
+     * Assigns beforeInit and init methods of java plugin to visible javascript <code>CKEDITOR</code> object.
+     * @param config
+     * @param plugin
+     */
     private native void nativeExport(JavaScriptObject config, CkEditorCompositePlugin plugin) /*-{
         //TODO we need to find a better way to expose the plugin in javascript world
         $wnd.CKEDITOR.nsesaBeforeInit = $entry(function (ed) {
@@ -50,6 +55,10 @@ public class CkEditorCompositePlugin extends RichTextCompositePlugin {
         });
     }-*/;
 
+    /**
+     * Add a plugin in the wrapped plugins list
+     * @param plugin The plugin that will be added
+     */
     public void registerPlugin(RichTextEditorPlugin plugin) {
         plugins.add(plugin);
     }
