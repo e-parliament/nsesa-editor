@@ -24,6 +24,8 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
 
 /**
+ * Interface for GIN injectors. This interface must be extended in any module that extends {@link Editor}.
+ *
  * Date: 24/06/12 15:56
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -31,21 +33,57 @@ import org.nsesa.editor.gwt.editor.client.ui.main.EditorController;
  */
 public interface Injector {
 
+    /**
+     * Get the client factory with access to the client context.
+     * @return the client factory
+     */
     ClientFactory getClientFactory();
 
+    /**
+     * Get the service factory, with access to GWT RPC services.
+     * @return the service factory
+     */
     ServiceFactory getServiceFactory();
 
+    /**
+     * Return the main editor controller.
+     * @return the editor controller
+     */
     EditorController getEditorController();
 
+    /**
+     * Return a document controller.
+     * @return a document controller
+     */
     DocumentController getDocumentController();
 
+    /**
+     * Return the error controller.
+     * @return the error controller
+     */
     ErrorController getErrorController();
 
+    /**
+     * Return the confirmation controller.
+     * @return the confirmation controller
+     */
     ConfirmationController getConfirmationController();
 
+    /**
+     * Return the notification controller.
+     * @return the notification controller
+     */
     NotificationController getNotificationController();
 
+    /**
+     * Return the activity mapper.
+     * @return the activity mapper
+     */
     ActivityMapper getActivityMapper();
 
+    /**
+     * Return the place factory.
+     * @return the place factory
+     */
     EditorPlaceFactory getPlaceFactory();
 }
