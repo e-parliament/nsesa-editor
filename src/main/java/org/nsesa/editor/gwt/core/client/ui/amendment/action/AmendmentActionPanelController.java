@@ -94,7 +94,7 @@ public class AmendmentActionPanelController {
 
                             @Override
                             public void onSuccess(AmendmentContainerDTO[] result) {
-                                amendmentController.setAmendment(result[0]);
+                                amendmentController.setModel(result[0]);
                                 final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus);
                                 final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
                                 documentEventBus.fireEvent(updatedEvent);
@@ -119,7 +119,7 @@ public class AmendmentActionPanelController {
 
                             @Override
                             public void onSuccess(AmendmentContainerDTO[] result) {
-                                amendmentController.setAmendment(result[0]);
+                                amendmentController.setModel(result[0]);
                                 final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus);
                                 final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
                                 documentEventBus.fireEvent(updatedEvent);
@@ -150,7 +150,7 @@ public class AmendmentActionPanelController {
 
                                     @Override
                                     public void onSuccess(AmendmentContainerDTO[] result) {
-                                        amendmentController.setAmendment(result[0]);
+                                        amendmentController.setModel(result[0]);
                                         final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
                                         documentEventBus.fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
                                         documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionDeleteSuccessful(result.length)));

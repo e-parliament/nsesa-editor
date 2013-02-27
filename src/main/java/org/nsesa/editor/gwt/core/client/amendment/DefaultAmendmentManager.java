@@ -200,7 +200,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
         for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
             final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-            amendmentController.setAmendment(amendmentContainerDTO);
+            amendmentController.setModel(amendmentContainerDTO);
             amendmentController.setDocumentController(documentController);
 
             // check if we already have an amendment with a similar revisionID
@@ -317,7 +317,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendmentContainerDTO) {
         final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-        amendmentController.setAmendment(amendmentContainerDTO);
+        amendmentController.setModel(amendmentContainerDTO);
         return amendmentController;
     }
 

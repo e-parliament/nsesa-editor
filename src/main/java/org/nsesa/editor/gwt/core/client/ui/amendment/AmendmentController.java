@@ -15,13 +15,17 @@ package org.nsesa.editor.gwt.core.client.ui.amendment;
 
 import com.google.gwt.dom.client.Element;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import java.util.Comparator;
 
 /**
+ * A controller for an amendment model. Can be injected on an {@link OverlayWidget} by calling its
+ * {@link OverlayWidget#addAmendmentController(AmendmentController)} method. Represents a single injected
+ * amendment in an overlay tree if the {@link #getDocumentController()} is returning a not-<tt>null</tt> value.
+ * <p/>
  * Date: 09/01/13 16:46
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,6 +34,10 @@ import java.util.Comparator;
 @ImplementedBy(DefaultAmendmentController.class)
 public interface AmendmentController {
 
+    /**
+     * Simple amendment controller {@link Comparator} to sort amendment controllers accordign to their
+     * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController#getOrder()} values.
+     */
     public static Comparator<AmendmentController> ORDER_COMPARATOR = new Comparator<AmendmentController>() {
         @Override
         public int compare(AmendmentController a, AmendmentController b) {
@@ -37,31 +45,95 @@ public interface AmendmentController {
         }
     };
 
+    /**
+     * Returns the underlying DTO model.
+     *
+     * @return the model
+     */
     AmendmentContainerDTO getModel();
 
+    /**
+     * Set the model on this controller.
+     * @param amendment the model to set.
+     */
+    void setModel(AmendmentContainerDTO amendment);
+
+    /**
+     * Transforms the given <tt>source</tt> into an overlay widget tree.
+     *
+     * @param source the XML payload to transform into the overlay tree
+     * @return the overlay widget, or <tt>null</tt> if it cannot be created
+     */
     OverlayWidget asAmendableWidget(String source);
 
+    /**
+     * Transforms the given <tt>element</tt> into an overlay widget tree.
+     *
+     * @param element the element to transform into the overlay tree
+     * @return the overlay widget, or <tt>null</tt> if it cannot be created
+     */
     OverlayWidget asAmendableWidget(Element element);
 
-    void setAmendment(AmendmentContainerDTO amendment);
-
+    /**
+     * Returns the document controller set on this model. This will return a non-<tt>null</tt> value if the amendent
+     * controller has actually been injected into a document controller.
+     *
+     * @return the document controller, or <tt>null</tt> if it has not been set
+     */
     DocumentController getDocumentController();
 
+    /**
+     * Sets the document controller.
+     * @param documentController the document controller
+     */
     void setDocumentController(DocumentController documentController);
 
+    /**
+     * Get the main amendment view (the one injected into the document controller)
+     * @return the amendment view
+     */
     AmendmentView getView();
 
+    /**
+     * Get the extended view (used in the amendments tab) with extended UI elements
+     * @return the extended amendment view
+     */
     AmendmentView getExtendedView();
 
+    /**
+     * Set the title on the amendment views
+     * @param title the title to set
+     */
     void setTitle(String title);
 
+    /**
+     * Set the status on the amendment views
+     * @param status the status to set
+     */
     void setStatus(String status);
 
+    /**
+     * After being added to an {@link OverlayWidget}, this will hold the reference to the direct overlay widget that
+     * has been amended.
+      * @param amendedOverlayWidget the amended overlay widget
+     */
     void setAmendedOverlayWidget(OverlayWidget amendedOverlayWidget);
 
+    /**
+     * Returns the overlay widget that has this amendment in its list of amendment controllers.
+     * @return the amended overlay widget
+     */
     OverlayWidget getAmendedOverlayWidget();
 
+    /**
+     * Get the local order of the amendment.
+     * @return the order
+     */
     int getOrder();
 
+    /**
+     * Sets the local order of the amendment in the document.
+     * @param order
+     */
     void setOrder(int order);
 }
