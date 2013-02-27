@@ -16,6 +16,8 @@ package org.nsesa.editor.gwt.core.client.ui.resources;
 import com.google.gwt.i18n.client.Messages;
 
 /**
+ * Git messages - its corresponding .properties file is generated automatically by the Maven Git plugin with the
+ * latest commit information.
  * Date: 17/10/12 22:57
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
