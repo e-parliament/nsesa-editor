@@ -19,6 +19,7 @@
               type='org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationViewCss'/>
     <ui:style field="res">
         .confirmationPanel {
+            min-width: 400px;
         }
 
         .primaryActionButton {

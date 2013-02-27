@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the confirmation component.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -26,15 +27,39 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ConfirmationViewImpl.class)
 public interface ConfirmationView extends IsWidget {
 
+    /**
+     * Set the title for the confirmation popup.
+     * @param title the title
+     */
     void setConfirmationTitle(String title);
 
+    /**
+     * Set the message for the confirmation.
+     * @param message the message
+     */
     void setConfirmationMessage(String message);
 
+    /**
+     * Set the confirmation action button's text
+     * @param text the confirmation action text
+     */
     void setConfirmationButtonText(String text);
 
+    /**
+     * Set the cancel action button's text
+     * @param text the cancel action text
+     */
     void setCancelButtonText(String text);
 
+    /**
+     * Get a reference to the confirmation button.
+     * @return the confirmation component
+     */
     HasClickHandlers getConfirmationButton();
 
+    /**
+     * Get a reference to the cancel button.
+     * @return the cancel component
+     */
     HasClickHandlers getCancelButton();
 }

@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.inject.Inject;
 
 /**
+ * Controller for the confirmation popup panel, which should be triggered via the
+ * {@link org.nsesa.editor.gwt.core.client.event.ConfirmationEvent}.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -36,7 +38,6 @@ public class ConfirmationController {
         this.view = view;
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
-        this.view.asWidget().setWidth("400px");
         registerListeners();
     }
 
@@ -44,16 +45,28 @@ public class ConfirmationController {
 
     }
 
+    /**
+     * Shows the popup at the given coordinates.
+     *
+     * @param left the left position, in pixels, relative to the browser window
+     * @param top the top position, in pixels, relative to the browser window
+     */
     public void show(int left, int top) {
         popupPanel.setPopupPosition(left, top);
         popupPanel.show();
     }
 
+    /**
+     * Center and show the popup.
+     */
     public void center() {
         popupPanel.center();
         popupPanel.show();
     }
 
+    /**
+     * Hide the popup.
+     */
     public void hide() {
         popupPanel.hide(true);
     }
@@ -72,7 +85,7 @@ public class ConfirmationController {
         view.setConfirmationTitle(confirmationTitle);
         view.setConfirmationMessage(confirmationMessage);
         view.setConfirmationButtonText(confirmationButtonText);
-        // ensure the clickhandlers cannot alter the behaviour of the confirmation panel
+        // ensure the click handlers cannot alter the behaviour of the confirmation panel
         view.getConfirmationButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -90,6 +103,11 @@ public class ConfirmationController {
         });
     }
 
+    /**
+     * Get the associated view.
+     *
+     * @return the view
+     */
     public ConfirmationView getView() {
         return view;
     }
