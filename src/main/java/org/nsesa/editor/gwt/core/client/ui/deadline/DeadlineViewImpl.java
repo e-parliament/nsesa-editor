@@ -26,6 +26,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * Default implementation for {@link DeadlineView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -54,8 +55,7 @@ public class DeadlineViewImpl extends Composite implements DeadlineView {
     @UiField
     HTML deadline;
 
-
-    public void setDeadline(String deadlineString) {
+    public void setDeadline(final String deadlineString) {
         this.deadline.setHTML(deadlineString);
     }
 

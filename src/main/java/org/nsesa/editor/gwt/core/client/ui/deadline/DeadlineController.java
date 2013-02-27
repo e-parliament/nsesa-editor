@@ -27,6 +27,14 @@ import java.util.Date;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * A controller for the deadline that might be set on a document controller. This controller also has a tracker
+ * that will fire the following events on the local document event bus:
+ * <ul>
+ *     <li>{@link Deadline24HourEvent}</li>
+ *     <li>{@link Deadline1HourEvent}</li>
+ *     <li>{@link DeadlinePassedEvent}</li>
+ * </ul>
+ *
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -36,15 +44,30 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 public class DeadlineController {
 
-    private final DeadlineView view;
+    /**
+     * The view.
+     */
+    protected final DeadlineView view;
 
-    private final DeadlineTracker deadlineTracker;
+    /**
+     * A tracker for the deadlines, fires events.
+     */
+    protected final DeadlineTracker deadlineTracker;
 
-    private DocumentController documentController;
+    /**
+     * The document event bus.
+     */
+    protected final DocumentEventBus documentEventBus;
 
-    private final DocumentEventBus documentEventBus;
+    /**
+     * The parent document controller.
+     */
+    protected DocumentController documentController;
 
-    private Date deadline;
+    /**
+     * The deadline, if any.
+     */
+    protected Date deadline;
 
     @Inject
     public DeadlineController(final DocumentEventBus documentEventBus,
@@ -54,18 +77,30 @@ public class DeadlineController {
         this.deadlineTracker = deadlineTracker;
         this.deadlineTracker.setDeadlineController(this);
         this.view = view;
-
+        // register private listeners
         registerListeners();
     }
+
+    /**
+     * Set the parent document controller.
+     * @param documentController the document controller
+     */
 
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
 
+    /**
+     * Return a reference to the parent document controller.
+     * @return the document controller
+     */
     public DocumentController getDocumentController() {
         return documentController;
     }
 
+    /**
+     * Registers the listeners for events that are being fired by the deadline tracker.
+     */
     private void registerListeners() {
         documentEventBus.addHandler(DeadlinePassedEvent.TYPE, new DeadlinePassedEventHandler() {
             @Override
@@ -97,6 +132,10 @@ public class DeadlineController {
     }
 
 
+    /**
+     * Get the formatted deadline. See the {@link CoreMessages} for the messages and date formats.
+     * @return the formatted deadline.
+     */
     protected String getFormattedDeadline() {
         // TODO switch to gwt-joda-time
         final Date now = new Date();
@@ -126,11 +165,19 @@ public class DeadlineController {
         return coreMessages.documentDeadlineDefaultMessage(DateTimeFormat.getFormat(coreMessages.documentDeadlineDefaultFormat()).format(deadline));
     }
 
+    /**
+     * Set the actual deadline, or <tt>null</tt> if there is no deadline.
+     * @param deadline the deadline
+     */
     public void setDeadline(final Date deadline) {
         this.deadline = deadline;
         deadlineTracker.setDeadline(deadline);
     }
 
+    /**
+     * Return the view associated with this controller.
+     * @return the view
+     */
     public DeadlineView getView() {
         return view;
     }

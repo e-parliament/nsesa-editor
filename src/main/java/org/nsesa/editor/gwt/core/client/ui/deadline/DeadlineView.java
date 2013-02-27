@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the deadline component.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,13 +26,30 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DeadlineViewImpl.class)
 public interface DeadlineView extends IsWidget {
 
+    /**
+     * Set the formatted deadline.
+     * @param deadline the deadline to set
+     */
     void setDeadline(String deadline);
 
+    /**
+     * Set the style when the deadline has passed.
+     */
     void setPastStyle();
 
+    /**
+     * Set the style to warn that the deadline is within 24 hours.
+     */
     void set24HourStyle();
 
+    /**
+     * Set the style to warn that the deadline is within 1 hour.
+     */
     void set1HourStyle();
 
+    /**
+     * General stylename to be used in the UIBinder.
+     * @param style the stylename to set
+     */
     void setStyleName(String style);
 }

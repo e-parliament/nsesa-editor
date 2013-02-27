@@ -19,6 +19,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provides;
 
 /**
+ * The module for the deadline component.
+ *
  * Date: 24/06/12 15:11
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

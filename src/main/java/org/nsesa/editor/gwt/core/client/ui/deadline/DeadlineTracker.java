@@ -19,17 +19,22 @@ import org.nsesa.editor.gwt.core.client.event.deadline.Deadline1HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.Deadline24HourEvent;
 import org.nsesa.editor.gwt.core.client.event.deadline.DeadlinePassedEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.*;
+
 /**
+ * This class is responsible for tracking a deadline by publishing events when the date nears.
  * Date: 30/07/12 23:31
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Scope(DOCUMENT)
 public class DeadlineTracker {
 
     private static final Logger LOG = Logger.getLogger(DeadlineTracker.class.getName());
@@ -48,7 +53,7 @@ public class DeadlineTracker {
     }
 
     /**
-     * Installs a new deadline and schedules the timers to fire accordingly.
+     * Sets a new deadline and schedules the timers to fire accordingly.
      *
      * @param deadline the deadline.
      */
@@ -75,7 +80,7 @@ public class DeadlineTracker {
                         try {
                             timer24hour.schedule((int) diff + (60 * 1000));
                         } catch (Exception exception) {
-                            LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                            LOG.log(Level.FINER, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                         }
                     }
                 }
@@ -88,7 +93,7 @@ public class DeadlineTracker {
                         try {
                             timer1hour.schedule((int) diff + (60 * 1000));
                         } catch (Exception exception) {
-                            LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                            LOG.log(Level.FINER, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                         }
                     }
                 }
@@ -101,7 +106,7 @@ public class DeadlineTracker {
                     try {
                         timer0hour.schedule((int) diff + (60 * 1000));
                     } catch (Exception exception) {
-                        LOG.log(Level.INFO, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
+                        LOG.log(Level.FINER, "Overflow - Deadline probably too far in the future" + exception.getMessage(), exception);
                     }
                 }
             }
