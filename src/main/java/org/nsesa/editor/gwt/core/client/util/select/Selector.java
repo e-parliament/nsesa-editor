@@ -20,6 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Selector class to support xpath-like expressions. Very simplified, it only supports basic expressions, and definitely
+ * not yet well tested.
+ *
+ * TODO untested
+ *
  * Date: 07/01/13 14:23
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -31,6 +36,17 @@ public class Selector {
             new AttributeMatcher(), new NodeNameIndexMatcher(), new IndexMatcher(), new NodeNameMatcher(), new WildcardMatcher()
     };
 
+    /**
+     * Selects a list of matching nodes based on the passed expression and a given <tt>root</tt> node. Valid examples
+     * are in the form of:
+     * <ul>
+     *     <li>//{nodeType}[{index}]/{nodeType}</li>
+     * </ul>
+     * Where <tt>nodeType</tt> and <tt>index</tt> can be replaced by a wildcard.
+     * @param path  the path expression
+     * @param root  the root node
+     * @return a list of matching {@link OverlayWidget}s
+     */
     public List<OverlayWidget> select(final String path, final OverlayWidget root) {
         List<OverlayWidget> overlayWidgets = new ArrayList<OverlayWidget>();
         final String[] split = path.split("/");
@@ -38,6 +54,14 @@ public class Selector {
         return overlayWidgets;
     }
 
+    /**
+     * Similar {@link #select(String, org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)}, but using
+     * recursion.
+     *
+     * @param split an array of expression parts
+     * @param root  the root node
+     * @param found a list of {@link OverlayWidget}s to store the matching nodes in
+     */
     public void select(final String[] split, final OverlayWidget root, final List<OverlayWidget> found) {
         if (split != null && split.length > 0) {
             final String expression = split[0];
@@ -63,6 +87,9 @@ public class Selector {
         }
     }
 
+    /**
+     * A wildcard matcher that matches everything if the expression is '*'.
+     */
     private static class WildcardMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
@@ -75,6 +102,10 @@ public class Selector {
         }
     }
 
+    /**
+     * An attribute matcher, that can be used to find {@link OverlayWidget}s with an attribute value such as
+     * <code>/foo[name=bar]</code> or <code>//blah[id=foo]</code>.
+     */
     private static class AttributeMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
@@ -94,6 +125,9 @@ public class Selector {
         }
     }
 
+    /**
+     * A matcher on the type name of of node.
+     */
     private static class NodeNameMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
@@ -106,6 +140,9 @@ public class Selector {
         }
     }
 
+    /**
+     * A composite matcher on node type and index.
+     */
     private static class NodeNameIndexMatcher implements Matcher {
 
         private NodeNameMatcher nodeNameMatcher = new NodeNameMatcher();
@@ -126,6 +163,9 @@ public class Selector {
         }
     }
 
+    /**
+     * A matcher on the index.
+     */
     private static class IndexMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {

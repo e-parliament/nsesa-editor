@@ -16,13 +16,25 @@ package org.nsesa.editor.gwt.core.client.util.select;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
+ * Simple matcher interface. Subject to change.
  * Date: 07/01/13 14:24
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface Matcher {
+interface Matcher {
+    /**
+     * Check if a certain <tt>expression</tt> matches a given <tt>overlayWidget</tt>.
+     * @param expression        the expression
+     * @param overlayWidget     the overlay widget to match
+     * @return <tt>true</tt> if the overlay widget matches the given <tt>expression</tt>
+     */
     boolean matches(String expression, OverlayWidget overlayWidget);
 
+    /**
+     * Check if the expression is applicable to this matcher.
+     * @param expression    the expression
+     * @return <tt>true</tt> if the matcher can handle this <tt>expression</tt>
+     */
     boolean applicable(String expression);
 }
