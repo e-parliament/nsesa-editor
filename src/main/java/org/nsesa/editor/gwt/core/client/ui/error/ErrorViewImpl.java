@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 
 /**
+ * Basic implementation of the {@link ErrorView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

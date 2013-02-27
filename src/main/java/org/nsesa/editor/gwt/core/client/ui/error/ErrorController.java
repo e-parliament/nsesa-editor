@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.inject.Inject;
 
 /**
+ * Controller for the error component to display (critical) error messages to the end user.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -27,8 +28,14 @@ import com.google.inject.Inject;
  */
 public class ErrorController {
 
+    /**
+     * The popup panel.
+     */
     private final PopupPanel popupPanel = new DecoratedPopupPanel(false, true);
 
+    /**
+     * The view.
+     */
     private final ErrorView view;
 
     @Inject
@@ -49,16 +56,29 @@ public class ErrorController {
         });
     }
 
+
+    /**
+     * Shows the popup at the given coordinates.
+     *
+     * @param left the left position, in pixels, relative to the browser window
+     * @param top  the top position, in pixels, relative to the browser window
+     */
     public void show(int left, int top) {
         popupPanel.setPopupPosition(left, top);
         popupPanel.show();
     }
 
+    /**
+     * Center the popup and show it.
+     */
     public void center() {
         popupPanel.center();
         popupPanel.show();
     }
 
+    /**
+     * Hide the popup.
+     */
     public void hide() {
         popupPanel.hide(true);
     }
@@ -74,6 +94,10 @@ public class ErrorController {
         view.setErrorMessage(errorMessage);
     }
 
+    /**
+     * Return the associated view.
+     * @return the view
+     */
     public ErrorView getView() {
         return view;
     }

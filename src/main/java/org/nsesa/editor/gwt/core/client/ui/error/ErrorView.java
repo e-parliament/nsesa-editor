@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the error component.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -26,9 +27,21 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ErrorViewImpl.class)
 public interface ErrorView extends IsWidget {
 
+    /**
+     * Set the error title on the popup.
+     * @param title the title
+     */
     void setErrorTitle(String title);
 
+    /**
+     * Set the error message on the popup.
+     * @param message the message
+     */
     void setErrorMessage(String message);
 
+    /**
+     * Return a reference to the OK button.
+     * @return the ok button reference
+     */
     HasClickHandlers getOkButton();
 }
