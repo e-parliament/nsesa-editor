@@ -25,6 +25,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
+ * The default implementation for the amendment action panel using the UIBinder approach.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

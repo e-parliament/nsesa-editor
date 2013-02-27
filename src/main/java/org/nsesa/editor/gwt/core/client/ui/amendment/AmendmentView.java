@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * Main amendment view as it is injected into the document.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,17 +29,52 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentViewImpl.class)
 public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClickHandlers {
 
+    /**
+     * Set the title
+     *
+     * @param title the title to set
+     */
     void setTitle(String title);
 
+    /**
+     * Sets the body to display as the main amendment content (usually transformed XML).
+     *
+     * @param xmlContent the xml content to set as the body
+     */
     void setBody(String xmlContent);
 
+    /**
+     * Sets the status of the amendment on this view.
+     *
+     * @param status the status to set
+     */
+    void setStatus(String status);
+
+    /**
+     * Get the body of the amendment as an element.
+     *
+     * @return the body
+     */
     Element getBody();
 
+    /**
+     * Return a reference to the component for more actions, such as table, delete, ...
+     *
+     * @return the component that can be clicked for more actions
+     */
     HasClickHandlers getMoreActionsButton();
 
+    /**
+     * Return a reference to the component to edit the current amendment.
+     *
+     * @return the component that can be clicked to edit the amendment
+     */
     HasClickHandlers getEditButton();
 
+    /**
+     * Returns the reference to the component to delete this amendment controller.
+     *
+     * @return the component that can be clicked to delete this controller
+     */
     HasClickHandlers getDeleteButton();
-
-    void setStatus(String status);
 }

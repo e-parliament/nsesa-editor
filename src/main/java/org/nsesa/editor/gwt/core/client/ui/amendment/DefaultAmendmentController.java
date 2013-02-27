@@ -35,6 +35,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
+ * Default implementation of the {@link AmendmentController}
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -70,7 +71,7 @@ public class DefaultAmendmentController implements AmendmentController {
         this.extendedView = amendmentExtendedView;
     }
 
-    private void registerListeners() {
+    protected void registerListeners() {
 
         final ClickHandler confirmationHandler = new ClickHandler() {
             @Override
@@ -208,11 +209,18 @@ public class DefaultAmendmentController implements AmendmentController {
         return documentController;
     }
 
+    /**
+     * Sets the document controller. If the document controller is not <tt>null</tt> (which can happen if an amendment
+     * controller is no longer injected in a document controller), then we also register the event listeners.
+     * @param documentController the document controller
+     */
     @Override
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
         if (documentController != null) {
             registerListeners();
+
+            // only now we have the possibility to inject the amendment action panel controller
             this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
             this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
                 @Override
@@ -263,6 +271,8 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setOrder(int order) {
         this.order = order;
+
+        // TODO i18n
         view.setTitle("Amendment " + order);
         extendedView.setTitle("Amendment " + order);
     }

@@ -36,6 +36,14 @@ import java.util.Arrays;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
+ * The is the controller for the popup with available actions for a single amendment, after clicking the
+ * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView#getMoreActionsButton()}. This panel
+ * gives access to several actions that are possible at the time of appearance (they might or might not be
+ * valid anymore during the actual action invocation).
+ * <p/>
+ * This controller can be extended by calling the {@link #addWidget(com.google.gwt.user.client.ui.Widget)} or
+ * {@link #addWidget(com.google.gwt.user.client.ui.IsWidget)} methods.
+ * <p/>
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -44,17 +52,34 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 @Scope(AMENDMENT)
 public class AmendmentActionPanelController {
 
+    /**
+     * The view.
+     */
     protected final AmendmentActionPanelView view;
 
-    // parent amendment controller
+    /**
+     * The parent amendment controller.
+     */
     protected AmendmentController amendmentController;
 
+    /**
+     * An anchor to table the amendment.
+     */
     protected final Anchor anchorTable = new Anchor();
 
+    /**
+     * An anchor to withdraw an amendment.
+     */
     protected final Anchor anchorWithdraw = new Anchor();
 
+    /**
+     * An anchor to delete an amendment.
+     */
     protected final Anchor anchorDelete = new Anchor();
 
+    /**
+     * The enclosing popup.
+     */
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
 
     @Inject
@@ -69,7 +94,10 @@ public class AmendmentActionPanelController {
         addWidget(anchorDelete);
     }
 
-    private void registerListeners() {
+    /**
+     * Registers the event listeners on the various anchors.
+     */
+    protected void registerListeners() {
 
         final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
         final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
@@ -169,27 +197,54 @@ public class AmendmentActionPanelController {
         });
     }
 
+    /**
+     * Adds a widget to the action panel.
+     *
+     * @param widget the widget to add.
+     */
     public void addWidget(IsWidget widget) {
         view.getMainPanel().add(widget);
     }
 
+    /**
+     * Adds a widget to the action panel.
+     *
+     * @param widget the widget to add.
+     */
     public void addWidget(Widget widget) {
         view.getMainPanel().add(widget);
     }
 
+    /**
+     * Adds a visual separator (an hr element with the css class 'separator') to the actions listed.
+     */
     public void addSeparator() {
         addWidget(new HTML("<hr class='separator'/>"));
     }
 
+    /**
+     * Shows the popup at the given coordinates.
+     *
+     * @param x the x (left) position, in pixels, relative to the browser window
+     * @param y the y (top) position, in pixels, relative to the browser window
+     */
     public void show(int x, int y) {
         popupPanel.setPopupPosition(x, y);
         popupPanel.show();
     }
 
+    /**
+     * Hides the popup panel.
+     */
     public void hide() {
         popupPanel.hide();
     }
 
+    /**
+     * Sets the parent amendment controller, and registers the event listeners.
+     *
+     * @param amendmentController the parent amendment controller
+     */
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
         registerListeners();

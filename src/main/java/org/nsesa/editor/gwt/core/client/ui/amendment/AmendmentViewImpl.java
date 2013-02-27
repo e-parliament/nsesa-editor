@@ -28,6 +28,8 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
+ * Amendment view implementation using the UI-Binder approach.
+ *
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -96,13 +98,13 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
         }
     }
 
+    /**
+     * Overridden to ensure that browser events do not bubble up to the parent DOM element.
+     * @param event the event
+     */
     @Override
     public void onBrowserEvent(Event event) {
         event.stopPropagation();
-        /*switch(DOM.eventGetType(event)) {
-            case Event.ONDBLCLICK :
-
-        }*/
         super.onBrowserEvent(event);
     }
 
