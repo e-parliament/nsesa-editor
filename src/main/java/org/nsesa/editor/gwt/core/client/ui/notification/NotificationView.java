@@ -21,6 +21,7 @@ import com.google.inject.ImplementedBy;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 /**
+ * View for the notification component.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,13 +29,36 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
  */
 @ImplementedBy(NotificationViewImpl.class)
 public interface NotificationView extends IsWidget {
+
+    /**
+     * General method to set the style name on this view.
+     * @param style the css style name
+     */
     void setStyleName(String style);
 
+    /**
+     * Set the notification message.
+     * @param message the message
+     */
     void setMessage(String message);
 
+    /**
+     * Get a reference to the close button.
+     * @return the close button
+     */
     HasClickHandlers getCloseButton();
 
+    /**
+     * Add an on-mouse-over handler to register mouse-over events.
+     * @param handler the handler
+     * @return the handler registration
+     */
     HandlerRegistration addMouseOverHandler(MouseOverHandler handler);
 
+    /**
+     * Add an on-mouse-out handler to register mouse-out events.
+     * @param handler the handler
+     * @return the handler registration
+     */
     HandlerRegistration addMouseOutHandler(MouseOutHandler handler);
 }

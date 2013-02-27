@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Default implementation for the {@link NotificationView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -37,23 +38,25 @@ public class NotificationViewImpl extends Composite implements NotificationView 
     interface MyUiBinder extends UiBinder<Widget, NotificationViewImpl> {
     }
 
+    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+
     @UiField
     Button closeButton;
 
     @UiField
     HTML message;
 
-    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-
     public NotificationViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
+    @Override
     public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
         return addDomHandler(handler, MouseOverEvent.getType());
     }
 
+    @Override
     public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
         return addDomHandler(handler, MouseOutEvent.getType());
     }

@@ -28,6 +28,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Component for showing a (temporary) notification on the screen of the end user.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -36,15 +37,39 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class NotificationController {
 
+    /**
+     * To keep track of all instances (since multiple instances kan appear at the same time).
+     */
     private final static List<NotificationController> INSTANCES = new ArrayList<NotificationController>();
+
+    /**
+     * A flag to keep track of whether or not we should pause the animation (eg. during hovering)
+     */
     private static boolean PAUSE_UPDATE = false;
 
+    /**
+     * The default height in pixels of a single notification.
+     */
     private final static int HEIGHT_IN_PX = 30;
+
+    /**
+     * The default width in pixels of a single notification.
+     */
     private final static int WIDTH_IN_PX = 600;
 
+    /**
+     * The underlying popup panel for a single notification.
+     */
     private PopupPanel popupPanel = new PopupPanel(false, false);
 
+    /**
+     * The view.
+     */
     private final NotificationView view;
+
+    /**
+     * An animation timer.
+     */
     private final Timer timer = new Timer() {
         @Override
         public void run() {
@@ -52,6 +77,9 @@ public class NotificationController {
         }
     };
 
+    /**
+     * An animation to alter the opacity.
+     */
     private Animation animation = new Animation() {
         @Override
         protected void onUpdate(double progress) {
@@ -59,7 +87,9 @@ public class NotificationController {
         }
     };
 
-
+    /**
+     * The default duration of 5 seconds.
+     */
     private int duration = 5;
 
     @Inject
@@ -98,6 +128,11 @@ public class NotificationController {
         });
     }
 
+    /**
+     * Set the opacity on this view.
+     *
+     * @param opacity
+     */
     private void setOpacity(double opacity) {
         final Style style = popupPanel.getElement().getStyle();
         style.setOpacity(opacity);
@@ -106,14 +141,27 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Get the view associated with this notification.
+     *
+     * @return the view
+     */
     public NotificationView getView() {
         return view;
     }
 
+    /**
+     * Set the message to be displayed in the notification.
+     *
+     * @param message the message to show
+     */
     public void setMessage(final String message) {
         view.setMessage(message);
     }
 
+    /**
+     * Show the notification, and keep track of this notification's position.
+     */
     public void show() {
         timer.cancel();
 
@@ -129,6 +177,9 @@ public class NotificationController {
         updatePositions();
     }
 
+    /**
+     * Update the position to make sure they are not overlapping
+     */
     private static void updatePositions() {
         if (!PAUSE_UPDATE) {
             final int left = (Window.getClientWidth() / 2) - (WIDTH_IN_PX / 2);
@@ -139,6 +190,9 @@ public class NotificationController {
         }
     }
 
+    /**
+     * Hide the notification.
+     */
     public void hide() {
         popupPanel.hide();
         timer.cancel();
