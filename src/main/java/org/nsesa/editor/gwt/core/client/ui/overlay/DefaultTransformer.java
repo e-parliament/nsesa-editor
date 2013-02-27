@@ -54,9 +54,6 @@ public class DefaultTransformer implements Transformer {
         sb.append(indent).append("<");
         if (rootNode) {
             sb.append(widget.getType());
-            // add the default namespace for xsi
-//            sb.append("\n\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"");
-            // TODO: we need to see if we can find a good way to reference the XSD and plug it in via a subclass
             for (final Map.Entry<String, String> entry : namespaces.entrySet()) {
                 if (DEFAULT_NAMESPACE.equals(entry.getValue())) {
                     // this is the default namespace

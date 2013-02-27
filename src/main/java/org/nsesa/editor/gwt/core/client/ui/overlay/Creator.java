@@ -21,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import java.util.LinkedHashMap;
 
 /**
+ * Interface to keep track of the allowed children of a given {@link OverlayWidget} in a given {@link DocumentController}.
  * Date: 08/11/12 11:20
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

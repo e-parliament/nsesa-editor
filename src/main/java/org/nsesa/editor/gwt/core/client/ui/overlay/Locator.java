@@ -17,6 +17,7 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
+ * Class responsible for reporting the location of an {@link OverlayWidget}.
  * Date: 06/07/12 17:21
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,7 +25,32 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  */
 @ImplementedBy(DefaultLocator.class)
 public interface Locator {
-    String getLocation(OverlayWidget overlayWidget, OverlayWidget newChild, String languageIso, boolean childrenIncluded);
+    /**
+     * Get the location of a given <tt>newChild</tt> that has not yet been added in the
+     * collection of the {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}
+     * <tt>parentOverlayWidget</tt>.
+     * <p/>
+     * This location will be done in a certain language specified by the given <tt>languageIso</tt>, and can take the
+     * children of the element into account, or calculate it standalone.
+     * <p/>
+     * To clarify the last point: for example, when an amendment is created on an article, its position would be
+     * different if the amendment included the entire complex structure of the article, or if it were standalone.
+     *
+     * @param parentOverlayWidget the parent overlay widget
+     * @param newChild            the new child to get the position for
+     * @param languageIso         the ISO code of the language to get the position in
+     * @param childrenIncluded    <tt>true</tt> if the children are taken into account
+     * @return the position of this overlay widget in the tree
+     */
+    String getLocation(OverlayWidget parentOverlayWidget, OverlayWidget newChild, String languageIso, boolean childrenIncluded);
 
+    /**
+     * Get the position of a given <tt>overlayWidget</tt> in a given <tt>languageIso</tt>.
+     *
+     * @param overlayWidget     the overlay widget to get the position for
+     * @param languageIso       the ISO code of the language to get the position in
+     * @param childrenIncluded  <tt>true</tt> if the children are taken into account
+     * @return the position of this overlay widget in the tree
+     */
     String getLocation(OverlayWidget overlayWidget, String languageIso, boolean childrenIncluded);
 }

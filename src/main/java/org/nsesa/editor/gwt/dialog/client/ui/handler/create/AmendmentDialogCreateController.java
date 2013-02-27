@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleE
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.AmendmentAction;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;

@@ -230,7 +230,7 @@ public class OverlayStrategySupport {
     private Format guessFormat(Element element) {
         String literalIndex = getLiteralIndex(element);
         if (literalIndex != null) {
-            literalIndex = TextUtils.stripTags(literalIndex.trim());
+            literalIndex = TextUtils.stripTags(literalIndex.trim(), false);
             if (literalIndex.startsWith("("))
                 return Format.DOUBLE_BRACKET;
             if (literalIndex.endsWith("."))
@@ -270,7 +270,7 @@ public class OverlayStrategySupport {
     public final String getLiteralIndex(Element element) {
         Element el = getElementByClassName(element, TAG_LITERAL_INDEX);
         if (el != null) {
-            return TextUtils.stripTags(el.getInnerText().trim());
+            return TextUtils.stripTags(el.getInnerText().trim(), false);
         } else {
             return null;
         }

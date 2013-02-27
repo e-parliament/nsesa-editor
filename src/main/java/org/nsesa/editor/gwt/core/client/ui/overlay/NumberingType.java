@@ -14,6 +14,8 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 /**
+ * Numbering type enum to handle the different numbering types we encounter in XML documents.
+ *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: NumberingType.java 4771 2012-01-20 13:24:50Z pluppens $
  */
@@ -45,7 +47,7 @@ public enum NumberingType {
     LETTER {
         @Override
         public String get(int index) {
-            return TextUtils.getLiteralForNumber(index);
+            return Alphabet.getLiteralForNumber(index);
         }
 
         @Override

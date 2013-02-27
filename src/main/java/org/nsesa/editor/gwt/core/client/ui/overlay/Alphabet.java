@@ -16,12 +16,41 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import java.util.Arrays;
 
 /**
+ * Keeps track of non-latin alphabets such as Cyrillic and Greek. Used to guess the numbering type of a given
+ * overlay widget.
+ * <p/>
  * Date: 05/07/12 21:59
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class Alphabet {
+
+    private final static char[] alphabet;
+
+    static {
+        // create the alphabet - a to b
+        alphabet = new char[26];
+        for (int i = 0; i < alphabet.length; i++) {
+            alphabet[i] = (char) (i + (int) 'a');
+        }
+    }
+
+    public static String getLiteralForNumber(int index) {
+        if (index > alphabet.length * alphabet.length)
+            throw new IllegalArgumentException("Cannot serve a number greater than " +
+                    alphabet.length * alphabet.length);
+            /*
+           if the index is bigger than the number of chars in the alphabet,
+           we'll add the the extra char equal to the number of times
+           this index will overflow the alphabet.
+            */
+        if (index > alphabet.length) {
+            return String.valueOf((alphabet[index / alphabet.length]) + alphabet[index % alphabet.length]);
+        }
+        return String.valueOf(alphabet[index]);
+    }
+
     /**
      * @see <a href="http://en.wikipedia.org/wiki/Bulgarian_language#Alphabet">Bulgarian Alphabet</a>
      */

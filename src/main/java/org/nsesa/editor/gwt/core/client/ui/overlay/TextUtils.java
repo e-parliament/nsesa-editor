@@ -17,21 +17,32 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import java.util.LinkedHashMap;
 
 /**
+ * Unsorted collection of utilities related to String and XML processing.
+ *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: TextUtils.java 5027 2012-02-17 14:01:17Z pluppens $
  */
 public class TextUtils {
+
+    // TODO: this seems hardly sufficient? What about other entities?
     // xml conversion: & - &amp; < - &lt; > - &gt; " - &quot; ' - &apos;
     private static final LinkedHashMap<Character, String> XML_ESCAPER = new LinkedHashMap<Character, String>();
 
     static {
-        XML_ESCAPER.put(new Character('&'), "&amp;");
-        XML_ESCAPER.put(new Character('<'), "&lt;");
-        XML_ESCAPER.put(new Character('>'), "&gt;");
-        XML_ESCAPER.put(new Character('"'), "&quot;");
-        XML_ESCAPER.put(new Character('\''), "&apos;");
+        XML_ESCAPER.put('&', "&amp;");
+        XML_ESCAPER.put('<', "&lt;");
+        XML_ESCAPER.put('>', "&gt;");
+        XML_ESCAPER.put('"', "&quot;");
+        XML_ESCAPER.put('\'', "&apos;");
     }
 
+    /**
+     * Strips all tags from a given <tt>html</tt>, and optionally collapses all whitespace afterwards.
+     *
+     * @param html               the html to get the text for
+     * @param collapseWhiteSpace <tt>true</tt> if you want the whitespace to be collapsed into a single whitespace
+     * @return
+     */
     public static String stripTags(String html, boolean collapseWhiteSpace) {
         if (html == null)
             return null;
@@ -46,10 +57,23 @@ public class TextUtils {
         return html.trim();
     }
 
+    /**
+     * Collapse all whitespace in a given <tt>content</tt> into a single whitespace.
+     *
+     * @param content the content
+     * @return the content with whitespace collapsed
+     */
     public static String collapseWhiteSpace(String content) {
         return content.replaceAll("\\s+", " ");
     }
 
+    /**
+     * Limit a given <tt>input</tt> string into <tt>max</tt> characters with ellipsis at the end ('...').
+     *
+     * @param input the input string
+     * @param max   the max. amount of characters
+     * @return the string limited to <tt>max</tt>. characters, or the input if the length was not exceeded
+     */
     public static String limit(String input, int max) {
         if (input.length() > max) {
             input = input.substring(0, max - 4) + " ...";
@@ -57,6 +81,12 @@ public class TextUtils {
         return input;
     }
 
+    /**
+     * Capitalize a given <tt>input</tt> string
+     *
+     * @param input the input to capitalize
+     * @return the capitalized input, <tt>null</tt> if it was <tt>null</tt>, and an empty string ("") otherwise
+     */
     public static String capitalize(String input) {
         if (input != null) {
             if ("".equals(input.trim()))
@@ -67,65 +97,7 @@ public class TextUtils {
     }
 
     /**
-     * Strips all HTML tags
-     *
-     * @param {Mixed} value The text from which to strip tags
-     * @return {String} The stripped text
-     */
-    public static String stripTags(String html) {
-        return html.replaceAll("\\<.*?\\>", "");
-    }
-
-    private final static char[] alphabet;
-
-    static {
-        // create the alphabet - a to b
-        alphabet = new char[26];
-        for (int i = 0; i < alphabet.length; i++) {
-            alphabet[i] = (char) (i + (int) 'a');
-        }
-    }
-
-    public static String getLiteralForNumber(int index) {
-        if (index > alphabet.length * alphabet.length)
-            throw new IllegalArgumentException("Cannot serve a number greater than " +
-                    alphabet.length * alphabet.length);
-        /*
-       if the index is bigger than the number of chars in the alphabet,
-       we'll add the the extra char equal to the number of times
-       this index will overflow the alphabet.
-        */
-        if (index > alphabet.length) {
-            return String.valueOf((alphabet[index / alphabet.length]) + alphabet[index % alphabet.length]);
-        }
-        return String.valueOf(alphabet[index]);
-    }
-
-    public static String markBoldItalic(String input) {
-        if (input == null) return null;
-        return "<span class='bold_italic'>" + input + "</span>";
-    }
-
-
-    public static String dump(StringBuilder sb, int level, Throwable e) {
-
-        for (StackTraceElement traceElement : e.getStackTrace()) {
-            sb.append(traceElement.getMethodName()).append(" in ").append(traceElement.getClassName()).append(" at line ").append(traceElement.getLineNumber()).append("\n");
-        }
-        if (e.getCause() != null) {
-            sb.append("\n\n------------ UNDERLYING CAUSE-----------------\n\n");
-            sb.append(dump(sb, ++level, e.getCause()));
-        }
-        return sb.toString();
-    }
-
-
-    public static boolean hasLength(String str) {
-        return (str != null && str.length() > 0);
-    }
-
-    /**
-     * Escape all xml special chars with their corresponding values as follows
+     * Escape SOME xml special chars with their corresponding values as follows
      *
      * @param str The string to be escaped
      * @return The string escaped
@@ -134,32 +106,18 @@ public class TextUtils {
         if (str == null) return null;
         StringBuilder sb = new StringBuilder(str.length() * 2);
         for (int i = 0; i < str.length(); i++) {
-            Character ch = new Character(str.charAt(i));
+            Character ch = str.charAt(i);
             String escape = XML_ESCAPER.get(ch);
             sb.append(escape == null ? ch.charValue() : escape);
         }
         return sb.toString();
     }
 
-    public static boolean hasText(String str) {
-        if (!hasLength(str)) {
-            return false;
-        }
-        int strLen = str.length();
-        for (int i = 0; i < strLen; i++) {
-            // isWhitespace is not supported yet by gwt
-            if (!Character.isSpace(str.charAt(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
-     * Checks whether a string starts with digits and might contains after digits only letters
+     * Checks whether a string starts with digits and might contains after the digits only letters
      *
-     * @param str
-     * @return
+     * @param str the string to check
+     * @return true if the string starts with digits, and is followed by letters
      */
     public static boolean startsWithDigitsFollowedByLetters(String str) {
         int strLen = str.length();
@@ -187,33 +145,6 @@ public class TextUtils {
         }
         return startsWithDigits && followedByLetters;
 
-    }
-
-    private static final String DOCUMENT_START_TAG = "<document>";
-    private static final String DOCUMENT_END_TAG = "</document>";
-    private static final String BOM_CHAR = "\uFEFF";
-
-    /**
-     * Strip start and end document tags
-     *
-     * @param html
-     * @return
-     */
-    public static String stripDocumentTags(String html) {
-        if (html == null) {
-            return null;
-        }
-        html = html.trim();
-        if (html.startsWith(BOM_CHAR)) {
-            html = html.substring(1);
-        }
-        if (html.startsWith(DOCUMENT_START_TAG)) {
-            html = html.substring(DOCUMENT_START_TAG.length());
-        }
-        if (html.endsWith(DOCUMENT_END_TAG)) {
-            html = html.substring(0, html.length() - DOCUMENT_END_TAG.length());
-        }
-        return html;
     }
 
     /**
