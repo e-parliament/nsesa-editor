@@ -17,8 +17,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.inject.ImplementedBy;
 
 /**
- * An overlay factory is responsible for translating an element into an amendable widget.
- * This widget will then be used in a separate tree to represent a high(er) level version
+ * An overlay factory is responsible for translating an element into an {@link OverlayWidget}.
+ * This widget will then be used in a separate tree to represent a high(er) level abstraction
  * of the structure in the document.
  * <p/>
  * Date: 04/08/12 17:44
@@ -29,22 +29,35 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultOverlayFactory.class)
 public interface OverlayFactory {
     /**
-     * Translates a given element into an {@link OverlayWidget}. If the overlay does not succeed (eg. because there
-     * is no matching {@link OverlayWidget} found, then null is returned.
+     * Translates a given element and its children into an {@link OverlayWidget} tree. If the overlay does not succeed
+     * (eg. because there is no matching {@link OverlayWidget} found), then null is returned.
      *
      * @param element the element to get the overlaying element for.
      * @return the amendable widget, or null if it cannot be overlaid.
      */
     OverlayWidget getAmendableWidget(Element element);
 
+    /**
+     * Get a new {@link OverlayWidget} based on the passed tag. If the tag is not recognized, or cannot be found
+     * within the current namespace, it will return <tt>null</tt>.
+     *
+     * @param tag the tag to create the {@link OverlayWidget} for
+     * @return the generated overlay widget, or <tt>null</tt> if it cannot be instantiated
+     */
     OverlayWidget getAmendableWidget(String tag);
 
+    /**
+     * Return a single new {@link OverlayWidget} for a given <tt>element</tt>
+     *
+     * @param element the element to get the overlay widget for
+     * @return the {@link OverlayWidget}, or <tt>null</tt> if it cannot be created.
+     */
     OverlayWidget toAmendableWidget(Element element);
 
     /**
-     * Returns the namespace of the overlay factory
+     * Returns the namespace URI of the overlay factory
      *
-     * @return
+     * @return the namespace URI
      */
     String getNamespace();
 }

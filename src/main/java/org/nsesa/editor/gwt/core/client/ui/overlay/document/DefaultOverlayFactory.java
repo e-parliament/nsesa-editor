@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.core.client.util.Counter;
 import java.util.logging.Logger;
 
 /**
+ * Default implementation of the {@link OverlayFactory}.
  * Date: 17/10/12 21:30
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

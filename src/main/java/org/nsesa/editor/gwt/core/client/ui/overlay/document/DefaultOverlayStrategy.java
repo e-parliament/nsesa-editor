@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Default implementation of the {@link OverlayStrategy}.
  * Date: 17/10/12 21:31
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

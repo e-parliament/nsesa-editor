@@ -16,6 +16,8 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 
 /**
+ * A listener interface for {@link OverlayWidget}s that will be called during various operations
+ * such as adding or removing {@link AmendmentController}s or child {@link OverlayWidget}s.
  * Date: 23/10/12 14:15
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -23,19 +25,71 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  */
 public interface OverlayWidgetListener {
 
+    /**
+     * Called before an {@link AmendmentController} is added to the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget       the overlay widget to which the amendment controller is added
+     * @param amendmentController the amendment controller to be added
+     * @return <tt>true</tt> if you want to veto the addition of this amendment controller
+     */
     boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
+    /**
+     * Callback after an {@link AmendmentController} has been added to a given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget       the overlay widget to which the amendment controller was added
+     * @param amendmentController the amendment controller that has been added
+     */
     void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
+    /**
+     * Called before an {@link AmendmentController} is removed from the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget       the overlay widget from which the amendment controller is removed
+     * @param amendmentController the amendment controller to be removed
+     * @return <tt>true</tt> if you want to veto the removal of this amendment controller
+     */
     boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
+    /**
+     * Callback after an {@link AmendmentController} has been removed from a given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget       the overlay widget from which the amendment controller was removed
+     * @param amendmentController the amendment controller that has been removed
+     */
     void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController);
 
+    /**
+     * Called before an {@link OverlayWidget} is added to the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget the overlay widget to which the overlay widget is added
+     * @param child         the overlay widget to be added
+     * @return <tt>true</tt> if you want to veto the addition of this overlay widget
+     */
     boolean beforeOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child);
 
+    /**
+     * Called after an {@link OverlayWidget} is added to the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget the overlay widget to which the amendment controller was added
+     * @param child         the overlay widget that was added
+     */
     void afterOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child);
 
+    /**
+     * Called before an {@link OverlayWidget} is removed from the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget the overlay widget from which the overlay widget is removed
+     * @param child         the overlay widget to be removed
+     * @return <tt>true</tt> if you want to veto the removal of this overlay widget
+     */
     boolean beforeOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child);
 
+    /**
+     * Called after an {@link OverlayWidget} is removed from the given <tt>overlayWidget</tt>.
+     *
+     * @param overlayWidget the overlay widget from which the amendment controller was removed
+     * @param child         the overlay widget that was removed
+     */
     void afterOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child);
 }

@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Support class to assist an {@link OverlayStrategy}.
  * Date: 03/07/12 23:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -39,18 +40,18 @@ public class OverlayStrategySupport {
     public static final String ATTRIB_ID = "id";
     public static final String ATTRIB_EVOLVING_ID = "evolvingId";
 
-    public static final String ATTRIB_AMENDABLE = "ep:amendable";
-    public static final String ATTRIB_IMMUTABLE = "ep:immutable";
-    public static final String ATTRIB_ASSIGNED_INDEX = "ep:assignedIndex";
-    public static final String ATTRIB_ORIGINAL_INDEX = "ep:originalIndex";
-    public static final String ATTRIB_FORMAT = "ep:format";
-    public static final String ATTRIB_NUMBERING_TYPE = "ep:numberingType";
-    public static final String ATTRIB_TRANSLATION_ID = "ep:sequence";
-    public static final String ATTRIB_SOURCE = "ep:source";
+    public static final String ATTRIB_AMENDABLE = "nsesa:amendable";
+    public static final String ATTRIB_IMMUTABLE = "nsesa:immutable";
+    public static final String ATTRIB_ASSIGNED_INDEX = "nsesa:assignedIndex";
+    public static final String ATTRIB_ORIGINAL_INDEX = "nsesa:originalIndex";
+    public static final String ATTRIB_FORMAT = "nsesa:format";
+    public static final String ATTRIB_NUMBERING_TYPE = "nsesa:numberingType";
+    public static final String ATTRIB_TRANSLATION_ID = "nsesa:sequence";
+    public static final String ATTRIB_SOURCE = "nsesa:source";
 
 
-    public static final String CLASS_OPERATION_PANEL = "ep:operationPanel";
-    public static final String CLASS_AMENDMENTS_PANEL = "ep:amendmentsPanel";
+    public static final String CLASS_OPERATION_PANEL = "nsesa:operationPanel";
+    public static final String CLASS_AMENDMENTS_PANEL = "nsesa:amendmentsPanel";
 
     private Set<String> asProperties = new HashSet<String>();
 

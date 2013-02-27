@@ -28,7 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO
+ * Interface for an overlay widget (a higher level widget that can be translated into one or more DOM elements).
+ * Forms a tree with a parent and children. Can be amendable, immutable and more.
+ *
+ * Usually instantiated by an {@link OverlayFactory}.
+ *
  * Date: 27/06/12 17:52
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -112,8 +116,16 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      */
     OverlayWidget getParentOverlayWidget();
 
+    /**
+     * Get the previous sibling or <tt>null</tt> if there is none.
+     * @return the previous sibling
+     */
     OverlayWidget getPreviousSibling();
 
+    /**
+     * Get the next sibling or <tt>null</tt> if there is none.
+     * @return the next sibling
+     */
     OverlayWidget getNextSibling();
 
     /**
@@ -154,10 +166,20 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      */
     void addOverlayWidget(OverlayWidget child, int index);
 
+    /**
+     * Called when adopting the lower level amendable element into the DOM tree.
+     */
     void onAttach();
 
+    /**
+     * Check if the underlying amendable element is attached to the DOM or not.
+     * @return <tt>true</tt> if it is attached
+     */
     boolean isAttached();
 
+    /**
+     * Called when the underlying element is detached from the DOM.
+     */
     void onDetach();
 
     /**
