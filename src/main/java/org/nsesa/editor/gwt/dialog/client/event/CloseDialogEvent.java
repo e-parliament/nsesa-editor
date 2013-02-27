@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
+ * An event indicating a request to close the main dialog.
  * Date: 24/06/12 20:14
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

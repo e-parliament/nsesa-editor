@@ -83,6 +83,12 @@ public abstract class Editor implements EntryPoint {
         });
     }
 
+    /**
+     * Installs an exception handler that catches exceptions that would otherwise bubble up and result in a
+     * exception in the browser window.
+     * By handling this via the java.util.Logger, we are able to pass this exception on to the server side, and log
+     * it over there.
+     */
     protected void installUncaughtExceptionHandler() {
         GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
             @Override
@@ -90,8 +96,13 @@ public abstract class Editor implements EntryPoint {
                 LOG.log(Level.SEVERE, "Uncaught exception: " + e, e);
             }
         });
+        LOG.info("Installed uncaught exception handler.");
     }
 
+    /**
+     * Deferred loading of the module, to ensure that the uncaught exception handler has been installed. At this point,
+     * the client and service factory have been set.
+     */
     protected void onModuleLoadDeferred() {
         // set up the main window
         final EditorController editorController = getInjector().getEditorController();
@@ -144,10 +155,16 @@ public abstract class Editor implements EntryPoint {
         return new ActivityManager(activityMapper, eventBus);
     }
 
+    /**
+     * Sets the initial title for the bootstrap.
+     */
     protected void setInitialTitle() {
         clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(clientFactory.getCoreMessages().windowTitleBootstrap()));
     }
 
+    /**
+     * Registers the listeners.
+     */
     protected void registerEventListeners() {
         // register the basic event listeners
         final EventBus eventBus = clientFactory.getEventBus();
@@ -197,6 +214,7 @@ public abstract class Editor implements EntryPoint {
         eventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
             @Override
             public void onEvent(NotificationEvent event) {
+                LOG.info("Showing notification: '" + event.getMessage() + "' for " + event.getDuration() + " seconds.");
                 handleNotification(event.getMessage(), event.getDuration());
             }
         });
@@ -214,6 +232,7 @@ public abstract class Editor implements EntryPoint {
             }
         });
 
+        // handle locale change requests
         eventBus.addHandler(LocaleChangeEvent.TYPE, new LocaleChangeEventHandler() {
             @Override
             public void onEvent(LocaleChangeEvent event) {
