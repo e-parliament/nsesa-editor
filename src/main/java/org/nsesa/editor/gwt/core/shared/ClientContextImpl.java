@@ -24,6 +24,7 @@ import java.util.HashMap;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Default implementation of the {@link ClientContext}
  * Date: 24/06/12 18:54
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -50,75 +51,88 @@ public class ClientContextImpl implements ClientContext, Serializable, IsSeriali
     public ClientContextImpl() {
     }
 
-    public void addParameter(String key, String value) {
-        addParameter(key, new String[]{value});
-    }
-
+    @Override
     public void addParameter(String key, String[] values) {
         parameters.put(key, values);
     }
 
+    @Override
     public void removeParameter(String key) {
         parameters.remove(key);
     }
 
+    @Override
     public String[] getParameter(String key) {
         return parameters.get(key);
     }
 
+    @Override
     public HashMap<String, String[]> getParameters() {
         return parameters != null ? new HashMap<String, String[]>(parameters) : null;
     }
 
+    @Override
     public void setParameters(HashMap<String, String[]> parameters) {
         this.parameters = parameters;
     }
 
+    @Override
     public PersonDTO getLoggedInPerson() {
         return loggedInPerson;
     }
 
+    @Override
     public void setLoggedInPerson(PersonDTO loggedInPerson) {
         this.loggedInPerson = loggedInPerson;
     }
 
+    @Override
     public String getSessionID() {
         return sessionID;
     }
 
+    @Override
     public void setSessionID(String sessionID) {
         this.sessionID = sessionID;
     }
 
+    @Override
     public String[] getRoles() {
         return roles != null ? Arrays.asList(roles).toArray(new String[roles.length]) : null;
     }
 
+    @Override
     public void setRoles(String[] roles) {
         this.roles = roles;
     }
 
+    @Override
     public String[] getDocumentIDs() {
         return documentIDs != null ? Arrays.asList(documentIDs).toArray(new String[documentIDs.length]) : null;
     }
 
+    @Override
     public void setDocumentIDs(String[] documentIDs) {
         this.documentIDs = documentIDs;
     }
 
-    public String getLanguageIso() {
+    @Override
+    public String getUILanguageISOCode() {
         return languageIso;
     }
 
-    public void setLanguageIso(String languageIso) {
+    @Override
+    public void setUILanguageISOCOde(String languageIso) {
         this.languageIso = languageIso;
     }
 
-    public String getDocumentIso() {
+    @Override
+    public String getDocumentTranslationLanguageCode() {
         return documentIso;
     }
 
-    public void setDocumentIso(String documentIso) {
+    @Override
+    public void setDocumentTranslationLanguageCode(String documentIso) {
         this.documentIso = documentIso;
     }
 }

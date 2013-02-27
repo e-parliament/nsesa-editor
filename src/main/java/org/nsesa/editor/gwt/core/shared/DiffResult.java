@@ -13,13 +13,28 @@
  */
 package org.nsesa.editor.gwt.core.shared;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.io.Serializable;
 
-public class DiffResult implements Serializable {
+/**
+ * Class representing a diff on 2 Strings with a given {@link DiffMethod}.
+ */
+public class DiffResult implements IsSerializable, Serializable {
 
+    /**
+     * The original string.
+     */
     private String original;
+
+    /**
+     * The new, modified string to be compared to the original string.
+     */
     private String amendment;
 
+    /**
+     * The diffing method (word or character based).
+     */
     private DiffMethod diffMethod;
 
     public DiffResult() {

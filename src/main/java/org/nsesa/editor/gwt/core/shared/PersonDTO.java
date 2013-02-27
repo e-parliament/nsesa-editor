@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * A Data Transfer Object (DTO) for a person.
  * Date: 26/06/12 19:15
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -26,9 +27,22 @@ import java.util.Date;
  */
 public class PersonDTO implements IsSerializable, Serializable {
 
+    /**
+     * The primary key identifier for this person.
+     */
     private String id;
+    /**
+     * The username of this person.
+     */
     private String username;
+    /**
+     * The first name of this person.
+     */
     private String name;
+
+    /**
+     * The family name of this person.
+     */
     private String lastName;
 
     public PersonDTO() {
@@ -65,6 +79,10 @@ public class PersonDTO implements IsSerializable, Serializable {
         return result;
     }
 
+    /**
+     * Returns the display name of this person (name + space + family name to upper case)
+     * @return the display name
+     */
     public String getDisplayName() {
         return name + " " + lastName.toUpperCase();
     }

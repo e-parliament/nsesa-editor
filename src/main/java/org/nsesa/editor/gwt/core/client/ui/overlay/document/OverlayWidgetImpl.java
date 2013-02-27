@@ -723,6 +723,18 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         throw new NullPointerException("Should be overridden by subclass.");
     }
 
+    /**
+     * This will use a
+     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
+     * </P>
+     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
+     * we will continue going deeper into the tree's leaves.
+     * <p/>
+     * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
+     * visiting the sibling of this node that has not yet been visited.
+     *
+     * @param visitor the visitor
+     */
     @Override
     public void walk(OverlayWidgetVisitor visitor) {
         walk(this, visitor);

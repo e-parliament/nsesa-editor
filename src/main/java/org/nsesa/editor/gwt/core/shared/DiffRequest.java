@@ -15,14 +15,30 @@ package org.nsesa.editor.gwt.core.shared;
 
 import java.io.Serializable;
 
+/**
+ * A diff request class holding the strings to calculate the diff for, and the method and style.
+ */
 public class DiffRequest implements Serializable {
 
+    /**
+     * The original string.
+     */
     private String original;
+
+    /**
+     * The modified string.
+     */
     private String amendment;
 
+    /**
+     * The method of diffing (word or character based)
+     */
     private DiffMethod diffMethod;
 
-    private String diffStyle = "epStyle"; // or msStyle
+    /**
+     * The diff style (EP or track-changes).
+     */
+    private DiffStyle diffStyle = DiffStyle.EP;
 
     public DiffRequest() {
     }
@@ -39,7 +55,7 @@ public class DiffRequest implements Serializable {
         this.diffMethod = diffMethod;
     }
 
-    public DiffRequest(String original, String amendment, DiffMethod diffMethod, String diffStyle) {
+    public DiffRequest(String original, String amendment, DiffMethod diffMethod, DiffStyle diffStyle) {
         this.original = original;
         this.amendment = amendment;
         this.diffMethod = diffMethod;
@@ -70,11 +86,11 @@ public class DiffRequest implements Serializable {
         this.diffMethod = diffMethod;
     }
 
-    public String getDiffStyle() {
+    public DiffStyle getDiffStyle() {
         return diffStyle;
     }
 
-    public void setDiffStyle(String diffStyle) {
+    public void setDiffStyle(DiffStyle diffStyle) {
         this.diffStyle = diffStyle;
     }
 }

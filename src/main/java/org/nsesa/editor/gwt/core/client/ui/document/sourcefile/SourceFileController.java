@@ -23,7 +23,7 @@ import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -132,6 +132,18 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         return root;
     }
 
+    /**
+     * This will use a
+     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
+     * </P>
+     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
+     * we will continue going deeper into the tree's leaves.
+     * <p/>
+     * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
+     * visiting the sibling of this node that has not yet been visited.
+     *
+     * @param visitor the visitor
+     */
     @Override
     public void walk(OverlayWidgetVisitor visitor) {
         for (final OverlayWidget root : overlayWidgets) {
@@ -150,7 +162,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     @Override
     public void onClick(OverlayWidget sender) {
         //        printDetails(sender);
-        documentEventBus.fireEvent(new AmendableWidgetSelectEvent(sender, documentController));
+        documentEventBus.fireEvent(new OverlayWidgetSelectEvent(sender, documentController));
     }
 
     private void printDetails(final OverlayWidget overlayWidget) {

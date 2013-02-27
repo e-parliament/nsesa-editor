@@ -13,6 +13,16 @@
  */
 package org.nsesa.editor.gwt.core.shared;
 
+/**
+ * Supported diff methods: word or character based.
+ */
 public enum DiffMethod {
-    WORD, CHARACTER
+    /**
+     * Word based diff, meaning that a change in a word marks the entire word as changed.
+     */
+    WORD,
+    /**
+     * Character based diff, meaning that only changed characters are highlighted.
+     */
+    CHARACTER
 }

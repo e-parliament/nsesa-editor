@@ -88,7 +88,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setStatus(final String status) {
         if (status != null) {
             // do a lookup ...
-            final String lookup = messages.getString(status.toLowerCase());
+            final String lookup = messages != null ? messages.getString(status.toLowerCase()) : null;
             if (lookup != null)
                 this.status.setText(lookup);
             else

@@ -26,8 +26,8 @@ import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.AmendableWidgetSelectEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEventHandler;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -172,9 +172,9 @@ public class DocumentController {
             }
         });
 
-        clientFactory.getEventBus().addHandler(AmendableWidgetSelectEvent.TYPE, new AmendableWidgetSelectEventHandler() {
+        clientFactory.getEventBus().addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
             @Override
-            public void onEvent(AmendableWidgetSelectEvent event) {
+            public void onEvent(OverlayWidgetSelectEvent event) {
                 boolean alreadySelected = false;
                 if (sourceFileController.getActiveOverlayWidget() == event.getOverlayWidget()) {
                     alreadySelected = true;

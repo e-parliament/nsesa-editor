@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import java.util.ArrayList;
 
 /**
+ * A Data Transfer Object (DTO) for an Amendment entity.
  * Date: 24/06/12 21:51
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -27,19 +28,55 @@ import java.util.ArrayList;
  */
 public class AmendmentContainerDTO implements IsSerializable {
 
+    /**
+     * The primary key that uniquely identifies an amendment container revision.
+     */
     private String id;
+
+    /**
+     * A revision key that identifies all amendment revisions for a single, logical amendment.
+     */
     private String revisionID;
 
+    /**
+     * The two letter ISO code of the (primary) language this amendment is created in.
+     */
     private String languageISO;
 
+    /**
+     * The type of action of this amendment (modification, deletion, creation, move, ...)
+     */
     private AmendmentAction amendmentAction;
+
+    /**
+     * The status of an amendment. The initial status of an amendment is 'candidate'. Left as a String for
+     * easier extension.
+     */
     private String amendmentContainerStatus = "candidate";
 
+    /**
+     * The serialized body/payload of this amendment. Can be XML or JSON, depending on what your backend provides.
+     */
     private String body;
 
+    /**
+     * A transient overlay widget which is the result of the {@link #body} being transformed into an overlay tree
+     * consisting of one or more {@link OverlayWidget} via an {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory}.
+     */
     private transient OverlayWidget root;
 
+    /**
+     * A reference to the source of this this amendment (meaning, the place where the amendment should be injected upon)
+     */
     private AmendableWidgetReference sourceReference;
+
+    /**
+     * A list of one or more target references - which will be impacted by this amendment. For example, if an amendment
+     * is made on a &lt;DEFINITION&gt; element, the target references would be every widget where the redefined
+     * element is used.
+     * <p/>
+     * TODO the target references are not yet supported
+     */
     private ArrayList<AmendableWidgetReference> targetReferences = new ArrayList<AmendableWidgetReference>();
 
     public AmendmentContainerDTO() {
@@ -47,6 +84,40 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public AmendmentAction getAmendmentAction() {
         return amendmentAction;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AmendmentContainerDTO that = (AmendmentContainerDTO) o;
+
+        if (amendmentAction != that.amendmentAction) return false;
+        if (!amendmentContainerStatus.equals(that.amendmentContainerStatus)) return false;
+        if (body != null ? !body.equals(that.body) : that.body != null) return false;
+        if (!id.equals(that.id)) return false;
+        if (!languageISO.equals(that.languageISO)) return false;
+        if (!revisionID.equals(that.revisionID)) return false;
+        if (sourceReference != null ? !sourceReference.equals(that.sourceReference) : that.sourceReference != null)
+            return false;
+        if (targetReferences != null ? !targetReferences.equals(that.targetReferences) : that.targetReferences != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + revisionID.hashCode();
+        result = 31 * result + languageISO.hashCode();
+        result = 31 * result + (amendmentAction != null ? amendmentAction.hashCode() : 0);
+        result = 31 * result + amendmentContainerStatus.hashCode();
+        result = 31 * result + (body != null ? body.hashCode() : 0);
+        result = 31 * result + (sourceReference != null ? sourceReference.hashCode() : 0);
+        result = 31 * result + (targetReferences != null ? targetReferences.hashCode() : 0);
+        return result;
     }
 
     public void setAmendmentAction(AmendmentAction amendmentAction) {

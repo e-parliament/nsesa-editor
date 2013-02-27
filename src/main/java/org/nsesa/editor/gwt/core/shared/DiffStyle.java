@@ -11,16 +11,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.amendment;
-
-import com.google.gwt.event.shared.EventHandler;
+package org.nsesa.editor.gwt.core.shared;
 
 /**
- * Date: 24/06/12 18:15
- *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * Supported diff styles.
  */
-public interface AmendmentContainerRemovedEventHandler extends EventHandler {
-    void onEvent(AmendmentContainerRemovedEvent event);
+public enum DiffStyle {
+    /**
+     * European parliament style, 2 column.
+     */
+    EP,
+    /**
+     * Track-changes style, single column.
+     */
+    TRACK_CHANGES
 }

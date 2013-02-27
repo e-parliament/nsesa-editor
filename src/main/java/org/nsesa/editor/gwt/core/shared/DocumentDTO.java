@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * A Data Transfer Object (DTO) for a non-logical document (eg. translation).
  * Date: 26/06/12 19:15
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -26,11 +27,28 @@ import java.util.Date;
  */
 public class DocumentDTO implements IsSerializable, Serializable {
 
+    /**
+     * The primary key identifier for this particular document translation.
+     */
     private String documentID;
+
+    /**
+     * The name of the document.
+     */
     private String name;
+    /**
+     * The 2 letter ISO code for this translation.
+     */
     private String languageIso;
+
+    /**
+     * A flag indicating if this document is amendable or not.
+     */
     private boolean amendable;
 
+    /**
+     * The deadline for this document.
+     */
     private Date deadline;
 
     public DocumentDTO() {

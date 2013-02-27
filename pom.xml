@@ -285,6 +285,7 @@
                     <encoding>UTF-8</encoding>
                     <excludes>
                         <exclude>web/js/**</exclude>
+                        <exclude>src/main/java/org/nsesa/editor/gwt/core/client/util/UUID.java</exclude>
                         <exclude>target/**</exclude>
                         <exclude>.gitignore</exclude>
                         <exclude>**/*.css</exclude>
