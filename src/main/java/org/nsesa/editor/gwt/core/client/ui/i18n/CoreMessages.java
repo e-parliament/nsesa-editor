@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.i18n;
 import com.google.gwt.i18n.client.Messages;
 
 /**
+ * Core messages for the editor.
  * Date: 24/06/12 17:18
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
