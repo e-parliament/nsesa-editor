@@ -90,7 +90,7 @@ public class HeaderViewImpl extends Composite implements HeaderView {
     @Override
     public void setAvailableLanguages(final List<String> localeNames) {
         availableLanguages.setVisible(false);
-        if (localeNames != null || localeNames.size() > 1) {
+        if (localeNames != null && localeNames.size() > 1) {
             availableLanguages.clear();
             for (final String locale : localeNames) {
                 // TODO: use resource bundle to translate
