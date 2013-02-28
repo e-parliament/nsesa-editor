@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provides;
 
 /**
+ * GIN module for the action bar component.
  * Date: 24/06/12 15:11
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

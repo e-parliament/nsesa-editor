@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link ActionBarController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,21 +26,57 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(ActionBarViewImpl.class)
 public interface ActionBarView extends IsWidget {
+
+    /**
+     * Get a reference to the modification link.
+     * @return the modification link
+     */
     FocusWidget getModifyHandler();
 
+    /**
+     * Get a reference to the delete link.
+     * @return the delete link
+     */
     FocusWidget getDeleteHandler();
 
+    /**
+     * Get a reference to the bundle link.
+     * @return the bundle link
+     */
     FocusWidget getBundleHandler();
 
+    /**
+     * Get a reference to the move link.
+     * @return the move link
+     */
     FocusWidget getMoveHandler();
 
+    /**
+     * Get a reference to the child link to create new elements.
+     * @return the child link
+     */
     FocusWidget getChildHandler();
 
+    /**
+     * Get a reference to the translate link.
+     * @return the translate link
+     */
     FocusWidget getTranslateHandler();
 
+    /**
+     * Set the location of the overlay widget in the tree.
+     * @param location the location
+     */
     void setLocation(String location);
 
+    /**
+     * 'Physically' attach the component to the DOM tree.
+     */
     void attach();
 
+    /**
+     * General method to set a CSS class name on this component.
+     * @param styleName the css class name to set.
+     */
     void setStyleName(String styleName);
 }
