@@ -31,7 +31,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * Component for showing a (temporary) notification on the screen of the end user.
  * Date: 24/06/12 21:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Scope(EDITOR)

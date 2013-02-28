@@ -20,7 +20,7 @@ import java.util.Map;
  * Bean to keep basic information about properties of the overlay class
  * Date: 05/08/12 16:00
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayProperty extends OverlayNode {

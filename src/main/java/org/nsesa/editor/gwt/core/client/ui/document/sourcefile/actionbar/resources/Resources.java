@@ -20,7 +20,7 @@ import com.google.gwt.resources.client.ImageResource;
  * Resources for the {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarView}.
  * Date: 03/08/12 15:37
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface Resources extends ClientBundle {

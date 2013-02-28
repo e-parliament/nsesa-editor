@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * An event indicating that the status of an amendment has been changed from <tt>oldStatus</tt> to a new one.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentContainerStatusUpdatedEvent extends GwtEvent<AmendmentContainerStatusUpdatedEventHandler> {

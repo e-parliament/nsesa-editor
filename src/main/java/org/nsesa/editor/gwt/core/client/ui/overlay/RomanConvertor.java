@@ -15,7 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 /**
  * @author Fred Swartz - 2006-12-29 - Placed in public domain (MIT License).
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a> (small modifications)
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (small modifications)
  * @see <a href="http://www.leepoint.net/notes-java/examples/components/romanNumerals/romanNumeral.html">Original</a>
  */
 public class RomanConvertor {

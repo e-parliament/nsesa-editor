@@ -22,7 +22,7 @@ import java.util.Date;
  * A Data Transfer Object (DTO) for a person.
  * Date: 26/06/12 19:15
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class PersonDTO implements IsSerializable, Serializable {

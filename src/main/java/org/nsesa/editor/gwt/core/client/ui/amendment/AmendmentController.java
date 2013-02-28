@@ -28,7 +28,7 @@ import java.util.Comparator;
  * <p/>
  * Date: 09/01/13 16:46
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultAmendmentController.class)

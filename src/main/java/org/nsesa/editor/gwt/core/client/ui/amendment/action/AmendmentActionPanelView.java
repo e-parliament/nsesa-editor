@@ -21,7 +21,7 @@ import com.google.inject.ImplementedBy;
  * The view for the amendment action panel.
  * Date: 24/06/12 21:44
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(AmendmentActionPanelViewImpl.class)

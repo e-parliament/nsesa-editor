@@ -43,7 +43,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableC
  * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentDialogController extends Composite implements ProvidesResize {

@@ -23,7 +23,7 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
  * The {@link ServiceFactory} gives access to RPC services to communicate with the server side.
  * Date: 25/06/12 21:54
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(ServiceFactoryImpl.class)

@@ -29,7 +29,7 @@ import java.util.List;
  * <p/>
  * Date: 09/01/13 17:16
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultAmendmentManager.class)

@@ -18,7 +18,7 @@ package org.nsesa.editor.gwt.core.client.mode;
  * queried for its current {@link DocumentState}.
  * Date: 23/11/12 23:05
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface DocumentMode<S extends DocumentState> {

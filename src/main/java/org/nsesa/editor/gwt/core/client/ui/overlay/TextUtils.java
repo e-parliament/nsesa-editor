@@ -19,7 +19,7 @@ import java.util.LinkedHashMap;
 /**
  * Unsorted collection of utilities related to String and XML processing.
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: TextUtils.java 5027 2012-02-17 14:01:17Z pluppens $
  */
 public class TextUtils {

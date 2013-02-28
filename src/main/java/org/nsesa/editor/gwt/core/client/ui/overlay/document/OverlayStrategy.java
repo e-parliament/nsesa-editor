@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
  * The overlay strategy is responsible for retrieving the correct properties from the DOM.
  * Date: 03/07/12 22:20
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultOverlayStrategy.class)

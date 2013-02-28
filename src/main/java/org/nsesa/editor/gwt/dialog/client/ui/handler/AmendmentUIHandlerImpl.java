@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 /**
  * Date: 21/12/12 16:09
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public abstract class AmendmentUIHandlerImpl extends Composite implements AmendmentUIHandler {

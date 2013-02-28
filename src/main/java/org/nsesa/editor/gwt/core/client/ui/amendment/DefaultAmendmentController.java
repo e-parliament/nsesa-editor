@@ -38,7 +38,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  * Default implementation of the {@link AmendmentController}
  * Date: 24/06/12 21:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Scope(AMENDMENT)

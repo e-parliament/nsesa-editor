@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Date: 12/12/12 13:06
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayUtil {

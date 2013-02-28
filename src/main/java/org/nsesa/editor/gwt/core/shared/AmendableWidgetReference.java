@@ -22,7 +22,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  *
  * Date: 10/07/12 22:34
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendableWidgetReference implements IsSerializable {

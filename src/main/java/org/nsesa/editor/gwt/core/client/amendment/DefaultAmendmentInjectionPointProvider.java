@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * <p/>
  * Date: 30/11/12 11:50
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectionPointProvider {

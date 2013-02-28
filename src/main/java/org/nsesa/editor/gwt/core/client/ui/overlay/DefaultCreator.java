@@ -23,7 +23,7 @@ import java.util.*;
  * Default implementation of the {@link Creator}.
  * Date: 08/11/12 11:23
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultCreator implements Creator {

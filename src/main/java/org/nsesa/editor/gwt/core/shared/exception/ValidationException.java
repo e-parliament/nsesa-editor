@@ -19,7 +19,7 @@ package org.nsesa.editor.gwt.core.shared.exception;
  * <p/>
  * Date: 22/02/13 16:30
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ValidationException extends Exception {

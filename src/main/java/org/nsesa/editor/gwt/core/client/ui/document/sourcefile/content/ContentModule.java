@@ -20,7 +20,7 @@ import com.google.gwt.inject.client.binder.GinBinder;
  * GIN module for the content component.
  * Date: 24/06/12 15:11
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ContentModule implements GinModule {

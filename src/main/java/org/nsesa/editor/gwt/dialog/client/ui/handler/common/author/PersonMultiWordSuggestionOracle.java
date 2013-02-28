@@ -26,7 +26,7 @@ import java.util.Collection;
 /**
  * Date: 20/02/13 15:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  * @see <a href="http://eggsylife.co.uk"></a>
  */

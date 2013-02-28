@@ -17,7 +17,7 @@ package org.nsesa.editor.gwt.core.shared;
  * The different amendment actions.
  * Date: 10/07/12 13:27
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public enum AmendmentAction {

@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * such as adding or removing {@link AmendmentController}s or child {@link OverlayWidget}s.
  * Date: 23/10/12 14:15
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface OverlayWidgetListener {

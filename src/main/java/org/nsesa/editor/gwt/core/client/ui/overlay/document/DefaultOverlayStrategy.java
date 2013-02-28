@@ -24,7 +24,7 @@ import java.util.List;
  * Default implementation of the {@link OverlayStrategy}.
  * Date: 17/10/12 21:31
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultOverlayStrategy implements OverlayStrategy {

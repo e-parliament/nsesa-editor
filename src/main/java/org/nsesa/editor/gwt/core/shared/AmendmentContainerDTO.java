@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * A Data Transfer Object (DTO) for an Amendment entity.
  * Date: 24/06/12 21:51
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentContainerDTO implements IsSerializable {

@@ -31,7 +31,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.*;
  * This class is responsible for tracking a deadline by publishing events when the date nears.
  * Date: 30/07/12 23:31
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Scope(DOCUMENT)

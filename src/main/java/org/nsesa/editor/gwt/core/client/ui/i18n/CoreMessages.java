@@ -19,7 +19,7 @@ import com.google.gwt.i18n.client.Messages;
  * Core messages for the editor.
  * Date: 24/06/12 17:18
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface CoreMessages extends Messages {

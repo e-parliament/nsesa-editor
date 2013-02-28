@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.shared.PersonDTO;
  * Service interface for general RPC.
  * Date: 24/06/12 19:58
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @RemoteServiceRelativePath("gwtService")

@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  * Default singleton implementation of the {@link ClientFactory}.
  * Date: 25/06/12 21:59
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Singleton

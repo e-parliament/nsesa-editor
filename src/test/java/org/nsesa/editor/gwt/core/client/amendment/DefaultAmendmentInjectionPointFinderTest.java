@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Date: 26/02/13 11:43
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")

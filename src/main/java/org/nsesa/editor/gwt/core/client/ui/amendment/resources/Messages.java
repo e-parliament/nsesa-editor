@@ -18,7 +18,7 @@ import com.google.gwt.i18n.client.ConstantsWithLookup;
 /**
  * Date: 10/01/13 17:08
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface Messages extends ConstantsWithLookup {

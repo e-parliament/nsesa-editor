@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.core.shared.DiffMethod;
  * An event indicating a request to perform a diffing on a set of amendment controllers.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentContainerDiffEvent extends GwtEvent<AmendmentContainerDiffEventHandler> {

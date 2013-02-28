@@ -17,7 +17,7 @@ package org.nsesa.editor.gwt.core.shared;
  * The possible origin of a given {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}.
  * Date: 22/11/12 16:16
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public enum OverlayWidgetOrigin {

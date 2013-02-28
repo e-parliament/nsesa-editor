@@ -26,7 +26,7 @@ import java.util.HashMap;
  *
  * Date: 24/06/12 18:54
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(ClientContextImpl.class)

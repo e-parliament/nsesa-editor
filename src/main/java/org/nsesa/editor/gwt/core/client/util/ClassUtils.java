@@ -17,7 +17,7 @@ package org.nsesa.editor.gwt.core.client.util;
  * Utility class to deal with {@link Class}es.
  * Date: 20/11/12 11:12
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ClassUtils {

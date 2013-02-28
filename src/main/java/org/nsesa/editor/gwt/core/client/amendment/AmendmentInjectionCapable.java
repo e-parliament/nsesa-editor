@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  *
  * Date: 07/07/12 23:21
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface AmendmentInjectionCapable {

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * Support class to assist an {@link OverlayStrategy}.
  * Date: 03/07/12 23:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayStrategySupport {

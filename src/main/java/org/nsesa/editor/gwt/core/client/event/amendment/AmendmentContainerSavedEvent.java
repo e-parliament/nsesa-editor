@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * An event indicating a successful persistence of the amendment container on the server side.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentContainerSavedEvent extends GwtEvent<AmendmentContainerSavedEventHandler> {

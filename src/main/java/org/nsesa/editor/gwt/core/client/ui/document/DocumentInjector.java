@@ -36,7 +36,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerCont
  *
  * Date: 17/10/12 14:53
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @GinModules({DocumentModule.class})

@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  * An event indicating a request to scroll to a given widget in a document controller.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler> {

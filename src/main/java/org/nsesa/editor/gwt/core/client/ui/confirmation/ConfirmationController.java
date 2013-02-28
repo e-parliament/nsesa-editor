@@ -24,7 +24,7 @@ import com.google.inject.Inject;
  * {@link org.nsesa.editor.gwt.core.client.event.ConfirmationEvent}.
  * Date: 24/06/12 21:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ConfirmationController {

@@ -19,7 +19,7 @@ import com.google.gwt.dom.client.NodeList;
 /**
  * Date: 22/01/13 14:07
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class NodeUtil {

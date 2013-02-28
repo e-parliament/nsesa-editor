@@ -20,7 +20,7 @@ import com.google.gwt.xml.client.XMLParser;
  * A simple validator to check if the passed String containing serialized XML is well-formed.
  * Date: 19/02/13 13:56
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class WellformedValidator implements Validator<String> {

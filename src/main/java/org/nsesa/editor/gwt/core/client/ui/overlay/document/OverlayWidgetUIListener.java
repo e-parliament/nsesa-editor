@@ -17,7 +17,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  * UI events listener for a {@link OverlayWidget}.
  * Date: 30/06/12 19:10
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface OverlayWidgetUIListener {

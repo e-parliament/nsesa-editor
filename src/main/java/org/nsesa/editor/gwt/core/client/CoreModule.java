@@ -31,7 +31,7 @@ import org.nsesa.editor.gwt.core.client.ui.error.ErrorModule;
  *
  * Date: 24/06/12 15:10
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class CoreModule extends AbstractGinModule {

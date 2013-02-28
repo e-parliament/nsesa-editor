@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 /**
  * Numbering type enum to handle the different numbering types we encounter in XML documents.
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: NumberingType.java 4771 2012-01-20 13:24:50Z pluppens $
  */
 public enum NumberingType {

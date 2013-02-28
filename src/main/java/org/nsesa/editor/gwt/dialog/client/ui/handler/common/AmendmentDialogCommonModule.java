@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelModule
 /**
  * Date: 09/01/13 11:05
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentDialogCommonModule extends AbstractGinModule {

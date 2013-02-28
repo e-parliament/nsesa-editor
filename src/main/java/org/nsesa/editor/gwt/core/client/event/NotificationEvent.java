@@ -19,7 +19,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * An event to notify the user.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class NotificationEvent extends GwtEvent<NotificationEventHandler> {

@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.shared.PersonDTO;
 /**
  * Date: 20/02/13 15:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class PersonMultiWordSuggestion extends MultiWordSuggestOracle.MultiWordSuggestion {

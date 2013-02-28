@@ -26,7 +26,7 @@ import java.util.*;
  * Default implementation for {@link Locator}.
  * Date: 24/09/12 17:19
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultLocator implements Locator {

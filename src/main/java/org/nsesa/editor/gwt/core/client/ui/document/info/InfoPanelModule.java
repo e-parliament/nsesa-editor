@@ -20,7 +20,7 @@ import com.google.gwt.inject.client.binder.GinBinder;
  * Gin module for the info panel component.
  * Date: 24/06/12 15:11
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class InfoPanelModule implements GinModule {

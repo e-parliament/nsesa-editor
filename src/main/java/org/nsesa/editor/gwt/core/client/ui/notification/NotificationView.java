@@ -24,7 +24,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
  * View for the notification component.
  * Date: 24/06/12 21:44
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(NotificationViewImpl.class)

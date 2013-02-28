@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  * Simple matcher interface. Subject to change.
  * Date: 07/01/13 14:24
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 interface Matcher {

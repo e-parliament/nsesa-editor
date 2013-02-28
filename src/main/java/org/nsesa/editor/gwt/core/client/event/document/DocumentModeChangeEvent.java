@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  * An event indicating that a {@link DocumentMode} has changed its state.
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DocumentModeChangeEvent<D extends DocumentMode> extends GwtEvent<DocumentModeChangeEventHandler> {

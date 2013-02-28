@@ -24,7 +24,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
  * <li>INDENT (eg. '-')</li>
  * </ul>
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id: Format.java 4771 2012-01-20 13:24:50Z pluppens $
  */
 public enum Format {

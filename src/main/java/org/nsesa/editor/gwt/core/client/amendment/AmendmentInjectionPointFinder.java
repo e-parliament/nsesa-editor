@@ -30,7 +30,7 @@ import java.util.List;
  *
  * Date: 30/11/12 11:10
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultAmendmentInjectionPointFinder.class)

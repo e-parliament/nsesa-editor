@@ -22,7 +22,7 @@ import com.google.inject.ImplementedBy;
  * View for the {@link ContentView}.
  * Date: 24/06/12 21:43
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(ContentViewImpl.class)

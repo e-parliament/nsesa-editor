@@ -26,7 +26,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContextImpl;
 /**
  * Date: 18/01/13 15:23
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ClientFactoryMock implements ClientFactory {

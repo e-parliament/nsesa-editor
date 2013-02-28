@@ -18,7 +18,7 @@ package org.nsesa.editor.gwt.core.client.util;
  * when doing visitor-based tree walking (so we can make the instance final).
  * Date: 03/12/12 11:06
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public final class Counter {

@@ -28,7 +28,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  * <p/>
  * Date: 30/11/12 11:10
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultAmendmentInjectionPointProvider.class)

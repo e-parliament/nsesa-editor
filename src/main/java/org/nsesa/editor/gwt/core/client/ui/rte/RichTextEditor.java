@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 /**
  * Date: 13/07/12 19:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface RichTextEditor extends IsWidget {

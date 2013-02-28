@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  * be found or provided, or because its language was not matching).
  * Date: 24/06/12 20:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentContainerSkippedEvent extends GwtEvent<AmendmentContainerSkippedEventHandler> {

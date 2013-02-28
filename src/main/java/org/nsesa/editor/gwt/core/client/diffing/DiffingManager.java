@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.shared.DiffMethod;
  * A diffing manager is responsible for doing a diff on an amendment (after the amendment has been created).
  * Date: 07/01/13 17:45
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultDiffingManager.class)

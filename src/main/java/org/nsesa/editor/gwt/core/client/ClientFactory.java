@@ -24,7 +24,7 @@ import org.nsesa.editor.gwt.core.shared.ClientContext;
  * A client factory to give access to local core dependencies.
  * Date: 25/06/12 21:54
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(ClientFactoryImpl.class)

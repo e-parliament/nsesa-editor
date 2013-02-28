@@ -25,7 +25,7 @@ import java.util.Map;
  * This validation currently check the given min/max occurrences of both the children and the current overlay widget.
  * Date: 19/02/13 14:03
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayWidgetValidator implements Validator<OverlayWidget> {

@@ -28,7 +28,7 @@ import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
 /**
  * Date: 24/06/12 16:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class EditorViewImpl extends Composite implements EditorView, ProvidesResize {

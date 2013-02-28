@@ -52,7 +52,7 @@ import java.util.logging.Logger;
  * <p/>
  * Date: 24/06/12 14:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public abstract class Editor implements EntryPoint {

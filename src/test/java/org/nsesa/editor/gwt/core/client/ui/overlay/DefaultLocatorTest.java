@@ -27,7 +27,7 @@ import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 /**
  * Date: 21/01/13 11:11
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")

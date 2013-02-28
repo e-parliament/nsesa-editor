@@ -28,7 +28,7 @@ import org.xml.sax.SAXParseException;
  * An abstract class to to generate different representations based on XSD schema provided
  * Date: 03/08/12 19:25
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public abstract class OverlayGenerator {

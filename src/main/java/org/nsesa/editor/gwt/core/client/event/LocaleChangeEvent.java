@@ -19,7 +19,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * An event used to indicate that a request for changing the locale has been performed.
  * Date: 24/06/12 18:14
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class LocaleChangeEvent extends GwtEvent<LocaleChangeEventHandler> {

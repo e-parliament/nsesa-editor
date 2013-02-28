@@ -23,7 +23,7 @@ import java.util.*;
  * Bean to keep basic information about class.
  * Date: 05/08/12 13:36
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class OverlayClass extends OverlayNode {

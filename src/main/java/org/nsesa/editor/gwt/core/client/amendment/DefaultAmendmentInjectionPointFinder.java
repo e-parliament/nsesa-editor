@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * the {@link OverlayUtil} expression support.
  * Date: 30/11/12 11:31
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionPointFinder {

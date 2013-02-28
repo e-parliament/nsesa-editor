@@ -17,7 +17,7 @@ package org.nsesa.editor.gwt.core.client.validation;
  * A interface for a result of a validation done by a {@link Validator}.
  * Date: 19/02/13 13:45
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface ValidationResult {

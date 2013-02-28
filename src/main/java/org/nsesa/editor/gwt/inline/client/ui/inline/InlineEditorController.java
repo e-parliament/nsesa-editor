@@ -33,7 +33,7 @@ import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEventHandler;
 import java.util.logging.Logger;
 
 /**
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class InlineEditorController implements ProvidesResize {

@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  * Class responsible for reporting the location of an {@link OverlayWidget}.
  * Date: 06/07/12 17:21
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @ImplementedBy(DefaultLocator.class)

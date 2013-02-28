@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 /**
  * Date: 26/02/13 13:31
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class ServiceFactoryMock implements ServiceFactory {

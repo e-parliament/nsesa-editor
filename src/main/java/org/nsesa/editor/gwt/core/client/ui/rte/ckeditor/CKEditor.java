@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 /**
  * Date: 04/12/12 13:19
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class CKEditor extends Composite implements RichTextEditor {
