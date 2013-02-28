@@ -16,11 +16,16 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create
 import com.google.gwt.resources.client.CssResource;
 
 /**
+ * CSS resource for the {@link ActionBarCreatePanelView}.
  * Date: 24/06/12 16:39
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface ActionBarCreatePanelViewCss extends CssResource {
+    /**
+     * Style for the action bar create view.
+     * @return the main css class
+     */
     String actionPanel();
 }

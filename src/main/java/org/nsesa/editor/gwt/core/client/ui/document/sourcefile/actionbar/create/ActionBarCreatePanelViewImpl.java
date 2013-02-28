@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Default implementation of the {@link ActionBarCreatePanelView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -96,7 +97,7 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
         separator.setVisible(visible);
     }
 
-    public void clearAmendableWidgets() {
+    public void clearChildOverlayWidgets() {
         siblingPanel.clear();
         childPanel.clear();
         siblingTitle.setVisible(false);
@@ -107,6 +108,4 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
     public void attach() {
         onAttach();
     }
-
-
 }

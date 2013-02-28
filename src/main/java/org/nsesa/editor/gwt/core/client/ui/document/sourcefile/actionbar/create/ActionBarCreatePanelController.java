@@ -29,6 +29,9 @@ import java.util.Map;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * A child controller of the {@link ActionBarController} responsible for showing the allowed children and siblings
+ * of the currently selected {@link OverlayWidget}.
+ *
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -37,13 +40,30 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class ActionBarCreatePanelController {
 
-    private final ActionBarCreatePanelView view;
-    private final DocumentEventBus documentEventBus;
-    private SourceFileController sourceFileController;
+    /**
+     * The main view of this component.
+     */
+    protected final ActionBarCreatePanelView view;
 
-    private ActionBarController actionBarController;
+    /**
+     * The document scoped event bus.
+     */
+    protected final DocumentEventBus documentEventBus;
 
-    private OverlayWidget overlayWidget;
+    /**
+     * The parent sourcefile controller.
+     */
+    protected SourceFileController sourceFileController;
+
+    /**
+     * The parent sourcefile controller.
+     */
+    protected ActionBarController actionBarController;
+
+    /**
+     * The current overlay widget we're listing the allowed child and sibling types for.
+     */
+    protected OverlayWidget overlayWidget;
 
     @Inject
     public ActionBarCreatePanelController(final DocumentEventBus documentEventBus,
@@ -54,6 +74,7 @@ public class ActionBarCreatePanelController {
     }
 
     private void registerListeners() {
+        // register a handler for the click event on the name of the overlay widget as a child or sibling
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
             public void onClick(final OverlayWidget newChild, final boolean sibling) {
@@ -65,15 +86,27 @@ public class ActionBarCreatePanelController {
         });
     }
 
+    /**
+     * Return the view for this component.
+     * @return the view
+     */
     public ActionBarCreatePanelView getView() {
         return view;
     }
 
+    /**
+     * Sets the current {@link OverlayWidget} to list the allowed child and sibling types for.
+     *
+     * The allowed children and siblings are coming from the injected
+     * {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController#getCreator()}.
+     *
+     * @param overlayWidget
+     */
     public void setOverlayWidget(final OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
 
         // clean up whatever is there
-        view.clearAmendableWidgets();
+        view.clearChildOverlayWidgets();
 
         // add all the possible siblings
         LinkedHashMap<OverlayWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
@@ -86,19 +119,31 @@ public class ActionBarCreatePanelController {
             view.addChildAmendableWidget(entry.getKey().getType(), entry.getKey());
         }
 
-        // show spacer if both siblings and children are possible
+        // show separator if both siblings and children are possible
         view.setSeparatorVisible(!allowedSiblings.isEmpty() && !allowedChildren.isEmpty());
     }
 
 
+    /**
+     * Set the parent action bar controller.
+     * @param actionBarController the parent action bar controller
+     */
     public void setActionBarController(ActionBarController actionBarController) {
         this.actionBarController = actionBarController;
     }
 
+    /**
+     * Get the current overlay widget
+     * @return the overlay widget
+     */
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
     }
 
+    /**
+     * Set the parent sourcefile controller.
+     * @param sourceFileController the parent sourcefile controller
+     */
     public void setSourceFileController(SourceFileController sourceFileController) {
         this.sourceFileController = sourceFileController;
     }

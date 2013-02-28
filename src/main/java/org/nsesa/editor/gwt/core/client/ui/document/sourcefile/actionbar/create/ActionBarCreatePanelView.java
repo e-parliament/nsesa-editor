@@ -18,6 +18,8 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
+ * View for the {@link ActionBarCreatePanelController}.
+ * <p/>
  * Date: 24/06/12 21:44
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,19 +27,54 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  */
 @ImplementedBy(ActionBarCreatePanelViewImpl.class)
 public interface ActionBarCreatePanelView extends IsWidget {
+
+    /**
+     * Sets a UI listener to get callbacks on when a new element link is clicked.
+     * @param uiListener the UI listener
+     */
     void setUIListener(UIListener uiListener);
 
+    /**
+     * Attaches this view to the DOM.
+     */
     void attach();
 
+    /**
+     * Adds a new anchor based on the given <tt>title</tt> for the passed <tt>overlayWidget</tt>.
+     *
+     * @param title         the title for the link
+     * @param overlayWidget the child overlay widget
+     */
     void addChildAmendableWidget(String title, OverlayWidget overlayWidget);
 
+    /**
+     * Adds a new anchor based on the given <tt>title</tt> for the passed <tt>overlayWidget</tt>.
+     *
+     * @param title         the title for the link
+     * @param overlayWidget the sibling overlay widget
+     */
     void addSiblingAmendableWidget(String title, final OverlayWidget overlayWidget);
 
+    /**
+     * Adds a separator between the siblings and the new children.
+     * @param visible   <tt>true</tt> if the separator should be visible
+     */
     void setSeparatorVisible(boolean visible);
 
-    void clearAmendableWidgets();
+    /**
+     * Clear the existing child or sibling types.
+     */
+    void clearChildOverlayWidgets();
 
+    /**
+     * UI listener interface.
+     */
     public static interface UIListener {
+        /**
+         * Callback when a link for a new element is clicked.
+         * @param newChild  the new {@link OverlayWidget}
+         * @param sibling   if <tt>true</tt>, this should be added as a sibling rather than a child element
+         */
         void onClick(OverlayWidget newChild, boolean sibling);
     }
 }
