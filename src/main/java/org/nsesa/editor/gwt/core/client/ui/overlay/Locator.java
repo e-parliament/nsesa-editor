@@ -47,9 +47,9 @@ public interface Locator {
     /**
      * Get the position of a given <tt>overlayWidget</tt> in a given <tt>languageIso</tt>.
      *
-     * @param overlayWidget     the overlay widget to get the position for
-     * @param languageIso       the ISO code of the language to get the position in
-     * @param childrenIncluded  <tt>true</tt> if the children are taken into account
+     * @param overlayWidget    the overlay widget to get the position for
+     * @param languageIso      the ISO code of the language to get the position in
+     * @param childrenIncluded <tt>true</tt> if the children are taken into account
      * @return the position of this overlay widget in the tree
      */
     String getLocation(OverlayWidget overlayWidget, String languageIso, boolean childrenIncluded);

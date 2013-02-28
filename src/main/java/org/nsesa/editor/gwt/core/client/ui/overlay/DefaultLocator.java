@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * TODO internationalize and correct the signatures of the various helper methods
- *
+ * <p/>
  * Default implementation for {@link Locator}.
  * Date: 24/09/12 17:19
  *
@@ -160,6 +160,7 @@ public class DefaultLocator implements Locator {
 
     /**
      * Returns the used splitter that is injected between overlay widgets in the path calculation.
+     *
      * @return the splitter, defaults to {@link #SPLITTER}
      */
     public String getSplitter() {
@@ -169,6 +170,7 @@ public class DefaultLocator implements Locator {
     /**
      * Get the notation for a root overlay widget (meaning {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getParentOverlayWidget()}
      * returns <tt>null</tt>. By default, this returns the type without any number, since we only have one root widget in our path.
+     *
      * @param overlayWidget the root overlay widget
      * @return the notation for this root widget
      */
@@ -179,8 +181,9 @@ public class DefaultLocator implements Locator {
 
     /**
      * Default notation for a given {@link OverlayWidget} <tt>overlayWidget</tt>, using the type.
+     *
      * @param overlayWidget the overlay widget
-     * @return  the location string for a single {@link OverlayWidget}
+     * @return the location string for a single {@link OverlayWidget}
      */
     public String getNotation(final OverlayWidget overlayWidget) {
         return overlayWidget.getType() != null ? overlayWidget.getType() : "?";
@@ -188,6 +191,7 @@ public class DefaultLocator implements Locator {
 
     /**
      * Default 'sub' notation when an {@link OverlayWidget} has a parent of the same type.
+     *
      * @param overlayWidget the overlay widget
      * @return the sub notation for this widget
      */
@@ -198,6 +202,7 @@ public class DefaultLocator implements Locator {
     /**
      * Default 'new' notation for an {@link OverlayWidget} that has been introduced by an
      * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointProvider}. Returns '(new)'.
+     *
      * @return the new notation
      */
     public String getNewNotation() {
@@ -206,6 +211,7 @@ public class DefaultLocator implements Locator {
 
     /**
      * Helper method to ease the adding of overlay widget classes to hide themselves.
+     *
      * @param overlayWidgetClasses the overlay widget classes and subclasses to hide
      */
     public void hide(final Class<? extends OverlayWidget>... overlayWidgetClasses) {
@@ -214,6 +220,7 @@ public class DefaultLocator implements Locator {
 
     /**
      * Helper method to ease the adding of overlay widget classes to hide their children.
+     *
      * @param overlayWidgetClasses the overlay widget classes and subclasses to hide their children
      */
     public void hideUnder(final Class<? extends OverlayWidget>... overlayWidgetClasses) {
@@ -223,6 +230,7 @@ public class DefaultLocator implements Locator {
     /**
      * Helper method to ease the adding of overlay widget classes to always show if
      * for example their superclass has been added in the {@link #hiddenAmendableWidgets} list.
+     *
      * @param overlayWidgetClasses the overlay widget classes and subclasses to show.
      */
     public void show(final Class<? extends OverlayWidget>... overlayWidgetClasses) {

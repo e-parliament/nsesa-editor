@@ -30,9 +30,9 @@ import java.util.Map;
 /**
  * Interface for an overlay widget (a higher level widget that can be translated into one or more DOM elements).
  * Forms a tree with a parent and children. Can be amendable, immutable and more.
- *
+ * <p/>
  * Usually instantiated by an {@link OverlayFactory}.
- *
+ * <p/>
  * Date: 27/06/12 17:52
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -118,12 +118,14 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Get the previous sibling or <tt>null</tt> if there is none.
+     *
      * @return the previous sibling
      */
     OverlayWidget getPreviousSibling();
 
     /**
      * Get the next sibling or <tt>null</tt> if there is none.
+     *
      * @return the next sibling
      */
     OverlayWidget getNextSibling();
@@ -173,6 +175,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Check if the underlying amendable element is attached to the DOM or not.
+     *
      * @return <tt>true</tt> if it is attached
      */
     boolean isAttached();

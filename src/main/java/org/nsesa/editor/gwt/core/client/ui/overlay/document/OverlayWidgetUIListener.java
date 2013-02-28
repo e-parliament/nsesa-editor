@@ -45,6 +45,7 @@ public interface OverlayWidgetUIListener {
 
     /**
      * Callback when the <tt>sender</tt> lost the mouse hoover.
+     *
      * @param sender the overlay widget that lost the mouse hoover
      */
     void onMouseOut(OverlayWidget sender);
