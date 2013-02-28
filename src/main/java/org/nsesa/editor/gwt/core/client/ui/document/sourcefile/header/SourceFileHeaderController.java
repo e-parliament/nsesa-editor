@@ -17,11 +17,11 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * Controller for the source file header component.
  * Date: 24/06/12 18:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -38,24 +39,43 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 public class SourceFileHeaderController {
 
+    /**
+     * View for this component.
+     */
     protected final SourceFileHeaderView view;
+
+    /**
+     * Document scoped event bus.
+     */
     protected final DocumentEventBus documentEventBus;
+
+    /**
+     * Parent source file controller.
+     */
     protected SourceFileController sourceFileController;
 
+    /**
+     * List of the available translations.
+     */
     protected List<DocumentDTO> availableTranslations = new ArrayList<DocumentDTO>();
+
+    /**
+     * List of the related documents.
+     */
     protected List<DocumentDTO> relatedDocuments = new ArrayList<DocumentDTO>();
 
 
     @Inject
     public SourceFileHeaderController(final DocumentEventBus documentEventBus, final SourceFileHeaderView view) {
         assert view != null : "View is not set --BUG";
-
         this.view = view;
         this.documentEventBus = documentEventBus;
         registerListeners();
     }
 
     private void registerListeners() {
+
+        // add a change handler to load translations when a new translation is selected
         view.getTranslationsListBox().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -76,6 +96,7 @@ public class SourceFileHeaderController {
                 }
             }
         });
+        // add a change handler to load related documents when a new document is selected
         view.getRelatedDocumentsListBox().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
@@ -95,48 +116,82 @@ public class SourceFileHeaderController {
         });
     }
 
-    private DocumentDTO getTranslationDocument(String documentID) {
+    /**
+     * Get a {@link DocumentDTO} translation based on the given <tt>documentID</tt>.
+     *
+     * @param documentID the document identifier
+     * @return the document dto, or <tt>null</tt> if it cannot be found in the list of available translations
+     */
+    private DocumentDTO getTranslationDocument(final String documentID) {
         for (final DocumentDTO document : availableTranslations) {
             if (documentID.equals(document.getDocumentID())) {
                 return document;
             }
         }
-
         return null;
     }
 
-    private DocumentDTO getRelatedDocument(String documentID) {
+    /**
+     * Get a {@link DocumentDTO} related document based on the given <tt>documentID</tt>.
+     *
+     * @param documentID the document identifier
+     * @return the document dto, or <tt>null</tt> if it cannot be found in the list of available related documents
+     */
+    private DocumentDTO getRelatedDocument(final String documentID) {
         for (final DocumentDTO document : relatedDocuments) {
             if (documentID.equals(document.getDocumentID())) {
                 return document;
             }
         }
-
         return null;
     }
 
+    /**
+     * Return the view associated with this controller.
+     * @return  the view
+     */
     public SourceFileHeaderView getView() {
         return view;
     }
 
+    /**
+     * Set the available translations.
+     * @param translations the translations
+     */
     public void setAvailableTranslations(final ArrayList<DocumentDTO> translations) {
         this.availableTranslations = translations;
         view.setAvailableTranslations(translations);
     }
 
+    /**
+     * Set the related documents.
+     * @param relatedDocuments the related documents
+     */
     public void setRelatedDocuments(final ArrayList<DocumentDTO> relatedDocuments) {
         this.relatedDocuments = relatedDocuments;
         view.setRelatedDocuments(relatedDocuments);
     }
 
+    /**
+     * Set the currently active translation.
+     * @param selectedTranslation the active selected translation
+     */
     public void setSelectedTranslation(final DocumentDTO selectedTranslation) {
         view.setSelectedTranslation(selectedTranslation);
     }
 
+    /**
+     * Set the current related document.
+     * @param selectedRelatedDocument the active selected related document
+     */
     public void setSelectedRelatedDocument(final DocumentDTO selectedRelatedDocument) {
         view.setSelectedRelatedDocument(selectedRelatedDocument);
     }
 
+    /**
+     * Set the parent source file controller.
+     * @param sourceFileController the source file controller
+     */
     public void setSourceFileController(SourceFileController sourceFileController) {
         this.sourceFileController = sourceFileController;
     }

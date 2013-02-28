@@ -22,6 +22,7 @@ import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 import java.util.List;
 
 /**
+ * View for the {@link SourceFileHeaderController}.
  * Date: 24/06/12 21:43
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,25 +31,69 @@ import java.util.List;
 @ImplementedBy(SourceFileHeaderViewImpl.class)
 public interface SourceFileHeaderView extends IsWidget {
 
+    /**
+     * Set the list of available translations.
+     * @param translations the translations
+     */
     void setAvailableTranslations(List<DocumentDTO> translations);
 
+    /**
+     * Set the list of related documents.
+     * @param relatedDocuments the related documents
+     */
     void setRelatedDocuments(List<DocumentDTO> relatedDocuments);
 
+    /**
+     * Get a reference to the translations list box.
+     * @return the listbox
+     */
     HasChangeHandlers getTranslationsListBox();
 
+    /**
+     * Get a reference to the related documents list box.
+     * @return the listbox
+     */
     HasChangeHandlers getRelatedDocumentsListBox();
 
+    /**
+     * Get the document ID from the current selected related document.
+     * @return the documentID
+     */
     String getSelectedRelatedDocumentID();
 
+    /**
+     * Get the document ID from the current selected translations.
+     * @return the documentID
+     */
     String getSelectedTranslationDocumentID();
 
+    /**
+     * Set the current selected translation.
+     * @param selectedTranslation the selected translation
+     */
     void setSelectedTranslation(DocumentDTO selectedTranslation);
 
+    /**
+     * Set the current selected related document.
+     * @param selectedRelatedDocument the selected related document
+     */
     void setSelectedRelatedDocument(DocumentDTO selectedRelatedDocument);
 
+    /**
+     * General style setting
+     * @param style the CSS style name to set
+     */
     void setStyleName(String style);
 
+    /**
+     * Add another widget on the main header toolbar.
+     * @param widget the widget to add
+     */
     void addWidget(Widget widget);
 
+    /**
+     * Add another widget on the main header toolbar.
+     * @param widget the widget to add
+     */
     void addWidget(IsWidget widget);
 }

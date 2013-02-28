@@ -30,6 +30,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * Default implementation of the {@link SourceFileHeaderView} using UIBinder.
  * Date: 24/06/12 16:39
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
