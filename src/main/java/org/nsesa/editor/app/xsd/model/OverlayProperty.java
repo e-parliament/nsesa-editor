@@ -43,8 +43,8 @@ public class OverlayProperty extends OverlayNode {
     // the base class
     private OverlayClass baseClass;
 
-    private Integer minOccurs = new Integer(0);
-    private Integer maxOccurs = new Integer(-1);
+    private Integer minOccurs = 0;
+    private Integer maxOccurs = -1;
 
     private boolean required;
 
