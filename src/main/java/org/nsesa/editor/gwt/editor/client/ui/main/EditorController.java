@@ -110,7 +110,7 @@ public class EditorController implements BootstrapEventHandler {
     }
 
 
-    private DocumentController getDocumentController(String documentID) {
+    public DocumentController getDocumentController(final String documentID) {
         for (final DocumentController documentController : documentControllers) {
             if (documentID.equals(documentController.getDocumentID())) {
                 return documentController;

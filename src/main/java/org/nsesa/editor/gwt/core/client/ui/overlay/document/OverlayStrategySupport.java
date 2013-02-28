@@ -442,39 +442,6 @@ public class OverlayStrategySupport {
         return null;
     }
 
-    private void walk(Element elem, ElementVisitor visitor) {
-        assert elem != null;
-        assert visitor != null;
-
-        final List<Element> stack = new ArrayList<Element>();
-        stack.add(elem);
-
-        while (!stack.isEmpty()) {
-            Element nextElem = stack.remove(0);
-
-            NodeList<Node> nodes = nextElem.getChildNodes();
-            if (nodes != null) {
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Node node = nodes.getItem(i);
-                    if (node != null) {
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            Element el = Element.as(node);
-                            if (visitor.visit(el)) {
-                                stack.add(el);
-                            } else {
-                                break;
-                            }
-                        }
-                    } else {
-                        LOG.info("A 'null' node found -- that's very weird. Running in hosted mode under Chrome perhaps?");
-                    }
-                }
-            } else {
-                LOG.info("Nodes under nextElem are null -- that's very weird. Running in hosted mode under Chrome perhaps?");
-            }
-        }
-    }
-
     public String getNamespaceURI(Element element) {
         return element.hasAttribute("ns") ? element.getAttribute("ns") : null;
     }

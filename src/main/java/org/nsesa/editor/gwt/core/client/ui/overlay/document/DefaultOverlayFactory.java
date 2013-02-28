@@ -119,14 +119,6 @@ public class DefaultOverlayFactory implements OverlayFactory {
     }
 
     protected void postProcess(final OverlayWidget overlayWidget) {
-
-    }
-
-    private String spaces(int number) {
-        final StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < number; i++) {
-            sb.append(" ");
-        }
-        return sb.toString();
+        // currently unused, left as an extension point
     }
 }
