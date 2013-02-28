@@ -17,6 +17,7 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
+ * Resources for the {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentView}.
  * Date: 03/08/12 15:37
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

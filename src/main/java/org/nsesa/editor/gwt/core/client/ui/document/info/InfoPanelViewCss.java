@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.info;
 import com.google.gwt.resources.client.CssResource;
 
 /**
+ * CSS resource for the {@link InfoPanelView}.
  * Date: 24/06/12 16:39
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

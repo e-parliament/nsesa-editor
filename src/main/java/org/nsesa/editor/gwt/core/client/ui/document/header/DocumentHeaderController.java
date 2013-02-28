@@ -22,6 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * A controller for the header of this document.
  * Date: 24/06/12 18:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

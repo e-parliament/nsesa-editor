@@ -21,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Controller for the (meta) information tab under a {@link DocumentController}.
  * Date: 24/06/12 21:42
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,18 +31,33 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class InfoPanelController {
 
-    private final InfoPanelView view;
-    private DocumentController documentController;
+    /**
+     * View part of the component.
+     */
+    protected final InfoPanelView view;
+
+    /**
+     * The parent document controller.
+     */
+    protected DocumentController documentController;
 
     @Inject
     public InfoPanelController(InfoPanelView view) {
         this.view = view;
     }
 
+    /**
+     * Return the main view.
+     * @return the view
+     */
     public InfoPanelView getView() {
         return view;
     }
 
+    /**
+     * Set the parent document controller.
+     * @param documentController the document controller
+     */
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }

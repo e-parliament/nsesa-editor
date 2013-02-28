@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link DocumentHeaderController}.
  * Date: 24/06/12 21:43
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
