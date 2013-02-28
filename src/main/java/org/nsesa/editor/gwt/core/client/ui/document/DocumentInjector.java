@@ -31,6 +31,9 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFile
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
 
 /**
+ * A GIN document injector - used to give a document controller access to its dependencies. Note that this
+ * effectively makes singleton-scoped dependencies in fact document controller-scoped singletons.
+ *
  * Date: 17/10/12 14:53
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -39,37 +42,105 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerCont
 @GinModules({DocumentModule.class})
 public interface DocumentInjector extends Ginjector {
 
+    /**
+     * Get the main document view.
+     * @return the document view
+     */
     DocumentView getDocumentView();
 
+    /**
+     * Get the document view CSS resource.
+     * @return the document view css resource
+     */
     DocumentViewCss getDocumentViewCss();
 
+    /**
+     * Get the controller for the deadline component.
+     * @return the deadline controller
+     */
     DeadlineController getDeadlineController();
 
+    /**
+     * Get the document event bus.
+     * @return the document event bus.
+     */
     DocumentEventBus getDocumentEventBus();
 
+    /**
+     * Get the amendments panel controller.
+     * @return the amendments panel controller.
+     */
     AmendmentsPanelController getAmendmentsPanelController();
 
+    /**
+     * Get the source file controller.
+     * @return the source file controller
+     */
     SourceFileController getSourceFileController();
 
+    /**
+     * Get the header for the source file tab.
+     * @return the header for the source file controller tab
+     */
     SourceFileHeaderController getSourceFileHeaderController();
 
+    /**
+     * Get the marker controller.
+     * @return the marker controller
+     */
     MarkerController getMarkerController();
 
+    /**
+     * Get the actual content controller.
+     * @return the content controller
+     */
     ContentController getContentController();
 
+    /**
+     * Get the action bar controller.
+     * @return the action bar controller
+     */
     ActionBarController getActionBarController();
 
+    /**
+     * Get the amendment action panel controller.
+     * @return the amendent action panel controller
+     */
     AmendmentActionPanelController getAmendmentActionPanelController();
 
+    /**
+     * Get the info panel tab controller.
+     * @return the info panel controller
+     */
     InfoPanelController getInfoPanelController();
 
+    /**
+     * Get the document header controller for this document controller.
+     * @return the document header controller
+     */
     DocumentHeaderController getDocumentHeaderController();
 
+    /**
+     * Get the amendment manager.
+     * @return the amendment manager
+     */
     AmendmentManager getAmendmentManager();
 
+    /**
+     * Get an amendment controller.
+     * @return an amendment controller
+     */
     AmendmentController getAmendmentController();
 
+    /**
+     * Get the header controller for the amendments panel.
+     * @return the amendments header controller
+     */
     AmendmentsHeaderController getAmendmentsHeaderController();
 
+    /**
+     * Get the diffing manager for this document controller.
+     * @return the diffing manager
+     */
     DiffingManager getDiffingManager();
 }

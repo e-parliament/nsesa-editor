@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerModu
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
 
 /**
+ * Module for the Document component.
  * Date: 24/06/12 15:11
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

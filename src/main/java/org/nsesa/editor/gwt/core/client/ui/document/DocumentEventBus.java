@@ -20,6 +20,9 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * A document bus that is scoped per {@link DocumentController} to allow private communication between a document
+ * controller and its lower components.
+ *
  * Date: 19/10/12 11:33
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
