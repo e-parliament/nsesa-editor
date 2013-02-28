@@ -19,18 +19,23 @@ import java.util.Collection;
 
 /**
  * Interface to generate objects of type {@link OverlayClass} from different xsd components
- * <p/>
- * User: sgroza
- * Date: 18/10/12
- * Time: 15:24
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 18/10/12 15:36
  */
 public interface OverlayClassGenerator {
+    /**
+     * Defines a root overlay class. When parsing an xsd schema one root overlay class is created.
+     */
     public static class OverlayRootClass extends OverlayClass {
         public OverlayRootClass() {
             super("XS Root class", null, null);
         }
     }
 
+    /**
+     * Defines a schema overlay class. When parsing xsd schema-s, for each xsd schema one schema overlay class is created .
+     */
     public static class OverlaySchemaClass extends OverlayClass {
         public OverlaySchemaClass(String nameSpace) {
             super("XS Schema class", nameSpace, null);
@@ -38,14 +43,15 @@ public interface OverlayClassGenerator {
     }
 
     /**
-     * Return tree result of overlay classes
+     * Return tree result of overlay classes after xsd parsing
      *
      * @return
      */
     OverlayRootClass getResult();
 
     /**
-     * Start generation
+     * Start generation of overlay classes
+     * @param schemas
      */
     void generate(Collection<XSSchema> schemas);
 
@@ -85,6 +91,7 @@ public interface OverlayClassGenerator {
     void generate(XSAttGroupDecl attrGroup);
 
     /**
+     * Generates overlay class from XSElementDecl type component
      * @param element
      * @return
      */

@@ -15,9 +15,9 @@ package org.nsesa.editor.app.xsd.model;
 
 /**
  * Define how to process, if the case, an overlay class, when traversing it
- * User: sgroza
- * Date: 29/10/12
- * Time: 12:35
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/10/12 12:35
  */
 public interface OverlayClassProcessor {
     /**

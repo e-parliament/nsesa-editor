@@ -17,13 +17,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class description
- * User: sgroza
- * Date: 29/10/12
- * Time: 10:05
+ * The <code>OverlayNode</code> class is the primary datatype when parsing xsd schema.
+ * It represents a single node in the xsd structure and keep basic information about xsd node like name,
+ * namespace, classname, comments and type.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/10/12 10:05
  */
 public class OverlayNode {
-    public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(OverlayNode.class);
 
     protected String name;
     protected String nameSpace;
@@ -31,151 +34,119 @@ public class OverlayNode {
     protected OverlayType overlayType;
     protected String comments;
 
+    /**
+     * Constructs an empty <code>OverlayNode</code>
+     */
     public OverlayNode() {
     }
 
+    /**
+     * Constructs an <code>OverlayNode</code> with the given name, namespace abd type
+     * @param name The node name as String
+     * @param nameSpace The namespace as String
+     * @param overlayType  The overlayType as Enum
+     */
     public OverlayNode(String name, String nameSpace, OverlayType overlayType) {
         this.name = name;
         this.nameSpace = nameSpace;
         this.overlayType = overlayType;
     }
 
-    // a simple way to clone an object by invoking the constructor
-    public OverlayNode(OverlayNode toClone) {
-        this(toClone.getName(), toClone.getNameSpace(), toClone.getOverlayType());
-        this.className = toClone.getClassName();
-    }
-
+    /**
+     * Return the <code>OverlayType</code> of the <code>OverlayNode</code>
+     * @return
+     */
     public OverlayType getOverlayType() {
         return overlayType;
     }
 
+    /**
+     * Set the <code>overlayType</code> of the node
+     * @param overlayType
+     */
     public void setOverlayType(OverlayType overlayType) {
         this.overlayType = overlayType;
     }
 
+    /**
+     * Returns the node name
+     * @return the node name as String
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set the node name
+     * @param name as String
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the node namespace
+     * @return The namespace as String
+     */
     public String getNameSpace() {
         return nameSpace;
     }
 
+    /**
+     * Set the namespace
+     * @param nameSpace as String
+     */
     public void setNameSpace(String nameSpace) {
         this.nameSpace = nameSpace;
     }
 
+    /**
+     * Returns the node classname
+     * @return Classname as String
+     */
     public String getClassName() {
         return className;
     }
 
+    /**
+     * Set the node class name
+     * @param className As String
+     */
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * True when the <code>OverlayNode</code> is simple type
+     * @return True for simple type
+     */
     public boolean isSimple() {
         return OverlayType.SimpleType.equals(overlayType);
     }
 
+    /**
+     * True when the <code>OverlayNode</code> is complex type
+     * @return True for complex type
+     */
     public boolean isComplex() {
         return OverlayType.ComplexType.equals(overlayType);
     }
 
+    /**
+     * True when the <code>OverlayNode</code> is xsd element
+     * @return True for xsd element
+     */
     public boolean isElement() {
         return OverlayType.Element.equals(overlayType);
     }
 
+    /**
+     * True when the <code>OverlayNode</code> is wildcard type
+     * @return True for wildcard type
+     */
     public boolean isWildCard() {
         return OverlayType.WildcardType.equals(overlayType);
     }
-
-    /**
-     * Traverse the node and its descendants
-     * @param processor The processor applied for the visited node
-     */
-//    public void process(OverlayClassProcessor processor) {
-//        processor.process(this);
-//        Stack<OverlayNode> stack = new Stack<OverlayNode>();
-//        stack.add(this);
-//        Map<String, OverlayNode> map = new HashMap<String, OverlayNode>();
-//        while(!stack.isEmpty()) {
-//            OverlayNode node = stack.pop();
-//            processor.process(node, context);
-//            if (node.getProperties().size() > 0) {
-//                for (int i = node.getProperties().size(); i > 0 ; i--) {
-//                    if (!map.containsKey(node.getProperties().get(i-1).getKey())) {
-//                        map.put(node.getProperties().get(i-1).getKey(), node.getProperties().get(i-1));
-//                        stack.push(node.getProperties().get(i-1));
-//                    } else {
-//                        System.out.println(node.getProperties().get(i-1) + " is already traversed");
-//                    }
-//                }
-//            }
-//        }
-//    }
-    /**
-     * Build the tree containing its descendants
-     * @param rawNodes The list of all possible descendants nodes
-     */
-//    public OverlayNode asTree(List<OverlayClass> rawNodes) {
-//        final Map<String, OverlayClass> map = Maps.uniqueIndex(rawNodes, new Function<OverlayClass, String>() {
-//            @Override
-//            public String apply(@Nullable OverlayClass input) {
-//                return input.getKey();
-//            }
-//        });
-//        OverlayNode rootNode = new OverlayNode(this);
-//        buildTree(rootNode, map);
-//        return rootNode;
-//    }
-
-//    protected void buildTree(OverlayNode node, Map<String, OverlayClass> map) {
-//        // traverse the children of the parent if exist and add as descendants
-//        LOG.debug("Generate tree for node {}", node);
-//        OverlayNode rawNode = map.get(node.getKey());
-//        // create a copy for each child
-//        if (rawNode != null) {
-//            for(OverlayNode child : rawNode.getProperties()) {
-//                OverlayNode newChild = new OverlayNode(child);
-//                node.add(newChild);
-//            }
-//            // create a copy for each child of the parent and descendants
-//            OverlayNode parent = rawNode.getParent();
-//            while (parent != null) {
-//                OverlayNode parentRawNode = map.get(parent.getKey());
-//                if (parentRawNode != null) {
-//                    for(OverlayNode child : parentRawNode.getProperties()) {
-//                        OverlayNode newChild = new OverlayNode(child);
-//                        node.add(newChild);
-//                    }
-//                }
-//                parent = parentRawNode.getParent();
-//            }
-//
-//            // traverse the children and replace with their overlay classes
-//            ListIterator<OverlayNode> iterator = node.children.listIterator();
-//            while (iterator.hasNext()) {
-//                OverlayNode child = iterator.next();
-//                // find the overlay node in the map
-//                OverlayNode childRawNode = map.get(child.getKey());
-//                if (childRawNode != null) {
-//                    LOG.debug("Get the child class in the map: " + childRawNode);
-//                    // remove the overlay property with the class from map
-//                    if (!childRawNode.visited) {
-//                        buildTree(child, map);
-//                    } else {
-//                        LOG.debug("The child has been already visited: " + childRawNode);
-//                    }
-//                }
-//                rawNode.visited = true;
-//            }
-//        }
-//    }
 
     /**
      * Casts this object to OverlayClass if possible, otherwise returns null.
@@ -229,10 +200,18 @@ public class OverlayNode {
         return result;
     }
 
+    /**
+     * Returns the comments associated to the node
+     * @return comments as String
+     */
     public String getComments() {
         return comments;
     }
 
+    /**
+     * Set the comments to the node
+     * @param comments as String
+     */
     public void setComments(String comments) {
         this.comments = comments;
     }

@@ -29,7 +29,13 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * Generates a hierarchy of css styles by parsing an XSD Schema
+ * Get the result of XSD parsing and generate css class for each element defined in XSD schema.
+ * The program is usind a predefined template properties <code>overlayCss.properties</code> whereas the user can add
+ * custom css properties that will be generated for certain type of elements. If there are css properties defined in
+ * superclasses they will be carried on also in subclasses unless they are overridden in the template file.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 17/01/13 9:38
  */
 public class CssOverlayGenerator extends OverlayGenerator {
 

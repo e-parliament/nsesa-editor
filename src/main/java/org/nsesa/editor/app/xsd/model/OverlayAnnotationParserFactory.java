@@ -19,10 +19,10 @@ import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import org.xml.sax.*;
 
 /**
- * An annotation parser implementation to read the documentation from annotations
- * User: groza
- * Date: 24/01/13
- * Time: 16:00
+ * An XSOM annotation parser implementation to read the documentation from XSD annotations
+ * 
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 24/01/13 16:46
  */
 public class OverlayAnnotationParserFactory implements AnnotationParserFactory {
     @Override
@@ -49,17 +49,17 @@ public class OverlayAnnotationParserFactory implements AnnotationParserFactory {
 
                 @Override
                 public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void processingInstruction(String target, String data) throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void skippedEntity(String name) throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
@@ -72,27 +72,27 @@ public class OverlayAnnotationParserFactory implements AnnotationParserFactory {
 
                 @Override
                 public void setDocumentLocator(Locator locator) {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void startDocument() throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void endDocument() throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void startPrefixMapping(String prefix, String uri) throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override
                 public void endPrefixMapping(String prefix) throws SAXException {
-                    //To change body of implemented methods use File | Settings | File Templates.
+                    //do nothing.
                 }
 
                 @Override

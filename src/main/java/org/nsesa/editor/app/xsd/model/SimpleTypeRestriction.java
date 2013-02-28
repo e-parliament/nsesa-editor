@@ -17,7 +17,6 @@ import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSimpleType;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -25,12 +24,11 @@ import java.util.Vector;
 /**
  * Contains a mapping of xsd facet restriction
  * (See {@link XSFacet})
- * User: sgroza
- * Date: 18/10/12
- * Time: 09:11
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 18/10/12 09:11
  */
 public class SimpleTypeRestriction {
-    private String[] enumeration = null;
+    private List<String> enumeration = null;
     private String fractionDigits = null;
     private String maxExclusive = null;
     private String maxInclusive = null;
@@ -43,11 +41,11 @@ public class SimpleTypeRestriction {
     private String totalDigits = null;
     private String whiteSpace = null;
 
-    public String[] getEnumeration() {
+    public List<String> getEnumeration() {
         return enumeration;
     }
 
-    public void setEnumeration(String[] enumeration) {
+    public void setEnumeration(List<String> enumeration) {
         this.enumeration = enumeration;
     }
 
@@ -149,8 +147,10 @@ public class SimpleTypeRestriction {
         SimpleTypeRestriction typeRestriction = new SimpleTypeRestriction();
         XSRestrictionSimpleType restriction = simpleType.asRestriction();
         if (restriction != null) {
-            List<String> enumeration = new ArrayList<String>();
-            for (XSFacet facet : restriction.getDeclaredFacets()) {
+            Vector<String> enumeration = new Vector<String>();
+            Iterator<? extends XSFacet> i = restriction.getDeclaredFacets().iterator();
+            while (i.hasNext()) {
+                XSFacet facet = i.next();
                 if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {
                     enumeration.add(facet.getValue().value);
                 }
@@ -189,7 +189,7 @@ public class SimpleTypeRestriction {
                 }
             }
             if (enumeration.size() > 0) {
-                typeRestriction.setEnumeration(enumeration.toArray(new String[enumeration.size()]));
+                typeRestriction.setEnumeration(enumeration);
             }
         }
         return typeRestriction;

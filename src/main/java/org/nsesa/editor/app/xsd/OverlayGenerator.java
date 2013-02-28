@@ -25,22 +25,34 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * An abstract class to to generate different representations based on XSD schema provided
- * Date: 03/08/12 19:25
+ * Defines an API that enables applications to parse XML documents with XSOM parser.
+ * Any subclass will have access to the result of the parsing which is stored in
+ * <code>OverlayClassGenerator</code> object as a tree of <code>OverlayClass</code> objects.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 03/10/12 19:25
  */
 public abstract class OverlayGenerator {
 
     public static final Logger LOG = LoggerFactory.getLogger(OverlayGenerator.class);
-    // XSOM parser
+    /**
+     * The parser used to parse the xsd document
+     */
     private final XSOMParser parser;
 
-    // the overlay generator used to parse and analyze xsd schemas
+    /**
+     * The overlay generator used to parse and analyze xsd schemas
+     */
     protected OverlayClassGenerator overlayClassGenerator;
+
+    /**
+     * The xsd schema to be parsed
+     */
     protected String xsdSchema;
 
+    /**
+     * Default constructor
+     */
     public OverlayGenerator() {
         parser = new XSOMParser();
         parser.setErrorHandler(new LoggingErrorHandler());
@@ -75,6 +87,9 @@ public abstract class OverlayGenerator {
      */
     public abstract void print();
 
+    /**
+     * Utility class to handle parsing errors
+     */
     private static class LoggingErrorHandler implements ErrorHandler {
         @Override
         public void warning(SAXParseException e) throws SAXException {

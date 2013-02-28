@@ -17,6 +17,8 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 
+import java.util.List;
+
 /**
  * Defines configuration settings for CK Editor.
  *
@@ -27,7 +29,12 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
  */
 public class CKEditorConfig implements RichTextEditorConfig {
 
-    private String[] contentCss;
+    /**
+     * Nsesa plugin name defined in CK editor plugins area
+     */
+    public static String NSESA_PLUGIN_NAME = "nsesa";
+
+    private List<String> contentCss;
     private String bodyClass, originalBodyClass;
     private boolean readOnly;
     private boolean startupFocus;
@@ -110,7 +117,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
      * @param contentCss
      * @return
      */
-    public CKEditorConfig setContentCss(String[] contentCss) {
+    public CKEditorConfig setContentCss(List<String> contentCss) {
         this.contentCss = contentCss;
         final JsArrayString jsStrings = (JsArrayString) JsArrayString.createArray();
         for (final String s : contentCss) {

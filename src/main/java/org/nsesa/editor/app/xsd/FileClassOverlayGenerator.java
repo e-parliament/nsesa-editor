@@ -30,13 +30,23 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Generates a hierarchy of Java classes by parsing an XSD schemas. In order to create instances
- * of those classes a factory class is also generated. There will be a package for each schema and the
- * classes will be saved under target directory specified when instantiating the generator.
- * <p/>
- * User: sgroza
- * Date: 06/11/12
- * Time: 09:09
+ * Get the result of XSD parsing and based on Freemarker template mechanism it generate a class for each element
+ * defined in XSD schema. A factory API is also generated in order to facilitate the object's creation.
+ * <p>
+ * The generator is coming with the following predefined Freemarker templates which shall exist
+ * before running the program:
+ * <p>
+ *     overlayClass.ftl : responsible for classes generation
+ * <p>
+ *     overlayEnum.ftl : responsible for classes of type enum generation
+ * <p>
+ *    overlayFactory.ftl: responsible for factories generation
+ * <p>
+ *    overlayLocalizableResource.ftl,overlayMessagesProperties.ftl, overlayMessagesProperties.ftl:
+ *    responsible for localizable resources generation
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 06/11/12 9:09
  */
 public class FileClassOverlayGenerator extends OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(FileClassOverlayGenerator.class);
@@ -101,7 +111,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     }
 
     /**
-     * Print overlay classes in the files
+     * Generate files containing the source code for classes, for factories.
+     *
      */
     public void print() {
 
@@ -129,7 +140,9 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         generateOverlayResources(elementClasses, packageNameGenerator, directoryNameGenerator);
     }
 
-
+    /**
+     * Generate the directory where the sources will be created
+     */
     private void generateSourcesDirectory() {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -149,6 +162,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * Generate overlay resources for element types
+     * @param elementClasses
+     * @param packageNameGenerator
+     * @param directoryNameGenerator
+     */
     private void generateOverlayResources(Map<String, List<OverlayClass>> elementClasses,
                                           PackageNameGenerator packageNameGenerator,
                                           PackageNameGenerator directoryNameGenerator) {
@@ -178,6 +197,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * Generate overlay messages for element types based on xsd documentation
+     * @param elementClasses
+     * @param packageNameGenerator
+     * @param directoryNameGenerator
+     */
     private void generateOverlayMessages(Map<String, List<OverlayClass>> elementClasses,
                                          PackageNameGenerator packageNameGenerator,
                                          PackageNameGenerator directoryNameGenerator) {
@@ -210,6 +235,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * Generates factories of elements
+     * @param elementClasses
+     * @param packageNameGenerator
+     * @param directoryNameGenerator
+     */
     private void generateFactories(Map<String, List<OverlayClass>> elementClasses,
                                    PackageNameGenerator packageNameGenerator,
                                    PackageNameGenerator directoryNameGenerator) {
@@ -238,6 +269,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * Generates source code for elements
+     * @param generatedClasses
+     * @param packageNameGenerator
+     * @param directoryNameGenerator
+     */
     private void generateClasses(List<OverlayClass> generatedClasses,
                                  PackageNameGenerator packageNameGenerator,
                                  PackageNameGenerator directoryNameGenerator) {
@@ -272,6 +309,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * Filter generated classes based on the given <code>OverlayType</code> type
+     * @param generatedClasses
+     * @param overlayType
+     * @return
+     */
     private Map<String, List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
         Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
         for (OverlayClass generatedClass : generatedClasses) {
@@ -288,7 +331,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         return result;
     }
 
-
+    /**
+     * Create a file using freemarker template mechanism
+     * @param file
+     * @param rootMap
+     * @param templateName
+     */
     public void writeToFile(File file, Object rootMap, String templateName) {
         FileWriter writer = null;
         try {
@@ -376,7 +424,9 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     }
 
 
-    // replace the group properties with their collection of simple properties
+    /**
+     * Replace the group properties with their collection of simple properties
+     */
     private void replaceGroupProperties(OverlayClass aClass) {
         List<OverlayPropertyHolder> stack = new ArrayList<OverlayPropertyHolder>();
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();

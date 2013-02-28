@@ -14,10 +14,10 @@
 package org.nsesa.editor.app.xsd.model;
 
 /**
- * An enum for XSD component types
- * User: sgroza
- * Date: 22/10/12
- * Time: 11:24
+ * An enum for XSD types
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/10/12 11:24
  */
 public enum OverlayType {
     Unknown,

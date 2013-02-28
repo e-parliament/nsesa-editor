@@ -18,10 +18,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A default implementation of {@link PackageNameGenerator} interface converting the names spaces into a package
- * User: sgroza
- * Date: 22/10/12
- * Time: 11:45
+ * A default implementation of {@link PackageNameGenerator} interface converting the names space of
+ * overlay datatypes into a package names.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/10/12 11:45
  */
 public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
@@ -106,7 +107,6 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     }
 
-    // if substr
     private String getEligiblePackageName(String substr) {
         Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
         for (Map.Entry<String, String> entry : entries) {

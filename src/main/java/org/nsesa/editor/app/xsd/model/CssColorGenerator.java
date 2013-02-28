@@ -16,28 +16,45 @@ package org.nsesa.editor.app.xsd.model;
 import java.util.Random;
 
 /**
- * Generates a color code in hexadecimal.
- * User: groza
- * Date: 21/01/13
- * Time: 13:05
+ * A generator to compute randomly color codes in hexadecimal format based on the given label.
+ * The generated color remains constant over the recomputation with the same label.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 21/01/13 13:38
  */
 public class CssColorGenerator {
 
-    public static CssColorGenerator INSTANCE = new CssColorGenerator();
+    private static CssColorGenerator INSTANCE = new CssColorGenerator();
 
+    /**
+     * Returns one instance of this generator
+     * @return
+     */
     public static CssColorGenerator getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Dissallow creation of other instances
+     */
     private CssColorGenerator() {
-
     }
 
+    /**
+     * Generates a color based on the provided label and match then the color
+     * @param label
+     * @return
+     */
     public String getTextColor(final String label) {
         String color = getColor(label);
         return matchTextColor(color);
     }
 
+    /**
+     * Returns "000000" or "FFFFFF" depending on the lightness of the color
+     * @param color
+     * @return
+     */
     public String matchTextColor(String color) {
         if (color.startsWith("#")) color = color.substring(1);
         if (color.length() != 6) return "000000";
@@ -49,6 +66,12 @@ public class CssColorGenerator {
         return (brightness <= 128 ? "FFFFFF" : "000000");
     }
 
+    /**
+     *  Generate a color based on provided label.
+     *  The color remains constant during recomputation with the same label
+     * @param label
+     * @return
+     */
     public String getColor(final String label) {
         final Random random = new Random(label.hashCode());
         String code = hexColor(random);

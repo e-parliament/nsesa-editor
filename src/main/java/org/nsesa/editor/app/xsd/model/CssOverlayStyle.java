@@ -20,9 +20,9 @@ import java.util.Map;
 
 /**
  * Keeps style information for a given overlay class
- * User: sgroza
- * Date: 06/11/12
- * Time: 12:46
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 06/11/12 12:46
  */
 public class CssOverlayStyle {
     /**
@@ -121,8 +121,6 @@ public class CssOverlayStyle {
             aClass = aClass.getParent();
         }
     }
-
-    ;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -20,21 +20,24 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Bean to keep basic information about class.
- * Date: 05/08/12 13:36
+ * A <code>OverlayClass</code> is a layer between a <code>java class</code> and an <code>xsd node</code>.
+ * It holds all the information required in order to generate a <code>Java</code>class.
+ * Besides providing access to the hierarchy it also provides some convenience methods for accessing
+ * certain sets of information.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 05/08/12 13:36
  */
 public class OverlayClass extends OverlayNode {
-    public static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(OverlayClass.class);
+    /**
+     * Compare 2 overlay classes by their name
+     */
     public static final Comparator<OverlayClass> DEFAULT_COMPARATOR = new Comparator<OverlayClass>() {
         @Override
         public int compare(OverlayClass o1, OverlayClass o2) {
-//            int result = o1.getChildren().size() - o2.getChildren().size();
-//            if (result != 0) {
-//                return result;
-//            }
             int result = o1.name.compareTo(o2.name);
             return result;
         }
@@ -42,7 +45,7 @@ public class OverlayClass extends OverlayNode {
 
 
     private String packageName;
-    private Class<?>[] interfaces;
+    private List<String> interfaces;
     private SimpleTypeRestriction restriction;
 
     private OverlayClass parent;
@@ -50,51 +53,100 @@ public class OverlayClass extends OverlayNode {
     private List<OverlayClass> children;
     private List<OverlayProperty> properties;
 
+    /**
+     * Constructs an empty <code>OverlayClass</code>
+     */
     public OverlayClass() {
         super();
         this.properties = new ArrayList<OverlayProperty>();
         this.children = new ArrayList<OverlayClass>();
     }
 
+    /**
+     * Constructs an <code>OverlayClass</code> with the given name, namespace and overlaytype
+     * @param name
+     * @param nameSpace
+     * @param overlayType
+     */
     public OverlayClass(String name, String nameSpace, OverlayType overlayType) {
         super(name, nameSpace, overlayType);
         this.properties = new ArrayList<OverlayProperty>();
         this.children = new ArrayList<OverlayClass>();
     }
 
+    /**
+     * Returns the possible overlay subclasses as a list. An overlay subclass is a <code>java subclass</code> of
+     * <code>java class</code> linked to this overlay class
+     * @return
+     */
     public List<OverlayClass> getChildren() {
         return children;
     }
 
+    /**
+     * Returns a list of ordered children by using <code>DEFAULT_COMPARATOR</code>
+     * @return
+     */
     public List<OverlayClass> getOrderedChildren() {
         Collections.sort(children, OverlayClass.DEFAULT_COMPARATOR);
         return children;
     }
 
+    /**
+     * Set a list of overlay subclasses
+     * @param children
+     */
     public void setChildren(List<OverlayClass> children) {
         this.children = children;
     }
 
+    /**
+     * Returns <code>SimpleTypeRestriction</code> if the xsd representation is a simple type restriction
+     * @return
+     */
     public SimpleTypeRestriction getRestriction() {
         return restriction;
     }
 
+    /**
+     * Returns a list of <code>OverlayProperty</code>. An <code>OverlayProperty</code> works like a layer between
+     * <code>java property</code> and <code>xsd attributes/xsd elements</code>
+     * @return
+     */
     public List<OverlayProperty> getProperties() {
         return properties;
     }
 
+    /**
+     * Set the list of <code>OverlayProperty</code>
+     * @param properties
+     */
     public void setProperties(List<OverlayProperty> properties) {
         this.properties = properties;
     }
 
+    /**
+     * Returns the parent of <code>OverlayClass</code>. The parent is defined as the <code>OverlayClass</code> linked to
+     * <code>java superclass</code>
+     * @return
+     */
     public OverlayClass getParent() {
         return parent;
     }
 
+    /**
+     * Set the parent of <code>OverlayClass</code>
+     * @param parent
+     */
     public void setParent(OverlayClass parent) {
         this.parent = parent;
     }
 
+    /**
+     * Checks to see whether or not this overlay class is descendent of given parent
+     * @param parentName Parent Name as String
+     * @return True when the overlay class is descendent of given parent
+     */
     public boolean isDescendentOf(String parentName) {
         boolean result = false;
         OverlayClass nodeParent = this;
@@ -108,6 +160,12 @@ public class OverlayClass extends OverlayNode {
         return result;
     }
 
+    /**
+     * utility method to generate a list of <code>java import</code>statements based on
+     * the its parent and properties
+     * @param packageNameGenerator
+     * @return An array of String
+     */
     public String[] getImports(PackageNameGenerator packageNameGenerator) {
         Set<String> imports = new LinkedHashSet<String>();
         if (parent != null && (parent.isComplex() || parent.isElement() || parent.isSimple())) {
@@ -136,34 +194,63 @@ public class OverlayClass extends OverlayNode {
         return imports.toArray(new String[imports.size()]);
     }
 
-    public Class<?>[] getInterfaces() {
+    /**
+     * Returns possible interfaces of <code>java class</code> linked to <code>OverlayClass</code>
+     * @return
+     */
+    public List<String> getInterfaces() {
         return interfaces;
     }
 
-    public void setInterfaces(Class<?>[] interfaces) {
+    /**
+     * Set the possible java interfaces of this <code>OverlayClass</>
+     * @param interfaces
+     */
+    public void setInterfaces(List<String> interfaces) {
         this.interfaces = interfaces;
     }
 
+    /**
+     * Returns the package name of <code>java class</code> linked to this <code>OverlayClass</code>
+     * @return
+     */
     public String getPackageName() {
         return packageName;
     }
 
+    /**
+     * Set the package name
+     * @param packageName
+     */
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
 
+    /**
+     * Process <code>OverlayClass</code> by passing it as parameter to the <code>OverlayClassProcessor</code>
+     * @param processor
+     */
     public void process(OverlayClassProcessor processor) {
         processor.process(this);
     }
 
+    /**
+     * Set XSd restriction if the case
+     * @param typeRestriction
+     */
     public void setRestriction(SimpleTypeRestriction typeRestriction) {
         this.restriction = typeRestriction;
     }
 
+    /**
+     * Check to see whether or not <code>java class</code> associated to <code>OverlayClass</code> can be treated as
+     * <code>java enum</code>
+     * @return
+     */
     public boolean isEnumeration() {
         return isSimple() && restriction != null &&
                 restriction.getEnumeration() != null &&
-                restriction.getEnumeration().length > 0;
+                restriction.getEnumeration().size() > 0;
     }
 
     /**
@@ -201,6 +288,11 @@ public class OverlayClass extends OverlayNode {
         return set;
     }
 
+    /**
+     * Returns a list with all properties marked as <code>attribute</code> from <code>OverlayClass</code>
+     * and its parents
+     * @return A List of <code>OverlayProperty</code>
+     */
     public List<OverlayProperty> getAllAttributesProperties() {
         OverlayProperty.Filter filter = new OverlayProperty.Filter() {
             @Override
@@ -211,6 +303,11 @@ public class OverlayClass extends OverlayNode {
         return getAllFilteredProperties(filter);
     }
 
+    /**
+     * Returns a list with all properties marked as <code>non attribute</code> from <code>OverlayClass</code>
+     * and its parents
+     * @return A List of <code>OverlayProperty</code>
+     */
     public List<OverlayProperty> getAllNonAttributesProperties() {
         OverlayProperty.Filter filter = new OverlayProperty.Filter() {
             @Override
@@ -221,6 +318,11 @@ public class OverlayClass extends OverlayNode {
         return getAllFilteredProperties(filter);
     }
 
+    /**
+     * Filter the <code>OverlayProperty</code> properties by using the given filter
+     * @param filter The filter to be used
+     * @return A List of filtered properties
+     */
     private List<OverlayProperty> getAllFilteredProperties(OverlayProperty.Filter filter) {
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         OverlayClass aClass = this;

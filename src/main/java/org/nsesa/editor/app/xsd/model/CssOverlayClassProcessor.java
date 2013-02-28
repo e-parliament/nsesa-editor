@@ -24,13 +24,13 @@ import java.io.Writer;
 import java.util.*;
 
 /**
- * Generate with freemarker template a list of css selectors for elements which belong to an xsd file.
+ * Generate a list of css selectors for elements which belong to an xsd file.
  * The css selectors are based on predefined list of styles stored in properties file.
  * The css style will be inherited from the parent node if it is the case.
  * Otherwise a generic css style containing only the node name is generated
- * User: sgroza
- * Date: 30/10/12
- * Time: 14:11
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 30/10/12 13:38
  */
 public class CssOverlayClassProcessor implements OverlayClassProcessor {
     private boolean emptyCssStyles;
@@ -43,6 +43,7 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
     private Map<String, Object> cssConfiguration;
 
     /**
+     * Constructor
      * @param properties   The predefined list of css styles
      * @param templateName The freemarker template used for css generation
      * @param out          The location where the output is saved

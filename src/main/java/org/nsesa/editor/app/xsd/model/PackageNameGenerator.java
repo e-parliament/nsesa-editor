@@ -14,10 +14,10 @@
 package org.nsesa.editor.app.xsd.model;
 
 /**
- * An interface to generate package name from overlay classes, overlay properties or simple strings
- * User: sgroza
- * Date: 22/10/12
- * Time: 11:44
+ * An interface to generate <code>java</code>package name from overlay datatypes.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 22/10/12 11:44
  */
 public interface PackageNameGenerator {
 

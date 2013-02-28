@@ -21,13 +21,13 @@ import java.util.*;
 
 /**
  * An implementation of {@link OverlayClassGenerator} interface
- * User: sgroza
- * Date: 18/10/12
- * Time: 15:31
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 18/10/12 15:31
  */
 public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
 
-    public static final Logger LOG = LoggerFactory.getLogger(OverlayClassGeneratorImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OverlayClassGeneratorImpl.class);
 
     private List<OverlayClass> generatedClasses;
     private Map<OverlayClass, OverlayClass> cache;
