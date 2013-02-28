@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker;
 import com.google.gwt.resources.client.CssResource;
 
 /**
+ * CSS resource bundle for the {@link MarkerView}.
  * Date: 24/06/12 16:39
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>

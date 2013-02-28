@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link MarkerController}.
  * Date: 24/06/12 21:43
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,9 +26,23 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(MarkerViewImpl.class)
 public interface MarkerView extends IsWidget {
+
+    /**
+     * Add a single marker on the panel at the relative position <tt>top</tt> in the given css <tt>color</tt> code.
+     * @param top   the top of the marker, in pixels
+     * @param color the color of the marker, in css color code
+     * @return the marker
+     */
     FocusWidget addMarker(double top, String color);
 
+    /**
+     * Removes all markers from the panel.
+     */
     void clearMarkers();
 
+    /**
+     * General method to set the css class name on this view.
+     * @param style the css class name to set
+     */
     void setStyleName(String style);
 }
