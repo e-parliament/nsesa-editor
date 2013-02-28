@@ -17,7 +17,9 @@ import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSimpleType;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -147,10 +149,8 @@ public class SimpleTypeRestriction {
         SimpleTypeRestriction typeRestriction = new SimpleTypeRestriction();
         XSRestrictionSimpleType restriction = simpleType.asRestriction();
         if (restriction != null) {
-            Vector<String> enumeration = new Vector<String>();
-            Iterator<? extends XSFacet> i = restriction.getDeclaredFacets().iterator();
-            while (i.hasNext()) {
-                XSFacet facet = i.next();
+            List<String> enumeration = new ArrayList<String>();
+            for (XSFacet facet : restriction.getDeclaredFacets()) {
                 if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {
                     enumeration.add(facet.getValue().value);
                 }
@@ -189,7 +189,7 @@ public class SimpleTypeRestriction {
                 }
             }
             if (enumeration.size() > 0) {
-                typeRestriction.setEnumeration(enumeration.toArray(new String[]{}));
+                typeRestriction.setEnumeration(enumeration.toArray(new String[enumeration.size()]));
             }
         }
         return typeRestriction;
