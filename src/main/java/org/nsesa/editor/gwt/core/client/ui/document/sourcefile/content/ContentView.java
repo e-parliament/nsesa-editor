@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link ContentView}.
  * Date: 24/06/12 21:43
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -26,11 +27,28 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(ContentViewImpl.class)
 public interface ContentView extends IsWidget {
+
+    /**
+     * Set the content of the document as an HTML string.
+     * @param documentContent the document content
+     */
     void setContent(String documentContent);
 
+    /**
+     * Get the underlying element to which the content will be attached.
+     * @return the main content element
+     */
     Element getContentElement();
 
+    /**
+     * Get a reference to the scroll panel.
+     * @return the scroll panel
+     */
     ScrollPanel getScrollPanel();
 
+    /**
+     * General setting of a css class name on this view.
+     * @param style the css class name to set
+     */
     void setStyleName(String style);
 }

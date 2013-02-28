@@ -34,18 +34,33 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
+ * Controller for the content component for actually displaying a rendered source text in a scroll panel.
  * Date: 24/06/12 18:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Singleton
 @Scope(DOCUMENT)
 public class ContentController {
-
+    /**
+     * View of the content component.
+     */
     private ContentView view;
+
+    /**
+     * Parent source file controller.
+     */
     private SourceFileController sourceFileController;
+
+    /**
+     * Document scoped event bus.
+     */
     private final DocumentEventBus documentEventBus;
+
+    /**
+     * Flag to keep track if the document content was set already or not.
+     */
     private boolean contentLoaded;
 
     @Inject
@@ -67,10 +82,19 @@ public class ContentController {
         });
     }
 
+    /**
+     * Return the view associated with this controller.
+     * @return the view
+     */
     public ContentView getView() {
         return view;
     }
 
+    /**
+     * Check if the given <tt>widget</tt> is fully visible in the scroll panel or not.
+     * @param widget    the widget to check
+     * @return <tt>true</tt> if the widget is fully visible in the scroll panel
+     */
     public boolean isFullyVisible(Widget widget) {
         if (widget != null) {
             final int widgetTop = widget.asWidget().getAbsoluteTop();
@@ -81,6 +105,10 @@ public class ContentController {
         return false;
     }
 
+    /**
+     * Retrieve the current top visible {@link OverlayWidget} in the document. Flaky.
+     * @return the top visible overlay widget.
+     */
     public OverlayWidget getCurrentVisibleAmendableWidget() {
         final OverlayWidget[] temp = new OverlayWidget[1];
         sourceFileController.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
@@ -96,20 +124,33 @@ public class ContentController {
         return temp[0];
     }
 
+    /**
+     * Set the transformed HTML-ized content on the view.
+     * @param documentContent the document content to set
+     */
     public void setContent(String documentContent) {
         view.setContent(documentContent);
         this.contentLoaded = true;
     }
 
+    /**
+     * Set the parent source file controller.
+     * @param sourceFileController the source file controller
+     */
     public void setSourceFileController(SourceFileController sourceFileController) {
         this.sourceFileController = sourceFileController;
     }
 
+    /**
+     * Get the root element node(s) that is/are set on the
+     * {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentView#getContentElement()}
+     * @return the root element
+     */
     public Element[] getContentElements() {
         if (!contentLoaded) {
             throw new RuntimeException("Content not yet available.");
         }
-        List<Element> elements = new ArrayList<Element>();
+        final List<Element> elements = new ArrayList<Element>();
         final NodeList<Node> childNodes = view.getContentElement().getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node node = childNodes.getItem(i);
