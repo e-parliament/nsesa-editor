@@ -759,7 +759,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     /**
      * This will use a
-     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
+     * depth-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
      * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.

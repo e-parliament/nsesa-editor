@@ -31,10 +31,10 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionB
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.util.Counter;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,27 +52,59 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     private static final Logger LOG = Logger.getLogger(SourceFileController.class.getName());
 
+    /**
+     * Private, document scoped event bus.
+     */
     protected final DocumentEventBus documentEventBus;
 
+    /**
+     * Marker controller to mark injected amendments in the content.
+     */
     protected final MarkerController markerController;
+
+    /**
+     * Source file header to control some mode-buttons, allow selection of translation, etc ..
+     */
     protected final SourceFileHeaderController sourceFileHeaderController;
+
+    /**
+     * Actual content of the source text.
+     */
     protected final ContentController contentController;
+
+    /**
+     * Action bar for all amendable overlay widgets, allows different amendment actions.
+     */
     protected final ActionBarController actionBarController;
 
+    /**
+     * The main view of the source file controller.
+     */
     protected final SourceFileView view;
 
-    // logical parent
+    /**
+     * Parent document controller.
+     */
     protected DocumentController documentController;
 
+    /**
+     * List of overlay widgets from the root node(s) in the content controller.
+     */
     protected List<OverlayWidget> overlayWidgets;
 
+    /**
+     * A list of active overlay widgets (after a {@link OverlayWidgetSelectEvent} has been caught).
+     */
     protected OverlayWidget activeOverlayWidget;
 
     @Inject
-    public SourceFileController(DocumentEventBus documentEventBus, MarkerController markerController,
-                                SourceFileHeaderController sourceFileHeaderController,
-                                SourceFileView sourceFileView,
-                                ContentController contentController, ActionBarController actionBarController) {
+    public SourceFileController(final DocumentEventBus documentEventBus,
+                                final MarkerController markerController,
+                                final SourceFileHeaderController sourceFileHeaderController,
+                                final SourceFileView sourceFileView,
+                                final ContentController contentController,
+                                final ActionBarController actionBarController) {
+
         this.view = sourceFileView;
         this.documentEventBus = documentEventBus;
         this.markerController = markerController;
@@ -97,12 +129,25 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         });
     }
 
-    public OverlayWidget getTopVisibleAmenableWidget() {
+    /**
+     * Return the top overlay widget that is completely visible in the content controller. Not very reliable ...
+     *
+     * @return the top visible overlay widget.
+     */
+    public OverlayWidget getTopVisibleOverlayWidget() {
         return contentController.getCurrentVisibleAmendableWidget();
     }
 
+    /**
+     * Set the content on the content controller via {@link ContentController#setContent(String)}.
+     * Does a cleanup of the overlay widgets.
+     *
+     * @param documentContent the document content to set
+     */
     public void setContent(String documentContent) {
-
+        /*if (activeOverlayWidget != null) {
+            activeOverlayWidget = null;
+        }*/
         // clean up
         if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
             for (final OverlayWidget overlayWidget : overlayWidgets) {
@@ -112,7 +157,41 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         contentController.setContent(documentContent);
     }
 
-    public OverlayWidget overlay(final com.google.gwt.dom.client.Element element, final OverlayWidgetUIListener UIListener) {
+    /**
+     * Perform the overlay of the DOM tree into a higher level tree of {@link OverlayWidget}s for each of the
+     * elements returned from
+     * {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController#getContentElements()}.
+     *
+     * Fires a {@link CriticalErrorEvent} is something goes wrong during the overlay.
+     *
+     * @see #overlay(com.google.gwt.dom.client.Element, org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener)
+     */
+    public void overlay() {
+        long start = System.currentTimeMillis();
+        final Element[] contentElements = contentController.getContentElements();
+        if (overlayWidgets == null) overlayWidgets = new ArrayList<OverlayWidget>();
+        for (final Element element : contentElements) {
+            try {
+                final OverlayWidget rootOverlayWidget = overlay(element, this);
+                overlayWidgets.add(rootOverlayWidget);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, "Exception while overlaying.", e);
+                documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
+            }
+        }
+        LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
+    }
+
+    /**
+     * The actual overlaying routine to transform a given DOM tree with root <tt>element</tt> into a tree of higher
+     * level {@link OverlayWidget}s. All amendable overlay widgets will have a {@link OverlayWidgetUIListener}
+     * <tt>UIListener</tt> set so they can respond to UI events such as clicking.
+     *
+     * @param element       the root DOM element to create the overlay tree for
+     * @param UIListener    the UI listener to set on each amendable overlay widget
+     * @return  the root overlay widget for a given <tt>element</tt>
+     */
+    protected OverlayWidget overlay(final com.google.gwt.dom.client.Element element, final OverlayWidgetUIListener UIListener) {
         // Assert that the element is attached.
         // assert Document.get().getBody().isOrHasChild(element) : "element is not attached to the document -- BUG";
 
@@ -134,7 +213,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * This will use a
-     * breath-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
+     * depth-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
      * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.
@@ -151,38 +230,50 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         }
     }
 
+    /**
+     * Depth-first walk of the given {@link OverlayWidget} <tt>toVisit</tt> with a given <tt>visitor</tt>.
+     * @param toVisit   the overlay widget to start the tree walk
+     * @param visitor   the visitor that will visit each node
+     */
     public void walk(final OverlayWidget toVisit, final OverlayWidgetVisitor visitor) {
         toVisit.walk(visitor);
     }
 
-    public void scrollTo(Widget widget) {
+    /**
+     * Asks the content controller to scroll to a given widget.
+     * @param widget    the widget to scroll to
+     */
+    public void scrollTo(final Widget widget) {
         contentController.scrollTo(widget);
     }
 
+    /**
+     * Click callback; fires a {@link OverlayWidgetSelectEvent} on the private document bus.
+     * @param sender the overlay widget that was clicked
+     */
     @Override
-    public void onClick(OverlayWidget sender) {
-        //        printDetails(sender);
+    public void onClick(final OverlayWidget sender) {
         documentEventBus.fireEvent(new OverlayWidgetSelectEvent(sender, documentController));
     }
 
-    private void printDetails(final OverlayWidget overlayWidget) {
-        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(false);
-        System.out.println(">>>> " + (previousNonIntroducedOverlayWidget != null ? documentController.getLocator().getLocation(previousNonIntroducedOverlayWidget, "EN", false) : null));
-        final OverlayWidget previousNonIntroducedOverlayWidget1 = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
-        System.out.println(">>>> " + (previousNonIntroducedOverlayWidget1 != null ? documentController.getLocator().getLocation(previousNonIntroducedOverlayWidget1, "EN", false) : null));
-        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(false);
-        System.out.println(">>>> " + (nextNonIntroducedOverlayWidget != null ? documentController.getLocator().getLocation(nextNonIntroducedOverlayWidget, "EN", false) : null));
-        final OverlayWidget nextNonIntroducedOverlayWidget1 = overlayWidget.getNextNonIntroducedOverlayWidget(true);
-        System.out.println(">>>> " + (nextNonIntroducedOverlayWidget1 != null ? documentController.getLocator().getLocation(nextNonIntroducedOverlayWidget1, "EN", false) : null));
-    }
-
+    /**
+     * Double click callback; fires a {@link AmendmentContainerCreateEvent} on the private document bus.
+     * @param sender the overlay widget that was double clicked
+     */
     @Override
-    public void onDblClick(OverlayWidget sender) {
+    public void onDblClick(final OverlayWidget sender) {
         documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
     }
 
+    /**
+     * Mouse over callback; if the {@link OverlayWidget} <tt>sender</tt> is amendable, we will attach the
+     * {@link ActionBarController} with the available amendment options, and set the location obtained via
+     * {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController#getLocator()}.
+     *
+     * @param sender the overlay widget that was hovered
+     */
     @Override
-    public void onMouseOver(OverlayWidget sender) {
+    public void onMouseOver(final OverlayWidget sender) {
         // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
         // allow the action bar to be shown.
         if (!sender.isIntroducedByAnAmendment()) {
@@ -191,27 +282,21 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         }
     }
 
+    /**
+     * We ignore on-mouse-out events since they tend to be unreliable. Rather, we're passing the
+     * {@link ActionBarController} as a single token around.
+     *
+     * @param sender the overlay widget that lost the mouse hoover
+     */
     @Override
     public void onMouseOut(OverlayWidget sender) {
         // ignore
     }
 
-    public void overlay() {
-        long start = System.currentTimeMillis();
-        final Element[] contentElements = contentController.getContentElements();
-        if (overlayWidgets == null) overlayWidgets = new ArrayList<OverlayWidget>();
-        for (final Element element : contentElements) {
-            try {
-                final OverlayWidget rootOverlayWidget = overlay(element, this);
-                overlayWidgets.add(rootOverlayWidget);
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Exception while overlaying.", e);
-                documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
-            }
-        }
-        LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
-    }
-
+    /**
+     * Renumbers the amendments by assigning a local number to be assigned to the amendments in the order they appear
+     * in the document.
+     */
     public void renumberAmendments() {
         final Counter counter = new Counter();
         walk(new OverlayWidgetVisitor() {
@@ -227,46 +312,90 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         });
     }
 
+    /**
+     * Return the active overlay widget, if any.
+     * @return the active overlay widget
+     */
     public OverlayWidget getActiveOverlayWidget() {
         return activeOverlayWidget;
     }
 
+    /**
+     * Set the active overlay widget
+     * @param activeOverlayWidget the active overlay widget
+     */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
         this.activeOverlayWidget = activeOverlayWidget;
     }
 
+    /**
+     * Set the parent document controller.
+     * @param documentController the document controller
+     */
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }
 
+    /**
+     * Get a list of all the root overlay widget nodes under this source file controller.
+     * @return the list of overlay widget root nodes
+     */
     public List<OverlayWidget> getOverlayWidgets() {
         return overlayWidgets;
     }
 
+    /**
+     * Clear the root overlay widget nodes.
+     * Does not do any detaching.
+     */
     public void clearAmendableWidgets() {
         this.overlayWidgets = new ArrayList<OverlayWidget>();
     }
 
+    /**
+     * Get the marker controller for the markers component.
+     * @return the marker controller.
+     */
     public MarkerController getMarkerController() {
         return markerController;
     }
 
+    /**
+     * Get the source file header controller.
+     * @return the header controller
+     */
     public SourceFileHeaderController getSourceFileHeaderController() {
         return sourceFileHeaderController;
     }
 
+    /**
+     * Get the content controller.
+     * @return the content controller
+     */
     public ContentController getContentController() {
         return contentController;
     }
 
+    /**
+     * Get the action bar controller.
+     * @return the action bar controller
+     */
     public ActionBarController getActionBarController() {
         return actionBarController;
     }
 
+    /**
+     * Get the parent document controller.
+     * @return the document controller
+     */
     public DocumentController getDocumentController() {
         return documentController;
     }
 
+    /**
+     * Get the associated view.
+     * @return the view
+     */
     public SourceFileView getView() {
         return view;
     }

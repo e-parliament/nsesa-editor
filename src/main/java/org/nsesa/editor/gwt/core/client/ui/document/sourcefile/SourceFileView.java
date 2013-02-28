@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * The view for the {@link SourceFileController}.
  * Date: 28/01/13 15:27
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,5 +25,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(SourceFileViewImpl.class)
 public interface SourceFileView extends IsWidget {
+
+    /**
+     * Set the CSS class name on this view.
+     * @param styleName the css class name to set
+     */
     void setStyleName(String styleName);
 }

@@ -35,6 +35,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerCont
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerView;
 
 /**
+ * Default implementation of the {@link SourceFileView} using UIBinder.
  * Date: 28/01/13 15:27
  *
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
