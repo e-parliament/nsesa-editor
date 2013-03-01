@@ -19,13 +19,17 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import java.util.List;
 
 /**
- * An event raised when the user select a selection
- * User: groza
- * Date: 29/11/12
- * Time: 10:42
+ * An event raised when the user select an action in
+ * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView}.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 13:15
  */
 public class AmendmentControllerSelectionActionEvent extends GwtEvent<AmendmentControllerSelectionActionEventHandler> {
 
+    /**
+     * An interface to specify what type of actions will be performed against selected amendment controllers
+     */
     public static interface Action {
         void execute(List<AmendmentController> amendmentControllers);
     }
@@ -34,6 +38,10 @@ public class AmendmentControllerSelectionActionEvent extends GwtEvent<AmendmentC
 
     private final Action action;
 
+    /**
+     * Create <code>AmendmentControllerSelectionActionEvent</code> object with the given input
+     * @param action The selected action
+     */
     public AmendmentControllerSelectionActionEvent(Action action) {
         this.action = action;
     }
@@ -48,6 +56,10 @@ public class AmendmentControllerSelectionActionEvent extends GwtEvent<AmendmentC
         handler.onEvent(this);
     }
 
+    /**
+     * Return the action selected by the user
+     * @return action The selected action
+     */
     public Action getAction() {
         return action;
     }

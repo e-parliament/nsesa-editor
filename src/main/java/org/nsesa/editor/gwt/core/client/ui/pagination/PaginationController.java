@@ -34,10 +34,11 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * The controller for pagination functionality
- * User: groza
- * Date: 30/11/12
- * Time: 15:29
+ * <code>PaginationController</code> class is responsible to control {@link PaginationView} view and
+ * to react to any amendment changes the user performs in the application.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 30/11/12 15:29
  */
 @Scope(DOCUMENT)
 @Singleton
@@ -50,6 +51,11 @@ public class PaginationController {
 
     private Filter currentFilter;
 
+    /**
+     * Create <code>PaginationController</code> object with the given parameters
+     * @param documentEventBus The event bus used to manage events
+     * @param paginationView The view associated to controller
+     */
     @Inject
     public PaginationController(DocumentEventBus documentEventBus, PaginationView paginationView) {
         this.documentEventBus = documentEventBus;
@@ -57,10 +63,17 @@ public class PaginationController {
         registerListeners();
     }
 
+    /**
+     * Returns the pagination view
+     * @return The view associated to controller
+     */
     public PaginationView getPaginationView() {
         return paginationView;
     }
 
+    /**
+     * Refresh the pagination as a reaction of the events occurred in the system
+     */
     private void registerListeners() {
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
@@ -135,6 +148,9 @@ public class PaginationController {
         });
     }
 
+    /**
+     * Move to current page in pagination view
+     */
     private void moveTo() {
         if (currentPage <= 0) {
             currentPage = 1;
@@ -147,11 +163,17 @@ public class PaginationController {
         documentEventBus.fireEvent(new FilterRequestEvent(currentFilter));
     }
 
+    /**
+     * Reset to 1 the current page in the pagination view
+     */
     private void resetPage() {
         currentPage = 1;
         displayCurrentPage();
     }
 
+    /**
+     * Display current page in pagination view
+     */
     public void displayCurrentPage() {
         paginationView.displayCurrentPage(currentPage, totalPages);
     }

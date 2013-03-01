@@ -43,17 +43,21 @@ import java.util.Map;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Date: 24/06/12 21:44
+ *  Default implementation of <code>AmendmentsPanelView</code> interface based on {@link UiBinder} GWT mechanism.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 24/06/12 21:44
  */
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPanelView, ProvidesResize {
-
+    /**
+     * Used to fire event when an amendemnt is selected or un selected
+     */
     private DocumentEventBus documentEventBus;
-
+    /**
+     * constant used when resize the view
+     */
     private static final int SCROLLBAR_OFFSET = 125;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
@@ -61,21 +65,47 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    /**
+     * facilites scrolling functionality when there are more amendments to be listed
+     */
     @UiField
     ScrollPanel scrollPanel;
 
+    /**
+     * <code>AmendmentsHeaderView</code> view linked to this widget
+     */
     @UiField(provided = true)
     AmendmentsHeaderView amendmentsHeaderView;
+
+    /**
+     * <code>AmendmentsFilterView</code> view linked to this widget
+     */
     @UiField(provided = true)
     AmendmentsFilterView filterView;
+
+    /**
+     * <code>PaginationView</code> view linked to this widget
+     */
     @UiField(provided = true)
     PaginationView paginationView;
 
+    /**
+     * holder panel for amendments representation
+     */
     @UiField
     VerticalPanel amendmentsPanel;
-
+    /**
+     * holder map for check boxes
+     */
     private Map<String, CheckBox> checkBoxes = new LinkedHashMap<String, CheckBox>();
 
+    /**
+     * Create <code>AmendmentsPanelViewImpl</code> with the given parameters
+     * @param amendmentsHeaderController
+     * @param paginationController
+     * @param amendmentsFilterController
+     * @param documentEventBus
+     */
     @Inject
     public AmendmentsPanelViewImpl(AmendmentsHeaderController amendmentsHeaderController,
                                    PaginationController paginationController,
@@ -91,6 +121,9 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         registerListeners();
     }
 
+    /**
+     * Register specific handlers in particular a handler to resize the scroll panel whenever is necessary.
+     */
     private void registerListeners() {
         documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
@@ -102,7 +135,12 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     }
 
-
+    /**
+     * Display a check box and an amendment representation by using
+     * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController#getExtendedView()}
+     * for each amendment controller present in the provided map of amendment controllers
+     * @param amendments The amendments that will be displayed
+     */
     @Override
     public void setAmendmentControllers(final Map<String, AmendmentController> amendments) {
         for (final Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
@@ -126,6 +164,10 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         }
     }
 
+    /**
+     * Clean up the view content and  set up again the amendment controllers
+     * @param amendments The amendments that will be displayed
+     */
     @Override
     public void refreshAmendmentControllers(Map<String, AmendmentController> amendments) {
         amendmentsPanel.clear();
@@ -133,6 +175,10 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         setAmendmentControllers(amendments);
     }
 
+    /**
+     * Returns the selected amendment controllers which are visible in the view
+     * @return A list of Id that identify uniquely a selected amendment
+     */
     @Override
     public List<String> getSelectedVisibleAmendmentContainerIds() {
         List<String> result = new ArrayList<String>();
@@ -145,6 +191,10 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         return result;
     }
 
+    /**
+     * Mark as selected the check boxes associated to the given id-s
+     * @param ids A list of id-s to identify the amendment controllers
+     */
     @Override
     public void selectAmendmentControllers(List<String> ids) {
         // deselect all

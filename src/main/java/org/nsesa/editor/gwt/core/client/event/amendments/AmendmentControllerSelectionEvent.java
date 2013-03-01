@@ -18,16 +18,21 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 
 /**
- * An event raised when the user select a selection
- * User: groza
- * Date: 29/11/12
- * Time: 10:42
+ * An event raised when the user performs a specific <code>Selection</code> in
+ * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView} view
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 13:15
  */
 public class AmendmentControllerSelectionEvent extends GwtEvent<AmendmentControllerSelectionEventHandler> {
     public static final Type<AmendmentControllerSelectionEventHandler> TYPE = new Type<AmendmentControllerSelectionEventHandler>();
 
     private Selection<AmendmentController> selection;
 
+    /**
+     * Create <code>AmendmentControllerSelectionEvent</code> object with the given input
+     * @param selection The selection chosen  by the user
+     */
     public AmendmentControllerSelectionEvent(Selection<AmendmentController> selection) {
         this.selection = selection;
     }
@@ -42,6 +47,10 @@ public class AmendmentControllerSelectionEvent extends GwtEvent<AmendmentControl
         handler.onEvent(this);
     }
 
+    /**
+     * Return the selection chosen  by the user
+     * @return The selection chosen  by the user
+     */
     public Selection<AmendmentController> getSelection() {
         return selection;
     }

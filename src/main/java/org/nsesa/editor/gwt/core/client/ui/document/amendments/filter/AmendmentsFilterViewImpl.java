@@ -23,45 +23,54 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Implementation for AmendmentsFilterView interface
- * User: groza
- * Date: 26/11/12
- * Time: 11:51
- * To change this template use File | Settings | File Templates.
+ * Default implementation of {@link AmendmentsFilterView} interface based on {@link UiBinder} GWT mechanism.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 14:44
  */
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFilterView {
-
-    private DocumentEventBus documentEventBus;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsFilterViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    /**
+     * A list box with the available filters
+     */
     @UiField
     ListBox menuFilter;
 
+    /**
+     * Create <code>AmendmentsFilterViewImpl</code> and initiale it
+     */
     @Inject
-    public AmendmentsFilterViewImpl(DocumentEventBus documentEventBus) {
-        this.documentEventBus = documentEventBus;
+    public AmendmentsFilterViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
+    /**
+     * Return <code>AmendmentsFilterViewImpl</code> as Widget
+     * @return <code>AmendmentsFilterViewImpl</code> as Widget
+     */
     @Override
     public Widget asWidget() {
         return this;
     }
 
+    /**
+     * Add given list of string in the <code>menufilter</code> list box
+     * @param filterList The list to be added
+     */
     @Override
     public void setFilters(List<String> filterList) {
         for (final String filter : filterList) {
@@ -70,11 +79,20 @@ public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFil
 
     }
 
+    /**
+     * Return the <code>menufilter</code> list box as <code>HasChangeHandlers</code> in order to
+     * attach handlers to it
+     * @return the <code>menufilter</code>list box
+     */
     @Override
     public HasChangeHandlers getFilter() {
         return menuFilter;
     }
 
+    /**
+     * Return the selected value of <code>menufilter</code> list box
+     * @return selected value of <code>menufilter</code> list box
+     */
     @Override
     public String getSelectedFilter() {
         return menuFilter.getValue(menuFilter.getSelectedIndex());

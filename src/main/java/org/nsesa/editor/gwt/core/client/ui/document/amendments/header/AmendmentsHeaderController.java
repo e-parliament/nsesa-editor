@@ -47,21 +47,39 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * The controller for amendments panel header
- * User: groza
- * Date: 26/11/12
- * Time: 11:49
- * To change this template use File | Settings | File Templates.
+ * <code>AmendmentsHeaderController</code> class is responsible to set up the selections and the actions available in
+ * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView} view.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:50
  */
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsHeaderController {
-
+    /**
+     * The view associated to the controller
+     */
     private final AmendmentsHeaderView view;
+
+    /**
+     * the event bus to raise GWT events
+     */
     private DocumentEventBus documentEventBus;
+    /**
+     * Used to get reference to {@link ServiceFactory} when user request a given action over selected amendments
+     */
     private DocumentController documentController;
+
+    /**
+     * Stores the number of amendments after applying a {@link Selection}
+     */
     private final InlineHTML selectedAmount = new InlineHTML();
 
+    /**
+     * Create <code>AmendmentsHeaderController</code> with the given properties
+     * @param view The view associated
+     * @param documentEventBus The document event bus
+     */
     @Inject
     public AmendmentsHeaderController(final AmendmentsHeaderView view,
                                       final DocumentEventBus documentEventBus
@@ -70,10 +88,19 @@ public class AmendmentsHeaderController {
         this.documentEventBus = documentEventBus;
     }
 
+    /**
+     * Returns the view associated to the controller
+     * @return The view
+     */
     public AmendmentsHeaderView getView() {
         return view;
     }
 
+    /**
+     * Register actions that could be performed by the user in the actions area. Three actions are available as
+     * default: table, withdraw and delete. When the user performs the actions from the view for each type of action
+     *
+     */
     protected void registerActions() {
 
         final ClientFactory clientFactory = documentController.getClientFactory();
@@ -184,6 +211,11 @@ public class AmendmentsHeaderController {
         view.addAction(deleteButton);
     }
 
+    /**
+     * Returns the DTO models associated to amendment controllers
+     * @param amendmentControllers The amendment controllers processed
+     * @return An ArrayList of <code>AmendmentContainerDTO</code>
+     */
     private ArrayList<AmendmentContainerDTO> transformToDTOs(final List<AmendmentController> amendmentControllers) {
         return new ArrayList<AmendmentContainerDTO>(Collections2.transform(amendmentControllers, new Function<AmendmentController, AmendmentContainerDTO>() {
             @Override
@@ -193,7 +225,11 @@ public class AmendmentsHeaderController {
         }));
     }
 
-
+    /**
+     * Set up the selections (all, none, candidate, tabled, withdrawn) that could be performed against the existing
+     * amendments and the associated handlers for each type of selection. Basically a handler fire a GWT
+     * event for each type of selection performed
+     */
     protected void registerSelections() {
         final ClientFactory clientFactory = documentController.getClientFactory();
 
@@ -267,6 +303,9 @@ public class AmendmentsHeaderController {
         view.addSelection(selectedAmount);
     }
 
+    /**
+     * Refresh the number of selected amendments by handling {@link AmendmentControllerSelectedEvent} event
+     */
     private void registerListeners() {
         documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
             @Override
@@ -276,6 +315,10 @@ public class AmendmentsHeaderController {
         });
     }
 
+    /**
+     * Set the document controller and register the selections and actions
+     * @param documentController The document controller
+     */
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
         registerListeners();

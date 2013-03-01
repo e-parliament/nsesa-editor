@@ -23,49 +23,66 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Implementation for AmendmentsFilterView interface
- * User: groza
- * Date: 26/11/12
- * Time: 11:51
+ * Default implementation of <code>AmendmentsHeaderView</code> interface based on {@link UiBinder} GWT mechanism.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:51
  */
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsHeaderViewImpl extends Composite implements AmendmentsHeaderView {
-
-    private DocumentEventBus documentEventBus;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsHeaderViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
+    /**
+     *  Holder for selections
+     */
     @UiField
     HTMLPanel selections;
+    /**
+     *  Holder for actions
+     */
     @UiField
     HTMLPanel actions;
 
+    /**
+     * Create an empty AmendmentsHeaderViewImpl object
+     */
     @Inject
-    public AmendmentsHeaderViewImpl(DocumentEventBus documentEventBus) {
-        this.documentEventBus = documentEventBus;
+    public AmendmentsHeaderViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
+    /**
+     * Returns AmendmentsHeaderViewImpl as widget
+     * @return
+     */
     @Override
     public Widget asWidget() {
         return this;
     }
 
+    /**
+     * Add a widget in the selection panel holder
+     * @param selectionWidget The widget to be added
+     */
     @Override
     public void addSelection(IsWidget selectionWidget) {
         this.selections.add(selectionWidget);
     }
 
+    /**
+     * Add a widget in the actions holder panel
+     * @param actionWidget The widget to be added
+     */
     @Override
     public void addAction(IsWidget actionWidget) {
         this.actions.add(actionWidget);

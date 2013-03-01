@@ -41,10 +41,11 @@ import java.util.Map;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Date: 24/06/12 21:42
+ * <code>AmendmentsPanelController</code> class is responsible to control set up the selections and the actions available in
+ * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView} view.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:50
  */
 @Singleton
 @Scope(DOCUMENT)
@@ -58,6 +59,11 @@ public class AmendmentsPanelController {
 
     private Selection<AmendmentController> DEFAULT_SELECTION = new Selection.AllSelection<AmendmentController>();
 
+    /**
+     * Create <code>AmendmentsPanelController</code> object with the given properties
+     * @param view The view associated to controller
+     * @param documentEventBus The event bus associated to controller
+     */
     @Inject
     public AmendmentsPanelController(AmendmentsPanelView view,
                                      DocumentEventBus documentEventBus) {
@@ -68,10 +74,18 @@ public class AmendmentsPanelController {
         registerListeners();
     }
 
+    /**
+     * Returns the view associated to controller
+     * @return the view
+     */
     public AmendmentsPanelView getView() {
         return view;
     }
 
+    /**
+     * Refresh the amendments view whenever the user add/modify amendments or change the current filter
+     *
+     */
     private void registerListeners() {
         documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
@@ -135,11 +149,17 @@ public class AmendmentsPanelController {
 
     }
 
-
+    /**
+     * Set the document controller associated to this <code>AmendmentsPanelController</code>
+     * @param documentController the document controller
+     */
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
     }
 
+    /**
+     * Create an initial {@link Filter} and filter the amendments based on it
+     */
     private void refreshAmendments() {
         if (currentFilter != null) {
             currentFilter.setStart(0);
@@ -152,6 +172,10 @@ public class AmendmentsPanelController {
         filterAmendments();
     }
 
+    /**
+     * Filter the amendments based on the current filter and refresh the view. Keep also the state of the selection
+     * for the amendments selected before
+     */
     private void filterAmendments() {
         final Map<String, AmendmentController> amendments = new LinkedHashMap<String, AmendmentController>();
         final FilterResponse<AmendmentController> response = documentController.getAmendmentManager().getAmendmentControllers(currentFilter);

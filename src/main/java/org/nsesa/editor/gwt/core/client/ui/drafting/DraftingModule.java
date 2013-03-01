@@ -17,12 +17,15 @@ import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 
 /**
- * The Gin drafting module
- * User: groza
- * Date: 16/01/13
- * Time: 13:41
+ * Gin drafting module
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
  */
 public class DraftingModule implements GinModule {
+    /**
+     * Drafting configuration
+     * @param binder
+     */
     @Override
     public void configure(GinBinder binder) {
     }

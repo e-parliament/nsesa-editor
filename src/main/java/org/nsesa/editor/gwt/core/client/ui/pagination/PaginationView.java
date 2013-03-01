@@ -18,23 +18,51 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
- * Created with IntelliJ IDEA.
- * User: groza
- * Date: 28/11/12
- * Time: 13:00
- * To change this template use File | Settings | File Templates.
+ * <code>PaginationView</code> view offers general pagination support functionality.
+ * Specifically it is used in the second tabbed panel of the application
+ * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView} where the
+ * existing amendments are displayed in a "pagination" way.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 28/11/12 15:37
  */
 @ImplementedBy(PaginationViewImpl.class)
 public interface PaginationView extends IsWidget {
+    /**
+     * Set the style name of the view
+     * @param styleName
+     */
     void setStyleName(String styleName);
 
+    /**
+     * Display the current page from total pages in the view
+     * @param currentPage The current page as int
+     * @param totalPages The total number of pages as int
+     */
     void displayCurrentPage(int currentPage, int totalPages);
 
+    /**
+     * Get "first" pagination link as <code>HasClickHandlers</code> to attach specific handler
+     * in the controller
+     * @return "first" link as HasClickHandlers
+     */
     HasClickHandlers getFirst();
-
+    /**
+     * Get "last" pagination link as <code>HasClickHandlers</code> to attach specific handler
+     * in the controller
+     * @return "last" link as HasClickHandlers
+     */
     HasClickHandlers getLast();
-
+    /**
+     * Get "next" pagination link as <code>HasClickHandlers</code> to attach specific handler
+     * in the controller
+     * @return "next" link as HasClickHandlers
+     */
     HasClickHandlers getNext();
-
+    /**
+     * Get "previous" pagination link as <code>HasClickHandlers</code> to attach specific handler
+     * in the controller
+     * @return "previous" link as HasClickHandlers
+     */
     HasClickHandlers getPrevious();
 }

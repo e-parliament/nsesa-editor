@@ -17,9 +17,9 @@ import com.google.gwt.resources.client.CssResource;
 
 /**
  * The drafting css resource
- * User: groza
- * Date: 16/01/13
- * Time: 13:44
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:44
+ *
  */
 public interface DraftingViewCss extends CssResource {
 }

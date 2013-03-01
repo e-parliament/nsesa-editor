@@ -17,12 +17,31 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 import java.util.Map;
+
+/**
+ * The drafting attributes view widget is responsible to display the attributes
+ * for a specific <code>OverlayWidget</code>
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
+ */
 @ImplementedBy(DraftingAttributesViewImpl.class)
 public interface DraftingAttributesView extends IsWidget {
+    /**
+     * Clean up the widget
+     */
     void clearAll();
 
+    /**
+     * Set up the attributes in the widget
+     * @param attributes A map of attributes where the key is the attribute name and the value is the attribute value
+     */
     void setAttributes(Map<String, String> attributes);
 
+    /**
+     * Returns the map of attributes displayed in the view
+     * @return A map of attributes
+     */
     public Map<String, String> getAttributes();
 
 }

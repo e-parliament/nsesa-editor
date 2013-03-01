@@ -29,21 +29,45 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Filter controller responsible to raise filter amendment events if the case
- * User: groza
- * Date: 3/12/12
- * Time: 13:52
+ * <code>AmendmentsFilterController</code> class is responsible to set up the filters that will be available in
+ * {@link AmendmentsFilterView} view and to raise {@link FilterRequestEvent} events as soon as the user select a
+ * filter form the view.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 13:44
  */
 @Singleton
 public class AmendmentsFilterController {
+
+    /**
+     * Used to fire GWT events
+     */
     private DocumentEventBus documentEventBus;
+    /**
+     * The view associated to this controller
+     */
     private AmendmentsFilterView view;
 
-    private static Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
+    /**
+     * A map with registered
+     */
+    private Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
+    /**
+     * <code>Selection</code> of all <code>AmendmentController</code>
+     */
     private Selection<AmendmentController> ALL = new Selection.AllSelection<AmendmentController>();
+
+    /**
+     * <code>Selection</code> of none of <code>AmendmentController</code>
+     */
     private Selection<AmendmentController> NONE = new Selection.NoneSelection<AmendmentController>();
 
+    /**
+     * Create <code>AmendmentsFilterController</code> with the given parameters
+     * @param documentEventBus The event bus linked to the controller
+     * @param view The associated view
+     */
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {
         this.documentEventBus = documentEventBus;
@@ -53,6 +77,9 @@ public class AmendmentsFilterController {
         this.view.setFilters(Arrays.asList(filters.keySet().toArray(new String[filters.size()])));
     }
 
+    /**
+     * Register the actions that will be displayed in the view
+     */
     protected void registerFilterActions() {
         registerFilterAction("All amendments",
                 new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, ALL));
@@ -60,10 +87,19 @@ public class AmendmentsFilterController {
                 new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, NONE));
     }
 
+    /**
+     * Add a filter in the list of filter actions available in the view
+     * @param filterName The filter name as String
+     * @param filter The filter representation
+     */
     public void registerFilterAction(String filterName, Filter<AmendmentController> filter) {
         filters.put(filterName, filter);
     }
 
+    /**
+     * Add a change handler for {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView#getFilter()}
+     * and raise a new {@link FilterRequestEvent} GWT event
+     */
     protected void registerListeners() {
         HasChangeHandlers filterHandler = view.getFilter();
         filterHandler.addChangeHandler(new ChangeHandler() {
@@ -79,6 +115,10 @@ public class AmendmentsFilterController {
         });
     }
 
+    /**
+     * Returns the view associated to the controller
+     * @return the view as AmendmentsFilterView
+     */
     public AmendmentsFilterView getView() {
         return view;
     }

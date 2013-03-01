@@ -17,12 +17,15 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderModule;
 
 /**
- * Date: 24/06/12 15:11
+ * The GIN module for amendments panel functionality
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:50
  */
 public class AmendmentsPanelModule extends AbstractGinModule {
+    /**
+     * Configure <code>AmendmentsPanelModule</code>
+     */
     @Override
     protected void configure() {
         install(new AmendmentsHeaderModule());

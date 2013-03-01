@@ -20,19 +20,35 @@ import com.google.inject.ImplementedBy;
 import java.util.List;
 
 /**
- * Amendments Filter view interface
- * User: groza
- * Date: 26/11/12
- * Time: 11:50
- * To change this template use File | Settings | File Templates.
+ * <code>AmendmentsFilterView</code> view is part of the second tabbed panel of the application. It provides a list
+ * of options that can be used to filter the amendments displayed in this second panel.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 13:44
  */
 @ImplementedBy(AmendmentsFilterViewImpl.class)
 public interface AmendmentsFilterView extends IsWidget {
+    /**
+     * Set the style name of the view
+     * @param styleName The style name as String
+     */
     public void setStyleName(String styleName);
 
+    /**
+     * Set the list of the available filters
+     * @param filterList
+     */
     public void setFilters(List<String> filterList);
 
+    /**
+     * Return the current filter
+     * @return
+     */
     public HasChangeHandlers getFilter();
 
+    /**
+     * Return the selected filter
+     * @return The selected filter sa String
+     */
     public String getSelectedFilter();
 }

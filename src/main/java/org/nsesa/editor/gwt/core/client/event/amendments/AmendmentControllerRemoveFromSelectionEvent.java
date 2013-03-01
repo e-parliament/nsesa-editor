@@ -20,21 +20,28 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * An event raised when a selection gets applied.
- * Date: 24/06/12 21:42
+ * An event raised when a <code>AmendmentController</code> object is unselected by the user.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * Date: 24/06/12 21:42
  */
 public class AmendmentControllerRemoveFromSelectionEvent extends GwtEvent<AmendmentControllerRemoveFromSelectionEventHandler> {
     public static final Type<AmendmentControllerRemoveFromSelectionEventHandler> TYPE = new Type<AmendmentControllerRemoveFromSelectionEventHandler>();
 
     private final List<AmendmentController> selected;
 
+    /**
+     * Create <code>AmendmentControllerRemoveFromSelectionEvent</code> object with the given input
+     * @param selected The <code>AmendmentController</code> removed from selection
+     */
     public AmendmentControllerRemoveFromSelectionEvent(final AmendmentController selected) {
         this.selected = Arrays.asList(selected);
     }
 
+    /**
+     * Create <code>AmendmentControllerRemoveFromSelectionEvent</code> object with the given input list
+     * @param selected The <code>AmendmentController</code> list removed from selection
+     */
     public AmendmentControllerRemoveFromSelectionEvent(final List<AmendmentController> selected) {
         this.selected = selected;
     }
@@ -49,6 +56,10 @@ public class AmendmentControllerRemoveFromSelectionEvent extends GwtEvent<Amendm
         handler.onEvent(this);
     }
 
+    /**
+     * Return the list of <code>AmendmentController</code> removed from selection
+     * @return the list of <code>AmendmentController</code> removed from selection
+     */
     public List<AmendmentController> getSelected() {
         return selected;
     }

@@ -19,17 +19,20 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import java.util.List;
 
 /**
- * An event raised when a selection gets applied.
- * Date: 24/06/12 21:42
+ * An event raised by the application to include the amendment controllers in the selected list.
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * Date: 24/06/12 21:42
  */
 public class AmendmentControllerSelectedEvent extends GwtEvent<AmendmentControllerSelectedEventHandler> {
     public static final Type<AmendmentControllerSelectedEventHandler> TYPE = new Type<AmendmentControllerSelectedEventHandler>();
 
     private final List<AmendmentController> selected;
 
+    /**
+     * Create <code>AmendmentControllerSelectedEvent</code> with the given input list
+     * @param selected The list of <code>AmendmentController</code> that should be included later in selection
+     */
     public AmendmentControllerSelectedEvent(List<AmendmentController> selected) {
         this.selected = selected;
     }
@@ -44,6 +47,10 @@ public class AmendmentControllerSelectedEvent extends GwtEvent<AmendmentControll
         handler.onEvent(this);
     }
 
+    /**
+     * Return The list of <code>AmendmentController</code> that should be included in selection
+     * @return The list of <code>AmendmentController</code> that should be included in selection
+     */
     public List<AmendmentController> getSelected() {
         return selected;
     }

@@ -40,11 +40,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Controls the elaboration of a amendment by displaying a list of possible children
- * that could be used when the user is creating/modifying an amendment
- * User: groza
- * Date: 16/01/13
- * Time: 13:37
+ * The <code>DraftingController</code> class acts as a controller to refresh <code>DraftingView</code> and
+ * <code>DraftingAttributesView</code> widgets.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
  */
 public class DraftingController {
 
@@ -58,6 +58,16 @@ public class DraftingController {
     private EventBus eventBus;
     private OverlayWidget originalOverlayWidget;
 
+    /**
+     * Create a <code>DraftingController</code> with the given parameters
+     * @param draftingView The <code>DraftingView</code> widget
+     * @param draftingAttributesView The <code>DraftingAttributesView</code> widget
+     * @param clientFactory The client factory used to reference to event bus
+     * @param creator The creator
+     * @param overlayFactory The overlay factory
+     * @param overlayResource The overlay resource
+     * @param documentController The document controller
+     */
     @Inject
     public DraftingController(DraftingView draftingView,
                               DraftingAttributesView draftingAttributesView,
@@ -77,11 +87,19 @@ public class DraftingController {
         registerListeners();
     }
 
+    /**
+     * Set the original <code>OverlayWidget</code>
+     * @param overlayWidget the original
+     */
     public void setOverlayWidgetWidget(final OverlayWidget overlayWidget) {
         this.originalOverlayWidget = overlayWidget;
         refreshView(overlayWidget, null);
     }
 
+    /**
+     * Register handlers for {@link SelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
+     * When those events occur <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets are refreshed.
+     */
     private void registerListeners() {
         eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
             @Override
@@ -108,6 +126,16 @@ public class DraftingController {
 
     }
 
+    /**
+     * Refresh <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets. More specifically,
+     * the drafting view will be filled in with 2 lists:
+     * one contains the allowed children list of the given <code>OverlayWidget</code> and
+     * the other contains the mandatory children list of the given <code>OverlayWidget</code>.
+     * The drafting attributes view is filled in with the available attributes of the given <code>OverlayWidget</code>.
+     * @param overlayWidget The {@link OverlayWidget} processed
+     * @param selectedText When it is empty the allowed children in drafting view are displayed as labels,
+     *                     otherwise as anchors.
+     */
     public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
 
         final OverlayWidget widget = (overlayWidget == null) ? originalOverlayWidget : overlayWidget;
@@ -148,15 +176,27 @@ public class DraftingController {
 
     }
 
+    /**
+     * Returns {@link DraftingView}
+     * @return The drafting view
+     */
     public DraftingView getView() {
         return draftingView;
     }
 
+    /**
+     * Returns {@link DraftingAttributesView}
+     * @return The drafting attributes view
+     */
     public DraftingAttributesView getAttributesView() {
         return draftingAttributesView;
     }
 
-    //create a label from amendable widget
+    /**
+     * Create a label based on the given overlay widget
+     * @param overlayWidget The {@link OverlayWidget} used to create a label
+     * @return The label result
+     */
     private Label createLabelFrom(OverlayWidget overlayWidget) {
         Label label = new Label(overlayResource.getName(overlayWidget));
         label.setTitle(overlayResource.getDescription(overlayWidget));
@@ -164,7 +204,11 @@ public class DraftingController {
         return label;
     };
 
-    //create an anchor from amendable widget
+    /**
+     * Create an anchor from the given overlay widget which fire {@link DraftingInsertionEvent} gwt event
+     * @param overlayWidget The {@link OverlayWidget} used to create an anchor
+     * @return The anchor result
+     */
     private Anchor createAnchorFrom(final OverlayWidget overlayWidget) {
         Anchor anchor = new Anchor(overlayResource.getName(overlayWidget));
         anchor.setTitle(overlayResource.getDescription(overlayWidget));

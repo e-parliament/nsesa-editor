@@ -26,15 +26,28 @@ import org.nsesa.editor.gwt.core.client.event.drafting.DraftingModificationEvent
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Default implementation of {@link DraftingAttributesView} interface based on {@link UiBinder} GWT mechanism.
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
+ */
+
 public class DraftingAttributesViewImpl extends ResizeComposite implements DraftingAttributesView {
     private EventBus eventBus;
 
     interface MyUiBinder extends UiBinder<Widget, DraftingAttributesViewImpl> {
     }
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    /**
+     * Widget used to display the attributes
+     */
     @UiField
     Grid attributesPanel;
 
+    /**
+     * Keep the attributes as map of label and textbox
+     */
     private Map<Label, TextBox> attributesHolder = new HashMap<Label, TextBox>();
 
     @Inject
@@ -51,6 +64,12 @@ public class DraftingAttributesViewImpl extends ResizeComposite implements Draft
         attributesPanel.clear();
     }
 
+    /**
+     * Create a list of labels and text boxes based on the given map
+     * and fire {@link DraftingModificationEvent} whenever the user change the value from textbox
+     *
+     * @param attributes A map of attributes where the key is the attribute name and the value is the attribute value
+     */
     @Override
     public void setAttributes(Map<String, String> attributes) {
         attributesHolder.clear();
@@ -77,6 +96,10 @@ public class DraftingAttributesViewImpl extends ResizeComposite implements Draft
         }
     }
 
+    /**
+     * Return the map of attributes with the actual values
+     * @return Map of attributes
+     */
     @Override
     public Map<String, String> getAttributes() {
         Map<String, String> result = new HashMap<String, String>();

@@ -14,23 +14,46 @@
 package org.nsesa.editor.gwt.core.client.util;
 
 /**
- * Applies selection over given object
- * User: groza
- * Date: 28/11/12
- * Time: 10:28
+ * A <code>Selection</code> is an object which determines true or false for a given input
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 28/11/12 10:28
  */
 public interface Selection<T> {
 
+    /**
+     * Check whether or not the input is "selected"
+     * @param t
+     * @return True if <code>t</code> object is "selected"
+     */
     boolean select(T t);
 
+    /**
+     * Special selection to return false for any given input
+     * @param <T>
+     */
     static class NoneSelection<T> implements Selection<T> {
+        /**
+         * Return false all the time
+         * @param o
+         * @return false
+         */
         @Override
         public boolean select(T o) {
             return false;
         }
     }
 
+    /**
+     * Special selection to return true for any given input
+     * @param <T>
+     */
     static class AllSelection<T> implements Selection<T> {
+        /**
+         * Return True all the time
+         * @param o
+         * @return True
+         */
         @Override
         public boolean select(T o) {
             return true;

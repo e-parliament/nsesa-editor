@@ -23,10 +23,9 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * GWT implementation for drafting view
- * User: groza
- * Date: 16/01/13
- * Time: 13:40
+ * Default implementation of {@link DraftingView} based on {@link UiBinder} GWT mechanism.
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
  */
 @Scope(DOCUMENT)
 public class DraftingViewImpl extends ResizeComposite implements DraftingView {
@@ -34,16 +33,26 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-
+    /**
+     * stores draft title
+     */
     @UiField
     Label draftTitle;
-
+    /**
+     * holder for allowed children
+     */
     @UiField
     VerticalPanel allowedPanel;
 
+    /**
+     * holder for mandatory children
+     */
     @UiField
     VerticalPanel mandatoryPanel;
 
+    /**
+     * Create <code>DraftingViewImpl</code> object and initialize widgets
+     */
     @Inject
     public DraftingViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
@@ -54,21 +63,36 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
             this.setTitle(this.getClass().getName());
     }
 
+    /**
+     * Clean up the content of holder panels
+     */
     @Override
     public void clearAll() {
         allowedPanel.clear();
         mandatoryPanel.clear();
     }
 
+    /**
+     * Add a widget in the holder panel for allowed children
+     * @param widget The widget that will be added in the allowed children area of the view.
+     */
     @Override
     public void addAllowedChild(IsWidget widget) {
         allowedPanel.add(widget);
     }
 
+    /**
+     * Add a widget in the holder panel for mandatory children
+     * @param widget The widget that will be added in the  mandatory children area of the view.
+     */
     public void addMandatoryChild(IsWidget widget) {
         mandatoryPanel.add(widget);
     }
 
+    /**
+     * Set the title of this view
+     * @param title Title as String
+     */
     @Override
     public void setDraftTitle(String title) {
         draftTitle.setText(title);

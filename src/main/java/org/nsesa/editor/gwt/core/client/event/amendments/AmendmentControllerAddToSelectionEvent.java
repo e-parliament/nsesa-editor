@@ -20,21 +20,29 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * An event raised when a selection gets applied.
- * Date: 24/06/12 21:42
+ * An event raised when a <code>AmendmentController</code> object is selected by the user.
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * Date: 24/06/12 21:42
  */
 public class AmendmentControllerAddToSelectionEvent extends GwtEvent<AmendmentControllerAddToSelectionEventHandler> {
     public static final Type<AmendmentControllerAddToSelectionEventHandler> TYPE = new Type<AmendmentControllerAddToSelectionEventHandler>();
 
     private final List<AmendmentController> selected;
 
+    /**
+     * Create <code>AmendmentControllerAddToSelectionEvent</code> with a given input
+     * @param selected The selected <code>AmendmentController</code>
+     */
     public AmendmentControllerAddToSelectionEvent(final AmendmentController selected) {
         this.selected = Arrays.asList(selected);
     }
 
+    /**
+     * Create <code>AmendmentControllerAddToSelectionEvent</code> with a given list of selected
+     * <code>AmendmentController</code>
+     * @param selected The list of selected <code>AmendmentController</code>
+     */
     public AmendmentControllerAddToSelectionEvent(final List<AmendmentController> selected) {
         this.selected = selected;
     }
@@ -49,6 +57,10 @@ public class AmendmentControllerAddToSelectionEvent extends GwtEvent<AmendmentCo
         handler.onEvent(this);
     }
 
+    /**
+     * Returns the list of the selected amendment controllers
+     * @return Amendment controllers as List
+     */
     public List<AmendmentController> getSelected() {
         return selected;
     }

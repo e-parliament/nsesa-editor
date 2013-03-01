@@ -15,5 +15,10 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 
 import com.google.gwt.resources.client.CssResource;
 
+/**
+ * The drafting attributes css resource
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:44
+ */
 public interface DraftingAttributesViewCss extends CssResource {
 }

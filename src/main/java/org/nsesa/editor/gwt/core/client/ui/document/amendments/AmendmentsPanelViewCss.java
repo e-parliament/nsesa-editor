@@ -16,10 +16,10 @@ package org.nsesa.editor.gwt.core.client.ui.document.amendments;
 import com.google.gwt.resources.client.CssResource;
 
 /**
- * Date: 24/06/12 16:39
+ * The amendAmendments panel view css resource
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:50
  */
 public interface AmendmentsPanelViewCss extends CssResource {
 }

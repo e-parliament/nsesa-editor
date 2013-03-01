@@ -16,12 +16,10 @@ package org.nsesa.editor.gwt.core.client.ui.document.amendments.header;
 import com.google.gwt.resources.client.CssResource;
 
 /**
- * Created with IntelliJ IDEA.
- * User: groza
- * Date: 26/11/12
- * Time: 11:50
- * To change this template use File | Settings | File Templates.
+ * The amendments header view css resource
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 26/11/12 11:50
  */
-
 public interface AmendmentsHeaderViewCss extends CssResource {
 }

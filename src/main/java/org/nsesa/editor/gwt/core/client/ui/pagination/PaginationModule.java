@@ -17,13 +17,16 @@ import com.google.gwt.inject.client.GinModule;
 import com.google.gwt.inject.client.binder.GinBinder;
 
 /**
- * Created with IntelliJ IDEA.
- * User: groza
- * Date: 28/11/12
- * Time: 15:01
- * To change this template use File | Settings | File Templates.
+ * Gin Pagination module
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 28/11/12 15:37
  */
 public class PaginationModule implements GinModule {
+    /**
+     * Configuration for pagination module
+     * @param binder
+     */
     @Override
     public void configure(GinBinder binder) {
 

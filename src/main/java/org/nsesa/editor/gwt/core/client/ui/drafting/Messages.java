@@ -16,7 +16,10 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 import com.google.gwt.i18n.client.ConstantsWithLookup;
 
 /**
- *  Responsible to expose i18n drafting messages
+ *  Interface to facilitate locale-sensitive drafting related labels supplied from properties files
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 16/01/13 13:37
  */
 public interface Messages extends ConstantsWithLookup {
     @Key(value = "drafting.mandatory")
