@@ -34,6 +34,9 @@ import java.util.Set;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
 /**
+ * Controller for the common author panel in the amendment dialog. Part of the
+ * {@link AmendmentDialogAwareController}s so it can easily be added to a tab panel.
+ *
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -42,13 +45,29 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 @Scope(DIALOG)
 public class AuthorPanelController implements AmendmentDialogAwareController {
 
-    private final AuthorPanelView view;
-    private final AuthorPanelViewCss authorPanelViewCss;
+    /**
+     * The main view.
+     */
+    protected final AuthorPanelView view;
 
-    private final ClientFactory clientFactory;
+    /**
+     * The CSS resource.
+     */
+    protected final AuthorPanelViewCss authorPanelViewCss;
 
-    private DialogContext dialogContext;
+    /**
+     * The client factory.
+     */
+    protected final ClientFactory clientFactory;
 
+    /**
+     * The dialog context.
+     */
+    protected DialogContext dialogContext;
+
+    /**
+     * The set of selected persons.
+     */
     private Set<PersonDTO> selectedPersons = new LinkedHashSet<PersonDTO>();
 
     @Inject
@@ -60,32 +79,57 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         registerListeners();
     }
 
+    /**
+     * Perform validation on the author panel. Currently just returns <tt>true</tt>.
+     * @return <tt>true</tt> if the validation passes, and a valid (set of) author(s) has been selected.
+     */
     @Override
     public boolean validate() {
         return true;
     }
 
+    /**
+     * Get the selected persons to act as authors for this amendment.
+     * @return the selected persons.
+     */
     public Set<PersonDTO> getSelectedPersons() {
         return selectedPersons;
     }
 
-    public void addPerson(PersonDTO person) {
+    /**
+     * Add a person dto to the group of selected persons.
+     * @see #getSelectedPersons() to get the list
+     * @param person the person to add as an author
+     */
+    public void addPerson(final PersonDTO person) {
         if (selectedPersons.add(person)) {
             drawPersons();
         }
     }
 
-    public void removePerson(PersonDTO person) {
+    /**
+     * Remove a person dto from the group of selected persons.
+     * @see #getSelectedPersons() to get the list
+     * @param person the person to remove as an author
+     */
+    public void removePerson(final PersonDTO person) {
         if (selectedPersons.remove(person)) {
             drawPersons();
         }
     }
 
+    /**
+     * Clear all the selected persons and clear the representation in the view.
+     */
     public void clear() {
         this.selectedPersons.clear();
         this.view.getAuthorsPanel().clear();
     }
 
+    /**
+     * Draw the selected persons using some quick & dirty panel with removal button.
+     * TODO replace with a UI binder
+     */
     private void drawPersons() {
         view.getAuthorsPanel().clear();
         for (final PersonDTO person : selectedPersons) {
@@ -106,13 +150,17 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         }
     }
 
+    /**
+     * Set the dialog context with runtime information.
+     * @param dialogContext the dialog context
+     */
     @Override
     public void setContext(final DialogContext dialogContext) {
         this.dialogContext = dialogContext;
     }
 
     private void registerListeners() {
-        // nothing yet
+        // add a handler when a selection is made from the autocomplete results
         view.getSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
             @Override
             public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
@@ -127,10 +175,19 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         });
     }
 
+    /**
+     * Return the view
+     * @return the view
+     */
     public AuthorPanelView getView() {
         return view;
     }
 
+    /**
+     * Return the title for this tab.
+     * TODO i18n
+     * @return the title
+     */
     @Override
     public String getTitle() {
         return "Author";

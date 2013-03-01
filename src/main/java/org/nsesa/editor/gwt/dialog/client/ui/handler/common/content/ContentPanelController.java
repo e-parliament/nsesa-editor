@@ -23,10 +23,8 @@ import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
 /**
- * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
- * column layout (with the original proposed text on the left, and a rich text editor on the right).
- * <p/>
- * Requires an {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
+ * Content tab to display the original content of an amendment.
+ *
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -34,10 +32,19 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAware
  */
 public class ContentPanelController implements AmendmentDialogAwareController {
 
+    /**
+     * The client factory.
+     */
     protected final ClientFactory clientFactory;
 
+    /**
+     * The main view.
+     */
     protected final ContentControllerView view;
 
+    /**
+     * The dialog context with runtime information.
+     */
     protected DialogContext dialogContext;
 
     @Inject
@@ -63,21 +70,38 @@ public class ContentPanelController implements AmendmentDialogAwareController {
 
     }
 
+    /**
+     * Validate the data in the content panel. Defaults to returning <tt>true</tt>
+     * @return <tt>true</tt> if the content is valid
+     */
     @Override
     public boolean validate() {
         return true;
     }
 
+    /**
+     * Set the dialog context on this panel.
+     * @param dialogContext the dialog context
+     */
     @Override
     public void setContext(final DialogContext dialogContext) {
         this.dialogContext = dialogContext;
     }
 
+    /**
+     * Get the view to add to the tab.
+     * @return the view
+     */
     @Override
     public ContentControllerView getView() {
         return view;
     }
 
+    /**
+     * Get the title for the tab.
+     * TODO i18n
+     * @return the title
+     */
     @Override
     public String getTitle() {
         return "Original";

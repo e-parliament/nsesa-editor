@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 
 /**
+ * Default implementation of the {@link AmendmentDialogDeleteView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

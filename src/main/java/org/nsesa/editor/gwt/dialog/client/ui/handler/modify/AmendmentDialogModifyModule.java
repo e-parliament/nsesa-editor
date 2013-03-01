@@ -23,6 +23,8 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditor;
 
 /**
+ * GIN module for the amendment dialog component to handle modification amendments (amendments that modify the
+ * existing structure or content).
  * Date: 24/06/12 15:11
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -34,6 +36,9 @@ public class AmendmentDialogModifyModule extends AbstractGinModule {
         bind(RichTextEditor.class).annotatedWith(Names.named("amendmentText")).toProvider(AmendmentTextProvider.class);
     }
 
+    /**
+     * Provider for a modifiable RTE.
+     */
     public static class AmendmentTextProvider implements Provider<RichTextEditor> {
         @Inject
         RichTextEditorPlugin plugin;

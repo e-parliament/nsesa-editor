@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditor;
 
 /**
+ * GIN module for the amendment dialog module for creating new elements.
  * Date: 24/06/12 15:11
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -34,6 +35,9 @@ public class AmendmentDialogCreateModule extends AbstractGinModule {
         bind(RichTextEditor.class).annotatedWith(Names.named("newText")).toProvider(NewTextProvider.class);
     }
 
+    /**
+     * A provider for a {@link CKEditor} that is marked as read-only.
+     */
     public static class NewTextProvider implements Provider<RichTextEditor> {
         @Inject
         RichTextEditorPlugin plugin;

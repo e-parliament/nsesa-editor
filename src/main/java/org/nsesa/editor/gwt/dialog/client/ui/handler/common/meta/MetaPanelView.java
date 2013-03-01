@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link MetaPanelController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,10 +25,28 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(MetaPanelViewImpl.class)
 public interface MetaPanelView extends IsWidget {
+
+    /**
+     * Set the justification for this amendment.
+     * @param justification the justification
+     */
     void setJustification(String justification);
+
+    /**
+     * Set the notes for this amendment.
+     * @param notes the notes
+     */
     void setNotes(String notes);
 
+    /**
+     * Get the justification from the view.
+     * @return the justification
+     */
     String getJustification();
 
+    /**
+     * Get the notes from the view.
+     * @return the notes
+     */
     String getNotes();
 }

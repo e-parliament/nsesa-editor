@@ -17,23 +17,38 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
+ * An extension to the {@link MultiWordSuggestOracle.MultiWordSuggestion} to keep a reference to the given
+ * {@link PersonDTO}. Used in combination with the {@link PersonMultiWordSuggestionOracle}.
+ *
  * Date: 20/02/13 15:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class PersonMultiWordSuggestion extends MultiWordSuggestOracle.MultiWordSuggestion {
+
+    /**
+     * A reference to the underlying person DTO.
+     */
     private final PersonDTO person;
 
     public PersonMultiWordSuggestion() {
         person = null;
     }
 
-    public PersonMultiWordSuggestion(PersonDTO person) {
-        super(person.getLastName() + " " + person.getName(), person.getLastName() + " " + person.getName());
+    /**
+     * Creates a suggestion based on the passed {@link PersonDTO}.
+     * @param person the person DTO
+     */
+    public PersonMultiWordSuggestion(final PersonDTO person) {
+        super(person.getDisplayName(), person.getDisplayName());
         this.person = person;
     }
 
+    /**
+     * Get the reference to the person DTO that was used to build this suggestion.
+     * @return the person DTO
+     */
     public PersonDTO getPerson() {
         return person;
     }

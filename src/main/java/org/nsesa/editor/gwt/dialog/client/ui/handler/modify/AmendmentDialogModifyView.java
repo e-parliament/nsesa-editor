@@ -19,7 +19,7 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 
 /**
- * Default 'simple' view for the creation and editing of amendments on simple widgets.
+ * View for the {@link AmendmentDialogModifyController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,21 +28,57 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 @ImplementedBy(AmendmentDialogModifyViewImpl.class)
 public interface AmendmentDialogModifyView extends IsWidget {
 
+    /**
+     * Sets the body class on the RTE to mimic the DOM structure of the document.
+     * @param className the CSS class name
+     */
     void addBodyClass(String className);
 
+    /**
+     * Resets the body class to the original one by remove any additional css body class.
+     */
     void resetBodyClass();
 
+    /**
+     * Set the title on the main panel.
+     * @param title the title to set
+     */
     void setTitle(String title);
 
+    /**
+     * Set the amendment content on the RTE.
+     * @param amendmentContent the amendment content
+     */
     void setAmendmentContent(String amendmentContent);
 
+    /**
+     * Get the unvalidated HTML amendment content.
+     * @return the amendment content
+     */
     String getAmendmentContent();
 
+    /**
+     * Add a new child widget to the view under the given <tt>title</tt>.
+     * @param view  the view to add
+     * @param title the title
+     */
     void addView(IsWidget view, String title);
 
+    /**
+     * Get a reference to the RTE.
+     * @return the RTE
+     */
     RichTextEditor getRichTextEditor();
 
+    /**
+     * Get a reference to the save button.
+     * @return the save button
+     */
     HasClickHandlers getSaveButton();
 
+    /**
+     * Get a reference to the cancel link.
+     * @return the cancel link
+     */
     HasClickHandlers getCancelLink();
 }

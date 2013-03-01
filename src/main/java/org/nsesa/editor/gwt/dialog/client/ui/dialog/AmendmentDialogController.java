@@ -21,9 +21,9 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEventHandler;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEventHandler;
@@ -33,7 +33,6 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreat
 import org.nsesa.editor.gwt.dialog.client.ui.handler.delete.AmendmentDialogDeleteController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.table.AmendmentDialogTableController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -58,11 +57,29 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      */
     private final AmendmentDialogView view;
 
+    /**
+     * Controller for handling creation amendments.
+     */
     private final AmendmentDialogCreateController amendmentDialogCreateController;
+
+    /**
+     * Controller for handling deletion amendments.
+     */
     private final AmendmentDialogDeleteController amendmentDialogDeleteController;
+
+    /**
+     * Controller for handling bundle amendments.
+     */
     private final AmendmentDialogBundleController amendmentDialogBundleController;
+
+    /**
+     * Controller for move amendments.
+     */
     private final AmendmentDialogMoveController amendmentDialogMoveController;
-    private final AmendmentDialogTableController amendmentDialogTableController;
+
+    /**
+     * Controller for amendments on
+     */
     private final AmendmentDialogModifyController amendmentDialogModifyController;
 
     /**
@@ -71,8 +88,15 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      */
     private final ClientFactory clientFactory;
 
+    /**
+     * Service factory giving access to the RPC services.
+     */
     private final OverlayFactory overlayFactory;
 
+    /**
+     * The dialog context, giving access to the {@link AmendmentContainerDTO},
+     * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}, ...
+     */
     private DialogContext dialogContext;
 
 
@@ -81,7 +105,6 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                                      final AmendmentDialogCreateController amendmentDialogCreateController,
                                      final AmendmentDialogDeleteController amendmentDialogDeleteController,
                                      final AmendmentDialogBundleController amendmentDialogBundleController,
-                                     final AmendmentDialogTableController amendmentDialogTableController,
                                      final AmendmentDialogMoveController amendmentDialogMoveController,
                                      final AmendmentDialogModifyController amendmentDialogModifyController,
                                      final OverlayFactory overlayFactory) {
@@ -92,7 +115,6 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.amendmentDialogCreateController = amendmentDialogCreateController;
         this.amendmentDialogDeleteController = amendmentDialogDeleteController;
         this.amendmentDialogBundleController = amendmentDialogBundleController;
-        this.amendmentDialogTableController = amendmentDialogTableController;
         this.amendmentDialogMoveController = amendmentDialogMoveController;
         this.amendmentDialogModifyController = amendmentDialogModifyController;
 
@@ -103,6 +125,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     }
 
     private void registerListeners() {
+
+        // register a listener when a request to make an amendment is fired (regardless of its type)
         clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
@@ -117,6 +141,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 show();
             }
         });
+
+        // register a listener to edit an existing amendment (regardless of its type)
         clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
@@ -131,6 +157,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 show();
             }
         });
+
+        // respond to dialog close requests
         clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
             @Override
             public void onEvent(CloseDialogEvent event) {
@@ -140,8 +168,14 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         });
     }
 
+    /**
+     * Create a default {@link AmendmentContainerDTO} with a
+     * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getId()} and
+     * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getRevisionID()} set.
+     * @return the amendment container DTO
+     */
     protected AmendmentContainerDTO createAmendment() {
-        AmendmentContainerDTO dto = new AmendmentContainerDTO();
+        final AmendmentContainerDTO dto = new AmendmentContainerDTO();
         // set the primary key
         dto.setId(UUID.uuid());
         // set the revision
@@ -149,6 +183,14 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         return dto;
     }
 
+    /**
+     * Returns the {@link AmendmentUIHandler} to handle a given
+     * {@link org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext#getAmendmentAction()}. Can easily be extended
+     * to also take the {@link org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext#getOverlayWidget()}'s type
+     * into account (eg. on tables).
+     *
+     * @return the ui handler
+     */
     protected AmendmentUIHandler getUIHandler() {
         if (dialogContext.getAmendmentAction() == AmendmentAction.CREATION) {
             return amendmentDialogCreateController;
@@ -165,8 +207,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         return amendmentDialogModifyController;
     }
 
+    /**
+     * Actually handle the request by removing any prior displayed {@link AmendmentUIHandler}s' view.
+     */
     private void handle() {
-        AmendmentUIHandler amendmentUIHandler = getUIHandler();
+        final AmendmentUIHandler amendmentUIHandler = getUIHandler();
 
         final int widgetCount = this.view.getMainPanel().getWidgetCount();
         if (widgetCount > 0) {
@@ -199,10 +244,17 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         view.getLayoutPanel().setWidth((Window.getClientWidth() - 100) + "px");
     }
 
+    /**
+     * Hide the dialog popup.
+     */
     public void hide() {
         popupPanel.hide(true);
     }
 
+    /**
+     * Return the associated view.
+     * @return
+     */
     public AmendmentDialogView getView() {
         return view;
     }

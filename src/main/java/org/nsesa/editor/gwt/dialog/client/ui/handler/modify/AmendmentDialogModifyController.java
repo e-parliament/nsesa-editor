@@ -37,10 +37,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
+ * Main amendment dialog. Allows for the creation and editing of modification amendments. Typically consists of a two
  * column layout (with the original proposed text on the left, and a rich text editor on the right).
  * <p/>
- * Requires an {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -48,16 +47,34 @@ import java.util.List;
  */
 public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
 
+    /**
+     * The client factory.
+     */
     protected final ClientFactory clientFactory;
 
+    /**
+     * The associated view.
+     */
     protected final AmendmentDialogModifyView view;
 
+    /**
+     * The overlay factory.
+     */
     protected final OverlayFactory overlayFactory;
 
+    /**
+     * The locator.
+     */
     protected final Locator locator;
 
+    /**
+     * The drafting controller.
+     */
     protected final DraftingController draftingController;
 
+    /**
+     * The list of child {@link AmendmentDialogAwareController} controllers.
+     */
     protected List<AmendmentDialogAwareController> childControllers = new ArrayList<AmendmentDialogAwareController>();
 
     @Inject
@@ -78,6 +95,12 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         registerListeners();
     }
 
+    /**
+     * Add one or more {@link AmendmentDialogAwareController}s. Each one will be added to the view.
+     *
+     * @param amendmentDialogAwareControllers
+     *         the child controllers to add
+     */
     public void addChildControllers(AmendmentDialogAwareController... amendmentDialogAwareControllers) {
         this.childControllers.addAll(Arrays.asList(amendmentDialogAwareControllers));
         for (final AmendmentDialogAwareController amendmentModifyAwareController : this.childControllers) {
@@ -114,6 +137,9 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         });
     }
 
+    /**
+     * Request the saving of the amendment.
+     */
     public void handleSave() {
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
@@ -122,15 +148,25 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
 
+    /**
+     * Request the closing of the parent dialog.
+     */
     public void handleClose() {
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
 
+    /**
+     * Return the view associated with this controller.
+     * @return the view
+     */
     @Override
     public AmendmentDialogModifyView getView() {
         return view;
     }
 
+    /**
+     * Pass the dialog context to the child {@link AmendmentDialogAwareController}s.
+     */
     @Override
     public void handle() {
         // set the amendable widget in the drafting controller
@@ -142,6 +178,9 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         setProperties();
     }
 
+    /**
+     * Set and validate the properties that are set in the dialog context.
+     */
     public void setProperties() {
         if (dialogContext.getOverlayWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");

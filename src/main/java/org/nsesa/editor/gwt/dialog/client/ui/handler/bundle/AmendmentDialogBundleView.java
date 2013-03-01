@@ -27,7 +27,15 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentDialogBundleViewImpl.class)
 public interface AmendmentDialogBundleView extends IsWidget {
 
+    /**
+     * Return a reference to the save button.
+     * @return the save button
+     */
     HasClickHandlers getSaveButton();
 
+    /**
+     * Return a reference to the cancel button.
+     * @return the cancel button
+     */
     HasClickHandlers getCancelButton();
 }

@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
- * Default 'simple' view for the creation and editing of amendments on simple widgets.
+ * View for the {@link AmendmentDialogDeleteController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -27,11 +27,28 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentDialogDeleteViewImpl.class)
 public interface AmendmentDialogDeleteView extends IsWidget {
 
+    /**
+     * Set the title on the main widget.
+     * @param title the title
+     */
     void setTitle(String title);
 
+    /**
+     * Add a child view to the main view with the given <tt>title</tt>
+     * @param view  the view to set
+     * @param title the title
+     */
     void addView(IsWidget view, String title);
 
+    /**
+     * Get a reference to the save button.
+     * @return the save button
+     */
     HasClickHandlers getSaveButton();
 
+    /**
+     * Get a reference to the cancel link
+     * @return the cancel link
+     */
     HasClickHandlers getCancelLink();
 }

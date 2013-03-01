@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 import com.google.gwt.resources.client.ClientBundle;
 
 /**
+ * Resources for the {@link AuthorPanelView}.
  * Date: 30/06/12 21:33
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

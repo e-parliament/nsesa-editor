@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
- * View for handling amendments on table structures.
+ * View for the {@link AmendmentDialogMoveController}.
  * <p/>
  * Date: 24/06/12 21:44
  *
@@ -28,7 +28,15 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentDialogMoveViewImpl.class)
 public interface AmendmentDialogMoveView extends IsWidget {
 
+    /**
+     * Get a reference to the save button.
+     * @return the save button
+     */
     HasClickHandlers getSaveButton();
 
+    /**
+     * Get a reference to the cancel link.
+     * @return the cancel link
+     */
     HasClickHandlers getCancelLink();
 }

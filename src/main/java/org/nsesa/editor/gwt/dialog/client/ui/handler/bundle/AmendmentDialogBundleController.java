@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 
 /**
+ * Dialog controller to handle the bundling of amendments into a single consolidated amendment.
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,8 +31,14 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
  */
 public class AmendmentDialogBundleController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
 
+    /**
+     * The client factory giving access to client side dependencies and user information.
+     */
     protected final ClientFactory clientFactory;
 
+    /**
+     * The associated view.
+     */
     protected final AmendmentDialogBundleView view;
 
     @Inject
@@ -50,11 +57,18 @@ public class AmendmentDialogBundleController extends AmendmentUIHandlerImpl impl
         });
     }
 
+    /**
+     * Return the view.
+     * @return the view
+     */
     @Override
     public AmendmentDialogBundleView getView() {
         return view;
     }
 
+    /**
+     * Handle the call, currently does nothing.
+     */
     @Override
     public void handle() {
 

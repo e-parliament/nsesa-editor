@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.Composite;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 
 /**
+ * Very simple abstract implementation that only keeps a {@link DialogContext} around for other
+ * {@link AmendmentUIHandler}s to work with.
  * Date: 21/12/12 16:09
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,10 +26,17 @@ import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
  */
 public abstract class AmendmentUIHandlerImpl extends Composite implements AmendmentUIHandler {
 
+    /**
+     * The dialog context to give access to a wide range of environment and runtime variables.
+     */
     protected DialogContext dialogContext;
 
+    /**
+     * Set and store the {@link DialogContext}.
+     * @param dialogContext the dialog context
+     */
     @Override
-    public void setContext(DialogContext dialogContext) {
+    public void setContext(final DialogContext dialogContext) {
         this.dialogContext = dialogContext;
     }
 }

@@ -26,6 +26,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
 /**
+ * Default implementation for the {@link AuthorPanelView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -40,8 +41,12 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     private final ServiceFactory serviceFactory;
+
     private final ClientFactory clientFactory;
 
+    /**
+     * Suggest oracle for the person DTOs coming from the backend.
+     */
     private final PersonMultiWordSuggestionOracle oracle;
 
     @UiField
@@ -49,6 +54,7 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
 
     @UiField
     HTMLPanel authorsPanel;
+
     @UiField
     HorizontalPanel form;
 
@@ -63,7 +69,6 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
 
     @UiFactory
     SuggestBox createSuggestBox() {
-
         return new SuggestBox(oracle);
     }
 

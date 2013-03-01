@@ -19,6 +19,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.content.ContentPanel
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelModule;
 
 /**
+ * GIN module for the common panel components such as author, meta, or original content.
  * Date: 09/01/13 11:05
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -30,6 +31,5 @@ public class AmendmentDialogCommonModule extends AbstractGinModule {
         install(new AuthorPanelModule());
         install(new MetaPanelModule());
         install(new ContentPanelModule());
-
     }
 }

@@ -20,6 +20,8 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * Simple reference holder for various context related objects that will be instantiated and passed around
+ * when the {@link AmendmentDialogController} is active.
  * Date: 21/12/12 16:03
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -61,58 +63,114 @@ public class DialogContext {
      */
     private DocumentController documentController;
 
+    /**
+     * Get the amendment container dto.
+     * @return the amendment container dto
+     */
     public AmendmentContainerDTO getAmendment() {
         return amendment;
     }
 
+    /**
+     * Set the amendment container dto.
+     * @param amendment the amendment container dto
+     */
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
     }
 
+    /**
+     * Get the amendment controller.
+     * @return the amendment controller
+     */
     public AmendmentController getAmendmentController() {
         return amendmentController;
     }
 
+    /**
+     * Set the amendment controller
+     * @param amendmentController the amendment controller
+     */
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
     }
 
+    /**
+     * Get the amendment action
+     * @return the amendment action
+     */
     public AmendmentAction getAmendmentAction() {
         return amendmentAction;
     }
 
+    /**
+     * Set the amendment action
+     * @param amendmentAction the amendment action
+     */
     public void setAmendmentAction(AmendmentAction amendmentAction) {
         this.amendmentAction = amendmentAction;
     }
 
+    /**
+     * Get the overlay widget
+     * @return the overlay widget
+     */
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
     }
 
+    /**
+     * Set the overlay widget
+     * @param overlayWidget the overlay widget
+     */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
     }
 
+    /**
+     * Get the parent overlay widget.
+     * @return the parent overlay widget
+     */
     public OverlayWidget getParentOverlayWidget() {
         return parentOverlayWidget;
     }
 
+    /**
+     * Set the parent overlay widget
+     * @param parentOverlayWidget the parent overlay widget
+     */
     public void setParentOverlayWidget(OverlayWidget parentOverlayWidget) {
         this.parentOverlayWidget = parentOverlayWidget;
     }
 
+    /**
+     * Get the index for the insertion of the created widget in the parent
+     * @return the index
+     */
     public int getIndex() {
         return index;
     }
 
+    /**
+     * Set the index for the insertion of the created widget
+     * @param index the index
+     */
     public void setIndex(int index) {
         this.index = index;
     }
 
+    /**
+     * Get the parent document controller
+     * @return the document controller
+     */
     public DocumentController getDocumentController() {
         return documentController;
     }
 
+    /**
+     * Set the parent document controller
+     * @param documentController the document controller
+     */
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
     }

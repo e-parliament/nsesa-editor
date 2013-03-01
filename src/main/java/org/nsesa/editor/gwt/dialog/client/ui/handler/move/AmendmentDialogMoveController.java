@@ -23,10 +23,9 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 
 /**
- * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
- * column layout (with the original proposed text on the left, and a rich text editor on the right).
+ * Dialog controller to handle the creation and editing of a movement amendments (amendments suggesting the move of
+ * pre-existing a (complex) structure from the document).
  * <p/>
- * Requires an {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO} and {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget} to be set before it can be displayed.
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -34,8 +33,14 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
  */
 public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implements ProvidesResize, AmendmentUIHandler {
 
+    /**
+     * The client factory.
+     */
     protected final ClientFactory clientFactory;
 
+    /**
+     * The associated view.
+     */
     protected final AmendmentDialogMoveView view;
 
     @Inject
@@ -54,11 +59,19 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
         });
     }
 
+    /**
+     * Get the associated view.
+     * @return the view
+     */
     @Override
     public AmendmentDialogMoveView getView() {
         return view;
     }
 
+    /**
+     * Handle the context and pass it on to child
+     * {@link org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController}s, validated it, ..
+     */
     @Override
     public void handle() {
 

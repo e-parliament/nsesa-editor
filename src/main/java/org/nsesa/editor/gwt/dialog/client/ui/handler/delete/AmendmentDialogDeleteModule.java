@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.delete;
 import com.google.gwt.inject.client.AbstractGinModule;
 
 /**
+ * GIN module for the amendment dialog for creating and editing of deletion amendments.
  * Date: 24/06/12 15:11
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

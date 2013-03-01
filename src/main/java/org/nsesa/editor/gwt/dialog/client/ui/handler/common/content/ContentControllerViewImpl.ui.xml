@@ -20,7 +20,7 @@
 
     </ui:style>
     <g:HTMLPanel>
-        <rte:RichTextEditor ui:field="originalText"/>
+        <rte:RichTextEditor ui:field="originalTextRTE"/>
     </g:HTMLPanel>
 
 </ui:UiBinder>

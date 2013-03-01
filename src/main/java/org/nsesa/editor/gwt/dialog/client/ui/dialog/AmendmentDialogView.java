@@ -27,7 +27,16 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(AmendmentDialogViewImpl.class)
 public interface AmendmentDialogView extends IsWidget {
+
+    /**
+     * Get the main panel.
+     * @return the main panel
+     */
     CellPanel getMainPanel();
 
+    /**
+     * Get the layout panel.
+     * @return the layout panel
+     */
     DockLayoutPanel getLayoutPanel();
 }

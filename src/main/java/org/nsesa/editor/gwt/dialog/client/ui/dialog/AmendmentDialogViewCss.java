@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 import com.google.gwt.resources.client.CssResource;
 
 /**
+ * CSS resource for the {@link AmendmentDialogView}.
  * Date: 24/06/12 16:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

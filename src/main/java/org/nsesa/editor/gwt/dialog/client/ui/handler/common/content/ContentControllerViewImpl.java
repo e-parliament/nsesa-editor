@@ -23,6 +23,7 @@ import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 
 /**
+ * Default implementation of the {@link ContentControllerView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -37,38 +38,38 @@ public class ContentControllerViewImpl extends Composite implements ContentContr
 
 
     @UiField(provided = true)
-    final RichTextEditor originalText;
+    final RichTextEditor originalTextRTE;
 
     @Inject
-    public ContentControllerViewImpl(@Named("originalText") final RichTextEditor originalText) {
-        this.originalText = originalText;
+    public ContentControllerViewImpl(@Named("originalText") final RichTextEditor originalTextRTE) {
+        this.originalTextRTE = originalTextRTE;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
 
     @Override
     public void addBodyClass(String className) {
-        originalText.addBodyClass(className);
+        originalTextRTE.addBodyClass(className);
     }
 
     @Override
     public void resetBodyClass() {
-        originalText.resetBodyClass();
+        originalTextRTE.resetBodyClass();
     }
 
     @Override
     public void setOriginalText(String content) {
-        originalText.setHTML(content);
+        originalTextRTE.setHTML(content);
     }
 
     @Override
     public String getOriginalText() {
-        return originalText.getHTML();
+        return originalTextRTE.getHTML();
     }
 
     @Override
     public RichTextEditor getRichTextEditor() {
-        return originalText;
+        return originalTextRTE;
     }
 
     @Override

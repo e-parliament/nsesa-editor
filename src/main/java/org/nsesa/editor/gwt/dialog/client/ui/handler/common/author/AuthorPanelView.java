@@ -21,6 +21,7 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
+ * View for the {@link AuthorPanelController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,6 +29,15 @@ import org.nsesa.editor.gwt.core.shared.PersonDTO;
  */
 @ImplementedBy(AuthorPanelViewImpl.class)
 public interface AuthorPanelView extends IsWidget {
+    /**
+     * Get a reference to the (autocomplete) suggestbox with the author.
+     * @return the suggest box
+     */
     SuggestBox getSuggestBox();
+
+    /**
+     * Get a reference to the selected authors panel.
+     * @return the selected authors panel
+     */
     ComplexPanel getAuthorsPanel();
 }
