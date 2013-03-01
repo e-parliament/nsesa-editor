@@ -14,11 +14,10 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 /**
- * Keeps occurrence information (minOccurs, maxOccurs) about an element
- * when it is used as an allowed child of another element
- * User: groza
- * Date: 29/01/13
- * Time: 11:52
+ * <code>Occurrence</code> class stores xsd occurrence indicators (minOccurs, maxOccurs) about a "child_name" element
+ *
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/01/13 11:52
  */
 public final class Occurrence {
     public static Integer UNBOUNDED = -1;
@@ -26,19 +25,36 @@ public final class Occurrence {
     private Integer minOccurs;
     private Integer maxOccurs;
 
+    /**
+     * Create <code>Occurrence</code> instance with the given input data
+     * @param minOccurs The minimum number of times an element can occur
+     * @param maxOccurs The maximum number of times an element can occur
+     */
     public Occurrence(Integer minOccurs, Integer maxOccurs) {
         this.minOccurs = minOccurs;
         this.maxOccurs = maxOccurs;
     }
 
+    /**
+     * Returns minimum number of times an element can occur
+     * @return <code>minOccurs</code> as Integer
+     */
     public Integer getMinOccurs() {
         return minOccurs;
     }
 
+    /**
+     * Returns maximum number of times an element can occur
+     * @return <code>maxOccurs</code> as Integer
+     */
     public Integer getMaxOccurs() {
         return maxOccurs;
     }
 
+    /**
+     * True when an element appear an unlimited number of times
+     * @return Whether is unbounded or not
+     */
     public boolean isUnbounded() {
         return maxOccurs != null && maxOccurs.intValue() == UNBOUNDED.intValue();
     }

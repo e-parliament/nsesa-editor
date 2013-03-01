@@ -14,17 +14,27 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 /**
- * Default implementation for <code>OverlayLocalizableResource<code/> interface returning the amendable widget type
- * User: groza
- * Date: 28/01/13
- * Time: 9:59
+ * Default implementation for <code>OverlayLocalizableResource<code/> interface returning the overlay widget type
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 28/01/13 9:59
  */
 public class DefaultOverlayLocalizableResource implements OverlayLocalizableResource {
+
+    /**
+     * Return the type of the overlay widget
+     * @param widget The overlay widget to be processed
+     * @return The overlay widget type
+     */
     @Override
     public String getName(OverlayWidget widget) {
         return widget.getType();
     }
 
+    /**
+     * Return the type of the overlay widget
+     * @param widget The overlay widget to be processed
+     * @return The overlay widget type
+     */
     @Override
     public String getDescription(OverlayWidget widget) {
         return widget.getType();

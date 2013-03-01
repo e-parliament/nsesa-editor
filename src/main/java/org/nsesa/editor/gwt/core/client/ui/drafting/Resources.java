@@ -18,7 +18,7 @@ import com.google.gwt.resources.client.ClientBundle;
 /**
  * Interface to facilitate access to "drafting" image resources
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:46
  */
 public interface Resources extends ClientBundle {

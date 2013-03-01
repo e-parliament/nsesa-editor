@@ -26,10 +26,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Default implementation of <code>XMLTransformer</code> interface
- * User: groza
- * Date: 20/11/12
- * Time: 11:02
+ * Default implementation of {@link Transformer} interface. It tries to generate an XML representation of an
+ * overlay widget by retrieving text content and attributes values from the corresponding DOM element.
+ *
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 20/11/12 11:02
  */
 public class DefaultTransformer implements Transformer {
 
@@ -40,6 +41,11 @@ public class DefaultTransformer implements Transformer {
 
     private boolean withIndentation = true;
 
+    /**
+     * Generate an Xml representation for the given <code>OverlayWidget</code>
+     * @param widget The overlay widget that will be XML-ized.
+     * @return Xml representation as String
+     */
     @Override
     public String transform(final OverlayWidget widget) {
         final Map<String, String> namespaces = gatherNamespaces(widget);
@@ -48,7 +54,23 @@ public class DefaultTransformer implements Transformer {
         return sb.append(toXMLElement(widget, namespaces, true, 0)).toString();
     }
 
-    public String toXMLElement(final OverlayWidget widget, final Map<String, String> namespaces, final boolean rootNode, int depth) {
+    /**
+     * This method is in facto responsible with the xml generation. For each child of the given
+     * overlay widget ({@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()})
+     * it tries to find out the corresponding browser element node and to extract from there the text content and the
+     * css attributes values. The process continue then recursively for all descendants of the original overlay widget.
+     *
+     * @param widget The overlay widget that will be processed
+     * @param namespaces The map of all namespaces used in overlay widget and its descendants
+     * @param rootNode True if the
+     * @param depth
+     * @return Xml representation of overlay widget as String
+     */
+    public String toXMLElement(final OverlayWidget widget,
+                               final Map<String, String> namespaces,
+                               final boolean rootNode,
+                               int depth)
+    {
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
         sb.append(indent).append("<");
@@ -127,7 +149,11 @@ public class DefaultTransformer implements Transformer {
         return sb.toString();
     }
 
-
+    /**
+     * Gather all distinct namespaces from the given <code>OverlayWidget</code> and its chidren
+     * @param root The OverlayWidget that will be processed
+     * @return A Map of String
+     */
     protected Map<String, String> gatherNamespaces(final OverlayWidget root) {
         final Map<String, String> namespaces = new HashMap<String, String>();
         root.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
@@ -147,6 +173,11 @@ public class DefaultTransformer implements Transformer {
         return namespaces;
     }
 
+    /**
+     * Return null but can be overridden by subclasses.
+     * @param namespaceURI The namesapce to be processed
+     * @return <code>null</code>
+     */
     protected String getPrefix(final String namespaceURI) {
         return null;
     }

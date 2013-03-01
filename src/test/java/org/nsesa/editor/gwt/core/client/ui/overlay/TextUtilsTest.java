@@ -18,10 +18,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * A test class for TextUtils class
- * User: groza
- * Date: 23/11/12
- * Time: 11:01
+ * A test class for <code>TextUtils</code> class
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 23/11/12 11:01
  */
 public class TextUtilsTest {
     @Test

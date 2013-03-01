@@ -16,11 +16,9 @@ package org.nsesa.editor.gwt.core.client.event.filter;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * Created with IntelliJ IDEA.
- * User: groza
- * Date: 3/12/12
- * Time: 15:12
- * To change this template use File | Settings | File Templates.
+ * An interface to handle {@link FilterResponseEvent} GWT event.
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 10:42
  */
 public interface FilterResponseEventHandler extends EventHandler {
     void onEvent(FilterResponseEvent responseEvent);

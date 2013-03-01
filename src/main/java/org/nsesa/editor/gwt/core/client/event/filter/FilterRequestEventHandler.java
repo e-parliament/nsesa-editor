@@ -16,10 +16,9 @@ package org.nsesa.editor.gwt.core.client.event.filter;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * A handler for filter implemented by all the components aware about filter.
- * User: groza
- * Date: 29/11/12
- * Time: 10:43
+ * An interface to handle {@link FilterRequestEvent} GWT event.
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 10:42
  */
 public interface FilterRequestEventHandler extends EventHandler {
     void onEvent(FilterRequestEvent event);

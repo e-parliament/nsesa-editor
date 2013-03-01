@@ -17,15 +17,18 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 
 /**
- * An event triggered by the filter component
- * User: groza
- * Date: 29/11/12
- * Time: 10:42
+ * An event triggered by the filtering operations
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 10:42
  */
 public class FilterRequestEvent extends GwtEvent<FilterRequestEventHandler> {
     public static final Type<FilterRequestEventHandler> TYPE = new Type<FilterRequestEventHandler>();
     private Filter filter;
 
+    /**
+     * Create <code>FilterRequestEvent</code> with the given input filter
+     * @param filter The filter request
+     */
     public FilterRequestEvent(Filter filter) {
         this.filter = filter;
     }
@@ -40,6 +43,10 @@ public class FilterRequestEvent extends GwtEvent<FilterRequestEventHandler> {
         handler.onEvent(this);
     }
 
+    /**
+     * Return the filter request
+     * @return <code>filter</code>
+     */
     public Filter getFilter() {
         return filter;
     }

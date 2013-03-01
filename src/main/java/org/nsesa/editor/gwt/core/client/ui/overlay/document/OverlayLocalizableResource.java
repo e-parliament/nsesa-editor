@@ -16,26 +16,26 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 import com.google.inject.ImplementedBy;
 
 /**
- * An interface to provide localizable information about amendable widgets
- * User: groza
- * Date: 28/01/13
- * Time: 9:55
+ *
+ * An interface to provide localizable information about overlay widgets.
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 28/01/13 9:55
  */
 @ImplementedBy(DefaultOverlayLocalizableResource.class)
 public interface OverlayLocalizableResource {
     /**
-     * Returns localized tag name for the given amendable widget
+     * Returns localized tag name for the given overlay widget
      *
-     * @param widget
-     * @return
+     * @param widget The overlay widget to be processed
+     * @return The localizable tag name
      */
     abstract String getName(OverlayWidget widget);
 
     /**
      * Returns localized details for the given amendable widget
      *
-     * @param widget
-     * @return
+     * @param widget The overlay widget to be processed
+     * @return The localizable description
      */
     abstract String getDescription(OverlayWidget widget);
 }

@@ -16,30 +16,48 @@ package org.nsesa.editor.gwt.core.client.util;
 import java.util.List;
 
 /**
- * A response occurred after a filter operation
- * User: groza
- * Date: 5/12/12
- * Time: 11:41
+ * <code>FilterResponse</code> class encapsulate the response of filter request. It has reference to the
+ * original filter and also to the result of the filter operation.
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 5/12/12 11:41
  */
 public class FilterResponse<T> {
     private final int totalSize;
     private final Filter<T> filter;
     private final List<T> result;
 
+    /**
+     * Create <code>FilterResponse</code> instance with the given input
+     * @param filter The original filter used to filter the data
+     * @param totalSize The total size of data before applying pagination if case
+     * @param result The result of the filter operation
+     */
     public FilterResponse(Filter<T> filter, int totalSize, List<T> result) {
         this.totalSize = totalSize;
         this.filter = filter;
         this.result = result;
     }
 
+    /**
+     * Return the total size before applying pagination if case
+     * @return <code>totalSize</code> as int
+     */
     public int getTotalSize() {
         return totalSize;
     }
 
+    /**
+     * Return the original filter request
+     * @return <code>filter</code>
+     */
     public Filter<T> getFilter() {
         return filter;
     }
 
+    /**
+     * Returns the result of the filter operation after applying pagination
+     * @return List
+     */
     public List<T> getResult() {
         return result;
     }

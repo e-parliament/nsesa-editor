@@ -18,16 +18,19 @@ import org.nsesa.editor.gwt.core.client.util.Filter;
 
 /**
  * An event initiated as a response to a filter request
- * User: groza
- * Date: 3/12/12
- * Time: 15:10
- * To change this template use File | Settings | File Templates.
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 29/11/12 10:42
  */
 public class FilterResponseEvent extends GwtEvent<FilterResponseEventHandler> {
     public static final GwtEvent.Type<FilterResponseEventHandler> TYPE = new GwtEvent.Type<FilterResponseEventHandler>();
     private int totalSize;
     private Filter filter;
 
+    /**
+     * Create a <code>FilterResponseEvent</code> as an answer to a filter request event
+     * @param totalSize The total size
+     * @param filter the original filter request
+     */
     public FilterResponseEvent(int totalSize, Filter filter) {
         this.totalSize = totalSize;
         this.filter = filter;
@@ -43,10 +46,18 @@ public class FilterResponseEvent extends GwtEvent<FilterResponseEventHandler> {
         handler.onEvent(this);
     }
 
+    /**
+     * Return the total size
+     * @return <code>totalSize</code>
+     */
     public int getTotalSize() {
         return totalSize;
     }
 
+    /**
+     * Return the original filter request
+     * @return <code>filter</code>
+     */
     public Filter getFilter() {
         return filter;
     }

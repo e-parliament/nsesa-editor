@@ -17,22 +17,37 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
- * Created with IntelliJ IDEA.
- * User: groza
- * Date: 30/11/12
- * Time: 14:50
- * To change this template use File | Settings | File Templates.
+ *  Interface to facilitate access to "pagination" image resources
+ *
+ * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * Date: 30/11/12 15:29
  */
 public interface Resources extends ClientBundle {
+    /**
+     * "First" image
+     * @return an ImageResource
+     */
     @Source("go-first.png")
     public ImageResource first();
 
+    /**
+     * "Last" image
+     * @return an ImageResource
+     */
     @Source("go-last.png")
     public ImageResource last();
 
+    /**
+     * "Previous" image
+     * @return an ImageResource
+     */
     @Source("go-previous.png")
     public ImageResource previous();
 
+    /**
+     * "Next" image
+     * @return an ImageResource
+     */
     @Source("go-next.png")
     public ImageResource next();
 }
