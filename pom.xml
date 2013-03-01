@@ -8,6 +8,7 @@
     <artifactId>editor</artifactId>
     <packaging>jar</packaging>
     <name>Core Editor</name>
+    <url>http://code.at4am.org/nsesa-editor</url>
     <version>0.0.1</version>
 
     <organization>
