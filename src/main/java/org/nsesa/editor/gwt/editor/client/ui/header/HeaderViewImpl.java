@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.LocaleChangeEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.TextUtils;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.Arrays;
@@ -74,7 +75,7 @@ public class HeaderViewImpl extends Composite implements HeaderView {
         availableLanguages.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
-                clientFactory.getEventBus().fireEvent(new LocaleChangeEvent(availableLanguages.getItemText(availableLanguages.getSelectedIndex())));
+                clientFactory.getEventBus().fireEvent(new LocaleChangeEvent(availableLanguages.getValue(availableLanguages.getSelectedIndex())));
             }
         });
     }
@@ -97,8 +98,11 @@ public class HeaderViewImpl extends Composite implements HeaderView {
         if (localeNames != null && localeNames.size() > 1) {
             availableLanguages.clear();
             for (final String locale : localeNames) {
-                // TODO: use resource bundle to translate
-                availableLanguages.addItem(locale, locale);
+                final String displayName =
+                        "default".equalsIgnoreCase(locale) ? "english" : LocaleInfo.getLocaleNativeDisplayName(locale);
+                if (displayName != null) {
+                    availableLanguages.addItem(TextUtils.capitalize(displayName), locale);
+                }
             }
             availableLanguages.setVisible(true);
         }
