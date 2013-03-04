@@ -20,9 +20,9 @@ import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEventHandler;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.editor.client.Injector;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,9 @@ import java.util.logging.Logger;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Main editor controller. This controller acts as a singleton and is responsible for the instantiating of
+ * one or more {@link DocumentController}s, which in turn will load documents and amendments.
+ * <p/>
  * Date: 24/06/12 18:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -42,13 +45,31 @@ public class EditorController implements BootstrapEventHandler {
 
     private static final Logger LOG = Logger.getLogger(EditorController.class.getName());
 
-    private final EditorView view;
-    private final ClientFactory clientFactory;
-    private final ServiceFactory serviceFactory;
+    /**
+     * The associated view.
+     */
+    protected final EditorView view;
 
-    private Injector injector;
+    /**
+     * The client factory, giving access to local dependencies such as the global event bus, scheduler, and client
+     * context information about the currently logged in user.
+     */
+    protected final ClientFactory clientFactory;
 
-    private final List<DocumentController> documentControllers = new ArrayList<DocumentController>();
+    /**
+     * The service factory, giving access to asynchronous RPC services.
+     */
+    protected final ServiceFactory serviceFactory;
+
+    /**
+     * The injector to instantiate {@link DocumentController}s.
+     */
+    protected Injector injector;
+
+    /**
+     * The list of available {@link DocumentController}s.
+     */
+    protected final List<DocumentController> documentControllers = new ArrayList<DocumentController>();
 
     @Inject
     public EditorController(final EditorView view,
@@ -67,6 +88,12 @@ public class EditorController implements BootstrapEventHandler {
         clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
     }
 
+    /**
+     * Callback on the {@link BootstrapEvent}, to indicate the user context has been set up, and all local
+     * dependencies are available.
+     *
+     * @param event
+     */
     @Override
     public void onEvent(BootstrapEvent event) {
         LOG.info("Received bootstrap event.");
@@ -74,6 +101,7 @@ public class EditorController implements BootstrapEventHandler {
 
         if (documentIDs == null) {
             // no document ids provided in the client context?
+            // TODO handle gracefully, perhaps a list of recent documents?
             final String message = clientFactory.getCoreMessages().errorDocumentIdMissing();
             clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
         } else {
@@ -88,20 +116,32 @@ public class EditorController implements BootstrapEventHandler {
         }
     }
 
+    /**
+     * Add a {@link DocumentController} to the list of current domain controllers, and update the layout if necessary.
+     *
+     * @param documentController the document controller to add
+     * @return <tt>true</tt> if the document controller was added
+     */
     public boolean addDocumentController(final DocumentController documentController) {
         boolean added = documentControllers.add(documentController);
         if (added) {
             view.getDocumentsPanel().add(documentController.getView());
             doLayout();
         } else {
-            throw new RuntimeException("Probably a bug.");
+            throw new RuntimeException("Document controller not added - was it already added?");
         }
         return added;
     }
 
-    public boolean removeDocumentController(final DocumentController documentController, final boolean autoRemoveView) {
+    /**
+     * Remove a {@link DocumentController} from the current document controllers.
+     *
+     * @param documentController the document controller to remove
+     * @return <tt>true</tt> if the document controller was removed
+     */
+    public boolean removeDocumentController(final DocumentController documentController) {
         final boolean removed = documentControllers.remove(documentController);
-        if (removed && autoRemoveView) {
+        if (removed) {
             if (view.getDocumentsPanel().remove(documentController.getView())) {
                 doLayout();
             }
@@ -109,7 +149,14 @@ public class EditorController implements BootstrapEventHandler {
         return removed;
     }
 
-
+    /**
+     * Get a given document controller by the given <tt>documentID</tt>. Note that this will check the document
+     * controller's current document, so if another document was loaded into the document controller, then its
+     * documentID might have changed.
+     *
+     * @param documentID the document ID
+     * @return the {@link DocumentController} with the given <tt>documentID</tt>, or <tt>null</tt> if it does not exist.
+     */
     public DocumentController getDocumentController(final String documentID) {
         for (final DocumentController documentController : documentControllers) {
             if (documentID.equals(documentController.getDocumentID())) {
@@ -119,6 +166,10 @@ public class EditorController implements BootstrapEventHandler {
         return null;
     }
 
+    /**
+     * Perform a layout adaptation to handle the number of document controllers horizontally by dividing the available
+     * screen estate.
+     */
     protected void doLayout() {
         // There seems to be no other way to dynamically set the width of the children
         // for an evenly distributed width
@@ -128,10 +179,18 @@ public class EditorController implements BootstrapEventHandler {
         }
     }
 
+    /**
+     * Return the associated view.
+     * @return the view
+     */
     public EditorView getView() {
         return view;
     }
 
+    /**
+     * Set the injector to use to instantiate the {@link DocumentController}.
+     * @param injector the injector to use
+     */
     public void setInjector(Injector injector) {
         this.injector = injector;
     }

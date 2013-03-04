@@ -30,6 +30,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Controller for the editor's header component.
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -39,9 +40,20 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class HeaderController {
 
-    private final ServiceFactory serviceFactory;
-    private final ClientFactory clientFactory;
-    private final HeaderView view;
+    /**
+     * The service factory, giving access to the RPC services.
+     */
+    protected final ServiceFactory serviceFactory;
+
+    /**
+     * The client factory, giving access to the local dependencies and user context
+     */
+    protected final ClientFactory clientFactory;
+
+    /**
+     * The view
+     */
+    protected final HeaderView view;
 
     @Inject
     public HeaderController(final ClientFactory clientFactory, final ServiceFactory serviceFactory, final HeaderView view) {
@@ -69,14 +81,24 @@ public class HeaderController {
         });
     }
 
+    /**
+     * Set up the language after the {@link BootstrapEvent} has been received. Sets all available languages according
+     * to {@link com.google.gwt.i18n.client.LocaleInfo#getAvailableLocaleNames()}.
+     */
     protected void setUpLanguages() {
         final List<String> locales = new ArrayList<String>();
+        // no System.arrayCopy because it's not emulated
         for (final String localeName : LocaleInfo.getAvailableLocaleNames()) {
+            // note that the locale name is 'like the ISO code, except for the default (which is named 'default')'
             locales.add(localeName);
         }
         view.setAvailableLanguages(locales);
     }
 
+    /**
+     * Return the associated view.
+     * @return the view
+     */
     public HeaderView getView() {
         return view;
     }

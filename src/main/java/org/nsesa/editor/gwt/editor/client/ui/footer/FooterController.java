@@ -20,6 +20,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Controller for the editor's footer component.
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -29,13 +30,20 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Scope(EDITOR)
 public class FooterController {
 
-    private final FooterView view;
+    /**
+     * The associated view.
+     */
+    protected final FooterView view;
 
     @Inject
     public FooterController(FooterView view) {
         this.view = view;
     }
 
+    /**
+     * Return the associated view.
+     * @return the view
+     */
     public FooterView getView() {
         return view;
     }

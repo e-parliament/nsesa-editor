@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link EditorController}.
  * Date: 24/06/12 21:43
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -25,5 +26,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(EditorViewImpl.class)
 public interface EditorView extends IsWidget {
+
+    /**
+     * Returns the main panel to add {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController}s to.
+     * @return the document panel
+     */
     CellPanel getDocumentsPanel();
 }

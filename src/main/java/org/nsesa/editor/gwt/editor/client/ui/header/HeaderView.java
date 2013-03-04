@@ -20,6 +20,7 @@ import com.google.inject.ImplementedBy;
 import java.util.List;
 
 /**
+ * View for the {@link HeaderController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -28,11 +29,27 @@ import java.util.List;
 @ImplementedBy(HeaderViewImpl.class)
 public interface HeaderView extends IsWidget {
 
+    /**
+     * Set the CSS class name on the {@link HeaderView}.
+     * @param style the CSS class name
+     */
     void setStyleName(String style);
 
+    /**
+     * Set the name to display as the logged in user in the view.
+     * @param personName the person name to display
+     */
     void setLoggedInPersonName(String personName);
 
+    /**
+     * Set the (security) roles of the logged in user in the view.
+     * @param roles the roles of the logged in person
+     */
     void setLoggedInPersonRoles(String[] roles);
 
+    /**
+     * Set the available UI languages in the view.
+     * @param locales the locales to set
+     */
     void setAvailableLanguages(List<String> locales);
 }

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
 /**
+ * View for the {@link FooterController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -24,5 +25,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(FooterViewImpl.class)
 public interface FooterView extends IsWidget {
+
+    /**
+     * General CSS class name setter for the {@link FooterView}.
+     * @param style the css class name to set
+     */
     void setStyleName(String style);
 }

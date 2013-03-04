@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
 
 /**
+ * GIN module for the main editor component.
  * Date: 24/06/12 15:11
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

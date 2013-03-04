@@ -14,7 +14,6 @@
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -26,6 +25,7 @@ import org.nsesa.editor.gwt.editor.client.ui.header.HeaderController;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderView;
 
 /**
+ * Default implementation of the {@link EditorView} using UIBinder.
  * Date: 24/06/12 16:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -38,7 +38,10 @@ public class EditorViewImpl extends Composite implements EditorView, ProvidesRes
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final ClientFactory clientFactory;
+    /**
+     * The client factory, giving access to various user context dependencies.
+     */
+    protected final ClientFactory clientFactory;
 
     @UiField
     HorizontalPanel documentsPanel;
@@ -56,9 +59,13 @@ public class EditorViewImpl extends Composite implements EditorView, ProvidesRes
         this.footerView = footerController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        documentsPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
     }
 
+    /**
+     * Returns the main panel to add {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController}s to.
+     *
+     * @return the document panel
+     */
     @Override
     public CellPanel getDocumentsPanel() {
         return documentsPanel;

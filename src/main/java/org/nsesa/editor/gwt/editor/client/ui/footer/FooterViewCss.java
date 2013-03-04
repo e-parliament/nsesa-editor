@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.editor.client.ui.footer;
 import com.google.gwt.resources.client.CssResource;
 
 /**
+ * CSS resource bundle for the {@link FooterView}.
  * Date: 24/06/12 16:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

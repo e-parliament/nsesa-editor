@@ -35,6 +35,7 @@ import java.util.List;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
 /**
+ * Default implementation for the {@link HeaderView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -48,7 +49,10 @@ public class HeaderViewImpl extends Composite implements HeaderView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final ClientFactory clientFactory;
+    /**
+     * The client factory, giving access to local dependencies and the user context.
+     */
+    protected final ClientFactory clientFactory;
 
     @UiField
     Label name;

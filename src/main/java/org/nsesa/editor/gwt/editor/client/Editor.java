@@ -48,7 +48,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Main entry point for the Editor module.
+ * Base entry point for the Editor module. Designed for easy subclassing.
  * <p/>
  * Date: 24/06/12 14:39
  *
@@ -58,8 +58,6 @@ import java.util.logging.Logger;
 public abstract class Editor implements EntryPoint {
 
     private static final Logger LOG = Logger.getLogger(Editor.class.getName());
-
-    public abstract Injector getInjector();
 
     private ClientFactory clientFactory;
     private ServiceFactory serviceFactory;
@@ -84,6 +82,14 @@ public abstract class Editor implements EntryPoint {
     }
 
     /**
+     * Abstract call that must be implemented to get a (subclass of) the {@link Injector}, which
+     * will be used to set up all dependencies in the correct scope.
+     *
+     * @return the {@link Injector}
+     */
+    public abstract Injector getInjector();
+
+    /**
      * Installs an exception handler that catches exceptions that would otherwise bubble up and result in a
      * exception in the browser window.
      * By handling this via the java.util.Logger, we are able to pass this exception on to the server side, and log
@@ -104,6 +110,32 @@ public abstract class Editor implements EntryPoint {
      * the client and service factory have been set.
      */
     protected void onModuleLoadDeferred() {
+
+        // build the UI
+        initializeUI();
+
+        // register event listeners
+        registerEventListeners();
+
+        // update the window title
+        setInitialTitle();
+
+        // process any changes to the layout
+        doLayout();
+
+        // retrieve the url parameters for the client context
+        getParameters();
+
+        // retrieve the user principal for the client context
+        authenticate();
+    }
+
+    /**
+     * Initialize the main UI component(s) and add them to the {@link RootLayoutPanel}.
+     * We're currently also setting up the {@link ActivityManager} and {@link EditorPlaceFactory}, but they are
+     * unused until we handle multiple document controllers.
+     */
+    protected void initializeUI() {
         // set up the main window
         final EditorController editorController = getInjector().getEditorController();
         // there seems to be no other way to inject this 'injector'
@@ -134,22 +166,14 @@ public abstract class Editor implements EntryPoint {
 
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
-
-        registerEventListeners();
-
-        // update the window title
-        setInitialTitle();
-
-        // process any changes to the layout
-        doLayout();
-
-        // retrieve the url parameters for the client context
-        getParameters();
-
-        // retrieve the user principal for the client context
-        authenticate();
     }
 
+    /**
+     * Retrieve the {@link ActivityManager}.
+     *
+     * @param eventBus the event bus to use
+     * @return the activity manager
+     */
     protected ActivityManager getActivityManager(final EventBus eventBus) {
         final ActivityMapper activityMapper = getInjector().getActivityMapper();
         return new ActivityManager(activityMapper, eventBus);
@@ -273,6 +297,7 @@ public abstract class Editor implements EntryPoint {
         gwtService.authenticate(clientFactory.getClientContext(), new AsyncCallback<ClientContext>() {
             @Override
             public void onFailure(Throwable caught) {
+                LOG.info("Authentication failed for " + clientFactory.getClientContext());
                 eventBus.fireEvent(new CriticalErrorEvent(clientFactory.getCoreMessages().authenticationFailed(), caught));
             }
 
