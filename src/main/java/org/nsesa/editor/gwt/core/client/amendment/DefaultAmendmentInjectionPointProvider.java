@@ -57,7 +57,7 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
         // check if we need to create a new element or not
         if (reference.isCreation()) {
-            final OverlayWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getType());
+            final OverlayWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getNamespaceURI(), reference.getType());
 
             if (child == null)
                 throw new NullPointerException("The provided overlay factory " + documentController.getOverlayFactory() + " was not able to provide an injection point for " + reference);

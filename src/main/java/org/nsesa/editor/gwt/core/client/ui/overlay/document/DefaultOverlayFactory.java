@@ -46,7 +46,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
     }
 
     @Override
-    public OverlayWidget getAmendableWidget(String tag) {
+    public OverlayWidget getAmendableWidget(final String namespaceURI, final String tag) {
         com.google.gwt.user.client.Element element = DOM.createSpan();
         element.setAttribute("type", tag);
         element.setClassName("widget " + tag);
@@ -67,7 +67,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
     }
 
     @Override
-    public String getNamespace() {
+    public String getNamespaceURI() {
         // no namespace defined for default implementation
         return null;
     }

@@ -36,8 +36,8 @@ import java.util.Map;
 public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {
 
 private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first}.class.getName());
-/** the namespace of the overlay factory **/
-private final String namespace = "${overlayClass.nameSpace}";
+/** the namespace URI of the overlay factory **/
+private final String namespaceURI = "${overlayClass.nameSpace}";
 
 /**
 * Create <code>${overlayClass.name?cap_first}</code> object with the given overlay strategy
@@ -48,11 +48,11 @@ public ${overlayClass.name?cap_first}(final OverlayStrategy overlayStrategy) {
 super(overlayStrategy);
 }
 /**
-* Return <code>namespace</code> of the overlay class
-* @return the namespace as String
+* Return <code>namespaceURI</code> of the overlay class
+* @return the namespace URI as String
 */
 @Override
-public String getNamespace() {
+public String getNamespaceURI() {
 return namespace;
 }
 /**

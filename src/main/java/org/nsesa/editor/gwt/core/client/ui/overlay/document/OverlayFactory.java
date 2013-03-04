@@ -44,7 +44,7 @@ public interface OverlayFactory {
      * @param tag the tag to create the {@link OverlayWidget} for
      * @return the generated overlay widget, or <tt>null</tt> if it cannot be instantiated
      */
-    OverlayWidget getAmendableWidget(String tag);
+    OverlayWidget getAmendableWidget(String namespaceURI, String tag);
 
     /**
      * Return a single new {@link OverlayWidget} for a given <tt>element</tt>
@@ -59,5 +59,5 @@ public interface OverlayFactory {
      *
      * @return the namespace URI
      */
-    String getNamespace();
+    String getNamespaceURI();
 }

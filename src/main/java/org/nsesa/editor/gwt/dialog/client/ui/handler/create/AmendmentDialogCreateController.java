@@ -166,6 +166,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         // set up the source reference so we can re-inject this amendment later.
         dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(true,
                 dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
+                dialogContext.getParentOverlayWidget().getNamespaceURI(),
                 amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
                 dialogContext.getOverlayWidget().getType(),
                 dialogContext.getIndex()));

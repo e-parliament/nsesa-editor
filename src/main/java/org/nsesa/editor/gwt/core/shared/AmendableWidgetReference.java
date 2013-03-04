@@ -123,4 +123,12 @@ public class AmendableWidgetReference implements IsSerializable {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getNamespaceURI() {
+        return namespaceURI;
+    }
+
+    public void setNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+    }
 }
