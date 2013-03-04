@@ -18,6 +18,8 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * An event requesting the attaching of the inline editor to a given {@link OverlayWidget}.
+ *
  * Date: 24/06/12 20:14
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

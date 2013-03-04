@@ -17,6 +17,8 @@ import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 /**
+ * A request to detach the inline editor.
+ *
  * Date: 24/06/12 20:14
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

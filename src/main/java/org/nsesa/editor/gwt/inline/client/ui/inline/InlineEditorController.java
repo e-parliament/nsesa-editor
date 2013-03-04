@@ -33,6 +33,8 @@ import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEventHandler;
 import java.util.logging.Logger;
 
 /**
+ * A controller for inline editing. Can be attached to an {@link OverlayWidget}.
+ *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
@@ -46,8 +48,14 @@ public class InlineEditorController implements ProvidesResize {
      */
     private final ClientFactory clientFactory;
 
+    /**
+     * The overlay factory.
+     */
     private final OverlayFactory overlayFactory;
 
+    /**
+     * The RTE to use for the actual editing.
+     */
     private final RichTextEditor richTextEditor;
 
     /**
@@ -143,6 +151,9 @@ public class InlineEditorController implements ProvidesResize {
 
     }
 
+    /**
+     * Call to hide the inline editor - effectively destroys the inline RTE.
+     */
     public void hide() {
         richTextEditor.destroy();
         richTextEditor.asWidget().setVisible(false);
@@ -150,23 +161,42 @@ public class InlineEditorController implements ProvidesResize {
             overlayWidget.asWidget().setVisible(true);
     }
 
+    /**
+     * Return the underlying amendment dto.
+     * @return the amendment dto
+     */
     public AmendmentContainerDTO getAmendment() {
         return amendment;
     }
 
+    /**
+     * Set the amendment dto.
+     * @param amendment the amendment dto
+     */
     public void setAmendment(AmendmentContainerDTO amendment) {
         this.amendment = amendment;
     }
 
-
+    /**
+     * Get the underlying overlay widget.
+     * @return the overlay widget
+     */
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
     }
 
+    /**
+     * Set the underlying overlay widget.
+     * @param overlayWidget the overlay widget
+     */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
     }
 
+    /**
+     * Set the parent document controller.
+     * @param documentController the document controller
+     */
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
     }

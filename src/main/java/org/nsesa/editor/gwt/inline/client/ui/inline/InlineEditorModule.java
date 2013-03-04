@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditor;
 
 /**
+ * GIN module for the inline editing.
  * Date: 24/06/12 15:11
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
