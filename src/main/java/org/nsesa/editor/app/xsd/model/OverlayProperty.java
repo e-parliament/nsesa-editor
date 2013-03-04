@@ -45,14 +45,14 @@ public class OverlayProperty extends OverlayNode {
     // the base class
     private OverlayClass baseClass;
 
-    private Integer minOccurs = new Integer(0);
-    private Integer maxOccurs = new Integer(-1);
+    private Integer minOccurs = 0;
+    private Integer maxOccurs = -1;
 
     private boolean required;
 
     /**
      * Constructs a <code>OverlayProperty</code> with the given parameters
-     * @param overlayType The <code></>
+     * @param overlayType The the property type
      * @param packageName The <code>java package name</code> as String
      * @param nameSpace The nameSpace as String
      * @param className The <code>java class name</code>as String

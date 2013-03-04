@@ -33,11 +33,15 @@ import java.util.Map;
 import com.google.gwt.user.client.DOM;
 
 /**
+* <#if overlayClass.comments??>${overlayClass.comments?replace("\n", " ")?replace("\t", " ")?replace("'", "''")?replace("\\s+"," ", "r")}<#else>Generated class</#if>
 * This file is generated. Rather than changing this file, correct the template called <tt>overlayClass.ftl</tt>.
 */
 
 public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple)>extends ${overlayClass.parent.className?cap_first}<#else><#if overlayClass.complex || overlayClass.element>extends OverlayWidgetImpl</#if></#if>  <#if overlayClass.interfaces??>implements <#list overlayClass.interfaces as interface>${interface}<#if interface_has_next>, </#if></#list> </#if>{
 <#if overlayClass.complex || overlayClass.element>
+/**
+* Stores a map of allowed sub types coming from xsd structure
+*/
 private static Map<OverlayWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<OverlayWidget, Occurrence>() {
 {
     <#list overlayClass.allNonAttributesProperties as prop>
@@ -53,7 +57,9 @@ private static Map<OverlayWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<Ov
 </#if>
 
 
-// STATIC create method
+/**
+* Create a browser DOM span element and set up "type", "ns" and css class attributes
+*/
 public static Element create() {
 com.google.gwt.user.client.Element span = DOM.createSpan();
 span.setAttribute("type", "${overlayClass.className}");
@@ -64,6 +70,9 @@ return span;
 
 // CONSTRUCTORS ------------------
 <#if overlayClass.element>
+/**
+* Create a <code>${overlayClass.className?cap_first}</code> object and set up its type
+*/
 public ${overlayClass.className?cap_first}() {
 super(create());
 setType("${overlayClass.className}");
@@ -74,7 +83,9 @@ setType("${overlayClass.className}");
 <#if prop.required><#assign requiredConstructor = true></#if>
 </#list>
 <#if requiredConstructor>
-//Constructor with the required attributes
+/**
+* Constructor with required attributes
+*/
 public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
 this();
     <#list overlayClass.allAttributesProperties as property>
@@ -88,14 +99,23 @@ set<@propertyNameCap property = property/>(<@propertyName property = property/>)
 </#if>
 
 <#if overlayClass.complex || overlayClass.element>
+/**
+* Create a <code>${overlayClass.className?cap_first}</code> object with the given DOM element
+*/
 public ${overlayClass.className?cap_first}(Element element) {
 super(element);
 }
 </#if>
 <#if overlayClass.simple>
+/**
+* Create an empty <code>${overlayClass.className?cap_first}</code> object
+*/
 public ${overlayClass.className?cap_first}() {
 super();
 }
+/**
+* Create a <code>${overlayClass.className?cap_first}</code> object with teh given input data
+*/
 public ${overlayClass.className?cap_first}(String value) {
 super();
 this.value = value;
@@ -119,6 +139,10 @@ this.value = value;
 
     <#list overlayClass.properties as property>
         <#if property.attribute>
+        /**
+        * Return <code><@propertyName property = property/></code> property
+        * @return <@propertyName property=property/>
+        */
         public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
         if (<@propertyName property = property/> == null) {
             <#if property.baseClass?? && !property.baseClass.enumeration>
@@ -135,11 +159,17 @@ this.value = value;
 
         return <@propertyName property = property/>;
         }
-        //DSL Style get value
+        /**
+        * Return <code><@propertyName property=property/></code> property in DSL way
+        * @return <@propertyName property=property/>
+        */
         public <@propertyClassName property=property/> <@propertyName property = property/>() {
         return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
         }
-
+        /**
+        * Set <code><@propertyName property=property/></code> property
+        * @param <@propertyName property=property/> the new value
+        */
         public void set<@propertyNameCap property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
         this.<@propertyName property = property/> = <@propertyName property = property/>;
         <#if property.wildCard>
@@ -150,13 +180,21 @@ this.value = value;
         getElement().setAttribute("${property.name}",<@propertyName property = property/>.getValue());
         </#if>
         }
-        //DSL Style set value
+        /**
+        * Set <code><@propertyName property=property/></code> property in DSL way
+        * @param <@propertyName property=property/> the new value
+        * @return <code>${overlayClass.className?cap_first}</code> instance
+        */
         public ${overlayClass.className?cap_first} <@propertyName property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
         set<@propertyNameCap property = property/>(<@propertyName property = property/>);
         return this;
         }
         <#else>
             <#if property.collection>
+            /**
+            * Return <code><@propertyClassName property=property/></code> property
+            * @return The property as unmodifiable list
+            */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = new ArrayList<<@elementClassName property=property/>>();
             for (OverlayWidget widget : getChildOverlayWidgets()) {
@@ -167,11 +205,17 @@ this.value = value;
             return java.util.Collections.unmodifiableList(result);
             }
 
-            //DSL Style get value
+            /**
+            * Return <code><@propertyClassName property=property/></code> property in DSL way
+            * @return The property as unmodifiable list
+            */
             public <@propertyClassName property=property/> get${property.javaName?cap_first}List() {
             return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
             }
-            //DSL Style set value
+            /**
+            * Add <code><@propertyClassName property=property/></code> property in the list of properties
+            * @return The property as unmodifiable list
+            */
             public ${property.className?cap_first} add${property.javaName?cap_first}(${property.className?cap_first} ${property.javaName}Elem) {
                 <#if property.wildCard>
                 throw new RuntimeException("Adding wildcard content is not supported yet");
@@ -182,6 +226,10 @@ this.value = value;
             }
 
             <#else>
+            /**
+            * Add <code><@propertyClassName property=property/></code> property in the list of properties
+            * @return The property as unmodifiable list
+            */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = null;
             for (OverlayWidget widget : getChildOverlayWidgets()) {
@@ -192,9 +240,11 @@ this.value = value;
             }
             return result;
             }
-            //DSL Style get value already exists
-
-            //DSL Style set value
+            /**
+            * Set <code>${property.javaName}Elem</code> property in DSL way
+            * @param ${property.javaName}Elem new value
+            * @return <code>${property.className?cap_first}</code> instance
+            */
             public ${property.className?cap_first} set${property.javaName?cap_first}(${property.className?cap_first} ${property.javaName}Elem) {
                 <#if property.wildCard>
                 throw new RuntimeException("Setting wildcard content is not supported yet");
@@ -215,7 +265,11 @@ this.value = value;
 //Override all attributes methods to be conformant with DSL approach
     <#if overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple>
         <#list overlayClass.parent.allAttributesProperties as parentProp>
-        //DSL Style set value
+        /**
+        * Set <code><@propertyName property = parentProp/></code> property in DSL way
+        * @param <@propertyName property = parentProp/> new value
+        * @return <code> ${overlayClass.className?cap_first}</code> instance
+        */
         public ${overlayClass.className?cap_first} <@propertyName property = parentProp/>(final <@propertyClassName property=parentProp/> <@propertyName property = parentProp/>) {
         set<@propertyNameCap property = parentProp/>(<@propertyName property = parentProp/>);
         return this;
@@ -233,6 +287,7 @@ return java.util.Collections.unmodifiableMap(ALLOWED_SUB_TYPES);
 
 /**
 * Returns the namespace URI of this amendable widget.
+* @return The namesapce as String
 */
 @Override
 public String getNamespaceURI() {
@@ -252,7 +307,9 @@ attrs.putAll(super.getAttributes());
 return attrs;
 }
 
-//DSL Style for html method
+/**
+* DSL Style for html method
+*/
 @Override
 public ${overlayClass.className?cap_first} html(String s) {
     super.html(s);
@@ -261,9 +318,17 @@ public ${overlayClass.className?cap_first} html(String s) {
 </#if>
 <#if overlayClass.simple>
     <#list overlayClass.properties as property>
+    /**
+    * Get <code><@propertyName property = property/></code> property
+    * @return <@propertyName property = property/>
+    */
     public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
     return <@propertyName property = property/>;
     }
+    /**
+    * Set <code><@propertyName property = property/></code> property
+    * @param <@propertyName property = property/> new value
+    */
     public void set<@propertyNameCap property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
     this.<@propertyName property = property/> = <@propertyName property = property/>;
     }

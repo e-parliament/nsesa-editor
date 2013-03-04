@@ -30,22 +30,36 @@ import com.google.gwt.dom.client.Element;
 import java.util.logging.Logger;
 import java.util.Map;
 /**
+* A factory class specialization used to create overlay wigets based on the given DOM element input data
 * Note: this file is generated. Rather than changing this file, correct the template called <tt>overlayFactory.ftl</tt>.
 */
 public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {
 
 private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first}.class.getName());
-// the namespace of the overlay factory
+/** the namespace of the overlay factory **/
 private final String namespace = "${overlayClass.nameSpace}";
 
+/**
+* Create <code>${overlayClass.name?cap_first}</code> object with the given overlay strategy
+* @param overlayStrategy The strategy to be used to create overlay widget objects
+*/
 @Inject
 public ${overlayClass.name?cap_first}(final OverlayStrategy overlayStrategy) {
 super(overlayStrategy);
 }
+/**
+* Return <code>namespace</code> of the overlay class
+* @return the namespace as String
+*/
 @Override
 public String getNamespace() {
 return namespace;
 }
+/**
+* Return <code>OverlayWidget</code> instance based on the given DOM element or null if there is no
+* possibility to create an overlay widget with the type specified in the DOM element "type" attribute
+* @return an overlay widget instance
+*/
 @Override
 public OverlayWidget toAmendableWidget(final Element element) {
 final String nodeName = overlayStrategy.getType(element);
