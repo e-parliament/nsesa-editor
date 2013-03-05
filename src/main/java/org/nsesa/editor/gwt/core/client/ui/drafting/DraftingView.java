@@ -15,6 +15,10 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+
+import java.util.HashMap;
 
 /**
  * The drafting view widget is responsible to display the allowed and mandatory children
@@ -24,16 +28,23 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(DraftingViewImpl.class)
 public interface DraftingView extends IsWidget {
+
+    /**
+     * A callback interfaced for code<>DraftingView</code> interface. The typical implementation
+     * will use the event bus in order to raise different types of events.
+     */
+    public static interface DraftingCallback {
+        /**
+         * Execute this operation when child is selected in
+         * @param child The child selected
+         */
+        void onChildrenSelect(OverlayWidget child);
+    }
+
     /**
      * Clean up the widget content
      */
     void clearAll();
-
-    /**
-     * Add an allowed child in the view
-     * @param widget The widget that will be added in the allowed children area of the view.
-     */
-    void addAllowedChild(IsWidget widget);
 
     /**
      * Set the view title
@@ -42,9 +53,10 @@ public interface DraftingView extends IsWidget {
     void setDraftTitle(String title);
 
     /**
-     * Add a mandatory child in the view
-     * @param widget The widget that will be added in the  mandatory children area of the view.
+     * Refresh the allowed children into the view
+     * @param allowedChildren A Map containing the allowed widget children with their occurrence
+     * @param callback gets called when the user select a child from the interface
      */
-    void addMandatoryChild(IsWidget widget);
+    void refreshAllowedChildren(HashMap<OverlayWidget,Occurrence> allowedChildren, DraftingCallback callback);
 
 }

@@ -15,11 +15,6 @@ package org.nsesa.editor.gwt.core.client.ui.drafting;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -28,15 +23,15 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -58,6 +53,7 @@ public class DraftingController {
     private EventBus eventBus;
     private OverlayWidget originalOverlayWidget;
 
+    private DraftingView.DraftingCallback draftingCallback;
     /**
      * Create a <code>DraftingController</code> with the given parameters
      * @param draftingView The <code>DraftingView</code> widget
@@ -98,6 +94,7 @@ public class DraftingController {
 
     /**
      * Register handlers for {@link SelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
+     * It also create a drafting callback to be called when selecting children from drafting view interface
      * When those events occur <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets are refreshed.
      */
     private void registerListeners() {
@@ -124,6 +121,13 @@ public class DraftingController {
             }
         });
 
+        // set up the callback for drafting view
+        draftingCallback = new DraftingView.DraftingCallback() {
+            @Override
+            public void onChildrenSelect(OverlayWidget child) {
+                eventBus.fireEvent(new DraftingInsertionEvent(child));
+            }
+        };
     }
 
     /**
@@ -149,28 +153,12 @@ public class DraftingController {
                 if (!widget.equals(originalOverlayWidget))
                     draftingAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
 
-                draftingView.clearAll();
                 LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, widget);
+                draftingView.clearAll();
                 draftingView.setDraftTitle(widget.getType());
-                for (final Map.Entry<OverlayWidget, Occurrence> child : children.entrySet()) {
-                    // when selected text is empty do not add any click handler just display the tags
-                    IsWidget allowedChild, mandatoryChild = null;
-                    if (selectedText == null || selectedText.length() == 0) {
-                        allowedChild = createLabelFrom(child.getKey());
-                        if (child.getValue().getMinOccurs() >= 1) {
-                            mandatoryChild = createLabelFrom(child.getKey());
-                        }
-                    } else {
-                        allowedChild = createAnchorFrom(child.getKey());
-                        if (child.getValue().getMinOccurs() >= 1) {
-                            mandatoryChild = createAnchorFrom(child.getKey());
-                        }
-                    }
-                    draftingView.addAllowedChild(allowedChild);
-                    if (mandatoryChild != null) {
-                        draftingView.addMandatoryChild(allowedChild);
-                    }
-                }
+                draftingView.refreshAllowedChildren(
+                        new HashMap<OverlayWidget, Occurrence>(children),
+                        selectedText == null || selectedText.length() == 0 ? null : draftingCallback);
             }
         });
 
@@ -192,37 +180,7 @@ public class DraftingController {
         return draftingAttributesView;
     }
 
-    /**
-     * Create a label based on the given overlay widget
-     * @param overlayWidget The {@link OverlayWidget} used to create a label
-     * @return The label result
-     */
-    private Label createLabelFrom(OverlayWidget overlayWidget) {
-        Label label = new Label(overlayResource.getName(overlayWidget));
-        label.setTitle(overlayResource.getDescription(overlayWidget));
-        label.getElement().addClassName("drafting-" + overlayWidget.getType());
-        return label;
-    };
 
-    /**
-     * Create an anchor from the given overlay widget which fire {@link DraftingInsertionEvent} gwt event
-     * @param overlayWidget The {@link OverlayWidget} used to create an anchor
-     * @return The anchor result
-     */
-    private Anchor createAnchorFrom(final OverlayWidget overlayWidget) {
-        Anchor anchor = new Anchor(overlayResource.getName(overlayWidget));
-        anchor.setTitle(overlayResource.getDescription(overlayWidget));
-        anchor.getElement().addClassName("drafting-" + overlayWidget.getType());
-        anchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                // throw a drafting insertion event
-                clientFactory.getEventBus().fireEvent(
-                        new DraftingInsertionEvent(overlayWidget));
-            }
-        });
-        return anchor;
-    }
 
 
 }
