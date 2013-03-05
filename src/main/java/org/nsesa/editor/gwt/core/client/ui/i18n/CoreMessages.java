@@ -157,4 +157,8 @@ public interface CoreMessages extends Messages {
 
     @Key("amendment.action.cancel")
     String amendmentActionCancel();
+
+    @Key("amendment.selection.number")
+    String amendmentSelection(@PluralCount int arg);
+
 }

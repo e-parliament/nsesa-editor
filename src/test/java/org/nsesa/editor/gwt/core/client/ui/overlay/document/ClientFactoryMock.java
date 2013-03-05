@@ -261,6 +261,11 @@ public class ClientFactoryMock implements ClientFactory {
         public String amendmentActionCancel() {
             return "amendmentActionCancel";
         }
+
+        @Override
+        public String amendmentSelection(@PluralCount int arg) {
+            return "amendmentSelection";
+        }
     };
 
     @Override

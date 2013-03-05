@@ -50,6 +50,9 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsPanelController {
+    /**
+     * Stores hoy many amendments will be displayed per page
+     */
     private static final int AMENDMENTS_PER_PAGE = 2;
 
     private AmendmentsPanelView view;
@@ -183,7 +186,7 @@ public class AmendmentsPanelController {
             amendments.put(amendmentController.getModel().getId(), amendmentController);
         }
         view.refreshAmendmentControllers(amendments);
-        // raise a filter response
+        // fire a filter response
         documentEventBus.fireEvent(new FilterResponseEvent(response.getTotalSize(), currentFilter));
 
         view.selectAmendmentControllers(new ArrayList<String>(Collections2.transform(documentController.getSelectedAmendmentControllers(), new Function<AmendmentController, String>() {
