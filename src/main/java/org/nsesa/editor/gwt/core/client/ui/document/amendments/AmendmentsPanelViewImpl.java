@@ -58,7 +58,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     /**
      * constant used when resize the view
      */
-    private static final int SCROLLBAR_OFFSET = 125;
+    private static final int SCROLLBAR_OFFSET = 145;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
     }

@@ -65,7 +65,6 @@ public class AmendmentsHeaderController {
      * the event bus to raise GWT events
      */
     private DocumentEventBus documentEventBus;
-    private ClientFactory clientFactory;
     /**
      * Used to get reference to {@link ServiceFactory} when user request a given action over selected amendments
      */
@@ -83,15 +82,11 @@ public class AmendmentsHeaderController {
      */
     @Inject
     public AmendmentsHeaderController(final AmendmentsHeaderView view,
-                                      final DocumentEventBus documentEventBus,
-                                      final ClientFactory clientFactory
+                                      final DocumentEventBus documentEventBus
+
     ) {
         this.view = view;
         this.documentEventBus = documentEventBus;
-        this.clientFactory = clientFactory;
-
-        this.selectedAmount.setHTML("&nbsp;&nbsp;" + clientFactory.getCoreMessages().amendmentSelection(0));
-
     }
 
     /**
@@ -316,7 +311,7 @@ public class AmendmentsHeaderController {
         documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
             @Override
             public void onEvent(AmendmentControllerSelectedEvent event) {
-                selectedAmount.setHTML("&nbsp;&nbsp;" + clientFactory.getCoreMessages().amendmentSelection(event.getSelected().size()));
+                selectedAmount.setHTML("&nbsp;&nbsp;" + documentController.getClientFactory().getCoreMessages().amendmentSelection(event.getSelected().size()));
             }
         });
     }
@@ -332,5 +327,8 @@ public class AmendmentsHeaderController {
         registerSelections();
         // register the actions
         registerActions();
+
+        this.selectedAmount.setHTML("&nbsp;&nbsp;" + documentController.getClientFactory().getCoreMessages().amendmentSelection(0));
+
     }
 }
