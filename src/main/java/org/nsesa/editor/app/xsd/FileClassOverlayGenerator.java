@@ -172,8 +172,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                                           PackageNameGenerator packageNameGenerator,
                                           PackageNameGenerator directoryNameGenerator) {
         // create the resource for each namespace
-        for (String key : elementClasses.keySet()) {
-            String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
+        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+            String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
             }
@@ -185,13 +185,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(key);
+            factoryClass.setNameSpace(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
             rootMap.put("overlayClass", factoryClass);
             rootMap.put("factoryName", factoryName);
-            rootMap.put("overlayClasses", elementClasses.get(key));
+            rootMap.put("overlayClasses", entry.getValue());
             rootMap.put("packageNameGenerator", packageNameGenerator);
             writeToFile(file, rootMap, OVERLAY_RESOURCE_TEMPLATE_NAME);
         }
@@ -207,8 +207,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                                          PackageNameGenerator packageNameGenerator,
                                          PackageNameGenerator directoryNameGenerator) {
         // create overlay message properties file for each namespace
-        for (String key : elementClasses.keySet()) {
-            String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
+        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+            String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
             }
@@ -221,12 +221,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(key);
+            factoryClass.setNameSpace(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
             rootMap.put("overlayClass", factoryClass);
-            rootMap.put("overlayClasses", elementClasses.get(key));
+            rootMap.put("overlayClasses", entry.getValue());
             rootMap.put("packageNameGenerator", packageNameGenerator);
 
             writeToFile(classFile, rootMap, OVERLAY_MESSAGE_TEMPLATE_NAME);
@@ -245,8 +245,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                                    PackageNameGenerator packageNameGenerator,
                                    PackageNameGenerator directoryNameGenerator) {
         // create the factory for each namespace
-        for (String key : elementClasses.keySet()) {
-            String factoryName = directoryNameGenerator.getPackageName(key).replace("_", "");
+        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+            String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
             }
@@ -258,12 +258,12 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(key);
+            factoryClass.setNameSpace(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
             rootMap.put("overlayClass", factoryClass);
-            rootMap.put("overlayClasses", elementClasses.get(key));
+            rootMap.put("overlayClasses", entry.getValue());
             rootMap.put("packageNameGenerator", packageNameGenerator);
             writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
         }
