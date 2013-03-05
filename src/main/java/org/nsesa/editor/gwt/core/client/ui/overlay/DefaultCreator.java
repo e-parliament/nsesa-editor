@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -28,6 +29,15 @@ import java.util.*;
  */
 public class DefaultCreator implements Creator {
 
+    protected Excluder excluder;
+
+    /**
+     * Create <code>DefaultCreator</code> with a {@link Excluder} setup
+     */
+    @Inject
+    public DefaultCreator(Excluder excluder) {
+        this.excluder = excluder;
+    }
     /**
      * Returns a map of the allowed siblings with their occurrence for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
      * This implementation returns all allowed siblings according to this overlay widget's parent's
@@ -63,7 +73,10 @@ public class DefaultCreator implements Creator {
             }
         });
         for (final Map.Entry<OverlayWidget, Occurrence> allowedType : list) {
-            allowedChildren.put(allowedType.getKey(), allowedType.getValue());
+            // check the exclusion
+            if (!excluder.excludeChildCandidate(allowedType.getKey(), allowedType.getValue(), overlayWidget)) {
+                allowedChildren.put(allowedType.getKey(), allowedType.getValue());
+            }
         }
         return allowedChildren;
     }
