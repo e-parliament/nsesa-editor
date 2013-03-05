@@ -13,7 +13,6 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
-import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -25,19 +24,11 @@ import java.util.*;
  * Date: 08/11/12 11:23
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
+ * Date 12/01/2013 09:45
  */
 public class DefaultCreator implements Creator {
 
-    protected Excluder excluder;
-
-    /**
-     * Create <code>DefaultCreator</code> with a {@link Excluder} setup
-     */
-    @Inject
-    public DefaultCreator(Excluder excluder) {
-        this.excluder = excluder;
-    }
     /**
      * Returns a map of the allowed siblings with their occurrence for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
      * This implementation returns all allowed siblings according to this overlay widget's parent's
@@ -74,10 +65,46 @@ public class DefaultCreator implements Creator {
         });
         for (final Map.Entry<OverlayWidget, Occurrence> allowedType : list) {
             // check the exclusion
-            if (!excluder.excludeChildCandidate(allowedType.getKey(), allowedType.getValue(), overlayWidget)) {
+            if (!excludeChildCandidate(allowedType.getKey(), allowedType.getValue(), overlayWidget)) {
                 allowedChildren.put(allowedType.getKey(), allowedType.getValue());
             }
         }
         return allowedChildren;
     }
+
+    /**
+     * Can be the candidate a child of a given parent? A candidate can be added as a child if the given occurrence
+     * constraint is not broken, ie there is no possible to add a candidate as a child if the parent already has
+     * a child of the same type and namespace and the <code>occurrence</code> allows only one child of that type
+     * @param candidate {@link OverlayWidget} candidate
+     * @param occurrence {@link Occurrence} of the candidate
+     * @param parent {@link OverlayWidget} the parent of the candidate
+     * @return True when the candidate is not accepted as a child of the given parent
+     */
+    private boolean excludeChildCandidate(OverlayWidget candidate, Occurrence occurrence, OverlayWidget parent) {
+        // strange situation, it should never occur
+        if (occurrence.getMaxOccurs() == 0) {
+            return true;
+        }
+        //allows an infinity
+        if (occurrence.isUnbounded()) {
+            return false;
+        }
+
+        int count = 0;
+        boolean result = false;
+        for (OverlayWidget child : parent.getChildOverlayWidgets()) {
+            if (child.getType().equalsIgnoreCase(candidate.getType()) &&
+                    child.getNamespaceURI().equalsIgnoreCase(candidate.getNamespaceURI())) {
+                //increase the number of childs with the same type and namespace
+                count++;
+                if (count >= occurrence.getMaxOccurs()) {
+                    result = true; // the maximum occurs has been reached
+                    break;
+                }
+            }
+        }
+        return result;
+    }
 }
+
