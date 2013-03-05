@@ -43,6 +43,11 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
      */
     private ClientFactory clientFactory;
 
+    /**
+     * Create <code>CKEditorSelectionChangedPlugin</code> object with the given <code>clientFactory</code>
+     * @param clientFactory {@link ClientFactory} used to fire GWT events through its
+     *                                           reference to {@link org.nsesa.editor.gwt.core.client.ClientFactory#getEventBus()}
+     */
     @Inject
     public CKEditorSelectionChangedPlugin(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -122,6 +127,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
         }
 
+        // check the selection and fire an SelectionChangedEvent to be handled by the other components
         function checkSelection(selection, ed) {
             var env = $wnd.CKEDITOR.env,
                 element = selection.getStartElement(),
@@ -141,16 +147,28 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
             //
         }
 
+        //check the number of DOM elements enclosed into the selection
         function selectMoreTags(selection) {
             if (selection.getType == $wnd.CKEDITOR.SELECTION_TEXT) {
                 return false;
             }
             var ranges = selection.getRanges();
-            return !ranges[0].startContainer.equals(ranges[ranges.length - 1].endContainer);
+            // find start container and end container of the selection
+            // if they are text nodes go to their parents
+            var startContainer = ranges[0].startContainer;
+            while (startContainer != null && startContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
+                startContainer = startContainer.getParent();
+            }
+            var endContainer = ranges[ranges.length - 1].endContainer;
+            while (endContainer != null && endContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
+                endContainer = endContainer.getParent();
+            }
+            return !startContainer.equals(endContainer);
         }
 
         editor.on('mode', function () {
-            // get the listeners if they exists
+            // reapply the listeners if they exists, since they are removed when switching back and forth with the
+            //source representation of the editor
             if (editor.mode != 'source') {
                 selectionHandle(editor);
             }
