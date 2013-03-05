@@ -52,7 +52,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     /**
      * This correction value is supposed to be the height of the header and footer (plus any margin that might come into play)
      */
-    private static final int SCROLLBAR_OFFSET = 100;
+    private static final int SCROLLBAR_OFFSET = 122;
 
     private DocumentEventBus documentEventBus;
 
@@ -74,7 +74,7 @@ public class ContentViewImpl extends Composite implements ContentView {
         documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
-
+                // this needs to be a fixed height, or you will not get a scroll bar.
                 final int height = event.getHeight() - SCROLLBAR_OFFSET;
                 LOG.info("Setting scroll panel to " + height);
                 setScrollPanelHeight(height + "px");

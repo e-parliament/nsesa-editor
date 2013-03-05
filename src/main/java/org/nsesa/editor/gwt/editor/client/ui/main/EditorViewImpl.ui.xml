@@ -50,7 +50,7 @@
         <g:center>
             <g:HorizontalPanel ui:field="documentsPanel" styleName="{res.documentsPanel}"/>
         </g:center>
-        <g:south size="0">
+        <g:south size="20">
             <footer:FooterView ui:field="footerView" styleName="{res.footer}"/>
         </g:south>
     </g:DockLayoutPanel>
