@@ -25,12 +25,10 @@ import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -48,14 +46,14 @@ public class DefaultAmendmentController implements AmendmentController {
 
     protected final AmendmentView extendedView;
 
+    protected final AmendmentActionPanelController amendmentActionPanelController;
+
     protected AmendmentContainerDTO amendment;
 
     /**
      * Reference to the parent amendable widget we've been added to.
      */
     protected OverlayWidget amendedOverlayWidget;
-
-    protected AmendmentActionPanelController amendmentActionPanelController;
 
     protected int order;
 
@@ -66,12 +64,16 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
-                                      final AmendmentView amendmentExtendedView) {
+                                      final AmendmentView amendmentExtendedView,
+                                      final AmendmentActionPanelController amendmentActionPanelController) {
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
+        this.amendmentActionPanelController = amendmentActionPanelController;
+
+        registerListeners();
     }
 
-    protected void registerListeners() {
+    private void registerListeners() {
 
         final ClickHandler confirmationHandler = new ClickHandler() {
             @Override
@@ -87,24 +89,34 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         };
 
-        final ClientFactory clientFactory = documentController.getClientFactory();
-        final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
-                confirmationHandler,
-                clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
-                cancelHandler);
-
         view.getDeleteButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+
+                final ClientFactory clientFactory = documentController.getClientFactory();
+                final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
+                        confirmationHandler,
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
+                        cancelHandler);
+
                 documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
         extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+
+                final ClientFactory clientFactory = documentController.getClientFactory();
+                final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
+                        confirmationHandler,
+                        clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
+                        cancelHandler);
                 documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
@@ -212,23 +224,12 @@ public class DefaultAmendmentController implements AmendmentController {
     /**
      * Sets the document controller. If the document controller is not <tt>null</tt> (which can happen if an amendment
      * controller is no longer injected in a document controller), then we also register the event listeners.
+     *
      * @param documentController the document controller
      */
     @Override
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
-        if (documentController != null) {
-            registerListeners();
-
-            // only now we have the possibility to inject the amendment action panel controller
-            this.amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
-            this.documentController.getDocumentEventBus().addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
-                @Override
-                public void onEvent(DocumentScrollEvent event) {
-                    amendmentActionPanelController.hide();
-                }
-            });
-        }
     }
 
     @Override

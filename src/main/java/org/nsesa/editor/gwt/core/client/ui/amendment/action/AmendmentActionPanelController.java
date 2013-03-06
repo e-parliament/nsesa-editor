@@ -13,7 +13,6 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.amendment.action;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,8 +25,11 @@ import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
@@ -59,6 +61,11 @@ public class AmendmentActionPanelController {
     protected final AmendmentActionPanelView view;
 
     /**
+     * Document scoped event bus.
+     */
+    protected final DocumentEventBus documentEventBus;
+
+    /**
      * The parent amendment controller.
      */
     protected AmendmentController amendmentController;
@@ -84,36 +91,36 @@ public class AmendmentActionPanelController {
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
 
     @Inject
-    public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView) {
+    public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView,
+                                          final CoreMessages coreMessages,
+                                          final DocumentEventBus documentEventBus) {
         this.view = amendmentActionPanelView;
         this.popupPanel.setWidget(amendmentActionPanelView);
+        this.documentEventBus = documentEventBus;
 
         // create operations on the amendment
         addWidget(anchorTable);
-        anchorTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         addWidget(anchorWithdraw);
-        anchorWithdraw.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         addSeparator();
         addWidget(anchorDelete);
-        anchorDelete.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+
+        // set the correct anchor labels
+        anchorTable.setText(coreMessages.amendmentActionTable());
+        anchorWithdraw.setText(coreMessages.amendmentActionWithdraw());
+        anchorDelete.setText(coreMessages.amendmentActionDelete());
+
+        registerListeners();
     }
 
     /**
      * Registers the event listeners on the various anchors.
      */
-    protected void registerListeners() {
-
-        final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
-        final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
-
-        // set the correct anchor labels
-        anchorTable.setText(clientFactory.getCoreMessages().amendmentActionTable());
-        anchorWithdraw.setText(clientFactory.getCoreMessages().amendmentActionWithdraw());
-        anchorDelete.setText(clientFactory.getCoreMessages().amendmentActionDelete());
-
+    private void registerListeners() {
         anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
                 final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
                 popupPanel.hide();
                 serviceFactory.getGwtAmendmentService().tableAmendmentContainers(clientFactory.getClientContext(),
@@ -139,6 +146,8 @@ public class AmendmentActionPanelController {
         anchorWithdraw.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
                 final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
                 popupPanel.hide();
                 serviceFactory.getGwtAmendmentService().withdrawAmendmentContainers(clientFactory.getClientContext(),
@@ -164,6 +173,8 @@ public class AmendmentActionPanelController {
         anchorDelete.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+                final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                final ServiceFactory serviceFactory = amendmentController.getDocumentController().getServiceFactory();
                 popupPanel.hide();
                 // ask for confirmation
                 amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new ConfirmationEvent(
@@ -197,6 +208,13 @@ public class AmendmentActionPanelController {
                 }
                 ));
 
+            }
+        });
+
+        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+            @Override
+            public void onEvent(DocumentScrollEvent event) {
+                hide();
             }
         });
     }
@@ -251,6 +269,5 @@ public class AmendmentActionPanelController {
      */
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
-        registerListeners();
     }
 }
