@@ -50,7 +50,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
     public void setup() {
         AmendmentContainerDTO amendmentContainerDTO = new AmendmentContainerDTO();
         amendmentContainerDTO.setSourceReference(reference);
-        amendmentController = new DefaultAmendmentController(new AmendmentViewImpl(null), new AmendmentViewImpl(null));
+        amendmentController = new DefaultAmendmentController(new AmendmentViewImpl(null), new AmendmentViewImpl(null), null);
         amendmentController.setModel(amendmentContainerDTO);
 
         root = new OverlayWidgetImpl();
