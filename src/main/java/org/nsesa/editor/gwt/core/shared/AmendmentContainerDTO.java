@@ -109,10 +109,10 @@ public class AmendmentContainerDTO implements IsSerializable {
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + revisionID.hashCode();
-        result = 31 * result + languageISO.hashCode();
+        result = 31 * result + (revisionID != null ? revisionID.hashCode() :0);
+        result = 31 * result + (languageISO != null ? languageISO.hashCode() :0);
         result = 31 * result + (amendmentAction != null ? amendmentAction.hashCode() : 0);
-        result = 31 * result + amendmentContainerStatus.hashCode();
+        result = 31 * result + (amendmentContainerStatus != null ? amendmentContainerStatus.hashCode() :0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
         result = 31 * result + (sourceReference != null ? sourceReference.hashCode() : 0);
         result = 31 * result + (targetReferences != null ? targetReferences.hashCode() : 0);
