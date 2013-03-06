@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.amendment.action;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -103,6 +104,10 @@ public class AmendmentActionPanelController {
         addWidget(anchorWithdraw);
         addSeparator();
         addWidget(anchorDelete);
+
+        anchorTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorWithdraw.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorDelete.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 
         // set the correct anchor labels
         anchorTable.setText(coreMessages.amendmentActionTable());
