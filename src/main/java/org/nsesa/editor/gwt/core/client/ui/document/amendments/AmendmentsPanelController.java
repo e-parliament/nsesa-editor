@@ -118,9 +118,9 @@ public class AmendmentsPanelController {
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+        documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
+            public void onEvent(AmendmentContainerSavedEvent event) {
                 refreshAmendments();
             }
         });
