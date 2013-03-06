@@ -18,11 +18,6 @@ import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.util.Filter;
-import org.nsesa.editor.gwt.core.client.util.FilterResponse;
-import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
@@ -30,8 +25,13 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Filter;
+import org.nsesa.editor.gwt.core.client.util.FilterResponse;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -161,12 +161,10 @@ public class AmendmentsPanelController {
     }
 
     /**
-     * Create an initial {@link Filter} and filter the amendments based on it
+     * Create an initial {@link Filter} if not exists and filter the amendments based on it
      */
     private void refreshAmendments() {
-        if (currentFilter != null) {
-            currentFilter.setStart(0);
-        } else {
+        if (currentFilter == null) {
             currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
                     AmendmentController.ORDER_COMPARATOR,
                     DEFAULT_SELECTION);
@@ -182,19 +180,25 @@ public class AmendmentsPanelController {
     private void filterAmendments() {
         final Map<String, AmendmentController> amendments = new LinkedHashMap<String, AmendmentController>();
         final FilterResponse<AmendmentController> response = documentController.getAmendmentManager().getAmendmentControllers(currentFilter);
-        for (final AmendmentController amendmentController : response.getResult()) {
-            amendments.put(amendmentController.getModel().getId(), amendmentController);
-        }
-        view.refreshAmendmentControllers(amendments);
-        // fire a filter response
-        documentEventBus.fireEvent(new FilterResponseEvent(response.getTotalSize(), currentFilter));
-
-        view.selectAmendmentControllers(new ArrayList<String>(Collections2.transform(documentController.getSelectedAmendmentControllers(), new Function<AmendmentController, String>() {
-            @Override
-            public String apply(AmendmentController input) {
-                return input.getModel().getId();
+        if (response.getResult().size() == 0 && currentFilter.getStart() != 0) {
+            //fire a new event to go to the first page when they are no results to be displayed in the current page
+            currentFilter.setStart(0);
+            documentEventBus.fireEvent(new FilterRequestEvent(currentFilter));
+        } else {
+            for (final AmendmentController amendmentController : response.getResult()) {
+                amendments.put(amendmentController.getModel().getId(), amendmentController);
             }
-        })));
+            view.refreshAmendmentControllers(amendments);
+            // fire a filter response
+            documentEventBus.fireEvent(new FilterResponseEvent(response.getTotalSize(), currentFilter));
+
+            view.selectAmendmentControllers(new ArrayList<String>(Collections2.transform(documentController.getSelectedAmendmentControllers(), new Function<AmendmentController, String>() {
+                @Override
+                public String apply(AmendmentController input) {
+                    return input.getModel().getId();
+                }
+            })));
+        }
     }
 }
 

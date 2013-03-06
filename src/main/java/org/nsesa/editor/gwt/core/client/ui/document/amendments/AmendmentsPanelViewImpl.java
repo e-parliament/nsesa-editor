@@ -66,7 +66,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     /**
-     * facilites scrolling functionality when there are more amendments to be listed
+     * facilitates scrolling functionality when there are more amendments to be listed
      */
     @UiField
     ScrollPanel scrollPanel;
