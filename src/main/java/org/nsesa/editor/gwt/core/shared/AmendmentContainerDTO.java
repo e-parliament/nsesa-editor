@@ -96,7 +96,8 @@ public class AmendmentContainerDTO implements IsSerializable {
         if (!amendmentContainerStatus.equals(that.amendmentContainerStatus)) return false;
         if (body != null ? !body.equals(that.body) : that.body != null) return false;
         if (!id.equals(that.id)) return false;
-        if (!languageISO.equals(that.languageISO)) return false;
+        if (languageISO != null ? !languageISO.equals(that.languageISO) : that.languageISO != null)
+            return false;
         if (!revisionID.equals(that.revisionID)) return false;
         if (sourceReference != null ? !sourceReference.equals(that.sourceReference) : that.sourceReference != null)
             return false;
@@ -109,10 +110,10 @@ public class AmendmentContainerDTO implements IsSerializable {
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + (revisionID != null ? revisionID.hashCode() :0);
-        result = 31 * result + (languageISO != null ? languageISO.hashCode() :0);
+        result = 31 * result + (revisionID != null ? revisionID.hashCode() : 0);
+        result = 31 * result + (languageISO != null ? languageISO.hashCode() : 0);
         result = 31 * result + (amendmentAction != null ? amendmentAction.hashCode() : 0);
-        result = 31 * result + (amendmentContainerStatus != null ? amendmentContainerStatus.hashCode() :0);
+        result = 31 * result + (amendmentContainerStatus != null ? amendmentContainerStatus.hashCode() : 0);
         result = 31 * result + (body != null ? body.hashCode() : 0);
         result = 31 * result + (sourceReference != null ? sourceReference.hashCode() : 0);
         result = 31 * result + (targetReferences != null ? targetReferences.hashCode() : 0);

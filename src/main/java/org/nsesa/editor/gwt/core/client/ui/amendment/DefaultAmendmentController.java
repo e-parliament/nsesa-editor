@@ -46,7 +46,7 @@ public class DefaultAmendmentController implements AmendmentController {
 
     protected final AmendmentView extendedView;
 
-    protected final AmendmentActionPanelController amendmentActionPanelController;
+    protected AmendmentActionPanelController amendmentActionPanelController;
 
     protected AmendmentContainerDTO amendment;
 
@@ -64,11 +64,9 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
-                                      final AmendmentView amendmentExtendedView,
-                                      final AmendmentActionPanelController amendmentActionPanelController) {
+                                      final AmendmentView amendmentExtendedView) {
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
-        this.amendmentActionPanelController = amendmentActionPanelController;
 
         registerListeners();
     }
@@ -230,6 +228,9 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
+        if (documentController != null) {
+            amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
+        }
     }
 
     @Override
@@ -276,5 +277,9 @@ public class DefaultAmendmentController implements AmendmentController {
         // TODO i18n
         view.setTitle("Amendment " + order);
         extendedView.setTitle("Amendment " + order);
+    }
+
+    public AmendmentActionPanelController getAmendmentActionPanelController() {
+        return amendmentActionPanelController;
     }
 }

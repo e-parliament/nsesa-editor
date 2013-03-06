@@ -62,11 +62,6 @@ public class AmendmentActionPanelController {
     protected final AmendmentActionPanelView view;
 
     /**
-     * Document scoped event bus.
-     */
-    protected final DocumentEventBus documentEventBus;
-
-    /**
      * The parent amendment controller.
      */
     protected AmendmentController amendmentController;
@@ -93,11 +88,9 @@ public class AmendmentActionPanelController {
 
     @Inject
     public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView,
-                                          final CoreMessages coreMessages,
-                                          final DocumentEventBus documentEventBus) {
+                                          final CoreMessages coreMessages) {
         this.view = amendmentActionPanelView;
         this.popupPanel.setWidget(amendmentActionPanelView);
-        this.documentEventBus = documentEventBus;
 
         // create operations on the amendment
         addWidget(anchorTable);
@@ -213,13 +206,6 @@ public class AmendmentActionPanelController {
                 }
                 ));
 
-            }
-        });
-
-        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
-            @Override
-            public void onEvent(DocumentScrollEvent event) {
-                hide();
             }
         });
     }

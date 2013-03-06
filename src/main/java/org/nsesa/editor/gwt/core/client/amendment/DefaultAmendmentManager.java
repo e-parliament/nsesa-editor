@@ -318,6 +318,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendmentContainerDTO) {
         final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
         amendmentController.setModel(amendmentContainerDTO);
+        amendmentController.setDocumentController(documentController);
         return amendmentController;
     }
 

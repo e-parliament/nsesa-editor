@@ -157,7 +157,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended, null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         Assert.assertTrue(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
     }
@@ -187,7 +187,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended, null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         Assert.assertTrue("Make sure the before method is hit", hits[0]);
         Assert.assertTrue("Make sure the after method is hit", hits[1]);
@@ -213,7 +213,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended, null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         Assert.assertTrue("Make sure the before method is hit", hits[0]);
         Assert.assertFalse("Make sure the after method is not hit", hits[1]);
@@ -233,7 +233,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended,null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         overlayWidget.removeAmendmentController(amendmentController);
         Assert.assertFalse(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
@@ -258,7 +258,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended, null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         overlayWidget.removeAmendmentController(amendmentController);
         Assert.assertTrue("Make sure the before method is hit", hits[0]);
@@ -285,7 +285,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended, null);
+        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
         overlayWidget.addAmendmentController(amendmentController);
         overlayWidget.removeAmendmentController(amendmentController);
         Assert.assertTrue("Make sure the before method is hit", hits[0]);
@@ -530,7 +530,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final ClientFactory clientFactory = new ClientFactoryMock();
         final AmendmentView amendmentView = new AmendmentViewImpl(null);
         final AmendmentView amendmentViewExt = new AmendmentViewImpl(null);
-        AmendmentController amendmentController1 = new DefaultAmendmentController(amendmentView, amendmentViewExt, null);
+        AmendmentController amendmentController1 = new DefaultAmendmentController(amendmentView, amendmentViewExt);
         overlayWidget.addAmendmentController(amendmentController1);
         Assert.assertTrue(overlayWidget.isAmended());
     }

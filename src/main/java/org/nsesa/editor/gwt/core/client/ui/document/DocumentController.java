@@ -780,6 +780,7 @@ public class DocumentController {
 
     /**
      * Sets the document ID on this controller.
+     *
      * @param documentID the document ID
      */
     public void setDocumentID(String documentID) {
@@ -788,6 +789,7 @@ public class DocumentController {
 
     /**
      * Get the document ID.
+     *
      * @return the document ID
      */
     public String getDocumentID() {
@@ -796,6 +798,7 @@ public class DocumentController {
 
     /**
      * Get the document DTO.
+     *
      * @return the document DTO.
      */
     public DocumentDTO getDocument() {
@@ -804,6 +807,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the amendment manager for this document controller.
+     *
      * @return the amendment manager
      */
     public AmendmentManager getAmendmentManager() {
@@ -812,6 +816,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the creator for this document controller.
+     *
      * @return the creator
      */
     public Creator getCreator() {
@@ -820,6 +825,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the locator for this document controller.
+     *
      * @return the locator
      */
     public Locator getLocator() {
@@ -828,6 +834,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the client factory for this document controller.
+     *
      * @return the client factory
      */
     public ClientFactory getClientFactory() {
@@ -836,6 +843,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the service factory for this document controller.
+     *
      * @return the service factory
      */
     public ServiceFactory getServiceFactory() {
@@ -844,6 +852,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the private event bus for this document controller.
+     *
      * @return the private event bus
      */
     public DocumentEventBus getDocumentEventBus() {
@@ -852,6 +861,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the overlay factory for this document controller.
+     *
      * @return the overlay factory
      */
     public OverlayFactory getOverlayFactory() {
@@ -860,6 +870,7 @@ public class DocumentController {
 
     /**
      * Get the locally selected amendment controllers for this document controller.
+     *
      * @return the selected amendent controllers
      */
     public List<AmendmentController> getSelectedAmendmentControllers() {
@@ -868,6 +879,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the diffing manager for this document controller.
+     *
      * @return the diffing manager
      */
     public DiffingManager getDiffingManager() {
@@ -876,6 +888,7 @@ public class DocumentController {
 
     /**
      * Get a reference to the underlaying source file content controller for this document controller.
+     *
      * @return
      */
     public SourceFileController getSourceFileController() {
