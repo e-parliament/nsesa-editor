@@ -30,6 +30,7 @@
         .tabHeader {
             margin: 0;
             padding: 0;
+            cursor: pointer;
         }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
