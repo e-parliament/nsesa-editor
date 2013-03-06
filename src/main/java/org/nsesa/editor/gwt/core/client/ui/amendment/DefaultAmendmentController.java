@@ -24,7 +24,6 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -45,8 +44,6 @@ public class DefaultAmendmentController implements AmendmentController {
     protected final AmendmentView view;
 
     protected final AmendmentView extendedView;
-
-    protected AmendmentActionPanelController amendmentActionPanelController;
 
     protected AmendmentContainerDTO amendment;
 
@@ -136,8 +133,8 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
-                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                documentController.getAmendmentActionPanelController().setAmendmentController(DefaultAmendmentController.this);
+                documentController.getAmendmentActionPanelController().show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
         });
 
@@ -145,8 +142,8 @@ public class DefaultAmendmentController implements AmendmentController {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
-                amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
-                amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                documentController.getAmendmentActionPanelController().setAmendmentController(DefaultAmendmentController.this);
+                documentController.getAmendmentActionPanelController().show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
             }
         });
 
@@ -228,9 +225,6 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
-        if (documentController != null) {
-            amendmentActionPanelController = documentController.getInjector().getAmendmentActionPanelController();
-        }
     }
 
     @Override
@@ -277,9 +271,5 @@ public class DefaultAmendmentController implements AmendmentController {
         // TODO i18n
         view.setTitle("Amendment " + order);
         extendedView.setTitle("Amendment " + order);
-    }
-
-    public AmendmentActionPanelController getAmendmentActionPanelController() {
-        return amendmentActionPanelController;
     }
 }

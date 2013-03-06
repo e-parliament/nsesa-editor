@@ -34,6 +34,7 @@ import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEventHan
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
@@ -162,6 +163,13 @@ public class DocumentController {
     @Scope(DOCUMENT)
     protected final AmendmentsHeaderController amendmentsHeaderController;
 
+
+    /**
+     * UI controller for the amendments panel header.
+     */
+    @Scope(DOCUMENT)
+    protected final AmendmentActionPanelController amendmentActionPanelController;
+
     /**
      * UI controller for the info panel tab.
      */
@@ -215,6 +223,7 @@ public class DocumentController {
         this.documentHeaderController = documentInjector.getDocumentHeaderController();
         this.deadlineController = documentInjector.getDeadlineController();
         this.amendmentsHeaderController = documentInjector.getAmendmentsHeaderController();
+        this.amendmentActionPanelController = documentInjector.getAmendmentActionPanelController();
 
         // set references in the child controllers
         this.diffingManager.setDocumentController(this);
@@ -283,6 +292,14 @@ public class DocumentController {
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
                 clientFactory.getEventBus().fireEvent(event);
+            }
+        });
+
+        // when we detect a scrolling event, hide the amendment action panel
+        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+            @Override
+            public void onEvent(DocumentScrollEvent event) {
+                amendmentActionPanelController.hide();
             }
         });
 
@@ -887,12 +904,20 @@ public class DocumentController {
     }
 
     /**
-     * Get a reference to the underlaying source file content controller for this document controller.
+     * Get a reference to the underlying source file content controller for this document controller.
      *
-     * @return
+     * @return the source file controller
      */
     public SourceFileController getSourceFileController() {
         return sourceFileController;
+    }
+
+    /**
+     * Return a reference to the document-wide singleton for the amendment action panel.
+     * @return the amendment action panel
+     */
+    public AmendmentActionPanelController getAmendmentActionPanelController() {
+        return amendmentActionPanelController;
     }
 
     @Override
