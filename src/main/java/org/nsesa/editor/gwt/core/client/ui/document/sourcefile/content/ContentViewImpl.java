@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -42,6 +43,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class ContentViewImpl extends Composite implements ContentView {
+
+    private HandlerRegistration resizeEventHandlerRegistration;
 
     interface MyUiBinder extends UiBinder<Widget, ContentViewImpl> {
     }
@@ -71,7 +74,7 @@ public class ContentViewImpl extends Composite implements ContentView {
     }
 
     private void registerListeners() {
-        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+        resizeEventHandlerRegistration = documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 // this needs to be a fixed height, or you will not get a scroll bar.
@@ -80,6 +83,10 @@ public class ContentViewImpl extends Composite implements ContentView {
                 setScrollPanelHeight(height + "px");
             }
         });
+    }
+
+    public void removeListeners() {
+        resizeEventHandlerRegistration.removeHandler();
     }
 
     /**

@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -88,6 +89,11 @@ public class ActionBarController {
      * {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController}.
      */
     protected SourceFileController sourceFileController;
+    private HandlerRegistration modifyHandlerRegistration;
+    private HandlerRegistration deleteHandlerRegistration;
+    private HandlerRegistration childHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration documentScrollEventHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
 
     @Inject
     public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
@@ -117,7 +123,7 @@ public class ActionBarController {
 
     private void registerListeners() {
         // translate the click on the modify handler into a request to create a new modification amendment
-        view.getModifyHandler().addClickHandler(new ClickHandler() {
+        modifyHandlerRegistration = view.getModifyHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (overlayWidget != null) {
@@ -126,7 +132,7 @@ public class ActionBarController {
             }
         });
         // translate the click on the delete handler into a request to create a new deletion amendment
-        view.getDeleteHandler().addClickHandler(new ClickHandler() {
+        deleteHandlerRegistration = view.getDeleteHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (overlayWidget != null) {
@@ -135,7 +141,7 @@ public class ActionBarController {
             }
         });
         // translate the click on the child handler into a request to create a new element amendment
-        view.getChildHandler().addClickHandler(new ClickHandler() {
+        childHandlerRegistration = view.getChildHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (overlayWidget != null) {
@@ -149,7 +155,7 @@ public class ActionBarController {
             }
         });
         // we hide this toolbar as soon as the user scrolls the content
-        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+        documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
                 if (event.getDocumentController() == sourceFileController.getDocumentController() || sourceFileController.getDocumentController() == null) {
@@ -159,12 +165,20 @@ public class ActionBarController {
         });
 
         // hide this panel as soon as the an amendment create event was published
-        documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 popupPanel.hide();
             }
         });
+    }
+
+    public void removeListeners() {
+        modifyHandlerRegistration.removeHandler();
+        deleteHandlerRegistration.removeHandler();
+        childHandlerRegistration.removeHandler();
+        documentScrollEventHandlerRegistration.removeHandler();
+        amendmentContainerCreateEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -304,6 +318,7 @@ public class ActionBarController {
 
     /**
      * The overlay widget we are considered to be 'attached' to.
+     *
      * @return the overlay widget
      */
     public OverlayWidget getOverlayWidget() {

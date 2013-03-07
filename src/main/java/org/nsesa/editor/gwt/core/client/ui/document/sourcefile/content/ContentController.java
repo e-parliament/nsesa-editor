@@ -18,6 +18,7 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -62,6 +63,7 @@ public class ContentController {
      * Flag to keep track if the document content was set already or not.
      */
     private boolean contentLoaded;
+    private HandlerRegistration scrollHandlerRegistration;
 
     @Inject
     public ContentController(final DocumentEventBus documentEventBus, final ContentView view) {
@@ -73,13 +75,17 @@ public class ContentController {
     }
 
     private void registerListeners() {
-        view.getScrollPanel().addScrollHandler(new ScrollHandler() {
+        scrollHandlerRegistration = view.getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
                 if (sourceFileController != null)
                     documentEventBus.fireEvent(new DocumentScrollEvent(sourceFileController.getDocumentController()));
             }
         });
+    }
+
+    public void removeListeners() {
+        scrollHandlerRegistration.removeHandler();
     }
 
     /**

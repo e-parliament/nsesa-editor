@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
@@ -192,6 +193,30 @@ public class DocumentController {
      */
     private final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
 
+    // ------------- event handler registration -----------
+    private HandlerRegistration switchTabEventHandlerRegistration;
+    private HandlerRegistration amendmentControllerRemovedFromSelectionEventHandlerRegistration;
+    private HandlerRegistration amendmentControllerAddToSelectionEventHandlerRegistration;
+    private HandlerRegistration amendmentControllerSelectEventHandlerRegistration;
+    private HandlerRegistration amendmentControllerSelectionActionEventHandlerRegistration;
+    private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerUpdatedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
+    private HandlerRegistration documentModeChangeEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
+    private HandlerRegistration notificationEventHandlerRegistration;
+    private HandlerRegistration confirmationEventHandlerRegistration;
+    private HandlerRegistration criticalEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
+    private HandlerRegistration documentScrollEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetSelectEventHandlerRegistration;
+    private HandlerRegistration resizeEventHandlerRegistration;
+    private HandlerRegistration documentScrollToEventHandlerRegistration;
+
     @Inject
     public DocumentController(final ClientFactory clientFactory,
                               final ServiceFactory serviceFactory,
@@ -247,7 +272,7 @@ public class DocumentController {
     // event handler.
     private void registerListeners() {
 
-        clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
+        documentScrollToEventHandlerRegistration = clientFactory.getEventBus().addHandler(DocumentScrollToEvent.TYPE, new DocumentScrollToEventHandler() {
             @Override
             public void onEvent(DocumentScrollToEvent event) {
                 if (event.getDocumentController() == DocumentController.this) {
@@ -257,7 +282,7 @@ public class DocumentController {
         });
 
         // forward the resize event
-        clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+        resizeEventHandlerRegistration = clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
@@ -265,7 +290,7 @@ public class DocumentController {
             }
         });
 
-        clientFactory.getEventBus().addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
+        overlayWidgetSelectEventHandlerRegistration = clientFactory.getEventBus().addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
             @Override
             public void onEvent(OverlayWidgetSelectEvent event) {
                 boolean alreadySelected = false;
@@ -287,7 +312,7 @@ public class DocumentController {
         });
 
         // forward the amendment injected event to the parent event bus
-        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
@@ -296,7 +321,7 @@ public class DocumentController {
         });
 
         // when we detect a scrolling event, hide the amendment action panel
-        documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
+        documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
             public void onEvent(DocumentScrollEvent event) {
                 amendmentActionPanelController.hide();
@@ -304,7 +329,7 @@ public class DocumentController {
         });
 
         // forward the edit event
-        documentEventBus.addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
+        amendmentContainerEditEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
@@ -313,7 +338,7 @@ public class DocumentController {
         });
 
         // forward the critical error event
-        documentEventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
+        criticalEventHandlerRegistration = documentEventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
             @Override
             public void onEvent(CriticalErrorEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
@@ -321,7 +346,7 @@ public class DocumentController {
         });
 
         // forward the confirmation event
-        documentEventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
+        confirmationEventHandlerRegistration = documentEventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
             @Override
             public void onEvent(ConfirmationEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
@@ -329,7 +354,7 @@ public class DocumentController {
         });
 
         // forward the notification event to the parent event bus
-        documentEventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
+        notificationEventHandlerRegistration = documentEventBus.addHandler(NotificationEvent.TYPE, new NotificationEventHandler() {
             @Override
             public void onEvent(NotificationEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
@@ -337,7 +362,7 @@ public class DocumentController {
         });
 
         // after an amendment has been saved, we have to redo its diffing
-        documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
+        amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
                 diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
@@ -346,7 +371,7 @@ public class DocumentController {
 
         // if an amendment has been successfully deleted, we need to update our selection and active widget
         // (since it might have been part of it), and renumber the existing amendments locally
-        documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 final AmendmentController amendmentController = event.getAmendmentController();
@@ -365,7 +390,7 @@ public class DocumentController {
         });
 
         // applying a new state to the document controller
-        documentEventBus.addHandler(DocumentModeChangeEvent.TYPE, new DocumentModeChangeEventHandler() {
+        documentModeChangeEventHandlerRegistration = documentEventBus.addHandler(DocumentModeChangeEvent.TYPE, new DocumentModeChangeEventHandler() {
             @Override
             public void onEvent(DocumentModeChangeEvent event) {
                 LOG.info("Applying state " + event.getState() + " to mode " + event.getDocumentMode());
@@ -374,7 +399,7 @@ public class DocumentController {
         });
 
         // simple logging of amendment container status transitions
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 LOG.info("Amendment " + event.getAmendmentController().getModel() + " had its status updated from "
@@ -383,7 +408,7 @@ public class DocumentController {
         });
 
         // forward the create event to the parent event bus
-        documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 clientFactory.getEventBus().fireEvent(event);
@@ -391,7 +416,7 @@ public class DocumentController {
         });
 
         // forward an injection request to the amendment manager, and update the local numbering
-        documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
+        amendmentContainerInjectEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectEvent event) {
                 for (final OverlayWidget overlayWidget : sourceFileController.getOverlayWidgets()) {
@@ -405,7 +430,7 @@ public class DocumentController {
         });
 
         // if an amendment is updated, update the revision and renumber the amendments
-        documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
+        amendmentContainerUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerUpdatedEvent event) {
                 final OverlayWidget overlayWidget = event.getOldRevision().getAmendedOverlayWidget();
@@ -418,7 +443,7 @@ public class DocumentController {
         });
 
         // when the document should be reloaded, clear all amendments (they will be requested later again)
-        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+        documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 // clear the previous amendable widgets
@@ -434,7 +459,7 @@ public class DocumentController {
         });
 
         // execute an action on the selected amendments
-        documentEventBus.addHandler(AmendmentControllerSelectionActionEvent.TYPE, new AmendmentControllerSelectionActionEventHandler() {
+        amendmentControllerSelectionActionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerSelectionActionEvent.TYPE, new AmendmentControllerSelectionActionEventHandler() {
             @Override
             public void onEvent(AmendmentControllerSelectionActionEvent event) {
                 event.getAction().execute(selectedAmendmentControllers);
@@ -442,7 +467,7 @@ public class DocumentController {
         });
 
         // apply a selection
-        documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
+        amendmentControllerSelectEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
             @Override
             public void onEvent(AmendmentControllerSelectionEvent event) {
                 applySelection(event.getSelection());
@@ -450,7 +475,7 @@ public class DocumentController {
         });
 
         // add an amendment to the selection
-        documentEventBus.addHandler(AmendmentControllerAddToSelectionEvent.TYPE, new AmendmentControllerAddToSelectionEventHandler() {
+        amendmentControllerAddToSelectionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerAddToSelectionEvent.TYPE, new AmendmentControllerAddToSelectionEventHandler() {
             @Override
             public void onEvent(AmendmentControllerAddToSelectionEvent event) {
                 addToSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
@@ -458,7 +483,7 @@ public class DocumentController {
         });
 
         // remove an amendment from the selection
-        documentEventBus.addHandler(AmendmentControllerRemoveFromSelectionEvent.TYPE, new AmendmentControllerRemoveFromSelectionEventHandler() {
+        amendmentControllerRemovedFromSelectionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerRemoveFromSelectionEvent.TYPE, new AmendmentControllerRemoveFromSelectionEventHandler() {
             @Override
             public void onEvent(AmendmentControllerRemoveFromSelectionEvent event) {
                 removeFromSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
@@ -466,12 +491,37 @@ public class DocumentController {
         });
 
         // handle requests to switch the document tabs
-        documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
+        switchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
             @Override
             public void onEvent(SwitchTabEvent event) {
                 view.switchToTab(event.getTabIndex());
             }
         });
+    }
+
+    public void removeListeners() {
+        switchTabEventHandlerRegistration.removeHandler();
+        amendmentControllerRemovedFromSelectionEventHandlerRegistration.removeHandler();
+        amendmentControllerAddToSelectionEventHandlerRegistration.removeHandler();
+        amendmentControllerSelectEventHandlerRegistration.removeHandler();
+        amendmentControllerSelectionActionEventHandlerRegistration.removeHandler();
+        documentRefreshRequestEventHandlerRegistration.removeHandler();
+        amendmentContainerUpdatedEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectEventHandlerRegistration.removeHandler();
+        amendmentContainerCreateEventHandlerRegistration.removeHandler();
+        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
+        documentModeChangeEventHandlerRegistration.removeHandler();
+        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
+        amendmentContainerSavedEventHandlerRegistration.removeHandler();
+        notificationEventHandlerRegistration.removeHandler();
+        confirmationEventHandlerRegistration.removeHandler();
+        criticalEventHandlerRegistration.removeHandler();
+        amendmentContainerEditEventHandlerRegistration.removeHandler();
+        documentScrollEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
+        overlayWidgetSelectEventHandlerRegistration.removeHandler();
+        resizeEventHandlerRegistration.removeHandler();
+        documentScrollToEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -914,6 +964,7 @@ public class DocumentController {
 
     /**
      * Return a reference to the document-wide singleton for the amendment action panel.
+     *
      * @return the amendment action panel
      */
     public AmendmentActionPanelController getAmendmentActionPanelController() {

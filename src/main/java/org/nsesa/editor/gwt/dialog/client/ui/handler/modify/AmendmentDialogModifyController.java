@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -76,6 +77,10 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
      * The list of child {@link AmendmentDialogAwareController} controllers.
      */
     protected List<AmendmentDialogAwareController> childControllers = new ArrayList<AmendmentDialogAwareController>();
+    private HandlerRegistration saveClickHandlerRegistration;
+    private HandlerRegistration cancelClickHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration draftingToggleEventHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
 
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
@@ -109,32 +114,39 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     }
 
     private void registerListeners() {
-        view.getSaveButton().addClickHandler(new ClickHandler() {
+        saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleSave();
             }
         });
 
-        view.getCancelLink().addClickHandler(new ClickHandler() {
+        cancelClickHandlerRegistration = view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleClose();
             }
         });
 
-        clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
             @Override
             public void onEvent(DraftingToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
             }
         });
-        clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
             @Override
             public void onEvent(DraftingAttributesToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
+    }
+
+    public void removeListeners() {
+        saveClickHandlerRegistration.removeHandler();
+        cancelClickHandlerRegistration.removeHandler();
+        draftingToggleEventHandlerRegistration.removeHandler();
+        draftingAttributesToggleEventHandlerRegistration.removeHandler();
     }
 
     /**

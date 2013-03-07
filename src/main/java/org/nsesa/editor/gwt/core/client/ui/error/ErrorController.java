@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.error;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.inject.Inject;
@@ -37,6 +38,7 @@ public class ErrorController {
      * The view.
      */
     private final ErrorView view;
+    private HandlerRegistration clickHandlerRegistration;
 
     @Inject
     public ErrorController(final ErrorView view) {
@@ -48,12 +50,16 @@ public class ErrorController {
     }
 
     private void registerListeners() {
-        this.view.getOkButton().addClickHandler(new ClickHandler() {
+        clickHandlerRegistration = this.view.getOkButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ErrorController.this.hide();
             }
         });
+    }
+
+    public void removeListeners() {
+        clickHandlerRegistration.removeHandler();
     }
 
 

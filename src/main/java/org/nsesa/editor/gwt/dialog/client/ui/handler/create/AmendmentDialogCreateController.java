@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -85,6 +86,10 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
      * The overlay factory that allows you to instantiate the new overlay structure from the new element.
      */
     protected final OverlayFactory overlayFactory;
+    private HandlerRegistration saveClickHandlerRegistration;
+    private HandlerRegistration cancelClickHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration draftingToggleEventHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
 
     @Inject
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
@@ -120,7 +125,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     private void registerListeners() {
         // calls the handleSave() method afterwards
         // TODO validate
-        view.getSaveButton().addClickHandler(new ClickHandler() {
+        saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // set the assigned number on the amendable widget
@@ -130,7 +135,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         });
 
         // hide the dialog when the cancel link is clicked
-        view.getCancelLink().addClickHandler(new ClickHandler() {
+        cancelClickHandlerRegistration = view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleClose();
@@ -138,7 +143,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         });
 
         // toggle the RTE's drafting view
-        clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
             @Override
             public void onEvent(DraftingToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
@@ -146,13 +151,20 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         });
 
         // toggle the RTE's attributes view
-        clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
             @Override
             public void onEvent(DraftingAttributesToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
 
+    }
+
+    public void removeListeners() {
+        saveClickHandlerRegistration.removeHandler();
+        cancelClickHandlerRegistration.removeHandler();
+        draftingAttributesToggleEventHandlerRegistration.removeHandler();
+        draftingToggleEventHandlerRegistration.removeHandler();
     }
 
     /**

@@ -17,6 +17,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
@@ -39,7 +40,7 @@ import java.util.TreeMap;
  * <code>DraftingAttributesView</code> widgets.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 16/01/13 13:37
+ *         Date: 16/01/13 13:37
  */
 public class DraftingController {
 
@@ -53,16 +54,26 @@ public class DraftingController {
     private EventBus eventBus;
     private OverlayWidget originalOverlayWidget;
 
-    private DraftingView.DraftingCallback draftingCallback;
+    private final DraftingView.DraftingCallback draftingCallback = new DraftingView.DraftingCallback() {
+        @Override
+        public void onChildrenSelect(OverlayWidget child) {
+            eventBus.fireEvent(new DraftingInsertionEvent(child));
+        }
+    };
+
+    private HandlerRegistration selectionChangedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
+
     /**
      * Create a <code>DraftingController</code> with the given parameters
-     * @param draftingView The <code>DraftingView</code> widget
+     *
+     * @param draftingView           The <code>DraftingView</code> widget
      * @param draftingAttributesView The <code>DraftingAttributesView</code> widget
-     * @param clientFactory The client factory used to reference to event bus
-     * @param creator The creator
-     * @param overlayFactory The overlay factory
-     * @param overlayResource The overlay resource
-     * @param documentController The document controller
+     * @param clientFactory          The client factory used to reference to event bus
+     * @param creator                The creator
+     * @param overlayFactory         The overlay factory
+     * @param overlayResource        The overlay resource
+     * @param documentController     The document controller
      */
     @Inject
     public DraftingController(DraftingView draftingView,
@@ -85,6 +96,7 @@ public class DraftingController {
 
     /**
      * Set the original <code>OverlayWidget</code>
+     *
      * @param overlayWidget the original
      */
     public void setOverlayWidgetWidget(final OverlayWidget overlayWidget) {
@@ -98,7 +110,7 @@ public class DraftingController {
      * When those events occur <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets are refreshed.
      */
     private void registerListeners() {
-        eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
+        selectionChangedEventHandlerRegistration = eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
             @Override
             public void onEvent(SelectionChangedEvent event) {
                 Element el = event.getParentElement();
@@ -114,20 +126,17 @@ public class DraftingController {
                 }
             }
         });
-        eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 refreshView(event.getOverlayWidget(), null);
             }
         });
+    }
 
-        // set up the callback for drafting view
-        draftingCallback = new DraftingView.DraftingCallback() {
-            @Override
-            public void onChildrenSelect(OverlayWidget child) {
-                eventBus.fireEvent(new DraftingInsertionEvent(child));
-            }
-        };
+    public void removeListeners() {
+        amendmentContainerCreateEventHandlerRegistration.removeHandler();
+        selectionChangedEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -136,9 +145,10 @@ public class DraftingController {
      * one contains the allowed children list of the given <code>OverlayWidget</code> and
      * the other contains the mandatory children list of the given <code>OverlayWidget</code>.
      * The drafting attributes view is filled in with the available attributes of the given <code>OverlayWidget</code>.
+     *
      * @param overlayWidget The {@link OverlayWidget} processed
-     * @param selectedText When it is empty the allowed children in drafting view are displayed as labels,
-     *                     otherwise as anchors.
+     * @param selectedText  When it is empty the allowed children in drafting view are displayed as labels,
+     *                      otherwise as anchors.
      */
     public void refreshView(final OverlayWidget overlayWidget, final String selectedText) {
 
@@ -166,6 +176,7 @@ public class DraftingController {
 
     /**
      * Returns {@link DraftingView}
+     *
      * @return The drafting view
      */
     public DraftingView getView() {
@@ -174,13 +185,12 @@ public class DraftingController {
 
     /**
      * Returns {@link DraftingAttributesView}
+     *
      * @return The drafting attributes view
      */
     public DraftingAttributesView getAttributesView() {
         return draftingAttributesView;
     }
-
-
 
 
 }

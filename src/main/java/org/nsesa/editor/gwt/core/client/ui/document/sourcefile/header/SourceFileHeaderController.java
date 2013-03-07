@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
@@ -63,6 +64,8 @@ public class SourceFileHeaderController {
      * List of the related documents.
      */
     protected List<DocumentDTO> relatedDocuments = new ArrayList<DocumentDTO>();
+    private HandlerRegistration translationChangeEventHandlerRegistration;
+    private HandlerRegistration relatedChangeEventHandlerRegistration;
 
 
     @Inject
@@ -76,7 +79,7 @@ public class SourceFileHeaderController {
     private void registerListeners() {
 
         // add a change handler to load translations when a new translation is selected
-        view.getTranslationsListBox().addChangeHandler(new ChangeHandler() {
+        translationChangeEventHandlerRegistration = view.getTranslationsListBox().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 final String documentID = view.getSelectedTranslationDocumentID();
@@ -97,7 +100,7 @@ public class SourceFileHeaderController {
             }
         });
         // add a change handler to load related documents when a new document is selected
-        view.getRelatedDocumentsListBox().addChangeHandler(new ChangeHandler() {
+        relatedChangeEventHandlerRegistration = view.getRelatedDocumentsListBox().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 final String documentID = view.getSelectedRelatedDocumentID();
@@ -114,6 +117,11 @@ public class SourceFileHeaderController {
                 }
             }
         });
+    }
+
+    public void removeListeners() {
+        translationChangeEventHandlerRegistration.removeHandler();
+        relatedChangeEventHandlerRegistration.removeHandler();
     }
 
     /**

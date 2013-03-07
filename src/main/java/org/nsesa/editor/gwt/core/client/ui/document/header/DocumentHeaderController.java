@@ -50,6 +50,10 @@ public class DocumentHeaderController {
 
     }
 
+    public void removeListeners() {
+
+    }
+
     public DocumentHeaderView getView() {
         return view;
     }

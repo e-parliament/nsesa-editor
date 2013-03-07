@@ -21,6 +21,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -59,6 +60,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      * constant used when resize the view
      */
     private static final int SCROLLBAR_OFFSET = 145;
+    private HandlerRegistration resizeEventHandlerRegistration;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
     }
@@ -125,14 +127,17 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      * Register specific handlers in particular a handler to resize the scroll panel whenever is necessary.
      */
     private void registerListeners() {
-        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+        resizeEventHandlerRegistration = documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
             @Override
             public void onEvent(ResizeEvent event) {
                 final int height = event.getHeight() - SCROLLBAR_OFFSET;
                 scrollPanel.setHeight(height + "px");
             }
         });
+    }
 
+    public void removeListeners() {
+        resizeEventHandlerRegistration.removeHandler();
     }
 
     /**

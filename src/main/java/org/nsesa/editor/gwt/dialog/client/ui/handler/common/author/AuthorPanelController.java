@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -69,6 +70,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      * The set of selected persons.
      */
     private Set<PersonDTO> selectedPersons = new LinkedHashSet<PersonDTO>();
+    private HandlerRegistration selectionHandlerRegistration;
 
     @Inject
     public AuthorPanelController(final ClientFactory clientFactory, final AuthorPanelView view,
@@ -161,7 +163,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     private void registerListeners() {
         // add a handler when a selection is made from the autocomplete results
-        view.getSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+        selectionHandlerRegistration = view.getSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
             @Override
             public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event) {
                 final SuggestOracle.Suggestion selectedItem = event.getSelectedItem();
@@ -173,6 +175,10 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
                 }
             }
         });
+    }
+
+    public void removeListeners() {
+        selectionHandlerRegistration.removeHandler();
     }
 
     /**

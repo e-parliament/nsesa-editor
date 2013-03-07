@@ -17,6 +17,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -83,6 +84,8 @@ public class InlineEditorController implements ProvidesResize {
      * The document controller.
      */
     private DocumentController documentController;
+    private HandlerRegistration attachInlineEditorEventHandlerRegistration;
+    private HandlerRegistration detachInlineEditorEventHandlerRegistration;
 
 
     @Inject
@@ -97,7 +100,7 @@ public class InlineEditorController implements ProvidesResize {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(AttachInlineEditorEvent.TYPE, new AttachInlineEditorEventHandler() {
+        attachInlineEditorEventHandlerRegistration = clientFactory.getEventBus().addHandler(AttachInlineEditorEvent.TYPE, new AttachInlineEditorEventHandler() {
             @Override
             public void onEvent(AttachInlineEditorEvent event) {
 
@@ -113,12 +116,17 @@ public class InlineEditorController implements ProvidesResize {
             }
         });
 
-        clientFactory.getEventBus().addHandler(DetachInlineEditorEvent.TYPE, new DetachInlineEditorEventHandler() {
+        detachInlineEditorEventHandlerRegistration = clientFactory.getEventBus().addHandler(DetachInlineEditorEvent.TYPE, new DetachInlineEditorEventHandler() {
             @Override
             public void onEvent(DetachInlineEditorEvent event) {
                 hide();
             }
         });
+    }
+
+    public void removeListeners() {
+        attachInlineEditorEventHandlerRegistration.removeHandler();
+        detachInlineEditorEventHandlerRegistration.removeHandler();
     }
 
     protected AmendmentContainerDTO createAmendment() {

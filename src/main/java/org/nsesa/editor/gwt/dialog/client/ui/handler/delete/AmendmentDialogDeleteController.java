@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.delete;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -66,6 +67,8 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
      * The locator.
      */
     protected final Locator locator;
+    private HandlerRegistration saveClickHandlerRegistration;
+    private HandlerRegistration cancelClickHandlerRegistration;
 
     @Inject
     public AmendmentDialogDeleteController(final ClientFactory clientFactory, final AmendmentDialogDeleteView view,
@@ -92,19 +95,24 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
     }
 
     private void registerListeners() {
-        view.getSaveButton().addClickHandler(new ClickHandler() {
+        saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleSave();
             }
         });
 
-        view.getCancelLink().addClickHandler(new ClickHandler() {
+        cancelClickHandlerRegistration = view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 handleClose();
             }
         });
+    }
+
+    public void removeListeners() {
+        saveClickHandlerRegistration.removeHandler();
+        cancelClickHandlerRegistration.removeHandler();
     }
 
     /**

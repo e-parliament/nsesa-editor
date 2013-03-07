@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.BootstrapEvent;
@@ -70,6 +71,7 @@ public class EditorController implements BootstrapEventHandler {
      * The list of available {@link DocumentController}s.
      */
     protected final List<DocumentController> documentControllers = new ArrayList<DocumentController>();
+    private HandlerRegistration bootstrapEventHandlerRegistration;
 
     @Inject
     public EditorController(final EditorView view,
@@ -85,7 +87,11 @@ public class EditorController implements BootstrapEventHandler {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
+        bootstrapEventHandlerRegistration = clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
+    }
+
+    public void removeListeners() {
+        bootstrapEventHandlerRegistration.removeHandler();
     }
 
     /**

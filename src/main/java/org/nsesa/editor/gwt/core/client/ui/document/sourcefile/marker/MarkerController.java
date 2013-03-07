@@ -20,18 +20,19 @@ import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +44,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * Controller for the markers component. This component is displayed usually on the right side of the
  * {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController}, with markers
  * displayed according to their relative position in the overlay tree.
- *
+ * <p/>
  * Date: 24/06/12 18:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -129,6 +130,11 @@ public class MarkerController {
             }
         }
     };
+    private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
+    private HandlerRegistration awitchTabEventHandlerRegistration;
 
     @Inject
     public MarkerController(final DocumentEventBus documentEventBus, final MarkerView view) {
@@ -141,47 +147,48 @@ public class MarkerController {
     }
 
     private void registerListeners() {
-        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+        documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 clearMarkers();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 drawAmendmentControllers();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 drawAmendmentControllers();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 drawAmendmentControllers();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
+        awitchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
             @Override
             public void onEvent(SwitchTabEvent event) {
                 drawAmendmentControllers();
             }
         });
+    }
+
+    public void removeListeners() {
+        documentRefreshRequestEventHandlerRegistration.removeHandler();
+        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
+        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
+        awitchTabEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -201,6 +208,7 @@ public class MarkerController {
 
     /**
      * Return the view associated with this component.
+     *
      * @return the view
      */
     public MarkerView getView() {
@@ -209,6 +217,7 @@ public class MarkerController {
 
     /**
      * Set the parent sourcefile controller and register the private listeners.
+     *
      * @param sourceFileController the parent source file controller
      */
     public void setSourceFileController(SourceFileController sourceFileController) {

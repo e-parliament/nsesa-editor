@@ -15,21 +15,21 @@ package org.nsesa.editor.gwt.core.client.ui.pagination;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
-import org.nsesa.editor.gwt.core.client.util.Filter;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEvent;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Filter;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -38,7 +38,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * to react to any amendment changes the user performs in the application.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 30/11/12 15:29
+ *         Date: 30/11/12 15:29
  */
 @Scope(DOCUMENT)
 @Singleton
@@ -50,11 +50,20 @@ public class PaginationController {
     private PaginationView paginationView;
 
     private Filter currentFilter;
+    private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
+    private HandlerRegistration filterResponseEventHandlerRegistration;
+    private com.google.gwt.event.shared.HandlerRegistration firstHandlerRegistration;
+    private com.google.gwt.event.shared.HandlerRegistration nextHandlerRegistration;
+    private com.google.gwt.event.shared.HandlerRegistration previousHandlerRegistration;
+    private com.google.gwt.event.shared.HandlerRegistration lastHandlerRegistration;
 
     /**
      * Create <code>PaginationController</code> object with the given parameters
+     *
      * @param documentEventBus The event bus used to manage events
-     * @param paginationView The view associated to controller
+     * @param paginationView   The view associated to controller
      */
     @Inject
     public PaginationController(DocumentEventBus documentEventBus, PaginationView paginationView) {
@@ -65,6 +74,7 @@ public class PaginationController {
 
     /**
      * Returns the pagination view
+     *
      * @return The view associated to controller
      */
     public PaginationView getPaginationView() {
@@ -75,34 +85,28 @@ public class PaginationController {
      * Refresh the pagination as a reaction of the events occurred in the system
      */
     private void registerListeners() {
-        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+        documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 resetPage();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 resetPage();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                resetPage();
-            }
-        });
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 resetPage();
             }
         });
 
-        documentEventBus.addHandler(FilterResponseEvent.TYPE, new FilterResponseEventHandler() {
+        filterResponseEventHandlerRegistration = documentEventBus.addHandler(FilterResponseEvent.TYPE, new FilterResponseEventHandler() {
             @Override
             public void onEvent(FilterResponseEvent event) {
                 currentFilter = event.getFilter();
@@ -114,38 +118,45 @@ public class PaginationController {
             }
         });
 
-        HasClickHandlers first = paginationView.getFirst();
-        first.addClickHandler(new ClickHandler() {
+        firstHandlerRegistration = paginationView.getFirst().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 currentPage = 1;
                 moveTo();
             }
         });
-        HasClickHandlers next = paginationView.getNext();
-        next.addClickHandler(new ClickHandler() {
+        nextHandlerRegistration = paginationView.getNext().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 currentPage++;
                 moveTo();
             }
         });
-        HasClickHandlers previous = paginationView.getPrevious();
-        previous.addClickHandler(new ClickHandler() {
+        previousHandlerRegistration = paginationView.getPrevious().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 currentPage--;
                 moveTo();
             }
         });
-        HasClickHandlers last = paginationView.getLast();
-        last.addClickHandler(new ClickHandler() {
+        lastHandlerRegistration = paginationView.getLast().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 currentPage = totalPages;
                 moveTo();
             }
         });
+    }
+
+    public void removeListeners() {
+        documentRefreshRequestEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
+        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
+        filterResponseEventHandlerRegistration.removeHandler();
+        firstHandlerRegistration.removeHandler();
+        nextHandlerRegistration.removeHandler();
+        previousHandlerRegistration.removeHandler();
+        lastHandlerRegistration.removeHandler();
     }
 
     /**

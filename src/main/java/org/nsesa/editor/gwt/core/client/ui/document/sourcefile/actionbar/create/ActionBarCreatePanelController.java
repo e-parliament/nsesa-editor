@@ -86,6 +86,10 @@ public class ActionBarCreatePanelController {
         });
     }
 
+    public void removeListeners() {
+        view.setUIListener(null);
+    }
+
     /**
      * Return the view for this component.
      * @return the view

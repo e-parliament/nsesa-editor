@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.deadline;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -68,6 +69,9 @@ public class DeadlineController {
      * The deadline, if any.
      */
     protected Date deadline;
+    private HandlerRegistration deadlinePassedEventHandlerRegistration;
+    private HandlerRegistration hour24DeadlineEventHandlerRegistration;
+    private HandlerRegistration hour1DeadlineEventHandlerRegistration;
 
     @Inject
     public DeadlineController(final DocumentEventBus documentEventBus,
@@ -102,7 +106,7 @@ public class DeadlineController {
      * Registers the listeners for events that are being fired by the deadline tracker.
      */
     private void registerListeners() {
-        documentEventBus.addHandler(DeadlinePassedEvent.TYPE, new DeadlinePassedEventHandler() {
+        deadlinePassedEventHandlerRegistration = documentEventBus.addHandler(DeadlinePassedEvent.TYPE, new DeadlinePassedEventHandler() {
             @Override
             public void onEvent(DeadlinePassedEvent event) {
                 if (event.getDocumentController() == documentController) {
@@ -111,7 +115,7 @@ public class DeadlineController {
                 }
             }
         });
-        documentEventBus.addHandler(Deadline24HourEvent.TYPE, new Deadline24HourEventHandler() {
+        hour24DeadlineEventHandlerRegistration = documentEventBus.addHandler(Deadline24HourEvent.TYPE, new Deadline24HourEventHandler() {
             @Override
             public void onEvent(Deadline24HourEvent event) {
                 if (event.getDocumentController() == documentController) {
@@ -120,7 +124,7 @@ public class DeadlineController {
                 }
             }
         });
-        documentEventBus.addHandler(Deadline1HourEvent.TYPE, new Deadline1HourEventHandler() {
+        hour1DeadlineEventHandlerRegistration = documentEventBus.addHandler(Deadline1HourEvent.TYPE, new Deadline1HourEventHandler() {
             @Override
             public void onEvent(Deadline1HourEvent event) {
                 if (event.getDocumentController() == documentController) {
@@ -129,6 +133,12 @@ public class DeadlineController {
                 }
             }
         });
+    }
+
+    public void removeListeners() {
+        deadlinePassedEventHandlerRegistration.removeHandler();
+        hour24DeadlineEventHandlerRegistration.removeHandler();
+        hour1DeadlineEventHandlerRegistration.removeHandler();
     }
 
 

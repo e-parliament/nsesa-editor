@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.editor.client.ui.header;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -45,6 +46,9 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 @Singleton
 @Scope(EDITOR)
 public class HeaderViewImpl extends Composite implements HeaderView {
+
+    private HandlerRegistration availableLanguagesHandlerRegistration;
+
     interface MyUiBinder extends UiBinder<Widget, HeaderViewImpl> {
     }
 
@@ -72,12 +76,16 @@ public class HeaderViewImpl extends Composite implements HeaderView {
     }
 
     private void registerListeners() {
-        availableLanguages.addChangeHandler(new ChangeHandler() {
+        availableLanguagesHandlerRegistration = availableLanguages.addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 clientFactory.getEventBus().fireEvent(new LocaleChangeEvent(availableLanguages.getValue(availableLanguages.getSelectedIndex())));
             }
         });
+    }
+
+    public void removeListeners() {
+        availableLanguagesHandlerRegistration.removeHandler();
     }
 
     @Override

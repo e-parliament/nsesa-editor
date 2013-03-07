@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.amendments.filter;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -62,6 +63,7 @@ public class AmendmentsFilterController {
      * <code>Selection</code> of none of <code>AmendmentController</code>
      */
     private Selection<AmendmentController> NONE = new Selection.NoneSelection<AmendmentController>();
+    private HandlerRegistration changeHandlerRegistration;
 
     /**
      * Create <code>AmendmentsFilterController</code> with the given parameters
@@ -100,9 +102,8 @@ public class AmendmentsFilterController {
      * Add a change handler for {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView#getFilter()}
      * and raise a new {@link FilterRequestEvent} GWT event
      */
-    protected void registerListeners() {
-        HasChangeHandlers filterHandler = view.getFilter();
-        filterHandler.addChangeHandler(new ChangeHandler() {
+    private void registerListeners() {
+        changeHandlerRegistration = view.getFilter().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
                 Filter<AmendmentController> filter = filters.get(view.getSelectedFilter());
@@ -113,6 +114,10 @@ public class AmendmentsFilterController {
                 }
             }
         });
+    }
+
+    public void removeListeners() {
+        changeHandlerRegistration.removeHandler();
     }
 
     /**

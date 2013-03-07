@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -96,6 +97,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * A list of active overlay widgets (after a {@link OverlayWidgetSelectEvent} has been caught).
      */
     protected OverlayWidget activeOverlayWidget;
+    private HandlerRegistration documentScrollEventHandlerRegistration;
 
     @Inject
     public SourceFileController(final DocumentEventBus documentEventBus,
@@ -121,12 +123,16 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     }
 
     private void registerListeners() {
-        contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
+        documentScrollEventHandlerRegistration = contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
                 documentEventBus.fireEvent(new DocumentScrollEvent(documentController));
             }
         });
+    }
+
+    public void removeListeners() {
+        documentScrollEventHandlerRegistration.removeHandler();
     }
 
     /**

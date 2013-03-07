@@ -136,4 +136,9 @@ public interface AmendmentController {
      * @param order
      */
     void setOrder(int order);
+
+    /**
+     * Removes all event listeners that have been added to the eventbus, and any listeners for UI callbacks.
+     */
+    void removeListeners();
 }

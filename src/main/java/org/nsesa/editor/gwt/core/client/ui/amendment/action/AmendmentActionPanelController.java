@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.amendment.action;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
@@ -26,8 +27,6 @@ import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
@@ -85,6 +84,9 @@ public class AmendmentActionPanelController {
      * The enclosing popup.
      */
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
+    private HandlerRegistration anchorTableHandlerRegistration;
+    private HandlerRegistration anchorWithdrawHandlerRegistration;
+    private HandlerRegistration anchorDeleteHandlerRegistration;
 
     @Inject
     public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView,
@@ -114,7 +116,7 @@ public class AmendmentActionPanelController {
      * Registers the event listeners on the various anchors.
      */
     private void registerListeners() {
-        anchorTable.addClickHandler(new ClickHandler() {
+        anchorTableHandlerRegistration = anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
@@ -141,7 +143,7 @@ public class AmendmentActionPanelController {
             }
         });
 
-        anchorWithdraw.addClickHandler(new ClickHandler() {
+        anchorWithdrawHandlerRegistration = anchorWithdraw.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
@@ -168,7 +170,7 @@ public class AmendmentActionPanelController {
             }
         });
 
-        anchorDelete.addClickHandler(new ClickHandler() {
+        anchorDeleteHandlerRegistration = anchorDelete.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
@@ -208,6 +210,12 @@ public class AmendmentActionPanelController {
 
             }
         });
+    }
+
+    public void removeListeners() {
+        anchorTableHandlerRegistration.removeHandler();
+        anchorWithdrawHandlerRegistration.removeHandler();
+        anchorDeleteHandlerRegistration.removeHandler();
     }
 
     /**

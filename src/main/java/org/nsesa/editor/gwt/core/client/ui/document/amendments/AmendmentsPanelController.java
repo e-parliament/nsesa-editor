@@ -17,6 +17,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEvent;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerSelectedEventHandler;
@@ -45,7 +46,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView} view.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 26/11/12 11:50
+ *         Date: 26/11/12 11:50
  */
 @Singleton
 @Scope(DOCUMENT)
@@ -61,10 +62,19 @@ public class AmendmentsPanelController {
     private Filter<AmendmentController> currentFilter;
 
     private Selection<AmendmentController> DEFAULT_SELECTION = new Selection.AllSelection<AmendmentController>();
+    private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerSkippedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
+    private HandlerRegistration filterRequestEventHandlerRegistration;
+    private HandlerRegistration amendmentControllerSelectedEventHandlerRegistration;
 
     /**
      * Create <code>AmendmentsPanelController</code> object with the given properties
-     * @param view The view associated to controller
+     *
+     * @param view             The view associated to controller
      * @param documentEventBus The event bus associated to controller
      */
     @Inject
@@ -79,6 +89,7 @@ public class AmendmentsPanelController {
 
     /**
      * Returns the view associated to controller
+     *
      * @return the view
      */
     public AmendmentsPanelView getView() {
@@ -87,57 +98,56 @@ public class AmendmentsPanelController {
 
     /**
      * Refresh the amendments view whenever the user add/modify amendments or change the current filter
-     *
      */
     private void registerListeners() {
-        documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
+        documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 refreshAmendments();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 refreshAmendments();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerSkippedEvent.TYPE, new AmendmentContainerSkippedEventHandler() {
+        amendmentContainerSkippedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSkippedEvent.TYPE, new AmendmentContainerSkippedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSkippedEvent event) {
                 refreshAmendments();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 refreshAmendments();
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
+        amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
                 refreshAmendments();
             }
         });
-        documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 refreshAmendments();
             }
         });
-        documentEventBus.addHandler(FilterRequestEvent.TYPE, new FilterRequestEventHandler() {
+        filterRequestEventHandlerRegistration = documentEventBus.addHandler(FilterRequestEvent.TYPE, new FilterRequestEventHandler() {
             @Override
             public void onEvent(FilterRequestEvent event) {
                 currentFilter = event.getFilter();
                 filterAmendments();
             }
         });
-        documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
+        amendmentControllerSelectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerSelectedEvent.TYPE, new AmendmentControllerSelectedEventHandler() {
             @Override
             public void onEvent(AmendmentControllerSelectedEvent event) {
                 final Collection<String> ids = Collections2.transform(event.getSelected(), new Function<AmendmentController, String>() {
@@ -152,8 +162,20 @@ public class AmendmentsPanelController {
 
     }
 
+    public void removeListeners() {
+        documentRefreshRequestEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
+        amendmentContainerSkippedEventHandlerRegistration.removeHandler();
+        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
+        amendmentContainerSavedEventHandlerRegistration.removeHandler();
+        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
+        filterRequestEventHandlerRegistration.removeHandler();
+        amendmentControllerSelectedEventHandlerRegistration.removeHandler();
+    }
+
     /**
      * Set the document controller associated to this <code>AmendmentsPanelController</code>
+     *
      * @param documentController the document controller
      */
     public void setDocumentController(final DocumentController documentController) {

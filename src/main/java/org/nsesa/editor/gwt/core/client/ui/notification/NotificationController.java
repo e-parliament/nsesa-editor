@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.notification;
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -91,6 +92,9 @@ public class NotificationController {
      * The default duration of 5 seconds.
      */
     private int duration = 5;
+    private HandlerRegistration clickHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration mouseOverHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration mouseOutHandlerRegistration;
 
     @Inject
     public NotificationController(final NotificationView view) {
@@ -103,13 +107,13 @@ public class NotificationController {
     }
 
     private void registerListeners() {
-        view.getCloseButton().addClickHandler(new ClickHandler() {
+        clickHandlerRegistration = view.getCloseButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 hide();
             }
         });
-        view.addMouseOverHandler(new MouseOverHandler() {
+        mouseOverHandlerRegistration = view.addMouseOverHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
                 timer.cancel();
@@ -118,7 +122,7 @@ public class NotificationController {
                 PAUSE_UPDATE = true;
             }
         });
-        view.addMouseOutHandler(new MouseOutHandler() {
+        mouseOutHandlerRegistration = view.addMouseOutHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
                 timer.schedule(duration * 1000);
@@ -126,6 +130,12 @@ public class NotificationController {
                 PAUSE_UPDATE = false;
             }
         });
+    }
+
+    public void removeListeners() {
+        clickHandlerRegistration.removeHandler();
+        mouseOutHandlerRegistration.removeHandler();
+        mouseOverHandlerRegistration.removeHandler();
     }
 
     /**
@@ -197,6 +207,7 @@ public class NotificationController {
         popupPanel.hide();
         timer.cancel();
         animation.cancel();
+        removeListeners();
 
         INSTANCES.remove(this);
         updatePositions();

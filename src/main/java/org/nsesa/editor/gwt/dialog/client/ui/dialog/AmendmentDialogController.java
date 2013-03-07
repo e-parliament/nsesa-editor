@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
@@ -98,6 +99,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}, ...
      */
     private DialogContext dialogContext;
+    private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
+    private HandlerRegistration closeDialogEventHandlerRegistration;
 
 
     @Inject
@@ -127,7 +131,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private void registerListeners() {
 
         // register a listener when a request to make an amendment is fired (regardless of its type)
-        clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
             @Override
             public void onEvent(AmendmentContainerCreateEvent event) {
                 dialogContext = new DialogContext();
@@ -143,7 +147,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         });
 
         // register a listener to edit an existing amendment (regardless of its type)
-        clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
+        amendmentContainerEditEventHandlerRegistration = clientFactory.getEventBus().addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
             @Override
             public void onEvent(AmendmentContainerEditEvent event) {
                 dialogContext = new DialogContext();
@@ -159,13 +163,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         });
 
         // respond to dialog close requests
-        clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
+        closeDialogEventHandlerRegistration = clientFactory.getEventBus().addHandler(CloseDialogEvent.TYPE, new CloseDialogEventHandler() {
             @Override
             public void onEvent(CloseDialogEvent event) {
                 dialogContext = new DialogContext();
                 hide();
             }
         });
+    }
+
+    public void removeListeners() {
+        amendmentContainerCreateEventHandlerRegistration.removeHandler();
+        amendmentContainerEditEventHandlerRegistration.removeHandler();
+        closeDialogEventHandlerRegistration.removeHandler();
     }
 
     /**

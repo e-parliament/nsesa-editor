@@ -18,6 +18,7 @@ import com.google.common.collect.Collections2;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
@@ -86,6 +87,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
      * The provider for the injection points (since amendments can introduce new elements)
      */
     private final AmendmentInjectionPointProvider injectionPointProvider;
+    private HandlerRegistration amendmentContainerSaveEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerDeleteEventHandlerRegistration;
 
     @Inject
     public DefaultAmendmentManager(final Transformer transformer,
@@ -103,19 +106,24 @@ public class DefaultAmendmentManager implements AmendmentManager {
      * scoping in Gin).
      */
     private void registerListeners() {
-        documentEventBus.addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
+        amendmentContainerSaveEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerSaveEvent event) {
                 saveAmendmentContainers(event.getAmendments());
             }
         });
 
-        documentEventBus.addHandler(AmendmentContainerDeleteEvent.TYPE, new AmendmentContainerDeleteEventHandler() {
+        amendmentContainerDeleteEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeleteEvent.TYPE, new AmendmentContainerDeleteEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerDeleteEvent event) {
                 deleteAmendmentContainers(event.getAmendmentControllers());
             }
         });
+    }
+
+    public void removeListeners() {
+        amendmentContainerSaveEventHandlerRegistration.removeHandler();
+        amendmentContainerDeleteEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -148,6 +156,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 // successfully deleted on the server, so inform our document controller to remove the amendment
                 for (int i = 0; i < result.length; i++) {
                     AmendmentController amendmentController = toDelete[i];
+                    // clean up all listeners
+                    amendmentController.removeListeners();
                     documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(amendmentController));
                 }
                 // show notification about successful delete

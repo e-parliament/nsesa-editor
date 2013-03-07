@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.content;
 
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
@@ -46,6 +47,8 @@ public class ContentPanelController implements AmendmentDialogAwareController {
      * The dialog context with runtime information.
      */
     protected DialogContext dialogContext;
+    private HandlerRegistration draftingToggleEventHandlerRegistration;
+    private HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
 
     @Inject
     public ContentPanelController(final ClientFactory clientFactory, final ContentControllerView view) {
@@ -55,19 +58,23 @@ public class ContentPanelController implements AmendmentDialogAwareController {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
             @Override
             public void onEvent(DraftingToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
             }
         });
-        clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
             @Override
             public void onEvent(DraftingAttributesToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
+    }
 
+    public void removeListeners() {
+        draftingAttributesToggleEventHandlerRegistration.removeHandler();
+        draftingToggleEventHandlerRegistration.removeHandler();
     }
 
     /**

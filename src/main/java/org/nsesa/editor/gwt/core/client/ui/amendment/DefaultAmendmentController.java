@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -59,6 +60,30 @@ public class DefaultAmendmentController implements AmendmentController {
      */
     protected DocumentController documentController;
 
+    private ClickHandler confirmationHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(DefaultAmendmentController.this));
+        }
+    };
+    private ClickHandler cancelHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // this does not do anything
+        }
+    };
+
+    private HandlerRegistration deleteButtonClickHandlerRegistration;
+    private HandlerRegistration extDeleteButtonClickHandlerRegistration;
+    private HandlerRegistration editButtonClickHandlerRegistration;
+    private HandlerRegistration extEditButtonClickHandlerRegistration;
+    private HandlerRegistration moreButtonClickHandlerRegistration;
+    private HandlerRegistration extMoreButtonClickHandlerRegistration;
+    private HandlerRegistration clickHandlerRegistration;
+    private HandlerRegistration doubleClickHandlerRegistration;
+    private HandlerRegistration extClickHandlerRegistration;
+    private HandlerRegistration extDoubleClickHandlerRegistration;
+
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
                                       final AmendmentView amendmentExtendedView) {
@@ -69,22 +94,7 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     private void registerListeners() {
-
-        final ClickHandler confirmationHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(DefaultAmendmentController.this));
-            }
-        };
-
-        final ClickHandler cancelHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                // this does not do anything
-            }
-        };
-
-        view.getDeleteButton().addClickHandler(new ClickHandler() {
+        deleteButtonClickHandlerRegistration = view.getDeleteButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
@@ -100,7 +110,7 @@ public class DefaultAmendmentController implements AmendmentController {
                 documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
-        extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
+        extDeleteButtonClickHandlerRegistration = extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
@@ -115,21 +125,21 @@ public class DefaultAmendmentController implements AmendmentController {
                 documentController.getDocumentEventBus().fireEvent(confirmationEvent);
             }
         });
-        view.getEditButton().addClickHandler(new ClickHandler() {
+        editButtonClickHandlerRegistration = view.getEditButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
             }
         });
 
-        extendedView.getEditButton().addClickHandler(new ClickHandler() {
+        extEditButtonClickHandlerRegistration = extendedView.getEditButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
             }
         });
 
-        view.getMoreActionsButton().addClickHandler(new ClickHandler() {
+        moreButtonClickHandlerRegistration = view.getMoreActionsButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
@@ -138,7 +148,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         });
 
-        extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
+        extMoreButtonClickHandlerRegistration = extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 final Element relativeElement = event.getRelativeElement();
@@ -147,7 +157,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         });
 
-        view.addClickHandler(new ClickHandler() {
+        clickHandlerRegistration = view.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // don't let it bubble up to its parent amended widget
@@ -155,7 +165,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         });
 
-        view.addDoubleClickHandler(new DoubleClickHandler() {
+        doubleClickHandlerRegistration = view.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
                 // don't let it bubble up to its parent amended widget
@@ -164,7 +174,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         });
 
-        extendedView.addClickHandler(new ClickHandler() {
+        extClickHandlerRegistration = extendedView.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 // don't let it bubble up to its parent amended widget
@@ -172,7 +182,7 @@ public class DefaultAmendmentController implements AmendmentController {
             }
         });
 
-        extendedView.addDoubleClickHandler(new DoubleClickHandler() {
+        extDoubleClickHandlerRegistration = extendedView.addDoubleClickHandler(new DoubleClickHandler() {
             @Override
             public void onDoubleClick(DoubleClickEvent event) {
                 // don't let it bubble up to its parent amended widget
@@ -180,6 +190,19 @@ public class DefaultAmendmentController implements AmendmentController {
                 documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
             }
         });
+    }
+
+    public void removeListeners() {
+        deleteButtonClickHandlerRegistration.removeHandler();
+        extDeleteButtonClickHandlerRegistration.removeHandler();
+        editButtonClickHandlerRegistration.removeHandler();
+        extEditButtonClickHandlerRegistration.removeHandler();
+        moreButtonClickHandlerRegistration.removeHandler();
+        extMoreButtonClickHandlerRegistration.removeHandler();
+        clickHandlerRegistration.removeHandler();
+        doubleClickHandlerRegistration.removeHandler();
+        extClickHandlerRegistration.removeHandler();
+        extDoubleClickHandlerRegistration.removeHandler();
     }
 
     @Override

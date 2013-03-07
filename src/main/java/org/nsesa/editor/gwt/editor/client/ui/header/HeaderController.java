@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.editor.client.ui.header;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.AuthenticatedEvent;
@@ -54,6 +55,8 @@ public class HeaderController {
      * The view
      */
     protected final HeaderView view;
+    private HandlerRegistration bootstrapEventHandlerRegistration;
+    private HandlerRegistration authenticatedEventHandlerRegistration;
 
     @Inject
     public HeaderController(final ClientFactory clientFactory, final ServiceFactory serviceFactory, final HeaderView view) {
@@ -65,20 +68,25 @@ public class HeaderController {
     }
 
     private void registerListeners() {
-        clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, new BootstrapEventHandler() {
+        bootstrapEventHandlerRegistration = clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, new BootstrapEventHandler() {
             @Override
             public void onEvent(BootstrapEvent event) {
                 setUpLanguages();
             }
         });
 
-        clientFactory.getEventBus().addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
+        authenticatedEventHandlerRegistration = clientFactory.getEventBus().addHandler(AuthenticatedEvent.TYPE, new AuthenticatedEventHandler() {
             @Override
             public void onEvent(AuthenticatedEvent event) {
                 view.setLoggedInPersonName(clientFactory.getClientContext().getLoggedInPerson().getName());
                 view.setLoggedInPersonRoles(clientFactory.getClientContext().getRoles());
             }
         });
+    }
+
+    public void removeListeners() {
+        bootstrapEventHandlerRegistration.removeHandler();
+        authenticatedEventHandlerRegistration.removeHandler();
     }
 
     /**

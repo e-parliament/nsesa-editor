@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.bundle;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -40,6 +41,7 @@ public class AmendmentDialogBundleController extends AmendmentUIHandlerImpl impl
      * The associated view.
      */
     protected final AmendmentDialogBundleView view;
+    private HandlerRegistration clickHandlerRegistration;
 
     @Inject
     public AmendmentDialogBundleController(final ClientFactory clientFactory, final AmendmentDialogBundleView view) {
@@ -49,12 +51,16 @@ public class AmendmentDialogBundleController extends AmendmentUIHandlerImpl impl
     }
 
     private void registerListeners() {
-        view.getCancelButton().addClickHandler(new ClickHandler() {
+        clickHandlerRegistration = view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent event) {
                 clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
             }
         });
+    }
+
+    public void removeListeners() {
+        clickHandlerRegistration.removeHandler();
     }
 
     /**

@@ -65,6 +65,10 @@ public class MetaPanelController implements AmendmentDialogAwareController {
         // nothing yet
     }
 
+    public void removeListeners() {
+        // nothing yet
+    }
+
     /**
      * Validate the meta data (justification, notes).
      *
