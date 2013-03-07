@@ -23,11 +23,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,12 +84,16 @@ public class ContentController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         scrollHandlerRegistration.removeHandler();
     }
 
     /**
      * Return the view associated with this controller.
+     *
      * @return the view
      */
     public ContentView getView() {
@@ -98,7 +102,8 @@ public class ContentController {
 
     /**
      * Check if the given <tt>widget</tt> is fully visible in the scroll panel or not.
-     * @param widget    the widget to check
+     *
+     * @param widget the widget to check
      * @return <tt>true</tt> if the widget is fully visible in the scroll panel
      */
     public boolean isFullyVisible(Widget widget) {
@@ -113,6 +118,7 @@ public class ContentController {
 
     /**
      * Retrieve the current top visible {@link OverlayWidget} in the document. Flaky.
+     *
      * @return the top visible overlay widget.
      */
     public OverlayWidget getCurrentVisibleAmendableWidget() {
@@ -132,6 +138,7 @@ public class ContentController {
 
     /**
      * Set the transformed HTML-ized content on the view.
+     *
      * @param documentContent the document content to set
      */
     public void setContent(String documentContent) {
@@ -141,6 +148,7 @@ public class ContentController {
 
     /**
      * Set the parent source file controller.
+     *
      * @param sourceFileController the source file controller
      */
     public void setSourceFileController(SourceFileController sourceFileController) {
@@ -150,6 +158,7 @@ public class ContentController {
     /**
      * Get the root element node(s) that is/are set on the
      * {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentView#getContentElement()}
+     *
      * @return the root element
      */
     public Element[] getContentElements() {

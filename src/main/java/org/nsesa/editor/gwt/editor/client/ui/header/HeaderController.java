@@ -84,6 +84,9 @@ public class HeaderController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         bootstrapEventHandlerRegistration.removeHandler();
         authenticatedEventHandlerRegistration.removeHandler();
@@ -105,6 +108,7 @@ public class HeaderController {
 
     /**
      * Return the associated view.
+     *
      * @return the view
      */
     public HeaderView getView() {

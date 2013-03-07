@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAware
 
 /**
  * Content tab to display the original content of an amendment.
- *
+ * <p/>
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -72,6 +72,9 @@ public class ContentPanelController implements AmendmentDialogAwareController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         draftingAttributesToggleEventHandlerRegistration.removeHandler();
         draftingToggleEventHandlerRegistration.removeHandler();
@@ -79,6 +82,7 @@ public class ContentPanelController implements AmendmentDialogAwareController {
 
     /**
      * Validate the data in the content panel. Defaults to returning <tt>true</tt>
+     *
      * @return <tt>true</tt> if the content is valid
      */
     @Override
@@ -88,6 +92,7 @@ public class ContentPanelController implements AmendmentDialogAwareController {
 
     /**
      * Set the dialog context on this panel.
+     *
      * @param dialogContext the dialog context
      */
     @Override
@@ -97,6 +102,7 @@ public class ContentPanelController implements AmendmentDialogAwareController {
 
     /**
      * Get the view to add to the tab.
+     *
      * @return the view
      */
     @Override
@@ -107,6 +113,7 @@ public class ContentPanelController implements AmendmentDialogAwareController {
     /**
      * Get the title for the tab.
      * TODO i18n
+     *
      * @return the title
      */
     @Override

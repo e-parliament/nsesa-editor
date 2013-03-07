@@ -90,6 +90,9 @@ public class EditorController implements BootstrapEventHandler {
         bootstrapEventHandlerRegistration = clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         bootstrapEventHandlerRegistration.removeHandler();
     }
@@ -187,6 +190,7 @@ public class EditorController implements BootstrapEventHandler {
 
     /**
      * Return the associated view.
+     *
      * @return the view
      */
     public EditorView getView() {
@@ -195,6 +199,7 @@ public class EditorController implements BootstrapEventHandler {
 
     /**
      * Set the injector to use to instantiate the {@link DocumentController}.
+     *
      * @param injector the injector to use
      */
     public void setInjector(Injector injector) {

@@ -172,6 +172,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         amendmentContainerEditEventHandlerRegistration.removeHandler();
@@ -182,6 +185,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
      * Create a default {@link AmendmentContainerDTO} with a
      * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getId()} and
      * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getRevisionID()} set.
+     *
      * @return the amendment container DTO
      */
     protected AmendmentContainerDTO createAmendment() {
@@ -263,6 +267,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     /**
      * Return the associated view.
+     *
      * @return
      */
     public AmendmentDialogView getView() {

@@ -132,6 +132,9 @@ public class NotificationController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         clickHandlerRegistration.removeHandler();
         mouseOutHandlerRegistration.removeHandler();
@@ -141,7 +144,7 @@ public class NotificationController {
     /**
      * Set the opacity on this view.
      *
-     * @param opacity
+     * @param opacity the new opacity
      */
     private void setOpacity(double opacity) {
         final Style style = popupPanel.getElement().getStyle();

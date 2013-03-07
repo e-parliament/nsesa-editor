@@ -183,6 +183,9 @@ public class MarkerController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         documentRefreshRequestEventHandlerRegistration.removeHandler();
         amendmentContainerDeletedEventHandlerRegistration.removeHandler();

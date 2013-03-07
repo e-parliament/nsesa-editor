@@ -20,16 +20,13 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
@@ -37,7 +34,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 /**
  * Controller for the common author panel in the amendment dialog. Part of the
  * {@link AmendmentDialogAwareController}s so it can easily be added to a tab panel.
- *
+ * <p/>
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -83,6 +80,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Perform validation on the author panel. Currently just returns <tt>true</tt>.
+     *
      * @return <tt>true</tt> if the validation passes, and a valid (set of) author(s) has been selected.
      */
     @Override
@@ -92,6 +90,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Get the selected persons to act as authors for this amendment.
+     *
      * @return the selected persons.
      */
     public Set<PersonDTO> getSelectedPersons() {
@@ -100,8 +99,9 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Add a person dto to the group of selected persons.
-     * @see #getSelectedPersons() to get the list
+     *
      * @param person the person to add as an author
+     * @see #getSelectedPersons() to get the list
      */
     public void addPerson(final PersonDTO person) {
         if (selectedPersons.add(person)) {
@@ -111,8 +111,9 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Remove a person dto from the group of selected persons.
-     * @see #getSelectedPersons() to get the list
+     *
      * @param person the person to remove as an author
+     * @see #getSelectedPersons() to get the list
      */
     public void removePerson(final PersonDTO person) {
         if (selectedPersons.remove(person)) {
@@ -154,6 +155,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Set the dialog context with runtime information.
+     *
      * @param dialogContext the dialog context
      */
     @Override
@@ -177,12 +179,16 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         selectionHandlerRegistration.removeHandler();
     }
 
     /**
      * Return the view
+     *
      * @return the view
      */
     public AuthorPanelView getView() {
@@ -192,6 +198,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
     /**
      * Return the title for this tab.
      * TODO i18n
+     *
      * @return the title
      */
     @Override

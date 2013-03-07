@@ -142,6 +142,9 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         saveClickHandlerRegistration.removeHandler();
         cancelClickHandlerRegistration.removeHandler();
@@ -169,6 +172,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
     /**
      * Return the view associated with this controller.
+     *
      * @return the view
      */
     @Override

@@ -24,17 +24,17 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
-import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerAddToSelectionEvent;
 import org.nsesa.editor.gwt.core.client.event.amendments.AmendmentControllerRemoveFromSelectionEvent;
+import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterController;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderView;
+import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
+import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -44,10 +44,10 @@ import java.util.Map;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- *  Default implementation of <code>AmendmentsPanelView</code> interface based on {@link UiBinder} GWT mechanism.
+ * Default implementation of <code>AmendmentsPanelView</code> interface based on {@link UiBinder} GWT mechanism.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 24/06/12 21:44
+ *         Date: 24/06/12 21:44
  */
 @Singleton
 @Scope(DOCUMENT)
@@ -103,6 +103,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     /**
      * Create <code>AmendmentsPanelViewImpl</code> with the given parameters
+     *
      * @param amendmentsHeaderController
      * @param paginationController
      * @param amendmentsFilterController
@@ -136,6 +137,9 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         resizeEventHandlerRegistration.removeHandler();
     }
@@ -144,6 +148,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      * Display a check box and an amendment representation by using
      * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController#getExtendedView()}
      * for each amendment controller present in the provided map of amendment controllers
+     *
      * @param amendments The amendments that will be displayed
      */
     @Override
@@ -171,6 +176,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     /**
      * Clean up the view content and  set up again the amendment controllers
+     *
      * @param amendments The amendments that will be displayed
      */
     @Override
@@ -182,6 +188,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     /**
      * Returns the selected amendment controllers which are visible in the view
+     *
      * @return A list of Id that identify uniquely a selected amendment
      */
     @Override
@@ -198,6 +205,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
 
     /**
      * Mark as selected the check boxes associated to the given id-s
+     *
      * @param ids A list of id-s to identify the amendment controllers
      */
     @Override

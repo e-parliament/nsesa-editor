@@ -131,6 +131,9 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         documentScrollEventHandlerRegistration.removeHandler();
     }
@@ -167,7 +170,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * Perform the overlay of the DOM tree into a higher level tree of {@link OverlayWidget}s for each of the
      * elements returned from
      * {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController#getContentElements()}.
-     *
+     * <p/>
      * Fires a {@link CriticalErrorEvent} is something goes wrong during the overlay.
      *
      * @see #overlay(com.google.gwt.dom.client.Element, org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener)
@@ -193,9 +196,9 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * level {@link OverlayWidget}s. All amendable overlay widgets will have a {@link OverlayWidgetUIListener}
      * <tt>UIListener</tt> set so they can respond to UI events such as clicking.
      *
-     * @param element       the root DOM element to create the overlay tree for
-     * @param UIListener    the UI listener to set on each amendable overlay widget
-     * @return  the root overlay widget for a given <tt>element</tt>
+     * @param element    the root DOM element to create the overlay tree for
+     * @param UIListener the UI listener to set on each amendable overlay widget
+     * @return the root overlay widget for a given <tt>element</tt>
      */
     protected OverlayWidget overlay(final com.google.gwt.dom.client.Element element, final OverlayWidgetUIListener UIListener) {
         // Assert that the element is attached.
@@ -238,8 +241,9 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Depth-first walk of the given {@link OverlayWidget} <tt>toVisit</tt> with a given <tt>visitor</tt>.
-     * @param toVisit   the overlay widget to start the tree walk
-     * @param visitor   the visitor that will visit each node
+     *
+     * @param toVisit the overlay widget to start the tree walk
+     * @param visitor the visitor that will visit each node
      */
     public void walk(final OverlayWidget toVisit, final OverlayWidgetVisitor visitor) {
         toVisit.walk(visitor);
@@ -247,7 +251,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Asks the content controller to scroll to a given widget.
-     * @param widget    the widget to scroll to
+     *
+     * @param widget the widget to scroll to
      */
     public void scrollTo(final Widget widget) {
         contentController.scrollTo(widget);
@@ -255,6 +260,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Click callback; fires a {@link OverlayWidgetSelectEvent} on the private document bus.
+     *
      * @param sender the overlay widget that was clicked
      */
     @Override
@@ -264,6 +270,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Double click callback; fires a {@link AmendmentContainerCreateEvent} on the private document bus.
+     *
      * @param sender the overlay widget that was double clicked
      */
     @Override
@@ -320,6 +327,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Return the active overlay widget, if any.
+     *
      * @return the active overlay widget
      */
     public OverlayWidget getActiveOverlayWidget() {
@@ -328,6 +336,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Set the active overlay widget
+     *
      * @param activeOverlayWidget the active overlay widget
      */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
@@ -336,6 +345,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Set the parent document controller.
+     *
      * @param documentController the document controller
      */
     public void setDocumentController(DocumentController documentController) {
@@ -344,6 +354,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get a list of all the root overlay widget nodes under this source file controller.
+     *
      * @return the list of overlay widget root nodes
      */
     public List<OverlayWidget> getOverlayWidgets() {
@@ -360,6 +371,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the marker controller for the markers component.
+     *
      * @return the marker controller.
      */
     public MarkerController getMarkerController() {
@@ -368,6 +380,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the source file header controller.
+     *
      * @return the header controller
      */
     public SourceFileHeaderController getSourceFileHeaderController() {
@@ -376,6 +389,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the content controller.
+     *
      * @return the content controller
      */
     public ContentController getContentController() {
@@ -384,6 +398,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the action bar controller.
+     *
      * @return the action bar controller
      */
     public ActionBarController getActionBarController() {
@@ -392,6 +407,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the parent document controller.
+     *
      * @return the document controller
      */
     public DocumentController getDocumentController() {
@@ -400,6 +416,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
     /**
      * Get the associated view.
+     *
      * @return the view
      */
     public SourceFileView getView() {

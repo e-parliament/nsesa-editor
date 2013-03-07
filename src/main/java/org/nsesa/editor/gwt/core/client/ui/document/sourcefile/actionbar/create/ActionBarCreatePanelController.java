@@ -15,13 +15,13 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create
 
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 /**
  * A child controller of the {@link ActionBarController} responsible for showing the allowed children and siblings
  * of the currently selected {@link OverlayWidget}.
- *
+ * <p/>
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -86,12 +86,16 @@ public class ActionBarCreatePanelController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         view.setUIListener(null);
     }
 
     /**
      * Return the view for this component.
+     *
      * @return the view
      */
     public ActionBarCreatePanelView getView() {
@@ -100,7 +104,7 @@ public class ActionBarCreatePanelController {
 
     /**
      * Sets the current {@link OverlayWidget} to list the allowed child and sibling types for.
-     *
+     * <p/>
      * The allowed children and siblings are coming from the injected
      * {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentController#getCreator()}.
      *
@@ -130,6 +134,7 @@ public class ActionBarCreatePanelController {
 
     /**
      * Set the parent action bar controller.
+     *
      * @param actionBarController the parent action bar controller
      */
     public void setActionBarController(ActionBarController actionBarController) {
@@ -138,6 +143,7 @@ public class ActionBarCreatePanelController {
 
     /**
      * Get the current overlay widget
+     *
      * @return the overlay widget
      */
     public OverlayWidget getOverlayWidget() {
@@ -146,6 +152,7 @@ public class ActionBarCreatePanelController {
 
     /**
      * Set the parent sourcefile controller.
+     *
      * @param sourceFileController the parent sourcefile controller
      */
     public void setSourceFileController(SourceFileController sourceFileController) {

@@ -58,6 +58,9 @@ public class ErrorController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         clickHandlerRegistration.removeHandler();
     }
@@ -102,6 +105,7 @@ public class ErrorController {
 
     /**
      * Return the associated view.
+     *
      * @return the view
      */
     public ErrorView getView() {

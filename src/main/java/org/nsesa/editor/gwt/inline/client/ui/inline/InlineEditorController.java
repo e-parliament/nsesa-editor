@@ -124,6 +124,9 @@ public class InlineEditorController implements ProvidesResize {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         attachInlineEditorEventHandlerRegistration.removeHandler();
         detachInlineEditorEventHandlerRegistration.removeHandler();

@@ -26,8 +26,8 @@ import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.logging.Logger;
 
@@ -85,6 +85,9 @@ public class ContentViewImpl extends Composite implements ContentView {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         resizeEventHandlerRegistration.removeHandler();
     }

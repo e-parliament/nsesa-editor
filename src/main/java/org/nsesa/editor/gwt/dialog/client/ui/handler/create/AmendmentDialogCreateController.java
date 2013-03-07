@@ -160,6 +160,9 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         saveClickHandlerRegistration.removeHandler();
         cancelClickHandlerRegistration.removeHandler();

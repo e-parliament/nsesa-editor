@@ -84,6 +84,9 @@ public class HeaderViewImpl extends Composite implements HeaderView {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         availableLanguagesHandlerRegistration.removeHandler();
     }

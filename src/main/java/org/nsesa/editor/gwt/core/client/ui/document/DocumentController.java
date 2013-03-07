@@ -499,6 +499,9 @@ public class DocumentController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         switchTabEventHandlerRegistration.removeHandler();
         amendmentControllerRemovedFromSelectionEventHandlerRegistration.removeHandler();

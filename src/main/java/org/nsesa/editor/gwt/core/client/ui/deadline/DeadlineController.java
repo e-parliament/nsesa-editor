@@ -18,10 +18,10 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.deadline.*;
-import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.Date;
 
@@ -31,11 +31,11 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * A controller for the deadline that might be set on a document controller. This controller also has a tracker
  * that will fire the following events on the local document event bus:
  * <ul>
- *     <li>{@link Deadline24HourEvent}</li>
- *     <li>{@link Deadline1HourEvent}</li>
- *     <li>{@link DeadlinePassedEvent}</li>
+ * <li>{@link Deadline24HourEvent}</li>
+ * <li>{@link Deadline1HourEvent}</li>
+ * <li>{@link DeadlinePassedEvent}</li>
  * </ul>
- *
+ * <p/>
  * Date: 24/06/12 21:42
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -87,6 +87,7 @@ public class DeadlineController {
 
     /**
      * Set the parent document controller.
+     *
      * @param documentController the document controller
      */
 
@@ -96,6 +97,7 @@ public class DeadlineController {
 
     /**
      * Return a reference to the parent document controller.
+     *
      * @return the document controller
      */
     public DocumentController getDocumentController() {
@@ -135,6 +137,9 @@ public class DeadlineController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         deadlinePassedEventHandlerRegistration.removeHandler();
         hour24DeadlineEventHandlerRegistration.removeHandler();
@@ -144,6 +149,7 @@ public class DeadlineController {
 
     /**
      * Get the formatted deadline. See the {@link CoreMessages} for the messages and date formats.
+     *
      * @return the formatted deadline.
      */
     protected String getFormattedDeadline() {
@@ -177,6 +183,7 @@ public class DeadlineController {
 
     /**
      * Set the actual deadline, or <tt>null</tt> if there is no deadline.
+     *
      * @param deadline the deadline
      */
     public void setDeadline(final Date deadline) {
@@ -186,6 +193,7 @@ public class DeadlineController {
 
     /**
      * Return the view associated with this controller.
+     *
      * @return the view
      */
     public DeadlineView getView() {

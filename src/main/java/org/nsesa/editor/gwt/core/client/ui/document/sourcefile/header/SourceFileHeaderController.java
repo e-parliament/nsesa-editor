@@ -119,6 +119,9 @@ public class SourceFileHeaderController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         translationChangeEventHandlerRegistration.removeHandler();
         relatedChangeEventHandlerRegistration.removeHandler();
@@ -156,7 +159,8 @@ public class SourceFileHeaderController {
 
     /**
      * Return the view associated with this controller.
-     * @return  the view
+     *
+     * @return the view
      */
     public SourceFileHeaderView getView() {
         return view;
@@ -164,6 +168,7 @@ public class SourceFileHeaderController {
 
     /**
      * Set the available translations.
+     *
      * @param translations the translations
      */
     public void setAvailableTranslations(final ArrayList<DocumentDTO> translations) {
@@ -173,6 +178,7 @@ public class SourceFileHeaderController {
 
     /**
      * Set the related documents.
+     *
      * @param relatedDocuments the related documents
      */
     public void setRelatedDocuments(final ArrayList<DocumentDTO> relatedDocuments) {
@@ -182,6 +188,7 @@ public class SourceFileHeaderController {
 
     /**
      * Set the currently active translation.
+     *
      * @param selectedTranslation the active selected translation
      */
     public void setSelectedTranslation(final DocumentDTO selectedTranslation) {
@@ -190,6 +197,7 @@ public class SourceFileHeaderController {
 
     /**
      * Set the current related document.
+     *
      * @param selectedRelatedDocument the active selected related document
      */
     public void setSelectedRelatedDocument(final DocumentDTO selectedRelatedDocument) {
@@ -198,6 +206,7 @@ public class SourceFileHeaderController {
 
     /**
      * Set the parent source file controller.
+     *
      * @param sourceFileController the source file controller
      */
     public void setSourceFileController(SourceFileController sourceFileController) {

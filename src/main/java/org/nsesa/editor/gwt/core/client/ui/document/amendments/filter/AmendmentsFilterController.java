@@ -15,15 +15,14 @@ package org.nsesa.editor.gwt.core.client.ui.document.amendments.filter;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -35,7 +34,7 @@ import java.util.Map;
  * filter form the view.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 26/11/12 13:44
+ *         Date: 26/11/12 13:44
  */
 @Singleton
 public class AmendmentsFilterController {
@@ -67,8 +66,9 @@ public class AmendmentsFilterController {
 
     /**
      * Create <code>AmendmentsFilterController</code> with the given parameters
+     *
      * @param documentEventBus The event bus linked to the controller
-     * @param view The associated view
+     * @param view             The associated view
      */
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {
@@ -91,8 +91,9 @@ public class AmendmentsFilterController {
 
     /**
      * Add a filter in the list of filter actions available in the view
+     *
      * @param filterName The filter name as String
-     * @param filter The filter representation
+     * @param filter     The filter representation
      */
     public void registerFilterAction(String filterName, Filter<AmendmentController> filter) {
         filters.put(filterName, filter);
@@ -116,12 +117,16 @@ public class AmendmentsFilterController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         changeHandlerRegistration.removeHandler();
     }
 
     /**
      * Returns the view associated to the controller
+     *
      * @return the view as AmendmentsFilterView
      */
     public AmendmentsFilterView getView() {

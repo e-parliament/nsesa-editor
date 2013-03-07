@@ -212,6 +212,9 @@ public class AmendmentActionPanelController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         anchorTableHandlerRegistration.removeHandler();
         anchorWithdrawHandlerRegistration.removeHandler();

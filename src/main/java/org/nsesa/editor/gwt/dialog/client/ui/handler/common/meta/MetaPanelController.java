@@ -65,6 +65,9 @@ public class MetaPanelController implements AmendmentDialogAwareController {
         // nothing yet
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         // nothing yet
     }
@@ -91,6 +94,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
 
     /**
      * Return the view.
+     *
      * @return the view
      */
     public MetaPanelView getView() {
@@ -100,6 +104,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
     /**
      * Return the title for the tab under which this controller is registered.
      * TODO i18n
+     *
      * @return the title
      */
     @Override
@@ -109,6 +114,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
 
     /**
      * Set the notes on this panel.
+     *
      * @param notes the notes
      */
     public void setNotes(final String notes) {
@@ -117,6 +123,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
 
     /**
      * Get the notes that were entered on this panel.
+     *
      * @return the notes
      */
     public String getNotes() {
@@ -126,6 +133,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
 
     /**
      * Set the justification on this panel.
+     *
      * @param justification the justification
      */
     public void setJustification(final String justification) {
@@ -134,6 +142,7 @@ public class MetaPanelController implements AmendmentDialogAwareController {
 
     /**
      * Get the trimmed justification.
+     *
      * @return the justification.
      */
     public String getJustification() {

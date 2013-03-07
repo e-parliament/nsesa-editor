@@ -134,6 +134,9 @@ public class DraftingController {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         selectionChangedEventHandlerRegistration.removeHandler();

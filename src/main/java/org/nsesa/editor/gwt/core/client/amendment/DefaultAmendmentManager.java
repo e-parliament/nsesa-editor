@@ -121,6 +121,9 @@ public class DefaultAmendmentManager implements AmendmentManager {
         });
     }
 
+    /**
+     * Removes all registered event handlers from the event bus and UI.
+     */
     public void removeListeners() {
         amendmentContainerSaveEventHandlerRegistration.removeHandler();
         amendmentContainerDeleteEventHandlerRegistration.removeHandler();
@@ -202,6 +205,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Merge an amendment container DTO from the backend into the current list of amendment controllers.
+     *
      * @param toMerge the amendment container DTOs to merge
      */
     protected void mergeAmendmentContainerDTOs(AmendmentContainerDTO... toMerge) {
@@ -249,9 +253,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Injects a single amendment into the <tt>root</tt> overlay widget node.
-     * @param amendment             the amendment to inject
-     * @param root                  the root overlay widget node
-     * @param documentController    the containing document controller
+     *
+     * @param amendment          the amendment to inject
+     * @param root               the root overlay widget node
+     * @param documentController the containing document controller
      */
     @Override
     public void injectSingleAmendment(final AmendmentContainerDTO amendment, final OverlayWidget root, final DocumentController documentController) {
@@ -264,8 +269,9 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Injects all existing {#amendmentControllers} into the given <tt>root</tt> overlay widget node.
-     * @param root                  the root overlay widget node
-     * @param documentController    the containing document controller
+     *
+     * @param root               the root overlay widget node
+     * @param documentController the containing document controller
      */
     @Override
     public void inject(final OverlayWidget root, final DocumentController documentController) {
@@ -278,9 +284,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Actual internal injection of the given amendment controller.
-     * @param amendmentController   the amendment controller to inject
-     * @param root                  the root node of the overlay widget tree
-     * @param documentController    the parent document controller
+     *
+     * @param amendmentController the amendment controller to inject
+     * @param root                the root node of the overlay widget tree
+     * @param documentController  the parent document controller
      */
     protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
@@ -308,6 +315,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Get the controller associated with the given <tt>amendmentContainerDTO</tt>
+     *
      * @param amendmentContainerDTO the amendment container DTO to find the controller for
      * @return the controller, or <tt>null</tt> if it cannot be found
      */
@@ -322,6 +330,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Creates a simple {@link AmendmentController} associated with a given <tt>amendmentContainerDTO</tt>
+     *
      * @param amendmentContainerDTO the amendment container DTO to create a controller for
      * @return the controller
      */
@@ -334,6 +343,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Sets a list of amendment container DTOs on this manager. They will be transformed into {@link AmendmentController}s.
+     *
      * @param amendmentContainerDTOs the amendment container DTOs.
      */
     @Override
@@ -345,6 +355,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Returns all the amendment controllers associated with this manager.
+     *
      * @return all amendment controllers
      */
     @Override
@@ -354,6 +365,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Get a filtered (sub)set of the amendment controllers associated with this manager.
+     *
      * @param filter the filter with the specifications
      * @return the filter response, with matching amendment controllers.
      */
@@ -379,6 +391,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
     /**
      * Sets the parent document controller and registers the listeners for various events.
+     *
      * @param documentController the parent document controller
      */
     @Override
