@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
@@ -295,7 +296,13 @@ public class CKEditor extends Composite implements RichTextEditor {
     @Override
     protected void onAttach() {
         super.onAttach();
-        init();
+        // we cannot call init() directly because it will cause IE < 9 to choke
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                init();
+            }
+        });
     }
 
     @Override
