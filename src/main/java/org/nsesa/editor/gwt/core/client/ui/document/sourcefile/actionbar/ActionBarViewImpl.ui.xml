@@ -30,7 +30,8 @@
             position: relative;
             left: 8px;
             color: #333;
-            font-size: medium;
+            width: 100%;
+            font-size: small;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

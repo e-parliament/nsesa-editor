@@ -20,12 +20,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create.ActionBarCreatePanelController;
@@ -195,7 +197,7 @@ public class ActionBarController {
 
     /**
      * Set the current overlay widget - normally done via the
-     * {@link #attach(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)} method.
+     * {@link #attach(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget, org.nsesa.editor.gwt.core.client.ui.document.DocumentController)} method.
      *
      * @param overlayWidget the overlay widget
      */
@@ -268,11 +270,12 @@ public class ActionBarController {
 
     /**
      * 'Attaches' itself to the given <tt>target</tt> amendable overlay widget, changing the CSS style
-     * of the overlay widget, and position the toolbar right above it via a call to {@link #adaptPosition()}.
+     * of the overlay widget, and position the toolbar right above it via a call to {@link #adaptPosition(com.google.gwt.user.client.ui.Widget)}.
      *
      * @param target the target overlay widget
+     * @param target the containing document controller
      */
-    public void attach(final OverlayWidget target) {
+    public void attach(final OverlayWidget target, final DocumentController documentController) {
         // only perform the world if the new target overlay widget is actually different
         // this made a huge difference in re-flow/repainting of the browser
         if (overlayWidget != target) {
@@ -296,26 +299,25 @@ public class ActionBarController {
             overlayWidget.asWidget().addStyleName(actionBarViewCss.hover());
 
             // position our action bar exactly above the amendable widget
-            adaptPosition();
+            adaptPosition(documentController.getSourceFileController().getContentController().getView().getContentPanel());
         }
     }
 
     /**
      * Adapts the position of this 'hoovering' toolbar to be placed just above the {@link OverlayWidget}.
      */
-    public void adaptPosition() {
+    public void adaptPosition(final Widget container) {
         // hide the panel with our creation elements
         actionBarCreatePanelController.getView().asWidget().setVisible(false);
-        // TODO getRoot is NOT a good way to determine the max width - should use document view width instead!
-        if (overlayWidget != null && overlayWidget.getRoot() != null) {
+        if (overlayWidget != null) {
             final Style style = view.asWidget().getElement().getStyle();
-            final int coordinateY = overlayWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1) - 70;
+            final int coordinateY = overlayWidget.asWidget().getAbsoluteTop() - (view.asWidget().getOffsetHeight() - 1);
             style.setTop(coordinateY, Style.Unit.PX);
-            final int x = overlayWidget.asWidget().getAbsoluteLeft();
-            style.setLeft(x, Style.Unit.PX);
-            final int width = overlayWidget.getRoot().asWidget().getOffsetWidth();
-            final int offsetRoot = overlayWidget.getRoot().asWidget().getAbsoluteLeft();
-            style.setWidth((width + offsetRoot) - x, Style.Unit.PX);
+            style.setLeft(overlayWidget.asWidget().getAbsoluteLeft(), Style.Unit.PX);
+
+            // we need to limit the width to make sure it does not
+            final int width = (container.getOffsetWidth() + container.getAbsoluteLeft()) - overlayWidget.asWidget().getAbsoluteLeft();
+            style.setWidth((width), Style.Unit.PX);
         }
     }
 

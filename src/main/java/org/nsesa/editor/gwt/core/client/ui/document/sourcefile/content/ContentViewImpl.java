@@ -116,6 +116,11 @@ public class ContentViewImpl extends Composite implements ContentView {
     }
 
     @Override
+    public HTML getContentPanel() {
+        return contentPanel;
+    }
+
+    @Override
     public ScrollPanel getScrollPanel() {
         return scrollPanel;
     }

@@ -290,7 +290,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
         // allow the action bar to be shown.
         if (!sender.isIntroducedByAnAmendment()) {
-            actionBarController.attach(sender);
+            actionBarController.attach(sender, documentController);
             actionBarController.setLocation(documentController.getLocator().getLocation(sender, documentController.getDocument().getLanguageIso(), false));
         }
     }

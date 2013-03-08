@@ -72,10 +72,9 @@
         }
 
         .actionBarController {
-            position: absolute;
+            position: fixed;
             border-bottom: 1px solid gray;
             background-color: #fff;
-            min-width: 350px;
             padding: 8px;
             z-index: 1;
         }

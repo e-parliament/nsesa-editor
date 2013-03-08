@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.ImplementedBy;
@@ -39,6 +40,12 @@ public interface ContentView extends IsWidget {
      * @return the main content element
      */
     Element getContentElement();
+
+    /**
+     * Get the content panel, used to determine the max size of the action bar controller.
+     * @return the content panel
+     */
+    HTML getContentPanel();
 
     /**
      * Get a reference to the scroll panel.
