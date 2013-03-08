@@ -17,8 +17,19 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="ActionBarViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarViewCss'/>
-    <ui:with field="resource" type="org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.resources.Resources"/>
+    <ui:with field="resource"
+             type="org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.resources.Resources"/>
     <ui:style field="res">
+        .actions {
+            width: 300px;
+            display: inline-block;
+        }
+
+        .location {
+            width: 100%;
+            display: inline-block;
+        }
+
         .actionBar {
             width: 100%;
             position: relative;
@@ -30,7 +41,6 @@
             position: relative;
             left: 8px;
             color: #333;
-            width: 100%;
             font-size: small;
             white-space: nowrap;
             overflow: hidden;
@@ -44,23 +54,28 @@
             text-decoration: underline;
             padding-right: 10px;
         }
+
         .icon {
             vertical-align: middle;
         }
     </ui:style>
     <g:HTMLPanel styleName="{res.actionBar} actionBarView">
-        <g:Image resource="{resource.amend}" styleName="{res.icon}"/>
-        <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
-        <!--<g:Image resource="{resource.amend}" styleName="{res.icon}"/>-->
-        <g:Anchor ui:field="bundleAnchor" styleName="{res.anchor}" text="Bundle" visible="false"/>
-        <g:Image resource="{resource.children}" styleName="{res.icon}"/>
-        <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
-        <g:Image resource="{resource.delete}" styleName="{res.icon}"/>
-        <g:Anchor ui:field="deleteAnchor" styleName="{res.anchor}" text="Delete"/>
-        <!--<g:Image resource="{resource.move}" styleName="{res.icon}"/>-->
-        <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move" visible="false"/>
-        <!--<g:Image resource="{resource.translate}" styleName="{res.icon}"/>-->
-        <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate" visible="false"/>
-        <g:Label ui:field="location" styleName="{res.locationPanel}"/>
+        <span style="{res.actions}">
+            <g:Image resource="{resource.amend}" styleName="{res.icon}"/>
+            <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
+            <!--<g:Image resource="{resource.amend}" styleName="{res.icon}"/>-->
+            <g:Anchor ui:field="bundleAnchor" styleName="{res.anchor}" text="Bundle" visible="false"/>
+            <g:Image resource="{resource.children}" styleName="{res.icon}"/>
+            <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
+            <g:Image resource="{resource.delete}" styleName="{res.icon}"/>
+            <g:Anchor ui:field="deleteAnchor" styleName="{res.anchor}" text="Delete"/>
+            <!--<g:Image resource="{resource.move}" styleName="{res.icon}"/>-->
+            <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move" visible="false"/>
+            <!--<g:Image resource="{resource.translate}" styleName="{res.icon}"/>-->
+            <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate" visible="false"/>
+        </span>
+        <span style="{res.location}">
+            <g:Label ui:field="location" styleName="{res.locationPanel}"/>
+        </span>
     </g:HTMLPanel>
 </ui:UiBinder>

@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ui.overlay.TextUtils;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
@@ -91,7 +92,12 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
 
     @Override
     public void setLocation(String location) {
-        this.location.setText(location);
+        if (location != null) {
+            this.location.setText(TextUtils.capitalize(location));
+        }
+        else {
+            this.location.setText("");
+        }
     }
 
     @Override
