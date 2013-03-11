@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.ImplementedBy;
@@ -65,4 +66,16 @@ public interface ClientFactory {
      * @return the core messages.
      */
     CoreMessages getCoreMessages();
+
+    /**
+     * Returns the configuration JSON object as it was specified in /configuration.json.
+     * @return the configuration
+     */
+    JavaScriptObject getConfiguration();
+
+    /**
+     * Set the client side configuration object.
+     * @param configuration the configuration to set
+     */
+    void setConfiguration(JavaScriptObject configuration);
 }

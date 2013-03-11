@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.testing.StubScheduler;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -35,6 +36,7 @@ public class ClientFactoryMock implements ClientFactory {
     protected final PlaceController placeController = new PlaceController(eventBus);
     protected final Scheduler scheduler = new StubScheduler();
     protected ClientContext clientContext = new ClientContextImpl();
+    protected JavaScriptObject configuration = JavaScriptObject.createObject();
 
     final CoreMessages coreMessages = new CoreMessages() {
         @Override
@@ -296,5 +298,15 @@ public class ClientFactoryMock implements ClientFactory {
     @Override
     public CoreMessages getCoreMessages() {
         return coreMessages;
+    }
+
+    @Override
+    public JavaScriptObject getConfiguration() {
+        return configuration;
+    }
+
+    @Override
+    public void setConfiguration(JavaScriptObject configuration) {
+        this.configuration = configuration;
     }
 }

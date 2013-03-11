@@ -17,9 +17,12 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.http.client.*;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
@@ -59,6 +62,8 @@ public abstract class Editor implements EntryPoint {
 
     private static final Logger LOG = Logger.getLogger(Editor.class.getName());
 
+    private static final String CONFIGURATION_FILE = "configuration.json";
+
     private ClientFactory clientFactory;
     private ServiceFactory serviceFactory;
     private SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
@@ -74,9 +79,7 @@ public abstract class Editor implements EntryPoint {
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
             public void execute() {
-                LOG.info("Deferred Editor module loading started.");
-                onModuleLoadDeferred();
-                LOG.info("Deferred Editor module loading completed.");
+                configure();
             }
         });
     }
@@ -107,7 +110,9 @@ public abstract class Editor implements EntryPoint {
 
     /**
      * Deferred loading of the module, to ensure that the uncaught exception handler has been installed. At this point,
-     * the client and service factory have been set.
+     * the client and service factory have been set and all their dependencies are available.
+     * <p/>
+     * Note however, that while the client context has been set, the authentication has not yet been validated.
      */
     protected void onModuleLoadDeferred() {
 
@@ -136,6 +141,7 @@ public abstract class Editor implements EntryPoint {
      * unused until we handle multiple document controllers.
      */
     protected void initializeUI() {
+
         // set up the main window
         final EditorController editorController = getInjector().getEditorController();
         // there seems to be no other way to inject this 'injector'
@@ -166,6 +172,47 @@ public abstract class Editor implements EntryPoint {
 
         // Goes to the place represented on URL else default place
         historyHandler.handleCurrentHistory();
+    }
+
+    /**
+     * Configures the local
+     */
+    protected void configure() {
+        try {
+            RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, CONFIGURATION_FILE);
+
+            requestBuilder.sendRequest("", new RequestCallback() {
+                @Override
+                public void onResponseReceived(Request req, Response resp) {
+                    final JavaScriptObject configuration;
+                    try {
+                        configuration = JsonUtils.safeEval(resp.getText());
+                        clientFactory.setConfiguration(configuration);
+                        // configuration ok -- continue
+                        LOG.log(Level.INFO, "Successfully read " + CONFIGURATION_FILE);
+                    } catch (Exception e) {
+                        LOG.log(Level.WARNING, "Could parse " + CONFIGURATION_FILE + ", configuration will be empty.", e);
+                    } finally {
+                        // continue with the loading
+                        onModuleLoadDeferred();
+                    }
+                }
+
+                @Override
+                public void onError(Request res, Throwable throwable) {
+                    // handle errors
+                    LOG.log(Level.INFO, "Could not read " + CONFIGURATION_FILE + ", configuration will be empty.", throwable);
+                    clientFactory.setConfiguration(JavaScriptObject.createObject());
+                    // configuration failed -- ignore
+                    onModuleLoadDeferred();
+                }
+            });
+        } catch (RequestException e) {
+            LOG.log(Level.SEVERE, "Could not execute GET request to retrieve " + CONFIGURATION_FILE, e);
+            clientFactory.setConfiguration(JavaScriptObject.createObject());
+            // configuration failed -- ignore
+            onModuleLoadDeferred();
+        }
     }
 
     /**

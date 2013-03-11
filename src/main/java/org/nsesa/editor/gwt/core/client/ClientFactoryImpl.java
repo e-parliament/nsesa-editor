@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Inject;
@@ -35,6 +36,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private final PlaceController placeController;
     private final Scheduler scheduler;
     private final CoreMessages coreMessages;
+    private JavaScriptObject configuration;
 
     private ClientContext clientContext;
 
@@ -79,5 +81,15 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public CoreMessages getCoreMessages() {
         return coreMessages;
+    }
+
+    @Override
+    public JavaScriptObject getConfiguration() {
+        return configuration;
+    }
+
+    @Override
+    public void setConfiguration(JavaScriptObject configuration) {
+        this.configuration = configuration;
     }
 }
