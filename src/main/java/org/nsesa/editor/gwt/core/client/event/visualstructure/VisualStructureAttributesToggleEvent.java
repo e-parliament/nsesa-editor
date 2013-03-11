@@ -11,36 +11,40 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
 import com.google.gwt.event.shared.GwtEvent;
 
 /**
- * An event used to show/hide the drafting attributes widget tool
+ * An event used to show/hide the visual structure attributes widget tool
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:14
  *
  */
-public class DraftingAttributesToggleEvent extends GwtEvent<DraftingAttributesToggleEventHandler> {
+public class VisualStructureAttributesToggleEvent extends GwtEvent<VisualStructureAttributesToggleEventHandler> {
 
-    public static final Type<DraftingAttributesToggleEventHandler> TYPE = new Type<DraftingAttributesToggleEventHandler>();
+    public static final Type<VisualStructureAttributesToggleEventHandler> TYPE = new Type<VisualStructureAttributesToggleEventHandler>();
     private boolean shown;
 
-    public DraftingAttributesToggleEvent(boolean shown) {
+    public VisualStructureAttributesToggleEvent(boolean shown) {
         this.shown = shown;
     }
 
     @Override
-    public Type<DraftingAttributesToggleEventHandler> getAssociatedType() {
+    public Type<VisualStructureAttributesToggleEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(DraftingAttributesToggleEventHandler handler) {
+    protected void dispatch(VisualStructureAttributesToggleEventHandler handler) {
         handler.onEvent(this);
     }
 
+    /**
+     * To see whether or not visual structure attributes widget is displayed
+     * @return True when visual structure attributes widget is displayed
+     */
     public boolean isShown() {
         return shown;
     }
