@@ -136,13 +136,13 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureToggleEvent.TYPE, new VisualStructureToggleEventHandler() {
             @Override
             public void onEvent(VisualStructureToggleEvent event) {
-                view.getRichTextEditor().toggleDraftingTool(event.isShown());
+                view.getRichTextEditor().toggleVisualStructure(event.isShown());
             }
         });
         draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureAttributesToggleEvent.TYPE, new VisualStructureAttributesToggleEventHandler() {
             @Override
             public void onEvent(VisualStructureAttributesToggleEvent event) {
-                view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
+                view.getRichTextEditor().toggleVisualStructureAttributes(event.isShown());
             }
         });
     }

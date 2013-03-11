@@ -169,7 +169,7 @@ public class CKEditor extends Composite implements RichTextEditor {
      * @param toggled When true the drafting tool widget is shown
      */
     @Override
-    public void toggleDraftingTool(boolean toggled) {
+    public void toggleVisualStructure(boolean toggled) {
         //toggle the view when the editor is attached to DOM
         if (isAttached()) {
             //the flag to show drafting tool has been set up
@@ -201,7 +201,7 @@ public class CKEditor extends Composite implements RichTextEditor {
      * @param toggled When true the drafting attributes tool widget is shown
      */
     @Override
-    public void toggleDraftingAttributes(boolean toggled) {
+    public void toggleVisualStructureAttributes(boolean toggled) {
         //toggle the view when the editor is attached to DOM
         if (isAttached()) {
             if (showDraftingTool) {

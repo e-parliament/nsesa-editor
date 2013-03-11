@@ -84,11 +84,11 @@ public interface RichTextEditor extends IsWidget {
     void setVisualStructureAttributesWidget(IsWidget widget);
 
     /**
-     * Show/hide the drafting tool widget in the editor.
+     * Show/hide the visual structure tool widget in the editor.
      *
-     * @param toggled When true the drafting tool widget is shown
+     * @param toggled When true the visual structure tool widget is shown
      */
-    void toggleDraftingTool(boolean toggled);
+    void toggleVisualStructure(boolean toggled);
 
     /**
      * Executes a given command of the editor especially when the editor implementation is based on existing Javascript
@@ -100,11 +100,11 @@ public interface RichTextEditor extends IsWidget {
     void executeCommand(String command, int delay);
 
     /**
-     * Show/hide the drafting attributes widget in the editor
+     * Show/hide the visual structure attributes widget in the editor
      *
-     * @param toggled When true the drafting attributes widget is shown
+     * @param toggled When true the visual structure attributes widget is shown
      */
-    void toggleDraftingAttributes(boolean toggled);
+    void toggleVisualStructureAttributes(boolean toggled);
 
     /**
      * Resize the editor

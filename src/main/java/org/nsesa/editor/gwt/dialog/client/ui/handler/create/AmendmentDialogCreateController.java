@@ -146,7 +146,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureToggleEvent.TYPE, new VisualStructureToggleEventHandler() {
             @Override
             public void onEvent(VisualStructureToggleEvent event) {
-                view.getRichTextEditor().toggleDraftingTool(event.isShown());
+                view.getRichTextEditor().toggleVisualStructure(event.isShown());
             }
         });
 
@@ -154,7 +154,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureAttributesToggleEvent.TYPE, new VisualStructureAttributesToggleEventHandler() {
             @Override
             public void onEvent(VisualStructureAttributesToggleEvent event) {
-                view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
+                view.getRichTextEditor().toggleVisualStructureAttributes(event.isShown());
             }
         });
 
