@@ -11,16 +11,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
-import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.inject.client.GinModule;
+import com.google.gwt.inject.client.binder.GinBinder;
 
 /**
- * An interface to handle <code>SelectionChangedEvent</code> GWT event.
- *
+ * Gin visual structure module
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 17/01/13 10:15
+ * Date: 16/01/13 13:37
  */
-public interface SelectionChangedEventHandler extends EventHandler {
-    void onEvent(SelectionChangedEvent event);
+public class VisualStructureModule implements GinModule {
+    /**
+     * Visual structure configuration
+     * @param binder
+     */
+    @Override
+    public void configure(GinBinder binder) {
+    }
 }

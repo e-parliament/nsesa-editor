@@ -15,8 +15,8 @@
 -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.drafting.Resources'/>
-    <ui:with field='msg' type='org.nsesa.editor.gwt.core.client.ui.drafting.Messages'/>
+    <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.visualstructure.Resources'/>
+    <ui:with field='msg' type='org.nsesa.editor.gwt.core.client.ui.visualstructure.Messages'/>
 
 
     <ui:style field="res">

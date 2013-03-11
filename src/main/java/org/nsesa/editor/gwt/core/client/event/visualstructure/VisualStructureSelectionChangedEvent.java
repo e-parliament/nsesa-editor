@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.GwtEvent;
@@ -23,33 +23,33 @@ import com.google.gwt.event.shared.GwtEvent;
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 9:59
  */
-public class SelectionChangedEvent extends GwtEvent<SelectionChangedEventHandler> {
-    public static final Type<SelectionChangedEventHandler> TYPE = new Type<SelectionChangedEventHandler>();
+public class VisualStructureSelectionChangedEvent extends GwtEvent<VisualStructureSelectionChangedEventHandler> {
+    public static final Type<VisualStructureSelectionChangedEventHandler> TYPE = new Type<VisualStructureSelectionChangedEventHandler>();
 
     private Element parentElement;
     private boolean moreTagsSelected;
     private String selectedText;
 
     /**
-     * Create <code>SelectionChangedEvent</code> with the given input data
+     * Create <code>VisualStructureSelectionChangedEvent</code> with the given input data
      * @param parentElement The parent element whereas the selection occur
      * @param moreTagsSelected True when the browser selection contains more elements
      * @param selectedText The selected text
      */
-    public SelectionChangedEvent(Element parentElement, boolean moreTagsSelected, String selectedText) {
+    public VisualStructureSelectionChangedEvent(Element parentElement, boolean moreTagsSelected, String selectedText) {
         this.parentElement = parentElement;
         this.moreTagsSelected = moreTagsSelected;
         this.selectedText = selectedText;
     }
 
     @Override
-    public Type<SelectionChangedEventHandler> getAssociatedType() {
+    public Type<VisualStructureSelectionChangedEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(SelectionChangedEventHandler handler) {
-        handler.onEvent(this);
+    protected void dispatch(VisualStructureSelectionChangedEventHandler handlerVisualStructure) {
+        handlerVisualStructure.onEvent(this);
     }
 
     /**

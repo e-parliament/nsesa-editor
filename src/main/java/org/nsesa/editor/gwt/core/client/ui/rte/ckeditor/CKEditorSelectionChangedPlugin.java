@@ -17,17 +17,17 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Element;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
 /**
- * CK editor plugin which raise <code>SelectionChangedEvent</code>GWT application event whenever the user move
+ * CK editor plugin which raise <code>VisualStructureSelectionChangedEvent</code>GWT application event whenever the user move
  * the cursor, press a key or make a selection in the editor area. The event is propagated further through
- * event bus and can be handled by different controllers like <code>DraftingController</code>
- * ({@link org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController})
+ * event bus and can be handled by different controllers like <code>VisualStructureController</code>
+ * ({@link org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController})
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 9:38
@@ -69,7 +69,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     /**
      * Catch any  mouseup, mousedown or keypress browser events.
-     * In such cases raise a <code>SelectionChangedEvent</code> and pass further the start element whereas
+     * In such cases raise a <code>VisualStructureSelectionChangedEvent</code> and pass further the start element whereas
      * the selection occurs, among with the selected text from the editor area and a flag to see whether more
      * tag elements have been included in the selection.
      * @param editor The Rich Text editor as JavaScriptObject
@@ -90,7 +90,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
 
     /**
      * Catch any mouseup, mousedown or keypress browser events.
-     * In such cases raise a <code>SelectionChangedEvent</code> and pass further the start element whereas
+     * In such cases raise a <code>VisualStructureSelectionChangedEvent</code> and pass further the start element whereas
      * the selection occurs, among with the selected text from the editor area and a flag to see whether more
      * tag elements have been included in the selection
      * @param editor  The JavaScriptObject editor instance
@@ -186,7 +186,7 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
     private void fireEvent(JavaScriptObject jsObject, boolean moreTagsSelected, String selectedText) {
         LOG.info("Changed event fired with more tags selected: " + moreTagsSelected + " and selected text " + selectedText);
         Element el = jsObject.cast();
-        clientFactory.getEventBus().fireEvent(new SelectionChangedEvent(el, moreTagsSelected, selectedText));
+        clientFactory.getEventBus().fireEvent(new VisualStructureSelectionChangedEvent(el, moreTagsSelected, selectedText));
     }
 
 }

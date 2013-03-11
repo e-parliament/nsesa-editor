@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
@@ -25,8 +25,8 @@ import java.util.Map;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
-@ImplementedBy(DraftingAttributesViewImpl.class)
-public interface DraftingAttributesView extends IsWidget {
+@ImplementedBy(VisualStructureAttributesViewImpl.class)
+public interface VisualStructureAttributesView extends IsWidget {
     /**
      * Clean up the widget
      */

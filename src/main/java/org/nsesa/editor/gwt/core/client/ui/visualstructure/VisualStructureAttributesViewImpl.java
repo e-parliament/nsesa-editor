@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -21,22 +21,22 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingModificationEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureModificationEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Default implementation of {@link DraftingAttributesView} interface based on {@link UiBinder} GWT mechanism.
+ * Default implementation of {@link VisualStructureAttributesView} interface based on {@link UiBinder} GWT mechanism.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 
-public class DraftingAttributesViewImpl extends ResizeComposite implements DraftingAttributesView {
+public class VisualStructureAttributesViewImpl extends ResizeComposite implements VisualStructureAttributesView {
     private EventBus eventBus;
 
-    interface MyUiBinder extends UiBinder<Widget, DraftingAttributesViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, VisualStructureAttributesViewImpl> {
     }
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
     /**
@@ -51,7 +51,7 @@ public class DraftingAttributesViewImpl extends ResizeComposite implements Draft
     private Map<Label, TextBox> attributesHolder = new HashMap<Label, TextBox>();
 
     @Inject
-    public DraftingAttributesViewImpl(EventBus eventBus) {
+    public VisualStructureAttributesViewImpl(EventBus eventBus) {
         this.eventBus = eventBus;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
@@ -66,7 +66,7 @@ public class DraftingAttributesViewImpl extends ResizeComposite implements Draft
 
     /**
      * Create a list of labels and text boxes based on the given map
-     * and fire {@link DraftingModificationEvent} whenever the user change the value from textbox
+     * and fire {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureModificationEvent} whenever the user change the value from textbox
      *
      * @param attributes A map of attributes where the key is the attribute name and the value is the attribute value
      */
@@ -85,7 +85,7 @@ public class DraftingAttributesViewImpl extends ResizeComposite implements Draft
                 public void onChange(ChangeEvent event) {
                     final Map<String, String> attrs = new HashMap<String, String>();
                     attrs.put(lbl.getText(), txtBox.getText());
-                    eventBus.fireEvent(new DraftingModificationEvent(attrs));
+                    eventBus.fireEvent(new VisualStructureModificationEvent(attrs));
                 };
             });
 

@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
@@ -26,14 +26,14 @@ import java.util.HashMap;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
-@ImplementedBy(DraftingViewImpl.class)
-public interface DraftingView extends IsWidget {
+@ImplementedBy(VisualStructureViewImpl.class)
+public interface VisualStructureView extends IsWidget {
 
     /**
      * A callback interfaced for code<>DraftingView</code> interface. The typical implementation
      * will use the event bus in order to raise different types of events.
      */
-    public static interface DraftingCallback {
+    public static interface VisualStructureCallback {
         /**
          * Execute this operation when child is selected in
          * @param child The child selected
@@ -50,13 +50,13 @@ public interface DraftingView extends IsWidget {
      * Set the view title
      * @param title
      */
-    void setDraftTitle(String title);
+    void setVisualStructureTitle(String title);
 
     /**
      * Refresh the allowed children into the view
      * @param allowedChildren A Map containing the allowed widget children with their occurrence
      * @param callback gets called when the user select a child from the interface
      */
-    void refreshAllowedChildren(HashMap<OverlayWidget,Occurrence> allowedChildren, DraftingCallback callback);
+    void refreshAllowedChildren(HashMap<OverlayWidget,Occurrence> allowedChildren, VisualStructureCallback callback);
 
 }

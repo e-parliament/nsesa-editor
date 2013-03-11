@@ -21,11 +21,11 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.drafting.DraftingController;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -72,7 +72,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     /**
      * The drafting controller.
      */
-    protected final DraftingController draftingController;
+    protected final VisualStructureController visualStructureController;
 
     protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
 
@@ -89,18 +89,18 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
-                                           final DraftingController draftingController,
+                                           final VisualStructureController visualStructureController,
                                            final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
-        this.draftingController = draftingController;
+        this.visualStructureController = visualStructureController;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
 
 
-        view.getRichTextEditor().setDraftingTool(draftingController.getView());
-        view.getRichTextEditor().setDraftingAttributes(draftingController.getAttributesView());
+        view.getRichTextEditor().setDraftingTool(visualStructureController.getView());
+        view.getRichTextEditor().setDraftingAttributes(visualStructureController.getAttributesView());
 
         registerListeners();
     }
@@ -133,15 +133,15 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
             }
         });
 
-        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureToggleEvent.TYPE, new VisualStructureToggleEventHandler() {
             @Override
-            public void onEvent(DraftingToggleEvent event) {
+            public void onEvent(VisualStructureToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
             }
         });
-        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureAttributesToggleEvent.TYPE, new VisualStructureAttributesToggleEventHandler() {
             @Override
-            public void onEvent(DraftingAttributesToggleEvent event) {
+            public void onEvent(VisualStructureAttributesToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });
@@ -192,7 +192,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     @Override
     public void handle() {
         // set the amendable widget in the drafting controller
-        draftingController.setOverlayWidgetWidget(dialogContext.getOverlayWidget());
+        visualStructureController.setOverlayWidgetWidget(dialogContext.getOverlayWidget());
         // make sure to pass the context to the children
         for (final AmendmentDialogAwareController childController : childControllers) {
             childController.setContext(dialogContext);

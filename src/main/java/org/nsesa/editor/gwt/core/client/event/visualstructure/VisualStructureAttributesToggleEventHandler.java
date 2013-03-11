@@ -11,16 +11,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * An interface to handle <code>DraftingModificationEvent</code> GWT event.
+ * An interface to handle <code>VisualStructureAttributesToggleEvent</code> GWT event.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 17/01/13 15:25
+ * Date: 22/01/13 13:15
+ *
  */
-public interface DraftingModificationEventHandler extends EventHandler {
-    void onEvent(DraftingModificationEvent event);
+public interface VisualStructureAttributesToggleEventHandler extends EventHandler {
+    public void onEvent(VisualStructureAttributesToggleEvent event);
 }

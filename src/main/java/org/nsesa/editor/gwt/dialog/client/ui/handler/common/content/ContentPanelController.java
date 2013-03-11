@@ -16,10 +16,10 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.common.content;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
@@ -58,15 +58,15 @@ public class ContentPanelController implements AmendmentDialogAwareController {
     }
 
     private void registerListeners() {
-        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingToggleEvent.TYPE, new DraftingToggleEventHandler() {
+        draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureToggleEvent.TYPE, new VisualStructureToggleEventHandler() {
             @Override
-            public void onEvent(DraftingToggleEvent event) {
+            public void onEvent(VisualStructureToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingTool(event.isShown());
             }
         });
-        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(DraftingAttributesToggleEvent.TYPE, new DraftingAttributesToggleEventHandler() {
+        draftingAttributesToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureAttributesToggleEvent.TYPE, new VisualStructureAttributesToggleEventHandler() {
             @Override
-            public void onEvent(DraftingAttributesToggleEvent event) {
+            public void onEvent(VisualStructureAttributesToggleEvent event) {
                 view.getRichTextEditor().toggleDraftingAttributes(event.isShown());
             }
         });

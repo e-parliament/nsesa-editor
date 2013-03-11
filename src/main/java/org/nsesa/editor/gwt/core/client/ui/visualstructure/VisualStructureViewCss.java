@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.resources.client.CssResource;
 
@@ -21,5 +21,5 @@ import com.google.gwt.resources.client.CssResource;
  * Date: 16/01/13 13:44
  *
  */
-public interface DraftingViewCss extends CssResource {
+public interface VisualStructureViewCss extends CssResource {
 }

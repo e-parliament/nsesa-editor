@@ -16,45 +16,45 @@ package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingToggleEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
 /**
- * Add a button to CKEditor to fire <code>DraftingToggleEvent</code> GWT event.
- * The event is propagated further through the event bus and is handled by <code>DraftingController</code> controller
- * to show/hide drafting tool widget.
+ * Add a button to CKEditor to fire <code>VisualStructureAttributesToggleEvent</code> GWT event.
+ * The event is propagated further through the event bus and is handled by <code>VisualStructureController</code> controller
+ * to show/hide drafting attributes tool widget.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 22/01/13 12:32
+ * Date: 22/01/13 12:27
+ *
  */
-public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
-    private static final Logger LOG = Logger.getLogger(CKEditorDraftingToolPlugin.class.getName());
+public class CKEditorVisualStructureAttributesPlugin implements RichTextEditorPlugin {
+    private static final Logger LOG = Logger.getLogger(CKEditorVisualStructureAttributesPlugin.class.getName());
 
     /**
      * The client factory used to get event bus
      */
     private ClientFactory clientFactory;
-
     /**
      * Keep previous state of the button
      */
     private int previousState = -1;
 
     @Inject
-    public CKEditorDraftingToolPlugin(ClientFactory clientFactory) {
+    public CKEditorVisualStructureAttributesPlugin(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
 
     @Override
     public String getName() {
-        return "nsesa-draftingtoolbar";
+        return "nsesa-draftingattributestoolbar";
     }
 
     /**
-     * No beforeInit operation performed
+     * Empty method
      * @param editor The Rich Text editor as JavaScriptObject
      */
     @Override
@@ -62,9 +62,9 @@ public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
         //do nothing
     }
 
-    /**
-     * The main method responsible to create a CK editor button, to attach to editor instance and
-     * to raise <code>DraftingToggleEvent</code> as soon as the button is pressed.
+     /**
+     * The main method responsible to create a CK editor button, to attach to the editor instance and
+     * to raise <code>VisualStructureAttributesToggleEvent</code> as soon as the button is pressed.
      * Be carefully, the button name shall be the same with the one defined in <code>CKEditorToolbar</code>
      * toolbar configuration.
      * @param editor The Rich Text editor as JavaScriptObject
@@ -75,7 +75,7 @@ public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
     }
 
     /**
-     * No export operation performed
+     * Empty method
      * @param config The Rich Text editor configuration as JavaScriptObject
      */
     @Override
@@ -83,60 +83,54 @@ public class CKEditorDraftingToolPlugin implements RichTextEditorPlugin {
         //do nothing
     }
 
-    /**
-     * Creates <code>NsesaToggle</code> button and raise the specific event when the button is pressed.
-     * Since the action of the <code>Source</code> could alter the state of <code>NsesaToggle</code> button
-     * there is also a handler to preserve the state of this new button
-     * @param editor
-     * @param plugin
-     */
-    private native void nativeInit(JavaScriptObject editor, CKEditorDraftingToolPlugin plugin) /*-{
-        var buttonName = "NsesaToggle";
+    private native void nativeInit(JavaScriptObject editor, CKEditorVisualStructureAttributesPlugin plugin) /*-{
+        var buttonName = "NsesaToggleAttributes";
         var cmd = {
             exec: function (editor) {
                 editor.getCommand(buttonName).toggleState();
                 var nsesaState = editor.getCommand(buttonName).state;
-                var nsesaToggle = {nsesaToggleDraft: (nsesaState == $wnd.CKEDITOR.TRISTATE_ON)};
-                editor.fire("nsesaToggleDraft", nsesaToggle);
+                var nsesaToggle = {nsesaToggleDraftAttributes: (nsesaState == $wnd.CKEDITOR.TRISTATE_ON)};
+                editor.fire("nsesaToggleDraftAttributes", nsesaToggle);
             }
         }
         editor.addCommand(buttonName, cmd);
         editor.ui.addButton(buttonName, {
-            label: "Toggle Drafting tool",
-            icon: $wnd.CKEDITOR.basePath + "plugins/nsesa/nsesaDraftingTool.png",
+            label: "Toggle Drafting Attributes tool",
+            icon: $wnd.CKEDITOR.basePath + "plugins/nsesa/nsesaDraftingAttributes.png",
             command: buttonName
         });
 
         // save the state before executing source command
         editor.on('beforeCommandExec', function (evt) {
             if (evt.data.name == 'source' && evt.editor.mode == 'wysiwyg') {
-                if (editor.getCommand('NsesaToggle'))
-                    plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::previousState = editor.getCommand('NsesaToggle').state;
+                if (editor.getCommand(buttonName)) {
+                    plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureAttributesPlugin::previousState = editor.getCommand(buttonName).state;
+                }
             }
         });
 
         editor.on('mode', function () {
             if (editor.mode != 'source') {
-                if (editor.getCommand('NsesaToggle')) {
-                    var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::previousState;
+                if (editor.getCommand(buttonName)) {
+                    var state = plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureAttributesPlugin::previousState;
                     if (state >= 0) {
-                        editor.getCommand('NsesaToggle').setState(state);
-                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::fireEvent(Z)(state == 1);
+                        editor.getCommand(buttonName).setState(state);
+                        plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureAttributesPlugin::fireEvent(Z)(state == 1);
                     }
                 }
             } else {
-                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::fireEvent(Z)(false);
+                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureAttributesPlugin::fireEvent(Z)(false);
             }
         });
 
-        editor.on('nsesaToggleDraft', function (ev) {
-            var toggleDraft = ev.data.nsesaToggleDraft;
-            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorDraftingToolPlugin::fireEvent(Z)(toggleDraft);
+        editor.on('nsesaToggleDraftAttributes', function (ev) {
+            var toggleDraftAttributes = ev.data.nsesaToggleDraftAttributes;
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureAttributesPlugin::fireEvent(Z)(toggleDraftAttributes);
         });
 
     }-*/;
 
     private void fireEvent(boolean showTool) {
-        clientFactory.getEventBus().fireEvent(new DraftingToggleEvent(showTool));
+        clientFactory.getEventBus().fireEvent(new VisualStructureAttributesToggleEvent(showTool));
     }
 }

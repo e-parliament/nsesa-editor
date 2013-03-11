@@ -11,22 +11,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
-import com.google.gwt.inject.client.GinModule;
-import com.google.gwt.inject.client.binder.GinBinder;
+import com.google.gwt.event.shared.EventHandler;
 
-/**
- * Gin drafting module
+ /**
+ * An interface to handle <code>VisualStructureInsertionEvent</code> GWT event.
+ *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 16/01/13 13:37
+ * Date: 17/01/13 15:25
+ *
  */
-public class DraftingModule implements GinModule {
-    /**
-     * Drafting configuration
-     * @param binder
-     */
-    @Override
-    public void configure(GinBinder binder) {
-    }
+public interface VisualStructureInsertionEventHandler extends EventHandler {
+    void onEvent(VisualStructureInsertionEvent event);
 }

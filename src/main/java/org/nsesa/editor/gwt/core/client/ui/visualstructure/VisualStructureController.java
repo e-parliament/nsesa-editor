@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
@@ -21,9 +21,9 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
-import org.nsesa.editor.gwt.core.client.event.drafting.DraftingInsertionEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEvent;
-import org.nsesa.editor.gwt.core.client.event.drafting.SelectionChangedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureInsertionEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
+import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
@@ -36,16 +36,16 @@ import java.util.LinkedHashMap;
 import java.util.TreeMap;
 
 /**
- * The <code>DraftingController</code> class acts as a controller to refresh <code>DraftingView</code> and
- * <code>DraftingAttributesView</code> widgets.
+ * The <code>VisualStructureController</code> class acts as a controller to refresh <code>VisualStructureView</code> and
+ * <code>VisualStructureAttributesView</code> widgets.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 16/01/13 13:37
  */
-public class DraftingController {
+public class VisualStructureController {
 
-    private DraftingView draftingView;
-    private DraftingAttributesView draftingAttributesView;
+    private VisualStructureView visualStructureView;
+    private VisualStructureAttributesView visualStructureAttributesView;
     private ClientFactory clientFactory;
     private Creator creator;
     private OverlayFactory overlayFactory;
@@ -54,10 +54,10 @@ public class DraftingController {
     private EventBus eventBus;
     private OverlayWidget originalOverlayWidget;
 
-    private final DraftingView.DraftingCallback draftingCallback = new DraftingView.DraftingCallback() {
+    private final VisualStructureView.VisualStructureCallback draftingCallback = new VisualStructureView.VisualStructureCallback() {
         @Override
         public void onChildrenSelect(OverlayWidget child) {
-            eventBus.fireEvent(new DraftingInsertionEvent(child));
+            eventBus.fireEvent(new VisualStructureInsertionEvent(child));
         }
     };
 
@@ -65,10 +65,10 @@ public class DraftingController {
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
 
     /**
-     * Create a <code>DraftingController</code> with the given parameters
+     * Create a <code>VisualStructureController</code> with the given parameters
      *
-     * @param draftingView           The <code>DraftingView</code> widget
-     * @param draftingAttributesView The <code>DraftingAttributesView</code> widget
+     * @param visualStructureView           The <code>VisualStructureView</code> widget
+     * @param visualStructureAttributesView The <code>VisualStructureAttributesView</code> widget
      * @param clientFactory          The client factory used to reference to event bus
      * @param creator                The creator
      * @param overlayFactory         The overlay factory
@@ -76,15 +76,15 @@ public class DraftingController {
      * @param documentController     The document controller
      */
     @Inject
-    public DraftingController(DraftingView draftingView,
-                              DraftingAttributesView draftingAttributesView,
-                              ClientFactory clientFactory,
-                              Creator creator,
-                              OverlayFactory overlayFactory,
-                              OverlayLocalizableResource overlayResource,
-                              DocumentController documentController) {
-        this.draftingView = draftingView;
-        this.draftingAttributesView = draftingAttributesView;
+    public VisualStructureController(VisualStructureView visualStructureView,
+                                     VisualStructureAttributesView visualStructureAttributesView,
+                                     ClientFactory clientFactory,
+                                     Creator creator,
+                                     OverlayFactory overlayFactory,
+                                     OverlayLocalizableResource overlayResource,
+                                     DocumentController documentController) {
+        this.visualStructureView = visualStructureView;
+        this.visualStructureAttributesView = visualStructureAttributesView;
         this.clientFactory = clientFactory;
         this.creator = creator;
         this.overlayFactory = overlayFactory;
@@ -105,23 +105,23 @@ public class DraftingController {
     }
 
     /**
-     * Register handlers for {@link SelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
+     * Register handlers for {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
      * It also create a drafting callback to be called when selecting children from drafting view interface
-     * When those events occur <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets are refreshed.
+     * When those events occur <code>VisualStructureView</code> and <code>VisualStructureAttributesView</code> widgets are refreshed.
      */
     private void registerListeners() {
-        selectionChangedEventHandlerRegistration = eventBus.addHandler(SelectionChangedEvent.TYPE, new SelectionChangedEventHandler() {
+        selectionChangedEventHandlerRegistration = eventBus.addHandler(VisualStructureSelectionChangedEvent.TYPE, new VisualStructureSelectionChangedEventHandler() {
             @Override
-            public void onEvent(SelectionChangedEvent event) {
-                Element el = event.getParentElement();
+            public void onEvent(VisualStructureSelectionChangedEvent eventVisualStructure) {
+                Element el = eventVisualStructure.getParentElement();
                 if (el == null) {
                     el = originalOverlayWidget.getOverlayElement();
                 }
                 if (el != null) {
-                    if (event.isMoreTagsSelected()) {
+                    if (eventVisualStructure.isMoreTagsSelected()) {
                         refreshView(overlayFactory.getAmendableWidget(el), "");
                     } else {
-                        refreshView(overlayFactory.getAmendableWidget(el), event.getSelectedText());
+                        refreshView(overlayFactory.getAmendableWidget(el), eventVisualStructure.getSelectedText());
                     }
                 }
             }
@@ -143,7 +143,7 @@ public class DraftingController {
     }
 
     /**
-     * Refresh <code>DraftingView</code> and <code>DraftingAttributesView</code> widgets. More specifically,
+     * Refresh <code>VisualStructureView</code> and <code>VisualStructureAttributesView</code> widgets. More specifically,
      * the drafting view will be filled in with 2 lists:
      * one contains the allowed children list of the given <code>OverlayWidget</code> and
      * the other contains the mandatory children list of the given <code>OverlayWidget</code>.
@@ -162,14 +162,14 @@ public class DraftingController {
             @Override
             public void execute() {
                 //refresh the attributes
-                draftingAttributesView.clearAll();
+                visualStructureAttributesView.clearAll();
                 if (!widget.equals(originalOverlayWidget))
-                    draftingAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
+                    visualStructureAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
 
                 LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, widget);
-                draftingView.clearAll();
-                draftingView.setDraftTitle(widget.getType());
-                draftingView.refreshAllowedChildren(
+                visualStructureView.clearAll();
+                visualStructureView.setVisualStructureTitle(widget.getType());
+                visualStructureView.refreshAllowedChildren(
                         new HashMap<OverlayWidget, Occurrence>(children),
                         selectedText == null || selectedText.length() == 0 ? null : draftingCallback);
             }
@@ -178,21 +178,21 @@ public class DraftingController {
     }
 
     /**
-     * Returns {@link DraftingView}
+     * Returns {@link VisualStructureView}
      *
      * @return The drafting view
      */
-    public DraftingView getView() {
-        return draftingView;
+    public VisualStructureView getView() {
+        return visualStructureView;
     }
 
     /**
-     * Returns {@link DraftingAttributesView}
+     * Returns {@link VisualStructureAttributesView}
      *
      * @return The drafting attributes view
      */
-    public DraftingAttributesView getAttributesView() {
-        return draftingAttributesView;
+    public VisualStructureAttributesView getAttributesView() {
+        return visualStructureAttributesView;
     }
 
 

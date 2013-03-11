@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -22,29 +22,29 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 15:24
  */
-public class DraftingInsertionEvent extends GwtEvent<DraftingInsertionEventHandler> {
+public class VisualStructureInsertionEvent extends GwtEvent<VisualStructureInsertionEventHandler> {
 
-    public static final Type<DraftingInsertionEventHandler> TYPE = new Type<DraftingInsertionEventHandler>();
+    public static final Type<VisualStructureInsertionEventHandler> TYPE = new Type<VisualStructureInsertionEventHandler>();
 
     private OverlayWidget overlayWidget;
 
-    public DraftingInsertionEvent(OverlayWidget overlayWidget) {
+    public VisualStructureInsertionEvent(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
     }
 
     @Override
-    public Type<DraftingInsertionEventHandler> getAssociatedType() {
+    public Type<VisualStructureInsertionEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(DraftingInsertionEventHandler handler) {
+    protected void dispatch(VisualStructureInsertionEventHandler handler) {
         handler.onEvent(this);
     }
 
     /**
      * The insertion element
-     * @return
+     * @return The insertion element as <code>OverlayWidget</code>
      */
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;

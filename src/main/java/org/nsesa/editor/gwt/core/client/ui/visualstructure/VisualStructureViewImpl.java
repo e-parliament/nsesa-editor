@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.drafting;
+package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,14 +31,14 @@ import java.util.Map;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
- * Default implementation of {@link DraftingView} based on {@link UiBinder} GWT mechanism.
+ * Default implementation of {@link VisualStructureView} based on {@link UiBinder} GWT mechanism.
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 @Scope(DOCUMENT)
-public class DraftingViewImpl extends ResizeComposite implements DraftingView {
+public class VisualStructureViewImpl extends ResizeComposite implements VisualStructureView {
 
-    interface MyUiBinder extends UiBinder<Widget, DraftingViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, VisualStructureViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -49,7 +49,7 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
     private OverlayLocalizableResource overlayResource;
 
     /**
-     * stores draft title
+     * stores visual structure widget title
      */
     @UiField
     Label draftTitle;
@@ -66,11 +66,11 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
     VerticalPanel mandatoryPanel;
 
     /**
-     * Create <code>DraftingViewImpl</code> object by setting the <code>overlayResource</code> and then
+     * Create <code>VisualStructureViewImpl</code> object by setting the <code>overlayResource</code> and then
      * initialize the widgets
      */
     @Inject
-    public DraftingViewImpl(OverlayLocalizableResource overlayResource) {
+    public VisualStructureViewImpl(OverlayLocalizableResource overlayResource) {
         this.overlayResource = overlayResource;
 
         final Widget widget = uiBinder.createAndBindUi(this);
@@ -95,7 +95,7 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
      * @param title Title as String
      */
     @Override
-    public void setDraftTitle(String title) {
+    public void setVisualStructureTitle(String title) {
         draftTitle.setText(title);
     }
 
@@ -105,7 +105,7 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
      * @param callback gets called when the user select a child from the interface
      */
     @Override
-    public void refreshAllowedChildren(HashMap<OverlayWidget, Occurrence> allowedChildren, DraftingCallback callback) {
+    public void refreshAllowedChildren(HashMap<OverlayWidget, Occurrence> allowedChildren, VisualStructureCallback callback) {
         for (final Map.Entry<OverlayWidget, Occurrence> child : allowedChildren.entrySet()) {
             // when selected text is empty do not add any click handler just display the tags
             IsWidget allowedChild, mandatoryChild = null;
@@ -146,7 +146,7 @@ public class DraftingViewImpl extends ResizeComposite implements DraftingView {
      * @param callback gets called when click on anchor
      * @return The anchor result
      */
-    private Anchor createAnchorFrom(final OverlayWidget overlayWidget, final DraftingCallback callback) {
+    private Anchor createAnchorFrom(final OverlayWidget overlayWidget, final VisualStructureCallback callback) {
         Anchor anchor = new Anchor(overlayResource.getName(overlayWidget));
         anchor.setTitle(overlayResource.getDescription(overlayWidget));
         anchor.getElement().addClassName("drafting-" + overlayWidget.getType());

@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.drafting;
+package org.nsesa.editor.gwt.core.client.event.visualstructure;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -24,26 +24,30 @@ import java.util.Map;
  * Date: 17/01/13 15:24
  *
  */
-public class DraftingModificationEvent extends GwtEvent<DraftingModificationEventHandler> {
+public class VisualStructureModificationEvent extends GwtEvent<VisualStructureModificationEventHandler> {
 
-    public static final Type<DraftingModificationEventHandler> TYPE = new Type<DraftingModificationEventHandler>();
+    public static final Type<VisualStructureModificationEventHandler> TYPE = new Type<VisualStructureModificationEventHandler>();
 
     private Map<String, String> attributes;
 
-    public DraftingModificationEvent(Map<String, String> attributes) {
+    public VisualStructureModificationEvent(Map<String, String> attributes) {
         this.attributes = attributes;
     }
 
     @Override
-    public Type<DraftingModificationEventHandler> getAssociatedType() {
+    public Type<VisualStructureModificationEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(DraftingModificationEventHandler handler) {
+    protected void dispatch(VisualStructureModificationEventHandler handler) {
         handler.onEvent(this);
     }
 
+    /**
+     * A map of attributes having the key attribute name and value the attribute value
+     * @return A map of attributes having the key attribute name and value the attribute value
+     */
     public Map<String, String> getAttributes() {
         return attributes;
     }
