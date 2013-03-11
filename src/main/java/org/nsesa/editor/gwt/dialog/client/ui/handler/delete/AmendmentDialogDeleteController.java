@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
@@ -67,17 +68,22 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
      * The locator.
      */
     protected final Locator locator;
+
+    protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
+
     private HandlerRegistration saveClickHandlerRegistration;
     private HandlerRegistration cancelClickHandlerRegistration;
 
     @Inject
     public AmendmentDialogDeleteController(final ClientFactory clientFactory, final AmendmentDialogDeleteView view,
                                            final Locator locator,
-                                           final OverlayFactory overlayFactory) {
+                                           final OverlayFactory overlayFactory,
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
+        this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
         registerListeners();
     }
 
@@ -124,7 +130,8 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
     public void handleSave() {
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(dialogContext.getOverlayWidget().getId()));
+        // inject the xpath-like expression to uniquely identify this element
+                dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget())));
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }

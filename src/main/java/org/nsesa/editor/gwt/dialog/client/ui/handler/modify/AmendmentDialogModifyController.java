@@ -19,6 +19,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.drafting.DraftingAttributesToggleEventHandler;
@@ -73,6 +74,8 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
      */
     protected final DraftingController draftingController;
 
+    protected final AmendmentInjectionPointFinder amendmentInjectionPointFinder;
+
     /**
      * The list of child {@link AmendmentDialogAwareController} controllers.
      */
@@ -86,12 +89,14 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
-                                           final DraftingController draftingController) {
+                                           final DraftingController draftingController,
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
         this.draftingController = draftingController;
+        this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
 
 
         view.getRichTextEditor().setDraftingTool(draftingController.getView());
@@ -158,7 +163,8 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     public void handleSave() {
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(dialogContext.getOverlayWidget().getId()));
+        // inject the xpath-like expression to uniquely identify this element
+        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget())));
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
