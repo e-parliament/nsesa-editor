@@ -20,8 +20,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.logging.Logger;
 
@@ -62,14 +62,15 @@ public class MarkerViewImpl extends Composite implements MarkerView {
 
         int height = getOffsetHeight();
 
-        final double v = height / top;
+        double v = height * top;
+
         LOG.info("Drawing marker at " + (int) v);
 
         Anchor marker = new Anchor("<div></div>", true);
         mainPanel.add(marker);
         final Style style = marker.getElement().getFirstChildElement().getStyle();
-        style.setPosition(Style.Position.RELATIVE);
-        style.setTop((int) v, Style.Unit.PX);
+        style.setPosition(Style.Position.ABSOLUTE);
+        style.setTop((int)v, Style.Unit.PX);
         style.setWidth(100, Style.Unit.PCT);
         style.setHeight(5, Style.Unit.PX);
         style.setBorderWidth(1.0, Style.Unit.PX);

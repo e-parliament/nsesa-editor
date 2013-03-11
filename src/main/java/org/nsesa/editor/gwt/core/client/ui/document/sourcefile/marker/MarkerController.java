@@ -93,13 +93,13 @@ public class MarkerController {
             if (sourceFileController != null) {
                 view.clearMarkers();
                 final ScrollPanel scrollPanel = sourceFileController.getContentController().getView().getScrollPanel();
+                final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
+                LOG.finest("Document height is: " + documentHeight);
                 for (final AmendmentController amendmentController : sourceFileController.getDocumentController().getAmendmentManager().getAmendmentControllers()) {
                     if (amendmentController.getDocumentController() == sourceFileController.getDocumentController() && amendmentController.getView().asWidget().isAttached()) {
-                        final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-//                        LOG.info("Document height is: " + documentHeight);
-                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                        final double division = (double) documentHeight / (double) amendmentTop;
-//                        LOG.info("Amendment is: " + amendmentTop + ", and division is at " + division);
+                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() - scrollPanel.asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
+                        final double division = (double) amendmentTop / (double) (documentHeight);
+                        LOG.finest("Amendment is: " + amendmentTop + ", and division is at " + division);
                         final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
                         focusWidget.addClickHandler(new ClickHandler() {
                             @Override
@@ -127,6 +127,7 @@ public class MarkerController {
                         });
                     }
                 }
+//                scrollPanel.setVerticalScrollPosition(previousScroll);
             }
         }
     };
@@ -135,6 +136,7 @@ public class MarkerController {
     private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
     private HandlerRegistration awitchTabEventHandlerRegistration;
+    private HandlerRegistration resizeEventHandlerRegistration;
 
     @Inject
     public MarkerController(final DocumentEventBus documentEventBus, final MarkerView view) {
@@ -181,6 +183,17 @@ public class MarkerController {
                 drawAmendmentControllers();
             }
         });
+
+        // redraw the markers when the document window has resized
+        resizeEventHandlerRegistration = documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                final int height = event.getHeight() - 122;
+                view.asWidget().setHeight(height + "px");
+                drawAmendmentControllers();
+            }
+        });
+
     }
 
     /**
@@ -192,6 +205,7 @@ public class MarkerController {
         amendmentContainerInjectedEventHandlerRegistration.removeHandler();
         amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
         awitchTabEventHandlerRegistration.removeHandler();
+        resizeEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -225,17 +239,10 @@ public class MarkerController {
      */
     public void setSourceFileController(SourceFileController sourceFileController) {
         this.sourceFileController = sourceFileController;
-        registerPrivateListeners();
+//        registerPrivateListeners();
     }
 
     private void registerPrivateListeners() {
-        // redraw the markers when the document window has resized
-        documentEventBus.addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
-            @Override
-            public void onEvent(ResizeEvent event) {
-                view.asWidget().setHeight((event.getHeight() - sourceFileController.getContentController().getView().getScrollPanel().getAbsoluteTop()) + "px");
-                drawAmendmentControllers();
-            }
-        });
     }
+
 }
