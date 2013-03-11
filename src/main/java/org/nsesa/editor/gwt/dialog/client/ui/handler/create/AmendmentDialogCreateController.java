@@ -103,8 +103,8 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         this.visualStructureController = visualStructureController;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
 
-        view.getRichTextEditor().setDraftingTool(visualStructureController.getView());
-        view.getRichTextEditor().setDraftingAttributes(visualStructureController.getAttributesView());
+        view.getRichTextEditor().setVisualStructureWidget(visualStructureController.getView());
+        view.getRichTextEditor().setVisualStructureAttributesWidget(visualStructureController.getAttributesView());
 
         registerListeners();
     }

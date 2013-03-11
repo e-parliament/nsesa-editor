@@ -155,12 +155,12 @@ public class CKEditor extends Composite implements RichTextEditor {
     }
 
     @Override
-    public void setDraftingTool(IsWidget widget) {
+    public void setVisualStructureWidget(IsWidget widget) {
         draftHolderPanel.add(widget);
     }
 
     @Override
-    public void setDraftingAttributes(IsWidget widget) {
+    public void setVisualStructureAttributesWidget(IsWidget widget) {
         attributesHolderPanel.add(widget);
     }
 
@@ -250,7 +250,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
 
     @Override
-    public void setAmendableWidget(OverlayWidget overlayWidget) {
+    public void setOverlayWidget(OverlayWidget overlayWidget) {
         config.addBodyClass(overlayWidget.getType());
     }
 

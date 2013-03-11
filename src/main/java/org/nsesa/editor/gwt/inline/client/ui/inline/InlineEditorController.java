@@ -150,7 +150,7 @@ public class InlineEditorController implements ProvidesResize {
         richTextEditor.asWidget().setHeight(overlayWidget.asWidget().getOffsetHeight() + 50 + "px");
         richTextEditor.init();
         richTextEditor.asWidget().setVisible(true);
-        richTextEditor.setAmendableWidget(overlayWidget);
+        richTextEditor.setOverlayWidget(overlayWidget);
         overlayWidget.asWidget().setVisible(false);
         adaptSize();
     }

@@ -50,10 +50,10 @@ public interface RichTextEditor extends IsWidget {
     String getHTML();
 
     /**
-     *
+     * Set the overlay widget that will be processed by the editor
      * @param overlayWidget
      */
-    void setAmendableWidget(OverlayWidget overlayWidget);
+    void setOverlayWidget(OverlayWidget overlayWidget);
 
     /**
      * Method that must be called after you instantiate the editor, preferably when you attach the editor to
@@ -68,20 +68,20 @@ public interface RichTextEditor extends IsWidget {
     void destroy();
 
     /**
-     * Add a drafting tool widget to the editor. The drafting tool is responsible to change the structure of the original
-     * overlayWidget.
+     * Add a visual structure tool widget to the editor. The visual structure tool is responsible to change the
+     * structure of the original overlayWidget.
      *
      * @param widget The drafting tool as widget
      */
-    void setDraftingTool(IsWidget widget);
+    void setVisualStructureWidget(IsWidget widget);
 
     /**
-     * Add a drafting attributes widget to the editor. The drafting attributes tool gives the possibility to change the
-     * attribute values of the original overlayWidget children.
+     * Add a visual structure attributes widget to the editor. The visual structure attributes  attributes tool gives
+     * the possibility to change the attribute values of the the selected overlayWidget.
      *
      * @param widget The drafting attributes as
      */
-    void setDraftingAttributes(IsWidget widget);
+    void setVisualStructureAttributesWidget(IsWidget widget);
 
     /**
      * Show/hide the drafting tool widget in the editor.
