@@ -16,8 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
@@ -29,7 +28,7 @@ import java.util.logging.Logger;
  * Date: 22/01/13 12:42
  *
  */
-public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
+public class CKEditorRemoveFormatPlugin extends DefaultRichTextEditorPlugin {
     private static final Logger LOG = Logger.getLogger(CKEditorRemoveFormatPlugin.class.getName());
 
     private ClientFactory clientFactory;
@@ -37,20 +36,6 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
     @Inject
     public CKEditorRemoveFormatPlugin(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
-    }
-
-    @Override
-    public String getName() {
-        return "nsesa-removeformat";
-    }
-
-    /**
-     * No before init operation performed
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
     }
 
     /**
@@ -61,15 +46,6 @@ public class CKEditorRemoveFormatPlugin implements RichTextEditorPlugin {
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
-    }
-
-    /**
-     * No export operation performed
-     * @param config The Rich Text editor configuration as JavaScriptObject
-     */
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
     }
 
     /**

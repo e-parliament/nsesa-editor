@@ -30,25 +30,19 @@ import java.util.List;
  * Date: 10/01/13 12:05
  */
 public class RichTextCompositePlugin implements RichTextEditorPlugin {
-    private String name;
     protected List<RichTextEditorPlugin> plugins;
 
     /**
      * Default constructor
      */
     public RichTextCompositePlugin() {
-        this("RichTextCompositePlugin", new ArrayList<RichTextEditorPlugin>());
+        this(new ArrayList<RichTextEditorPlugin>());
     }
 
-    public RichTextCompositePlugin(String name, List<RichTextEditorPlugin> plugins) {
-        this.name = name;
+    public RichTextCompositePlugin(List<RichTextEditorPlugin> plugins) {
         this.plugins = plugins;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
     /**
      * Call <code>beforeInit<code/> method for all wrapped plugins
@@ -72,14 +66,11 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
         }
     }
 
-    /**
-     * Call <code>export<code/> method for all wrapped plugins
-     * @param config The Rich Text editor configuration as JavaScriptObject
-     */
     @Override
-    public void export(RichTextEditorConfig config) {
+    public void afterInit(JavaScriptObject editor) {
         for (RichTextEditorPlugin plugin : plugins) {
-            plugin.export(config);
+            plugin.afterInit(editor);
         }
     }
+
 }

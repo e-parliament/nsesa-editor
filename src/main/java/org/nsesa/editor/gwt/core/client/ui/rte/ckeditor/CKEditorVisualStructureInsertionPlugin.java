@@ -20,8 +20,7 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureInsertionEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 /**
  * A CK editor plugin to handle a <code>VisualStructureInsertionEvent</code> GWT event by inserting a DOM element into the
@@ -30,7 +29,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:27
  */
-public class CKEditorVisualStructureInsertionPlugin implements RichTextEditorPlugin {
+public class CKEditorVisualStructureInsertionPlugin extends DefaultRichTextEditorPlugin {
 
     /**
      * Enum used to markup a newly introduced element in the editor area.
@@ -48,20 +47,6 @@ public class CKEditorVisualStructureInsertionPlugin implements RichTextEditorPlu
         this.clientFactory = clientFactory;
     }
 
-    @Override
-    public String getName() {
-        return "nsesa-draftinginsertion";
-    }
-
-    /**
-     * Empty method
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
-    }
-
     /**
      *
      * @param editor The Rich Text editor as JavaScriptObject
@@ -70,13 +55,6 @@ public class CKEditorVisualStructureInsertionPlugin implements RichTextEditorPlu
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
     }
-
-
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
-    }
-
 
     private native void nativeInit(JavaScriptObject editor, CKEditorVisualStructureInsertionPlugin plugin) /*-{
         plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureInsertionPlugin::handleDrafting(Lcom/google/gwt/core/client/JavaScriptObject;)(editor);

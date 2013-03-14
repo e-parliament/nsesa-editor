@@ -14,23 +14,42 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 /**
- * Disable enter and shift enter keys in the editor
+ * A CK Editor plugin to handle enter and shift enter keystrokes. It replaces enter key and shift enter keys
+ * with a span tag having type attribute the <code>tagName</code>.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 31/01/13 08:40
- *
+ * Date: 10/01/13 12:16
  */
-public class CKEditorDisableEnterKeyPlugin extends DefaultRichTextEditorPlugin {
+public class CKEditorEnterKeySpanTagPlugin extends DefaultRichTextEditorPlugin {
+    private OverlayFactory overlayFactory;
+    private String tagName;
 
-    @Override
-    public void init(JavaScriptObject editor) {
-        nativeInit(editor);
+    /**
+     * Create an instance of the plugin with the given parameters
+     * @param overlayFactory
+     * @param tagName
+     */
+    @Inject
+    public CKEditorEnterKeySpanTagPlugin(OverlayFactory overlayFactory, String tagName) {
+        this.overlayFactory = overlayFactory;
+        this.tagName = tagName;
     }
 
-    private native void nativeInit(JavaScriptObject editor) /*-{
+    /**
+     * Use a native javascript call to handle enter and shift enter keysstrokes
+     * @param editor The Rich Text editor as JavaScriptObject
+     */
+    @Override
+    public void init(JavaScriptObject editor) {
+        nativeInit(editor, overlayFactory, tagName);
+    }
+
+    private native void nativeInit(JavaScriptObject editor, OverlayFactory overlayFactory, String tagName) /*-{
         editor.addCommand('enter', {
             modes: { wysiwyg: 1 },
             editorFocus: false,
@@ -59,7 +78,32 @@ public class CKEditorDisableEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             },
 
             enterBr: function (editor, mode, range, forceMode) {
-                return;
+                // Get the range for the current selection.
+                range = range || getRange(editor);
+                // We may not have valid ranges to work on, like when inside a
+                // contenteditable=false element.
+                if (!range)
+                    return;
+
+                var doc = range.document;
+                var isPre = false;
+
+                var ns = editor.getSelection().getStartElement().getAttribute('ns');
+                var lineBreak;
+                //create a span of type br
+                lineBreak = doc.createElement('span');
+                lineBreak.setAttribute('class', 'widget ' + tagName);
+                lineBreak.setAttribute('type', tagName);
+                lineBreak.setAttribute('ns', ns);
+//                var aw = overlayFactory.@org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory::getAmendableWidget(Ljava/lang/String;)('br');
+//                var el = aw.@org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget::getAmendableElement()();
+                range.deleteContents();
+                range.insertNode(lineBreak);
+
+                // This collapse guarantees the cursor will be blinking.
+                range.collapse(true);
+
+                range.select(isPre);
             }
         };
 
@@ -102,6 +146,19 @@ public class CKEditorDisableEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             }, 0);
 
             return true;
+        }
+
+        function getRange(editor) {
+            // Get the selection ranges.
+            var ranges = editor.getSelection().getRanges(true);
+
+            // Delete the contents of all ranges except the first one.
+            for (var i = ranges.length - 1; i > 0; i--) {
+                ranges[ i ].deleteContents();
+            }
+
+            // Return the first range.
+            return ranges[ 0 ];
         }
     }-*/;
 

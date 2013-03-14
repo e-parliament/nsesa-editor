@@ -17,8 +17,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
@@ -31,7 +30,7 @@ import java.util.logging.Logger;
  * Date: 22/01/13 12:27
  *
  */
-public class CKEditorVisualStructureAttributesPlugin implements RichTextEditorPlugin {
+public class CKEditorVisualStructureAttributesPlugin extends DefaultRichTextEditorPlugin {
     private static final Logger LOG = Logger.getLogger(CKEditorVisualStructureAttributesPlugin.class.getName());
 
     /**
@@ -48,20 +47,6 @@ public class CKEditorVisualStructureAttributesPlugin implements RichTextEditorPl
         this.clientFactory = clientFactory;
     }
 
-    @Override
-    public String getName() {
-        return "nsesa-draftingattributestoolbar";
-    }
-
-    /**
-     * Empty method
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
-    }
-
      /**
      * The main method responsible to create a CK editor button, to attach to the editor instance and
      * to raise <code>VisualStructureAttributesToggleEvent</code> as soon as the button is pressed.
@@ -72,15 +57,6 @@ public class CKEditorVisualStructureAttributesPlugin implements RichTextEditorPl
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
-    }
-
-    /**
-     * Empty method
-     * @param config The Rich Text editor configuration as JavaScriptObject
-     */
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
     }
 
     private native void nativeInit(JavaScriptObject editor, CKEditorVisualStructureAttributesPlugin plugin) /*-{

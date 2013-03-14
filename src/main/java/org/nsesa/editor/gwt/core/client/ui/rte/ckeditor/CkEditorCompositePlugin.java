@@ -13,9 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextCompositePlugin;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
@@ -29,29 +27,23 @@ public class CkEditorCompositePlugin extends RichTextCompositePlugin {
 
     public CkEditorCompositePlugin() {
         super();
+        nativeExport(this);
     }
 
     /**
      * Assigns beforeInit and init methods of java plugin to visible javascript <code>CKEDITOR</code> object.
-     * @param config The Rich Text editor configuration as JavaScriptObject
-     */
-    @Override
-    public void export(RichTextEditorConfig config) {
-        nativeExport(config.getConfiguration(), this);
-    }
-
-    /**
-     * Assigns beforeInit and init methods of java plugin to visible javascript <code>CKEDITOR</code> object.
-     * @param config
      * @param plugin
      */
-    private native void nativeExport(JavaScriptObject config, CkEditorCompositePlugin plugin) /*-{
+    private native void nativeExport(CkEditorCompositePlugin plugin) /*-{
         //TODO we need to find a better way to expose the plugin in javascript world
         $wnd.CKEDITOR.nsesaBeforeInit = $entry(function (ed) {
             plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CkEditorCompositePlugin::beforeInit(Lcom/google/gwt/core/client/JavaScriptObject;)(ed);
         });
         $wnd.CKEDITOR.nsesaInit = $entry(function (ed) {
             plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CkEditorCompositePlugin::init(Lcom/google/gwt/core/client/JavaScriptObject;)(ed);
+        });
+        $wnd.CKEDITOR.nsesaAfterInit = $entry(function (ed) {
+            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CkEditorCompositePlugin::afterInit(Lcom/google/gwt/core/client/JavaScriptObject;)(ed);
         });
     }-*/;
 

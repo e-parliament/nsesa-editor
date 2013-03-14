@@ -189,7 +189,7 @@ public class VisualStructureController {
     /**
      * Returns {@link VisualStructureAttributesView}
      *
-     * @return The drafting attributes view
+     * @return The visual structure attributes view
      */
     public VisualStructureAttributesView getAttributesView() {
         return visualStructureAttributesView;

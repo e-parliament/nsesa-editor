@@ -131,10 +131,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     @Override
     public void init() {
         if (!attached) {
-            //export the plugin
-            if (plugin != null) {
-                plugin.export(config);
-            }
+
             this.height = textArea.getOffsetHeight() + (config.isReadOnly() ? -21 : -55);
             config.setHeight(this.height);
 

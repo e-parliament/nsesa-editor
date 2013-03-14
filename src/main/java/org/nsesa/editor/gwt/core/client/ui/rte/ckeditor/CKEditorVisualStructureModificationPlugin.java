@@ -18,8 +18,7 @@ import com.google.gwt.core.client.JsArrayString;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureModificationEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureModificationEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 import java.util.Map;
 
@@ -30,22 +29,12 @@ import java.util.Map;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:27
  */
-public class CKEditorVisualStructureModificationPlugin implements RichTextEditorPlugin {
+public class CKEditorVisualStructureModificationPlugin extends DefaultRichTextEditorPlugin {
 
     private ClientFactory clientFactory;
 
     public CKEditorVisualStructureModificationPlugin(ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
-    }
-
-    @Override
-    public String getName() {
-        return "nsesa-draftingmodification";
-    }
-
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
     }
 
     /**
@@ -56,12 +45,6 @@ public class CKEditorVisualStructureModificationPlugin implements RichTextEditor
     @Override
     public void init(JavaScriptObject editor) {
         handleDrafting(editor);
-    }
-
-
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
     }
 
     /**

@@ -18,8 +18,7 @@ import com.google.gwt.user.client.Element;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 import java.util.logging.Logger;
 
@@ -32,7 +31,7 @@ import java.util.logging.Logger;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 9:38
  */
-public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
+public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin {
     /**
      * The Logger
      */
@@ -53,19 +52,6 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
         this.clientFactory = clientFactory;
     }
 
-    @Override
-    public String getName() {
-        return "nsesa-selectionChanged";
-    }
-
-    /**
-     * No before init operation performed
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
-    }
 
     /**
      * Catch any  mouseup, mousedown or keypress browser events.
@@ -77,15 +63,6 @@ public class CKEditorSelectionChangedPlugin implements RichTextEditorPlugin {
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor, this);
-    }
-
-    /**
-     * No export operation performed
-     * @param config The Rich Text editor configuration as JavaScriptObject
-     */
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
     }
 
     /**

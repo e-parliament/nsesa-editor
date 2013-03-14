@@ -14,8 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 /**
  * A plugin to override the default basic styles (bold, italic, underline, subscript, superscript) of CK editor.
@@ -24,25 +23,10 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 15/01/13 13:24
  */
-public class CKEditorBasicStylesPlugin implements RichTextEditorPlugin {
-    @Override
-    public String getName() {
-        return "nsesa-basicstyles";
-    }
-
-    @Override
-    public void beforeInit(JavaScriptObject editor) {
-        //do nothing
-    }
-
+public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
     @Override
     public void init(JavaScriptObject editor) {
         nativeInit(editor);
-    }
-
-    @Override
-    public void export(RichTextEditorConfig config) {
-        //do nothing
     }
 
     private native void nativeInit(JavaScriptObject editor) /*-{

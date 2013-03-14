@@ -14,36 +14,27 @@
 package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.inject.ImplementedBy;
 
 /**
- * Provides possibility to customize the rich text editor functionality without bloating the editor with unneeded
- * features.
+ * This class is available as a convenience base class for all plugins;
+ * it provides default empty implementation for all methods.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 09/01/13 11:06
+ * Date: 14/03/13 13:27
  */
-@ImplementedBy(RichTextCompositePlugin.class)
-public interface RichTextEditorPlugin {
-    /**
-     * Run before editor initialization
-     *
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    abstract void beforeInit(JavaScriptObject editor);
+public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
+    @Override
+    public void beforeInit(JavaScriptObject editor) {
+        //do nothing
+    }
 
-    /**
-     * Run during editor initialization
-     *
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    abstract void init(JavaScriptObject editor);
+    @Override
+    public void init(JavaScriptObject editor) {
+        //do nothing.
+    }
 
-    /**
-     * Run after editor initialization
-     *
-     * @param editor The Rich Text editor as JavaScriptObject
-     */
-    abstract void afterInit(JavaScriptObject editor);
-
+    @Override
+    public void afterInit(JavaScriptObject editor) {
+        //do nothing.
+    }
 }
