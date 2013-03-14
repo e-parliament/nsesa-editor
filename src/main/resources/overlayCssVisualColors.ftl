@@ -21,10 +21,11 @@
 
 /*
 * --------------------------------------------------------------------------
-* Akoma Ntoso Display default stylesheet.
+* Akoma Ntoso Visual Colors default stylesheet.
 * Note: this file is generated!
 * --------------------------------------------------------------------------
 */
+
 <@generateCss overlayClass=overlayClass styles=styles/>
 
 <#macro generateCss overlayClass styles>
@@ -39,19 +40,7 @@
     </#if>
     <#if overlayStyle.name??>
         <#if cssConfiguration['printEmptyCss'] || (overlayStyle.values?size != 0)>
-            <#if overlayStyle.values['display']??>
-                <#if overlayStyle.values['display'] == "inline">
-                    <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
-                <#else>
-                    <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>
-                </#if>
-            <#else>
-                <#if overlayClass.isDescendentOf("Inline") && (overlayClass.isElement() || overlayClass.isComplex())>
-                    <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
-                <#else>
-                    <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>
-                </#if>
-            </#if>
+            <@displayDrafting overlayStyle=overlayStyle overlayClass=overlayClass/>
         </#if>
     </#if>
     <#if overlayClass.children?size != 0 >
@@ -61,34 +50,19 @@
     </#if>
 </#macro>
 
-<#macro displayInline overlayStyle overlayClass>
-.akomaNtoso-drafting .${overlayStyle.name} {
+<#macro displayDrafting overlayStyle overlayClass>
+.drafting-${overlayStyle.name}:before {
 background-color:<#if overlayStyle.values["background-color"]??>${overlayStyle.values["background-color"]};<#else>#${colorGenerator.getColor(overlayStyle.name)};</#if>
-color:<#if overlayStyle.values["color"]??>${overlayStyle.values["color"]};<#elseif overlayStyle.values["background-color"]??>#${colorGenerator.matchTextColor(overlayStyle.values["background-color"])};<#else>#${colorGenerator.getTextColor(overlayStyle.name)};</#if>
+content: "";
+border-left: 5px solid transparent;
+border-right: 5px solid transparent;
+margin-right: 3px;
 }
 
-</#macro>
-
-<#macro displayBlock overlayStyle overlayClass>
-.akomaNtoso-drafting .${overlayStyle.name}:before {
-content: "${overlayStyle.name}";
-border: 1px solid #000000;
-background-color: #${colorGenerator.getColor(overlayStyle.name)};
-display:block;
-text-align:center;
-font-family: Sans-Serif;
-font-size: 10pt;
-left: 80%;
-color: #${colorGenerator.getTextColor(overlayStyle.name)};
-width: 90px;
-border-radius: 3px;
-margin: 0px;
-padding: 1px;
-position: relative;
-
+.drafting-${overlayStyle.name} {
+display: block;
+margin-top: 2px;
 }
-.akomaNtoso-drafting .${overlayStyle.name} {
-border:<#if overlayStyle.values["border"]??>${overlayStyle.values["border"]};<#else>1px solid #${colorGenerator.getColor(overlayStyle.name)};</#if>
-}
+
 
 </#macro>

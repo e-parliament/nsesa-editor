@@ -21,11 +21,10 @@
 
 /*
 * --------------------------------------------------------------------------
-* Akoma Ntoso Draft Tool default stylesheet.
+* Akoma Ntoso Visual Structure default stylesheet.
 * Note: this file is generated!
 * --------------------------------------------------------------------------
 */
-
 <@generateCss overlayClass=overlayClass styles=styles/>
 
 <#macro generateCss overlayClass styles>
@@ -40,7 +39,19 @@
     </#if>
     <#if overlayStyle.name??>
         <#if cssConfiguration['printEmptyCss'] || (overlayStyle.values?size != 0)>
-            <@displayDrafting overlayStyle=overlayStyle overlayClass=overlayClass/>
+            <#if overlayStyle.values['display']??>
+                <#if overlayStyle.values['display'] == "inline">
+                    <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
+                <#else>
+                    <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>
+                </#if>
+            <#else>
+                <#if overlayClass.isDescendentOf("Inline") && (overlayClass.isElement() || overlayClass.isComplex())>
+                    <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
+                <#else>
+                    <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>
+                </#if>
+            </#if>
         </#if>
     </#if>
     <#if overlayClass.children?size != 0 >
@@ -50,10 +61,35 @@
     </#if>
 </#macro>
 
-<#macro displayDrafting overlayStyle overlayClass>
-.drafting-${overlayStyle.name} {
-display:block;
-background-color:<#if overlayStyle.values["background-color"]??>${overlayStyle.values["background-color"]};<#else>#${colorGenerator.getColor(overlayStyle.name)};</#if>
-color:<#if overlayStyle.values["color"]??>${overlayStyle.values["color"]};<#elseif overlayStyle.values["background-color"]??>#${colorGenerator.matchTextColor(overlayStyle.values["background-color"])};<#else>#${colorGenerator.getTextColor(overlayStyle.name)};</#if>
+<#macro displayInline overlayStyle overlayClass>
+.akomaNtoso-drafting .${overlayStyle.name}:before {
+content: "${overlayStyle.name}";
+border: 1px solid #000000;
+background-color: #${colorGenerator.getColor(overlayStyle.name)};
+text-align:center;
+font-family: Sans-Serif;
+font-size: 8pt;
+color: #${colorGenerator.getTextColor(overlayStyle.name)};
+width: 90px;
+border-radius: 3px;
+margin: 0px;
+padding: 1px;
 }
+.akomaNtoso-drafting .${overlayStyle.name}:after {
+content: "/${overlayStyle.name}";
+border: 1px solid #000000;
+background-color: #${colorGenerator.getColor(overlayStyle.name)};
+text-align:center;
+font-family: Sans-Serif;
+font-size: 8pt;
+color: #${colorGenerator.getTextColor(overlayStyle.name)};
+width: 90px;
+border-radius: 3px;
+margin: 0px;
+padding: 1px;
+}
+</#macro>
+
+<#macro displayBlock overlayStyle overlayClass>
+    <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
 </#macro>

@@ -244,7 +244,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     enterBr(editor, null);
                 } else {
                     var positionType = selectionPosition(editor);
-                    // positionType -1, at the beginning, 0, in the middle, 1 at the end
+                    // positionType -1, at the beginning, 0 in the middle, 1 at the end
                     if (positionType == 0) {
                         enterBr(editor, null);
                     } else {
