@@ -63,30 +63,30 @@
 
 <#macro displayInline overlayStyle overlayClass>
 .akomaNtoso-drafting .${overlayStyle.name}:before {
-content: "${overlayStyle.name}";
-border: 1px solid #000000;
-background-color: #${colorGenerator.getColor(overlayStyle.name)};
-text-align:center;
-font-family: Sans-Serif;
-font-size: 8pt;
-color: #${colorGenerator.getTextColor(overlayStyle.name)};
-width: 90px;
-border-radius: 3px;
-margin: 0px;
-padding: 1px;
+content: "${overlayStyle.name} "!important;
+border: 1px solid #000000!important;
+background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;
+text-align:center!important;
+font-family: Sans-Serif!important;
+font-size: 8pt!important;
+color: #${colorGenerator.getTextColor(overlayStyle.name)}!important;
+width: 90px!important;
+border-radius: 3px!important;
+margin: 0px!important;
+padding: 1px!important;
 }
 .akomaNtoso-drafting .${overlayStyle.name}:after {
-content: "/${overlayStyle.name}";
-border: 1px solid #000000;
-background-color: #${colorGenerator.getColor(overlayStyle.name)};
-text-align:center;
-font-family: Sans-Serif;
-font-size: 8pt;
-color: #${colorGenerator.getTextColor(overlayStyle.name)};
-width: 90px;
-border-radius: 3px;
-margin: 0px;
-padding: 1px;
+content: "/${overlayStyle.name}"!important;
+border: 1px solid #000000!important;
+background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;
+text-align:center!important;
+font-family: Sans-Serif!important;
+font-size: 8pt!important;
+color: #${colorGenerator.getTextColor(overlayStyle.name)}!important;
+width: 90px!important;
+border-radius: 3px!important;
+margin: 0px!important;
+padding: 1px!important;
 }
 </#macro>
 
