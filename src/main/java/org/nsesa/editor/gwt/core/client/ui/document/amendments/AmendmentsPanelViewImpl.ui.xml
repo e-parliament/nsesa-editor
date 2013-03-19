@@ -51,7 +51,7 @@
             <filter:AmendmentsFilterView ui:field="filterView"/>
         </g:HorizontalPanel>
         <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
-            <g:VerticalPanel ui:field="amendmentsPanel" styleName="{res.amendmentsPanel}"/>
+            <g:FlowPanel ui:field="amendmentsPanel" styleName="{res.amendmentsPanel}"/>
         </g:ScrollPanel>
         <g:HorizontalPanel styleName="{res.amendmentsHeader}">
             <pagination:PaginationView ui:field="paginationView" styleName="{res.pagination}"/>
