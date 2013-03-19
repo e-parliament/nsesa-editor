@@ -54,7 +54,7 @@ public class AmendmentsPanelController {
     /**
      * Stores hoy many amendments will be displayed per page
      */
-    private static final int AMENDMENTS_PER_PAGE = 2;
+    private static final int AMENDMENTS_PER_PAGE = 10;
 
     private AmendmentsPanelView view;
     private DocumentEventBus documentEventBus;

@@ -35,6 +35,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.Amendments
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import com.google.gwt.dom.client.Style;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -95,7 +96,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      * holder panel for amendments representation
      */
     @UiField
-    VerticalPanel amendmentsPanel;
+    FlowPanel amendmentsPanel;
     /**
      * holder map for check boxes
      */
@@ -154,9 +155,11 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
     @Override
     public void setAmendmentControllers(final Map<String, AmendmentController> amendments) {
         for (final Map.Entry<String, AmendmentController> entry : amendments.entrySet()) {
-            HorizontalPanel panel = new HorizontalPanel();
+            FlowPanel panel = new FlowPanel();
             //create a check box
             CheckBox checkBox = new CheckBox();
+            checkBox.getElement().getStyle().setFloat(Style.Float.LEFT);
+            checkBox.getElement().getStyle().setPaddingTop(15, Style.Unit.PX);
             checkBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
