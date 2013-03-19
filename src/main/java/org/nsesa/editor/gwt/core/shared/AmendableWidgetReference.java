@@ -26,6 +26,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @version $Id$
  */
 public class AmendableWidgetReference implements IsSerializable {
+
+    private String referenceID;
+
     /**
      * Boolean flag to see if the reference requires the creation of a new element before injecting
      */
@@ -130,5 +133,13 @@ public class AmendableWidgetReference implements IsSerializable {
 
     public void setNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
+    }
+
+    public String getReferenceID() {
+        return referenceID;
+    }
+
+    public void setReferenceID(String referenceID) {
+        this.referenceID = referenceID;
     }
 }

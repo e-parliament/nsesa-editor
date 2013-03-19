@@ -32,6 +32,8 @@ public class AmendmentContainerDTO implements IsSerializable {
      */
     private String id;
 
+    private String documentID;
+
     /**
      * A revision key that identifies all amendment revisions for a single, logical amendment.
      */
@@ -186,5 +188,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setRevisionID(String revisionID) {
         this.revisionID = revisionID;
+    }
+
+    public String getDocumentID() {
+        return documentID;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
     }
 }

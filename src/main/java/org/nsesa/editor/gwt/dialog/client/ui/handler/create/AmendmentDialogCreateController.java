@@ -28,6 +28,7 @@ import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureTog
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -179,12 +180,16 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         }
 
         // set up the source reference so we can re-inject this amendment later.
-        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(true,
+        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
                 dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
                 dialogContext.getParentOverlayWidget().getNamespaceURI(),
                 amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
                 dialogContext.getOverlayWidget().getType(),
-                dialogContext.getIndex()));
+                dialogContext.getIndex());
+
+        sourceReference.setReferenceID(UUID.uuid());
+
+        dialogContext.getAmendment().setSourceReference(sourceReference);
 
         // the language is always the one from the document
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());

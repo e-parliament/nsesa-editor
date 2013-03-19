@@ -28,6 +28,7 @@ import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureTog
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -164,7 +165,9 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
         // inject the xpath-like expression to uniquely identify this element
-        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget())));
+        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
+        sourceReference.setReferenceID(UUID.uuid());
+        dialogContext.getAmendment().setSourceReference(sourceReference);
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }
