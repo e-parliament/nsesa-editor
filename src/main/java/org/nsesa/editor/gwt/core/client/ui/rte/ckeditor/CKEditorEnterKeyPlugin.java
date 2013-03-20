@@ -48,19 +48,44 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     /**
      * An interface to specify the rule when you press enter over an overlay widget in the editor area
      */
-    public static interface Rule {
+    public static interface EnterRule {
         abstract OverlayWidget onEnter(OverlayWidget widget);
     }
 
-    /**
-     * Default implementation of {@link Rule} by checking the type and namespace of the processed widget
-     */
-    public static class DefaultRule implements Rule {
-        private OverlayWidget from;
-        private OverlayWidget to;
 
-        public DefaultRule(OverlayWidget from, OverlayWidget to) {
-            this.from = from;
+    /**
+     * Default Implementation of {@link org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin.EnterRule}
+     * by returning a new widget with the same name and uri as the processed widget
+     */
+    public static class DefaultEnterRule implements EnterRule {
+
+        private OverlayFactory factory;
+
+        /**
+         * Create a DefaultRule instnace with the given overlay factory
+         * @param factory the {@link OverlayFactory} factory
+         */
+        public DefaultEnterRule(OverlayFactory factory) {
+            this.factory = factory;
+        }
+        @Override
+        public OverlayWidget onEnter(OverlayWidget widget) {
+            return factory.getAmendableWidget(widget.getOverlayElement());
+        }
+    }
+
+    /**
+     * Implementation of {@link org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin.EnterRule}
+     * by checking the type and namespace of the processed widget
+     */
+    public static class FromNameAndUriToWidgetEnterRule implements EnterRule {
+        private OverlayWidget to;
+        private String fromName;
+        private String fromNamespaceUri;
+
+        public FromNameAndUriToWidgetEnterRule(String fromName, String fromNamespaceUri, OverlayWidget to) {
+            this.fromName = fromName;
+            this.fromNamespaceUri = fromNamespaceUri;
             this.to = to;
         }
 
@@ -68,12 +93,12 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
          * Check the type and namespace uri of the processed widget
          * @param toProcess {@link OverlayWidget} to be processed
          * @return <code>to</code> widget when <code>from</code> widget and <code>toProcess</code> widget have the
-         * same type and and namespace
+         * same type and namespace
          */
         @Override
         public OverlayWidget onEnter(OverlayWidget toProcess) {
-            if (toProcess.getType().equals(from.getType()) &&
-                    toProcess.getNamespaceURI().equals(from.getNamespaceURI())) {
+            if (toProcess.getType().equals(fromName) &&
+                    toProcess.getNamespaceURI().equals(fromNamespaceUri)) {
                 return to;
             }
             return null;
@@ -81,7 +106,10 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     }
 
     /** a list with available rules that need to be applied **/
-    private List<Rule> rules = new ArrayList<Rule>();
+    private List<EnterRule> enterRules = new ArrayList<EnterRule>();
+
+    /** a list with widgets that need to be splitted **/
+    private List<OverlayWidget> toBeSplitWidgets = new ArrayList<OverlayWidget>();
 
     private OverlayFactory overlayFactory;
     private OverlayWidget brWidget;
@@ -98,12 +126,17 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     }
 
     /**
-     * Add a rule in the list of rules
-     * @param rule The rule to be added
+     * Add a rule in the list of enter rules
+     * @param enterRule The rule to be added
      */
-    public void addRule(Rule rule) {
-        rules.add(rule);
+    public void addEnterRule(EnterRule enterRule) {
+        enterRules.add(enterRule);
     }
+
+    public void addToBeSplitOnEnter(OverlayWidget widget) {
+        toBeSplitWidgets.add(widget);
+    }
+
 
     @Override
     public void init(JavaScriptObject editor) {
@@ -138,7 +171,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
 
         $wnd.CKEDITOR.plugins.enterkey =
         {
-            enterBlock: function (editor, range, positionType) {
+            enterBlock: function (editor, range) {
                 // Get the range for the current selection.
                 range = range || getRange(editor);
                 // We may not have valid ranges to work on, like when inside a
@@ -147,10 +180,27 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     return;
                 // position type = -1 , insert an element before the parent element of the selection
                 //identify the parent element of the selection
+                var positionType = selectionPosition(editor);
                 var ranges = editor.getSelection().getRanges();
-                // find start container and end container of the selection
-                // if they are text nodes go to their parents
-                if (positionType == -1) {
+                if (positionType == 0) {
+                    // if the container need to be splited, do it , otherwise introduce br
+                    var container = ranges[0].startContainer;
+                    while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
+                        container = container.getParent();
+                    }
+                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::toBeSplit(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+                    if (toBeSplit) {
+                        //collapse the range
+                        ranges[0].collapse(true);
+                        ranges[0].splitElement(container);
+
+                    } else {
+                        enterBr(editor, range);
+                    }
+
+                    // find start container and end container of the selection
+                    // if they are text nodes go to their parents
+                } else if (positionType == -1) {
                     var startContainer = ranges[0].startContainer;
                     while (startContainer != null && startContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         startContainer = startContainer.getParent();
@@ -160,7 +210,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
                         while (startContainer != null && (elem.getAttribute('type') != startContainer.getAttribute('type')
-                                )) {
+                            )) {
                             startContainer = startContainer.getParent();
                         }
                         if (startContainer) {
@@ -179,7 +229,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         // find the parent from rule
                         while (endContainer != null) {
                             if ((elem.getAttribute('type') == endContainer.getAttribute('type')
-                                    )) {
+                                )) {
                                 break;
                             }
                             endContainer = endContainer.getParent();
@@ -205,7 +255,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 if (!range)
                     return;
 
-                var doc = range.document;
+
                 var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::brWidgetAsString()();
                 var lineBreak = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                 range.deleteContents();
@@ -218,8 +268,8 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         };
 
         var plugin = $wnd.CKEDITOR.plugins.enterkey,
-                enterBr = plugin.enterBr,
-                enterBlock = plugin.enterBlock;
+            enterBr = plugin.enterBr,
+            enterBlock = plugin.enterBlock;
 
         // for mode = 1 add a br for mode 2 in the middle of the text add br, at the beginning of the text or
         // at the end of the text add a new widget as the parent of the text node unless a rule is specified to
@@ -243,13 +293,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 if (mode == 1) {
                     enterBr(editor, null);
                 } else {
-                    var positionType = selectionPosition(editor);
-                    // positionType -1, at the beginning, 0 in the middle, 1 at the end
-                    if (positionType == 0) {
-                        enterBr(editor, null);
-                    } else {
-                        enterBlock(editor, null, positionType);
-                    }
+                    enterBlock(editor, null);
                 }
 
                 editor.fire('saveSnapshot');
@@ -272,6 +316,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             return ranges[ 0 ];
         }
 
+        // positionType -1, at the beginning, 0 in the middle, 1 at the end
         function selectionPosition(editor) {
             // Get the selection ranges.
             var ranges = editor.getSelection().getRanges(true);
@@ -297,29 +342,29 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      */
     private native void nativeFilter(final CKEditorEnterKeyPlugin keyPlugin, JavaScriptObject editor) /*-{
         var dataProcessor = editor.dataProcessor,
-                dataFilter = dataProcessor && dataProcessor.dataFilter,
-                htmlFilter = dataProcessor && dataProcessor.htmlFilter;
+            dataFilter = dataProcessor && dataProcessor.dataFilter,
+            htmlFilter = dataProcessor && dataProcessor.htmlFilter;
 //        // Add filter for html->data transformation.
         if (dataFilter) {
             dataFilter.addRules(
-            {
-                elements: {
-                    'span': function( element ) {
-                        if (element.attributes && element.attributes['type'] == "br") {
-                            // Span is self closing element - change that.
-                            //element.isEmpty = true;
+                {
+                    elements: {
+                        'span': function( element ) {
+                            if (element.attributes && element.attributes['type'] == "br") {
+                                // Span is self closing element - change that.
+                                //element.isEmpty = true;
 //                            // Save original element name in data-saved-name attribute.
 //                            element.attributes[ 'data-saved-type' ] = element.attributes['type'];
 //                            element.attributes[ 'data-saved-ns' ] = element.attributes['ns'];
 //                            element.attributes[ 'data-saved-class' ] = element.attributes['class'];
 //                            // Change name to br.
-                            element.name = 'br';
-                            // Push zero width space, because empty span would be removed.
-                            //element.children.push( new CKEDITOR.htmlParser.text( '\u200b' ) );
+                                element.name = 'br';
+                                // Push zero width space, because empty span would be removed.
+                                //element.children.push( new CKEDITOR.htmlParser.text( '\u200b' ) );
+                            }
                         }
                     }
-                }
-             });
+                });
         }
 //
 //        // Add filter for data->html transformation.
@@ -358,8 +403,8 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         OverlayWidget from = overlayFactory.getAmendableWidget(original.getNamespaceURI(), original.getType());
 
         Element result = from.getOverlayElement();
-        for (Rule rule : rules) {
-            OverlayWidget widget = rule.onEnter(from);
+        for (EnterRule enterRule : enterRules) {
+            OverlayWidget widget = enterRule.onEnter(from);
             if (widget != null) {
                 result = widget.getOverlayElement();
                 break;
@@ -375,5 +420,26 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      */
     private String brWidgetAsString() {
         return DOM.toString((com.google.gwt.user.client.Element) brWidget.getOverlayElement());
+    }
+
+    /**
+     * Returns true when the element was set up to be splitted
+     * @param existingElement the element to be processed
+     * @return True when the element was set up to be splitted;
+     */
+    private boolean toBeSplit(JavaScriptObject existingElement) {
+        Element el = existingElement.cast();
+        OverlayWidget original = overlayFactory.getAmendableWidget(el);
+        if (original == null) {
+            return false;
+        }
+        for(OverlayWidget widget : toBeSplitWidgets) {
+            if (widget.getType().equals(original.getType())
+                    && widget.getNamespaceURI().equals(original.getNamespaceURI())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
