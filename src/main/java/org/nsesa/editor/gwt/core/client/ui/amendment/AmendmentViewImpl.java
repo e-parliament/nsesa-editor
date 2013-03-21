@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.amendment.resources.Messages;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -50,6 +51,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @UiField
     Label status;
+
+    @UiField
+    InlineHTML introduction;
 
     @UiField
     HTMLPanel body;
@@ -111,6 +115,11 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     @Override
     public void setBody(String xmlContent) {
         body.getElement().setInnerHTML(xmlContent);
+    }
+
+    @Override
+    public void setIntroduction(String introduction) {
+        this.introduction.setText(introduction);
     }
 
     @Override

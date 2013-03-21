@@ -44,6 +44,12 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
     void setBody(String xmlContent);
 
     /**
+     * Sets an introductory part on the amendment (can be used for declarative amendments).
+     * @param introduction the introductory part
+     */
+    void setIntroduction(String introduction);
+
+    /**
      * Sets the status of the amendment on this view.
      *
      * @param status the status to set

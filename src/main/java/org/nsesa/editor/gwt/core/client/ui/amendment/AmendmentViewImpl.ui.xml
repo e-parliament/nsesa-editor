@@ -50,6 +50,7 @@
                         <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
                     </g:FlowPanel>
             </div>
+            <g:InlineHTML ui:field="introduction"/>
             <g:HTMLPanel ui:field="body">
 
             </g:HTMLPanel>
