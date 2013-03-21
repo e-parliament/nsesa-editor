@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
@@ -137,7 +138,7 @@ public class DefaultTransformer implements Transformer {
                         }
                         break;
                     case Node.TEXT_NODE:
-                        sb.append(nodes.getItem(i).getNodeValue().trim());
+                        sb.append(SafeHtmlUtils.htmlEscapeAllowEntities(nodes.getItem(i).getNodeValue().trim()));
                         break;
                     case Node.DOCUMENT_NODE:
                         LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());
