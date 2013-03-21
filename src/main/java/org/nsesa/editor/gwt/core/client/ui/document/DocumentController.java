@@ -316,6 +316,9 @@ public class DocumentController {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
+                // do an automatic diffing
+                diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+
                 clientFactory.getEventBus().fireEvent(event);
             }
         });
@@ -632,7 +635,7 @@ public class DocumentController {
      */
     protected void onDocumentLoaded(DocumentDTO document) {
         setDocument(document);
-        final String title = clientFactory.getCoreMessages().windowTitleDocument(document.getName());
+        final String title = Window.getTitle() + " " + clientFactory.getCoreMessages().windowTitleDocument(document.getName());
         clientFactory.getEventBus().fireEvent(new SetWindowTitleEvent(title));
         loadDocumentContent();
     }
