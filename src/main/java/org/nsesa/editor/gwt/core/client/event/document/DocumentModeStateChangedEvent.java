@@ -25,29 +25,26 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DocumentModeChangeEvent<D extends DocumentMode> extends GwtEvent<DocumentModeChangeEventHandler> {
+public class DocumentModeStateChangedEvent<D extends DocumentMode> extends GwtEvent<DocumentModeStateChangedEventHandler> {
 
-    public static final Type<DocumentModeChangeEventHandler> TYPE = new Type<DocumentModeChangeEventHandler>();
+    public static final Type<DocumentModeStateChangedEventHandler> TYPE = new Type<DocumentModeStateChangedEventHandler>();
 
     private final DocumentController documentController;
     private final D documentMode;
-    private final DocumentState state;
 
-    public DocumentModeChangeEvent(final DocumentController documentController,
-                                   final D documentMode,
-                                   final DocumentState state) {
+    public DocumentModeStateChangedEvent(final DocumentController documentController,
+                                         final D documentMode) {
         this.documentController = documentController;
         this.documentMode = documentMode;
-        this.state = state;
     }
 
     @Override
-    public Type<DocumentModeChangeEventHandler> getAssociatedType() {
+    public Type<DocumentModeStateChangedEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(DocumentModeChangeEventHandler handler) {
+    protected void dispatch(DocumentModeStateChangedEventHandler handler) {
         handler.onEvent(this);
     }
 
@@ -57,9 +54,5 @@ public class DocumentModeChangeEvent<D extends DocumentMode> extends GwtEvent<Do
 
     public D getDocumentMode() {
         return documentMode;
-    }
-
-    public DocumentState getState() {
-        return state;
     }
 }

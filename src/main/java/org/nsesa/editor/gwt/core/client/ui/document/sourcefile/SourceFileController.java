@@ -23,6 +23,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentOverlayCompletedEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -188,6 +189,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
                 documentEventBus.fireEvent(new CriticalErrorEvent("Exception while overlaying.", e));
             }
         }
+        // notify the event bus that this document controller is ready
+        documentEventBus.fireEvent(new DocumentOverlayCompletedEvent(documentController));
         LOG.info("Overlaying took " + (System.currentTimeMillis() - start) + "ms.");
     }
 

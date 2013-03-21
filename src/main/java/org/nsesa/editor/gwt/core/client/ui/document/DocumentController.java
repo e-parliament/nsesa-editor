@@ -32,6 +32,8 @@ import org.nsesa.editor.gwt.core.client.event.amendments.*;
 import org.nsesa.editor.gwt.core.client.event.document.*;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEventHandler;
+import org.nsesa.editor.gwt.core.client.mode.ActiveState;
+import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
@@ -204,7 +206,6 @@ public class DocumentController {
     private HandlerRegistration amendmentContainerInjectEventHandlerRegistration;
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
     private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
-    private HandlerRegistration documentModeChangeEventHandlerRegistration;
     private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
     private HandlerRegistration notificationEventHandlerRegistration;
@@ -301,7 +302,9 @@ public class DocumentController {
                     sourceFileController.getActiveOverlayWidget().asWidget().removeStyleName(style.selected());
                 }
                 sourceFileController.setActiveOverlayWidget(event.getOverlayWidget());
-                sourceFileController.getActiveOverlayWidget().asWidget().addStyleName(style.selected());
+                if (sourceFileController.getActiveOverlayWidget() != null) {
+                    sourceFileController.getActiveOverlayWidget().asWidget().addStyleName(style.selected());
+                }
 
                 // inline editing is currently disabled
                 /*final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
@@ -316,9 +319,11 @@ public class DocumentController {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                // do an automatic diffing
-                diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
-
+                if (isDiffModeActive()) {
+                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+                } else {
+                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
+                }
                 clientFactory.getEventBus().fireEvent(event);
             }
         });
@@ -368,7 +373,12 @@ public class DocumentController {
         amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
-                diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+                if (isDiffModeActive()) {
+                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+                }
+                else {
+                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
+                }
             }
         });
 
@@ -389,15 +399,6 @@ public class DocumentController {
                     amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
                     sourceFileController.renumberAmendments();
                 }
-            }
-        });
-
-        // applying a new state to the document controller
-        documentModeChangeEventHandlerRegistration = documentEventBus.addHandler(DocumentModeChangeEvent.TYPE, new DocumentModeChangeEventHandler() {
-            @Override
-            public void onEvent(DocumentModeChangeEvent event) {
-                LOG.info("Applying state " + event.getState() + " to mode " + event.getDocumentMode());
-                event.getDocumentMode().apply(event.getState());
             }
         });
 
@@ -516,7 +517,6 @@ public class DocumentController {
         amendmentContainerInjectEventHandlerRegistration.removeHandler();
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
-        documentModeChangeEventHandlerRegistration.removeHandler();
         amendmentContainerDeletedEventHandlerRegistration.removeHandler();
         amendmentContainerSavedEventHandlerRegistration.removeHandler();
         notificationEventHandlerRegistration.removeHandler();
@@ -591,6 +591,30 @@ public class DocumentController {
             LOG.info("Installing '" + key + "' mode.");
         }
         documentModes.put(key, mode);
+    }
+
+    public <S extends DocumentState> boolean applyState(String key, S state) {
+        final DocumentMode<S> documentMode = (DocumentMode<S>) getMode(key);
+        if (documentMode != null) {
+            final boolean applied = documentMode.apply(state);
+            if (applied) {
+                LOG.info("Applied state " + state + " to mode " + documentMode);
+                documentEventBus.fireEvent(new DocumentModeStateChangedEvent<DocumentMode<S>>(this, documentMode));
+            }
+            return applied;
+        }
+        LOG.warning("No document mode found under " + key);
+        return false;
+    }
+
+    /**
+     * Check if there is a diff mode active (provided a {@link DiffingManager} has been set on this document
+     * controller).
+     * @return <tt>true</tt> if the diff mode is active.
+     */
+    private boolean isDiffModeActive() {
+        final DocumentMode<ActiveState> diffMode = (DocumentMode<ActiveState>) getMode(DiffMode.KEY);
+        return diffingManager != null && diffMode != null && diffMode.getState().isActive();
     }
 
     /**

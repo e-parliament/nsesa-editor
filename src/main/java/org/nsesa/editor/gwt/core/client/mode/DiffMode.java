@@ -11,17 +11,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.document;
-
-import com.google.gwt.event.shared.EventHandler;
+package org.nsesa.editor.gwt.core.client.mode;
 
 /**
- * Handler interface for the {@link DocumentModeChangeEvent}.
- * Date: 24/06/12 18:15
+ * Date: 21/03/13 13:39
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface DocumentModeChangeEventHandler extends EventHandler {
-    void onEvent(DocumentModeChangeEvent event);
+public interface DiffMode extends DocumentMode<ActiveState> {
+    public static final String KEY = "diff";
 }
