@@ -64,9 +64,9 @@ public abstract class Editor implements EntryPoint {
 
     private static final String CONFIGURATION_FILE = "configuration.json";
 
-    private ClientFactory clientFactory;
-    private ServiceFactory serviceFactory;
-    private SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
+    protected ClientFactory clientFactory;
+    protected ServiceFactory serviceFactory;
+    protected SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
 
     @Override
     public void onModuleLoad() {
