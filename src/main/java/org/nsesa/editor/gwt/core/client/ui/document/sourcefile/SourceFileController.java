@@ -343,6 +343,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param activeOverlayWidget the active overlay widget
      */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
+        LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
     }
 

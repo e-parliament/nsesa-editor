@@ -18,6 +18,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.ImplementedBy;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
@@ -66,6 +67,12 @@ public interface ClientFactory {
      * @return the core messages.
      */
     CoreMessages getCoreMessages();
+
+    /**
+     * Return a keyboard listener for key combinations.
+     * @return the keyboard listener
+     */
+    KeyboardListener getKeyboardListener();
 
     /**
      * Returns the configuration JSON object as it was specified in /configuration.json.

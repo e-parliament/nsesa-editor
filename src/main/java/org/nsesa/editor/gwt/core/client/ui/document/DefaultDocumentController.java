@@ -269,6 +269,10 @@ public class DefaultDocumentController implements DocumentController {
 
     }
 
+    public void registerKeyCombos() {
+
+    }
+
     // TODO while this approach is more flexible, it might be better to have the document controller act as the
     // event handler.
     public void registerListeners() {
@@ -291,7 +295,7 @@ public class DefaultDocumentController implements DocumentController {
             }
         });
 
-        overlayWidgetSelectEventHandlerRegistration = clientFactory.getEventBus().addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
+        overlayWidgetSelectEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
             @Override
             public void onEvent(OverlayWidgetSelectEvent event) {
                 boolean alreadySelected = false;

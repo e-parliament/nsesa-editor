@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.EventBus;
+import org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
@@ -36,6 +37,7 @@ public class ClientFactoryImpl implements ClientFactory {
     private final PlaceController placeController;
     private final Scheduler scheduler;
     private final CoreMessages coreMessages;
+    private final KeyboardListener keyboardListener;
     private JavaScriptObject configuration;
 
     private ClientContext clientContext;
@@ -45,12 +47,14 @@ public class ClientFactoryImpl implements ClientFactory {
                              final PlaceController placeController,
                              final Scheduler scheduler,
                              final ClientContext clientContext,
-                             final CoreMessages coreMessages) {
+                             final CoreMessages coreMessages,
+                             final KeyboardListener keyboardListener) {
         this.eventBus = eventBus;
         this.placeController = placeController;
         this.scheduler = scheduler;
         this.clientContext = clientContext;
         this.coreMessages = coreMessages;
+        this.keyboardListener = keyboardListener;
     }
 
     @Override
@@ -91,5 +95,10 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public void setConfiguration(JavaScriptObject configuration) {
         this.configuration = configuration;
+    }
+
+    @Override
+    public KeyboardListener getKeyboardListener() {
+        return keyboardListener;
     }
 }

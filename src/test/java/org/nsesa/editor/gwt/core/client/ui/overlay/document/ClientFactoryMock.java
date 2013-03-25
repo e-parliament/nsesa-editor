@@ -20,6 +20,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.ClientContextImpl;
@@ -36,6 +37,7 @@ public class ClientFactoryMock implements ClientFactory {
     protected final PlaceController placeController = new PlaceController(eventBus);
     protected final Scheduler scheduler = new StubScheduler();
     protected ClientContext clientContext = new ClientContextImpl();
+    protected KeyboardListener keyboardListener = new KeyboardListener(eventBus);
     protected JavaScriptObject configuration = JavaScriptObject.createObject();
 
     final CoreMessages coreMessages = new CoreMessages() {
@@ -308,5 +310,10 @@ public class ClientFactoryMock implements ClientFactory {
     @Override
     public void setConfiguration(JavaScriptObject configuration) {
         this.configuration = configuration;
+    }
+
+    @Override
+    public KeyboardListener getKeyboardListener() {
+        return keyboardListener;
     }
 }

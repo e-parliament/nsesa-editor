@@ -51,6 +51,8 @@ public interface DocumentController {
 
     void registerModes();
 
+    void registerKeyCombos();
+
     void registerListeners();
 
     /**

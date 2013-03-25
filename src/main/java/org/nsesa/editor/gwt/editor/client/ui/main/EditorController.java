@@ -120,6 +120,7 @@ public class EditorController implements BootstrapEventHandler {
                 documentController.setInjector(documentController.getInjector());
                 documentController.registerListeners();
                 documentController.registerModes();
+                documentController.registerKeyCombos();
                 documentController.setDocumentID(documentID);
                 addDocumentController(documentController);
                 // request the amendments in the backend, this will fire off the document loading afterwards
