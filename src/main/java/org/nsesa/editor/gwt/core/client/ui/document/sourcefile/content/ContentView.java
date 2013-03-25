@@ -53,6 +53,8 @@ public interface ContentView extends IsWidget {
      */
     ScrollPanel getScrollPanel();
 
+    void setScrollPanelOffset(int scrollPanelOffset);
+
     /**
      * General setting of a css class name on this view.
      * @param style the css class name to set

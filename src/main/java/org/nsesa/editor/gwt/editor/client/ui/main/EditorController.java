@@ -117,6 +117,9 @@ public class EditorController implements BootstrapEventHandler {
             // retrieve the documents
             for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
                 final DocumentController documentController = injector.getDocumentController();
+                documentController.setInjector(documentController.getInjector());
+                documentController.registerListeners();
+                documentController.registerModes();
                 documentController.setDocumentID(documentID);
                 addDocumentController(documentController);
                 // request the amendments in the backend, this will fire off the document loading afterwards

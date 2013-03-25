@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
@@ -95,36 +96,39 @@ public class MarkerController {
                 final ScrollPanel scrollPanel = sourceFileController.getContentController().getView().getScrollPanel();
                 final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
                 LOG.finest("Document height is: " + documentHeight);
-                for (final AmendmentController amendmentController : sourceFileController.getDocumentController().getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getDocumentController() == sourceFileController.getDocumentController() && amendmentController.getView().asWidget().isAttached()) {
-                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() - scrollPanel.asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                        final double division = (double) amendmentTop / (double) (documentHeight);
-                        LOG.finest("Amendment is: " + amendmentTop + ", and division is at " + division);
-                        final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
-                        focusWidget.addClickHandler(new ClickHandler() {
-                            @Override
-                            public void onClick(ClickEvent event) {
-                                // TODO: this is a very poor solution to find a amendable widget to scroll to ...
-                                if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
-                                    final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
-                                    if (amendedOverlayWidget != null) {
-                                        amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
+                final AmendmentManager amendmentManager = sourceFileController.getDocumentController().getAmendmentManager();
+                if (amendmentManager != null) {
+                    for (final AmendmentController amendmentController : amendmentManager.getAmendmentControllers()) {
+                        if (amendmentController.getDocumentController() == sourceFileController.getDocumentController() && amendmentController.getView().asWidget().isAttached()) {
+                            final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() - scrollPanel.asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
+                            final double division = (double) amendmentTop / (double) (documentHeight);
+                            LOG.finest("Amendment is: " + amendmentTop + ", and division is at " + division);
+                            final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
+                            focusWidget.addClickHandler(new ClickHandler() {
+                                @Override
+                                public void onClick(ClickEvent event) {
+                                    // TODO: this is a very poor solution to find a amendable widget to scroll to ...
+                                    if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
+                                        final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                                        if (amendedOverlayWidget != null) {
+                                            amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
 
-                                        OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
-                                        while (previousNonIntroducedOverlayWidget != null && !previousNonIntroducedOverlayWidget.asWidget().isVisible()) {
-                                            previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                            OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                            while (previousNonIntroducedOverlayWidget != null && !previousNonIntroducedOverlayWidget.asWidget().isVisible()) {
+                                                previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                            }
+                                            if (previousNonIntroducedOverlayWidget != null)
+                                                sourceFileController.scrollTo(previousNonIntroducedOverlayWidget.asWidget());
+                                            else {
+                                                sourceFileController.scrollTo(amendedOverlayWidget.getParentOverlayWidget().asWidget());
+                                            }
                                         }
-                                        if (previousNonIntroducedOverlayWidget != null)
-                                            sourceFileController.scrollTo(previousNonIntroducedOverlayWidget.asWidget());
-                                        else {
-                                            sourceFileController.scrollTo(amendedOverlayWidget.getParentOverlayWidget().asWidget());
-                                        }
+                                    } else {
+                                        sourceFileController.scrollTo(amendmentController.getView().asWidget());
                                     }
-                                } else {
-                                    sourceFileController.scrollTo(amendmentController.getView().asWidget());
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 //                scrollPanel.setVerticalScrollPosition(previousScroll);
