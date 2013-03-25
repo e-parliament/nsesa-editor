@@ -319,6 +319,12 @@ public class OverlayStrategySupport {
         // if not, work with the literal index
         String literalIndex = getLiteralIndex(element);
         if (literalIndex != null && !"".equals(literalIndex)) {
+            // check if there is a space - drop everything in front of the space
+            // note: not sure if this is a good way, but it helps us in getting rid of the <num> tags
+            // that have too much information in it, such as 'Article I' or 'Capo II'
+            if (literalIndex.contains(" ")) {
+                literalIndex = literalIndex.substring(literalIndex.lastIndexOf(" ") + 1);
+            }
             Format f = getFormat(element);
             switch (f) {
                 // in case of a point (11.)or bracket (11)), just strip off the last char
