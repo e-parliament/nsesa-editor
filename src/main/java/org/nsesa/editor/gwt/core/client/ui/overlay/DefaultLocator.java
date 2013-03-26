@@ -67,11 +67,15 @@ public class DefaultLocator implements Locator {
         if (newChild != null) {
             path.add(newChild);
         }
-
+        // our location string
         final StringBuilder location = new StringBuilder();
 
+        // splitter for each part of the location string
+        final String splitter = getSplitter(languageIso);
+
+        // loop over the widgets - sorted by the root, down to the grandparent, parent, and actual widget
         for (final OverlayWidget aw : path) {
-            // filter our not just the same classes, but also any parent classes or interfaces
+            // filter out not just the same classes, but also any parent classes (no interfaces - not supported in GWT)
             final Collection<Class<? extends OverlayWidget>> filtered = Collections2.filter(hiddenAmendableWidgets, new Predicate<Class<? extends OverlayWidget>>() {
                 @Override
                 public boolean apply(Class<? extends OverlayWidget> input) {
@@ -80,35 +84,33 @@ public class DefaultLocator implements Locator {
             });
 
             if (!filtered.contains(aw.getClass()) || showAmendableWidgets.contains(aw.getClass())) {
-                final StringBuilder sb = location;
 
                 if (aw.getParentOverlayWidget() == null) {
-                    sb.append(getRootNotation(aw));
+                    location.append(getRootNotation(aw, languageIso));
                 } else {
 
                     // check if there is a sub notation going on (point - point would become point - subpoint)
                     if (aw.getParentOverlayWidget().getType().equalsIgnoreCase(aw.getType())) {
                         // we've got a sub notation!
-                        sb.append(getSubNotation(aw));
+                        location.append(getSubNotation(aw, languageIso));
                     } else {
                         // default notation
-                        sb.append(getNotation(aw));
+                        location.append(getNotation(aw, languageIso));
                     }
 
-                    final String num = getNum(aw);
+                    final String num = getNum(aw, languageIso);
                     if (num != null && !("".equals(num.trim()))) {
-                        sb.append(" ");
-                        sb.append(num);
+                        location.append(" ").append(num);
                     }
                 }
-                sb.append(getSplitter());
+                location.append(splitter);
             }
             if (hideUnderLayingAmendableWidgets.contains(aw.getClass())) {
                 break;
             }
         }
         // drop the splitter at the end
-        final String locationString = location.toString().endsWith(getSplitter()) ? location.substring(0, location.length() - getSplitter().length()) : location.toString();
+        final String locationString = location.toString().endsWith(splitter) ? location.substring(0, location.length() - splitter.length()) : location.toString();
         return locationString.trim();
     }
 
@@ -118,9 +120,10 @@ public class DefaultLocator implements Locator {
      * will instead be used to remove confusion about the path.
      *
      * @param overlayWidget the overlay widget to get the number for
+     * @param languageIso   the ISO code of the language
      * @return the number, should never return <tt>null</tt>
      */
-    public String getNum(final OverlayWidget overlayWidget) {
+    public String getNum(final OverlayWidget overlayWidget, final String languageIso) {
         String index;
         if (overlayWidget.isIntroducedByAnAmendment()) {
             OverlayWidget previous = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
@@ -145,7 +148,7 @@ public class DefaultLocator implements Locator {
                 previousIndex += NumberingType.LETTER.get(offset - 1);
                 index = previousIndex;
             }
-            return index + " " + getNewNotation();
+            return index + " " + getNewNotation(languageIso);
         } else {
             // see if we can extract the index
             final NumberingType numberingType = overlayWidget.getNumberingType();
@@ -161,9 +164,10 @@ public class DefaultLocator implements Locator {
     /**
      * Returns the used splitter that is injected between overlay widgets in the path calculation.
      *
+     * @param languageIso the ISO code of the language
      * @return the splitter, defaults to {@link #SPLITTER}
      */
-    public String getSplitter() {
+    public String getSplitter(final String languageIso) {
         return SPLITTER;
     }
 
@@ -172,20 +176,22 @@ public class DefaultLocator implements Locator {
      * returns <tt>null</tt>. By default, this returns the type without any number, since we only have one root widget in our path.
      *
      * @param overlayWidget the root overlay widget
+     * @param languageIso   the ISO code of the language
      * @return the notation for this root widget
      */
-    public String getRootNotation(final OverlayWidget overlayWidget) {
+    public String getRootNotation(final OverlayWidget overlayWidget, final String languageIso) {
         // skip the num for the root
-        return getNotation(overlayWidget);
+        return getNotation(overlayWidget, languageIso);
     }
 
     /**
      * Default notation for a given {@link OverlayWidget} <tt>overlayWidget</tt>, using the type.
      *
      * @param overlayWidget the overlay widget
+     * @param languageIso   the ISO code of the language
      * @return the location string for a single {@link OverlayWidget}
      */
-    public String getNotation(final OverlayWidget overlayWidget) {
+    public String getNotation(final OverlayWidget overlayWidget, final String languageIso) {
         return overlayWidget.getType() != null ? overlayWidget.getType() : "?";
     }
 
@@ -193,19 +199,21 @@ public class DefaultLocator implements Locator {
      * Default 'sub' notation when an {@link OverlayWidget} has a parent of the same type.
      *
      * @param overlayWidget the overlay widget
+     * @param languageIso   the ISO code of the language
      * @return the sub notation for this widget
      */
-    public String getSubNotation(final OverlayWidget overlayWidget) {
-        return "sub" + getNotation(overlayWidget);
+    public String getSubNotation(final OverlayWidget overlayWidget, final String languageIso) {
+        return "sub" + getNotation(overlayWidget, languageIso);
     }
 
     /**
      * Default 'new' notation for an {@link OverlayWidget} that has been introduced by an
      * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointProvider}. Returns '(new)'.
      *
+     * @param languageIso the ISO code of the language
      * @return the new notation
      */
-    public String getNewNotation() {
+    public String getNewNotation(final String languageIso) {
         return "(new)";
     }
 
