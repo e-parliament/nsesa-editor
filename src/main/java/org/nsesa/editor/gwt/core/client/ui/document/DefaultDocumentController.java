@@ -256,6 +256,7 @@ public class DefaultDocumentController implements DocumentController {
         // set references in the child controllers
         this.diffingManager.setDocumentController(this);
         this.amendmentManager.setDocumentController(this);
+        this.amendmentManager.registerListeners();
         this.infoPanelController.setDocumentController(this);
         this.sourceFileController.setDocumentController(this);
         this.amendmentsPanelController.setDocumentController(this);
