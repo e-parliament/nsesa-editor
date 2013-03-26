@@ -53,7 +53,7 @@ super(overlayStrategy);
 */
 @Override
 public String getNamespaceURI() {
-return namespace;
+return namespaceURI;
 }
 /**
 * Return <code>OverlayWidget</code> instance based on the given DOM element or null if there is no
