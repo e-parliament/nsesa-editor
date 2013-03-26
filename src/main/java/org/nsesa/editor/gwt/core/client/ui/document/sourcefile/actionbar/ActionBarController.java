@@ -17,10 +17,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
@@ -276,8 +273,8 @@ public class ActionBarController {
      * 'Attaches' itself to the given <tt>target</tt> amendable overlay widget, changing the CSS style
      * of the overlay widget, and position the toolbar right above it via a call to {@link #adaptPosition(com.google.gwt.user.client.ui.Widget)}.
      *
-     * @param target the target overlay widget
-     * @param target the containing document controller
+     * @param target                the target overlay widget
+     * @param documentController    the containing document controller
      */
     public void attach(final OverlayWidget target, final DocumentController documentController) {
         // only perform the world if the new target overlay widget is actually different
@@ -285,7 +282,7 @@ public class ActionBarController {
         if (overlayWidget != target) {
             // if our action bar view has not yet been added to the rootpanel, then do so now.
             if (!view.asWidget().isAttached()) {
-                RootPanel.get().add(view);
+                RootLayoutPanel.get().add(view);
             }
             // hide the popup panel with
             popupPanel.hide();
