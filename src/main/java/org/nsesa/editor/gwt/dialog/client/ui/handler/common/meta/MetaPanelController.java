@@ -101,6 +101,11 @@ public class MetaPanelController implements AmendmentDialogAwareController {
         return view;
     }
 
+    public void clear() {
+        setJustification("");
+        setNotes("");
+    }
+
     /**
      * Return the title for the tab under which this controller is registered.
      * TODO i18n
