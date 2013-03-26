@@ -36,6 +36,8 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
+import java.util.logging.Logger;
+
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
@@ -53,6 +55,8 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class ActionBarController {
+
+    private static final Logger LOG = Logger.getLogger(ActionBarController.class.getName());
 
     /**
      * The main view for this component.
@@ -318,7 +322,17 @@ public class ActionBarController {
             // we need to limit the width to make sure it does not
             final int width = (container.getOffsetWidth() + container.getAbsoluteLeft()) - overlayWidget.asWidget().getAbsoluteLeft();
             style.setWidth((width), Style.Unit.PX);
+            adaptVisibility();
         }
+    }
+
+    public void adaptVisibility() {
+        final int widgetTop = overlayWidget.asWidget().getAbsoluteTop();
+        final int actionBarHeight = view.asWidget().getOffsetHeight();
+        final int scrollPanelTop = sourceFileController.getContentController().getView().getScrollPanel().getAbsoluteTop();
+        // only show if we are fully visible
+        view.asWidget().setVisible(widgetTop - actionBarHeight >= scrollPanelTop);
+
     }
 
     /**
