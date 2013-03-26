@@ -33,10 +33,10 @@ public class OverlayClassTest {
         OverlayClass overlayClass = new OverlayClass();
         PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl("");
 
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package1", "", "Foo", "foo", false, false));
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package2", "", "Bar", "bar", false, false));
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package3", "", "Baz", "baz", false, false));
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package3", "", "Doo", "doo", false, false));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package1", "", "Foo", "foo", false, true));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package2", "", "Bar", "bar", false, true));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package3", "", "Baz", "baz", false, true));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package3", "", "Doo", "doo", false, true));
 
         final String[] imports = overlayClass.getImports(packageNameGenerator);
         assertNotNull(imports);
@@ -53,9 +53,9 @@ public class OverlayClassTest {
     public void testJavaLangImports() throws Exception {
         OverlayClass overlayClass = new OverlayClass();
         PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl("");
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "java.lang", "", "Foo", "foo", false, false));
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "java.lang", "", "Bar", "bar", false, false));
-        overlayClass.getProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package1", "", "Baz", "baz", false, false));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "java.lang", "", "Foo", "foo", false, true));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "java.lang", "", "Bar", "bar", false, true));
+        overlayClass.getFlatProperties().add(new OverlayProperty(OverlayType.SimpleType, "tld.domain.package1", "", "Baz", "baz", false, true));
 
         final String[] imports = overlayClass.getImports(packageNameGenerator);
         assertNotNull(imports);

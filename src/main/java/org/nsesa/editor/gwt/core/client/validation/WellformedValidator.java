@@ -34,8 +34,8 @@ public class WellformedValidator implements Validator<String> {
         try {
             final Document document = XMLParser.parse(input);
         } catch (Exception e) {
-            return new ValidationResultImpl(false, "Not well-formed " + e.getMessage());
+            return new ValidationResultImpl(false, "Not well-formed " + e.getMessage(), null);
         }
-        return new ValidationResultImpl(true, null);
+        return new ValidationResultImpl(true, null, null);
     }
 }

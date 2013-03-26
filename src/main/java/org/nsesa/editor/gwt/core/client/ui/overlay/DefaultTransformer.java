@@ -139,6 +139,7 @@ public class DefaultTransformer implements Transformer {
                         break;
                     case Node.TEXT_NODE:
                         sb.append(SafeHtmlUtils.htmlEscapeAllowEntities(nodes.getItem(i).getNodeValue().trim()));
+                        //sb.append(nodes.getItem(i).getNodeValue().trim());
                         break;
                     case Node.DOCUMENT_NODE:
                         LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());

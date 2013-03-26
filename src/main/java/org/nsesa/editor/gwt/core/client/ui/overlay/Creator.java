@@ -15,10 +15,9 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
-import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Interface to keep track of the allowed children of a given {@link OverlayWidget} in a given {@link DocumentController}.
@@ -31,17 +30,15 @@ import java.util.LinkedHashMap;
 public interface Creator {
     /**
      * Returns a list of all the amendable widget types that are allowed to be created as a sibling.
-     * The key of the map is the amendable widget to be used as a sibling where the value is the <code>Occurrence</code>.
      *
-     * @return the map of allowed siblings - should never be <tt>null</tt>.
+     * @return the list of allowed siblings - should never be <tt>null</tt>.
      */
-    LinkedHashMap<OverlayWidget, Occurrence> getAllowedSiblings(DocumentController documentController, OverlayWidget overlayWidget);
+    List<OverlayWidget> getAllowedSiblings(DocumentController documentController, OverlayWidget overlayWidget);
 
     /**
-     * Returns a map of all the amendable widget types that are allowed to be created as a child.
-     * The key of the map is the amendable widget to be used as a child where the value is the <code>Occurrence</code>.
+     * Returns a list of all the amendable widget types that are allowed to be created as a child.
      *
      * @return the map of allowed children - should never be <tt>null</tt>.
      */
-    LinkedHashMap<OverlayWidget, Occurrence> getAllowedChildren(DocumentController documentController, OverlayWidget overlayWidget);
+    List<OverlayWidget> getAllowedChildren(DocumentController documentController, OverlayWidget overlayWidget);
 }

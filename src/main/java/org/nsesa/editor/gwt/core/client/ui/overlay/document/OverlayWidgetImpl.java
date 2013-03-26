@@ -139,6 +139,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      */
     protected HTMLPanel amendmentControllersHolderElement;
 
+    /** keep a list with the allowed children that could be added**/
+    private List<OverlayWidget> allowedChildren;
     /**
      * Default constructor.
      */
@@ -218,12 +220,12 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             if (!skipValidation) {
                 // see if there is a wildcard in the allowed subtypes,
                 OverlayWidget wildCard = null;
-                if (!getAllowedChildTypes().containsKey(wildCard)) {
+                if (!getAllowedChildTypes().contains(wildCard)) {
                     // no wildcard - see if the type is supported as a child widget
                     boolean canAdd = false;
-                    for (Map.Entry<OverlayWidget, Occurrence> entry : getAllowedChildTypes().entrySet()) {
-                        if (entry.getKey().getType().equalsIgnoreCase(child.getType()) &&
-                                entry.getKey().getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
+                    for (OverlayWidget allowed : getAllowedChildTypes()) {
+                        if (allowed.getType().equalsIgnoreCase(child.getType()) &&
+                                allowed.getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
                             canAdd = true;
                         }
                     }
@@ -572,15 +574,9 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return amendmentControllersHolderElement;
     }
 
-    /**
-     * Returns a map of the node names that are allowed to be nested.
-     * Note: this can include wildcards (null keys).
-     *
-     * @return the Map of allowed child types (an empty map is ok though).
-     */
     @Override
-    public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-        return new HashMap<OverlayWidget, Occurrence>();
+    public StructureIndicator getStructureIndicator() {
+        return new StructureIndicator.DefaultStructureIndicator(1,1);
     }
 
     @Override
@@ -782,5 +778,30 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 }
             }
         }
+    }
+
+    /**
+     * Returns the list of the allowed child types as they are coming from {@link StructureIndicator} structure
+     * @return the list of the allowed child types
+     */
+    protected List<OverlayWidget> getAllowedChildTypes() {
+        if (allowedChildren == null) {
+            allowedChildren = new ArrayList<OverlayWidget>();
+            List<StructureIndicator> stack = new ArrayList<StructureIndicator>();
+            stack.add(getStructureIndicator());
+            while (!stack.isEmpty()) {
+                StructureIndicator structureIndicator = stack.remove(0);
+                if (structureIndicator instanceof StructureIndicator.Element) {
+                    StructureIndicator.Element elemIndicator = (StructureIndicator.Element) structureIndicator;
+                    OverlayWidget candidate = elemIndicator.asWidget();
+                    allowedChildren.add(candidate);
+                } else {
+                    if (structureIndicator.getIndicators() != null ) {
+                        stack.addAll(structureIndicator.getIndicators());
+                    }
+                }
+            }
+        }
+        return allowedChildren;
     }
 }

@@ -26,13 +26,11 @@ import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSel
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -166,11 +164,11 @@ public class VisualStructureController {
                 if (!widget.equals(originalOverlayWidget))
                     visualStructureAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
 
-                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, widget);
+                List<OverlayWidget> children = creator.getAllowedChildren(documentController, widget);
                 visualStructureView.clearAll();
                 visualStructureView.setVisualStructureTitle(widget.getType());
                 visualStructureView.refreshAllowedChildren(
-                        new HashMap<OverlayWidget, Occurrence>(children),
+                        children,
                         selectedText == null || selectedText.length() == 0 ? null : draftingCallback);
             }
         });

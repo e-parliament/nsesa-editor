@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.validation;
 
+import com.google.inject.ImplementedBy;
+
 /**
  * Interface for a {@link Validator} for a given type <tt>T</tt>.
  * Date: 19/02/13 13:32
@@ -20,6 +22,7 @@ package org.nsesa.editor.gwt.core.client.validation;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@ImplementedBy(OverlayWidgetValidator.class)
 public interface Validator<T> {
 
     /**

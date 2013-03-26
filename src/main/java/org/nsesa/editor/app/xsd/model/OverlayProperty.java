@@ -49,7 +49,6 @@ public class OverlayProperty extends OverlayNode {
     private Integer maxOccurs = -1;
 
     private boolean required;
-
     /**
      * Constructs a <code>OverlayProperty</code> with the given parameters
      * @param overlayType The the property type
@@ -232,6 +231,21 @@ public class OverlayProperty extends OverlayNode {
         return required;
     }
 
+    public boolean isSequenceIndicator() {
+        return overlayType.equals(OverlayType.GroupSequence);
+    }
+    public boolean isAllIndicator() {
+        return overlayType.equals(OverlayType.GroupAll);
+    }
+    public boolean isChoiceIndicator() {
+        return overlayType.equals(OverlayType.GroupChoice);
+    }
+    public boolean isGroupIndicator() {
+        return overlayType.equals(OverlayType.Group) || overlayType.equals(OverlayType.GroupDecl)
+                || overlayType.equals(OverlayType.AttrGroup);
+    }
+
+
     /**
      * Set True when is <code>xsd required</code>
      * @param required
@@ -245,10 +259,12 @@ public class OverlayProperty extends OverlayNode {
      */
     public static interface Filter {
         /**
-         * Returns true when the <code>OverlayProperty</code> satisfy filter conditions
-         * @param property The property to be checked
-         * @return True when the property satisfy filter conditions
-         */
+        * Returns true when the <code>OverlayProperty</code> satisfy filter conditions
+        * @param property The property to be checked
+        * @return True when the property satisfy filter conditions
+        */
         boolean apply(OverlayProperty property);
     }
+
+
 }

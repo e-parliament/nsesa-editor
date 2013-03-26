@@ -269,12 +269,10 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     HTMLPanel getAmendmentControllersHolderElement();
 
     /**
-     * Get a map of the element node names that are allowed under this overlay widget (note, this also includes the
-     * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
-     *
-     * @return the allowed child nodes
+     * Get the structure indicator as it is coming from xsd
+     * @return The structure indicator
      */
-    Map<OverlayWidget, Occurrence> getAllowedChildTypes();
+    StructureIndicator getStructureIndicator();
 
     /**
      * Get the numbering type of this overlay widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},

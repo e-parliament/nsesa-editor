@@ -18,13 +18,11 @@ import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreate
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -117,14 +115,14 @@ public class ActionBarCreatePanelController {
         view.clearChildOverlayWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<OverlayWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
-        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedSiblings.entrySet()) {
-            view.addSiblingAmendableWidget(entry.getKey().getType(), entry.getKey());
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        for (final OverlayWidget entry : allowedSiblings) {
+            view.addSiblingAmendableWidget(entry.getType(), entry);
         }
         // add all the children
-        LinkedHashMap<OverlayWidget, Occurrence> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
-        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedChildren.entrySet()) {
-            view.addChildAmendableWidget(entry.getKey().getType(), entry.getKey());
+        List<OverlayWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
+        for (final OverlayWidget entry : allowedChildren) {
+            view.addChildAmendableWidget(entry.getType(), entry);
         }
 
         // show separator if both siblings and children are possible

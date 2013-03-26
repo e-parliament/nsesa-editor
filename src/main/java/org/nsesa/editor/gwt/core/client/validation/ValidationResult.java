@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.validation;
 
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+
 /**
  * A interface for a result of a validation done by a {@link Validator}.
  * Date: 19/02/13 13:45
@@ -33,4 +35,13 @@ public interface ValidationResult {
      * @return the error message, or <tt>null</tt> if no error message was given.
      */
     String getErrorMessage();
+
+    /**
+     * If the validation was not successful return the widget that cause problems, otherwise <code>null</code>
+     * value will be returned. It might be the case to return null values for cases where the validation fails
+     * but there is no invalid widget to return eg when check for well formed.
+     * @return {@link OverlayWidget} widget that cause problems
+     */
+    OverlayWidget getInvalidWidget();
+
 }

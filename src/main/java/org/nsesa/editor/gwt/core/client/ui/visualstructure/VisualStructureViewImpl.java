@@ -20,13 +20,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -101,23 +99,23 @@ public class VisualStructureViewImpl extends ResizeComposite implements VisualSt
 
     /**
      * Create a list of anchors/labels containing information about the allowed children.
-     * @param allowedChildren A Map containing the allowed widget children with their occurrence
+     * @param allowedChildren A List containing the allowed widget children
      * @param callback gets called when the user select a child from the interface
      */
     @Override
-    public void refreshAllowedChildren(HashMap<OverlayWidget, Occurrence> allowedChildren, VisualStructureCallback callback) {
-        for (final Map.Entry<OverlayWidget, Occurrence> child : allowedChildren.entrySet()) {
+    public void refreshAllowedChildren(List<OverlayWidget> allowedChildren, VisualStructureCallback callback) {
+        for (final OverlayWidget child : allowedChildren) {
             // when selected text is empty do not add any click handler just display the tags
             IsWidget allowedChild, mandatoryChild = null;
             if (callback == null) {
-                allowedChild = createLabelFrom(child.getKey());
-                if (child.getValue().getMinOccurs() >= 1) {
-                    mandatoryChild = createLabelFrom(child.getKey());
+                allowedChild = createLabelFrom(child);
+                if (child.getStructureIndicator().getMinOccurs() >= 1) {
+                    mandatoryChild = createLabelFrom(child);
                 }
             } else {
-                allowedChild = createAnchorFrom(child.getKey(), callback);
-                if (child.getValue().getMinOccurs() >= 1) {
-                    mandatoryChild = createAnchorFrom(child.getKey(), callback);
+                allowedChild = createAnchorFrom(child, callback);
+                if (child.getStructureIndicator().getMinOccurs() >= 1) {
+                    mandatoryChild = createAnchorFrom(child, callback);
                 }
             }
             allowedPanel.add(allowedChild);

@@ -20,15 +20,19 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
+import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -86,18 +90,23 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     private com.google.web.bindery.event.shared.HandlerRegistration draftingToggleEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
 
+    /** the overlay widget validator **/
+    private Validator<OverlayWidget> overlayWidgetValidator;
+
     @Inject
     public AmendmentDialogModifyController(final ClientFactory clientFactory, final AmendmentDialogModifyView view,
                                            final Locator locator,
                                            final OverlayFactory overlayFactory,
                                            final VisualStructureController visualStructureController,
-                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder,
+                                           final Validator<OverlayWidget> overlayWidgetValidator) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
         this.locator = locator;
         this.visualStructureController = visualStructureController;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
+        this.overlayWidgetValidator = overlayWidgetValidator;
 
 
         view.getRichTextEditor().setVisualStructureWidget(visualStructureController.getView());
@@ -162,14 +171,17 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
      * Request the saving of the amendment.
      */
     public void handleSave() {
-        dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
-        dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-        // inject the xpath-like expression to uniquely identify this element
-        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
-        sourceReference.setReferenceID(UUID.uuid());
-        dialogContext.getAmendment().setSourceReference(sourceReference);
-        dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
-        clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+        //validate the amendment before saving
+//        if (validate(dialogContext.getAmendment().getRoot())) {
+            dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
+            dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
+            // inject the xpath-like expression to uniquely identify this element
+            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
+            sourceReference.setReferenceID(UUID.uuid());
+            dialogContext.getAmendment().setSourceReference(sourceReference);
+            dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
+            clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+//        }
     }
 
     /**
@@ -210,5 +222,26 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         if (dialogContext.getOverlayWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
+    }
+
+
+    /**
+     * Validates the overlay widget by using the validator provided
+     * @param overlayWidget the overlay widget that will be validated
+     * @return True if the overlay widget is validated
+     */
+    private boolean validate(OverlayWidget overlayWidget) {
+        //validate the overlay
+        ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
+        boolean isValid = validationResult.isSuccessful();
+        if (!isValid) {
+            clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(validationResult.getErrorMessage()));
+            OverlayWidget invalidWidget = validationResult.getInvalidWidget();
+            if (invalidWidget != null) {
+                //mark the widget as invalid
+                invalidWidget.getOverlayElement().addClassName("validation-error");
+            }
+        }
+        return isValid;
     }
 }

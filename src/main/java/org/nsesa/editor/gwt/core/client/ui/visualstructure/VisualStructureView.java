@@ -15,10 +15,9 @@ package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * The drafting view widget is responsible to display the allowed and mandatory children
@@ -57,6 +56,6 @@ public interface VisualStructureView extends IsWidget {
      * @param allowedChildren A Map containing the allowed widget children with their occurrence
      * @param callback gets called when the user select a child from the interface
      */
-    void refreshAllowedChildren(HashMap<OverlayWidget,Occurrence> allowedChildren, VisualStructureCallback callback);
+    void refreshAllowedChildren(List<OverlayWidget> allowedChildren, VisualStructureCallback callback);
 
 }

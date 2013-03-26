@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.validation;
 
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+
 /**
  * Default implementation of the {@link ValidationResult}.
  * Date: 19/02/13 13:50
@@ -24,10 +26,12 @@ public final class ValidationResultImpl implements ValidationResult {
 
     final boolean success;
     final String errorMessage;
+    final OverlayWidget invalidWidget;
 
-    public ValidationResultImpl(boolean success, String errorMessage) {
+    public ValidationResultImpl(boolean success, String errorMessage, OverlayWidget invalidWidget) {
         this.success = success;
         this.errorMessage = errorMessage;
+        this.invalidWidget = invalidWidget;
     }
 
     @Override
@@ -38,5 +42,10 @@ public final class ValidationResultImpl implements ValidationResult {
     @Override
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    @Override
+    public OverlayWidget getInvalidWidget() {
+        return invalidWidget;
     }
 }

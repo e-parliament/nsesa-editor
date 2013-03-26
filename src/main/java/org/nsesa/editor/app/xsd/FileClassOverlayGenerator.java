@@ -247,6 +247,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         // create the factory for each namespace
         for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
             String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
+
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
             }
@@ -304,7 +305,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                 }
                 writeToFile(file, rootMap, templateName);
             } catch (Exception e) {
-                throw new RuntimeException("The class can not be generated " + file.getAbsolutePath());
+                throw new RuntimeException("The class can not be generated " + file.getAbsolutePath(), e);
             }
         }
     }
@@ -318,14 +319,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private Map<String, List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
         Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
         for (OverlayClass generatedClass : generatedClasses) {
-            List<OverlayClass> namespaceElements = result.get(generatedClass.getNameSpace());
-            if (namespaceElements == null) {
-                namespaceElements = new ArrayList<OverlayClass>();
-                result.put(generatedClass.getNameSpace(), namespaceElements);
-            }
-            // add only required types
-            if (generatedClass.getOverlayType().equals(overlayType)) {
-                namespaceElements.add(generatedClass);
+            if (generatedClass.getNameSpace() != null) {
+                List<OverlayClass> namespaceElements = result.get(generatedClass.getNameSpace());
+                if (namespaceElements == null) {
+                    namespaceElements = new ArrayList<OverlayClass>();
+                    result.put(generatedClass.getNameSpace(), namespaceElements);
+                }
+                // add only required types
+                if (generatedClass.getOverlayType().equals(overlayType)) {
+                    namespaceElements.add(generatedClass);
+                }
             }
         }
         return result;
@@ -428,6 +431,9 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * Replace the group properties with their collection of simple properties
      */
     private void replaceGroupProperties(OverlayClass aClass) {
+        if (aClass.getName().equalsIgnoreCase("vote")) {
+            System.out.println("stop");
+        }
         List<OverlayPropertyHolder> stack = new ArrayList<OverlayPropertyHolder>();
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         for (OverlayProperty property : aClass.getProperties()) {
@@ -442,12 +448,18 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                 // check whether is group or attribute group and replace with its properties
                 if (baseClass.getOverlayType().equals(OverlayType.AttrGroup) ||
                         baseClass.getOverlayType().equals(OverlayType.Group) ||
-                        baseClass.getOverlayType().equals(OverlayType.GroupDecl)) {
+                        baseClass.getOverlayType().equals(OverlayType.GroupDecl) ||
+                        baseClass.getOverlayType().equals(OverlayType.GroupChoice) ||
+                        baseClass.getOverlayType().equals(OverlayType.GroupAll) ||
+                        baseClass.getOverlayType().equals(OverlayType.GroupSequence)) {
                     // add in the stack the properties of the base class and parent
                     OverlayClass parent = baseClass;
                     while (parent != null) {
                         for (OverlayProperty parentProp : parent.getProperties()) {
                             // save the previous collection flag
+                            if (parentProp.getName().equalsIgnoreCase("sequence")) {
+                                System.out.println("stop");
+                            }
                             stack.add(new OverlayPropertyHolder(parentProp, parentCollection || parentProp.isCollection()));
                         }
                         parent = parent.getParent();
@@ -465,6 +477,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                 result.add(newProperty);
             }
         }
-        aClass.setProperties(result);
+        aClass.setFlatProperties(result);
     }
 }
