@@ -29,16 +29,14 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.exception.ValidationException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,7 +103,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
      * Registers the listeners as soon as the parent document controller is injected (manually, due to (lack of)
      * scoping in Gin).
      */
-    private void registerListeners() {
+    public void registerListeners() {
         amendmentContainerSaveEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSaveEvent.TYPE, new AmendmentContainerSaveEventHandler() {
             @Override
             public void onEvent(final AmendmentContainerSaveEvent event) {
@@ -134,7 +132,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
      *
      * @param toDelete the amendment controllers to delete.
      */
-    protected void deleteAmendmentContainers(final AmendmentController... toDelete) {
+    public void deleteAmendmentContainers(final AmendmentController... toDelete) {
 
         final ServiceFactory serviceFactory = documentController.getServiceFactory();
         final ClientFactory clientFactory = documentController.getClientFactory();
@@ -167,6 +165,92 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionDeleteSuccessful(result.length)));
             }
         });
+    }
+
+    public void tableAmendmentContainers(final AmendmentController... toTable) {
+        final ServiceFactory serviceFactory = documentController.getServiceFactory();
+        final ClientFactory clientFactory = documentController.getClientFactory();
+
+        final Collection<AmendmentContainerDTO> amendmentContainerDTOs = Collections2.transform(Arrays.asList(toTable), new Function<AmendmentController, AmendmentContainerDTO>() {
+            @Override
+            public AmendmentContainerDTO apply(AmendmentController input) {
+                return input.getModel();
+            }
+        });
+
+        final Collection<String> oldStatuses = Collections2.transform(Arrays.asList(toTable), new Function<AmendmentController, String>() {
+            @Override
+            public String apply(AmendmentController input) {
+                return input.getModel().getAmendmentContainerStatus();
+            }
+        });
+
+        final Counter index = new Counter();
+        serviceFactory.getGwtAmendmentService().tableAmendmentContainers(clientFactory.getClientContext(),
+                new ArrayList<AmendmentContainerDTO>(amendmentContainerDTOs),
+                new AsyncCallback<AmendmentContainerDTO[]>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not table amendment.", caught));
+                    }
+
+                    @Override
+                    public void onSuccess(AmendmentContainerDTO[] result) {
+                        // TODO: incorrect, we should not update the view
+                        final AmendmentController amendmentController = toTable[index.get()];
+                        amendmentController.setModel(result[index.get()]);
+                        final List<String> asList = new ArrayList<String>(oldStatuses);
+                        final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, asList.get(index.get()));
+                        index.increment();
+
+                        final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
+                        documentEventBus.fireEvent(updatedEvent);
+                        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionTableSuccessful(result.length)));
+                    }
+                });
+    }
+
+    public void withdrawAmendmentContainers(final AmendmentController... toWithdraw) {
+        final ServiceFactory serviceFactory = documentController.getServiceFactory();
+        final ClientFactory clientFactory = documentController.getClientFactory();
+
+        final Collection<AmendmentContainerDTO> amendmentContainerDTOs = Collections2.transform(Arrays.asList(toWithdraw), new Function<AmendmentController, AmendmentContainerDTO>() {
+            @Override
+            public AmendmentContainerDTO apply(AmendmentController input) {
+                return input.getModel();
+            }
+        });
+
+        final Collection<String> oldStatuses = Collections2.transform(Arrays.asList(toWithdraw), new Function<AmendmentController, String>() {
+            @Override
+            public String apply(AmendmentController input) {
+                return input.getModel().getAmendmentContainerStatus();
+            }
+        });
+
+        final Counter index = new Counter();
+        serviceFactory.getGwtAmendmentService().withdrawAmendmentContainers(clientFactory.getClientContext(),
+                new ArrayList<AmendmentContainerDTO>(amendmentContainerDTOs),
+                new AsyncCallback<AmendmentContainerDTO[]>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not withdraw amendment.", caught));
+                    }
+
+                    @Override
+                    public void onSuccess(AmendmentContainerDTO[] result) {
+                        // TODO: incorrect, we should not update the view
+                        final AmendmentController amendmentController = toWithdraw[index.get()];
+                        amendmentController.setModel(result[index.get()]);
+                        final List<String> asList = new ArrayList<String>(oldStatuses);
+                        final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, asList.get(index.get()));
+                        index.increment();
+
+                        final DocumentEventBus documentEventBus = amendmentController.getDocumentController().getDocumentEventBus();
+                        documentEventBus.fireEvent(updatedEvent);
+                        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionWithdrawSuccessful(result.length)));
+                    }
+                });
     }
 
     /**
@@ -398,6 +482,5 @@ public class DefaultAmendmentManager implements AmendmentManager {
     @Override
     public void setDocumentController(DocumentController documentController) {
         this.documentController = documentController;
-        registerListeners();
     }
 }

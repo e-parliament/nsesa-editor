@@ -35,6 +35,16 @@ import java.util.List;
 @ImplementedBy(DefaultAmendmentManager.class)
 public interface AmendmentManager extends AmendmentInjectionCapable {
 
+    void registerListeners();
+
+    void removeListeners();
+
+    void deleteAmendmentContainers(final AmendmentController... toDelete);
+
+    void tableAmendmentContainers(final AmendmentController... toTable);
+
+    void withdrawAmendmentContainers(final AmendmentController... toWithdraw);
+
     /**
      * Sets a list of available amendment container DTOs.
      *
