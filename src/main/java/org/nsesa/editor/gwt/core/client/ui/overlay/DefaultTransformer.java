@@ -147,7 +147,12 @@ public class DefaultTransformer implements Transformer {
                 }
             }
         }
-        sb.append("</").append(widget.getType()).append(">");
+        sb.append("</");
+        final String prefix = namespaces.get(widget.getNamespaceURI());
+        if (!DEFAULT_NAMESPACE.equals(prefix)) {
+            sb.append(prefix).append(":");
+        }
+        sb.append(widget.getType()).append(">");
         return sb.toString();
     }
 
@@ -165,7 +170,7 @@ public class DefaultTransformer implements Transformer {
                     String prefix = getPrefix(visited.getNamespaceURI());
                     if (prefix == null) {
                         // generate namespace (ns1, ns2, ...)
-                        prefix = "ns" + namespaces.size() + 1;
+                        prefix = "ns" + (namespaces.size() + 1);
                     }
                     namespaces.put(visited.getNamespaceURI(), prefix);
                 }
