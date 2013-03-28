@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.modify;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -26,10 +27,10 @@ import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAtt
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
 import org.nsesa.editor.gwt.core.client.validation.Validator;
@@ -172,7 +173,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
      */
     public void handleSave() {
         //validate the amendment before saving
-//        if (validate(dialogContext.getAmendment().getRoot())) {
+        if (validate()) {
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
             dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
             // inject the xpath-like expression to uniquely identify this element
@@ -181,7 +182,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
             dialogContext.getAmendment().setSourceReference(sourceReference);
             dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
             clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
-//        }
+        }
     }
 
     /**
@@ -226,12 +227,17 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
 
     /**
-     * Validates the overlay widget by using the validator provided
-     * @param overlayWidget the overlay widget that will be validated
-     * @return True if the overlay widget is validated
+     * Validates the content before saving
+     * @return True if content is valid
      */
-    private boolean validate(OverlayWidget overlayWidget) {
+    protected boolean validate() {
         //validate the overlay
+        final String content = view.getAmendmentContent();
+        //replace all validation-error class names with empty
+        content.replaceAll("validation-error", "");
+        final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
+        clone.setInnerHTML(content);
+        OverlayWidget overlayWidget = overlayFactory.getAmendableWidget(clone);
         ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
         boolean isValid = validationResult.isSuccessful();
         if (!isValid) {
@@ -240,7 +246,10 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
             if (invalidWidget != null) {
                 //mark the widget as invalid
                 invalidWidget.getOverlayElement().addClassName("validation-error");
+            } else {
+                overlayWidget.getOverlayElement().addClassName("validation-error");
             }
+            view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
         }
         return isValid;
     }

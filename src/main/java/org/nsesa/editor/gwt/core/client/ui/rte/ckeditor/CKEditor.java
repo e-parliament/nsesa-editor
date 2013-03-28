@@ -100,6 +100,11 @@ public class CKEditor extends Composite implements RichTextEditor {
     private int height;
 
     /**
+     * keep the toggle status
+     */
+    private boolean toggled;
+
+    /**
      * Create an instance of the editor.
      * @param plugin The plugin linked to the editor which
      * @param config The editor configuration
@@ -168,6 +173,8 @@ public class CKEditor extends Composite implements RichTextEditor {
     @Override
     public void toggleVisualStructure(boolean toggled) {
         //toggle the view when the editor is attached to DOM
+        this.toggled = toggled;
+
         if (isAttached()) {
             //the flag to show drafting tool has been set up
             if (showDraftingTool) {
@@ -256,7 +263,13 @@ public class CKEditor extends Composite implements RichTextEditor {
         //creating a javaScriptObject editor representation might be a time consuming operation, keep the content data
         // that need to be set up also in a temporary variable
         setTemporaryContent(content);
-        if (attached) setHTMLInternal(editorInstance, content);
+        if (attached) {
+            setHTMLInternal(editorInstance, content);
+            if (toggled) {
+                //force it again since the editor loose the setting when set up the content
+                addBodyClassName(editorInstance, config.getDraftingClassName());
+            }
+        }
     }
 
     private native void setHTMLInternal(final JavaScriptObject editorInstance, final String content) /*-{

@@ -129,13 +129,16 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
             if (structureIndicator instanceof StructureIndicator.Element) {
                 StructureIndicator.Element elemIndicator = (StructureIndicator.Element) structureIndicator;
                 int minOccurs = minOfMinim(structureIndicator.getMinOccurs(), occurrenceIndicator.getMinOccurs());
-                int maxOccurs = maxOfMax(structureIndicator.getMinOccurs(), occurrenceIndicator.getMaxOccurs());
+                int maxOccurs = maxOfMax(structureIndicator.getMaxOccurs(), occurrenceIndicator.getMaxOccurs());
                 result.add(new StructureIndicator.DefaultElement(minOccurs, maxOccurs, elemIndicator.asWidget()));
             } else {
                 if (structureIndicator.getIndicators() != null ) {
                     for(StructureIndicator ind : structureIndicator.getIndicators()) {
                         int minOccurs = minOfMinim(occurrenceIndicator.getMinOccurs(), ind.getMinOccurs());
-                        int maxOccurs = maxOfMax(occurrenceIndicator.getMinOccurs(), ind.getMaxOccurs());
+                        if (ind instanceof StructureIndicator.Choice) {
+                            minOccurs = 0;
+                        }
+                        int maxOccurs = maxOfMax(occurrenceIndicator.getMaxOccurs(), ind.getMaxOccurs());
                         stack.add(ind);
                         stackOccurrence.add(new StructureIndicator.DefaultStructureIndicator(minOccurs,maxOccurs));
                     }

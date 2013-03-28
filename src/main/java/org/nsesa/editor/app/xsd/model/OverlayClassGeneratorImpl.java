@@ -116,9 +116,6 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
     @Override
     public void generate(XSModelGroupDecl modelGroup) {
         LOG.debug("Generate overlayclass from group type {}", modelGroup);
-        if (modelGroup.getName().equalsIgnoreCase("Aninline")) {
-            System.out.println("stop");
-        }
 
         OverlayClass overlayClass = new OverlayClass(modelGroup.getName(), modelGroup.getTargetNamespace(), OverlayType.Group);
         if (modelGroup.getAnnotation() != null && modelGroup.getAnnotation().getAnnotation() != null) {

@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -186,7 +187,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
             throw new NullPointerException("No parent amendable widget set. Cannot continue.");
         }
         // validate the amendment
-//        if (validate(dialogContext.getAmendment().getRoot())) {
+        if (validate()) {
             // set up the source reference so we can re-inject this amendment later.
             final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
                     dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
@@ -210,7 +211,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
             // finally, close the parent dialog at this point.
             clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
-//        }
+        }
     }
 
     /**
@@ -254,12 +255,17 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     }
 
     /**
-     * Validates the overlay widget by using the validator provided in the constructor
-     * @param overlayWidget the overlay widget that will be validated
-     * @return True if the overlay widget is validated
+     * Validates the content before saving
+     * @return True if the content is valid
      */
-    private boolean validate(OverlayWidget overlayWidget) {
+    protected boolean validate() {
         //validate the overlay
+        final String content = view.getAmendmentContent();
+        //replace all validation-error class names with empty
+        content.replaceAll("validation-error", "");
+        final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
+        clone.setInnerHTML(content);
+        OverlayWidget overlayWidget = overlayFactory.getAmendableWidget(clone);
         ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
         boolean isValid = validationResult.isSuccessful();
         if (!isValid) {
@@ -268,9 +274,11 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
             if (invalidWidget != null) {
                 //mark the widget as invalid
                 invalidWidget.getOverlayElement().addClassName("validation-error");
+            } else {
+                overlayWidget.getOverlayElement().addClassName("validation-error");
             }
+            view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
         }
         return isValid;
     }
-
 }

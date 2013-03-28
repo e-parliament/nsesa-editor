@@ -22,7 +22,7 @@ import com.google.inject.ImplementedBy;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(OverlayWidgetValidator.class)
+@ImplementedBy(WellformedValidator.class)
 public interface Validator<T> {
 
     /**

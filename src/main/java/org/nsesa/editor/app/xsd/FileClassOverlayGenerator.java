@@ -431,9 +431,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * Replace the group properties with their collection of simple properties
      */
     private void replaceGroupProperties(OverlayClass aClass) {
-        if (aClass.getName().equalsIgnoreCase("vote")) {
-            System.out.println("stop");
-        }
         List<OverlayPropertyHolder> stack = new ArrayList<OverlayPropertyHolder>();
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         for (OverlayProperty property : aClass.getProperties()) {
@@ -457,9 +454,6 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                     while (parent != null) {
                         for (OverlayProperty parentProp : parent.getProperties()) {
                             // save the previous collection flag
-                            if (parentProp.getName().equalsIgnoreCase("sequence")) {
-                                System.out.println("stop");
-                            }
                             stack.add(new OverlayPropertyHolder(parentProp, parentCollection || parentProp.isCollection()));
                         }
                         parent = parent.getParent();
