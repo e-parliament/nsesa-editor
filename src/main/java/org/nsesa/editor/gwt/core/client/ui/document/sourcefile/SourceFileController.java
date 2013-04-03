@@ -13,10 +13,13 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -98,6 +101,10 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * A list of active overlay widgets (after a {@link OverlayWidgetSelectEvent} has been caught).
      */
     protected OverlayWidget activeOverlayWidget;
+
+    /**
+     * Event handler registration.
+     */
     private HandlerRegistration documentScrollEventHandlerRegistration;
 
     @Inject
@@ -238,7 +245,12 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     @Override
     public void walk(OverlayWidgetVisitor visitor) {
         for (final OverlayWidget root : overlayWidgets) {
-            root.walk(visitor);
+            if (root != null) {
+                root.walk(visitor);
+            }
+            else {
+                LOG.warning("There is no root widget set - probably no overlay took place?");
+            }
         }
     }
 
@@ -261,15 +273,47 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         contentController.scrollTo(widget);
     }
 
+    public void highlight(final OverlayWidget overlayWidget, final String color, final int seconds) {
+
+    }
+
     /**
      * Click callback; fires a {@link OverlayWidgetSelectEvent} on the private document bus.
      *
      * @param sender the overlay widget that was clicked
      */
     @Override
-    public void onClick(final OverlayWidget sender) {
+    public void onClick(final OverlayWidget sender, final Event event) {
+        String href = null;
+        try {
+            href = extractAttribute(event.getEventTarget(), "href");
+        } catch (Exception e) {
+            // ignore
+        }
+        if (href != null && !"".equals(href.trim())) {
+            // this contains a href - pass it on to the document controller's ref handler
+            if (documentController != null && documentController.getLocalOverlayWidgetReferenceHandler() != null) {
+                documentController.getLocalOverlayWidgetReferenceHandler().resolve("href", href, sender, new AsyncCallback<OverlayWidget>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        // ignore atm
+                    }
+
+                    @Override
+                    public void onSuccess(OverlayWidget result) {
+                        if (result != null)
+                            scrollTo(result.asWidget());
+                    }
+                });
+            }
+        }
         documentEventBus.fireEvent(new OverlayWidgetSelectEvent(sender, documentController));
     }
+
+    private native String extractAttribute(final JavaScriptObject target, final String attributeName) /*-{
+        //$wnd.console.log(target);
+        return target.getAttribute(attributeName);
+    }-*/;
 
     /**
      * Double click callback; fires a {@link AmendmentContainerCreateEvent} on the private document bus.
@@ -277,7 +321,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param sender the overlay widget that was double clicked
      */
     @Override
-    public void onDblClick(final OverlayWidget sender) {
+    public void onDblClick(final OverlayWidget sender, final Event event) {
         documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
     }
 
@@ -289,7 +333,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param sender the overlay widget that was hovered
      */
     @Override
-    public void onMouseOver(final OverlayWidget sender) {
+    public void onMouseOver(final OverlayWidget sender, final Event event) {
         // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
         // allow the action bar to be shown.
         if (!sender.isIntroducedByAnAmendment()) {
@@ -305,7 +349,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param sender the overlay widget that lost the mouse hoover
      */
     @Override
-    public void onMouseOut(OverlayWidget sender) {
+    public void onMouseOut(final OverlayWidget sender, final Event event) {
         // ignore
     }
 

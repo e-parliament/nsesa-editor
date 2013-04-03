@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.gwt.user.client.Event;
+
 /**
  * UI events listener for a {@link OverlayWidget}.
  * Date: 30/06/12 19:10
@@ -26,28 +28,32 @@ public interface OverlayWidgetUIListener {
      * Callback when the <tt>sender</tt> was clicked.
      *
      * @param sender the overlay widget that was clicked
+     * @param event  the original event
      */
-    void onClick(OverlayWidget sender);
+    void onClick(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> was double clicked.
      *
      * @param sender the overlay widget that was double clicked
+     * @param event  the original event
      */
-    void onDblClick(OverlayWidget sender);
+    void onDblClick(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> was hovered over.
      *
      * @param sender the overlay widget that was hovered
+     * @param event  the original event
      */
-    void onMouseOver(OverlayWidget sender);
+    void onMouseOver(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> lost the mouse hoover.
      *
      * @param sender the overlay widget that lost the mouse hoover
+     * @param event  the original event
      */
-    void onMouseOut(OverlayWidget sender);
+    void onMouseOut(OverlayWidget sender, Event event);
 
 }

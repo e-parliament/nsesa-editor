@@ -23,6 +23,7 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
+import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -287,6 +288,13 @@ public interface DocumentController {
      * @return the overlay factory
      */
     OverlayFactory getOverlayFactory();
+
+    /**
+     * Get a reference to the reference handler for (local) overlay widgets.
+     *
+     * @return the reference handler
+     */
+    ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler();
 
     /**
      * Get the locally selected amendment controllers for this document controller.

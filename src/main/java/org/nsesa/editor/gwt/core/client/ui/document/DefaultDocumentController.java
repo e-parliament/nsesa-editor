@@ -36,6 +36,7 @@ import org.nsesa.editor.gwt.core.client.mode.ActiveState;
 import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
+import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
@@ -132,6 +133,12 @@ public class DefaultDocumentController implements DocumentController {
     protected AmendmentManager amendmentManager;
 
     /**
+     * Reference handler for overlay widgets in this document.
+     */
+    @Scope(DOCUMENT)
+    protected ReferenceHandler<OverlayWidget> localOverlayWidgetReferenceHandler;
+
+    /**
      * The diffing manager, responsible for performing diffs on {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}s.
      */
     @Scope(DOCUMENT)
@@ -166,7 +173,6 @@ public class DefaultDocumentController implements DocumentController {
      */
     @Scope(DOCUMENT)
     protected AmendmentsHeaderController amendmentsHeaderController;
-
 
     /**
      * UI controller for the amendments panel header.
@@ -240,6 +246,7 @@ public class DefaultDocumentController implements DocumentController {
             throw new UnsupportedOperationException("DocumentInjector is null. Cannot continue.");
 
         this.amendmentManager = documentInjector.getAmendmentManager();
+        this.localOverlayWidgetReferenceHandler = documentInjector.getLocalOverlayWidgetReferenceHandler();
         this.documentEventBus = documentInjector.getDocumentEventBus();
         this.view = documentInjector.getDocumentView();
         this.style = documentInjector.getDocumentViewCss();
@@ -533,6 +540,7 @@ public class DefaultDocumentController implements DocumentController {
         resizeEventHandlerRegistration.removeHandler();
         documentScrollToEventHandlerRegistration.removeHandler();
     }
+
 
     /**
      * Shows or hides a loading indicator when the document content is retrieved and overlaid.
@@ -933,6 +941,14 @@ public class DefaultDocumentController implements DocumentController {
      */
     public Locator getLocator() {
         return locator;
+    }
+
+    /**
+     * Get a reference to the reference handler for (local) overlay widgets.
+     * @return the reference handler
+     */
+    public ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler() {
+        return localOverlayWidgetReferenceHandler;
     }
 
     /**

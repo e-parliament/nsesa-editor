@@ -65,13 +65,13 @@ public class OverlayUtil {
         return injectionPoints;
     }
 
-    public static <T extends OverlayWidget> T xpathSingle(final String expression, final OverlayWidget root, T target) {
-            final List<OverlayWidget> overlayWidgets = xpath(expression, root);
-            if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
-                return (T) overlayWidgets.get(0);
-            }
-            return null;
+    public static OverlayWidget xpathSingle(final String expression, final OverlayWidget root) {
+        final List<OverlayWidget> overlayWidgets = xpath(expression, root);
+        if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
+            return overlayWidgets.get(0);
         }
+        return null;
+    }
 
     public static List<OverlayWidget> find(final String expression, final OverlayWidget root) {
         final List<OverlayWidget> matches = new ArrayList<OverlayWidget>();
@@ -88,10 +88,10 @@ public class OverlayUtil {
         return matches;
     }
 
-    public static <T extends OverlayWidget> T findSingle(final String expression, final OverlayWidget root, T target) {
+    public static OverlayWidget findSingle(final String expression, final OverlayWidget root) {
         final List<OverlayWidget> overlayWidgets = find(expression, root);
         if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
-            return (T) overlayWidgets.get(0);
+            return overlayWidgets.get(0);
         }
         return null;
     }

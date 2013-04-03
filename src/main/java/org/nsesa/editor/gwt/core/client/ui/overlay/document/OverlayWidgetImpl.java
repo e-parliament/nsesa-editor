@@ -363,16 +363,16 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (UIListener != null) {
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    UIListener.onClick(this);
+                    UIListener.onClick(this, event);
                     break;
                 case Event.ONDBLCLICK:
-                    UIListener.onDblClick(this);
+                    UIListener.onDblClick(this, event);
                     break;
                 case Event.ONMOUSEMOVE:
-                    UIListener.onMouseOver(this);
+                    UIListener.onMouseOver(this, event);
                     break;
                 case Event.ONMOUSEOUT:
-                    UIListener.onMouseOut(this);
+                    UIListener.onMouseOut(this, event);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unknown event.");
@@ -513,7 +513,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public OverlayWidget getRoot() {
-        return getParentOverlayWidget() != null ? getParentOverlayWidget() : this;
+        return getParentOverlayWidget() != null ? getParentOverlayWidget().getRoot() : this;
     }
 
     @Override

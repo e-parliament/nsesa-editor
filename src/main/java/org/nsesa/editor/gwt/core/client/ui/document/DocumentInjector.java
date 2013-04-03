@@ -17,6 +17,7 @@ import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
+import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
@@ -29,6 +30,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionB
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * A GIN document injector - used to give a document controller access to its dependencies. Note that this
@@ -125,6 +127,12 @@ public interface DocumentInjector extends Ginjector {
      * @return the amendment manager
      */
     AmendmentManager getAmendmentManager();
+
+    /**
+     * Get the local overlay widget reference handler for this document controller.
+     * @return the local overlay widget reference handler
+     */
+    ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler();
 
     /**
      * Get an amendment controller.
