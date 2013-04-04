@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
-import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
@@ -40,9 +39,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of modification amendments. Typically consists of a two
@@ -233,7 +230,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     protected boolean validate() {
         //validate the overlay
         final String content = view.getAmendmentContent();
-        //replace all validation-error class names with empty
+        //replace all validation-error class names with empty string
         content.replaceAll("validation-error", "");
         final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
         clone.setInnerHTML(content);
@@ -241,15 +238,18 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
         boolean isValid = validationResult.isSuccessful();
         if (!isValid) {
-            clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(validationResult.getErrorMessage()));
             OverlayWidget invalidWidget = validationResult.getInvalidWidget();
             if (invalidWidget != null) {
                 //mark the widget as invalid
                 invalidWidget.getOverlayElement().addClassName("validation-error");
+
+                invalidWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
             } else {
                 overlayWidget.getOverlayElement().addClassName("validation-error");
+                overlayWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
             }
             view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
+            view.getRichTextEditor().setOverlayWidget(overlayWidget);
         }
         return isValid;
     }
