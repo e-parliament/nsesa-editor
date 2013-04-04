@@ -105,6 +105,11 @@ public class CKEditor extends Composite implements RichTextEditor {
     private boolean toggled;
 
     /**
+     * keep a reference to the widget over which the editor is operating
+     */
+    private OverlayWidget overlayWidget;
+
+    /**
      * Create an instance of the editor.
      * @param plugin The plugin linked to the editor which
      * @param config The editor configuration
@@ -221,6 +226,15 @@ public class CKEditor extends Composite implements RichTextEditor {
         resize(editorInstance, width, height);
     }
 
+    @Override
+    public CaretPosition getCaretPosition() {
+        CaretPosition caretPosition = new CaretPosition();
+        nativeCaretPosition(caretPosition, editorInstance);
+        caretPosition.setLeft(caretPosition.getLeft() + this.getAbsoluteLeft());
+        caretPosition.setTop(caretPosition.getTop() + this.getAbsoluteTop());
+        return caretPosition;
+    }
+
     public native void destroy(JavaScriptObject editorInstance) /*-{
         if (editorInstance != null) editorInstance.destroy();
     }-*/;
@@ -228,6 +242,32 @@ public class CKEditor extends Composite implements RichTextEditor {
     private native void addBodyClassName(JavaScriptObject editorInstance, String className) /*-{
         if (editorInstance != null && editorInstance.document != null && editorInstance.document.getBody() != null)
             editorInstance.document.getBody().addClass(className);
+    }-*/;
+
+    /**
+     * return the editor instance body as element
+     * @param editorInstance The editor instance processed
+     * @return The body element as JavaScriptObject
+     */
+    private native JavaScriptObject getBodyElement(JavaScriptObject editorInstance) /*-{
+        if (editorInstance && editorInstance.document) {
+            return editorInstance.document.$.body;
+        }
+
+        return null;
+    }-*/;
+
+    /**
+     * return the editor window element
+     * @param editorInstance The editor instance processed
+     * @return The body element as JavaScriptObject
+     */
+    private native JavaScriptObject getWindowElement(JavaScriptObject editorInstance) /*-{
+        if (editorInstance && editorInstance.document) {
+            return editorInstance.document.getWindow().$;
+        }
+
+        return null;
     }-*/;
 
     private native void removeBodyClassName(JavaScriptObject editorInstance, String className) /*-{
@@ -255,6 +295,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     @Override
     public void setOverlayWidget(OverlayWidget overlayWidget) {
+        this.overlayWidget = overlayWidget;
         config.addBodyClass(overlayWidget.getType());
     }
 
@@ -324,4 +365,38 @@ public class CKEditor extends Composite implements RichTextEditor {
     public void resetBodyClass() {
         config.resetBodyClass();
     }
+
+
+    /**
+     * Computes the caret position by introducing a fake img and summing the offsets
+     * @param caretPosition  {@link CaretPosition}
+     * @param editorInstance The editor instance as {@link JavaScriptObject}
+     */
+    private native void nativeCaretPosition(CaretPosition caretPosition, JavaScriptObject editorInstance) /*-{
+        if (editorInstance.document) {
+            var dummyElement = editorInstance.document.createElement('img', {
+                attributes: {
+                    src : 'null',
+                    width : 0,
+                    height : 0
+                }
+            });
+            editorInstance.insertElement(dummyElement);
+            var obj = dummyElement.$;
+            var cursor = {left : 0, top :0};
+            cursor.keydown = false;
+            while (obj.offsetParent) {
+                cursor.left += obj.offsetLeft;
+                cursor.top += obj.offsetTop;
+                obj = obj.offsetParent;
+            }
+            cursor.left += obj.offsetLeft;
+            cursor.top += obj.offsetTop;
+            cursor.keydown = true;
+            dummyElement.remove();
+            caretPosition.@org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor.CaretPosition::setLeft(I)(cursor.left);
+            caretPosition.@org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor.CaretPosition::setTop(I)(cursor.top);
+        }
+    }-*/;
+
 }

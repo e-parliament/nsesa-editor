@@ -112,4 +112,44 @@ public interface RichTextEditor extends IsWidget {
      * @param height The height
      */
     void resize(String width, String height);
+
+    /**
+     * Return the caret position from the editor  area
+     * @return {@link CaretPosition}
+     */
+    CaretPosition getCaretPosition();
+
+    /**
+     * A holder class for RichTextEditor caret position
+     */
+    public static class CaretPosition {
+
+        private int left;
+        private int top;
+
+        //default constructor
+        public CaretPosition() {
+        }
+
+        public CaretPosition(int left, int top) {
+            this.left = left;
+            this.top = top;
+        }
+
+        public void setLeft(int left) {
+            this.left = left;
+        }
+
+        public void setTop(int top) {
+            this.top = top;
+        }
+
+        public int getTop() {
+            return top;
+        }
+
+        public int getLeft() {
+            return left;
+        }
+    }
 }
