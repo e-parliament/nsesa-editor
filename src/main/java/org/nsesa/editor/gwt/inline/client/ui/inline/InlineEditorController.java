@@ -19,13 +19,13 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEventHandler;
 import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEvent;
@@ -79,6 +79,7 @@ public class InlineEditorController implements ProvidesResize {
      */
     private OverlayWidget parentOverlayWidget;
 
+    private boolean showing;
 
     /**
      * The document controller.
@@ -146,20 +147,30 @@ public class InlineEditorController implements ProvidesResize {
         // attach to the parent
         overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), overlayWidget.getOverlayElement());
         richTextEditor.setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
-        richTextEditor.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
-        richTextEditor.asWidget().setHeight(overlayWidget.asWidget().getOffsetHeight() + 50 + "px");
+
+        adaptSize();
         richTextEditor.init();
         richTextEditor.asWidget().setVisible(true);
         richTextEditor.setOverlayWidget(overlayWidget);
         overlayWidget.asWidget().setVisible(false);
-        adaptSize();
+
+        showing = true;
+    }
+
+    public boolean isShowing() {
+        return showing;
     }
 
     /**
      * Changes the size of the dialog to become the size of the window - 100 pixels.
      */
     public void adaptSize() {
-
+        richTextEditor.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
+        final int offsetHeight = overlayWidget.asWidget().getOffsetHeight();
+        int editorHeight = ((offsetHeight) + 50);
+        if (editorHeight < 200) editorHeight = 200;
+        LOG.info("Setting inline editor height to " + editorHeight);
+        richTextEditor.asWidget().setHeight(editorHeight + "px");
     }
 
     /**
@@ -170,10 +181,12 @@ public class InlineEditorController implements ProvidesResize {
         richTextEditor.asWidget().setVisible(false);
         if (overlayWidget != null)
             overlayWidget.asWidget().setVisible(true);
+        showing = false;
     }
 
     /**
      * Return the underlying amendment dto.
+     *
      * @return the amendment dto
      */
     public AmendmentContainerDTO getAmendment() {
@@ -182,6 +195,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the amendment dto.
+     *
      * @param amendment the amendment dto
      */
     public void setAmendment(AmendmentContainerDTO amendment) {
@@ -190,6 +204,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Get the underlying overlay widget.
+     *
      * @return the overlay widget
      */
     public OverlayWidget getOverlayWidget() {
@@ -198,6 +213,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the underlying overlay widget.
+     *
      * @param overlayWidget the overlay widget
      */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
@@ -206,9 +222,14 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the parent document controller.
+     *
      * @param documentController the document controller
      */
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    public RichTextEditor getRichTextEditor() {
+        return richTextEditor;
     }
 }

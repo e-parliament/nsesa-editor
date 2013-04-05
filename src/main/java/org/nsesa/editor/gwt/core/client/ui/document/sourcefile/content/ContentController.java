@@ -183,6 +183,7 @@ public class ContentController {
      */
     public void scrollTo(final Widget widget) {
         view.getScrollPanel().scrollToTop();
-        view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop() - view.getScrollPanel().getAbsoluteTop());
+        int offsetFromTop = 30;
+        view.getScrollPanel().setVerticalScrollPosition((widget.getAbsoluteTop() - view.getScrollPanel().getAbsoluteTop()) - offsetFromTop);
     }
 }

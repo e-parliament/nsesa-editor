@@ -149,6 +149,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             if (editorInstance == null) {
                 throw new NullPointerException("Editor instance not created!");
             }
+            if (!isAttached()) onAttach();
             attached = true;
         }
     }
@@ -183,6 +184,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         if (isAttached()) {
             //the flag to show drafting tool has been set up
             if (showDraftingTool) {
+                // TODO: only do this if there actually is a draft widget set
                 mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
             }
             if (toggled) {

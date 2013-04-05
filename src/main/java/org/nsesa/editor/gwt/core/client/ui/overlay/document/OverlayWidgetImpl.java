@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.core.client.util.NodeUtil;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -511,12 +512,11 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         // finally, if we found a next node, pass it on to the selector - if the selector rejects the node,
         // then we simply skip it, and use it to base the next search on
         while (next != null) {
-            LOG.info("Evaluating " + next + ".");
             if (!overlayWidgetSelector.select(next)) {
-                LOG.info("Skipping " + next + " because the selector rejected it.");
+                if (LOG.isLoggable(Level.FINE))
+                    LOG.fine("Skipping " + next + " because the selector rejected it.");
                 next = next.next(overlayWidgetSelector);
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -546,12 +546,11 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         // finally, if we found a previous node, pass it on to the selector - if the selector rejects the node,
         // then we simply skip it, and use it to base the previous search on
         while (previous != null) {
-            LOG.info("Evaluating " + previous + ".");
             if (!overlayWidgetSelector.select(previous)) {
-                LOG.info("Skipping " + previous + " because the selector rejected it.");
+                if (LOG.isLoggable(Level.FINE))
+                    LOG.fine("Skipping " + previous + " because the selector rejected it.");
                 previous = previous.previous(overlayWidgetSelector);
-            }
-            else {
+            } else {
                 break;
             }
         }
