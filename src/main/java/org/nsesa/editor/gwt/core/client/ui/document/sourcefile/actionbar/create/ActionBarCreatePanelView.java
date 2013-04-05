@@ -67,6 +67,12 @@ public interface ActionBarCreatePanelView extends IsWidget {
     void clearChildOverlayWidgets();
 
     /**
+     * Highlights the n-th item.
+     * @param n the index of the widget to highlight
+     */
+    void setHighlight(int n);
+
+    /**
      * UI listener interface.
      */
     public static interface UIListener {

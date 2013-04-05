@@ -139,8 +139,11 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      */
     protected HTMLPanel amendmentControllersHolderElement;
 
-    /** keep a list with the allowed children that could be added**/
+    /**
+     * keep a list with the allowed children that could be added*
+     */
     private List<OverlayWidget> allowedChildren;
+
     /**
      * Default constructor.
      */
@@ -478,6 +481,84 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
+    public OverlayWidget next(final OverlayWidgetSelector overlayWidgetSelector) {
+        OverlayWidget next = null;
+
+        // if we have any children, select the first one
+        if (!getChildOverlayWidgets().isEmpty()) {
+            next = getChildOverlayWidgets().get(0);
+        }
+
+        // if we have no children, but rather a sibling, select that one
+        if (next == null) {
+            OverlayWidget sibling = getNextSibling();
+            if (sibling != null) next = sibling;
+        }
+        // if we still don't have any target, then visit the parent node, and see if this one has a sibling relative
+        // to this overlay widget - if not, bubble up until we have the root, or until we find a new sibling
+        if (next == null) {
+            // get the next parent sibling, if any
+            OverlayWidget toCheckForSiblings = getParentOverlayWidget();
+            while (toCheckForSiblings != null) {
+                OverlayWidget nextSibling = toCheckForSiblings.getNextSibling();
+                if (nextSibling != null) {
+                    next = nextSibling;
+                    break;
+                }
+                toCheckForSiblings = toCheckForSiblings.getParentOverlayWidget();
+            }
+        }
+        // finally, if we found a next node, pass it on to the selector - if the selector rejects the node,
+        // then we simply skip it, and use it to base the next search on
+        while (next != null) {
+            LOG.info("Evaluating " + next + ".");
+            if (!overlayWidgetSelector.select(next)) {
+                LOG.info("Skipping " + next + " because the selector rejected it.");
+                next = next.next(overlayWidgetSelector);
+            }
+            else {
+                break;
+            }
+        }
+        return next;
+    }
+
+    @Override
+    public OverlayWidget previous(final OverlayWidgetSelector overlayWidgetSelector) {
+        OverlayWidget previous = null;
+
+        // if we have a previous sibling, then we need to find the very last child node
+        final OverlayWidget previousSibling = getPreviousSibling();
+        if (previousSibling != null) {
+            OverlayWidget toCheckForChildren = previousSibling;
+            OverlayWidget lastChild = toCheckForChildren;
+            while (toCheckForChildren != null && !toCheckForChildren.getChildOverlayWidgets().isEmpty()) {
+                // select the last child - see if it has any children
+                lastChild = toCheckForChildren.getChildOverlayWidgets().get(toCheckForChildren.getChildOverlayWidgets().size() - 1);
+                toCheckForChildren = lastChild;
+            }
+            previous = lastChild;
+        } else {
+            // no previous sibling - take the parent
+            previous = getParentOverlayWidget();
+        }
+
+        // finally, if we found a previous node, pass it on to the selector - if the selector rejects the node,
+        // then we simply skip it, and use it to base the previous search on
+        while (previous != null) {
+            LOG.info("Evaluating " + previous + ".");
+            if (!overlayWidgetSelector.select(previous)) {
+                LOG.info("Skipping " + previous + " because the selector rejected it.");
+                previous = previous.previous(overlayWidgetSelector);
+            }
+            else {
+                break;
+            }
+        }
+        return previous;
+    }
+
+    @Override
     public OverlayWidget getPreviousNonIntroducedOverlayWidget(final boolean sameType) {
         OverlayWidget previous = getPreviousSibling();
         while (previous != null) {
@@ -576,7 +657,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public StructureIndicator getStructureIndicator() {
-        return new StructureIndicator.DefaultStructureIndicator(1,1);
+        return new StructureIndicator.DefaultStructureIndicator(1, 1);
     }
 
     @Override
@@ -782,6 +863,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     /**
      * Returns the list of the allowed child types as they are coming from {@link StructureIndicator} structure
+     *
      * @return the list of the allowed child types
      */
     protected List<OverlayWidget> getAllowedChildTypes() {
@@ -796,7 +878,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                     OverlayWidget candidate = elemIndicator.asWidget();
                     allowedChildren.add(candidate);
                 } else {
-                    if (structureIndicator.getIndicators() != null ) {
+                    if (structureIndicator.getIndicators() != null) {
                         stack.addAll(structureIndicator.getIndicators());
                     }
                 }

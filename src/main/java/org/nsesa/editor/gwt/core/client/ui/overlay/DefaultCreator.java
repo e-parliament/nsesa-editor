@@ -43,7 +43,13 @@ public class DefaultCreator implements Creator {
      */
     @Override
     public List<OverlayWidget> getAllowedSiblings(final DocumentController documentController, final OverlayWidget overlayWidget) {
-        return getAllowedChildren(documentController, overlayWidget.getParentOverlayWidget());
+        if (overlayWidget.getParentOverlayWidget() != null) {
+            return getAllowedChildren(documentController, overlayWidget.getParentOverlayWidget());
+        }
+        else {
+            // probably dealing with a root node
+            return new ArrayList<OverlayWidget>();
+        }
     }
 
     /**

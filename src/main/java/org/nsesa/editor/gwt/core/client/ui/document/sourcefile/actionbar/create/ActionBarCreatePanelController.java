@@ -63,6 +63,8 @@ public class ActionBarCreatePanelController {
      */
     protected OverlayWidget overlayWidget;
 
+    private int highlightedNumber = -1;
+
     @Inject
     public ActionBarCreatePanelController(final DocumentEventBus documentEventBus,
                                           final ActionBarCreatePanelView view) {
@@ -137,6 +139,22 @@ public class ActionBarCreatePanelController {
      */
     public void setActionBarController(ActionBarController actionBarController) {
         this.actionBarController = actionBarController;
+    }
+
+    public void highlightNext() {
+        if (overlayWidget != null) {
+            view.setHighlight(highlightedNumber + 1);
+            // redraw the view
+            setOverlayWidget(overlayWidget);
+        }
+    }
+
+    public void highlightPrevious() {
+        if (overlayWidget != null) {
+            view.setHighlight(highlightedNumber - 1);
+            // redraw the view
+            setOverlayWidget(overlayWidget);
+        }
     }
 
     /**

@@ -131,6 +131,20 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     OverlayWidget getNextSibling();
 
     /**
+     * Returns the next {@link OverlayWidget} in a depth first search.
+     * @param overlayWidgetSelector the widget selector
+     * @return the next widget, or <tt>null</tt> if there is none
+     */
+    OverlayWidget next(OverlayWidgetSelector overlayWidgetSelector);
+
+    /**
+     * Returns the previous {@link OverlayWidget} in a depth-first search.
+     * @param overlayWidgetSelector the widget selector
+     * @return the previous widget, or <tt>null</tt> if there is none
+     */
+    OverlayWidget previous(OverlayWidgetSelector overlayWidgetSelector);
+
+    /**
      * Find the previous sibling that is not introduced by an amendment.
      *
      * @param sameType if true, only look for an overlay widget of the same type

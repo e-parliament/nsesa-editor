@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -274,7 +275,9 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     }
 
     public void highlight(final OverlayWidget overlayWidget, final String color, final int seconds) {
-
+        if (seconds == -1) {
+            // permanent highlight
+        }
     }
 
     /**
@@ -389,6 +392,9 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
         LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
+        if (activeOverlayWidget != null) {
+            highlight(activeOverlayWidget, "yellow", -1);
+        }
     }
 
     /**
