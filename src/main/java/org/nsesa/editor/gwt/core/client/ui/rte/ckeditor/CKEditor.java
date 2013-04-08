@@ -163,6 +163,16 @@ public class CKEditor extends Composite implements RichTextEditor {
     }
 
     @Override
+    public void setFocus(boolean focus) {
+        if (focus) {
+            setFocusNative(editorInstance);
+        }
+        else {
+            setBlurNative(editorInstance);
+        }
+    }
+
+    @Override
     public void setVisualStructureWidget(IsWidget widget) {
         draftHolderPanel.add(widget);
     }
@@ -236,6 +246,14 @@ public class CKEditor extends Composite implements RichTextEditor {
         caretPosition.setTop(caretPosition.getTop() + this.getAbsoluteTop());
         return caretPosition;
     }
+
+    public native void setFocusNative(JavaScriptObject editorInstance) /*-{
+        if (editorInstance != null) editorInstance.focus();
+    }-*/;
+
+    public native void setBlurNative(JavaScriptObject editorInstance) /*-{
+        if (editorInstance != null) editorInstance.forceBlur();
+    }-*/;
 
     public native void destroy(JavaScriptObject editorInstance) /*-{
         if (editorInstance != null) editorInstance.destroy();

@@ -68,6 +68,12 @@ public interface RichTextEditor extends IsWidget {
     void destroy();
 
     /**
+     * Set or unset the focus on this RTE.
+     * @param focus the focus flag
+     */
+    void setFocus(boolean focus);
+
+    /**
      * Add a visual structure tool widget to the editor. The visual structure tool is responsible to change the
      * structure of the original overlayWidget.
      *
