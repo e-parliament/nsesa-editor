@@ -27,8 +27,7 @@ import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAtt
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
@@ -236,7 +235,9 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     @Override
     public void handle() {
         // set the amendable widget in the drafting controller
-        visualStructureController.setOverlayWidgetWidget(dialogContext.getOverlayWidget());
+        OverlayWidget overlayWidget = dialogContext.getOverlayWidget();
+        visualStructureController.setOverlayWidgetWidget(overlayWidget);
+
         // make sure to pass the context to the children
         for (final AmendmentDialogAwareController childController : childControllers) {
             childController.setContext(dialogContext);
