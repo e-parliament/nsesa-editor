@@ -123,6 +123,7 @@ public class DefaultLocator implements Locator {
      * @param languageIso   the ISO code of the language
      * @return the number, should never return <tt>null</tt>
      */
+    @Override
     public String getNum(final OverlayWidget overlayWidget, final String languageIso) {
         String index;
         if (overlayWidget.isIntroducedByAnAmendment()) {

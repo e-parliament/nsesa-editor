@@ -53,4 +53,15 @@ public interface Locator {
      * @return the position of this overlay widget in the tree
      */
     String getLocation(OverlayWidget overlayWidget, String languageIso, boolean childrenIncluded);
+
+    /**
+     * Get the number for a given <tt>overlayWidget</tt>. The reported number depends various cases, but can be thought
+     * of in general that if the {@link NumberingType} is constant, the {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getTypeIndex()}
+     * will instead be used to remove confusion about the path.
+     *
+     * @param overlayWidget the overlay widget to get the number for
+     * @param languageIso   the ISO code of the language
+     * @return the number, should never return <tt>null</tt>
+     */
+    String getNum(final OverlayWidget overlayWidget, final String languageIso);
 }
