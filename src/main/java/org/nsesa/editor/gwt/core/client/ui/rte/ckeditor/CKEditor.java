@@ -195,8 +195,10 @@ public class CKEditor extends Composite implements RichTextEditor {
         if (isAttached()) {
             //the flag to show drafting tool has been set up
             if (showDraftingTool) {
-                // TODO: only do this if there actually is a draft widget set
-                mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
+                // TODO: only do this if there actually is a draft visualStructureChildPanel set
+                final Widget visualStructureChildPanel = draftHolderPanel.getWidgetCount() > 0 ? draftHolderPanel.getWidget(0) : null;
+                if (visualStructureChildPanel != null)
+                    mainPanel.setWidgetSize(draftHolderPanel, toggled ? 100 : 0);
             }
             if (toggled) {
                 // add drafting css class to editor instance
@@ -305,7 +307,9 @@ public class CKEditor extends Composite implements RichTextEditor {
     private native void resize(JavaScriptObject editorInstance, String width, String height) /*-{
         try{
             editorInstance.resize(width, height, true);
-        } catch(e){}
+        } catch(e){
+            // ignore - strange exception being thrown in native ckeditor.js
+        }
     }-*/;
 
     private native JavaScriptObject getEditor(JavaScriptObject instanceConfig, Object elementID, String content) /*-{
