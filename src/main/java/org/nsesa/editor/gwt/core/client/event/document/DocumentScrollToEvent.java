@@ -30,10 +30,18 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
 
     private final DocumentController documentController;
     private final Widget target;
+    private final boolean userInitiated;
 
     public DocumentScrollToEvent(Widget target, DocumentController documentController) {
         this.target = target;
         this.documentController = documentController;
+        this.userInitiated = true;
+    }
+
+    public DocumentScrollToEvent(Widget target, DocumentController documentController, boolean userInitiated) {
+        this.documentController = documentController;
+        this.target = target;
+        this.userInitiated = userInitiated;
     }
 
     @Override
@@ -52,5 +60,9 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
 
     public Widget getTarget() {
         return target;
+    }
+
+    public boolean isUserInitiated() {
+        return userInitiated;
     }
 }
