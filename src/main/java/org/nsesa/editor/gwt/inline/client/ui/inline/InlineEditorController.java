@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.inline.client.ui.inline;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
@@ -143,10 +144,10 @@ public class InlineEditorController implements ProvidesResize {
         // attach to the parent
         overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(view.asWidget().getElement(), overlayWidget.getOverlayElement());
         view.getRichTextEditor().setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
-
         adaptSize();
-        view.init();
+
         view.asWidget().setVisible(true);
+        view.init();
         view.getRichTextEditor().setOverlayWidget(overlayWidget);
         overlayWidget.asWidget().setVisible(false);
 
@@ -163,10 +164,19 @@ public class InlineEditorController implements ProvidesResize {
     public void adaptSize() {
         view.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
         final int offsetHeight = overlayWidget.asWidget().getOffsetHeight();
-        int editorHeight = ((offsetHeight) + 50);
+        int editorHeight = ((offsetHeight) + 80);
         if (editorHeight < 200) editorHeight = 200;
         LOG.info("Setting inline editor height to " + editorHeight);
         view.asWidget().setHeight(editorHeight + "px");
+
+        final int finalEditorHeight = editorHeight;
+        clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.getRichTextEditor().resize("100%", finalEditorHeight + "px");
+            }
+        });
+
     }
 
     /**

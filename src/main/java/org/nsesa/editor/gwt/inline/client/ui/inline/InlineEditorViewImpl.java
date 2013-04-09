@@ -39,7 +39,13 @@ public class InlineEditorViewImpl extends Composite implements InlineEditorView 
     @UiField(provided = true)
     RichTextEditor richTextEditor;
     @UiField
-    FocusPanel dummyFocusPanel;
+    FocusPanel dummyFocusPanelAbove;
+    @UiField
+    FocusPanel dummyFocusPanelBelow;
+    @UiField
+    Button saveButton;
+    @UiField
+    Anchor cancelAnchor;
 
     @Inject
     public InlineEditorViewImpl(@Named("inlineRichTextEditor") RichTextEditor richTextEditor) {
