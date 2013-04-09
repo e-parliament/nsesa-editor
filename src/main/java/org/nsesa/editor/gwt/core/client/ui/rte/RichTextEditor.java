@@ -120,6 +120,19 @@ public interface RichTextEditor extends IsWidget {
     void resize(String width, String height);
 
     /**
+     * Expose stylename setter for easier styling in UIBinder.
+     * @param styleName the stylename to set
+     */
+    void setStyleName(String styleName);
+
+
+    /**
+     * Expose visibility method for easier styling in UIBinder.
+     * @param visible true to set the element visible
+     */
+    void setVisible(boolean visible);
+
+    /**
      * Return the caret position from the editor  area
      * @return {@link CaretPosition}
      */

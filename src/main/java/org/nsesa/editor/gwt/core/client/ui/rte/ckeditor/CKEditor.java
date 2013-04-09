@@ -132,6 +132,7 @@ public class CKEditor extends Composite implements RichTextEditor {
         mainPanel.setHeight("100%");
         textArea.setWidth("100%");
         textArea.setHeight("100%");
+        textArea.setName(this.id + "-textArea");
     }
 
     /**
@@ -252,7 +253,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     }-*/;
 
     public native void setBlurNative(JavaScriptObject editorInstance) /*-{
-        if (editorInstance != null) editorInstance.forceBlur();
+
     }-*/;
 
     public native void destroy(JavaScriptObject editorInstance) /*-{

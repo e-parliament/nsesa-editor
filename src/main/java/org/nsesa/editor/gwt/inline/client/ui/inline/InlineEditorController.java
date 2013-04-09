@@ -16,7 +16,6 @@ package org.nsesa.editor.gwt.inline.client.ui.inline;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
@@ -54,10 +53,7 @@ public class InlineEditorController implements ProvidesResize {
      */
     private final OverlayFactory overlayFactory;
 
-    /**
-     * The RTE to use for the actual editing.
-     */
-    private final RichTextEditor richTextEditor;
+    private final InlineEditorView view;
 
     /**
      * The amendment to add or edit.
@@ -92,10 +88,10 @@ public class InlineEditorController implements ProvidesResize {
     @Inject
     public InlineEditorController(final ClientFactory clientFactory,
                                   final OverlayFactory overlayFactory,
-                                  @Named("inlineRichTextEditor") final RichTextEditor richTextEditor) {
+                                  final InlineEditorView view) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
-        this.richTextEditor = richTextEditor;
+        this.view = view;
 
         registerListeners();
     }
@@ -106,7 +102,7 @@ public class InlineEditorController implements ProvidesResize {
             public void onEvent(AttachInlineEditorEvent event) {
 
                 if (overlayWidget != null) {
-                    richTextEditor.destroy();
+                    view.destroy();
                     // we're already editing this one ..
                     overlayWidget.asWidget().setVisible(true);
                 }
@@ -145,13 +141,13 @@ public class InlineEditorController implements ProvidesResize {
      */
     public void show() {
         // attach to the parent
-        overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), overlayWidget.getOverlayElement());
-        richTextEditor.setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
+        overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(view.asWidget().getElement(), overlayWidget.getOverlayElement());
+        view.getRichTextEditor().setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
 
         adaptSize();
-        richTextEditor.init();
-        richTextEditor.asWidget().setVisible(true);
-        richTextEditor.setOverlayWidget(overlayWidget);
+        view.init();
+        view.asWidget().setVisible(true);
+        view.getRichTextEditor().setOverlayWidget(overlayWidget);
         overlayWidget.asWidget().setVisible(false);
 
         showing = true;
@@ -165,22 +161,23 @@ public class InlineEditorController implements ProvidesResize {
      * Changes the size of the dialog to become the size of the window - 100 pixels.
      */
     public void adaptSize() {
-        richTextEditor.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
+        view.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
         final int offsetHeight = overlayWidget.asWidget().getOffsetHeight();
         int editorHeight = ((offsetHeight) + 50);
         if (editorHeight < 200) editorHeight = 200;
         LOG.info("Setting inline editor height to " + editorHeight);
-        richTextEditor.asWidget().setHeight(editorHeight + "px");
+        view.asWidget().setHeight(editorHeight + "px");
     }
 
     /**
      * Call to hide the inline editor - effectively destroys the inline RTE.
      */
     public void hide() {
-        richTextEditor.destroy();
-        richTextEditor.asWidget().setVisible(false);
-        if (overlayWidget != null)
+        view.destroy();
+        view.asWidget().setVisible(false);
+        if (overlayWidget != null) {
             overlayWidget.asWidget().setVisible(true);
+        }
         showing = false;
     }
 
@@ -230,6 +227,10 @@ public class InlineEditorController implements ProvidesResize {
     }
 
     public RichTextEditor getRichTextEditor() {
-        return richTextEditor;
+        return view.getRichTextEditor();
+    }
+
+    public InlineEditorView getView() {
+        return view;
     }
 }

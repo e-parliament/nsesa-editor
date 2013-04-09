@@ -379,7 +379,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                     UIListener.onMouseOut(this, event);
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unknown event.");
+                    //throw new UnsupportedOperationException("Unknown event.");
             }
         }
     }

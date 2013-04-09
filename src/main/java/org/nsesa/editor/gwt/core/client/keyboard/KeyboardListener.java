@@ -73,13 +73,13 @@ public class KeyboardListener {
         LOG.info("Registered keyboard shortcut: " + keyCombo);
     }
 
-    public void filter(Event.NativePreviewEvent event) {
+    public void filter(final Event.NativePreviewEvent event) {
         KeyCombo toMatch = new KeyCombo(event.getNativeEvent().getShiftKey(),
                 event.getNativeEvent().getCtrlKey(), event.getNativeEvent().getKeyCode());
         if (LOG.isLoggable(Level.FINEST))
             LOG.finest("Looking for key combo --> " + toMatch);
         if (keyCombos.contains(toMatch)) {
-            eventBus.fireEvent(new KeyComboEvent(toMatch));
+            eventBus.fireEvent(new KeyComboEvent(toMatch, event.getNativeEvent()));
         }
     }
 

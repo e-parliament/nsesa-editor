@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.event;
 
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
@@ -29,9 +30,11 @@ public class KeyComboEvent extends GwtEvent<KeyComboEventHandler> {
     public static final Type<KeyComboEventHandler> TYPE = new Type<KeyComboEventHandler>();
 
     private final KeyboardListener.KeyCombo keyCombo;
+    private final NativeEvent nativeEvent;
 
-    public KeyComboEvent(KeyboardListener.KeyCombo keyCombo) {
+    public KeyComboEvent(KeyboardListener.KeyCombo keyCombo, NativeEvent nativeEvent) {
         this.keyCombo = keyCombo;
+        this.nativeEvent = nativeEvent;
     }
 
     @Override
@@ -46,5 +49,9 @@ public class KeyComboEvent extends GwtEvent<KeyComboEventHandler> {
 
     public KeyboardListener.KeyCombo getKeyCombo() {
         return keyCombo;
+    }
+
+    public NativeEvent getNativeEvent() {
+        return nativeEvent;
     }
 }
