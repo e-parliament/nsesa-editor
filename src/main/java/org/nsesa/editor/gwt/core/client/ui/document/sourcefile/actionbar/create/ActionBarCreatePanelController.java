@@ -22,6 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -143,7 +144,7 @@ public class ActionBarCreatePanelController {
 
     public void highlightNext() {
         if (overlayWidget != null) {
-            view.setHighlight(highlightedNumber + 1);
+            view.setHighlight(++highlightedNumber);
             // redraw the view
             setOverlayWidget(overlayWidget);
         }
@@ -151,10 +152,27 @@ public class ActionBarCreatePanelController {
 
     public void highlightPrevious() {
         if (overlayWidget != null) {
-            view.setHighlight(highlightedNumber - 1);
+            view.setHighlight(--highlightedNumber);
             // redraw the view
             setOverlayWidget(overlayWidget);
         }
+    }
+
+    public OverlayWidget getSelectedSibling() {
+        List<OverlayWidget> all = new ArrayList<OverlayWidget>();
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        all.addAll(allowedSiblings);
+        if (highlightedNumber >= all.size()) return null;
+        return all.get(highlightedNumber);
+    }
+
+    public OverlayWidget getSelectedChild() {
+        List<OverlayWidget> all = new ArrayList<OverlayWidget>();
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        if (highlightedNumber < allowedSiblings.size()) return null;
+        List<OverlayWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
+        all.addAll(allowedChildren);
+        return all.get(highlightedNumber - allowedSiblings.size());
     }
 
     /**
