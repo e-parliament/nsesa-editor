@@ -188,7 +188,9 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
                         container = container.getParent();
                     }
-                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::toBeSplit(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+//                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::toBeSplit(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+                    // changed to force a split ALWAYS
+                    var toBeSplit = true;
                     if (toBeSplit) {
                         //collapse the range
                         ranges[0].collapse(true);
