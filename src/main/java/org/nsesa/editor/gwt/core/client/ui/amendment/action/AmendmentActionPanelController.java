@@ -19,10 +19,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -47,6 +51,7 @@ public class AmendmentActionPanelController {
      * The view.
      */
     protected final AmendmentActionPanelView view;
+    private DocumentEventBus documentEventBus;
 
     /**
      * The parent amendment controller.
@@ -69,17 +74,37 @@ public class AmendmentActionPanelController {
     protected final Anchor anchorDelete = new Anchor();
 
     /**
+     * An anchor to move up an amendment.
+     */
+    protected final Widget moveSeparator;
+
+    /**
+     * An anchor to move up an amendment.
+     */
+    protected final Anchor anchorMoveUp = new Anchor();
+
+    /**
+     * An anchor to move down an amendment.
+     */
+    protected final Anchor anchorMoveDown = new Anchor();
+
+    /**
      * The enclosing popup.
      */
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
     private HandlerRegistration anchorTableHandlerRegistration;
     private HandlerRegistration anchorWithdrawHandlerRegistration;
     private HandlerRegistration anchorDeleteHandlerRegistration;
+    private HandlerRegistration anchorMoveUpHandlerRegistration;
+    private HandlerRegistration anchorMoveDownHandlerRegistration;
+
 
     @Inject
     public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView,
+                                          final DocumentEventBus documentEventBus,
                                           final CoreMessages coreMessages) {
         this.view = amendmentActionPanelView;
+        this.documentEventBus = documentEventBus;
         this.popupPanel.setWidget(amendmentActionPanelView);
 
         // create operations on the amendment
@@ -87,15 +112,23 @@ public class AmendmentActionPanelController {
         addWidget(anchorWithdraw);
         addSeparator();
         addWidget(anchorDelete);
+        moveSeparator = getSeparator();
+        addWidget(moveSeparator);
+        addWidget(anchorMoveUp);
+        addWidget(anchorMoveDown);
 
         anchorTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorWithdraw.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorDelete.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorMoveUp.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorMoveDown.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 
         // set the correct anchor labels
         anchorTable.setText(coreMessages.amendmentActionTable());
         anchorWithdraw.setText(coreMessages.amendmentActionWithdraw());
         anchorDelete.setText(coreMessages.amendmentActionDelete());
+        anchorMoveUp.setText(coreMessages.amendmentActionMoveUp());
+        anchorMoveDown.setText(coreMessages.amendmentActionMoveDown());
 
         registerListeners();
     }
@@ -143,6 +176,27 @@ public class AmendmentActionPanelController {
 
             }
         });
+
+        anchorMoveUpHandlerRegistration = anchorMoveUp.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                documentEventBus.fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
+                        OverlayWidgetMoveEvent.MoveType.Up, amendmentController));
+                popupPanel.hide();
+            }
+        });
+
+        anchorMoveDownHandlerRegistration = anchorMoveDown.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                documentEventBus.fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
+                        OverlayWidgetMoveEvent.MoveType.Down, amendmentController));
+                popupPanel.hide();
+            }
+        });
+
     }
 
     /**
@@ -152,6 +206,9 @@ public class AmendmentActionPanelController {
         anchorTableHandlerRegistration.removeHandler();
         anchorWithdrawHandlerRegistration.removeHandler();
         anchorDeleteHandlerRegistration.removeHandler();
+        anchorMoveUpHandlerRegistration.removeHandler();
+        anchorMoveDownHandlerRegistration.removeHandler();
+
     }
 
     /**
@@ -176,7 +233,7 @@ public class AmendmentActionPanelController {
      * Adds a visual separator (an hr element with the css class 'separator') to the actions listed.
      */
     public void addSeparator() {
-        addWidget(new HTML("<hr class='separator'/>"));
+        addWidget(getSeparator());
     }
 
     /**
@@ -204,5 +261,25 @@ public class AmendmentActionPanelController {
      */
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
+        hideMoveOperations();
     }
+
+    /**
+     * Hide move actions for creation
+     */
+    private void hideMoveOperations() {
+        boolean isCreation = AmendmentAction.CREATION.equals(amendmentController.getModel().getAmendmentAction());
+        moveSeparator.setVisible(isCreation);
+        anchorMoveUp.setVisible(isCreation);
+        anchorMoveDown.setVisible(isCreation);
+    }
+
+    /**
+     * Returns a widget separator as hr html tag
+     * @return {@link Widget} separator
+     */
+    protected Widget getSeparator() {
+        return new HTML("<hr class='separator'/>");
+    }
+
 }

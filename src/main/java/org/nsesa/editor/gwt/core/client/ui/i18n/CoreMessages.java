@@ -161,4 +161,9 @@ public interface CoreMessages extends Messages {
     @Key("amendment.selection.number")
     String amendmentSelection(@PluralCount int arg);
 
+    @Key("amendment.action.moveup")
+    String amendmentActionMoveUp();
+
+    @Key("amendment.action.movedown")
+    String amendmentActionMoveDown();
 }

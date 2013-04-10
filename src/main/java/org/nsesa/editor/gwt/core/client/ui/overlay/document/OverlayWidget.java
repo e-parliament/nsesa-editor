@@ -25,7 +25,6 @@ import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface for an overlay widget (a higher level widget that can be translated into one or more DOM elements).
@@ -432,4 +431,15 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      * @return the formatted index.
      */
     String getFormattedIndex();
+
+    /**
+     * Move this widget up in the parent collection.
+     */
+    void moveUp();
+
+    /**
+     * Move this widget down in the parent collection
+     */
+    void moveDown();
+
 }

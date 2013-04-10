@@ -17,9 +17,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.*;
 import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
@@ -726,8 +724,34 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return formattedIndex;
     }
 
+    @Override
+    public void moveUp() {
+        OverlayWidget parent = getParentOverlayWidget();
+        if (parent != null) {
+            int colIndex = parent.getChildOverlayWidgets().indexOf(this);
+            if (colIndex > 0) {
+                parent.removeOverlayWidget(this);
+                parent.addOverlayWidget(this, colIndex - 1, true);
+                move(this, parent);
+            }
+        }
+    }
+
     public void setFormattedIndex(String formattedIndex) {
         this.formattedIndex = formattedIndex;
+    }
+
+    @Override
+    public void moveDown() {
+        OverlayWidget parent = getParentOverlayWidget();
+        if (parent != null) {
+            int colIndex = parent.getChildOverlayWidgets().indexOf(this);
+            if (colIndex < parent.getChildOverlayWidgets().size() - 1) {
+                parent.removeOverlayWidget(this);
+                parent.addOverlayWidget(this, colIndex + 1, true);
+                move(this, parent);
+            }
+        }
     }
 
     @Override
@@ -885,4 +909,24 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         }
         return allowedChildren;
     }
+
+    /**
+     * Move the widget in the dom according with the new structure in parent collection
+     * @param widget The widget to be moved
+     * @param parent The widget parent
+     */
+    private void move(OverlayWidget widget, OverlayWidget parent) {
+        // physical attach
+        com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
+        com.google.gwt.user.client.Element childElement = widget.getOverlayElement().cast();
+        DOM.removeChild(parentElement, childElement);
+        OverlayWidget next = widget.getNextSibling();
+        if (next != null) {
+            com.google.gwt.user.client.Element beforeElement = next.getOverlayElement().cast();
+            DOM.insertBefore(parentElement, childElement, beforeElement);
+        } else {
+            DOM.appendChild(parentElement, childElement);
+        }
+    }
+
 }

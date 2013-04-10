@@ -35,7 +35,7 @@ import java.util.Comparator;
 public interface AmendmentController {
 
     /**
-     * Simple amendment controller {@link Comparator} to sort amendment controllers accordign to their
+     * Simple amendment controller {@link Comparator} to sort amendment controllers according to their
      * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController#getOrder()} values.
      */
     public static Comparator<AmendmentController> ORDER_COMPARATOR = new Comparator<AmendmentController>() {

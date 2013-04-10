@@ -30,6 +30,8 @@ import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.amendments.*;
 import org.nsesa.editor.gwt.core.client.event.document.*;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEventHandler;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEventHandler;
 import org.nsesa.editor.gwt.core.client.mode.ActiveState;
@@ -47,6 +49,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Mover;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -193,6 +196,12 @@ public class DefaultDocumentController implements DocumentController {
     protected DocumentEventBus documentEventBus;
 
     /**
+     * Used to validate the movement of overlay widgets within the source text structure
+     */
+    @Scope(DOCUMENT)
+    protected Mover mover;
+
+    /**
      * A list of selected document controllers on which actions can be performed (tabling, deleting, ...)
      */
     private List<AmendmentController> selectedAmendmentControllers = new ArrayList<AmendmentController>();
@@ -222,6 +231,7 @@ public class DefaultDocumentController implements DocumentController {
     private HandlerRegistration documentScrollEventHandlerRegistration;
     private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
     private HandlerRegistration overlayWidgetSelectEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetMoveEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
     private HandlerRegistration documentScrollToEventHandlerRegistration;
 
@@ -230,7 +240,8 @@ public class DefaultDocumentController implements DocumentController {
                                      final ServiceFactory serviceFactory,
                                      final OverlayFactory overlayFactory,
                                      final Locator locator,
-                                     final Creator creator) {
+                                     final Creator creator,
+                                     final Mover mover) {
 
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
@@ -238,6 +249,7 @@ public class DefaultDocumentController implements DocumentController {
         this.creator = creator;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
+        this.mover = mover;
     }
 
     public void setInjector(DocumentInjector documentInjector) {
@@ -303,7 +315,7 @@ public class DefaultDocumentController implements DocumentController {
             }
         });
 
-        overlayWidgetSelectEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
+          overlayWidgetSelectEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
             @Override
             public void onEvent(OverlayWidgetSelectEvent event) {
                 boolean alreadySelected = false;
@@ -512,6 +524,27 @@ public class DefaultDocumentController implements DocumentController {
                 view.switchToTab(event.getTabIndex());
             }
         });
+        overlayWidgetMoveEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetMoveEvent.TYPE, new OverlayWidgetMoveEventHandler() {
+            @Override
+            public void onEvent(OverlayWidgetMoveEvent event) {
+                OverlayWidget overlayWidget = event.getOverlayWidget();
+                switch (event.getMoveType()) {
+                    case Up:
+                        if (mover.canMoveUp(overlayWidget)) {
+                            overlayWidget.moveUp();
+                        }
+                        break;
+                    case Down:
+                        if (mover.canMoveDown(overlayWidget)) {
+                            overlayWidget.moveDown();
+                        }
+                        break;
+                    default:
+                        throw new UnsupportedOperationException( event.getMoveType() + " operation is not supported yet");
+                }
+            }
+        });
+
     }
 
     /**
@@ -537,6 +570,7 @@ public class DefaultDocumentController implements DocumentController {
         documentScrollEventHandlerRegistration.removeHandler();
         amendmentContainerInjectedEventHandlerRegistration.removeHandler();
         overlayWidgetSelectEventHandlerRegistration.removeHandler();
+        overlayWidgetMoveEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
         documentScrollToEventHandlerRegistration.removeHandler();
     }

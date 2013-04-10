@@ -48,8 +48,12 @@ public class DefaultOverlaySnippetEvaluator implements OverlaySnippetEvaluator {
         List<String> placeHolders = getPlaceHolders(templateContent);
         for (String placeHolder : placeHolders) {
             Evaluator evaluator = evaluators.get(placeHolder);
-            if (evaluator != null)
-                templateContent = templateContent.replace(placeHolder, evaluator.evaluate());
+            if (evaluator != null) {
+                String replacement = evaluator.evaluate();
+                if (replacement != null) {
+                    templateContent = templateContent.replace(placeHolder, replacement);
+                }
+            }
         }
 
         return templateContent;
