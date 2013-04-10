@@ -162,7 +162,7 @@ public class ActionBarController {
             @Override
             public void onEvent(DocumentScrollEvent event) {
                 if (event.getDocumentController() == sourceFileController.getDocumentController() || sourceFileController.getDocumentController() == null) {
-                    view.asWidget().setVisible(false);
+                    onScroll();
                 }
             }
         });
@@ -174,6 +174,10 @@ public class ActionBarController {
                 popupPanel.hide();
             }
         });
+    }
+
+    protected void onScroll() {
+        view.asWidget().setVisible(false);
     }
 
     /**
