@@ -34,7 +34,6 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 @Scope(EDITOR)
 public class ActionBarCreatePanelViewImpl extends Composite implements ActionBarCreatePanelView {
 

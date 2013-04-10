@@ -70,6 +70,12 @@ public interface ActionBarView extends IsWidget {
     void setLocation(String location);
 
     /**
+     * Toggle visibility.
+     * @param visible <tt>true</tt> if the element should be visible.
+     */
+    void setVisible(boolean visible);
+
+    /**
      * 'Physically' attach the component to the DOM tree.
      */
     void attach();

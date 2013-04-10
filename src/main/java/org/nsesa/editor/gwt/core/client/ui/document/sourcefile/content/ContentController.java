@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -181,9 +182,16 @@ public class ContentController {
      *
      * @param widget the widget to scroll to
      */
-    public void scrollTo(final Widget widget) {
-        view.getScrollPanel().scrollToTop();
-        int offsetFromTop = 30;
-        view.getScrollPanel().setVerticalScrollPosition((widget.getAbsoluteTop() - view.getScrollPanel().getAbsoluteTop()) - offsetFromTop);
+    public void scrollTo(final Widget widget, final int offset) {
+
+        final Scheduler scheduler = sourceFileController.getDocumentController().getClientFactory().getScheduler();
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.getScrollPanel().scrollToTop();
+                view.getScrollPanel().setVerticalScrollPosition(((widget.getAbsoluteTop() - offset) - view.getScrollPanel().getAbsoluteTop()));
+            }
+        });
+
     }
 }

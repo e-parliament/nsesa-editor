@@ -31,17 +31,27 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
     private final DocumentController documentController;
     private final Widget target;
     private final boolean userInitiated;
+    private final int offset;
 
     public DocumentScrollToEvent(Widget target, DocumentController documentController) {
         this.target = target;
         this.documentController = documentController;
         this.userInitiated = true;
+        this.offset = 40;
     }
 
     public DocumentScrollToEvent(Widget target, DocumentController documentController, boolean userInitiated) {
         this.documentController = documentController;
         this.target = target;
         this.userInitiated = userInitiated;
+        this.offset = 40;
+    }
+
+    public DocumentScrollToEvent(Widget target, DocumentController documentController, boolean userInitiated, int offset) {
+        this.documentController = documentController;
+        this.target = target;
+        this.userInitiated = userInitiated;
+        this.offset = offset;
     }
 
     @Override
@@ -64,5 +74,9 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
 
     public boolean isUserInitiated() {
         return userInitiated;
+    }
+
+    public int getOffset() {
+        return offset;
     }
 }

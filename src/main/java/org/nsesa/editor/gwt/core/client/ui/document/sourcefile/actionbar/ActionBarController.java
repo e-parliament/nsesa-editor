@@ -17,7 +17,10 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
@@ -129,32 +132,21 @@ public class ActionBarController {
         modifyHandlerRegistration = view.getModifyHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (overlayWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
-                }
+                onModifyClick(event);
             }
         });
         // translate the click on the delete handler into a request to create a new deletion amendment
         deleteHandlerRegistration = view.getDeleteHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (overlayWidget != null) {
-                    documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
-                }
+                onDeleteClick(event);
             }
         });
         // translate the click on the child handler into a request to create a new element amendment
         childHandlerRegistration = view.getChildHandler().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (overlayWidget != null) {
-                    actionBarCreatePanelController.setOverlayWidget(overlayWidget);
-                    final ActionBarCreatePanelView createPanelView = actionBarCreatePanelController.getView();
-                    createPanelView.asWidget().setVisible(true);
-                    popupPanel.setWidget(createPanelView);
-                    popupPanel.showRelativeTo(view.getChildHandler());
-                    popupPanel.show();
-                }
+                onNewClick(event);
             }
         });
         // we hide this toolbar as soon as the user scrolls the content
@@ -174,6 +166,32 @@ public class ActionBarController {
                 popupPanel.hide();
             }
         });
+    }
+
+    protected void onModifyClick(ClickEvent event) {
+        event.stopPropagation();
+        if (overlayWidget != null) {
+            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
+        }
+    }
+
+    protected void onDeleteClick(ClickEvent event) {
+        event.stopPropagation();
+        if (overlayWidget != null) {
+            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
+        }
+    }
+
+    protected void onNewClick(ClickEvent event) {
+        event.stopPropagation();
+        if (overlayWidget != null) {
+            actionBarCreatePanelController.setOverlayWidget(overlayWidget);
+            final ActionBarCreatePanelView createPanelView = actionBarCreatePanelController.getView();
+            createPanelView.asWidget().setVisible(true);
+            popupPanel.setWidget(createPanelView);
+            popupPanel.showRelativeTo(view.getChildHandler());
+            popupPanel.show();
+        }
     }
 
     protected void onScroll() {
@@ -277,8 +295,8 @@ public class ActionBarController {
      * 'Attaches' itself to the given <tt>target</tt> amendable overlay widget, changing the CSS style
      * of the overlay widget, and position the toolbar right above it via a call to {@link #adaptPosition(com.google.gwt.user.client.ui.Widget)}.
      *
-     * @param target                the target overlay widget
-     * @param documentController    the containing document controller
+     * @param target             the target overlay widget
+     * @param documentController the containing document controller
      */
     public void attach(final OverlayWidget target, final DocumentController documentController) {
         // only perform the world if the new target overlay widget is actually different

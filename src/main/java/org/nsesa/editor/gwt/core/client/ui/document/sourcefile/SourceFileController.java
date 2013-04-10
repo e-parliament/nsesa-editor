@@ -271,7 +271,17 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param widget the widget to scroll to
      */
     public void scrollTo(final Widget widget) {
-        contentController.scrollTo(widget);
+        contentController.scrollTo(widget, 40);
+    }
+
+    /**
+     * Asks the content controller to scroll to a given widget.
+     *
+     * @param widget the widget to scroll to
+     * @param offset the offset in pixels
+     */
+    public void scrollTo(final Widget widget, int offset) {
+        contentController.scrollTo(widget, offset);
     }
 
     public void highlight(final OverlayWidget overlayWidget, final String color, final int seconds) {

@@ -142,6 +142,10 @@ public class ActionBarCreatePanelController {
         this.actionBarController = actionBarController;
     }
 
+    public void clearHighlight() {
+       highlightedNumber = -1;
+    }
+
     public void highlightNext() {
         if (overlayWidget != null) {
             view.setHighlight(++highlightedNumber);
