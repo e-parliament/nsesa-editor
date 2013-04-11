@@ -143,7 +143,7 @@ public class InlineEditorController implements ProvidesResize {
     public void show() {
         // attach to the parent
         overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(view.asWidget().getElement(), overlayWidget.getOverlayElement());
-        view.getRichTextEditor().setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
+        view.getRichTextEditor().setHTML(overlayWidget.asWidget().getElement().getInnerHTML());
         adaptSize();
 
         view.asWidget().setVisible(true);
