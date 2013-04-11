@@ -405,6 +405,12 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     int getIndex();
 
     /**
+     * Get the index of this element in the DOM tree. Useful for inserting or DOM operations.
+     * @return the DOM index.
+     */
+    int getDomIndex();
+
+    /**
      * Returns the namespace this overlay widget was generated for.
      *
      * @return the namespace URI.

@@ -842,6 +842,22 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return -1;
     }
 
+    @Override
+    public int getDomIndex() {
+        if (getParentOverlayWidget() != null) {
+            int index = 0;
+            for (int i = 0; i < getParentOverlayWidget().asWidget().getElement().getChildCount(); i++) {
+                Node node = getParentOverlayWidget().asWidget().getElement().getChild(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    if (node.equals(getOverlayElement())) return index;
+                    index++;
+                }
+            }
+            LOG.warning("Node not found for the DOM index.");
+        }
+        return -1;
+    }
+
     // DSL Way
     public String html() {
         return getInnerHTML();
