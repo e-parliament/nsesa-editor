@@ -26,9 +26,15 @@ public class OverlayWidgetNewEvent extends GwtEvent<OverlayWidgetNewEventHandler
     public static final Type<OverlayWidgetNewEventHandler> TYPE = new Type<OverlayWidgetNewEventHandler>();
 
     private final OverlayWidget overlayWidget;
+    private final OverlayWidget reference;
+    private final OverlayWidget child;
+    private final int position;
 
-    public OverlayWidgetNewEvent(OverlayWidget overlayWidget) {
+    public OverlayWidgetNewEvent(final OverlayWidget overlayWidget, final OverlayWidget reference, final OverlayWidget child, int position) {
         this.overlayWidget = overlayWidget;
+        this.child = child;
+        this.reference = reference;
+        this.position = position;
     }
 
     @Override
@@ -43,5 +49,17 @@ public class OverlayWidgetNewEvent extends GwtEvent<OverlayWidgetNewEventHandler
 
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
+    }
+
+    public OverlayWidget getChild() {
+        return child;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public OverlayWidget getReference() {
+        return reference;
     }
 }
