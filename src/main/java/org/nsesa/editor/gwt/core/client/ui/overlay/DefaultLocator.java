@@ -155,7 +155,10 @@ public class DefaultLocator implements Locator {
             final NumberingType numberingType = overlayWidget.getNumberingType();
             if (numberingType != null) {
                 if (!numberingType.isConstant()) {
-                    return overlayWidget.getUnformattedIndex();
+                    final String unformattedIndex = overlayWidget.getUnformattedIndex();
+                    if (unformattedIndex != null) {
+                        return unformattedIndex;
+                    }
                 }
             }
             return Integer.toString(overlayWidget.getTypeIndex() + 1);
