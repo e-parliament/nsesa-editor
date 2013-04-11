@@ -57,7 +57,7 @@ public class KeyboardListener {
         handlerRegistration = Event.addNativePreviewHandler(new Event.NativePreviewHandler() {
             @Override
             public void onPreviewNativeEvent(Event.NativePreviewEvent event) {
-                if (event.getNativeEvent().getKeyCode() > 0 && KEY_UP_CONSTANT.equals(event.getNativeEvent().getType())) {
+                if (event.getNativeEvent().getKeyCode() > 0 && KEY_UP_CONSTANT.equalsIgnoreCase(event.getNativeEvent().getType())) {
                     filter(event);
                 }
             }
@@ -74,11 +74,15 @@ public class KeyboardListener {
     }
 
     public void filter(final Event.NativePreviewEvent event) {
-        KeyCombo toMatch = new KeyCombo(event.getNativeEvent().getShiftKey(),
+        KeyCombo toMatch = new KeyCombo(event.getNativeEvent().getShiftKey(), event.getNativeEvent().getAltKey(),
                 event.getNativeEvent().getCtrlKey(), event.getNativeEvent().getKeyCode());
         if (LOG.isLoggable(Level.FINEST))
             LOG.finest("Looking for key combo --> " + toMatch);
+        //LOG.info("Looking for key combo --> " + toMatch);
         if (keyCombos.contains(toMatch)) {
+            //LOG.info("Matching key combo --> " + toMatch);
+            event.getNativeEvent().preventDefault();
+            event.getNativeEvent().stopPropagation();
             eventBus.fireEvent(new KeyComboEvent(toMatch, event.getNativeEvent()));
         }
     }
@@ -93,11 +97,12 @@ public class KeyboardListener {
      * supported, since this would probably interfere with the browser (at least under Windows).
      */
     public static class KeyCombo {
-        public final boolean shift, control;
+        public final boolean shift, control, alt;
         public final int charCode;
 
-        public KeyCombo(boolean shift, boolean control, int charCode) {
+        public KeyCombo(boolean shift, boolean alt, boolean control, int charCode) {
             this.shift = shift;
+            this.alt = alt;
             this.control = control;
             this.charCode = charCode;
         }
@@ -106,7 +111,7 @@ public class KeyboardListener {
         public boolean equals(Object o) {
             if (o != null && o instanceof KeyCombo) {
                 KeyCombo toMatch = (KeyCombo) o;
-                return toMatch.control == control && toMatch.shift == shift && toMatch.charCode == charCode;
+                return toMatch.control == control && toMatch.shift == shift && toMatch.charCode == charCode && toMatch.alt == alt;
             }
             return false;
         }
@@ -115,6 +120,7 @@ public class KeyboardListener {
         public int hashCode() {
             int result = (shift ? 1 : 0);
             result = 31 * result + (control ? 1 : 0);
+            result = 31 * result + (alt ? 1 : 0);
             result = 31 * result + charCode;
             return result;
         }
@@ -123,9 +129,8 @@ public class KeyboardListener {
         public String toString() {
             StringBuilder sb = new StringBuilder();
             if (control) sb.append("[Ctrl]");
-            if (control && shift) sb.append("+");
             if (shift) sb.append("[Shift]");
-            if ((control || shift) && charCode > 0) sb.append("+");
+            if (alt) sb.append("[Alt]");
             if (charCode > 0) sb.append("<").append(charCode).append(">");
             return sb.toString();
         }
