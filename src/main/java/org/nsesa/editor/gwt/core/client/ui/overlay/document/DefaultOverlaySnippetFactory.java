@@ -40,10 +40,10 @@ public class DefaultOverlaySnippetFactory implements OverlaySnippetFactory {
 
     /**
      * Register a snippet for the given overlay widget
-     * @param overlaySnippet The overlay snippet to be registered
      * @param widget The widget for which the overlay snippet is registered
+     * @param overlaySnippet The overlay snippet to be registered
      */
-    public void registerSnippet(OverlaySnippet overlaySnippet, OverlayWidget widget) {
+    public void registerSnippet(final OverlayWidget widget, final OverlaySnippet overlaySnippet) {
         cache.put(widget.getNamespaceURI() + ":" + widget.getType(), overlaySnippet);
     }
 }
