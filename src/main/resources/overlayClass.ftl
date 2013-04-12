@@ -33,7 +33,7 @@ import java.util.Map;
 import com.google.gwt.user.client.DOM;
 
 /**
-* <#if overlayClass.comments??>${overlayClass.comments?replace("\n", " ")?replace("\t", " ")?replace("'", "''")?replace("\\s+"," ", "r")}<#else>Generated class</#if>
+* <#if overlayClass.comments??>${overlayClass.comments?replace("\n", "<br/>")?replace("\t", " ")?replace("'", "''")?replace("\\s+"," ", "r")}<#else>Generated class</#if>
 * This file is generated. Rather than changing this file, correct the template called <tt>overlayClass.ftl</tt>.
 */
 
