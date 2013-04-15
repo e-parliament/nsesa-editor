@@ -81,4 +81,11 @@ public interface RichTextEditorConfig {
      * @param namespaceURI The namespace URI to be set
      */
     void setBodyNamespaceURI(String namespaceURI);
+
+    /**
+     * Returns the namespace URI used for body configuration
+     * @return
+     */
+    String getBodyNamespaceURI();
+
 }

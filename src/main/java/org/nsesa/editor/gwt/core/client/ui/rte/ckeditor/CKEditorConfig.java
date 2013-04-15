@@ -74,7 +74,12 @@ public class CKEditorConfig implements RichTextEditorConfig {
     @Override
     public void setBodyNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
-        setNativeBodyNamespaceURI(namespaceURI);
+        //setNativeBodyNamespaceURI(namespaceURI);
+    }
+
+    @Override
+    public String getBodyNamespaceURI() {
+        return namespaceURI;
     }
 
     @Override
