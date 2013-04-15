@@ -147,8 +147,8 @@ public class InlineEditorController implements ProvidesResize {
         adaptSize();
 
         view.asWidget().setVisible(true);
-        view.init();
         view.getRichTextEditor().setOverlayWidget(overlayWidget);
+        view.init();
         overlayWidget.asWidget().setVisible(false);
 
         showing = true;
