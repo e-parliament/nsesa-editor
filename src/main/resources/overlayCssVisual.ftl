@@ -62,7 +62,7 @@
 </#macro>
 
 <#macro displayInline overlayStyle overlayClass>
-.akomaNtoso-drafting .${overlayStyle.name}:before {
+.${overlayStyle.name}[ns="http://www.akomantoso.org/2.0"]:before {
 content: "${overlayStyle.name} "!important;
 border: 1px solid #000000!important;
 background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;
@@ -75,7 +75,7 @@ border-radius: 3px!important;
 margin: 0px!important;
 padding: 1px!important;
 }
-.akomaNtoso-drafting .${overlayStyle.name}:after {
+.${overlayStyle.name}[ns="http://www.akomantoso.org/2.0"]:after {
 content: "/${overlayStyle.name}"!important;
 border: 1px solid #000000!important;
 background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;

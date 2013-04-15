@@ -38,7 +38,7 @@
     </#if>
     <#if overlayStyle.name??>
         <#if cssConfiguration['printEmptyCss'] || (overlayStyle.values?size != 0)>
-        .akomaNtoso .${overlayStyle.name} {
+        .${overlayStyle.name}[ns="${overlayClass.nameSpace}"] {
             <#assign m = overlayStyle.values>
             <#assign keys = m?keys>
             <#list keys as key>
