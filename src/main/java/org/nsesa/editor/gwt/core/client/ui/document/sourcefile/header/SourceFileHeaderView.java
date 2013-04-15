@@ -85,6 +85,8 @@ public interface SourceFileHeaderView extends IsWidget {
      */
     void setStyleName(String style);
 
+    void setVisible(boolean visible);
+
     /**
      * Add another widget on the main header toolbar.
      * @param widget the widget to add
