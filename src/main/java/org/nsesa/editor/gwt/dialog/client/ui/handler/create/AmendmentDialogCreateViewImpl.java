@@ -75,16 +75,6 @@ public class AmendmentDialogCreateViewImpl extends Composite implements Amendmen
     }
 
     @Override
-    public void addBodyClass(String className) {
-        newText.addBodyClass(className);
-    }
-
-    @Override
-    public void resetBodyClass() {
-        newText.resetBodyClass();
-    }
-
-    @Override
     public String getAmendmentContent() {
         return newText.getHTML();
     }

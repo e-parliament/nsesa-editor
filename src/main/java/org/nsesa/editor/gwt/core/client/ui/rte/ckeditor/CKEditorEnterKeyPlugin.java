@@ -43,6 +43,9 @@ import java.util.logging.Logger;
  *         Date: 12/03/13 9:03
  */
 public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
+    /** used to fill in the content of html element with an empty char to be accessible from the user interface**/
+    public static String EMPTY_CHAR = "\u200b";
+
     private static final Logger LOG = Logger.getLogger(CKEditorEnterKeyPlugin.class.getName());
 
     /**
@@ -395,7 +398,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             result = convert.getOverlayElement();
         }
         if (result != null) {
-            result.setInnerText("\u200b");
+            result.setInnerText(EMPTY_CHAR);
             return DOM.toString((com.google.gwt.user.client.Element) result);
         }
         return null;

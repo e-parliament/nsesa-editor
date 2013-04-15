@@ -150,6 +150,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             if (editorInstance == null) {
                 throw new NullPointerException("Editor instance not created!");
             }
+            setBodyNamespaceURI();
             if (!isAttached()) onAttach();
             attached = true;
         }
@@ -322,6 +323,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     public void setOverlayWidget(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
         config.addBodyClass(overlayWidget.getType());
+        config.setBodyNamespaceURI(overlayWidget.getNamespaceURI());
     }
 
     @Override
@@ -392,6 +394,24 @@ public class CKEditor extends Composite implements RichTextEditor {
     }
 
 
+    private void setBodyNamespaceURI() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                final String ns = overlayWidget != null ? overlayWidget.getNamespaceURI() : null;
+                nativeSetBodyNamespaceURI(editorInstance, ns);
+            }
+        });
+    }
+    private native void nativeSetBodyNamespaceURI(JavaScriptObject editor, String ns) /*-{
+        editor.on('mode', function (ev) {
+            var editorInstance = ev.editor;
+            if (editorInstance && editorInstance.document) {
+                var namespaceURI = ns ? ns : editorInstance.config.namespaceURI;
+                editorInstance.document.getBody().setAttribute("ns", ns);
+            }
+        })
+    }-*/;
     /**
      * Computes the caret position by introducing a fake img and summing the offsets
      * @param caretPosition  {@link CaretPosition}

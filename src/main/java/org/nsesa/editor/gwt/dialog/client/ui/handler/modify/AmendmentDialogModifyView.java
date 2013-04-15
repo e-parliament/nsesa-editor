@@ -29,17 +29,6 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 public interface AmendmentDialogModifyView extends IsWidget {
 
     /**
-     * Sets the body class on the RTE to mimic the DOM structure of the document.
-     * @param className the CSS class name
-     */
-    void addBodyClass(String className);
-
-    /**
-     * Resets the body class to the original one by remove any additional css body class.
-     */
-    void resetBodyClass();
-
-    /**
      * Set the title on the main panel.
      * @param title the title to set
      */

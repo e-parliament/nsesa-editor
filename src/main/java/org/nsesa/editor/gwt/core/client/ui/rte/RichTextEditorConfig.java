@@ -76,4 +76,9 @@ public interface RichTextEditorConfig {
      */
     void setDraftingClassName(String draftingClassName);
 
+    /**
+     * Set the ns attribute in the body tag
+     * @param namespaceURI The namespace URI to be set
+     */
+    void setBodyNamespaceURI(String namespaceURI);
 }
