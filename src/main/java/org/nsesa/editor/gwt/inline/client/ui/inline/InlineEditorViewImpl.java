@@ -68,4 +68,14 @@ public class InlineEditorViewImpl extends Composite implements InlineEditorView 
     public void init() {
         richTextEditor.init();
     }
+
+    @Override
+    public Button getSaveButton() {
+        return saveButton;
+    }
+
+    @Override
+    public Anchor getCancelAnchor() {
+        return cancelAnchor;
+    }
 }

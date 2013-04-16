@@ -14,6 +14,8 @@
 package org.nsesa.editor.gwt.inline.client.ui.inline;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
@@ -33,4 +35,8 @@ public interface InlineEditorView extends IsWidget {
     void destroy();
 
     void init();
+
+    Button getSaveButton();
+
+    Anchor getCancelAnchor();
 }

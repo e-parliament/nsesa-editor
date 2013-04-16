@@ -19,7 +19,8 @@
         >
     <ui:style field="res">
         .inlineEditorPanel {
-            padding-bottom: 20px;
+            display: block;
+            margin-bottom: 30px;
         }
 
         .richTextEditor {
@@ -29,10 +30,11 @@
         .actionPanel {
             width: 100%;
             text-align: center;
+
         }
 
         .innerActionPanel {
-            margin:10px;
+            padding:10px;
         }
 
     </ui:style>
