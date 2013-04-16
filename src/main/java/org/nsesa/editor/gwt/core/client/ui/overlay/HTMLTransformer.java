@@ -62,8 +62,9 @@ public class HTMLTransformer implements Transformer {
 
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
-        sb.append(indent).append("<");
-        sb.append(widget.getType());
+        sb.append(indent).append("<span class=\"widget ").append(widget.getType())
+                .append("\" type=\"").append(widget.getType()).append("\"").append(" ns=\"")
+                .append(widget.getNamespaceURI()).append("\"");
         //get the attributes
         final LinkedHashMap<String, String> attrs = widget.getAttributes();
         if (!attrs.isEmpty()) {
@@ -118,8 +119,7 @@ public class HTMLTransformer implements Transformer {
                 }
             }
         }
-        sb.append("</");
-        sb.append(widget.getType()).append(">");
+        sb.append("</span>");
         return sb.toString();
     }
 

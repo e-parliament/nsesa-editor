@@ -17,7 +17,6 @@ import com.google.gwt.user.client.DOM;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 import junit.framework.Assert;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -30,26 +29,46 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
  * @version $Id$
  */
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")
-public class HTMLTransformerTest extends GwtTest{
+public class HTMLTransformerTest extends GwtTest {
 
     private OverlayWidget root;
     private HTMLTransformer htmlTransformer = new HTMLTransformer();
 
     @Before
     public void setUp() throws Exception {
-        root = new OverlayWidgetImpl(DOM.createSpan());
+        root = new OverlayWidgetImpl(DOM.createSpan()) {
+            @Override
+            public String getNamespaceURI() {
+                return "http://ns.tld";
+            }
+        };
         root.setType("root");
 
-        OverlayWidget childA = new OverlayWidgetImpl(DOM.createSpan());
+        OverlayWidget childA = new OverlayWidgetImpl(DOM.createSpan()) {
+            @Override
+            public String getNamespaceURI() {
+                return "http://ns.tld";
+            }
+        };
         childA.setType("childA");
         root.addOverlayWidget(childA);
 
-        OverlayWidget childAA = new OverlayWidgetImpl(DOM.createSpan());
+        OverlayWidget childAA = new OverlayWidgetImpl(DOM.createSpan()) {
+            @Override
+            public String getNamespaceURI() {
+                return "http://ns.tld";
+            }
+        };
         childAA.setType("childAA");
         childAA.setInnerHTML("childAA.innerHTML");
         childA.addOverlayWidget(childAA);
 
-        OverlayWidget childB = new OverlayWidgetImpl(DOM.createSpan());
+        OverlayWidget childB = new OverlayWidgetImpl(DOM.createSpan()) {
+            @Override
+            public String getNamespaceURI() {
+                return "http://ns.tld";
+            }
+        };
         childB.setType("childB");
         childB.setInnerHTML("childB.innerHTML");
         root.addOverlayWidget(childB);
@@ -58,6 +77,6 @@ public class HTMLTransformerTest extends GwtTest{
     @Test
     public void testTransform() throws Exception {
         final String result = htmlTransformer.transform(root);
-        Assert.assertEquals("<root><childA><childAA>childAA.innerHTML</childAA></childA><childB>childB.innerHTML</childB></root>", result);
+        Assert.assertEquals("<span class=\"widget root\" type=\"root\" ns=\"http://ns.tld\"><span class=\"widget childA\" type=\"childA\" ns=\"http://ns.tld\"><span class=\"widget childAA\" type=\"childAA\" ns=\"http://ns.tld\">childAA.innerHTML</span></span><span class=\"widget childB\" type=\"childB\" ns=\"http://ns.tld\">childB.innerHTML</span></span>", result);
     }
 }
