@@ -389,7 +389,7 @@ public class OverlayClass extends OverlayNode {
         OverlayClass that = (OverlayClass) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (namespaceURI != null ? !namespaceURI.equals(that.namespaceURI) : that.namespaceURI != null) return false;
         if (overlayType != that.overlayType) return false;
 
         return true;

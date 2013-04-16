@@ -67,7 +67,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             parent.setOverlayType(OverlayType.ComplexType);
             parent.setName(complexType.getBaseType().getName());
             parent.setClassName(parent.getName() + OverlayType.ComplexType);
-            parent.setNameSpace(complexType.getBaseType().getTargetNamespace());
+            parent.setNamespaceURI(complexType.getBaseType().getTargetNamespace());
             overlayClass.setParent(parent);
         }
         overlayClass.getProperties().addAll(generateProperty(complexType));
@@ -90,7 +90,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             parent.setOverlayType(OverlayType.SimpleType);
             parent.setName(attribute.getType().getBaseType().getName());
             parent.setClassName(parent.getName() + OverlayType.SimpleType);
-            parent.setNameSpace(attribute.getType().getBaseType().getTargetNamespace());
+            parent.setNamespaceURI(attribute.getType().getBaseType().getTargetNamespace());
             overlayClass.setParent(parent);
         } else {
             if (attribute.getType() != null) {
@@ -98,7 +98,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 parent.setOverlayType(OverlayType.SimpleType);
                 parent.setName(attribute.getType().getName());
                 parent.setClassName(parent.getName() + OverlayType.SimpleType);
-                parent.setNameSpace(attribute.getType().getTargetNamespace());
+                parent.setNamespaceURI(attribute.getType().getTargetNamespace());
                 overlayClass.setParent(parent);
             }
         }
@@ -267,7 +267,7 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
                 parentClass = cache.get(aClass.getParent());
             } else {
                 // identify the schema class
-                OverlaySchemaClass schemaClass = new OverlaySchemaClass(aClass.getNameSpace());
+                OverlaySchemaClass schemaClass = new OverlaySchemaClass(aClass.getNamespaceURI());
                 parentClass = cache.get(schemaClass);
                 if (parentClass == null) {
                     parentClass = rootClass;
@@ -548,11 +548,11 @@ public class OverlayClassGeneratorImpl implements OverlayClassGenerator {
             if (simpleType.getSimpleBaseType().isLocal()) {
                 parent.setName(simpleType.getSimpleBaseType().getBaseType().getName());
                 parent.setClassName(parent.getName() + OverlayType.SimpleType);
-                parent.setNameSpace(simpleType.getSimpleBaseType().getBaseType().getTargetNamespace());
+                parent.setNamespaceURI(simpleType.getSimpleBaseType().getBaseType().getTargetNamespace());
             } else {
                 parent.setName(simpleType.getSimpleBaseType().getName());
                 parent.setClassName(parent.getName() + OverlayType.SimpleType);
-                parent.setNameSpace(simpleType.getSimpleBaseType().getTargetNamespace());
+                parent.setNamespaceURI(simpleType.getSimpleBaseType().getTargetNamespace());
             }
             overlayClass.setParent(parent);
         }

@@ -38,7 +38,7 @@
     </#if>
     <#if overlayStyle.name??>
         <#if cssConfiguration['printEmptyCss'] || (overlayStyle.values?size != 0)>
-        .${overlayStyle.name}[ns="${overlayClass.nameSpace}"] {
+        .${overlayStyle.name}[ns="${overlayClass.namespaceURI}"] {
             <#assign m = overlayStyle.values>
             <#assign keys = m?keys>
             <#list keys as key>

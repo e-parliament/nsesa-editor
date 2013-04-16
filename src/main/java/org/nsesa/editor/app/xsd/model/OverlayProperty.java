@@ -53,7 +53,7 @@ public class OverlayProperty extends OverlayNode {
      * Constructs a <code>OverlayProperty</code> with the given parameters
      * @param overlayType The the property type
      * @param packageName The <code>java package name</code> as String
-     * @param nameSpace The nameSpace as String
+     * @param nameSpace The namespaceURI as String
      * @param className The <code>java class name</code>as String
      * @param name The <code>xsd name</code> as String
      * @param collection True when it is <code>java collection</code>
@@ -78,7 +78,7 @@ public class OverlayProperty extends OverlayNode {
      * @return a new instance of <code>OverlayProperty</code> class
      */
     public OverlayProperty copy() {
-        OverlayProperty newProperty = new OverlayProperty(overlayType, packageName, nameSpace,
+        OverlayProperty newProperty = new OverlayProperty(overlayType, packageName, namespaceURI,
                 className, name, collection, attribute);
         newProperty.setBaseClass(getBaseClass());
         newProperty.setMinOccurs(getMinOccurs());
@@ -155,7 +155,7 @@ public class OverlayProperty extends OverlayNode {
         OverlayProperty that = (OverlayProperty) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (namespaceURI != null ? !namespaceURI.equals(that.namespaceURI) : that.namespaceURI != null) return false;
         if (overlayType != that.overlayType) return false;
 
         return true;

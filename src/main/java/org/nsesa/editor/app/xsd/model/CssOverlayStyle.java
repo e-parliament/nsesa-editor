@@ -52,10 +52,10 @@ public class CssOverlayStyle {
          * @return
          */
         private boolean canProcess(OverlayClass overlayClass) {
-            if (overlayClass.getNameSpace() == null) {
+            if (overlayClass.getNamespaceURI() == null) {
                 return false;
             }
-            if (!"http://www.akomantoso.org/2.0".equalsIgnoreCase(overlayClass.getNameSpace())) {
+            if (!"http://www.akomantoso.org/2.0".equalsIgnoreCase(overlayClass.getNamespaceURI())) {
                 return false;
             }
             if (overlayClass instanceof OverlayClassGenerator.OverlayRootClass) {

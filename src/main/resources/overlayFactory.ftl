@@ -37,7 +37,7 @@ public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {
 
 private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first}.class.getName());
 /** the namespace URI of the overlay factory **/
-private final String namespaceURI = "${overlayClass.nameSpace}";
+private final String namespaceURI = "${overlayClass.namespaceURI}";
 
 /**
 * Create <code>${overlayClass.name?cap_first}</code> object with the given overlay strategy

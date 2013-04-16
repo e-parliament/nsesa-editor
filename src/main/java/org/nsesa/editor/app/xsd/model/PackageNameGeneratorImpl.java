@@ -58,7 +58,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     @Override
     public String getPackageName(OverlayNode overlayNode) {
-        String source = overlayNode.getNameSpace();
+        String source = overlayNode.getNamespaceURI();
         return getPackageName(source);
     }
 
@@ -67,7 +67,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
-        String source = overlayClass.getNameSpace();
+        String source = overlayClass.getNamespaceURI();
         return getPackageName(source);
     }
 
@@ -76,7 +76,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         if (overlayProperty.getPackageName() != null) {
             return overlayProperty.getPackageName();
         }
-        String source = overlayProperty.getNameSpace();
+        String source = overlayProperty.getNamespaceURI();
         return getPackageName(source);
     }
 

@@ -185,7 +185,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(entry.getKey());
+            factoryClass.setNamespaceURI(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
@@ -221,7 +221,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(entry.getKey());
+            factoryClass.setNamespaceURI(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
@@ -259,7 +259,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
-            factoryClass.setNameSpace(entry.getKey());
+            factoryClass.setNamespaceURI(entry.getKey());
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
@@ -319,11 +319,11 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     private Map<String, List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
         Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
         for (OverlayClass generatedClass : generatedClasses) {
-            if (generatedClass.getNameSpace() != null) {
-                List<OverlayClass> namespaceElements = result.get(generatedClass.getNameSpace());
+            if (generatedClass.getNamespaceURI() != null) {
+                List<OverlayClass> namespaceElements = result.get(generatedClass.getNamespaceURI());
                 if (namespaceElements == null) {
                     namespaceElements = new ArrayList<OverlayClass>();
-                    result.put(generatedClass.getNameSpace(), namespaceElements);
+                    result.put(generatedClass.getNamespaceURI(), namespaceElements);
                 }
                 // add only required types
                 if (generatedClass.getOverlayType().equals(overlayType)) {

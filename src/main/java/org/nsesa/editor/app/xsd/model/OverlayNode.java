@@ -29,7 +29,7 @@ public class OverlayNode {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayNode.class);
 
     protected String name;
-    protected String nameSpace;
+    protected String namespaceURI;
     protected String className;
     protected OverlayType overlayType;
     protected String comments;
@@ -43,12 +43,12 @@ public class OverlayNode {
     /**
      * Constructs an <code>OverlayNode</code> with the given name, namespace abd type
      * @param name The node name as String
-     * @param nameSpace The namespace as String
+     * @param namespaceURI The namespace as String
      * @param overlayType  The overlayType as Enum
      */
-    public OverlayNode(String name, String nameSpace, OverlayType overlayType) {
+    public OverlayNode(String name, String namespaceURI, OverlayType overlayType) {
         this.name = name;
-        this.nameSpace = nameSpace;
+        this.namespaceURI = namespaceURI;
         this.overlayType = overlayType;
     }
 
@@ -88,16 +88,16 @@ public class OverlayNode {
      * Returns the node namespace
      * @return The namespace as String
      */
-    public String getNameSpace() {
-        return nameSpace;
+    public String getNamespaceURI() {
+        return namespaceURI;
     }
 
     /**
      * Set the namespace
-     * @param nameSpace as String
+     * @param namespaceURI as String
      */
-    public void setNameSpace(String nameSpace) {
-        this.nameSpace = nameSpace;
+    public void setNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
     }
 
     /**
@@ -172,7 +172,7 @@ public class OverlayNode {
     public String toString() {
         return "OverlayNode{" +
                 "name='" + name + '\'' +
-                ",nameSpace='" + nameSpace + '\'' +
+                ",namespaceURI='" + namespaceURI + '\'' +
                 ",overlayType=" + overlayType +
                 ", className='" + className + '\'' +
                 '}';
@@ -186,7 +186,7 @@ public class OverlayNode {
         OverlayNode that = (OverlayNode) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (namespaceURI != null ? !namespaceURI.equals(that.namespaceURI) : that.namespaceURI != null) return false;
         if (overlayType != that.overlayType) return false;
 
         return true;
@@ -195,7 +195,7 @@ public class OverlayNode {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (nameSpace != null ? nameSpace.hashCode() : 0);
+        result = 31 * result + (namespaceURI != null ? namespaceURI.hashCode() : 0);
         result = 31 * result + (overlayType != null ? overlayType.hashCode() : 0);
         return result;
     }

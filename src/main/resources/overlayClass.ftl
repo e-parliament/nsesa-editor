@@ -58,7 +58,7 @@ private static StructureIndicator STRUCTURE_INDICATOR = new StructureIndicator.D
 public static Element create() {
 com.google.gwt.user.client.Element span = DOM.createSpan();
 span.setAttribute("type", "${overlayClass.className}");
-span.setAttribute("ns", "${overlayClass.nameSpace}");
+span.setAttribute("ns", "${overlayClass.namespaceURI}");
 span.setClassName("widget ${overlayClass.className}");
 return span;
 }
@@ -278,7 +278,7 @@ this.value = value;
 */
 @Override
 public String getNamespaceURI() {
-return "${overlayClass.nameSpace}";
+return "${overlayClass.namespaceURI}";
 }
 
 @Override

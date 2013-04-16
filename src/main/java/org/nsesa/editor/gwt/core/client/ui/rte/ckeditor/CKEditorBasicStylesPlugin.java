@@ -98,7 +98,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
 //        config.coreStyles_strike =
 //        {
 //            element : newTag,
-//            attributes : { 'class' : className, 'type' : newType, 'ns' : nameSpace},
+//            attributes : { 'class' : className, 'type' : newType, 'ns' : namespaceURI},
 //            overrides : oldTag
 //        };
 //        addButtonCommand( 'Strike'		, lang.strike		, 'strike'		, config.coreStyles_strike );
