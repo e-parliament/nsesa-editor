@@ -17,10 +17,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
 import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -43,8 +43,6 @@ import java.util.logging.Logger;
  *         Date: 12/03/13 9:03
  */
 public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
-    /** used to fill in the content of html element with an empty char to be accessible from the user interface**/
-    public static String EMPTY_CHAR = "\u200b";
 
     private static final Logger LOG = Logger.getLogger(CKEditorEnterKeyPlugin.class.getName());
 
@@ -95,6 +93,9 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     private ConversionEnterRule conversionEnterRule;
     /** split enter rule to be applied **/
     private SplitEnterRule splitEnterRule;
+
+    /** snippet factory used to create new widget when press enter**/
+    private OverlaySnippetFactory snippetFactory;
     /** split enter rule to be applied **/
     private LineBreakProvider lineBreakProvider;
 
@@ -108,16 +109,22 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      * @param conversionEnterRule {@link ConversionEnterRule}
      */
     @Inject
-    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory, LineBreakProvider lineBreakProvider,
+    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory,
+
+                                  LineBreakProvider lineBreakProvider,
                                   SplitEnterRule splitEnterRule, ConversionEnterRule conversionEnterRule) {
         this.overlayFactory = overlayFactory;
+        this.snippetFactory = snippetFactory;
         this.lineBreakProvider = lineBreakProvider;
         this.splitEnterRule = splitEnterRule;
         this.conversionEnterRule = conversionEnterRule;
     }
 
-    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory) {
-        this(overlayFactory, new DefaultLineBreakProvider(overlayFactory), SPLIT_ALWAYS_ENTER_RULE, null);
+    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory, OverlaySnippetFactory overlaySnippetFactory) {
+        this(overlayFactory,
+                new DefaultLineBreakProvider(overlayFactory),
+                SPLIT_ALWAYS_ENTER_RULE,
+                null);
     }
 
     @Override
@@ -191,7 +198,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     while (startContainer != null && startContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         startContainer = startContainer.getParent();
                     }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;)(startContainer.$);
+                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(startContainer.$, editor);
                     if (elemAsString) {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
@@ -209,7 +216,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     while (endContainer != null && endContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         endContainer = endContainer.getParent();
                     }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$);
+                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$, editor);
                     if (elemAsString) {
                         var elem =  $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
@@ -327,81 +334,28 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     }-*/;
 
     /**
-     * Add a filter transformation for html to data and viceversa for BR tags
-     * @param keyPlugin The plugin instance
-     * @param editor The editor instance
-     */
-    private native void nativeFilter(final CKEditorEnterKeyPlugin keyPlugin, JavaScriptObject editor) /*-{
-        var dataProcessor = editor.dataProcessor,
-            dataFilter = dataProcessor && dataProcessor.dataFilter,
-            htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-//        // Add filter for html->data transformation.
-        if (dataFilter) {
-            dataFilter.addRules(
-                {
-                    elements: {
-                        'span': function( element ) {
-                            if (element.attributes && element.attributes['type'] == "br") {
-                                // Span is self closing element - change that.
-                                //element.isEmpty = true;
-//                            // Save original element name in data-saved-name attribute.
-//                            element.attributes[ 'data-saved-type' ] = element.attributes['type'];
-//                            element.attributes[ 'data-saved-ns' ] = element.attributes['ns'];
-//                            element.attributes[ 'data-saved-class' ] = element.attributes['class'];
-//                            // Change name to br.
-                                element.name = 'br';
-                                // Push zero width space, because empty span would be removed.
-                                //element.children.push( new CKEDITOR.htmlParser.text( '\u200b' ) );
-                            }
-                        }
-                    }
-                });
-        }
-//
-//        // Add filter for data->html transformation.
-        if (htmlFilter) {
-            htmlFilter.addRules( {
-                elements: {
-                    'br': function( element ) {
-                        element.isEmpty = true;
-                        element.children = [];
-                        element.attributes['type'] = 'br';
-//                        element.attributes['ns']  = 'ns';
-                        element.attributes['class'] = 'widget br';
-
-//                        delete element.attributes[ 'data-saved-type' ];
-//                        delete element.attributes[ 'data-saved-ns' ];
-//                        delete element.attributes[ 'data-saved-class' ];
-
-                        element.name = 'span';
-                    }
-                }
-            });
-        }
-    }-*/;
-    /**
      * Identify what type of element will be inserted when press enter over an existing element
      * @param existingElement
      * @return The new element that will be inserted
      */
-    private String onEnter(JavaScriptObject existingElement) {
+    private String onEnter(JavaScriptObject existingElement, JavaScriptObject editor) {
+        List<OverlayWidget> roots = overlayEditorBody(editor, overlayFactory);
         Element el = existingElement.cast();
-        OverlayWidget original = overlayFactory.getAmendableWidget(el);
-        if (original == null) {
-            return null;
-        }
-        //create a new one on the same type
-        OverlayWidget from = overlayFactory.getAmendableWidget(original.getNamespaceURI(), original.getType());
-        Element result = from.getOverlayElement();
+        OverlayWidget original = findOverlayWidget(el, roots);
+
+        OverlayWidget newWidget =  null;
         if (conversionEnterRule != null) {
-            OverlayWidget convert = conversionEnterRule.convert(original);
-            result = convert.getOverlayElement();
+            //fill in the ancestors for this widget
+            newWidget = conversionEnterRule.convert(original);
+        } else {
+            //create a new one on the same type
+            newWidget = overlayFactory.getAmendableWidget(original.getNamespaceURI(), original.getType());
+            if (newWidget != null) {
+                newWidget.getOverlayElement().setInnerText(EMPTY_CHAR);
+            }
         }
-        if (result != null) {
-            result.setInnerText(EMPTY_CHAR);
-            return DOM.toString((com.google.gwt.user.client.Element) result);
-        }
-        return null;
+
+        return newWidget == null ? null :  DOM.toString((com.google.gwt.user.client.Element) newWidget.getOverlayElement());
     }
 
     /**
@@ -430,4 +384,6 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         OverlayWidget original = overlayFactory.getAmendableWidget(el);
         return (original == null) ? false : splitEnterRule.split(original);
     }
+
+
 }

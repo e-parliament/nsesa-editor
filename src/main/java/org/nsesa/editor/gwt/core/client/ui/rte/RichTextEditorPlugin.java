@@ -25,6 +25,9 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(RichTextCompositePlugin.class)
 public interface RichTextEditorPlugin {
+    /** used to fill in the content of html element with an empty char to be accessible from the user interface**/
+    public static final String EMPTY_CHAR = "\u200b";
+
     /**
      * Run before editor initialization
      *
