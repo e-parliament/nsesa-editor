@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;
 
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -248,8 +249,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         for (final OverlayWidget root : overlayWidgets) {
             if (root != null) {
                 root.walk(visitor);
-            }
-            else {
+            } else {
                 LOG.warning("There is no root widget set - probably no overlay took place?");
             }
         }
@@ -284,9 +284,26 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         contentController.scrollTo(widget, offset);
     }
 
-    public void highlight(final OverlayWidget overlayWidget, final String color, final int seconds) {
+    public void highlight(final Widget overlayWidget, final String color, final int seconds) {
         if (seconds == -1) {
+
+        } else {
             // permanent highlight
+            Animation animation = new Animation() {
+                @Override
+                protected void onUpdate(double progress) {
+                    setOpacity(overlayWidget, color, interpolate(progress));
+                }
+            };
+            animation.run(seconds * 1000);
+        }
+    }
+
+    private void setOpacity(Widget overlayWidget, String color, double opacity) {
+        final Style style = overlayWidget.getElement().getStyle();
+        style.setOpacity(opacity);
+        if (opacity != 0.0 && opacity < 0.3) {
+
         }
     }
 
@@ -402,9 +419,6 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
         LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
-        if (activeOverlayWidget != null) {
-            highlight(activeOverlayWidget, "yellow", -1);
-        }
     }
 
     /**
