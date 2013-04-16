@@ -31,6 +31,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentCo
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.undo.UndoManager;
 
 /**
  * A GIN document injector - used to give a document controller access to its dependencies. Note that this
@@ -151,4 +152,10 @@ public interface DocumentInjector extends Ginjector {
      * @return the diffing manager
      */
     DiffingManager getDiffingManager();
+
+    /**
+     * Get the undo manager responsible for executing {@link org.nsesa.editor.gwt.core.client.undo.Action}s.
+     * @return  the undo manager
+     */
+    UndoManager getUndoManager();
 }
