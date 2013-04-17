@@ -62,6 +62,7 @@ public class HTMLTransformer implements Transformer {
 
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
+        if (!widget.getOverlayElement().getClassName().contains(widget.getType())) widget.getOverlayElement().addClassName(widget.getType());
         sb.append(indent).append("<span class=\"").append(widget.getOverlayElement().getClassName())
                 .append("\" type=\"").append(widget.getType()).append("\"").append(" ns=\"")
                 .append(widget.getNamespaceURI()).append("\"");
