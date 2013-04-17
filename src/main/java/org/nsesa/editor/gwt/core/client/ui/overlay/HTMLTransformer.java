@@ -62,7 +62,7 @@ public class HTMLTransformer implements Transformer {
 
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
-        sb.append(indent).append("<span class=\"widget ").append(widget.getType())
+        sb.append(indent).append("<span class=\"").append(widget.getOverlayElement().getClassName())
                 .append("\" type=\"").append(widget.getType()).append("\"").append(" ns=\"")
                 .append(widget.getNamespaceURI()).append("\"");
         //get the attributes
@@ -77,6 +77,7 @@ public class HTMLTransformer implements Transformer {
                 }
             }
         }
+        // add class names
         sb.append(">");
         Element element = widget.getOverlayElement();
         NodeList<Node> nodes = element.getChildNodes();
