@@ -14,43 +14,25 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.Element;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
- * Set up the caret position at the beginning of the text
+ * Set up the caret position by checking the caret marker presence inside of the text nodes.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 11/04/13 16:49
  */
 public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
 
-    /**
-     * skip rule *
-     */
-    public static interface SkipCaretPositionRule {
-        abstract boolean skip(OverlayWidget widget);
-    }
-
-    public static SkipCaretPositionRule NUM_SKIP_RULE = new SkipCaretPositionRule() {
-        @Override
-        public boolean skip(OverlayWidget widget) {
-            return "num".equalsIgnoreCase(widget.getType());
-        }
-    };
-
     private OverlayFactory overlayFactory;
-    private SkipCaretPositionRule skipCaretPositionRule;
+    private String caretPositionClassName;
 
-    public CKEditorCaretPositionSetupPlugin(OverlayFactory overlayFactory, SkipCaretPositionRule skipCaretPositionRule) {
+    private JavaScriptObject caretNode;
+
+    public CKEditorCaretPositionSetupPlugin(OverlayFactory overlayFactory, String caretPositionClassName) {
         this.overlayFactory = overlayFactory;
-        this.skipCaretPositionRule = skipCaretPositionRule;
-    }
-
-    public CKEditorCaretPositionSetupPlugin(OverlayFactory overlayFactory) {
-        this(overlayFactory, NUM_SKIP_RULE);
+        this.caretPositionClassName = caretPositionClassName;
     }
 
     @Override
@@ -69,32 +51,44 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
             var range = new $wnd.CKEDITOR.dom.range(editorInstance.document);
             range.selectNodeContents(editorInstance.document.getBody());
             caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::visitNative(Lorg/nsesa/editor/gwt/core/client/ui/rte/ckeditor/CKEditorCaretPositionSetupPlugin;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(caretPlugin, editorInstance, range.startContainer);
+            var caretNode = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode;
+
+            if (caretNode) {
+                range = new $wnd.CKEDITOR.dom.range(editorInstance.document);
+                var nodeList = caretNode.getChildren();
+                for (var i = 0; i < nodeList.count(); i++) {
+                    var node = nodeList.getItem(i);
+                    if (node.type ==  $wnd.CKEDITOR.NODE_TEXT) {
+                        range.setStart(node, 0);
+                        range.setEnd(node, node.getText().length);
+                        editorInstance.getSelection().selectRanges([range]);
+                        break;
+                    }
+                }
+            }
         })
     }-*/;
 
     private native void visitNative(CKEditorCaretPositionSetupPlugin caretPlugin, JavaScriptObject editorInstance, JavaScriptObject container) /*-{
+        var caretNode = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode;
+        if (caretNode) {
+            return;
+        }
+
+        var caretClassName = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretPositionClassName;
+
         var documentRange = new $wnd.CKEDITOR.dom.range(editorInstance.document);
         var nodeList = container.getChildren();
         for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
             if (node.type == $wnd.CKEDITOR.NODE_ELEMENT) {
-                var isSkipped = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::skip(Lcom/google/gwt/core/client/JavaScriptObject;)(node.$);
-                if (!isSkipped) {
-                    // see if we find our magic marker
-                    var children = node.getChildren();
-                    for (var j = 0; j < children.count(); j++) {
-                        var child = children.getItem(j);
-
-                        if (child.type == $wnd.CKEDITOR.NODE_TEXT) {
-                            if (child.getText().contains("\u200b")) {
-                                var indexStart = child.getText().indexOf("\u200b");
-                                var indexEnd = child.getText().indexOf("\u200b", indexStart + 1);
-
-                                var range = new $wnd.CKEDITOR.dom.range(documentRange.document);
-                                range.setStart(node, 0);
-                                range.setEnd(node, 1); // or 0 instead of 1 to simply place the caret at the beginning
-                                editorInstance.getSelection().selectRanges([range]);
-                            }
+                // see if we find our magic marker
+                var children = node.getChildren();
+                for (var j = 0; j < children.count(); j++) {
+                    var child = children.getItem(j);
+                    if (child.type == $wnd.CKEDITOR.NODE_ELEMENT) {
+                        if (child.hasClass(caretClassName)) {
+                            caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = child;
                         }
                     }
                 }
@@ -108,10 +102,4 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
         //do nothing
     }
 
-    private boolean skip(JavaScriptObject element) {
-        Element el = element.cast();
-        OverlayWidget original = overlayFactory.getAmendableWidget(el);
-        return (original == null) || skipCaretPositionRule.skip(original);
-
-    }
 }

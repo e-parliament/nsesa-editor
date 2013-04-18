@@ -32,4 +32,10 @@ public interface OverlaySnippetFactory {
      */
     abstract OverlaySnippet getSnippet(OverlayWidget widget);
 
+    /**
+     * Return the caret position class name used to select an element when it is created by this factory
+     * @return
+     */
+    abstract String getCaretPositionClassName();
+
 }

@@ -38,6 +38,11 @@ public class DefaultOverlaySnippetFactory implements OverlaySnippetFactory {
         return cache.get(widget.getNamespaceURI() + ":" + widget.getType());
     }
 
+    @Override
+    public String getCaretPositionClassName() {
+        return "";
+    }
+
     /**
      * Register a snippet for the given overlay widget
      * @param widget The widget for which the overlay snippet is registered
