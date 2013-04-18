@@ -33,9 +33,19 @@ public interface OverlayFactory {
      * (eg. because there is no matching {@link OverlayWidget} found), then null is returned.
      *
      * @param element the element to get the overlaying element for.
-     * @return the amendable widget, or null if it cannot be overlaid.
+     * @return the overlay widget, or <tt>null</tt> if it cannot be overlaid.
      */
     OverlayWidget getAmendableWidget(Element element);
+
+    /**
+     * Similar to {@link #getAmendableWidget(com.google.gwt.dom.client.Element)}, but with an extra limiter for the
+     * depth of the children to be overlaid.
+     * @param element       the element to get the overlaying element for
+     * @param maxDepth      the max depth to be overlaid (a value of '1' makes that only the direct children of the
+     *                      given <tt>element</tt> will be searched.
+     * @return  the overlay widget, or <tt>null</tt> if it cannot be found.
+     */
+    OverlayWidget getAmendableWidget(Element element, int maxDepth);
 
     /**
      * Get a new {@link OverlayWidget} based on the passed tag. If the tag is not recognized, or cannot be found

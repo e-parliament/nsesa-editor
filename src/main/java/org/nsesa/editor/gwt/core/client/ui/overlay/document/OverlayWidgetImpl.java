@@ -144,6 +144,11 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     private List<OverlayWidget> allowedChildren;
 
     /**
+     * Flag to keep track to see if the children of this overlay widget have been overlaid.
+     */
+    private boolean childrenInitialized;
+
+    /**
      * Default constructor.
      */
     public OverlayWidgetImpl() {
@@ -622,6 +627,16 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     @Override
     public void setAmendable(Boolean amendable) {
         this.amendable = amendable;
+    }
+
+    @Override
+    public boolean areChildrenInitialized() {
+        return childrenInitialized;
+    }
+
+    @Override
+    public void setChildrenInitialized(boolean childrenInitialized) {
+        this.childrenInitialized = childrenInitialized;
     }
 
     @Override

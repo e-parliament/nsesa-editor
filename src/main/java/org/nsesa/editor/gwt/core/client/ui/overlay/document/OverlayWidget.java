@@ -54,6 +54,20 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     boolean isAmended();
 
     /**
+     * Check if the overlay has been completed (this might not always be the case for lazy-loading approaches when
+     * performance is a problem).
+     * @return <tt>true</tt> if the overlay widget was fully loaded (meaning its children were enumerated and set). If
+     * not, we should use the {@link OverlayStrategy} to retrieve and overlay the children.
+     */
+    boolean areChildrenInitialized();
+
+    /**
+     * Set the flag that the children of this overlay widget were retrieved and overlaid.
+     * @param childrenInitialized whether or not the children were overlaid
+     */
+    void setChildrenInitialized(boolean childrenInitialized);
+
+    /**
      * Sets the flag whether or not this amendment is considered amendable (that is,
      * new amendments can be created by the user). Note that you can also
      *
