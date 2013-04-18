@@ -108,7 +108,8 @@ public class HTMLTransformer implements Transformer {
                         if (child != null) {
                             sb.append(toHTMLElement(child, false, depth + 1).trim());
                         } else {
-                            LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
+                            LOG.warning("No amendable child widget found for element " + childElement.getNodeName());
+                            sb.append(DOM.toString((com.google.gwt.user.client.Element) childElement.cast()));
                         }
                         break;
                     case Node.TEXT_NODE:
