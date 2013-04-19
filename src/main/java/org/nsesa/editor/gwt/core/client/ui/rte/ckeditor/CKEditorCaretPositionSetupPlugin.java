@@ -48,11 +48,11 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
     private native void nativeInit(CKEditorCaretPositionSetupPlugin caretPlugin, JavaScriptObject editor)/*-{
         editor.on('instanceReady', function (ev) {
             var editorInstance = ev.editor;
+            caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = null;
             var range = new $wnd.CKEDITOR.dom.range(editorInstance.document);
             range.selectNodeContents(editorInstance.document.getBody());
             caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::visitNative(Lorg/nsesa/editor/gwt/core/client/ui/rte/ckeditor/CKEditorCaretPositionSetupPlugin;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(caretPlugin, editorInstance, range.startContainer);
             var caretNode = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode;
-
             if (caretNode) {
                 range = new $wnd.CKEDITOR.dom.range(editorInstance.document);
                 var nodeList = caretNode.getChildren();
@@ -76,23 +76,17 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
         }
 
         var caretClassName = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretPositionClassName;
-
         var documentRange = new $wnd.CKEDITOR.dom.range(editorInstance.document);
         var nodeList = container.getChildren();
         for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);
             if (node.type == $wnd.CKEDITOR.NODE_ELEMENT) {
                 // see if we find our magic marker
-                var children = node.getChildren();
-                for (var j = 0; j < children.count(); j++) {
-                    var child = children.getItem(j);
-                    if (child.type == $wnd.CKEDITOR.NODE_ELEMENT) {
-                        if (child.hasClass(caretClassName)) {
-                            caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = child;
-                        }
-                    }
+                if (node.hasClass(caretClassName)) {
+                    caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = node;
+                } else {
+                    caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::visitNative(Lorg/nsesa/editor/gwt/core/client/ui/rte/ckeditor/CKEditorCaretPositionSetupPlugin;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(caretPlugin, editorInstance, node);
                 }
-                caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::visitNative(Lorg/nsesa/editor/gwt/core/client/ui/rte/ckeditor/CKEditorCaretPositionSetupPlugin;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(caretPlugin, editorInstance, node);
             }
         }
     }-*/;
