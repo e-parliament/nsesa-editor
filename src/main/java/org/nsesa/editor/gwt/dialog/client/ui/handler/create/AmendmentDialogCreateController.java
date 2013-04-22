@@ -260,9 +260,9 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
      */
     protected boolean validate() {
         //validate the overlay
-        final String content = view.getAmendmentContent();
+        String content = view.getAmendmentContent();
         //replace all validation-error class names with empty
-        content.replaceAll("validation-error", "");
+        content = content.replaceAll("validation-error", "");
         final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
         clone.setInnerHTML(content);
         OverlayWidget overlayWidget = overlayFactory.getAmendableWidget(clone);
@@ -280,7 +280,6 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
                 overlayWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
             }
             view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
-            view.getRichTextEditor().setOverlayWidget(overlayWidget);
         }
         return isValid;
     }
