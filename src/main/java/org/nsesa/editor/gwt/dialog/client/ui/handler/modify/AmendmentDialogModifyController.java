@@ -234,8 +234,8 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         content = content.replaceAll("validation-error", "");
         final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
         clone.setInnerHTML(content);
-        OverlayWidget overlayWidget = overlayFactory.getAmendableWidget(clone);
-        ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
+        OverlayWidget clonedOverlayWidgetToValidate = overlayFactory.getAmendableWidget(clone);
+        ValidationResult validationResult = overlayWidgetValidator.validate(clonedOverlayWidgetToValidate);
         boolean isValid = validationResult.isSuccessful();
         if (!isValid) {
             OverlayWidget invalidWidget = validationResult.getInvalidWidget();
@@ -245,10 +245,11 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
                 invalidWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
             } else {
-                overlayWidget.getOverlayElement().addClassName("validation-error");
-                overlayWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
+                clonedOverlayWidgetToValidate.getOverlayElement().addClassName("validation-error");
+                clonedOverlayWidgetToValidate.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
             }
-            view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
+            view.setAmendmentContent(clonedOverlayWidgetToValidate.getOverlayElement().getInnerHTML());
+//            view.getRichTextEditor().setOverlayWidget(clonedOverlayWidgetToValidate);
         }
         return isValid;
     }
