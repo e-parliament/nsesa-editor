@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 public class DefaultOverlayFactory implements OverlayFactory {
 
     private static final Logger LOG = Logger.getLogger(DefaultOverlayFactory.class.getName());
+    private static final int DEFERRED_THRESHOLD = 1000;
 
     protected final OverlayStrategy overlayStrategy;
     protected final Scheduler scheduler;
@@ -82,18 +83,10 @@ public class DefaultOverlayFactory implements OverlayFactory {
         final OverlayWidget overlayWidget = toAmendableWidget(element);
         if (overlayWidget != null) {
             elementCounter.increment();
-            if (elementCounter.get() % 1000 == 0) {
-                LOG.info("--> overlay process splitting at " + elementCounter.get() + " for " + overlayWidget + " with parent " + parent);
-                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        setProperties(parent, overlayWidget, element, depth, maxDepth);
-                    }
-                });
-            } else {
-                setProperties(parent, overlayWidget, element, depth, maxDepth);
-            }
+            setProperties(parent, overlayWidget, element, depth, maxDepth);
 
+        } else {
+            LOG.warning("No overlay widget found for " + element);
         }
         return overlayWidget;
     }
@@ -110,21 +103,36 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
         // check if we're not yet at the max depth
         if (depth <= maxDepth || maxDepth == -1) {
-            // attach all children (note, this is a recursive call)
-            final Element[] children = overlayStrategy.getChildren(element);
-            if (children != null) {
-                for (final Element child : children) {
-                    final OverlayWidget amendableChild = wrap(overlayWidget, child, depth + 1, maxDepth);
-                    if (amendableChild != null) {
-                        overlayWidget.addOverlayWidget(amendableChild, -1, true);
+            if (elementCounter.get() > 1 && elementCounter.get() % DEFERRED_THRESHOLD == 0) {
+                LOG.info("--> overlay process splitting at " + elementCounter.get() + " for '" + element + "' as " + overlayWidget + " with parent " + parent);
+                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        visitChildren(overlayWidget, element, depth + 1, maxDepth, true);
                     }
-                }
+                });
+            } else {
+                visitChildren(overlayWidget, element, depth + 1, maxDepth, false);
             }
-            // mark the children as overlaid
-            overlayWidget.setChildrenInitialized(true);
+
         }
         // post process the widget (eg. hide large tables)
         postProcess(overlayWidget);
+    }
+
+    protected void visitChildren(final OverlayWidget overlayWidget, final Element element, final int depth, final int maxDepth, boolean deferred) {
+        // attach all children (note, this is a recursive call)
+        final Element[] children = overlayStrategy.getChildren(element);
+        if (children != null) {
+            for (final Element child : children) {
+                final OverlayWidget amendableChild = wrap(overlayWidget, child, depth, maxDepth);
+                if (amendableChild != null) {
+                    overlayWidget.addOverlayWidget(amendableChild, -1, true);
+                }
+            }
+        }
+        // mark the children as overlaid
+        overlayWidget.setChildrenInitialized(true);
     }
 
     protected void postProcess(final OverlayWidget overlayWidget) {
