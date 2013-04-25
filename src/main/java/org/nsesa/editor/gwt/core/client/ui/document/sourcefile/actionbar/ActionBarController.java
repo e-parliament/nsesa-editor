@@ -27,6 +27,8 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetDeleteEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetModifyEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -99,6 +101,7 @@ public class ActionBarController {
     private HandlerRegistration childHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration documentScrollEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration overlayWidgetNewEventHandlerRegistration;
 
     @Inject
     public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
@@ -157,6 +160,12 @@ public class ActionBarController {
                 }
             }
         });
+        overlayWidgetNewEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
+            @Override
+            public void onEvent(OverlayWidgetNewEvent event) {
+                popupPanel.hide();
+            }
+        });
     }
 
     protected void onModifyClick(ClickEvent event) {
@@ -198,6 +207,7 @@ public class ActionBarController {
         childHandlerRegistration.removeHandler();
         documentScrollEventHandlerRegistration.removeHandler();
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
+        overlayWidgetNewEventHandlerRegistration.removeHandler();
     }
 
     /**
