@@ -14,13 +14,12 @@
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create;
 
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +78,16 @@ public class ActionBarCreatePanelController {
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
             public void onClick(final OverlayWidget newChild, final boolean sibling) {
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild,
-                        sibling ? overlayWidget.getParentOverlayWidget() : overlayWidget,
-                        sibling ? overlayWidget.getIndex() + 1 : 0,
-                        AmendmentAction.CREATION, sourceFileController.getDocumentController()));
+                if (sibling) {
+                    documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget.getParentOverlayWidget(),
+                            overlayWidget, newChild,
+                            overlayWidget.getIndex() + 1));
+                } else {
+                    // this is a child, by default add it as the first element (or last, TBD)
+                    documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget,
+                            overlayWidget, newChild, overlayWidget.getChildOverlayWidgets().size() - 1));
+                }
+
             }
         });
     }
@@ -143,7 +148,7 @@ public class ActionBarCreatePanelController {
     }
 
     public void clearHighlight() {
-       highlightedNumber = -1;
+        highlightedNumber = -1;
     }
 
     public void highlightNext() {

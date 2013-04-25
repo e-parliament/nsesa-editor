@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A reference to an {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}, used by a
- * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder} to find the correct
+ * {@link org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder} to find the correct
  * widget to amend, and used when passing information when creating a new element.
  *
  * Date: 10/07/12 22:34

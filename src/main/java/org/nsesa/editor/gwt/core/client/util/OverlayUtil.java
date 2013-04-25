@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.select.Selector;
 

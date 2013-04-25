@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy;
 /**
  * <code>PaginationView</code> view offers general pagination support functionality.
  * Specifically it is used in the second tabbed panel of the application
- * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView} where the
+ * {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelView} where the
  * existing amendments are displayed in a "pagination" way.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>

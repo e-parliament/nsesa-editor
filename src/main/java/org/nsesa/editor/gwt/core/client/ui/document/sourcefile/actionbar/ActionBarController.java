@@ -23,10 +23,10 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetDeleteEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetModifyEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -34,7 +34,6 @@ import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create.
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create.ActionBarCreatePanelView;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import java.util.logging.Logger;
 
@@ -158,27 +157,19 @@ public class ActionBarController {
                 }
             }
         });
-
-        // hide this panel as soon as the an amendment create event was published
-        amendmentContainerCreateEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerCreateEvent event) {
-                popupPanel.hide();
-            }
-        });
     }
 
     protected void onModifyClick(ClickEvent event) {
         event.stopPropagation();
         if (overlayWidget != null) {
-            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.MODIFICATION, sourceFileController.getDocumentController()));
+            documentEventBus.fireEvent(new OverlayWidgetModifyEvent(overlayWidget));
         }
     }
 
     protected void onDeleteClick(ClickEvent event) {
         event.stopPropagation();
         if (overlayWidget != null) {
-            documentEventBus.fireEvent(new AmendmentContainerCreateEvent(overlayWidget, null, 0, AmendmentAction.DELETION, sourceFileController.getDocumentController()));
+            documentEventBus.fireEvent(new OverlayWidgetDeleteEvent(overlayWidget));
         }
     }
 
@@ -301,7 +292,7 @@ public class ActionBarController {
     public void attach(final OverlayWidget target, final DocumentController documentController) {
         // only perform the world if the new target overlay widget is actually different
         // this made a huge difference in re-flow/repainting of the browser
-        if (overlayWidget != target) {
+        if (overlayWidget != target || !view.asWidget().isVisible()) {
             // if our action bar view has not yet been added to the rootpanel, then do so now.
             if (!view.asWidget().isAttached()) {
                 RootLayoutPanel.get().add(view);

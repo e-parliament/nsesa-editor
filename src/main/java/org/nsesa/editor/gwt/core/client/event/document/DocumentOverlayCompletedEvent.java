@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 /**
  * An event indicating that the overlaying of the DOM has completed, and is ready for further processing. At this
  * moment, you are free to walk the overlay tree using
- * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#walk(org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor)}.
+ * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#walk(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker.OverlayWidgetVisitor)}.
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$

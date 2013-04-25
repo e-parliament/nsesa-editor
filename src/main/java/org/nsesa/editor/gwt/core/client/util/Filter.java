@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
+
 import java.util.Comparator;
 
 /**
@@ -21,7 +23,7 @@ import java.util.Comparator;
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 3/12/12 13:49
  */
-public class Filter<T> {
+public class Filter<T extends OverlayWidgetAware> {
 
     private int start;
     private int size;

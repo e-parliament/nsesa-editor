@@ -21,15 +21,12 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
-import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelView;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileView;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.logging.Logger;
 
@@ -67,9 +64,6 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
     TabLayoutPanel tabPanel;
 
     @UiField(provided = true)
-    AmendmentsPanelView amendmentsPanelView;
-
-    @UiField(provided = true)
     SourceFileView sourceFileView;
 
     @UiField(provided = true)
@@ -88,14 +82,12 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
     @Inject
     public DocumentViewImpl(final DocumentEventBus documentEventBus,
-                            final AmendmentsPanelController amendmentsPanelController,
                             final InfoPanelController infoPanelController,
                             final SourceFileController sourceFileController,
                             final org.nsesa.editor.gwt.core.client.ui.document.resources.Resources resources
     ) {
 
         this.documentEventBus = documentEventBus;
-        this.amendmentsPanelView = amendmentsPanelController.getView();
         this.sourceFileView = sourceFileController.getView();
         this.infoPanelView = infoPanelController.getView();
         this.resources = resources;

@@ -20,8 +20,8 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
@@ -188,8 +188,8 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         if (validate()) {
             // set up the source reference so we can re-inject this amendment later.
             final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
-                    dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
-                    dialogContext.getParentOverlayWidget().getNamespaceURI(),
+                    dialogContext.getReferenceOverlayWidget() == dialogContext.getOverlayWidget(),
+                    dialogContext.getOverlayWidget().getNamespaceURI(),
                     amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
                     dialogContext.getOverlayWidget().getType(),
                     dialogContext.getIndex());

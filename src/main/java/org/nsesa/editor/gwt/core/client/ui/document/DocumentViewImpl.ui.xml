@@ -16,7 +16,6 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:sourcefile='urn:import:org.nsesa.editor.gwt.core.client.ui.document.sourcefile'
-             xmlns:amendments='urn:import:org.nsesa.editor.gwt.core.client.ui.document.amendments'
              xmlns:info='urn:import:org.nsesa.editor.gwt.core.client.ui.document.info'
         >
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.document.resources.Resources'/>
@@ -99,10 +98,10 @@
                     <g:header>Document</g:header>
                     <sourcefile:SourceFileView ui:field="sourceFileView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
-                <g:tab>
-                    <g:header>Amendments</g:header>
-                    <amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>
-                </g:tab>
+                <!--<g:tab>-->
+                    <!--<g:header>Amendments</g:header>-->
+                    <!--<amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>-->
+                <!--</g:tab>-->
                 <g:tab>
                     <g:header>Info</g:header>
                     <info:InfoPanelView ui:field="infoPanelView"/>

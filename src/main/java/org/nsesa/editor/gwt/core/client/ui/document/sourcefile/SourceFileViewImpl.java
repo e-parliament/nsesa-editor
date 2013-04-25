@@ -23,7 +23,7 @@ import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarView;

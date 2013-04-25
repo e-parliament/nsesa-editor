@@ -16,26 +16,18 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.SetWindowTitleEvent;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
-
-import java.util.List;
 
 /**
  * Main controller, responsible for loading and rendering, and entry point for executing actions on a document.
@@ -68,28 +60,6 @@ public interface DocumentController {
      * @param message the message to show, if any
      */
     void showLoadingIndicator(boolean show, String message);
-
-    /**
-     * Apply a selection to a set of amendment controllers, and keep only those that pass the
-     * {@link Selection#select(Object)} filter.
-     *
-     * @param selection the selection to filter
-     */
-    void applySelection(final Selection<AmendmentController> selection);
-
-    /**
-     * Add a set of amendment controllers to the list of selected amendment controllers for this document.
-     *
-     * @param amendmentControllers the amendment controllers to add to the selection
-     */
-    void addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers);
-
-    /**
-     * Remove a set of amendment controllers from the list of selected amendment controllers for this document.
-     *
-     * @param amendmentControllers the amendment controllers to remove from the selection
-     */
-    void removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers);
 
     /**
      * Register a new mode to use under a given <tt>key</tt>. We can then check for the existing of this mode
@@ -140,38 +110,11 @@ public interface DocumentController {
 
     /**
      * Callback when the document content was successfully received. Will set the received content on the
-     * {@link #getSourceFileController()}, and via a deferred
-     * command call the amendments to be fetched via {@link #fetchAmendments()}.
+     * {@link #getSourceFileController()}..
      *
      * @param content the received HTML content to be place in the source file controller
      */
     void onDocumentContentLoaded(final String content);
-
-    /**
-     * Fetch the amendments via the {@link ServiceFactory}'s
-     * {@link org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService#getAmendmentContainers(org.nsesa.editor.gwt.core.shared.ClientContext)},
-     * which upon successful returning, calls {@link #onAmendmentContainerDTOsLoaded(org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO[])}.
-     * <p/>
-     * This call is supposed to retrieve all available amendments for this user for the current document translation.
-     * <p/>
-     * If this call fails, a {@link CriticalErrorEvent} is fired on the global event bus.
-     */
-    void fetchAmendments();
-
-    /**
-     * Callback when the amendments have been received. Will subsequently place the received amendment DTOs on the
-     * {@link AmendmentManager} to be transformed into {@link AmendmentController}s.
-     * <p/>
-     * Will subsequently execute a deferred command to do the overlaying of the received content to build up the
-     * higher level tree of {@link OverlayWidget}s.
-     * <p/>
-     * When done, we request an injection of the amendments we have received.
-     * <p/>
-     * Fires a {@link ResizeEvent} on the global event bus to allow components to resize.
-     *
-     * @param amendments the received amendment container DTOs.
-     */
-    void onAmendmentContainerDTOsLoaded(AmendmentContainerDTO[] amendments);
 
     /**
      * Sets the document Data Transfer Object (DTO) on this controller, and this marks the beginning of our document
@@ -206,12 +149,6 @@ public interface DocumentController {
     void setWidth(final String width);
 
     /**
-     * Inject the amendment controllers that have been placed in the {@link AmendmentManager},
-     * and, after injection, do a renumbering to set their local number
-     */
-    void injectAmendments();
-
-    /**
      * Get a {@link DocumentInjector}, responsible for getting the various lower components used in this document
      * controller.
      *
@@ -239,13 +176,6 @@ public interface DocumentController {
      * @return the document DTO.
      */
     DocumentDTO getDocument();
-
-    /**
-     * Get a reference to the amendment manager for this document controller.
-     *
-     * @return the amendment manager
-     */
-    AmendmentManager getAmendmentManager();
 
     /**
      * Get a reference to the creator for this document controller.
@@ -297,13 +227,6 @@ public interface DocumentController {
     ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler();
 
     /**
-     * Get the locally selected amendment controllers for this document controller.
-     *
-     * @return the selected amendment controllers
-     */
-    List<AmendmentController> getSelectedAmendmentControllers();
-
-    /**
      * Get a reference to the diffing manager for this document controller.
      *
      * @return the diffing manager
@@ -316,11 +239,4 @@ public interface DocumentController {
      * @return the source file controller
      */
     SourceFileController getSourceFileController();
-
-    /**
-     * Return a reference to the document-wide singleton for the amendment action panel.
-     *
-     * @return the amendment action panel
-     */
-    AmendmentActionPanelController getAmendmentActionPanelController();
 }

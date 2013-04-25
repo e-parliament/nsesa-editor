@@ -212,7 +212,7 @@ public class DefaultLocator implements Locator {
 
     /**
      * Default 'new' notation for an {@link OverlayWidget} that has been introduced by an
-     * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointProvider}. Returns '(new)'.
+     * {@link org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointProvider}. Returns '(new)'.
      *
      * @param languageIso the ISO code of the language
      * @return the new notation

@@ -18,10 +18,10 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerEditEventHandler;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEventHandler;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEvent;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
@@ -96,7 +96,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     /**
      * The dialog context, giving access to the {@link AmendmentContainerDTO},
-     * {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}, ...
+     * {@link org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController}, ...
      */
     private DialogContext dialogContext;
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
@@ -136,6 +136,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
             public void onEvent(AmendmentContainerCreateEvent event) {
                 dialogContext = new DialogContext();
                 dialogContext.setOverlayWidget(event.getOverlayWidget());
+                dialogContext.setReferenceOverlayWidget(event.getReference());
                 dialogContext.setParentOverlayWidget(event.getParentOverlayWidget());
                 dialogContext.setIndex(event.getIndex());
                 dialogContext.setAmendmentAction(event.getAmendmentAction());

@@ -15,14 +15,14 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -70,12 +70,6 @@ public interface DocumentInjector extends Ginjector {
     DocumentEventBus getDocumentEventBus();
 
     /**
-     * Get the amendments panel controller.
-     * @return the amendments panel controller.
-     */
-    AmendmentsPanelController getAmendmentsPanelController();
-
-    /**
      * Get the source file controller.
      * @return the source file controller
      */
@@ -106,12 +100,6 @@ public interface DocumentInjector extends Ginjector {
     ActionBarController getActionBarController();
 
     /**
-     * Get the amendment action panel controller.
-     * @return the amendent action panel controller
-     */
-    AmendmentActionPanelController getAmendmentActionPanelController();
-
-    /**
      * Get the info panel tab controller.
      * @return the info panel controller
      */
@@ -124,28 +112,10 @@ public interface DocumentInjector extends Ginjector {
     DocumentHeaderController getDocumentHeaderController();
 
     /**
-     * Get the amendment manager.
-     * @return the amendment manager
-     */
-    AmendmentManager getAmendmentManager();
-
-    /**
      * Get the local overlay widget reference handler for this document controller.
      * @return the local overlay widget reference handler
      */
     ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler();
-
-    /**
-     * Get an amendment controller.
-     * @return an amendment controller
-     */
-    AmendmentController getAmendmentController();
-
-    /**
-     * Get the header controller for the amendments panel.
-     * @return the amendments header controller
-     */
-    AmendmentsHeaderController getAmendmentsHeaderController();
 
     /**
      * Get the diffing manager for this document controller.

@@ -13,13 +13,15 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
+
 /**
  * A <code>Selection</code> is an object which determines true or false for a given input
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 28/11/12 10:28
  */
-public interface Selection<T> {
+public interface Selection<T extends OverlayWidgetAware> {
 
     /**
      * Check whether or not the input is "selected"
@@ -32,7 +34,7 @@ public interface Selection<T> {
      * Special selection to return false for any given input
      * @param <T>
      */
-    static class NoneSelection<T> implements Selection<T> {
+    static class NoneSelection<T extends OverlayWidgetAware> implements Selection<T> {
         /**
          * Return false all the time
          * @param o
@@ -48,7 +50,7 @@ public interface Selection<T> {
      * Special selection to return true for any given input
      * @param <T>
      */
-    static class AllSelection<T> implements Selection<T> {
+    static class AllSelection<T extends OverlayWidgetAware> implements Selection<T> {
         /**
          * Return True all the time
          * @param o

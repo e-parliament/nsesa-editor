@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 
 /**
  * Date: 18/01/13 15:13
@@ -23,39 +23,42 @@ import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
  */
 public class OverlayWidgetListenerMock implements OverlayWidgetListener {
     @Override
-    public boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-        return false;
+    public boolean beforeOverlayWidgetAwareAdded(OverlayWidget overlayWidget, OverlayWidgetAware amendmentController) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
+    public void afterOverlayWidgetAwareAdded(OverlayWidget overlayWidget, OverlayWidgetAware amendmentController) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-        return false;
+    public boolean beforeOverlayWidgetAwareRemoved(OverlayWidget overlayWidget, OverlayWidgetAware amendmentController) {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
+    public void afterOverlayWidgetAwareRemoved(OverlayWidget overlayWidget, OverlayWidgetAware amendmentController) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean beforeOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child) {
-        return false;
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void afterOverlayWidgetAdded(OverlayWidget overlayWidget, OverlayWidget child) {
-
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean beforeOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child) {
-        return false;
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void afterOverlayWidgetRemoved(OverlayWidget overlayWidget, OverlayWidget child) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

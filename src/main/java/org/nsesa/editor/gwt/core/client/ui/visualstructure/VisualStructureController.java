@@ -19,11 +19,11 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
@@ -103,7 +103,7 @@ public class VisualStructureController {
     }
 
     /**
-     * Register handlers for {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
+     * Register handlers for {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent} and {@link OverlayWidgetNewEvent} gwt events.
      * It also create a drafting callback to be called when selecting children from drafting view interface
      * When those events occur <code>VisualStructureView</code> and <code>VisualStructureAttributesView</code> widgets are refreshed.
      */
@@ -124,10 +124,10 @@ public class VisualStructureController {
                 }
             }
         });
-        amendmentContainerCreateEventHandlerRegistration = eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = eventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
             @Override
-            public void onEvent(AmendmentContainerCreateEvent event) {
-                refreshView(event.getOverlayWidget(), null);
+            public void onEvent(OverlayWidgetNewEvent event) {
+                refreshView(event.getReference(), null);
             }
         });
     }

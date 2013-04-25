@@ -17,8 +17,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
@@ -234,14 +233,14 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      *
      * @param amendmentController the amendment controller to add.
      */
-    void addAmendmentController(AmendmentController amendmentController);
+    void addOverlayWidgetAware(OverlayWidgetAware amendmentController);
 
     /**
      * Remove an amendment controller from this overlay widget.
      *
      * @param amendmentController the amendment controller to remove.
      */
-    void removeAmendmentController(AmendmentController amendmentController);
+    void removeAmendmentController(OverlayWidgetAware amendmentController);
 
     /**
      * Returns the type of the overlay widget (defaults to the local node name - so without prefix, if any).
@@ -389,7 +388,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      *
      * @return the amendment controllers.
      */
-    AmendmentController[] getAmendmentControllers();
+    List<OverlayWidgetAware> getOverlayWidgetAwareList();
 
     /**
      * Get the index of this widget in its parent's widget collection, but only counting the same types (so, if there

@@ -13,22 +13,16 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.core.client.event.selection.*;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.*;
-import org.nsesa.editor.gwt.core.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.event.amendments.*;
 import org.nsesa.editor.gwt.core.client.event.document.*;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEventHandler;
@@ -39,11 +33,7 @@ import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -54,8 +44,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.*;
@@ -130,19 +118,13 @@ public class DefaultDocumentController implements DocumentController {
     protected String documentID;
 
     /**
-     * The amendment manager, responsible for storing and filtering the {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}s.
-     */
-    @Scope(DOCUMENT)
-    protected AmendmentManager amendmentManager;
-
-    /**
      * Reference handler for overlay widgets in this document.
      */
     @Scope(DOCUMENT)
     protected ReferenceHandler<OverlayWidget> localOverlayWidgetReferenceHandler;
 
     /**
-     * The diffing manager, responsible for performing diffs on {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}s.
+     * The diffing manager, responsible for performing diffs on {@link org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController}s.
      */
     @Scope(DOCUMENT)
     protected DiffingManager diffingManager;
@@ -165,23 +147,6 @@ public class DefaultDocumentController implements DocumentController {
     @Scope(DOCUMENT)
     protected SourceFileController sourceFileController;
 
-    /**
-     * UI controller for the amendments panel tab.
-     */
-    @Scope(DOCUMENT)
-    protected AmendmentsPanelController amendmentsPanelController;
-
-    /**
-     * UI controller for the amendments panel header.
-     */
-    @Scope(DOCUMENT)
-    protected AmendmentsHeaderController amendmentsHeaderController;
-
-    /**
-     * UI controller for the amendments panel header.
-     */
-    @Scope(DOCUMENT)
-    protected AmendmentActionPanelController amendmentActionPanelController;
 
     /**
      * UI controller for the info panel tab.
@@ -198,18 +163,13 @@ public class DefaultDocumentController implements DocumentController {
     /**
      * Used to validate the movement of overlay widgets within the source text structure
      */
-    @Scope(DOCUMENT)
+    @Scope(EDITOR)
     protected Mover mover;
-
-    /**
-     * A list of selected document controllers on which actions can be performed (tabling, deleting, ...)
-     */
-    private List<AmendmentController> selectedAmendmentControllers = new ArrayList<AmendmentController>();
 
     /**
      * A list of supported {@link org.nsesa.editor.gwt.core.client.mode.DocumentMode}s with their registration key.
      */
-    private final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
+    protected final Map<String, DocumentMode<? extends DocumentState>> documentModes = new LinkedHashMap<String, DocumentMode<? extends DocumentState>>();
 
     // ------------- event handler registration -----------
     private HandlerRegistration switchTabEventHandlerRegistration;
@@ -218,18 +178,10 @@ public class DefaultDocumentController implements DocumentController {
     private HandlerRegistration amendmentControllerSelectEventHandlerRegistration;
     private HandlerRegistration amendmentControllerSelectionActionEventHandlerRegistration;
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerUpdatedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
     private HandlerRegistration notificationEventHandlerRegistration;
     private HandlerRegistration confirmationEventHandlerRegistration;
     private HandlerRegistration criticalEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
     private HandlerRegistration documentScrollEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
     private HandlerRegistration overlayWidgetSelectEventHandlerRegistration;
     private HandlerRegistration overlayWidgetMoveEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
@@ -257,31 +209,23 @@ public class DefaultDocumentController implements DocumentController {
         if (documentInjector == null)
             throw new UnsupportedOperationException("DocumentInjector is null. Cannot continue.");
 
-        this.amendmentManager = documentInjector.getAmendmentManager();
         this.localOverlayWidgetReferenceHandler = documentInjector.getLocalOverlayWidgetReferenceHandler();
         this.documentEventBus = documentInjector.getDocumentEventBus();
         this.view = documentInjector.getDocumentView();
         this.style = documentInjector.getDocumentViewCss();
-        this.amendmentsPanelController = documentInjector.getAmendmentsPanelController();
 
         this.diffingManager = documentInjector.getDiffingManager();
         this.infoPanelController = documentInjector.getInfoPanelController();
         this.sourceFileController = documentInjector.getSourceFileController();
         this.documentHeaderController = documentInjector.getDocumentHeaderController();
         this.deadlineController = documentInjector.getDeadlineController();
-        this.amendmentsHeaderController = documentInjector.getAmendmentsHeaderController();
-        this.amendmentActionPanelController = documentInjector.getAmendmentActionPanelController();
 
         // set references in the child controllers
         this.diffingManager.setDocumentController(this);
-        this.amendmentManager.setDocumentController(this);
-        this.amendmentManager.registerListeners();
         this.infoPanelController.setDocumentController(this);
         this.sourceFileController.setDocumentController(this);
-        this.amendmentsPanelController.setDocumentController(this);
         this.documentHeaderController.setDocumentController(this);
         this.deadlineController.setDocumentController(this);
-        this.amendmentsHeaderController.setDocumentController(this);
 
     }
 
@@ -338,37 +282,6 @@ public class DefaultDocumentController implements DocumentController {
             }
         });
 
-        // forward the amendment injected event to the parent event bus
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-                clientFactory.getEventBus().fireEvent(event);
-            }
-        });
-
-        // when we detect a scrolling event, hide the amendment action panel
-        documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
-            @Override
-            public void onEvent(DocumentScrollEvent event) {
-                amendmentActionPanelController.hide();
-            }
-        });
-
-        // forward the edit event
-        amendmentContainerEditEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerEditEvent.TYPE, new AmendmentContainerEditEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerEditEvent event) {
-                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                clientFactory.getEventBus().fireEvent(event);
-            }
-        });
-
         // forward the critical error event
         criticalEventHandlerRegistration = documentEventBus.addHandler(CriticalErrorEvent.TYPE, new CriticalErrorEventHandler() {
             @Override
@@ -393,127 +306,13 @@ public class DefaultDocumentController implements DocumentController {
             }
         });
 
-        // after an amendment has been saved, we have to redo its diffing
-        amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerSavedEvent event) {
-                if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-            }
-        });
-
-        // if an amendment has been successfully deleted, we need to update our selection and active widget
-        // (since it might have been part of it), and renumber the existing amendments locally
-        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerDeletedEvent event) {
-                final AmendmentController amendmentController = event.getAmendmentController();
-                // remove from the selection, if it existed
-                removeFromSelectedAmendmentControllers(amendmentController);
-                documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
-
-                if (amendmentController.getAmendedOverlayWidget() != null) {
-                    if (amendmentController.getAmendedOverlayWidget() == sourceFileController.getActiveOverlayWidget()) {
-                        sourceFileController.setActiveOverlayWidget(null);
-                    }
-                    amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
-                    sourceFileController.renumberAmendments();
-                }
-            }
-        });
-
-        // simple logging of amendment container status transitions
-        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                LOG.info("Amendment " + event.getAmendmentController().getModel() + " had its status updated from "
-                        + event.getOldStatus() + " to " + event.getAmendmentController().getModel().getAmendmentContainerStatus());
-            }
-        });
-
-        // forward the create event to the parent event bus
-        amendmentContainerCreateEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerCreateEvent event) {
-                clientFactory.getEventBus().fireEvent(event);
-            }
-        });
-
-        // forward an injection request to the amendment manager, and update the local numbering
-        amendmentContainerInjectEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectEvent.TYPE, new AmendmentContainerInjectEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectEvent event) {
-                for (final OverlayWidget overlayWidget : sourceFileController.getOverlayWidgets()) {
-                    for (final AmendmentContainerDTO amendmentContainerDTO : event.getAmendments()) {
-                        amendmentManager.injectSingleAmendment(amendmentContainerDTO, overlayWidget, DefaultDocumentController.this);
-                    }
-                }
-                // renumber amendments
-                sourceFileController.renumberAmendments();
-            }
-        });
-
-        // if an amendment is updated, update the revision and renumber the amendments
-        amendmentContainerUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerUpdatedEvent event) {
-                final OverlayWidget overlayWidget = event.getOldRevision().getAmendedOverlayWidget();
-                if (overlayWidget != null) {
-                    overlayWidget.removeAmendmentController(event.getOldRevision());
-                    overlayWidget.addAmendmentController(event.getNewRevision());
-                    sourceFileController.renumberAmendments();
-                }
-            }
-        });
-
         // when the document should be reloaded, clear all amendments (they will be requested later again)
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
                 // clear the previous amendable widgets
-                sourceFileController.clearAmendableWidgets();
-                // make sure all amendment controllers are 'uninjected'
-                for (final AmendmentController ac : amendmentManager.getAmendmentControllers()) {
-                    if (ac.getDocumentController() == DefaultDocumentController.this) {
-                        ac.setDocumentController(null);
-                    }
-                }
+                sourceFileController.clearOverlayWidgets();
                 loadDocumentContent();
-            }
-        });
-
-        // execute an action on the selected amendments
-        amendmentControllerSelectionActionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerSelectionActionEvent.TYPE, new AmendmentControllerSelectionActionEventHandler() {
-            @Override
-            public void onEvent(AmendmentControllerSelectionActionEvent event) {
-                event.getAction().execute(selectedAmendmentControllers);
-            }
-        });
-
-        // apply a selection
-        amendmentControllerSelectEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerSelectionEvent.TYPE, new AmendmentControllerSelectionEventHandler() {
-            @Override
-            public void onEvent(AmendmentControllerSelectionEvent event) {
-                applySelection(event.getSelection());
-            }
-        });
-
-        // add an amendment to the selection
-        amendmentControllerAddToSelectionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerAddToSelectionEvent.TYPE, new AmendmentControllerAddToSelectionEventHandler() {
-            @Override
-            public void onEvent(AmendmentControllerAddToSelectionEvent event) {
-                addToSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
-            }
-        });
-
-        // remove an amendment from the selection
-        amendmentControllerRemovedFromSelectionEventHandlerRegistration = documentEventBus.addHandler(AmendmentControllerRemoveFromSelectionEvent.TYPE, new AmendmentControllerRemoveFromSelectionEventHandler() {
-            @Override
-            public void onEvent(AmendmentControllerRemoveFromSelectionEvent event) {
-                removeFromSelectedAmendmentControllers(event.getSelected().toArray(new AmendmentController[event.getSelected().size()]));
             }
         });
 
@@ -557,18 +356,10 @@ public class DefaultDocumentController implements DocumentController {
         amendmentControllerSelectEventHandlerRegistration.removeHandler();
         amendmentControllerSelectionActionEventHandlerRegistration.removeHandler();
         documentRefreshRequestEventHandlerRegistration.removeHandler();
-        amendmentContainerUpdatedEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectEventHandlerRegistration.removeHandler();
-        amendmentContainerCreateEventHandlerRegistration.removeHandler();
-        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
-        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
-        amendmentContainerSavedEventHandlerRegistration.removeHandler();
         notificationEventHandlerRegistration.removeHandler();
         confirmationEventHandlerRegistration.removeHandler();
         criticalEventHandlerRegistration.removeHandler();
-        amendmentContainerEditEventHandlerRegistration.removeHandler();
         documentScrollEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
         overlayWidgetSelectEventHandlerRegistration.removeHandler();
         overlayWidgetMoveEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
@@ -584,43 +375,6 @@ public class DefaultDocumentController implements DocumentController {
      */
     public void showLoadingIndicator(boolean show, String message) {
         view.showLoadingIndicator(show, message);
-    }
-
-    /**
-     * Apply a selection to a set of amendment controllers, and keep only those that pass the
-     * {@link org.nsesa.editor.gwt.core.client.util.Selection#select(Object)} filter.
-     *
-     * @param selection the selection to filter
-     */
-    public void applySelection(final Selection<AmendmentController> selection) {
-        selectedAmendmentControllers.clear();
-        List<AmendmentController> toAdd = new ArrayList<AmendmentController>(Collections2.filter(amendmentManager.getAmendmentControllers(), new Predicate<AmendmentController>() {
-            @Override
-            public boolean apply(AmendmentController input) {
-                return selection.select(input);
-            }
-        }));
-        addToSelectedAmendmentControllers(toAdd.toArray(new AmendmentController[toAdd.size()]));
-    }
-
-    /**
-     * Add a set of amendment controllers to the list of selected amendment controllers for this document.
-     *
-     * @param amendmentControllers the amendment controllers to add to the selection
-     */
-    public void addToSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        selectedAmendmentControllers.addAll(Arrays.asList(amendmentControllers));
-        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
-    }
-
-    /**
-     * Remove a set of amendment controllers from the list of selected amendment controllers for this document.
-     *
-     * @param amendmentControllers the amendment controllers to remove from the selection
-     */
-    public void removeFromSelectedAmendmentControllers(final AmendmentController... amendmentControllers) {
-        selectedAmendmentControllers.removeAll(Arrays.asList(amendmentControllers));
-        documentEventBus.fireEvent(new AmendmentControllerSelectedEvent(selectedAmendmentControllers));
     }
 
     /**
@@ -659,7 +413,7 @@ public class DefaultDocumentController implements DocumentController {
      *
      * @return <tt>true</tt> if the diff mode is active.
      */
-    private boolean isDiffModeActive() {
+    protected boolean isDiffModeActive() {
         final DocumentMode<ActiveState> diffMode = (DocumentMode<ActiveState>) getMode(DiffMode.KEY);
         return diffingManager != null && diffMode != null && diffMode.getState().isActive();
     }
@@ -740,8 +494,7 @@ public class DefaultDocumentController implements DocumentController {
 
     /**
      * Callback when the document content was successfully received. Will set the received content on the
-     * {@link #getSourceFileController()}, and via a deferred
-     * command call the amendments to be fetched via {@link #fetchAmendments()}.
+     * {@link #getSourceFileController()}.
      *
      * @param content the received HTML content to be place in the source file controller
      */
@@ -749,71 +502,6 @@ public class DefaultDocumentController implements DocumentController {
         showLoadingIndicator(true, "Parsing document.");
         sourceFileController.setContent(content);
         showLoadingIndicator(true, "Building document tree.");
-        clientFactory.getScheduler().scheduleDeferred(new Command() {
-            @Override
-            public void execute() {
-                fetchAmendments();
-            }
-        });
-    }
-
-    /**
-     * Fetch the amendments via the {@link org.nsesa.editor.gwt.core.client.ServiceFactory}'s
-     * {@link org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService#getAmendmentContainers(org.nsesa.editor.gwt.core.shared.ClientContext)},
-     * which upon successful returning, calls {@link #onAmendmentContainerDTOsLoaded(org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO[])}.
-     * <p/>
-     * This call is supposed to retrieve all available amendments for this user for the current document translation.
-     * <p/>
-     * If this call fails, a {@link org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent} is fired on the global event bus.
-     */
-    public void fetchAmendments() {
-        serviceFactory.getGwtAmendmentService().getAmendmentContainers(clientFactory.getClientContext(), new AsyncCallback<AmendmentContainerDTO[]>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                final String message = clientFactory.getCoreMessages().errorAmendmentsError();
-                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
-            }
-
-            @Override
-            public void onSuccess(AmendmentContainerDTO[] amendments) {
-                onAmendmentContainerDTOsLoaded(amendments);
-            }
-        });
-    }
-
-    /**
-     * Callback when the amendments have been received. Will subsequently place the received amendment DTOs on the
-     * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentManager} to be transformed into {@link org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController}s.
-     * <p/>
-     * Will subsequently execute a deferred command to do the overlaying of the received content to build up the
-     * higher level tree of {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}s.
-     * <p/>
-     * When done, we request an injection of the amendments we have received.
-     * <p/>
-     * Fires a {@link org.nsesa.editor.gwt.core.client.event.ResizeEvent} on the global event bus to allow components to resize.
-     *
-     * @param amendments the received amendment container DTOs.
-     */
-    public void onAmendmentContainerDTOsLoaded(AmendmentContainerDTO[] amendments) {
-        LOG.info("Received " + amendments.length + " amendments.");
-        amendmentManager.setAmendmentContainerDTOs(amendments);
-
-        clientFactory.getScheduler().scheduleDeferred(new Command() {
-            @Override
-            public void execute() {
-                sourceFileController.overlay();
-                showLoadingIndicator(true, "Done overlaying document.");
-                clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
-                showLoadingIndicator(false, "Done retrieving document.");
-
-                clientFactory.getScheduler().scheduleDeferred(new Command() {
-                    @Override
-                    public void execute() {
-                        injectAmendments();
-                    }
-                });
-            }
-        });
     }
 
     /**
@@ -836,10 +524,6 @@ public class DefaultDocumentController implements DocumentController {
         // TODO check if this is the same document (or, perhaps, keep a cache of documents and their amendments)
         this.document = document;
         this.documentID = document.getDocumentID();
-
-        // clean the amendments
-        if (amendmentManager != null)
-            amendmentManager.getAmendmentControllers().clear();
 
         // update the document title
         this.view.setDocumentTitle(document.getName());
@@ -897,23 +581,6 @@ public class DefaultDocumentController implements DocumentController {
     }
 
     /**
-     * Inject the amendment controllers that have been placed in the {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentManager},
-     * and, after injection, do a renumbering to set their local number
-     */
-    public void injectAmendments() {
-        for (final OverlayWidget root : sourceFileController.getOverlayWidgets()) {
-            amendmentManager.inject(root, this);
-        }
-        clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-                // after the injection, renumber all the amendments.
-                sourceFileController.renumberAmendments();
-            }
-        });
-    }
-
-    /**
      * Get a {@link org.nsesa.editor.gwt.core.client.ui.document.DocumentInjector}, responsible for getting the various lower components used in this document
      * controller.
      *
@@ -948,15 +615,6 @@ public class DefaultDocumentController implements DocumentController {
      */
     public DocumentDTO getDocument() {
         return document;
-    }
-
-    /**
-     * Get a reference to the amendment manager for this document controller.
-     *
-     * @return the amendment manager
-     */
-    public AmendmentManager getAmendmentManager() {
-        return amendmentManager;
     }
 
     /**
@@ -1022,15 +680,6 @@ public class DefaultDocumentController implements DocumentController {
     }
 
     /**
-     * Get the locally selected amendment controllers for this document controller.
-     *
-     * @return the selected amendent controllers
-     */
-    public List<AmendmentController> getSelectedAmendmentControllers() {
-        return selectedAmendmentControllers;
-    }
-
-    /**
      * Get a reference to the diffing manager for this document controller.
      *
      * @return the diffing manager
@@ -1048,14 +697,6 @@ public class DefaultDocumentController implements DocumentController {
         return sourceFileController;
     }
 
-    /**
-     * Return a reference to the document-wide singleton for the amendment action panel.
-     *
-     * @return the amendment action panel
-     */
-    public AmendmentActionPanelController getAmendmentActionPanelController() {
-        return amendmentActionPanelController;
-    }
 
     @Override
     public String toString() {

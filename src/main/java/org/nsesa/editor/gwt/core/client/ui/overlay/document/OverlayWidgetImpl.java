@@ -13,12 +13,16 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.*;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.client.util.NodeUtil;
@@ -75,9 +79,9 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     private List<OverlayWidget> childOverlayWidgets = new ArrayList<OverlayWidget>();
 
     /**
-     * A list of all the amendments on this widget.
+     * A list of {@link OverlayWidgetAware} (amendments or modifiers).
      */
-    private List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private List<OverlayWidgetAware> overlayWidgetAwareList = new ArrayList<OverlayWidgetAware>();
 
     /**
      * Flag to indicate whether or not this widget is amendable by the user (not, that does not mean there are no
@@ -203,7 +207,6 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             this.overlayStrategy = null;
             this.origin = null;
             this.amendable = null;
-            this.amendmentControllers = null;
             this.assignedNumber = null;
             this.amendmentControllersHolderElement = null;
             this.childOverlayWidgets = null;
@@ -288,29 +291,27 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void addAmendmentController(final AmendmentController amendmentController) {
-        if (amendmentController == null) throw new NullPointerException("Cannot add null amendment controller!");
+    public void addOverlayWidgetAware(final OverlayWidgetAware amendment) {
+        if (amendment == null) throw new NullPointerException("Cannot add null amendment controller!");
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendmentControllerAdded(this, amendmentController);
+            vetoed = listener.beforeOverlayWidgetAwareAdded(this, amendment);
 
         if (!vetoed) {
-            if (amendmentControllers.contains(amendmentController)) {
-                throw new RuntimeException("Amendment already exists: " + amendmentController);
+            if (overlayWidgetAwareList.contains(amendment)) {
+                throw new RuntimeException("Amendment already exists: " + amendment);
             }
-            if (!amendmentControllers.add(amendmentController)) {
-                throw new RuntimeException("Could not add amendment controller: " + amendmentController);
+            if (!overlayWidgetAwareList.add(amendment)) {
+                throw new RuntimeException("Could not add amendment controller: " + amendment);
             }
 
             // physical attach
             final HTMLPanel holderElement = getAmendmentControllersHolderElement();
             if (holderElement != null) {
-                holderElement.add(amendmentController.getView());
-                // set up a reference to this widget
-                amendmentController.setAmendedOverlayWidget(this);
+                holderElement.add(amendment.getView());
                 // inform the listener
-                if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
+                if (listener != null) listener.afterOverlayWidgetAwareAdded(this, amendment);
             } else {
                 LOG.severe("No amendment holder panel could be added for this widget " + this);
             }
@@ -320,30 +321,25 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void removeAmendmentController(final AmendmentController amendmentController) {
-        if (amendmentController == null) throw new NullPointerException("Cannot remove null amendment controller!");
+    public void removeAmendmentController(final OverlayWidgetAware amendment) {
+        if (amendment == null) throw new NullPointerException("Cannot remove null amendment controller!");
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendmentControllerRemoved(this, amendmentController);
+            vetoed = listener.beforeOverlayWidgetAwareRemoved(this, amendment);
 
         if (!vetoed) {
-            if (!amendmentControllers.contains(amendmentController)) {
-                throw new RuntimeException("Amendment controller not found: " + amendmentController);
+            if (!getOverlayWidgetAwareList().contains(amendment)) {
+                throw new RuntimeException("Amendment controller not found: " + amendment);
             }
-            if (!amendmentControllers.remove(amendmentController)) {
-                throw new RuntimeException("Could not remove amendment controller: " + amendmentController);
+            if (!getOverlayWidgetAwareList().remove(amendment)) {
+                throw new RuntimeException("Could not remove amendment controller: " + amendment);
             }
-
-            // physical remove
-            amendmentController.getView().asWidget().removeFromParent();
-            amendmentController.getExtendedView().asWidget().removeFromParent();
-
-            // clear reference to this widget
-            amendmentController.setAmendedOverlayWidget(null);
+            // physical remove of the main view
+            amendment.getView().asWidget().removeFromParent();
 
             // inform the listener
-            if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
+            if (listener != null) listener.afterOverlayWidgetAwareRemoved(this, amendment);
         } else {
             LOG.info("OverlayWidget listener veto'ed the removal of the amendment controller.");
         }
@@ -621,7 +617,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public boolean isAmended() {
-        return !amendmentControllers.isEmpty();
+        return !overlayWidgetAwareList.isEmpty();
     }
 
     @Override
@@ -798,8 +794,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public AmendmentController[] getAmendmentControllers() {
-        return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
+    public List<OverlayWidgetAware> getOverlayWidgetAwareList() {
+        return overlayWidgetAwareList;
     }
 
     @Override
@@ -892,7 +888,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      * This will use a
      * depth-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
-     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
+     * Depending on the visitor's return value from {@link OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.
      * <p/>
      * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from

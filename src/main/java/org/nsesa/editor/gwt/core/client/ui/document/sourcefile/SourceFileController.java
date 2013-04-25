@@ -25,23 +25,23 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentOverlayCompletedEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetModifyEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.util.Counter;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -236,7 +236,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * This will use a
      * depth-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
-     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
+     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.
      * <p/>
      * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
@@ -352,7 +352,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      */
     @Override
     public void onDblClick(final OverlayWidget sender, final Event event) {
-        documentEventBus.fireEvent(new AmendmentContainerCreateEvent(sender, null, 0, AmendmentAction.MODIFICATION, documentController));
+        documentEventBus.fireEvent(new OverlayWidgetModifyEvent(sender));
     }
 
     /**
@@ -393,8 +393,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
             @Override
             public boolean visit(OverlayWidget visited) {
                 if (visited.isAmended()) {
-                    for (final AmendmentController amendmentController : visited.getAmendmentControllers()) {
-                        amendmentController.setOrder(counter.incrementAndGet());
+                    for (final OverlayWidgetAware amendmentController : visited.getOverlayWidgetAwareList()) {
+                        // amendmentController.setOrder(counter.incrementAndGet());
                     }
                 }
                 return true;
@@ -443,7 +443,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * Clear the root overlay widget nodes.
      * Does not do any detaching.
      */
-    public void clearAmendableWidgets() {
+    public void clearOverlayWidgets() {
         this.overlayWidgets = new ArrayList<OverlayWidget>();
     }
 

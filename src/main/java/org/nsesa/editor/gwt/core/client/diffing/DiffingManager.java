@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.diffing;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 

@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -47,6 +47,11 @@ public class DialogContext {
      * The amendable widget.
      */
     OverlayWidget overlayWidget;
+
+    /**
+     * The reference overlay widget - this will be the overlay widget to modify;
+     */
+    OverlayWidget referenceOverlayWidget;
 
     /**
      * The logical parent amendable widget (only relevant in case of new elements).
@@ -125,6 +130,14 @@ public class DialogContext {
      */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
+    }
+
+    public OverlayWidget getReferenceOverlayWidget() {
+        return referenceOverlayWidget;
+    }
+
+    public void setReferenceOverlayWidget(OverlayWidget referenceOverlayWidget) {
+        this.referenceOverlayWidget = referenceOverlayWidget;
     }
 
     /**
