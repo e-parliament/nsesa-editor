@@ -75,9 +75,8 @@ public class OverlayStrategySupport {
     }
 
     public Boolean isAmendable(Element element) {
-        return element.getId() != null && !"".equalsIgnoreCase(element.getId());
-//        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
-//        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
+        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
+        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
     }
 
     protected String getAmendableAttributeName() {
