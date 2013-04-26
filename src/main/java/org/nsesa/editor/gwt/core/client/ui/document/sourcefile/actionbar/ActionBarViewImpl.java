@@ -53,11 +53,23 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     Anchor translateAnchor;
     @UiField
     Label location;
+    @UiField
+    HTMLPanel actionPanel;
 
     @Inject
     public ActionBarViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+    }
+
+    @Override
+    public void addWidget(IsWidget isWidget) {
+        actionPanel.add(isWidget);
+    }
+
+    @Override
+    public ComplexPanel getActionPanel() {
+        return actionPanel;
     }
 
     @Override

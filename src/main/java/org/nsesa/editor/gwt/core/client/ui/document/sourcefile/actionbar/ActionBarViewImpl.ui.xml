@@ -60,7 +60,7 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="{res.actionBar} actionBarView">
-        <span class="{res.actions}">
+        <g:HTMLPanel styleName="{res.actions} actions" ui:field="actionPanel">
             <g:Image resource="{resource.amend}" styleName="{res.icon}"/>
             <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
             <!--<g:Image resource="{resource.amend}" styleName="{res.icon}"/>-->
@@ -73,7 +73,7 @@
             <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move" visible="false"/>
             <!--<g:Image resource="{resource.translate}" styleName="{res.icon}"/>-->
             <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate" visible="false"/>
-        </span>
+        </g:HTMLPanel>
         <span class="{res.location}">
             <g:Label ui:field="location" styleName="{res.locationPanel}"/>
         </span>

@@ -13,7 +13,9 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar;
 
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -26,6 +28,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(ActionBarViewImpl.class)
 public interface ActionBarView extends IsWidget {
+
+    void addWidget(IsWidget isWidget);
+
+    ComplexPanel getActionPanel();
 
     /**
      * Get a reference to the modification link.
