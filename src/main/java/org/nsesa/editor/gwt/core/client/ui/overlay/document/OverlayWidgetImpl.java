@@ -766,6 +766,15 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
+    public boolean hasParent(String namespaceURI, String type) {
+        for (OverlayWidget parent : getParentOverlayWidgets()) {
+            if (parent.getNamespaceURI().equalsIgnoreCase(namespaceURI) && parent.getType().equalsIgnoreCase(type))
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public String getUnformattedIndex() {
         if (overlayStrategy == null) return unformattedIndex;
         if (unformattedIndex == null) {

@@ -394,6 +394,11 @@ public class AmendableWidgetImplTest extends GwtTest {
             }
 
             @Override
+            public void setOrder(int order) {
+                // ignore
+            }
+
+            @Override
             public IsWidget getView() {
                 return new HTML();
             }

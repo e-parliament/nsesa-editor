@@ -461,4 +461,13 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      */
     void moveDown();
 
+    /**
+     * Check if this overlay widget is under (meaning one of its matches the given arguments) a certain given overlay widget identified via
+     * the <tt>namespaceURI</tt> and its <tt>type</tt>.
+     * @param namespaceURI  the namespace uri
+     * @param type          the type
+     * @return <tt>true</tt> if it is
+     */
+    boolean hasParent(String namespaceURI, String type);
+
 }
