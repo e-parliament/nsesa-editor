@@ -306,6 +306,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 throw new RuntimeException("Could not add amendment controller: " + amendment);
             }
 
+            amendment.setOverlayWidget(this);
+
             // physical attach
             final HTMLPanel holderElement = getAmendmentControllersHolderElement();
             if (holderElement != null) {
@@ -337,6 +339,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             }
             // physical remove of the main view
             amendment.getView().asWidget().removeFromParent();
+            amendment.setOverlayWidget(null);
 
             // inform the listener
             if (listener != null) listener.afterOverlayWidgetAwareRemoved(this, amendment);
