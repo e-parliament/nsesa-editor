@@ -24,6 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  */
 public interface OverlayWidgetAware {
     void setOverlayWidget(OverlayWidget overlayWidget);
+    void setOrder(int order);
     IsWidget getView();
     IsWidget getExtendedView();
 }
