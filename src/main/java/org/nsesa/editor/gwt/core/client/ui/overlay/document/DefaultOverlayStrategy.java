@@ -43,9 +43,7 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
 
     @Override
     public Boolean isAmendable(Element element) {
-        if (!Arrays.asList("num", "p", "b", "i", "span", "content").contains(element.getAttribute("type").toLowerCase()))
-            return overlayStrategySupport.isAmendable(element);
-        return false;
+        return overlayStrategySupport.isAmendable(element);
     }
 
     @Override
