@@ -225,7 +225,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                         sourceFileController.setActiveOverlayWidget(null);
                     }
                     amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
-                    sourceFileController.renumberAmendments();
+                    sourceFileController.renumberOverlayWidgetsAware();
                 }
             }
         });
@@ -257,7 +257,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                     }
                 }
                 // renumber amendments
-                sourceFileController.renumberAmendments();
+                sourceFileController.renumberOverlayWidgetsAware();
             }
         });
 
@@ -269,7 +269,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                 if (overlayWidget != null) {
                     overlayWidget.removeAmendmentController(event.getOldRevision());
                     overlayWidget.addOverlayWidgetAware(event.getNewRevision());
-                    sourceFileController.renumberAmendments();
+                    sourceFileController.renumberOverlayWidgetsAware();
                 }
             }
         });
@@ -394,7 +394,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void execute() {
                 // after the injection, renumber all the amendments.
-                sourceFileController.renumberAmendments();
+                sourceFileController.renumberOverlayWidgetsAware();
             }
         });
     }

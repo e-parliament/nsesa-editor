@@ -25,7 +25,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentOverlayCompletedEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
@@ -346,7 +345,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     }-*/;
 
     /**
-     * Double click callback; fires a {@link AmendmentContainerCreateEvent} on the private document bus.
+     * Double click callback; fires a {@link OverlayWidgetModifyEvent} on the private document bus.
      *
      * @param sender the overlay widget that was double clicked
      */
@@ -366,7 +365,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     public void onMouseOver(final OverlayWidget sender, final Event event) {
         // we do not allow nested amendments, so if this amendable widget is already introduced by an amendment, do not
         // allow the action bar to be shown.
-        if (!sender.isIntroducedByAnAmendment()) {
+        if (!sender.isIntroducedByAnAmendment() && sender.isAmendable()) {
             actionBarController.attach(sender, documentController);
             actionBarController.setLocation(documentController.getLocator().getLocation(sender, documentController.getDocument().getLanguageIso(), false));
         }
@@ -387,14 +386,14 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * Renumbers the amendments by assigning a local number to be assigned to the amendments in the order they appear
      * in the document.
      */
-    public void renumberAmendments() {
+    public void renumberOverlayWidgetsAware() {
         final Counter counter = new Counter();
         walk(new OverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 if (visited.isAmended()) {
                     for (final OverlayWidgetAware amendmentController : visited.getOverlayWidgetAwareList()) {
-                        // amendmentController.setOrder(counter.incrementAndGet());
+                        amendmentController.setOrder(counter.incrementAndGet());
                     }
                 }
                 return true;
