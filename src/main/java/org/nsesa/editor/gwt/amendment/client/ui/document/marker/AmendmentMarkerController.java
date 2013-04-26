@@ -41,8 +41,9 @@ public class AmendmentMarkerController extends MarkerController {
 
     @Inject
     public AmendmentMarkerController(final DocumentEventBus documentEventBus,
-                                     final MarkerView view) {
+                                     final MarkerView view, final AmendmentManager amendmentManager) {
         super(documentEventBus, view);
+        this.amendmentManager = amendmentManager;
     }
 
     @Override
@@ -85,11 +86,6 @@ public class AmendmentMarkerController extends MarkerController {
                     }
                 }
             }
-            //                scrollPanel.setVerticalScrollPosition(previousScroll);
         }
-    }
-
-    public void setAmendmentManager(AmendmentManager amendmentManager) {
-        this.amendmentManager = amendmentManager;
     }
 }
