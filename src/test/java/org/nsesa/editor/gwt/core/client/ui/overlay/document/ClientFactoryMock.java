@@ -77,6 +77,11 @@ public class ClientFactoryMock implements ClientFactory {
         }
 
         @Override
+        public String errorDocumentContentError(String p0) {
+            return "errorDocumentContentError";
+        }
+
+        @Override
         public String errorDocumentNotfound(String p0) {
             return "errorDocumentNotfound";
         }

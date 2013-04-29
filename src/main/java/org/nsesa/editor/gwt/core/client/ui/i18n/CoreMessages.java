@@ -166,4 +166,7 @@ public interface CoreMessages extends Messages {
 
     @Key("amendment.action.movedown")
     String amendmentActionMoveDown();
+
+    @Key("error.document.content.error")
+    String errorDocumentContentError(String p0);
 }
