@@ -19,7 +19,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
@@ -45,6 +47,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 @Scope(AMENDMENT)
 public class AmendmentActionPanelController {
 
@@ -88,8 +91,6 @@ public class AmendmentActionPanelController {
      * An anchor to move down an amendment.
      */
     protected final Anchor anchorMoveDown = new Anchor();
-
-    private AmendmentManager amendmentManager;
 
     /**
      * The enclosing popup.
@@ -143,8 +144,8 @@ public class AmendmentActionPanelController {
         anchorTableHandlerRegistration = anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final DocumentController documentController = amendmentController.getDocumentController();
-                if (documentController != null) {
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                if (amendmentManager != null) {
                     amendmentManager.tableAmendmentContainers(amendmentController);
                 } else {
                     // you cannot table the amendment if no document controller has been set
@@ -156,8 +157,8 @@ public class AmendmentActionPanelController {
         anchorWithdrawHandlerRegistration = anchorWithdraw.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final DocumentController documentController = amendmentController.getDocumentController();
-                if (documentController != null) {
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                if (amendmentManager != null) {
                     amendmentManager.withdrawAmendmentContainers(amendmentController);
                 } else {
                     // you cannot withdraw the amendment if no document controller has been set
@@ -169,8 +170,8 @@ public class AmendmentActionPanelController {
         anchorDeleteHandlerRegistration = anchorDelete.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final DocumentController documentController = amendmentController.getDocumentController();
-                if (documentController != null) {
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                if (amendmentManager != null) {
                     amendmentManager.deleteAmendmentContainers(amendmentController);
                 } else {
                     // you cannot delete the amendment if no document controller has been set
@@ -265,10 +266,6 @@ public class AmendmentActionPanelController {
     public void setAmendmentController(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
         hideMoveOperations();
-    }
-
-    public void setAmendmentManager(AmendmentManager amendmentManager) {
-        this.amendmentManager = amendmentManager;
     }
 
     /**
