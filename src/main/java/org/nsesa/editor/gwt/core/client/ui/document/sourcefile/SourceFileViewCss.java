@@ -11,17 +11,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.document;
+package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;
 
 import com.google.gwt.resources.client.CssResource;
 
 /**
- * CSS resource for the {@link DocumentView}.
+ * Css resource for the source file view.
  * Date: 24/06/12 16:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface DocumentViewCss extends CssResource {
+public interface SourceFileViewCss extends CssResource {
+    String amendable();
 
+    String immutable();
+
+    String selected();
 }

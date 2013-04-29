@@ -88,6 +88,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      */
     protected final SourceFileView view;
 
+    protected final SourceFileViewCss style;
+
     /**
      * Parent document controller.
      */
@@ -114,7 +116,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
                                 final SourceFileHeaderController sourceFileHeaderController,
                                 final SourceFileView sourceFileView,
                                 final ContentController contentController,
-                                final ActionBarController actionBarController) {
+                                final ActionBarController actionBarController,
+                                final SourceFileViewCss style) {
 
         this.view = sourceFileView;
         this.documentEventBus = documentEventBus;
@@ -122,6 +125,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         this.sourceFileHeaderController = sourceFileHeaderController;
         this.contentController = contentController;
         this.actionBarController = actionBarController;
+        this.style = style;
 
         this.markerController.setSourceFileController(this);
         this.contentController.setSourceFileController(this);
@@ -416,8 +420,15 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param activeOverlayWidget the active overlay widget
      */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
+        if (this.activeOverlayWidget != null) {
+            activeOverlayWidget.asWidget().removeStyleName(style.selected());
+        }
         LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
+
+        if (this.activeOverlayWidget != null) {
+            this.activeOverlayWidget.asWidget().addStyleName(style.selected());
+        }
     }
 
     /**

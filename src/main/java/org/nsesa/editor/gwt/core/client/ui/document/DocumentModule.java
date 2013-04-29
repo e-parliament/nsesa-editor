@@ -17,10 +17,10 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.*;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineModule;
 import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderModule;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileViewCss;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarModule;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentModule;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerModule;
@@ -48,8 +48,18 @@ public class DocumentModule extends AbstractGinModule {
 
     @Inject
     @Provides
+    @Singleton
     DocumentViewCss createStyle(final Resources resources) {
         DocumentViewCss style = resources.style();
+        style.ensureInjected();
+        return style;
+    }
+    
+    @Inject
+    @Provides
+    @Singleton
+    SourceFileViewCss createSourceFileViewStyle(final org.nsesa.editor.gwt.core.client.ui.document.sourcefile.Resources resources) {
+        SourceFileViewCss style = resources.style();
         style.ensureInjected();
         return style;
     }

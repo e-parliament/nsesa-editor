@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.core.client.event.selection.*;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
@@ -43,10 +42,11 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Mover;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -102,10 +102,6 @@ public class DefaultDocumentController implements DocumentController {
      */
     @Scope(DOCUMENT)
     protected DocumentView view;
-    /**
-     * Document view CSS resource.
-     */
-    protected DocumentViewCss style;
 
     /**
      * Data Transfer Object (DTO) for a single document translation.
@@ -173,15 +169,10 @@ public class DefaultDocumentController implements DocumentController {
 
     // ------------- event handler registration -----------
     private HandlerRegistration switchTabEventHandlerRegistration;
-    private HandlerRegistration amendmentControllerRemovedFromSelectionEventHandlerRegistration;
-    private HandlerRegistration amendmentControllerAddToSelectionEventHandlerRegistration;
-    private HandlerRegistration amendmentControllerSelectEventHandlerRegistration;
-    private HandlerRegistration amendmentControllerSelectionActionEventHandlerRegistration;
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
     private HandlerRegistration notificationEventHandlerRegistration;
     private HandlerRegistration confirmationEventHandlerRegistration;
     private HandlerRegistration criticalEventHandlerRegistration;
-    private HandlerRegistration documentScrollEventHandlerRegistration;
     private HandlerRegistration overlayWidgetSelectEventHandlerRegistration;
     private HandlerRegistration overlayWidgetMoveEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
@@ -212,7 +203,6 @@ public class DefaultDocumentController implements DocumentController {
         this.localOverlayWidgetReferenceHandler = documentInjector.getLocalOverlayWidgetReferenceHandler();
         this.documentEventBus = documentInjector.getDocumentEventBus();
         this.view = documentInjector.getDocumentView();
-        this.style = documentInjector.getDocumentViewCss();
 
         this.diffingManager = documentInjector.getDiffingManager();
         this.infoPanelController = documentInjector.getInfoPanelController();
@@ -259,26 +249,10 @@ public class DefaultDocumentController implements DocumentController {
             }
         });
 
-          overlayWidgetSelectEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
+        overlayWidgetSelectEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetSelectEvent.TYPE, new OverlayWidgetSelectEventHandler() {
             @Override
             public void onEvent(OverlayWidgetSelectEvent event) {
-                boolean alreadySelected = false;
-                if (sourceFileController.getActiveOverlayWidget() == event.getOverlayWidget()) {
-                    alreadySelected = true;
-                }
-                if (sourceFileController.getActiveOverlayWidget() != null) {
-                    sourceFileController.getActiveOverlayWidget().asWidget().removeStyleName(style.selected());
-                }
                 sourceFileController.setActiveOverlayWidget(event.getOverlayWidget());
-                if (sourceFileController.getActiveOverlayWidget() != null) {
-                    sourceFileController.getActiveOverlayWidget().asWidget().addStyleName(style.selected());
-                }
-
-                // inline editing is currently disabled
-                /*final InlineEditingMode inlineEditingMode = (InlineEditingMode) getMode(InlineEditingMode.KEY);
-                if (alreadySelected && inlineEditingMode != null && inlineEditingMode.getState().isActive()) {
-                    clientFactory.getEventBus().fireEvent(new AttachInlineEditorEvent(event.getAmendableWidget(), DocumentController.this));
-                }*/
             }
         });
 
@@ -339,7 +313,7 @@ public class DefaultDocumentController implements DocumentController {
                         }
                         break;
                     default:
-                        throw new UnsupportedOperationException( event.getMoveType() + " operation is not supported yet");
+                        throw new UnsupportedOperationException(event.getMoveType() + " operation is not supported yet");
                 }
             }
         });
@@ -351,15 +325,10 @@ public class DefaultDocumentController implements DocumentController {
      */
     public void removeListeners() {
         switchTabEventHandlerRegistration.removeHandler();
-        amendmentControllerRemovedFromSelectionEventHandlerRegistration.removeHandler();
-        amendmentControllerAddToSelectionEventHandlerRegistration.removeHandler();
-        amendmentControllerSelectEventHandlerRegistration.removeHandler();
-        amendmentControllerSelectionActionEventHandlerRegistration.removeHandler();
         documentRefreshRequestEventHandlerRegistration.removeHandler();
         notificationEventHandlerRegistration.removeHandler();
         confirmationEventHandlerRegistration.removeHandler();
         criticalEventHandlerRegistration.removeHandler();
-        documentScrollEventHandlerRegistration.removeHandler();
         overlayWidgetSelectEventHandlerRegistration.removeHandler();
         overlayWidgetMoveEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
@@ -473,20 +442,20 @@ public class DefaultDocumentController implements DocumentController {
      * we call {@link #onDocumentContentLoaded(String)} with the received content.
      */
     public void loadDocumentContent() {
-        assert documentID != null : "No documentID set.";
+        assert document.getDocumentID() != null : "No documentID set on the document object.";
         // clean up any previous content - if any
         showLoadingIndicator(true, "Retrieving document.");
-        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentID, new AsyncCallback<String>() {
+        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
-                showLoadingIndicator(false, "Done retrieving document.");
-                final String message = clientFactory.getCoreMessages().errorDocumentError(documentID);
+                showLoadingIndicator(false, "Done retrieving document content.");
+                final String message = clientFactory.getCoreMessages().errorDocumentError(document.getDocumentID());
                 clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message, caught));
             }
 
             @Override
             public void onSuccess(final String content) {
-                showLoadingIndicator(false, "Done retrieving document.");
+                showLoadingIndicator(false, "Done retrieving document content.");
                 onDocumentContentLoaded(content);
             }
         });
@@ -637,6 +606,7 @@ public class DefaultDocumentController implements DocumentController {
 
     /**
      * Get a reference to the reference handler for (local) overlay widgets.
+     *
      * @return the reference handler
      */
     public ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler() {
