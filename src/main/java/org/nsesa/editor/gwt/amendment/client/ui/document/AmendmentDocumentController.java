@@ -123,6 +123,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             this.amendmentsPanelController = amendmentDocumentInjector.getAmendmentsPanelController();
             this.amendmentsPanelController.setDocumentController(this);
             this.amendmentActionPanelController = amendmentDocumentInjector.getAmendmentActionPanelController();
+            this.amendmentsHeaderController = amendmentDocumentInjector.getAmendmentsHeaderController();
+            this.amendmentsHeaderController.setDocumentController(this);
             this.selector = amendmentDocumentInjector.getSelector();
             // install collection filter for the selector
             this.selector.setCollectionFilter(new Selector.CollectionFilter<AmendmentController>() {
