@@ -325,6 +325,7 @@
                     <modules>
                         <module>org.nsesa.editor.gwt.editor.Editor</module>
                     </modules>
+                    <strict>true</strict>
                     <runTarget>editor.html</runTarget>
                 </configuration>
                 <executions>
