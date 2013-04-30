@@ -421,7 +421,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
         if (this.activeOverlayWidget != null) {
-            activeOverlayWidget.asWidget().removeStyleName(style.selected());
+            this.activeOverlayWidget.asWidget().removeStyleName(style.selected());
         }
         LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
