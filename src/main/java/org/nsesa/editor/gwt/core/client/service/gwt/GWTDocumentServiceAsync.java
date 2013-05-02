@@ -80,4 +80,13 @@ public interface GWTDocumentServiceAsync {
      */
     void getRelatedDocuments(ClientContext clientContext, String documentID, AsyncCallback<ArrayList<DocumentDTO>> async);
 
+    /**
+     * Saves the document content with documentID <tt>documentID</tt> to the backend. Note that this does not
+     * create a new version.
+     *
+     * @param clientContext the client context
+     * @param documentID    the documentID
+     * @param content       the XML content
+     */
+    void saveDocumentContent(ClientContext clientContext, String documentID, String content, AsyncCallback<Void> async);
 }

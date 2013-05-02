@@ -60,6 +60,15 @@ public interface GWTDocumentService extends RemoteService {
     String getDocumentContent(ClientContext clientContext, String documentID);
 
     /**
+     * Saves the document content with documentID <tt>documentID</tt> to the backend. Note that this does not
+     * create a new version.
+     * @param clientContext the client context
+     * @param documentID    the documentID
+     * @param content       the XML content
+     */
+    void saveDocumentContent(ClientContext clientContext, String documentID, String content);
+
+    /**
      * Retrieves a fragment of a document (usually a tree under the element identified by <tt>elementID</tt>).
      *
      * @param clientContext the client context
