@@ -13,26 +13,18 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.HashMap;
@@ -95,9 +87,6 @@ public class MarkerController {
         }
     };
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
     private HandlerRegistration switchTabEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
 
@@ -119,31 +108,10 @@ public class MarkerController {
             }
         });
 
-        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerDeletedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
         switchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
             @Override
             public void onEvent(SwitchTabEvent event) {
-                drawAmendmentControllers();
+                drawMarkers();
             }
         });
 
@@ -153,7 +121,7 @@ public class MarkerController {
             public void onEvent(ResizeEvent event) {
                 final int height = event.getHeight() - 122;
                 view.asWidget().setHeight(height + "px");
-                drawAmendmentControllers();
+                drawMarkers();
             }
         });
 
@@ -168,9 +136,6 @@ public class MarkerController {
      */
     public void removeListeners() {
         documentRefreshRequestEventHandlerRegistration.removeHandler();
-        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
-        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
         switchTabEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
     }
@@ -178,7 +143,7 @@ public class MarkerController {
     /**
      * Start a timer to draw the amendment controller markers in one second.
      */
-    private void drawAmendmentControllers() {
+    public void drawMarkers() {
         timer.cancel();
         timer.schedule(1000);
     }
@@ -186,7 +151,7 @@ public class MarkerController {
     /**
      * Clear any existing markers.
      */
-    private void clearMarkers() {
+    public void clearMarkers() {
         view.clearMarkers();
     }
 

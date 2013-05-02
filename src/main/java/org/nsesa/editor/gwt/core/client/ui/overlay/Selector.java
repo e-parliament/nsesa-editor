@@ -48,12 +48,12 @@ public interface Selector<T extends OverlayWidgetAware> {
      *
      * @param amendmentControllers the amendment controllers to add to the selection
      */
-    void addToSelectedAmendmentControllers(final T... amendmentControllers);
+    void addToSelectedAmendmentControllers(final List<T> amendmentControllers);
 
     /**
      * Remove a set of amendment controllers from the list of selected amendment controllers for this document.
      *
      * @param amendmentControllers the amendment controllers to remove from the selection
      */
-    void removeFromSelectedAmendmentControllers(final T... amendmentControllers);
+    void removeFromSelectedAmendmentControllers(final List<T> amendmentControllers);
 }

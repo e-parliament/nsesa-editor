@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.amendment.client.ui.document.amendments;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -22,20 +23,19 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareAddToSelectionEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareRemoveFromSelectionEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
-import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter.AmendmentsFilterController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter.AmendmentsFilterView;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderView;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareAddToSelectionEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareRemoveFromSelectionEvent;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import com.google.gwt.dom.client.Style;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

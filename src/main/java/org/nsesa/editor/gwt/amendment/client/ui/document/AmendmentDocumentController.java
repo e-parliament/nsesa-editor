@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPa
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderController;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
@@ -47,6 +48,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -91,6 +93,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     @Scope(DOCUMENT)
     protected Selector<AmendmentController> selector;
 
+    protected DiffingManager<AmendmentController> diffingManager;
+
 
     // ------------- event handler registration -----------
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
@@ -126,6 +130,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             this.amendmentsHeaderController = amendmentDocumentInjector.getAmendmentsHeaderController();
             this.amendmentsHeaderController.setDocumentController(this);
             this.selector = amendmentDocumentInjector.getSelector();
+            this.diffingManager = amendmentDocumentInjector.getAmendmentDiffingManager();
+            this.diffingManager.setDocumentController(this);
             // install collection filter for the selector
             this.selector.setCollectionFilter(new Selector.CollectionFilter<AmendmentController>() {
                 @Override
@@ -220,7 +226,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             public void onEvent(AmendmentContainerDeletedEvent event) {
                 final AmendmentController amendmentController = event.getAmendmentController();
                 // remove from the selection, if it existed
-                selector.removeFromSelectedAmendmentControllers(amendmentController);
+                selector.removeFromSelectedAmendmentControllers(Arrays.asList(amendmentController));
 
                 if (amendmentController.getAmendedOverlayWidget() != null) {
                     if (amendmentController.getAmendedOverlayWidget() == sourceFileController.getActiveOverlayWidget()) {

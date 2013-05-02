@@ -17,14 +17,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineView;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
-import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarView;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
@@ -70,8 +71,6 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
 
     @Inject
     public SourceFileViewImpl(final DocumentEventBus documentEventBus,
-                              final AmendmentsPanelController amendmentsPanelController,
-                              final InfoPanelController infoPanelController,
                               final ContentController contentController,
                               final MarkerController markerController,
                               final SourceFileHeaderController sourceFileHeaderController,

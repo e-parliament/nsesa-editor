@@ -14,11 +14,10 @@
 package org.nsesa.editor.gwt.core.client.diffing;
 
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -30,7 +29,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * @version $Id$
  */
 @Scope(DOCUMENT)
-public class DefaultDiffingManager implements DiffingManager {
+public class DefaultDiffingManager implements DiffingManager<Object> {
 
     /**
      * Reference to the parent document controller.
@@ -49,10 +48,10 @@ public class DefaultDiffingManager implements DiffingManager {
 
     /**
      * Default no-diffing.
-     * @param method                the diff method
-     * @param amendmentControllers  the amendment controllers to do the diff-ing on
+     * @param method   the diff method
+     * @param objects  the objects to diff
      */
-    public void diff(final DiffMethod method, final AmendmentController... amendmentControllers) {
+    public void diff(final DiffMethod method, final Object... objects) {
         // default is to not do any diffing at all ..
     }
 

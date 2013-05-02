@@ -15,7 +15,6 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.event.selection.*;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -23,7 +22,6 @@ import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -90,19 +88,19 @@ public class DefaultSelector<T extends OverlayWidgetAware> implements Selector<T
                     return selection.select(input);
                 }
             }));
-            addToSelectedAmendmentControllers((T[]) toAdd.toArray());
+            addToSelectedAmendmentControllers(toAdd);
         }
     }
 
     @Override
-    public void addToSelectedAmendmentControllers(T... amendmentControllers) {
-        selectedOverlayWidgetAwareList.addAll(Arrays.asList(amendmentControllers));
+    public void addToSelectedAmendmentControllers(List<T> amendmentControllers) {
+        selectedOverlayWidgetAwareList.addAll(amendmentControllers);
         documentEventBus.fireEvent(new OverlayWidgetAwareSelectedEvent(selectedOverlayWidgetAwareList));
     }
 
     @Override
-    public void removeFromSelectedAmendmentControllers(T... amendmentControllers) {
-        selectedOverlayWidgetAwareList.removeAll(Arrays.asList(amendmentControllers));
+    public void removeFromSelectedAmendmentControllers(List<T> amendmentControllers) {
+        selectedOverlayWidgetAwareList.removeAll(amendmentControllers);
         documentEventBus.fireEvent(new OverlayWidgetAwareSelectedEvent(selectedOverlayWidgetAwareList));
     }
 }

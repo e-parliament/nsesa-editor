@@ -18,6 +18,7 @@ import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderController;
+import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentInjector;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Selector;
 
@@ -64,4 +65,6 @@ public interface AmendmentDocumentInjector extends DocumentInjector {
     AmendmentsHeaderController getAmendmentsHeaderController();
 
     Selector<AmendmentController> getSelector();
+
+    DiffingManager<AmendmentController> getAmendmentDiffingManager();
 }

@@ -55,7 +55,7 @@
             margin: 0;
             position: relative;
             right: 12px;
-            top: -26px;
+            top: -32px;
             float: right;
         }
 

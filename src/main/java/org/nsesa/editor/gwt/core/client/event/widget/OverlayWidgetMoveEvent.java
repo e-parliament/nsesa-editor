@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.event.widget;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
@@ -34,13 +34,13 @@ public class OverlayWidgetMoveEvent extends GwtEvent<OverlayWidgetMoveEventHandl
     public static final Type<OverlayWidgetMoveEventHandler> TYPE = new Type<OverlayWidgetMoveEventHandler>();
     private final OverlayWidget overlayWidget;
     private MoveType moveType;
-    private AmendmentController amendmentController;
+    private OverlayWidgetAware overlayWidgetAware;
 
     public OverlayWidgetMoveEvent(OverlayWidget overlayWidget, MoveType moveType,
-                                  AmendmentController amendmentController) {
+                                  OverlayWidgetAware overlayWidgetAware) {
         this.overlayWidget = overlayWidget;
         this.moveType = moveType;
-        this.amendmentController = amendmentController;
+        this.overlayWidgetAware = overlayWidgetAware;
     }
 
     @Override
@@ -61,8 +61,8 @@ public class OverlayWidgetMoveEvent extends GwtEvent<OverlayWidgetMoveEventHandl
         return moveType;
     }
 
-    public AmendmentController getAmendmentController() {
-        return amendmentController;
+    public OverlayWidgetAware getOverlayWidgetAware() {
+        return overlayWidgetAware;
     }
 
 }

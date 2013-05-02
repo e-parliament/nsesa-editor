@@ -18,7 +18,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
@@ -39,11 +41,48 @@ public class AmendmentMarkerController extends MarkerController {
 
     private AmendmentManager amendmentManager;
 
+
+    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
+
     @Inject
     public AmendmentMarkerController(final DocumentEventBus documentEventBus,
                                      final MarkerView view, final AmendmentManager amendmentManager) {
         super(documentEventBus, view);
         this.amendmentManager = amendmentManager;
+
+        registerListeners();
+    }
+
+    private void registerListeners() {
+        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerDeletedEvent event) {
+                drawMarkers();
+            }
+        });
+
+        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerInjectedEvent event) {
+                drawMarkers();
+            }
+        });
+
+        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
+                drawMarkers();
+            }
+        });
+    }
+
+    public void removeListeners() {
+        super.removeListeners();
+        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
+        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
+        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
     }
 
     @Override

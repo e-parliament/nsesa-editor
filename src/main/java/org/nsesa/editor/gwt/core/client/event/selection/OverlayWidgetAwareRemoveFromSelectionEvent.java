@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.core.client.event.selection;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,13 +28,13 @@ import java.util.List;
 public class OverlayWidgetAwareRemoveFromSelectionEvent extends GwtEvent<OverlayWidgetAwareRemoveFromSelectionEventHandler> {
     public static final Type<OverlayWidgetAwareRemoveFromSelectionEventHandler> TYPE = new Type<OverlayWidgetAwareRemoveFromSelectionEventHandler>();
 
-    private final List<AmendmentController> selected;
+    private final List<OverlayWidgetAware> selected;
 
     /**
      * Create <code>AmendmentControllerRemoveFromSelectionEvent</code> object with the given input
      * @param selected The <code>AmendmentController</code> removed from selection
      */
-    public OverlayWidgetAwareRemoveFromSelectionEvent(final AmendmentController selected) {
+    public OverlayWidgetAwareRemoveFromSelectionEvent(final OverlayWidgetAware selected) {
         this.selected = Arrays.asList(selected);
     }
 
@@ -42,7 +42,7 @@ public class OverlayWidgetAwareRemoveFromSelectionEvent extends GwtEvent<Overlay
      * Create <code>AmendmentControllerRemoveFromSelectionEvent</code> object with the given input list
      * @param selected The <code>AmendmentController</code> list removed from selection
      */
-    public OverlayWidgetAwareRemoveFromSelectionEvent(final List<AmendmentController> selected) {
+    public OverlayWidgetAwareRemoveFromSelectionEvent(final List<OverlayWidgetAware> selected) {
         this.selected = selected;
     }
 
@@ -60,7 +60,7 @@ public class OverlayWidgetAwareRemoveFromSelectionEvent extends GwtEvent<Overlay
      * Return the list of <code>AmendmentController</code> removed from selection
      * @return the list of <code>AmendmentController</code> removed from selection
      */
-    public List<AmendmentController> getSelected() {
+    public List<OverlayWidgetAware> getSelected() {
         return selected;
     }
 }

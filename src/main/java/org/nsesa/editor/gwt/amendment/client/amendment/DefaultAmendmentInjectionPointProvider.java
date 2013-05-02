@@ -77,7 +77,9 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
                 injectionPoint.addOverlayWidget(child, -1, false);
             } else {
                 // insert before the first child amendable widget
-                com.google.gwt.user.client.Element beforeElement = injectionPoint.getChildOverlayWidgets().get(reference.getOffset()).getOverlayElement().cast();
+                final OverlayWidget overlayWidget = injectionPoint.getChildOverlayWidgets().get(reference.getOffset());
+
+                com.google.gwt.user.client.Element beforeElement = overlayWidget.getOverlayElement().cast();
                 DOM.insertBefore(parentElement, childElement, beforeElement);
                 // logical
                 injectionPoint.addOverlayWidget(child, reference.getOffset(), true);

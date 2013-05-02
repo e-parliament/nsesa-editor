@@ -14,7 +14,6 @@
 package org.nsesa.editor.gwt.core.client.diffing;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
@@ -26,14 +25,14 @@ import org.nsesa.editor.gwt.core.shared.DiffMethod;
  * @version $Id$
  */
 @ImplementedBy(DefaultDiffingManager.class)
-public interface DiffingManager {
+public interface DiffingManager<T> {
 
     /**
      * Perform a diff (word or character based) on a set of amendment controllers.
-     * @param method                the diff method
-     * @param amendmentControllers  the amendment controllers to do the diff-ing on
+     * @param method    the diff method
+     * @param toDiff    the entities to diff on
      */
-    void diff(final DiffMethod method, final AmendmentController... amendmentControllers);
+    void diff(final DiffMethod method, final T... toDiff);
 
     /**
      * Sets the parent document controller.
