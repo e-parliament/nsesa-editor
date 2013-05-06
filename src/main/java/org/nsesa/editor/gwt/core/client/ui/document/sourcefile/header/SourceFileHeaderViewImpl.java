@@ -21,9 +21,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 
 import java.util.List;
 
@@ -69,17 +69,24 @@ public class SourceFileHeaderViewImpl extends Composite implements SourceFileHea
     @Override
     public void setAvailableTranslations(final List<DocumentDTO> translations) {
         this.documentTranslations.clear();
-        for (final DocumentDTO translation : translations) {
-            documentTranslations.addItem(translation.getName(), translation.getDocumentID());
+
+        if (translations != null) {
+            for (final DocumentDTO translation : translations) {
+                documentTranslations.addItem(translation.getName(), translation.getDocumentID());
+            }
         }
+        this.documentTranslations.setVisible(translations != null && !translations.isEmpty());
     }
 
     @Override
     public void setRelatedDocuments(List<DocumentDTO> relatedDocuments) {
         this.relatedDocuments.clear();
-        for (final DocumentDTO related : relatedDocuments) {
-            this.relatedDocuments.addItem(related.getName(), related.getDocumentID());
+        if (relatedDocuments != null) {
+            for (final DocumentDTO related : relatedDocuments) {
+                this.relatedDocuments.addItem(related.getName(), related.getDocumentID());
+            }
         }
+        this.relatedDocuments.setVisible(relatedDocuments != null && !relatedDocuments.isEmpty());
     }
 
     @Override

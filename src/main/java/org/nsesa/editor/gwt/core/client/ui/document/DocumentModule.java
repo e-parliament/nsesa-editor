@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineModule;
-import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderModule;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileViewCss;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarModule;
@@ -39,7 +38,6 @@ public class DocumentModule extends AbstractGinModule {
     protected void configure() {
         install(new ContentModule());
         install(new MarkerModule());
-        install(new DocumentHeaderModule());
         install(new DeadlineModule());
         install(new ActionBarModule());
 

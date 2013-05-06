@@ -33,7 +33,6 @@ import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
@@ -126,12 +125,6 @@ public class DefaultDocumentController implements DocumentController {
     protected DiffingManager diffingManager;
 
     /**
-     * UI controller for the document header.
-     */
-    @Scope(DOCUMENT)
-    protected DocumentHeaderController documentHeaderController;
-
-    /**
      * UI controller for the deadline.
      */
     @Scope(DOCUMENT)
@@ -207,14 +200,12 @@ public class DefaultDocumentController implements DocumentController {
         this.diffingManager = documentInjector.getDiffingManager();
         this.infoPanelController = documentInjector.getInfoPanelController();
         this.sourceFileController = documentInjector.getSourceFileController();
-        this.documentHeaderController = documentInjector.getDocumentHeaderController();
         this.deadlineController = documentInjector.getDeadlineController();
 
         // set references in the child controllers
         this.diffingManager.setDocumentController(this);
         this.infoPanelController.setDocumentController(this);
         this.sourceFileController.setDocumentController(this);
-        this.documentHeaderController.setDocumentController(this);
         this.deadlineController.setDocumentController(this);
 
     }

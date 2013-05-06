@@ -15,15 +15,9 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderController;
-import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
@@ -104,12 +98,6 @@ public interface DocumentInjector extends Ginjector {
      * @return the info panel controller
      */
     InfoPanelController getInfoPanelController();
-
-    /**
-     * Get the document header controller for this document controller.
-     * @return the document header controller
-     */
-    DocumentHeaderController getDocumentHeaderController();
 
     /**
      * Get the local overlay widget reference handler for this document controller.
