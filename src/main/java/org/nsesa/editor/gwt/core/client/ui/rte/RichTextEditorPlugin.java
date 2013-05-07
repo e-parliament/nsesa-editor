@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -25,6 +25,9 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(RichTextCompositePlugin.class)
 public interface RichTextEditorPlugin {
+    /** used to fill in the content of html element with an empty char to be accessible from the user interface**/
+    public static final String EMPTY_CHAR = "\u200b";
+
     /**
      * Run before editor initialization
      *

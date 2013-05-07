@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -12,6 +12,8 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 package org.nsesa.editor.gwt.core.client.validation;
+
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Default implementation of the {@link ValidationResult}.
@@ -24,10 +26,12 @@ public final class ValidationResultImpl implements ValidationResult {
 
     final boolean success;
     final String errorMessage;
+    final OverlayWidget invalidWidget;
 
-    public ValidationResultImpl(boolean success, String errorMessage) {
+    public ValidationResultImpl(boolean success, String errorMessage, OverlayWidget invalidWidget) {
         this.success = success;
         this.errorMessage = errorMessage;
+        this.invalidWidget = invalidWidget;
     }
 
     @Override
@@ -38,5 +42,10 @@ public final class ValidationResultImpl implements ValidationResult {
     @Override
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    @Override
+    public OverlayWidget getInvalidWidget() {
+        return invalidWidget;
     }
 }

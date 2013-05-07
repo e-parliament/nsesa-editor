@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.select.Selector;
 
@@ -65,13 +65,13 @@ public class OverlayUtil {
         return injectionPoints;
     }
 
-    public static <T extends OverlayWidget> T xpathSingle(final String expression, final OverlayWidget root, T target) {
-            final List<OverlayWidget> overlayWidgets = xpath(expression, root);
-            if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
-                return (T) overlayWidgets.get(0);
-            }
-            return null;
+    public static OverlayWidget xpathSingle(final String expression, final OverlayWidget root) {
+        final List<OverlayWidget> overlayWidgets = xpath(expression, root);
+        if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
+            return overlayWidgets.get(0);
         }
+        return null;
+    }
 
     public static List<OverlayWidget> find(final String expression, final OverlayWidget root) {
         final List<OverlayWidget> matches = new ArrayList<OverlayWidget>();
@@ -88,10 +88,10 @@ public class OverlayUtil {
         return matches;
     }
 
-    public static <T extends OverlayWidget> T findSingle(final String expression, final OverlayWidget root, T target) {
+    public static OverlayWidget findSingle(final String expression, final OverlayWidget root) {
         final List<OverlayWidget> overlayWidgets = find(expression, root);
         if (overlayWidgets != null && !overlayWidgets.isEmpty()) {
-            return (T) overlayWidgets.get(0);
+            return overlayWidgets.get(0);
         }
         return null;
     }

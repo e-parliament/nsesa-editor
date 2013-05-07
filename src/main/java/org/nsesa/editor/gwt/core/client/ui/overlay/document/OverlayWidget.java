@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -17,15 +17,13 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Interface for an overlay widget (a higher level widget that can be translated into one or more DOM elements).
@@ -53,6 +51,20 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      * @return true if the widget has any amendments on it.
      */
     boolean isAmended();
+
+    /**
+     * Check if the overlay has been completed (this might not always be the case for lazy-loading approaches when
+     * performance is a problem).
+     * @return <tt>true</tt> if the overlay widget was fully loaded (meaning its children were enumerated and set). If
+     * not, we should use the {@link OverlayStrategy} to retrieve and overlay the children.
+     */
+    boolean areChildrenInitialized();
+
+    /**
+     * Set the flag that the children of this overlay widget were retrieved and overlaid.
+     * @param childrenInitialized whether or not the children were overlaid
+     */
+    void setChildrenInitialized(boolean childrenInitialized);
 
     /**
      * Sets the flag whether or not this amendment is considered amendable (that is,
@@ -131,6 +143,20 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     OverlayWidget getNextSibling();
 
     /**
+     * Returns the next {@link OverlayWidget} in a depth first search.
+     * @param overlayWidgetSelector the widget selector
+     * @return the next widget, or <tt>null</tt> if there is none
+     */
+    OverlayWidget next(OverlayWidgetSelector overlayWidgetSelector);
+
+    /**
+     * Returns the previous {@link OverlayWidget} in a depth-first search.
+     * @param overlayWidgetSelector the widget selector
+     * @return the previous widget, or <tt>null</tt> if there is none
+     */
+    OverlayWidget previous(OverlayWidgetSelector overlayWidgetSelector);
+
+    /**
      * Find the previous sibling that is not introduced by an amendment.
      *
      * @param sameType if true, only look for an overlay widget of the same type
@@ -207,14 +233,14 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      *
      * @param amendmentController the amendment controller to add.
      */
-    void addAmendmentController(AmendmentController amendmentController);
+    void addOverlayWidgetAware(OverlayWidgetAware amendmentController);
 
     /**
      * Remove an amendment controller from this overlay widget.
      *
      * @param amendmentController the amendment controller to remove.
      */
-    void removeAmendmentController(AmendmentController amendmentController);
+    void removeAmendmentController(OverlayWidgetAware amendmentController);
 
     /**
      * Returns the type of the overlay widget (defaults to the local node name - so without prefix, if any).
@@ -269,12 +295,10 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     HTMLPanel getAmendmentControllersHolderElement();
 
     /**
-     * Get a map of the element node names that are allowed under this overlay widget (note, this also includes the
-     * wildcard, if this was specified in the XSD). Because of their casing, make sure to do a case-insensitive comparison.
-     *
-     * @return the allowed child nodes
+     * Get the structure indicator as it is coming from xsd
+     * @return The structure indicator
      */
-    Map<OverlayWidget, Occurrence> getAllowedChildTypes();
+    StructureIndicator getStructureIndicator();
 
     /**
      * Get the numbering type of this overlay widget. If it was not set using {@link #setNumberingType(org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType)},
@@ -364,7 +388,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      *
      * @return the amendment controllers.
      */
-    AmendmentController[] getAmendmentControllers();
+    List<OverlayWidgetAware> getOverlayWidgetAwareList();
 
     /**
      * Get the index of this widget in its parent's widget collection, but only counting the same types (so, if there
@@ -394,6 +418,12 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     int getIndex();
 
     /**
+     * Get the index of this element in the DOM tree. Useful for inserting or DOM operations.
+     * @return the DOM index.
+     */
+    int getDomIndex();
+
+    /**
      * Returns the namespace this overlay widget was generated for.
      *
      * @return the namespace URI.
@@ -420,4 +450,24 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      * @return the formatted index.
      */
     String getFormattedIndex();
+
+    /**
+     * Move this widget up in the parent collection.
+     */
+    void moveUp();
+
+    /**
+     * Move this widget down in the parent collection
+     */
+    void moveDown();
+
+    /**
+     * Check if this overlay widget is under (meaning one of its matches the given arguments) a certain given overlay widget identified via
+     * the <tt>namespaceURI</tt> and its <tt>type</tt>.
+     * @param namespaceURI  the namespace uri
+     * @param type          the type
+     * @return <tt>true</tt> if it is
+     */
+    boolean hasParent(String namespaceURI, String type);
+
 }

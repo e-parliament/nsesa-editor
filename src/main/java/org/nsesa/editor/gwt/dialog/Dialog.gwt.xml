@@ -3,7 +3,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -17,7 +17,7 @@
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
         "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
 <module rename-to="Dialog">
-    <inherits name="org.nsesa.editor.gwt.core.Core"/>
+    <inherits name="org.nsesa.editor.gwt.amendment.Amendment"/>
 
     <inherits name='com.google.gwt.query.Query'/>
     <inherits name="org.nsesa.editor.gwt.editor.Editor"/>

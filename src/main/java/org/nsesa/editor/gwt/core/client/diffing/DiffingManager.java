@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -14,7 +14,6 @@
 package org.nsesa.editor.gwt.core.client.diffing;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
@@ -26,14 +25,14 @@ import org.nsesa.editor.gwt.core.shared.DiffMethod;
  * @version $Id$
  */
 @ImplementedBy(DefaultDiffingManager.class)
-public interface DiffingManager {
+public interface DiffingManager<T> {
 
     /**
      * Perform a diff (word or character based) on a set of amendment controllers.
-     * @param method                the diff method
-     * @param amendmentControllers  the amendment controllers to do the diff-ing on
+     * @param method    the diff method
+     * @param toDiff    the entities to diff on
      */
-    void diff(final DiffMethod method, final AmendmentController... amendmentControllers);
+    void diff(final DiffMethod method, final T... toDiff);
 
     /**
      * Sets the parent document controller.

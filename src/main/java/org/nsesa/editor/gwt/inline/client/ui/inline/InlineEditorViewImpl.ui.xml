@@ -1,0 +1,52 @@
+<!--
+
+    Copyright 2013 European Parliament
+
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+    http://joinup.ec.europa.eu/software/page/eupl
+
+    Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:rte='urn:import:org.nsesa.editor.gwt.core.client.ui.rte'
+        >
+    <ui:style field="res">
+        .inlineEditorPanel {
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .richTextEditor {
+            height: 100%;
+        }
+
+        .actionPanel {
+            width: 100%;
+            text-align: center;
+
+        }
+
+        .innerActionPanel {
+            padding:10px;
+        }
+
+    </ui:style>
+    <g:HTMLPanel styleName="{res.inlineEditorPanel}">
+        <g:FocusPanel ui:field="dummyFocusPanelAbove"/>
+        <rte:RichTextEditor ui:field="richTextEditor" styleName="{res.richTextEditor}"/>
+        <g:FocusPanel ui:field="dummyFocusPanelBelow"/>
+        <g:HTMLPanel styleName="{res.actionPanel}">
+            <g:HTMLPanel styleName="{res.innerActionPanel}">
+                <g:Button ui:field="saveButton" text="Save"/>
+                <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -65,6 +65,12 @@ public interface ActionBarCreatePanelView extends IsWidget {
      * Clear the existing child or sibling types.
      */
     void clearChildOverlayWidgets();
+
+    /**
+     * Highlights the n-th item.
+     * @param n the index of the widget to highlight
+     */
+    void setHighlight(int n);
 
     /**
      * UI listener interface.

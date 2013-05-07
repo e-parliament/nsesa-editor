@@ -282,7 +282,7 @@
                 <version>1.9.0</version>
                 <configuration>
                     <header>src/main/resources/header.txt</header>
-                    <strictCheck>true</strictCheck>
+                    <strictCheck>false</strictCheck>
                     <encoding>UTF-8</encoding>
                     <excludes>
                         <exclude>web/js/**</exclude>
@@ -325,6 +325,7 @@
                     <modules>
                         <module>org.nsesa.editor.gwt.editor.Editor</module>
                     </modules>
+                    <strict>true</strict>
                     <runTarget>editor.html</runTarget>
                 </configuration>
                 <executions>

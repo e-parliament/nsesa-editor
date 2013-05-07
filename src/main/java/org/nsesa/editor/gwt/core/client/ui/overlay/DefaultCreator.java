@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -14,10 +14,13 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.StructureIndicator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Default implementation of the {@link Creator}.
@@ -30,81 +33,69 @@ import java.util.*;
 public class DefaultCreator implements Creator {
 
     /**
-     * Returns a map of the allowed siblings with their occurrence for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
+     * Returns a list of the allowed siblings with their occurrence for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
      * This implementation returns all allowed siblings according to this overlay widget's parent's
-     * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getAllowedChildTypes()}.
+     * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getStructureIndicator()}.
      *
      * @param documentController the document controller
      * @param overlayWidget      the overlay widget to get the allowed siblings for
      * @return the allowed siblings
      */
     @Override
-    public LinkedHashMap<OverlayWidget, Occurrence> getAllowedSiblings(final DocumentController documentController, final OverlayWidget overlayWidget) {
-        return getAllowedChildren(documentController, overlayWidget.getParentOverlayWidget());
+    public List<OverlayWidget> getAllowedSiblings(final DocumentController documentController, final OverlayWidget overlayWidget) {
+        if (overlayWidget.getParentOverlayWidget() != null) {
+            return getAllowedChildren(documentController, overlayWidget.getParentOverlayWidget());
+        }
+        else {
+            // probably dealing with a root node
+            return new ArrayList<OverlayWidget>();
+        }
     }
 
     /**
-     * Returns a map of allowed child types and their occurrences for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
+     * Returns a list of allowed child types  for a given {@link OverlayWidget} <tt>overlayWidget</tt>.
      * This implementation returns all allowed child types according to
-     * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getAllowedChildTypes()}.
+     * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getStructureIndicator()}.
      *
      * @param documentController the document controller
      * @param overlayWidget      the overlay widget to get the children for
      * @return the allowed children, sorted in alphabetical order
      */
     @Override
-    public LinkedHashMap<OverlayWidget, Occurrence> getAllowedChildren(final DocumentController documentController, final OverlayWidget overlayWidget) {
-        final LinkedHashMap<OverlayWidget, Occurrence> allowedChildren = new LinkedHashMap<OverlayWidget, Occurrence>();
-        final Map<OverlayWidget, Occurrence> allowedTypes = overlayWidget.getAllowedChildTypes();
-        List<Map.Entry<OverlayWidget, Occurrence>> list = new ArrayList<Map.Entry<OverlayWidget, Occurrence>>(allowedTypes.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<OverlayWidget, Occurrence>>() {
+    public List<OverlayWidget> getAllowedChildren(final DocumentController documentController, final OverlayWidget overlayWidget) {
+        final List<OverlayWidget> allowedChildren = getAllowedChildTypes(overlayWidget);
+        Collections.sort(allowedChildren, new Comparator<OverlayWidget>() {
             @Override
-            public int compare(Map.Entry<OverlayWidget, Occurrence> o1, Map.Entry<OverlayWidget, Occurrence> o2) {
-                return o1.getKey().getType().compareTo(o2.getKey().getType());
+            public int compare(OverlayWidget o1, OverlayWidget o2) {
+                if (o1 == null) return -1;
+                if (o2 == null) return 1;
+                return o1.getType().compareTo(o2.getType());
             }
         });
-        for (final Map.Entry<OverlayWidget, Occurrence> allowedType : list) {
-            // check the exclusion
-            if (!excludeChildCandidate(allowedType.getKey(), allowedType.getValue(), overlayWidget)) {
-                allowedChildren.put(allowedType.getKey(), allowedType.getValue());
-            }
-        }
         return allowedChildren;
     }
 
     /**
-     * Can be the candidate a child of a given parent? A candidate can be added as a child if the given occurrence
-     * constraint is not broken, ie there is no possible to add a candidate as a child if the parent already has
-     * a child of the same type and namespace and the <code>occurrence</code> allows only one child of that type
-     * @param candidate {@link OverlayWidget} candidate
-     * @param occurrence {@link Occurrence} of the candidate
-     * @param parent {@link OverlayWidget} the parent of the candidate
-     * @return True when the candidate is not accepted as a child of the given parent
+     * Returns the list of the allowed child types as they are coming from {@link StructureIndicator} structure
+     * @return the list of the allowed child types
      */
-    private boolean excludeChildCandidate(OverlayWidget candidate, Occurrence occurrence, OverlayWidget parent) {
-        // strange situation, it should never occur
-        if (occurrence.getMaxOccurs() == 0) {
-            return true;
-        }
-        //allows an infinity
-        if (occurrence.isUnbounded()) {
-            return false;
-        }
-
-        int count = 0;
-        boolean result = false;
-        for (OverlayWidget child : parent.getChildOverlayWidgets()) {
-            if (child.getType().equalsIgnoreCase(candidate.getType()) &&
-                    child.getNamespaceURI().equalsIgnoreCase(candidate.getNamespaceURI())) {
-                //increase the number of childs with the same type and namespace
-                count++;
-                if (count >= occurrence.getMaxOccurs()) {
-                    result = true; // the maximum occurs has been reached
-                    break;
+    private List<OverlayWidget> getAllowedChildTypes(OverlayWidget overlayWidget) {
+        List<OverlayWidget> allowedChildren = new ArrayList<OverlayWidget>();
+        List<StructureIndicator> stack = new ArrayList<StructureIndicator>();
+        stack.add(overlayWidget.getStructureIndicator());
+        while (!stack.isEmpty()) {
+            StructureIndicator structureIndicator = stack.remove(0);
+            if (structureIndicator instanceof StructureIndicator.Element) {
+                StructureIndicator.Element elemIndicator = (StructureIndicator.Element) structureIndicator;
+                OverlayWidget candidate = elemIndicator.asWidget();
+                allowedChildren.add(candidate);
+            } else {
+                if (structureIndicator.getIndicators() != null ) {
+                    stack.addAll(structureIndicator.getIndicators());
                 }
             }
         }
-        return result;
+        return allowedChildren;
     }
 }
 

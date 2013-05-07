@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -75,9 +75,8 @@ public class OverlayStrategySupport {
     }
 
     public Boolean isAmendable(Element element) {
-        return element.getId() != null && !"".equalsIgnoreCase(element.getId());
-//        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
-//        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
+        String amendableAttribute = getAttribute(element, getAmendableAttributeName());
+        return amendableAttribute == null || "".equals(amendableAttribute) ? null : "true".equalsIgnoreCase(amendableAttribute);
     }
 
     protected String getAmendableAttributeName() {
@@ -319,6 +318,12 @@ public class OverlayStrategySupport {
         // if not, work with the literal index
         String literalIndex = getLiteralIndex(element);
         if (literalIndex != null && !"".equals(literalIndex)) {
+            // check if there is a space - drop everything in front of the space
+            // note: not sure if this is a good way, but it helps us in getting rid of the <num> tags
+            // that have too much information in it, such as 'Article I' or 'Capo II'
+            if (literalIndex.contains(" ")) {
+                literalIndex = literalIndex.substring(literalIndex.lastIndexOf(" ") + 1);
+            }
             Format f = getFormat(element);
             switch (f) {
                 // in case of a point (11.)or bracket (11)), just strip off the last char

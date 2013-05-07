@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -19,20 +19,18 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureInsertionEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayLocalizableResource;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -105,7 +103,7 @@ public class VisualStructureController {
     }
 
     /**
-     * Register handlers for {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent} and {@link AmendmentContainerCreateEvent} gwt events.
+     * Register handlers for {@link org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureSelectionChangedEvent} and {@link OverlayWidgetNewEvent} gwt events.
      * It also create a drafting callback to be called when selecting children from drafting view interface
      * When those events occur <code>VisualStructureView</code> and <code>VisualStructureAttributesView</code> widgets are refreshed.
      */
@@ -126,10 +124,10 @@ public class VisualStructureController {
                 }
             }
         });
-        amendmentContainerCreateEventHandlerRegistration = eventBus.addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {
+        amendmentContainerCreateEventHandlerRegistration = eventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
             @Override
-            public void onEvent(AmendmentContainerCreateEvent event) {
-                refreshView(event.getOverlayWidget(), null);
+            public void onEvent(OverlayWidgetNewEvent event) {
+                refreshView(event.getReference(), null);
             }
         });
     }
@@ -166,11 +164,11 @@ public class VisualStructureController {
                 if (!widget.equals(originalOverlayWidget))
                     visualStructureAttributesView.setAttributes(new TreeMap<String, String>(widget.getAttributes()));
 
-                LinkedHashMap<OverlayWidget, Occurrence> children = creator.getAllowedChildren(documentController, widget);
+                List<OverlayWidget> children = creator.getAllowedChildren(documentController, widget);
                 visualStructureView.clearAll();
                 visualStructureView.setVisualStructureTitle(widget.getType());
                 visualStructureView.refreshAllowedChildren(
-                        new HashMap<OverlayWidget, Occurrence>(children),
+                        children,
                         selectedText == null || selectedText.length() == 0 ? null : draftingCallback);
             }
         });

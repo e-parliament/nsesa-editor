@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -60,7 +60,7 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="{res.actionBar} actionBarView">
-        <span style="{res.actions}">
+        <g:HTMLPanel styleName="{res.actions} actions" ui:field="actionPanel">
             <g:Image resource="{resource.amend}" styleName="{res.icon}"/>
             <g:Anchor ui:field="modifyAnchor" styleName="{res.anchor}" text="Amend"/>
             <!--<g:Image resource="{resource.amend}" styleName="{res.icon}"/>-->
@@ -73,8 +73,8 @@
             <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move" visible="false"/>
             <!--<g:Image resource="{resource.translate}" styleName="{res.icon}"/>-->
             <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate" visible="false"/>
-        </span>
-        <span style="{res.location}">
+        </g:HTMLPanel>
+        <span class="{res.location}">
             <g:Label ui:field="location" styleName="{res.locationPanel}"/>
         </span>
     </g:HTMLPanel>

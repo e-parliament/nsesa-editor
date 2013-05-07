@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -16,7 +16,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="SourceFileHeaderViewImpl.css" field="css"
-              type='org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderViewCss'/>
+              type='org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderViewCss'/>
     <ui:style field="res">
 
 
@@ -41,7 +41,7 @@
         .modes {
             padding-right: 10px;
             position: relative;
-            top: 1px;
+            top: -1px;
         }
     </ui:style>
 

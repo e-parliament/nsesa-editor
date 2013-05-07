@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 import java.util.HashMap;
@@ -137,7 +137,8 @@ public class DefaultTransformer implements Transformer {
                         }
                         break;
                     case Node.TEXT_NODE:
-                        sb.append(nodes.getItem(i).getNodeValue().trim());
+                        sb.append(TextUtils.escapeXML(nodes.getItem(i).getNodeValue().trim()));
+                        //sb.append(nodes.getItem(i).getNodeValue().trim());
                         break;
                     case Node.DOCUMENT_NODE:
                         LOG.log(Level.WARNING, "There should be no document node here for " + element.getInnerHTML());
@@ -145,7 +146,12 @@ public class DefaultTransformer implements Transformer {
                 }
             }
         }
-        sb.append("</").append(widget.getType()).append(">");
+        sb.append("</");
+        final String prefix = namespaces.get(widget.getNamespaceURI());
+        if (!DEFAULT_NAMESPACE.equals(prefix)) {
+            sb.append(prefix).append(":");
+        }
+        sb.append(widget.getType()).append(">");
         return sb.toString();
     }
 
@@ -163,7 +169,7 @@ public class DefaultTransformer implements Transformer {
                     String prefix = getPrefix(visited.getNamespaceURI());
                     if (prefix == null) {
                         // generate namespace (ns1, ns2, ...)
-                        prefix = "ns" + namespaces.size() + 1;
+                        prefix = "ns" + (namespaces.size() + 1);
                     }
                     namespaces.put(visited.getNamespaceURI(), prefix);
                 }

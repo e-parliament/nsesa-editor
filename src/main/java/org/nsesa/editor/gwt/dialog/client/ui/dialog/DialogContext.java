@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,7 +13,7 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.dialog;
 
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -47,6 +47,11 @@ public class DialogContext {
      * The amendable widget.
      */
     OverlayWidget overlayWidget;
+
+    /**
+     * The reference overlay widget - this will be the overlay widget to modify;
+     */
+    OverlayWidget referenceOverlayWidget;
 
     /**
      * The logical parent amendable widget (only relevant in case of new elements).
@@ -125,6 +130,14 @@ public class DialogContext {
      */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
+    }
+
+    public OverlayWidget getReferenceOverlayWidget() {
+        return referenceOverlayWidget;
+    }
+
+    public void setReferenceOverlayWidget(OverlayWidget referenceOverlayWidget) {
+        this.referenceOverlayWidget = referenceOverlayWidget;
     }
 
     /**

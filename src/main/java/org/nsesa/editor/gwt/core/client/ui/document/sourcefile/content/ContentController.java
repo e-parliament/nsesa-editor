@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
@@ -22,7 +23,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -181,8 +182,16 @@ public class ContentController {
      *
      * @param widget the widget to scroll to
      */
-    public void scrollTo(final Widget widget) {
-        view.getScrollPanel().scrollToTop();
-        view.getScrollPanel().setVerticalScrollPosition(widget.getAbsoluteTop() - view.getScrollPanel().getAbsoluteTop());
+    public void scrollTo(final Widget widget, final int offset) {
+
+        final Scheduler scheduler = sourceFileController.getDocumentController().getClientFactory().getScheduler();
+        scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.getScrollPanel().scrollToTop();
+                view.getScrollPanel().setVerticalScrollPosition(((widget.getAbsoluteTop() - offset) - view.getScrollPanel().getAbsoluteTop()));
+            }
+        });
+
     }
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * A reference to an {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}, used by a
- * {@link org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder} to find the correct
+ * {@link org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder} to find the correct
  * widget to amend, and used when passing information when creating a new element.
  *
  * Date: 10/07/12 22:34
@@ -26,6 +26,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @version $Id$
  */
 public class AmendableWidgetReference implements IsSerializable {
+
+    private String referenceID;
+
     /**
      * Boolean flag to see if the reference requires the creation of a new element before injecting
      */
@@ -130,5 +133,13 @@ public class AmendableWidgetReference implements IsSerializable {
 
     public void setNamespaceURI(String namespaceURI) {
         this.namespaceURI = namespaceURI;
+    }
+
+    public String getReferenceID() {
+        return referenceID;
+    }
+
+    public void setReferenceID(String referenceID) {
+        this.referenceID = referenceID;
     }
 }

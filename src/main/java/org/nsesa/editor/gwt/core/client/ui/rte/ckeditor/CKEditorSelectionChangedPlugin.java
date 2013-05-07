@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -41,6 +41,11 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
      * The Client factory
      */
     private ClientFactory clientFactory;
+
+    // keep reference to previous selected element
+    private Element previousElement;
+    private boolean previousMoreTagsSelected;
+    private String previousSelectedText = "";
 
     /**
      * Create <code>CKEditorSelectionChangedPlugin</code> object with the given <code>clientFactory</code>
@@ -109,19 +114,16 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
             var env = $wnd.CKEDITOR.env,
                 element = selection.getStartElement(),
                 html = [],
-                parentTagType,
-                nameSpace,
                 moreTagsSelected = false,
                 selectedText = selection.getSelectedText();
             //keep a track of the last visited element
+            var previousElement = ed["cachedElement"];
             ed["cachedElement"] = element;
-            parentTagType = element.getAttribute('type');
-            nameSpace = element.getAttribute('ns');
 
             moreTagsSelected = selectMoreTags(selection);
-            //if (parentTagType) {
-            plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(element.$, moreTagsSelected, selectedText);
-            //
+            if (true) {
+                plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorSelectionChangedPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(element.$, moreTagsSelected, selectedText);
+            }
         }
 
         //check the number of DOM elements enclosed into the selection
@@ -141,6 +143,26 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
                 endContainer = endContainer.getParent();
             }
             return !startContainer.equals(endContainer);
+        }
+        //check to see whether the selection has been changed by comparing start element and end element
+        function selectionChanged(selection, ed) {
+            var ranges = selection.getRanges();
+            // find start container and end container of the selection
+            // if they are text nodes go to their parents
+            var startContainer = selection.getStartElement();
+            var startOffSet = ranges[0].startOffset;
+            var endContainer = ranges[ranges.length - 1].endContainer;
+            var endOffSet = ranges[ranges.length - 1].endOffset;
+            var previousStart = ed["cachedElement"];
+            var previousStartOffSet = ed["cachedStartOffSet"];
+            var previousEnd = ed["cachedEndElement"];
+            var previousEndOffSet = ed["cachedEndOffSet"];
+
+            ed["cachedElement"] = startContainer;
+            ed["cachedEndElement"] = endContainer;
+            ed["cachedStartOffSet"] = startOffSet;
+            ed["cachedEndOffSet"] = endOffSet;
+            return startContainer !== previousStart || !endContainer.$.isEqualNode(previousEnd ? previousEnd.$ : null) || startOffSet !== previousStartOffSet || endOffSet !== previousEndOffSet;
         }
 
         editor.on('mode', function () {
@@ -163,7 +185,19 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
     private void fireEvent(JavaScriptObject jsObject, boolean moreTagsSelected, String selectedText) {
         LOG.info("Changed event fired with more tags selected: " + moreTagsSelected + " and selected text " + selectedText);
         Element el = jsObject.cast();
-        clientFactory.getEventBus().fireEvent(new VisualStructureSelectionChangedEvent(el, moreTagsSelected, selectedText));
+        //raise the event only when something has been changed
+        if (el != null) {
+            if (!el.toString().equalsIgnoreCase(previousElement != null ? previousElement.toString() : null) ||
+                    moreTagsSelected != previousMoreTagsSelected ||
+                    !selectedText.equalsIgnoreCase(previousSelectedText)) {
+
+                clientFactory.getEventBus().fireEvent(new VisualStructureSelectionChangedEvent(el, moreTagsSelected, selectedText));
+            }
+        }
+        previousElement = el;
+        previousMoreTagsSelected = moreTagsSelected;
+        previousSelectedText = selectedText;
+
     }
 
 }

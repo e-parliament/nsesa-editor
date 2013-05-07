@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -20,6 +20,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.ClientContextImpl;
@@ -36,6 +37,7 @@ public class ClientFactoryMock implements ClientFactory {
     protected final PlaceController placeController = new PlaceController(eventBus);
     protected final Scheduler scheduler = new StubScheduler();
     protected ClientContext clientContext = new ClientContextImpl();
+    protected KeyboardListener keyboardListener = new KeyboardListener(eventBus);
     protected JavaScriptObject configuration = JavaScriptObject.createObject();
 
     final CoreMessages coreMessages = new CoreMessages() {
@@ -72,6 +74,11 @@ public class ClientFactoryMock implements ClientFactory {
         @Override
         public String errorDocumentError(String p0) {
             return "errorDocumentError";
+        }
+
+        @Override
+        public String errorDocumentContentError(String p0) {
+            return "errorDocumentContentError";
         }
 
         @Override
@@ -268,6 +275,16 @@ public class ClientFactoryMock implements ClientFactory {
         public String amendmentSelection(@PluralCount int arg) {
             return "amendmentSelection";
         }
+
+        @Override
+        public String amendmentActionMoveUp() {
+            return null;
+        }
+
+        @Override
+        public String amendmentActionMoveDown() {
+            return null;
+        }
     };
 
     @Override
@@ -308,5 +325,10 @@ public class ClientFactoryMock implements ClientFactory {
     @Override
     public void setConfiguration(JavaScriptObject configuration) {
         this.configuration = configuration;
+    }
+
+    @Override
+    public KeyboardListener getKeyboardListener() {
+        return keyboardListener;
     }
 }

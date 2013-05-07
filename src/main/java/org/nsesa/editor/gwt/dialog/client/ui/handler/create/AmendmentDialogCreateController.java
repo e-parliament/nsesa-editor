@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -16,18 +16,22 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.create;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
+import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
+import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
+import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
@@ -90,18 +94,21 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     private HandlerRegistration cancelClickHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration draftingToggleEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
+    protected final Validator<OverlayWidget> overlayWidgetValidator;
 
     @Inject
     public AmendmentDialogCreateController(final ClientFactory clientFactory, final AmendmentDialogCreateView view,
                                            final Locator locator, final OverlayFactory overlayFactory,
                                            final VisualStructureController visualStructureController,
-                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder) {
+                                           final AmendmentInjectionPointFinder amendmentInjectionPointFinder,
+                                           final Validator<OverlayWidget> overlayWidgetValidator) {
         this.clientFactory = clientFactory;
         this.view = view;
         this.locator = locator;
         this.overlayFactory = overlayFactory;
         this.visualStructureController = visualStructureController;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
+        this.overlayWidgetValidator = overlayWidgetValidator;
 
         view.getRichTextEditor().setVisualStructureWidget(visualStructureController.getView());
         view.getRichTextEditor().setVisualStructureAttributesWidget(visualStructureController.getAttributesView());
@@ -177,26 +184,32 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         if (dialogContext.getParentOverlayWidget() == null) {
             throw new NullPointerException("No parent amendable widget set. Cannot continue.");
         }
+        // validate the amendment
+        if (validate()) {
+            // set up the source reference so we can re-inject this amendment later.
+            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
+                    dialogContext.getReferenceOverlayWidget() == dialogContext.getOverlayWidget(),
+                    dialogContext.getOverlayWidget().getNamespaceURI(),
+                    amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
+                    dialogContext.getOverlayWidget().getType(),
+                    dialogContext.getIndex());
 
-        // set up the source reference so we can re-inject this amendment later.
-        dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(true,
-                dialogContext.getAmendmentAction() == AmendmentAction.CREATION,
-                dialogContext.getParentOverlayWidget().getNamespaceURI(),
-                amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
-                dialogContext.getOverlayWidget().getType(),
-                dialogContext.getIndex()));
+            sourceReference.setReferenceID(UUID.uuid());
 
-        // the language is always the one from the document
-        dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
+            dialogContext.getAmendment().setSourceReference(sourceReference);
 
-        // store the action as well
-        dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
+            // the language is always the one from the document
+            dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
 
-        // request a saving of the document
-        dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
+            // store the action as well
+            dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
 
-        // finally, close the parent dialog at this point.
-        clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+            // request a saving of the document
+            dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
+
+            // finally, close the parent dialog at this point.
+            clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
+        }
     }
 
     /**
@@ -222,7 +235,9 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
     @Override
     public void handle() {
         // set the amendable widget in the drafting controller
-        visualStructureController.setOverlayWidgetWidget(dialogContext.getOverlayWidget());
+        OverlayWidget overlayWidget = dialogContext.getOverlayWidget();
+        visualStructureController.setOverlayWidgetWidget(overlayWidget);
+
         // make sure to pass the context to the children
         for (final AmendmentDialogAwareController childController : childControllers) {
             childController.setContext(dialogContext);
@@ -237,5 +252,35 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         if (dialogContext.getOverlayWidget() == null && dialogContext.getAmendment() == null) {
             throw new NullPointerException("Neither amendment nor amendable widget are set.");
         }
+    }
+
+    /**
+     * Validates the content before saving
+     * @return True if the content is valid
+     */
+    protected boolean validate() {
+        //validate the overlay
+        String content = view.getAmendmentContent();
+        //replace all validation-error class names with empty
+        content = content.replaceAll("validation-error", "");
+        final com.google.gwt.user.client.Element clone = DOM.clone(dialogContext.getOverlayWidget().asWidget().getElement(), false);
+        clone.setInnerHTML(content);
+        OverlayWidget overlayWidget = overlayFactory.getAmendableWidget(clone);
+        ValidationResult validationResult = overlayWidgetValidator.validate(overlayWidget);
+        boolean isValid = validationResult.isSuccessful();
+        if (!isValid) {
+            OverlayWidget invalidWidget = validationResult.getInvalidWidget();
+            if (invalidWidget != null) {
+                //mark the widget as invalid
+                invalidWidget.getOverlayElement().addClassName("validation-error");
+
+                invalidWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
+            } else {
+                overlayWidget.getOverlayElement().addClassName("validation-error");
+                overlayWidget.getOverlayElement().setAttribute("error", validationResult.getErrorMessage());
+            }
+            view.setAmendmentContent(overlayWidget.getOverlayElement().getInnerHTML());
+        }
+        return isValid;
     }
 }

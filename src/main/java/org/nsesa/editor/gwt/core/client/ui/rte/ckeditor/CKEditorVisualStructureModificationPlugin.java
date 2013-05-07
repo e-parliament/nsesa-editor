@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -76,11 +76,13 @@ public class CKEditorVisualStructureModificationPlugin extends DefaultRichTextEd
      * @param values The new attributes values
      */
     private native void modify(CKEditorVisualStructureModificationPlugin plugin, JavaScriptObject editor, JsArrayString keys, JsArrayString values) /*-{
-        if (editor.cachedElement) {
+        // the cached element was set up in CKEditorSelectionChangedPlugin
+        if (editor["cachedElement"]) {
+            var cachedEl = editor["cachedElement"];
             var range = new $wnd.CKEDITOR.dom.range(editor.document);
-            range.selectNodeContents(editor.cachedElement);
+            range.selectNodeContents(cachedEl);
             //editor.getSelection().selectRanges([range]);
-            var el = new $wnd.CKEDITOR.dom.element(editor.cachedElement);
+            var el = new $wnd.CKEDITOR.dom.element(cachedEl);
             for (i = 0; i < keys.length; i++) {
                 if (values[i] != '') {
                     el.setAttribute(keys[i], values[i]);

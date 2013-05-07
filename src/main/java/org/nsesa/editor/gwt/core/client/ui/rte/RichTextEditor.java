@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -68,6 +68,12 @@ public interface RichTextEditor extends IsWidget {
     void destroy();
 
     /**
+     * Set or unset the focus on this RTE.
+     * @param focus the focus flag
+     */
+    void setFocus(boolean focus);
+
+    /**
      * Add a visual structure tool widget to the editor. The visual structure tool is responsible to change the
      * structure of the original overlayWidget.
      *
@@ -112,4 +118,57 @@ public interface RichTextEditor extends IsWidget {
      * @param height The height
      */
     void resize(String width, String height);
+
+    /**
+     * Expose stylename setter for easier styling in UIBinder.
+     * @param styleName the stylename to set
+     */
+    void setStyleName(String styleName);
+
+
+    /**
+     * Expose visibility method for easier styling in UIBinder.
+     * @param visible true to set the element visible
+     */
+    void setVisible(boolean visible);
+
+    /**
+     * Return the caret position from the editor  area
+     * @return {@link CaretPosition}
+     */
+    CaretPosition getCaretPosition();
+
+    /**
+     * A holder class for RichTextEditor caret position
+     */
+    public static class CaretPosition {
+
+        private int left;
+        private int top;
+
+        //default constructor
+        public CaretPosition() {
+        }
+
+        public CaretPosition(int left, int top) {
+            this.left = left;
+            this.top = top;
+        }
+
+        public void setLeft(int left) {
+            this.left = left;
+        }
+
+        public void setTop(int top) {
+            this.top = top;
+        }
+
+        public int getTop() {
+            return top;
+        }
+
+        public int getLeft() {
+            return left;
+        }
+    }
 }

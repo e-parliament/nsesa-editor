@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -38,7 +38,7 @@
     </#if>
     <#if overlayStyle.name??>
         <#if cssConfiguration['printEmptyCss'] || (overlayStyle.values?size != 0)>
-        .akomaNtoso .${overlayStyle.name} {
+        .${overlayStyle.name}[ns="${overlayClass.namespaceURI}"] {
             <#assign m = overlayStyle.values>
             <#assign keys = m?keys>
             <#list keys as key>

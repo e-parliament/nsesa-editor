@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -15,20 +15,17 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 
 import com.google.gwt.inject.client.GinModules;
 import com.google.gwt.inject.client.Ginjector;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.action.AmendmentActionPanelController;
+import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
 import org.nsesa.editor.gwt.core.client.ui.deadline.DeadlineController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelController;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.header.AmendmentsHeaderController;
-import org.nsesa.editor.gwt.core.client.ui.document.header.DocumentHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.undo.UndoManager;
 
 /**
  * A GIN document injector - used to give a document controller access to its dependencies. Note that this
@@ -67,12 +64,6 @@ public interface DocumentInjector extends Ginjector {
     DocumentEventBus getDocumentEventBus();
 
     /**
-     * Get the amendments panel controller.
-     * @return the amendments panel controller.
-     */
-    AmendmentsPanelController getAmendmentsPanelController();
-
-    /**
      * Get the source file controller.
      * @return the source file controller
      */
@@ -103,44 +94,26 @@ public interface DocumentInjector extends Ginjector {
     ActionBarController getActionBarController();
 
     /**
-     * Get the amendment action panel controller.
-     * @return the amendent action panel controller
-     */
-    AmendmentActionPanelController getAmendmentActionPanelController();
-
-    /**
      * Get the info panel tab controller.
      * @return the info panel controller
      */
     InfoPanelController getInfoPanelController();
 
     /**
-     * Get the document header controller for this document controller.
-     * @return the document header controller
+     * Get the local overlay widget reference handler for this document controller.
+     * @return the local overlay widget reference handler
      */
-    DocumentHeaderController getDocumentHeaderController();
-
-    /**
-     * Get the amendment manager.
-     * @return the amendment manager
-     */
-    AmendmentManager getAmendmentManager();
-
-    /**
-     * Get an amendment controller.
-     * @return an amendment controller
-     */
-    AmendmentController getAmendmentController();
-
-    /**
-     * Get the header controller for the amendments panel.
-     * @return the amendments header controller
-     */
-    AmendmentsHeaderController getAmendmentsHeaderController();
+    ReferenceHandler<OverlayWidget> getLocalOverlayWidgetReferenceHandler();
 
     /**
      * Get the diffing manager for this document controller.
      * @return the diffing manager
      */
     DiffingManager getDiffingManager();
+
+    /**
+     * Get the undo manager responsible for executing {@link org.nsesa.editor.gwt.core.client.undo.Action}s.
+     * @return  the undo manager
+     */
+    UndoManager getUndoManager();
 }

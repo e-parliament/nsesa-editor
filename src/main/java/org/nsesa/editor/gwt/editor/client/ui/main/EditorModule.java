@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -15,9 +15,7 @@ package org.nsesa.editor.gwt.editor.client.ui.main;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import org.nsesa.editor.gwt.core.client.CoreModule;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentModule;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentModule;
-import org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelModule;
 import org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelModule;
 import org.nsesa.editor.gwt.editor.client.ui.footer.FooterModule;
 import org.nsesa.editor.gwt.editor.client.ui.header.HeaderModule;
@@ -36,8 +34,6 @@ public class EditorModule extends AbstractGinModule {
         install(new DocumentModule());
         install(new HeaderModule());
         install(new FooterModule());
-        install(new AmendmentModule());
-        install(new AmendmentsPanelModule());
         install(new InfoPanelModule());
     }
 }

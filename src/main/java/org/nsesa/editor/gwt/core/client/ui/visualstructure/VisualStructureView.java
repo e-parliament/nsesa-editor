@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -15,10 +15,9 @@ package org.nsesa.editor.gwt.core.client.ui.visualstructure;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * The drafting view widget is responsible to display the allowed and mandatory children
@@ -57,6 +56,6 @@ public interface VisualStructureView extends IsWidget {
      * @param allowedChildren A Map containing the allowed widget children with their occurrence
      * @param callback gets called when the user select a child from the interface
      */
-    void refreshAllowedChildren(HashMap<OverlayWidget,Occurrence> allowedChildren, VisualStructureCallback callback);
+    void refreshAllowedChildren(List<OverlayWidget> allowedChildren, VisualStructureCallback callback);
 
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -30,10 +30,28 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
 
     private final DocumentController documentController;
     private final Widget target;
+    private final boolean userInitiated;
+    private final int offset;
 
     public DocumentScrollToEvent(Widget target, DocumentController documentController) {
         this.target = target;
         this.documentController = documentController;
+        this.userInitiated = true;
+        this.offset = 40;
+    }
+
+    public DocumentScrollToEvent(Widget target, DocumentController documentController, boolean userInitiated) {
+        this.documentController = documentController;
+        this.target = target;
+        this.userInitiated = userInitiated;
+        this.offset = 40;
+    }
+
+    public DocumentScrollToEvent(Widget target, DocumentController documentController, boolean userInitiated, int offset) {
+        this.documentController = documentController;
+        this.target = target;
+        this.userInitiated = userInitiated;
+        this.offset = offset;
     }
 
     @Override
@@ -52,5 +70,13 @@ public class DocumentScrollToEvent extends GwtEvent<DocumentScrollToEventHandler
 
     public Widget getTarget() {
         return target;
+    }
+
+    public boolean isUserInitiated() {
+        return userInitiated;
+    }
+
+    public int getOffset() {
+        return offset;
     }
 }

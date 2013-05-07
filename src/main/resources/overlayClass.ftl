@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -26,34 +26,29 @@ import java.util.Arrays;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import java.util.HashMap;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.StructureIndicator;
 </#if>
 import java.util.LinkedHashMap;
 import java.util.Map;
 import com.google.gwt.user.client.DOM;
 
 /**
-* <#if overlayClass.comments??>${overlayClass.comments?replace("\n", " ")?replace("\t", " ")?replace("'", "''")?replace("\\s+"," ", "r")}<#else>Generated class</#if>
+* <#if overlayClass.comments??>${overlayClass.comments?replace("\n", "<br/>")?replace("\t", " ")?replace("'", "''")?replace("\\s+"," ", "r")}<#else>Generated class</#if>
 * This file is generated. Rather than changing this file, correct the template called <tt>overlayClass.ftl</tt>.
 */
 
 public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple)>extends ${overlayClass.parent.className?cap_first}<#else><#if overlayClass.complex || overlayClass.element>extends OverlayWidgetImpl</#if></#if>  <#if overlayClass.interfaces??>implements <#list overlayClass.interfaces as interface>${interface}<#if interface_has_next>, </#if></#list> </#if>{
 <#if overlayClass.complex || overlayClass.element>
-/**
-* Stores a map of allowed sub types coming from xsd structure
-*/
-private static Map<OverlayWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<OverlayWidget, Occurrence>() {
-{
-    <#list overlayClass.allNonAttributesProperties as prop>
-        <#if prop.wildCard>
-        put(null, new Occurrence(${prop.minOccurs},${prop.maxOccurs}));
-        <#else>
-        put(new ${prop.className?cap_first}(), new Occurrence(${prop.minOccurs},${prop.maxOccurs}));
-        </#if>
-    </#list>
-}
-};
 
+/** Stores a structure indicator coming from xsd structure **/
+private static StructureIndicator STRUCTURE_INDICATOR = new StructureIndicator.DefaultStructureIndicator(1,1
+    <#if overlayClass.allStructureProperties?size != 0>
+        ,<#list overlayClass.allStructureProperties as prop>
+        <@structureIndicator prop=prop/>
+        <#if prop_has_next>,</#if>
+        </#list>
+    </#if>
+);
 </#if>
 
 
@@ -63,7 +58,7 @@ private static Map<OverlayWidget, Occurrence> ALLOWED_SUB_TYPES = new HashMap<Ov
 public static Element create() {
 com.google.gwt.user.client.Element span = DOM.createSpan();
 span.setAttribute("type", "${overlayClass.className}");
-span.setAttribute("ns", "${overlayClass.nameSpace}");
+span.setAttribute("ns", "${overlayClass.namespaceURI}");
 span.setClassName("widget ${overlayClass.className}");
 return span;
 }
@@ -79,16 +74,16 @@ setType("${overlayClass.className}");
 }
 
 <#assign requiredConstructor = false>
-<#list overlayClass.allAttributesProperties as prop>
+<#list overlayClass.allFlatAttributesProperties as prop>
 <#if prop.required><#assign requiredConstructor = true></#if>
 </#list>
 <#if requiredConstructor>
 /**
 * Constructor with required attributes
 */
-public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
+public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allFlatAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
 this();
-    <#list overlayClass.allAttributesProperties as property>
+    <#list overlayClass.allFlatAttributesProperties as property>
         <#if property.required>
 set<@propertyNameCap property = property/>(<@propertyName property = property/>);
         </#if>
@@ -124,20 +119,20 @@ this.value = value;
 
 // FIELDS ------------------
 <#if overlayClass.complex || overlayClass.element>
-    <#list overlayClass.properties as property>
+    <#list overlayClass.flatProperties as property>
         <#if property.attribute>
             <@generateField property=property accessType="private"/>
         </#if>
     </#list>
 </#if>
 <#if overlayClass.simple>
-    <#list overlayClass.properties as property>
+    <#list overlayClass.flatProperties as property>
         <@generateField property=property accessType="protected"/>
     </#list>
 </#if>
 <#if overlayClass.complex || overlayClass.element>
 
-    <#list overlayClass.properties as property>
+    <#list overlayClass.flatProperties as property>
         <#if property.attribute>
         /**
         * Return <code><@propertyName property = property/></code> property
@@ -264,7 +259,7 @@ this.value = value;
     </#list>
 //Override all attributes methods to be conformant with DSL approach
     <#if overlayClass.parent.complex || overlayClass.parent.element || overlayClass.parent.simple>
-        <#list overlayClass.parent.allAttributesProperties as parentProp>
+        <#list overlayClass.parent.allFlatAttributesProperties as parentProp>
         /**
         * Set <code><@propertyName property = parentProp/></code> property in DSL way
         * @param <@propertyName property = parentProp/> new value
@@ -278,33 +273,30 @@ this.value = value;
     </#if>
 
 /**
-* Returns possible children as a map of <tt>OverlayWidget, Occurrence</tt>s.
-*/
-@Override
-public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-return java.util.Collections.unmodifiableMap(ALLOWED_SUB_TYPES);
-}
-
-/**
 * Returns the namespace URI of this amendable widget.
 * @return The namesapce as String
 */
 @Override
 public String getNamespaceURI() {
-return "${overlayClass.nameSpace}";
+return "${overlayClass.namespaceURI}";
 }
 
 @Override
 public LinkedHashMap<String, String> getAttributes() {
 final LinkedHashMap<String, String> attrs = new LinkedHashMap<String, String>();
 attrs.putAll(super.getAttributes());
-    <#list overlayClass.properties as property>
+    <#list overlayClass.flatProperties as property>
         <#if property.attribute>
             <#assign stripped><@propertyName property=property/></#assign>
         attrs.put("<#if stripped?ends_with("Attr")>${stripped?substring(0, stripped?length - 4)}<#else>${stripped}</#if>", <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() != null ? <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>()<#if property.baseClass?? && property.baseClass.enumeration>.value()<#elseif property.baseClass?? && property.baseClass.simple>.getValue()<#elseif property.wildCard && !property.attribute>.getContent()<#else>.toString()</#if> : null);
         </#if>
     </#list>
 return attrs;
+}
+
+@Override
+public StructureIndicator getStructureIndicator() {
+    return STRUCTURE_INDICATOR;
 }
 
 /**
@@ -317,7 +309,7 @@ public ${overlayClass.className?cap_first} html(String s) {
 }
 </#if>
 <#if overlayClass.simple>
-    <#list overlayClass.properties as property>
+    <#list overlayClass.flatProperties as property>
     /**
     * Get <code><@propertyName property = property/></code> property
     * @return <@propertyName property = property/>
@@ -401,4 +393,20 @@ ${propName}
         <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
         ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
         >();</#if><#else><@propertyName property = property/>;</#if>
+</#macro>
+
+<#macro structureIndicator prop>
+    <#if prop.sequenceIndicator>
+        new StructureIndicator.DefaultSequence(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+    <#elseif prop.allIndicator>
+        new StructureIndicator.DefaultAll(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+    <#elseif prop.choiceIndicator>
+        new StructureIndicator.DefaultChoice(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+    <#elseif prop.groupIndicator>
+        new StructureIndicator.DefaultGroup(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+    <#elseif prop.wildCard>
+        new StructureIndicator.DefaultWildcard(${prop.minOccurs},${prop.maxOccurs})
+    <#else>
+        new StructureIndicator.DefaultElement(${prop.minOccurs},${prop.maxOccurs},new ${prop.className?cap_first}())
+    </#if>
 </#macro>

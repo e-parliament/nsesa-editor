@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -58,6 +58,15 @@ public interface GWTDocumentService extends RemoteService {
      * @return the full document content (XML, HTML, JSON, ...)
      */
     String getDocumentContent(ClientContext clientContext, String documentID);
+
+    /**
+     * Saves the document content with documentID <tt>documentID</tt> to the backend. Note that this does not
+     * create a new version.
+     * @param clientContext the client context
+     * @param documentID    the documentID
+     * @param content       the XML content
+     */
+    void saveDocumentContent(ClientContext clientContext, String documentID, String content);
 
     /**
      * Retrieves a fragment of a document (usually a tree under the element identified by <tt>elementID</tt>).

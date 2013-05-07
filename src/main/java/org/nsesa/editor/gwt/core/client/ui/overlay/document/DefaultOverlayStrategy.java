@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -43,9 +43,7 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
 
     @Override
     public Boolean isAmendable(Element element) {
-        if (!Arrays.asList("num", "p", "b", "i", "span", "content").contains(element.getAttribute("type").toLowerCase()))
-            return overlayStrategySupport.isAmendable(element);
-        return false;
+        return overlayStrategySupport.isAmendable(element);
     }
 
     @Override

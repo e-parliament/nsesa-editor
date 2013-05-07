@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 public class DefaultOverlayFactory implements OverlayFactory {
 
     private static final Logger LOG = Logger.getLogger(DefaultOverlayFactory.class.getName());
+    private static final int DEFERRED_THRESHOLD = 1000;
 
     protected final OverlayStrategy overlayStrategy;
     protected final Scheduler scheduler;
@@ -48,6 +49,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
     @Override
     public OverlayWidget getAmendableWidget(final String namespaceURI, final String tag) {
         com.google.gwt.user.client.Element element = DOM.createSpan();
+        element.setAttribute("ns", namespaceURI);
         element.setAttribute("type", tag);
         element.setClassName("widget " + tag);
         return getAmendableWidget(element);
@@ -55,8 +57,13 @@ public class DefaultOverlayFactory implements OverlayFactory {
 
     @Override
     public OverlayWidget getAmendableWidget(final Element element) {
+        return getAmendableWidget(element, -1);
+    }
+
+    @Override
+    public OverlayWidget getAmendableWidget(Element element, int maxDepth) {
         elementCounter = new Counter();
-        final OverlayWidget root = wrap(null, element, 0);
+        final OverlayWidget root = wrap(null, element, 0, -1);
         LOG.info("Total number of wrapped elements: " + elementCounter.get());
         return root;
     }
@@ -72,27 +79,19 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return null;
     }
 
-    protected OverlayWidget wrap(final OverlayWidget parent, final com.google.gwt.dom.client.Element element, final int depth) {
+    protected OverlayWidget wrap(final OverlayWidget parent, final com.google.gwt.dom.client.Element element, final int depth, final int maxDepth) {
         final OverlayWidget overlayWidget = toAmendableWidget(element);
         if (overlayWidget != null) {
             elementCounter.increment();
-            if (elementCounter.get() % 1000 == 0) {
-                LOG.info("--> overlay process splitting at " + elementCounter.get() + " for " + overlayWidget + " with parent " + parent);
-                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        setProperties(parent, overlayWidget, element, depth);
-                    }
-                });
-            } else {
-                setProperties(parent, overlayWidget, element, depth);
-            }
+            setProperties(parent, overlayWidget, element, depth, maxDepth);
 
+        } else {
+            LOG.warning("No overlay widget found for " + element);
         }
         return overlayWidget;
     }
 
-    protected void setProperties(final OverlayWidget parent, final OverlayWidget overlayWidget, final Element element, int depth) {
+    protected void setProperties(final OverlayWidget parent, final OverlayWidget overlayWidget, final Element element, final int depth, final int maxDepth) {
         overlayWidget.setParentOverlayWidget(parent);
 
         // process all eager properties
@@ -102,20 +101,38 @@ public class DefaultOverlayFactory implements OverlayFactory {
         // set the overlay strategy for lazy processing
         overlayWidget.setOverlayStrategy(overlayStrategy);
 
+        // check if we're not yet at the max depth
+        if (depth <= maxDepth || maxDepth == -1) {
+            if (elementCounter.get() > 1 && elementCounter.get() % DEFERRED_THRESHOLD == 0) {
+                LOG.info("--> overlay process splitting at " + elementCounter.get() + " for '" + element + "' as " + overlayWidget + " with parent " + parent);
+                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        visitChildren(overlayWidget, element, depth + 1, maxDepth, true);
+                    }
+                });
+            } else {
+                visitChildren(overlayWidget, element, depth + 1, maxDepth, false);
+            }
 
+        }
+        // post process the widget (eg. hide large tables)
+        postProcess(overlayWidget);
+    }
+
+    protected void visitChildren(final OverlayWidget overlayWidget, final Element element, final int depth, final int maxDepth, boolean deferred) {
         // attach all children (note, this is a recursive call)
         final Element[] children = overlayStrategy.getChildren(element);
         if (children != null) {
             for (final Element child : children) {
-                final OverlayWidget amendableChild = wrap(overlayWidget, child, depth + 1);
+                final OverlayWidget amendableChild = wrap(overlayWidget, child, depth, maxDepth);
                 if (amendableChild != null) {
                     overlayWidget.addOverlayWidget(amendableChild, -1, true);
                 }
             }
         }
-
-        // post process the widget (eg. hide large tables)
-        postProcess(overlayWidget);
+        // mark the children as overlaid
+        overlayWidget.setChildrenInitialized(true);
     }
 
     protected void postProcess(final OverlayWidget overlayWidget) {

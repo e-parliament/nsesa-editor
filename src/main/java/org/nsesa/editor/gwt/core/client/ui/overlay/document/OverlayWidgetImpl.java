@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
@@ -20,13 +22,14 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 import org.nsesa.editor.gwt.core.client.util.NodeUtil;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -76,9 +79,9 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     private List<OverlayWidget> childOverlayWidgets = new ArrayList<OverlayWidget>();
 
     /**
-     * A list of all the amendments on this widget.
+     * A list of {@link OverlayWidgetAware} (amendments or modifiers).
      */
-    private List<AmendmentController> amendmentControllers = new ArrayList<AmendmentController>();
+    private List<OverlayWidgetAware> overlayWidgetAwareList = new ArrayList<OverlayWidgetAware>();
 
     /**
      * Flag to indicate whether or not this widget is amendable by the user (not, that does not mean there are no
@@ -140,6 +143,16 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     protected HTMLPanel amendmentControllersHolderElement;
 
     /**
+     * keep a list with the allowed children that could be added*
+     */
+    private List<OverlayWidget> allowedChildren;
+
+    /**
+     * Flag to keep track to see if the children of this overlay widget have been overlaid.
+     */
+    private boolean childrenInitialized;
+
+    /**
      * Default constructor.
      */
     public OverlayWidgetImpl() {
@@ -194,7 +207,6 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             this.overlayStrategy = null;
             this.origin = null;
             this.amendable = null;
-            this.amendmentControllers = null;
             this.assignedNumber = null;
             this.amendmentControllersHolderElement = null;
             this.childOverlayWidgets = null;
@@ -218,12 +230,12 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             if (!skipValidation) {
                 // see if there is a wildcard in the allowed subtypes,
                 OverlayWidget wildCard = null;
-                if (!getAllowedChildTypes().containsKey(wildCard)) {
+                if (!getAllowedChildTypes().contains(wildCard)) {
                     // no wildcard - see if the type is supported as a child widget
                     boolean canAdd = false;
-                    for (Map.Entry<OverlayWidget, Occurrence> entry : getAllowedChildTypes().entrySet()) {
-                        if (entry.getKey().getType().equalsIgnoreCase(child.getType()) &&
-                                entry.getKey().getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
+                    for (OverlayWidget allowed : getAllowedChildTypes()) {
+                        if (allowed.getType().equalsIgnoreCase(child.getType()) &&
+                                allowed.getNamespaceURI().equalsIgnoreCase(child.getNamespaceURI())) {
                             canAdd = true;
                         }
                     }
@@ -279,29 +291,29 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void addAmendmentController(final AmendmentController amendmentController) {
-        if (amendmentController == null) throw new NullPointerException("Cannot add null amendment controller!");
+    public void addOverlayWidgetAware(final OverlayWidgetAware amendment) {
+        if (amendment == null) throw new NullPointerException("Cannot add null amendment controller!");
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendmentControllerAdded(this, amendmentController);
+            vetoed = listener.beforeOverlayWidgetAwareAdded(this, amendment);
 
         if (!vetoed) {
-            if (amendmentControllers.contains(amendmentController)) {
-                throw new RuntimeException("Amendment already exists: " + amendmentController);
+            if (overlayWidgetAwareList.contains(amendment)) {
+                throw new RuntimeException("Amendment already exists: " + amendment);
             }
-            if (!amendmentControllers.add(amendmentController)) {
-                throw new RuntimeException("Could not add amendment controller: " + amendmentController);
+            if (!overlayWidgetAwareList.add(amendment)) {
+                throw new RuntimeException("Could not add amendment controller: " + amendment);
             }
+
+            amendment.setOverlayWidget(this);
 
             // physical attach
             final HTMLPanel holderElement = getAmendmentControllersHolderElement();
             if (holderElement != null) {
-                holderElement.add(amendmentController.getView());
-                // set up a reference to this widget
-                amendmentController.setAmendedOverlayWidget(this);
+                holderElement.add(amendment.getView());
                 // inform the listener
-                if (listener != null) listener.afterAmendmentControllerAdded(this, amendmentController);
+                if (listener != null) listener.afterOverlayWidgetAwareAdded(this, amendment);
             } else {
                 LOG.severe("No amendment holder panel could be added for this widget " + this);
             }
@@ -311,30 +323,26 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void removeAmendmentController(final AmendmentController amendmentController) {
-        if (amendmentController == null) throw new NullPointerException("Cannot remove null amendment controller!");
+    public void removeAmendmentController(final OverlayWidgetAware amendment) {
+        if (amendment == null) throw new NullPointerException("Cannot remove null amendment controller!");
 
         boolean vetoed = false;
         if (listener != null)
-            vetoed = listener.beforeAmendmentControllerRemoved(this, amendmentController);
+            vetoed = listener.beforeOverlayWidgetAwareRemoved(this, amendment);
 
         if (!vetoed) {
-            if (!amendmentControllers.contains(amendmentController)) {
-                throw new RuntimeException("Amendment controller not found: " + amendmentController);
+            if (!getOverlayWidgetAwareList().contains(amendment)) {
+                throw new RuntimeException("Amendment controller not found: " + amendment);
             }
-            if (!amendmentControllers.remove(amendmentController)) {
-                throw new RuntimeException("Could not remove amendment controller: " + amendmentController);
+            if (!getOverlayWidgetAwareList().remove(amendment)) {
+                throw new RuntimeException("Could not remove amendment controller: " + amendment);
             }
-
-            // physical remove
-            amendmentController.getView().asWidget().removeFromParent();
-            amendmentController.getExtendedView().asWidget().removeFromParent();
-
-            // clear reference to this widget
-            amendmentController.setAmendedOverlayWidget(null);
+            // physical remove of the main view
+            amendment.getView().asWidget().removeFromParent();
+            amendment.setOverlayWidget(null);
 
             // inform the listener
-            if (listener != null) listener.afterAmendmentControllerRemoved(this, amendmentController);
+            if (listener != null) listener.afterOverlayWidgetAwareRemoved(this, amendment);
         } else {
             LOG.info("OverlayWidget listener veto'ed the removal of the amendment controller.");
         }
@@ -361,19 +369,19 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (UIListener != null) {
             switch (DOM.eventGetType(event)) {
                 case Event.ONCLICK:
-                    UIListener.onClick(this);
+                    UIListener.onClick(this, event);
                     break;
                 case Event.ONDBLCLICK:
-                    UIListener.onDblClick(this);
+                    UIListener.onDblClick(this, event);
                     break;
                 case Event.ONMOUSEMOVE:
-                    UIListener.onMouseOver(this);
+                    UIListener.onMouseOver(this, event);
                     break;
                 case Event.ONMOUSEOUT:
-                    UIListener.onMouseOut(this);
+                    UIListener.onMouseOut(this, event);
                     break;
                 default:
-                    throw new UnsupportedOperationException("Unknown event.");
+                    //throw new UnsupportedOperationException("Unknown event.");
             }
         }
     }
@@ -476,6 +484,82 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
+    public OverlayWidget next(final OverlayWidgetSelector overlayWidgetSelector) {
+        OverlayWidget next = null;
+
+        // if we have any children, select the first one
+        if (!getChildOverlayWidgets().isEmpty()) {
+            next = getChildOverlayWidgets().get(0);
+        }
+
+        // if we have no children, but rather a sibling, select that one
+        if (next == null) {
+            OverlayWidget sibling = getNextSibling();
+            if (sibling != null) next = sibling;
+        }
+        // if we still don't have any target, then visit the parent node, and see if this one has a sibling relative
+        // to this overlay widget - if not, bubble up until we have the root, or until we find a new sibling
+        if (next == null) {
+            // get the next parent sibling, if any
+            OverlayWidget toCheckForSiblings = getParentOverlayWidget();
+            while (toCheckForSiblings != null) {
+                OverlayWidget nextSibling = toCheckForSiblings.getNextSibling();
+                if (nextSibling != null) {
+                    next = nextSibling;
+                    break;
+                }
+                toCheckForSiblings = toCheckForSiblings.getParentOverlayWidget();
+            }
+        }
+        // finally, if we found a next node, pass it on to the selector - if the selector rejects the node,
+        // then we simply skip it, and use it to base the next search on
+        while (next != null) {
+            if (!overlayWidgetSelector.select(next)) {
+                if (LOG.isLoggable(Level.FINE))
+                    LOG.fine("Skipping " + next + " because the selector rejected it.");
+                next = next.next(overlayWidgetSelector);
+            } else {
+                break;
+            }
+        }
+        return next;
+    }
+
+    @Override
+    public OverlayWidget previous(final OverlayWidgetSelector overlayWidgetSelector) {
+        OverlayWidget previous = null;
+
+        // if we have a previous sibling, then we need to find the very last child node
+        final OverlayWidget previousSibling = getPreviousSibling();
+        if (previousSibling != null) {
+            OverlayWidget toCheckForChildren = previousSibling;
+            OverlayWidget lastChild = toCheckForChildren;
+            while (toCheckForChildren != null && !toCheckForChildren.getChildOverlayWidgets().isEmpty()) {
+                // select the last child - see if it has any children
+                lastChild = toCheckForChildren.getChildOverlayWidgets().get(toCheckForChildren.getChildOverlayWidgets().size() - 1);
+                toCheckForChildren = lastChild;
+            }
+            previous = lastChild;
+        } else {
+            // no previous sibling - take the parent
+            previous = getParentOverlayWidget();
+        }
+
+        // finally, if we found a previous node, pass it on to the selector - if the selector rejects the node,
+        // then we simply skip it, and use it to base the previous search on
+        while (previous != null) {
+            if (!overlayWidgetSelector.select(previous)) {
+                if (LOG.isLoggable(Level.FINE))
+                    LOG.fine("Skipping " + previous + " because the selector rejected it.");
+                previous = previous.previous(overlayWidgetSelector);
+            } else {
+                break;
+            }
+        }
+        return previous;
+    }
+
+    @Override
     public OverlayWidget getPreviousNonIntroducedOverlayWidget(final boolean sameType) {
         OverlayWidget previous = getPreviousSibling();
         while (previous != null) {
@@ -511,7 +595,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public OverlayWidget getRoot() {
-        return getParentOverlayWidget() != null ? getParentOverlayWidget() : this;
+        return getParentOverlayWidget() != null ? getParentOverlayWidget().getRoot() : this;
     }
 
     @Override
@@ -536,12 +620,22 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public boolean isAmended() {
-        return !amendmentControllers.isEmpty();
+        return !overlayWidgetAwareList.isEmpty();
     }
 
     @Override
     public void setAmendable(Boolean amendable) {
         this.amendable = amendable;
+    }
+
+    @Override
+    public boolean areChildrenInitialized() {
+        return childrenInitialized;
+    }
+
+    @Override
+    public void setChildrenInitialized(boolean childrenInitialized) {
+        this.childrenInitialized = childrenInitialized;
     }
 
     @Override
@@ -572,15 +666,9 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return amendmentControllersHolderElement;
     }
 
-    /**
-     * Returns a map of the node names that are allowed to be nested.
-     * Note: this can include wildcards (null keys).
-     *
-     * @return the Map of allowed child types (an empty map is ok though).
-     */
     @Override
-    public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-        return new HashMap<OverlayWidget, Occurrence>();
+    public StructureIndicator getStructureIndicator() {
+        return new StructureIndicator.DefaultStructureIndicator(1, 1);
     }
 
     @Override
@@ -650,8 +738,43 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return formattedIndex;
     }
 
+    @Override
+    public void moveUp() {
+        OverlayWidget parent = getParentOverlayWidget();
+        if (parent != null) {
+            int colIndex = parent.getChildOverlayWidgets().indexOf(this);
+            if (colIndex > 0) {
+                parent.removeOverlayWidget(this);
+                parent.addOverlayWidget(this, colIndex - 1, true);
+                move(this, parent);
+            }
+        }
+    }
+
     public void setFormattedIndex(String formattedIndex) {
         this.formattedIndex = formattedIndex;
+    }
+
+    @Override
+    public void moveDown() {
+        OverlayWidget parent = getParentOverlayWidget();
+        if (parent != null) {
+            int colIndex = parent.getChildOverlayWidgets().indexOf(this);
+            if (colIndex < parent.getChildOverlayWidgets().size() - 1) {
+                parent.removeOverlayWidget(this);
+                parent.addOverlayWidget(this, colIndex + 1, true);
+                move(this, parent);
+            }
+        }
+    }
+
+    @Override
+    public boolean hasParent(String namespaceURI, String type) {
+        for (OverlayWidget parent : getParentOverlayWidgets()) {
+            if (parent.getNamespaceURI().equalsIgnoreCase(namespaceURI) && parent.getType().equalsIgnoreCase(type))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -683,8 +806,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public AmendmentController[] getAmendmentControllers() {
-        return amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()]);
+    public List<OverlayWidgetAware> getOverlayWidgetAwareList() {
+        return overlayWidgetAwareList;
     }
 
     @Override
@@ -742,6 +865,22 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return -1;
     }
 
+    @Override
+    public int getDomIndex() {
+        if (getParentOverlayWidget() != null) {
+            int index = 0;
+            for (int i = 0; i < getParentOverlayWidget().asWidget().getElement().getChildCount(); i++) {
+                Node node = getParentOverlayWidget().asWidget().getElement().getChild(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    if (node.equals(getOverlayElement())) return index;
+                    index++;
+                }
+            }
+            LOG.warning("Node not found for the DOM index.");
+        }
+        return -1;
+    }
+
     // DSL Way
     public String html() {
         return getInnerHTML();
@@ -761,7 +900,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      * This will use a
      * depth-first search using {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget#getChildOverlayWidgets()}.
      * </P>
-     * Depending on the visitor's return value from {@link org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
+     * Depending on the visitor's return value from {@link OverlayWidgetWalker.OverlayWidgetVisitor#visit(org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)},
      * we will continue going deeper into the tree's leaves.
      * <p/>
      * Note that when a search is stopped short by the visitor, this will <strong>NOT</strong> prevent the search from
@@ -783,4 +922,50 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             }
         }
     }
+
+    /**
+     * Returns the list of the allowed child types as they are coming from {@link StructureIndicator} structure
+     *
+     * @return the list of the allowed child types
+     */
+    protected List<OverlayWidget> getAllowedChildTypes() {
+        if (allowedChildren == null) {
+            allowedChildren = new ArrayList<OverlayWidget>();
+            List<StructureIndicator> stack = new ArrayList<StructureIndicator>();
+            stack.add(getStructureIndicator());
+            while (!stack.isEmpty()) {
+                StructureIndicator structureIndicator = stack.remove(0);
+                if (structureIndicator instanceof StructureIndicator.Element) {
+                    StructureIndicator.Element elemIndicator = (StructureIndicator.Element) structureIndicator;
+                    OverlayWidget candidate = elemIndicator.asWidget();
+                    allowedChildren.add(candidate);
+                } else {
+                    if (structureIndicator.getIndicators() != null) {
+                        stack.addAll(structureIndicator.getIndicators());
+                    }
+                }
+            }
+        }
+        return allowedChildren;
+    }
+
+    /**
+     * Move the widget in the dom according with the new structure in parent collection
+     * @param widget The widget to be moved
+     * @param parent The widget parent
+     */
+    private void move(OverlayWidget widget, OverlayWidget parent) {
+        // physical attach
+        com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
+        com.google.gwt.user.client.Element childElement = widget.getOverlayElement().cast();
+        DOM.removeChild(parentElement, childElement);
+        OverlayWidget next = widget.getNextSibling();
+        if (next != null) {
+            com.google.gwt.user.client.Element beforeElement = next.getOverlayElement().cast();
+            DOM.insertBefore(parentElement, childElement, beforeElement);
+        } else {
+            DOM.appendChild(parentElement, childElement);
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -15,17 +15,14 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 import junit.framework.Assert;
 import org.junit.Test;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.amendment.OverlayWidgetWalker;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentView;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentViewImpl;
-import org.nsesa.editor.gwt.core.client.ui.amendment.DefaultAmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
@@ -151,147 +148,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         Assert.assertTrue("Make sure the child is not removed.", overlayWidget.getChildOverlayWidgets().contains(child));
     }
 
-    @Test
-    public void testAddAmendmentController() throws Exception {
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        Assert.assertTrue(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
 
-    @Test
-    public void testAddAmendmentControllerWithListener() throws Exception {
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl() {
-            {
-                // we need an amendment holder element to attach the amendment to ...
-                // TODO get rid of this holder element - no need for it
-                amendmentControllersHolderElement = new HTMLPanel("");
-            }
-        };
-        final Boolean[] hits = new Boolean[]{false, false};
-        overlayWidget.setListener(new OverlayWidgetListenerMock() {
-            @Override
-            public void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[1] = true;
-            }
-
-            @Override
-            public boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[0] = true;
-                return false;
-            }
-        });
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        Assert.assertTrue("Make sure the before method is hit", hits[0]);
-        Assert.assertTrue("Make sure the after method is hit", hits[1]);
-        Assert.assertTrue(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
-
-    @Test
-    public void testAddAmendmentControllerWithVetoListener() throws Exception {
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        final Boolean[] hits = new Boolean[]{false, false};
-        overlayWidget.setListener(new OverlayWidgetListenerMock() {
-            @Override
-            public void afterAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[1] = true;
-            }
-
-            @Override
-            public boolean beforeAmendmentControllerAdded(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[0] = true;
-                return true;
-            }
-        });
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        Assert.assertTrue("Make sure the before method is hit", hits[0]);
-        Assert.assertFalse("Make sure the after method is not hit", hits[1]);
-        Assert.assertFalse(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
-
-    @Test
-    public void testRemoveAmendmentController() throws Exception {
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl() {
-            {
-                // we need an amendment holder element to attach the amendment to ...
-                // TODO get rid of this holder element - no need for it
-                amendmentControllersHolderElement = new HTMLPanel("");
-            }
-        };
-
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        overlayWidget.removeAmendmentController(amendmentController);
-        Assert.assertFalse(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
-
-    @Test
-    public void testRemoveAmendmentControllerWithListener() throws Exception {
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        final Boolean[] hits = new Boolean[]{false, false};
-        overlayWidget.setListener(new OverlayWidgetListenerMock() {
-            @Override
-            public boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[0] = true;
-                return false;
-            }
-
-            @Override
-            public void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[1] = true;
-            }
-        });
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        overlayWidget.removeAmendmentController(amendmentController);
-        Assert.assertTrue("Make sure the before method is hit", hits[0]);
-        Assert.assertTrue("Make sure the after method is hit", hits[1]);
-        Assert.assertFalse(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
-
-    @Test
-    public void testRemoveAmendmentControllerWithVetoListener() throws Exception {
-        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        final Boolean[] hits = new Boolean[]{false, false};
-        overlayWidget.setListener(new OverlayWidgetListenerMock() {
-            @Override
-            public boolean beforeAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[0] = true;
-                return true;
-            }
-
-            @Override
-            public void afterAmendmentControllerRemoved(OverlayWidget overlayWidget, AmendmentController amendmentController) {
-                hits[1] = true;
-            }
-        });
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExtended = new AmendmentViewImpl(null);
-        final AmendmentController amendmentController = new DefaultAmendmentController(amendmentView, amendmentViewExtended);
-        overlayWidget.addAmendmentController(amendmentController);
-        overlayWidget.removeAmendmentController(amendmentController);
-        Assert.assertTrue("Make sure the before method is hit", hits[0]);
-        Assert.assertFalse("Make sure the after method is not hit", hits[1]);
-        Assert.assertTrue(Arrays.asList(overlayWidget.getAmendmentControllers()).contains(amendmentController));
-    }
 
     @Test
     public void testOnBrowserEvent() throws Exception {
@@ -527,18 +384,38 @@ public class AmendableWidgetImplTest extends GwtTest {
     public void testIsAmended() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         Assert.assertFalse(overlayWidget.isAmended());
-        final ClientFactory clientFactory = new ClientFactoryMock();
-        final AmendmentView amendmentView = new AmendmentViewImpl(null);
-        final AmendmentView amendmentViewExt = new AmendmentViewImpl(null);
-        AmendmentController amendmentController1 = new DefaultAmendmentController(amendmentView, amendmentViewExt);
-        overlayWidget.addAmendmentController(amendmentController1);
+        OverlayWidgetAware amendment = new OverlayWidgetAware() {
+
+            OverlayWidget target;
+
+            @Override
+            public void setOverlayWidget(OverlayWidget overlayWidget) {
+                this.target = overlayWidget;
+            }
+
+            @Override
+            public void setOrder(int order) {
+                // ignore
+            }
+
+            @Override
+            public IsWidget getView() {
+                return new HTML();
+            }
+
+            @Override
+            public IsWidget getExtendedView() {
+                return new HTML();
+            }
+        };
+        overlayWidget.addOverlayWidgetAware(amendment);
         Assert.assertTrue(overlayWidget.isAmended());
     }
 
     @Test
     public void testIsImmutable() throws Exception {
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
-        overlayWidget.setImmutable(true);
+        overlayWidget.setImmutable(Boolean.TRUE);
         Assert.assertTrue(overlayWidget.isImmutable());
     }
 

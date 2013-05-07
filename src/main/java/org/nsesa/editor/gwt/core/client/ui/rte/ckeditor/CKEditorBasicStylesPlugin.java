@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -14,6 +14,9 @@
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Element;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
 /**
@@ -24,25 +27,85 @@ import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
  * Date: 15/01/13 13:24
  */
 public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
-    @Override
-    public void init(JavaScriptObject editor) {
-        nativeInit(editor);
+
+    private OverlayFactory overlayFactory;
+    private BasicStyleProvider basicStyleProvider;
+
+    /**
+     * Identify the basic styles used in CK editor
+     */
+    public static enum BasicStyleDefinition {
+        b, i, u, sub, sup
     }
 
-    private native void nativeInit(JavaScriptObject editor) /*-{
+    /**
+     * An interface to provide the corresponding overlay widget to a given basic style definition
+     */
+    public static interface BasicStyleProvider {
+        OverlayWidget get(BasicStyleDefinition basicStyleDefinition, OverlayWidget parentOverlayWidget);
+    }
+
+    /**
+     * Default implementation of BasicStyleProvider interface by using the overlay factory to create an overlay widget
+     * which should correspond to the basic styles defined in the editor
+     *
+     */
+    public static class DefaultBasicStyleProvider implements BasicStyleProvider {
+        private OverlayFactory overlayFactory;
+
+        public DefaultBasicStyleProvider(OverlayFactory overlayFactory) {
+            this.overlayFactory = overlayFactory;
+        }
+        public OverlayWidget get(BasicStyleDefinition basicStyleDefinition, OverlayWidget parentOverlayWidget) {
+            return overlayFactory.getAmendableWidget(parentOverlayWidget.getNamespaceURI(), basicStyleDefinition.name());
+        }
+    }
+
+    /**
+     * Default constructor
+     * @param overlayFactory {@link OverlayFactory}
+     */
+    public CKEditorBasicStylesPlugin(OverlayFactory overlayFactory) {
+        this(overlayFactory, new DefaultBasicStyleProvider(overlayFactory));
+    }
+
+    /**
+     * Create an instance with the given parameters
+     * @param overlayFactory {@link OverlayFactory}
+     * @param basicStyleProvider {@link BasicStyleProvider}
+     */
+    public CKEditorBasicStylesPlugin(OverlayFactory overlayFactory, BasicStyleProvider basicStyleProvider) {
+        this.overlayFactory = overlayFactory;
+        this.basicStyleProvider = basicStyleProvider;
+    }
+
+    @Override
+    public void init(JavaScriptObject editor) {
+        nativeInit(this, editor);
+    }
+
+    private native void nativeInit(CKEditorBasicStylesPlugin basicStylesPlugin, JavaScriptObject editor) /*-{
 
         var addButtonCommand = function (buttonName, buttonLabel, commandName, styleDefiniton) {
-            NsesaStyleCommand = function (styleDefinition) {
-                this.styleDefinition = styleDefinition;
+            NsesaStyleCommand = function (styleDef) {
+                this.styleDefinition = styleDef;
             }
             NsesaStyleCommand.prototype = new $wnd.CKEDITOR.styleCommand();
             NsesaStyleCommand.prototype.exec = function (editor) {
-                this.styleDefinition.attributes['ns'] = editor.getSelection().getStartElement().getAttribute('ns');
+                // identify the basic style elements based on the selection start element
+                var container = editor.getSelection().getStartElement().$;
+                var tagName = this.styleDefinition.overrides;
+                var basicEl = basicStylesPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorBasicStylesPlugin::findBasicStyleElement(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(container, tagName);
+                if (basicEl) {
+                    this.styleDefinition.attributes['ns'] = basicEl.getAttribute('ns');
+                    this.styleDefinition.attributes['class'] = basicEl.getAttribute('class');
+                    this.styleDefinition.attributes['type'] = basicEl.getAttribute('type');
+                }
+
                 this.style = new $wnd.CKEDITOR.style(this.styleDefinition);
                 editor.attachStyleStateChange(this.style, function (state) {
                     !editor.readOnly && editor.getCommand(commandName).setState(state);
                 });
-
                 $wnd.CKEDITOR.styleCommand.prototype.exec.call(this, editor);
             }
             var nsesaStyleCommand = new NsesaStyleCommand(styleDefiniton);
@@ -56,71 +119,49 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
         var config = editor.config,
             lang = editor.lang,
             newTag = "span",
-            newType,
-            className,
             oldTag;
 
-        newType = "b";
         oldTag = "b";
-        className = "widget " + newType;
         config.coreStyles_bold =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType},
+            attributes: {},
             overrides: oldTag
         };
         addButtonCommand('Bold', lang.bold, 'bold', config.coreStyles_bold);
 
-        newType = "i";
         oldTag = "i";
-        className = "widget " + newType;
         config.coreStyles_italic =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType},
+            attributes: {},
             overrides: oldTag
         };
         addButtonCommand('Italic', lang.italic, 'italic', config.coreStyles_italic);
 
-        newType = "u";
         oldTag = "u";
-        className = "widget " + newType;
         config.coreStyles_underline =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType},
+            attributes: {},
             overrides: oldTag
         };
         addButtonCommand('Underline', lang.underline, 'underline', config.coreStyles_underline);
 
-//        newType = "strike";
-//        oldTag = "strike";
-//        config.coreStyles_strike =
-//        {
-//            element : newTag,
-//            attributes : { 'class' : className, 'type' : newType, 'ns' : nameSpace},
-//            overrides : oldTag
-//        };
-//        addButtonCommand( 'Strike'		, lang.strike		, 'strike'		, config.coreStyles_strike );
-
-        newType = "sub";
         oldTag = "sub";
-        className = "widget " + newType;
         config.coreStyles_subscript =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType},
+            attributes: {},
             overrides: oldTag
         };
         addButtonCommand('Subscript', lang.subscript, 'subscript', config.coreStyles_subscript);
 
-        newType = "sup";
         oldTag = "sup";
-        className = "widget " + newType;
         config.coreStyles_superscript =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType},
+            attributes: {},
             overrides: oldTag
         };
         addButtonCommand('Superscript', lang.superscript, 'superscript', config.coreStyles_superscript);
@@ -128,4 +169,19 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
 
     }-*/;
 
+    /**
+     * Find basic style element based on the given container an style type
+     * @param container the parent element as {@link JavaScriptObject}
+     * @param tagName The tag name
+     * @return {@link JavaScriptObject}
+     */
+    private JavaScriptObject findBasicStyleElement(JavaScriptObject container, String tagName) {
+        Element el = container.cast();
+        OverlayWidget parent = overlayFactory.getAmendableWidget(el);
+        if (parent != null) {
+            OverlayWidget basicStyleWidget = basicStyleProvider.get(BasicStyleDefinition.valueOf(tagName), parent);
+            return basicStyleWidget.getOverlayElement();
+        }
+        return null;
+    }
 }

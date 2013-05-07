@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -17,12 +17,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
 import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * A plugin to handle enter and shift enter keys.
@@ -45,98 +44,88 @@ import java.util.List;
  */
 public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
 
-    /**
-     * An interface to specify the rule when you press enter over an overlay widget in the editor area
-     */
-    public static interface EnterRule {
-        abstract OverlayWidget onEnter(OverlayWidget widget);
-    }
-
+    private static final Logger LOG = Logger.getLogger(CKEditorEnterKeyPlugin.class.getName());
 
     /**
-     * Default Implementation of {@link org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin.EnterRule}
-     * by returning a new widget with the same name and uri as the processed widget
+     * When you press enter over an given overlay widget it will be converted into another widget
      */
-    public static class DefaultEnterRule implements EnterRule {
-
-        private OverlayFactory factory;
-
-        /**
-         * Create a DefaultRule instnace with the given overlay factory
-         * @param factory the {@link OverlayFactory} factory
-         */
-        public DefaultEnterRule(OverlayFactory factory) {
-            this.factory = factory;
-        }
-        @Override
-        public OverlayWidget onEnter(OverlayWidget widget) {
-            return factory.getAmendableWidget(widget.getOverlayElement());
-        }
+    public static interface ConversionEnterRule {
+        abstract OverlayWidget convert(OverlayWidget widget);
     }
 
-     /**
-     * Implementation of {@link org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin.EnterRule}
-     * by checking the type and namespace of the processed widget
+    /**
+     * When you press enter over an given overlay widget it will be splitted if the rule allows.
      */
-    public static class FromNameAndUriToWidgetEnterRule implements EnterRule {
-        private OverlayWidget to;
-        private String fromName;
-        private String fromNamespaceUri;
-
-        public FromNameAndUriToWidgetEnterRule(String fromName, String fromNamespaceUri, OverlayWidget to) {
-            this.fromName = fromName;
-            this.fromNamespaceUri = fromNamespaceUri;
-            this.to = to;
-        }
-
-        /**
-         * Check the type and namespace uri of the processed widget
-         * @param toProcess {@link OverlayWidget} to be processed
-         * @return <code>to</code> widget when <code>from</code> widget and <code>toProcess</code> widget have the
-         * same type and namespace
-         */
-        @Override
-        public OverlayWidget onEnter(OverlayWidget toProcess) {
-            if (toProcess.getType().equals(fromName) &&
-                    toProcess.getNamespaceURI().equals(fromNamespaceUri)) {
-                return to;
-            }
-            return null;
-        }
+    public static interface SplitEnterRule {
+        abstract boolean split(OverlayWidget widget);
     }
 
-    /** a list with available rules that need to be applied **/
-    private List<EnterRule> enterRules = new ArrayList<EnterRule>();
+    /** split always the elements **/
+    public static SplitEnterRule SPLIT_ALWAYS_ENTER_RULE = new SplitEnterRule() {
+        @Override
+        public boolean split(OverlayWidget widget) {
+            return true;
+        }
+    };
+    /**
+     * Returns the line break as overlay widget by providing the parent overlay widget
+     */
+    public static interface LineBreakProvider {
+        abstract OverlayWidget get(OverlayWidget parentWidget);
+    }
 
-    /** a list with widgets that need to be splitted **/
-    private List<OverlayWidget> toBeSplitWidgets = new ArrayList<OverlayWidget>();
+    /**
+     * Default implementation of line break provider by using the overlay factory
+     * to get a representation of BR tag
+     */
+    public static class DefaultLineBreakProvider implements LineBreakProvider {
+        private OverlayFactory overlayFactory;
+        public DefaultLineBreakProvider(OverlayFactory overlayFactory) {
+            this.overlayFactory = overlayFactory;
+        }
+        @Override
+        public OverlayWidget get(OverlayWidget parentWidget) {
+            return overlayFactory.getAmendableWidget(parentWidget.getNamespaceURI(), "br");
+        }
+    };
+
+    /** conversion enter rule to be applied **/
+    private ConversionEnterRule conversionEnterRule;
+    /** split enter rule to be applied **/
+    private SplitEnterRule splitEnterRule;
+
+    /** snippet factory used to create new widget when press enter**/
+    private OverlaySnippetFactory snippetFactory;
+    /** split enter rule to be applied **/
+    private LineBreakProvider lineBreakProvider;
 
     private OverlayFactory overlayFactory;
-    private OverlayWidget brWidget;
 
     /**
-     * Create a plugin instance with the given {@link OverlayFactory}
-     * @param overlayFactory The factory used to determine overlay widgets from {@link Element}
-     * @param brWidget the overlay widget corresponding to <code>BR</code> html tag
+     * Create an instance with the given parameters
+     * @param overlayFactory {@link OverlayFactory}
+     * @param lineBreakProvider {@link LineBreakProvider}
+     * @param splitEnterRule {@link SplitEnterRule}
+     * @param conversionEnterRule {@link ConversionEnterRule}
      */
     @Inject
-    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory, OverlayWidget brWidget) {
+    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory,
+
+                                  LineBreakProvider lineBreakProvider,
+                                  SplitEnterRule splitEnterRule, ConversionEnterRule conversionEnterRule) {
         this.overlayFactory = overlayFactory;
-        this.brWidget = brWidget;
+        this.snippetFactory = snippetFactory;
+        this.lineBreakProvider = lineBreakProvider;
+        this.splitEnterRule = splitEnterRule;
+        this.conversionEnterRule = conversionEnterRule;
     }
 
-    /**
-     * Add a rule in the list of enter rules
-     * @param enterRule The rule to be added
-     */
-    public void addEnterRule(EnterRule enterRule) {
-        enterRules.add(enterRule);
+    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory, OverlaySnippetFactory overlaySnippetFactory) {
+        this(overlayFactory,
+                new DefaultLineBreakProvider(overlayFactory),
+                SPLIT_ALWAYS_ENTER_RULE,
+                null);
     }
-
-    public void addToBeSplitOnEnter(OverlayWidget widget) {
-        toBeSplitWidgets.add(widget);
-    }
-
 
     @Override
     public void init(JavaScriptObject editor) {
@@ -183,33 +172,38 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 var positionType = selectionPosition(editor);
                 var ranges = editor.getSelection().getRanges();
                 if (positionType == 0) {
-                // if the container need to be splited, do it , otherwise introduce br
+                    // if the container need to be splited, do it , otherwise introduce br
                     var container = ranges[0].startContainer;
                     while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
                         container = container.getParent();
                     }
-                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::toBeSplit(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::split(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
                     if (toBeSplit) {
                         //collapse the range
                         ranges[0].collapse(true);
-                        ranges[0].splitElement(container);
+                        var elem = ranges[0].splitElement(container);
+                        var range = new $wnd.CKEDITOR.dom.range(ranges[0].document);
+                        range.setStart(elem, 0);
+                        range.setEnd(elem, 0);
+                        editor.getSelection().selectRanges([range]);
+
                     } else {
                         enterBr(editor, range);
                     }
 
-                // find start container and end container of the selection
-                // if they are text nodes go to their parents
+                    // find start container and end container of the selection
+                    // if they are text nodes go to their parents
                 } else if (positionType == -1) {
                     var startContainer = ranges[0].startContainer;
                     while (startContainer != null && startContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         startContainer = startContainer.getParent();
                     }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;)(startContainer.$);
+                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(startContainer.$, editor);
                     if (elemAsString) {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
                         while (startContainer != null && (elem.getAttribute('type') != startContainer.getAttribute('type')
-                                )) {
+                            )) {
                             startContainer = startContainer.getParent();
                         }
                         if (startContainer) {
@@ -222,13 +216,13 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     while (endContainer != null && endContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         endContainer = endContainer.getParent();
                     }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$);
+                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$, editor);
                     if (elemAsString) {
                         var elem =  $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
                         while (endContainer != null) {
                             if ((elem.getAttribute('type') == endContainer.getAttribute('type')
-                                    )) {
+                                )) {
                                 break;
                             }
                             endContainer = endContainer.getParent();
@@ -253,22 +247,27 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 // contenteditable=false element.
                 if (!range)
                     return;
+                var container = range.startContainer;
+                while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
+                    container = container.getParent();
+                }
 
-                var doc = range.document;
-                var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::brWidgetAsString()();
-                var lineBreak = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
-                range.deleteContents();
-                range.insertNode(lineBreak);
-                // This collapse guarantees the cursor will be blinking.
-                range.collapse(false);
-                range.select(false);
+                var lineBreak = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::getLineBreak(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+                if (lineBreak) {
+                    var brNode = $wnd.CKEDITOR.dom.element.createFromHtml(lineBreak);
+                    range.deleteContents();
+                    range.insertNode(brNode);
+                    // This collapse guarantees the cursor will be blinking.
+                    range.collapse(false);
+                    range.select(false);
+                }
                 return;
             }
         };
 
         var plugin = $wnd.CKEDITOR.plugins.enterkey,
-                enterBr = plugin.enterBr,
-                enterBlock = plugin.enterBlock;
+            enterBr = plugin.enterBr,
+            enterBlock = plugin.enterBlock;
 
         // for mode = 1 add a br for mode 2 in the middle of the text add br, at the beginning of the text or
         // at the end of the text add a new widget as the parent of the text node unless a rule is specified to
@@ -335,90 +334,44 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     }-*/;
 
     /**
-     * Add a filter transformation for html to data and viceversa for BR tags
-     * @param keyPlugin The plugin instance
-     * @param editor The editor instance
-     */
-    private native void nativeFilter(final CKEditorEnterKeyPlugin keyPlugin, JavaScriptObject editor) /*-{
-        var dataProcessor = editor.dataProcessor,
-                dataFilter = dataProcessor && dataProcessor.dataFilter,
-                htmlFilter = dataProcessor && dataProcessor.htmlFilter;
-//        // Add filter for html->data transformation.
-        if (dataFilter) {
-            dataFilter.addRules(
-            {
-                elements: {
-                    'span': function( element ) {
-                        if (element.attributes && element.attributes['type'] == "br") {
-                            // Span is self closing element - change that.
-                            //element.isEmpty = true;
-//                            // Save original element name in data-saved-name attribute.
-//                            element.attributes[ 'data-saved-type' ] = element.attributes['type'];
-//                            element.attributes[ 'data-saved-ns' ] = element.attributes['ns'];
-//                            element.attributes[ 'data-saved-class' ] = element.attributes['class'];
-//                            // Change name to br.
-                            element.name = 'br';
-                            // Push zero width space, because empty span would be removed.
-                            //element.children.push( new CKEDITOR.htmlParser.text( '\u200b' ) );
-                        }
-                    }
-                }
-             });
-        }
-//
-//        // Add filter for data->html transformation.
-        if (htmlFilter) {
-            htmlFilter.addRules( {
-                elements: {
-                    'br': function( element ) {
-                        element.isEmpty = true;
-                        element.children = [];
-                        element.attributes['type'] = 'br';
-//                        element.attributes['ns']  = 'ns';
-                        element.attributes['class'] = 'widget br';
-
-//                        delete element.attributes[ 'data-saved-type' ];
-//                        delete element.attributes[ 'data-saved-ns' ];
-//                        delete element.attributes[ 'data-saved-class' ];
-
-                        element.name = 'span';
-                    }
-                }
-            });
-        }
-    }-*/;
-    /**
      * Identify what type of element will be inserted when press enter over an existing element
      * @param existingElement
      * @return The new element that will be inserted
      */
-    private String onEnter(JavaScriptObject existingElement) {
+    private String onEnter(JavaScriptObject existingElement, JavaScriptObject editor) {
+        List<OverlayWidget> roots = overlayEditorBody(editor, overlayFactory);
         Element el = existingElement.cast();
-        OverlayWidget original = overlayFactory.getAmendableWidget(el);
-        if (original == null) {
-            return null;
-        }
-        //create a new one on the same type
-        OverlayWidget from = overlayFactory.getAmendableWidget(original.getNamespaceURI(), original.getType());
+        OverlayWidget original = findOverlayWidget(el, roots);
 
-        Element result = from.getOverlayElement();
-        for (EnterRule enterRule : enterRules) {
-            OverlayWidget widget = enterRule.onEnter(from);
-            if (widget != null) {
-                result = widget.getOverlayElement();
-                break;
+        OverlayWidget newWidget =  null;
+        if (conversionEnterRule != null) {
+            //fill in the ancestors for this widget
+            newWidget = conversionEnterRule.convert(original);
+        } else {
+            //create a new one on the same type
+            newWidget = overlayFactory.getAmendableWidget(original.getNamespaceURI(), original.getType());
+            if (newWidget != null) {
+                newWidget.getOverlayElement().setInnerText(EMPTY_CHAR);
             }
         }
-        result.setInnerText("\u200b");
-        return DOM.toString((com.google.gwt.user.client.Element) result);
+
+        return newWidget == null ? null :  DOM.toString((com.google.gwt.user.client.Element) newWidget.getOverlayElement());
     }
 
     /**
      * Return String representation of brWidget
      * @return String
      */
-    private String brWidgetAsString() {
-        return DOM.toString((com.google.gwt.user.client.Element) brWidget.getOverlayElement());
+    private String getLineBreak(JavaScriptObject container) {
+        Element el = container.cast();
+        OverlayWidget original = overlayFactory.getAmendableWidget(el);
+        OverlayWidget lineBreak = lineBreakProvider.get(original);
+        if (lineBreak == null) {
+            LOG.severe("The line break can not be retrieved for namespace " +
+                    (original == null ? "null" : original.getNamespaceURI()));
+            return null;
+        }
+        return DOM.toString((com.google.gwt.user.client.Element) lineBreak.getOverlayElement());
     }
 
     /**
@@ -426,19 +379,11 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      * @param existingElement the element to be processed
      * @return True when the element was set up to be splitted;
      */
-    private boolean toBeSplit(JavaScriptObject existingElement) {
+    private boolean split(JavaScriptObject existingElement) {
         Element el = existingElement.cast();
         OverlayWidget original = overlayFactory.getAmendableWidget(el);
-        if (original == null) {
-            return false;
-        }
-        for(OverlayWidget widget : toBeSplitWidgets) {
-            if (widget.getType().equals(original.getType())
-                    && widget.getNamespaceURI().equals(original.getNamespaceURI())) {
-                return true;
-            }
-        }
-
-        return false;
+        return (original == null) ? false : splitEnterRule.split(original);
     }
+
+
 }

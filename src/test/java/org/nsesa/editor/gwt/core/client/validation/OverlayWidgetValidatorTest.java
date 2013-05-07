@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -17,14 +17,13 @@ import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 import org.junit.Before;
 import org.junit.Test;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.StructureIndicator;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Date: 19/02/13 14:25
@@ -47,12 +46,12 @@ public class OverlayWidgetValidatorTest extends GwtTest {
     public void setup() throws Exception {
         parent = new OverlayWidgetImpl() {
             @Override
-            public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-                Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
-                allowedChildTypes.put(getOverlayWidget("typeA"), new Occurrence(0, 1));
-                allowedChildTypes.put(getOverlayWidget("typeB"), new Occurrence(0, -1));
-                allowedChildTypes.put(getOverlayWidget("typeC"), new Occurrence(1, -1));
-                return allowedChildTypes;
+            public StructureIndicator getStructureIndicator() {
+                StructureIndicator indicator = new StructureIndicator.DefaultStructureIndicator(1, 1,
+                        new StructureIndicator.DefaultElement(0,1, getOverlayWidget("typeA")),
+                        new StructureIndicator.DefaultElement(0,-1, getOverlayWidget("typeB")),
+                        new StructureIndicator.DefaultElement(1,-1, getOverlayWidget("typeC")));
+                return indicator;
             }
 
             @Override
@@ -104,10 +103,10 @@ public class OverlayWidgetValidatorTest extends GwtTest {
 
         final OverlayWidget missingOccurrence = new OverlayWidgetImpl() {
             @Override
-            public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-                Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
-                allowedChildTypes.put(getOverlayWidget("typeA"), new Occurrence(1, -1));
-                return allowedChildTypes;
+            public StructureIndicator getStructureIndicator() {
+                StructureIndicator indicator = new StructureIndicator.DefaultStructureIndicator(1, 1,
+                        new StructureIndicator.DefaultElement(1,-1, getOverlayWidget("typeA")));
+                return indicator;
             }
 
             @Override
@@ -124,11 +123,12 @@ public class OverlayWidgetValidatorTest extends GwtTest {
 
         final OverlayWidget noOccurrence = new OverlayWidgetImpl() {
             @Override
-            public Map<OverlayWidget, Occurrence> getAllowedChildTypes() {
-                Map<OverlayWidget, Occurrence> allowedChildTypes = new LinkedHashMap<OverlayWidget, Occurrence>();
-                allowedChildTypes.put(getOverlayWidget("typeA"), new Occurrence(0, -1));
-                return allowedChildTypes;
+            public StructureIndicator getStructureIndicator() {
+                StructureIndicator indicator = new StructureIndicator.DefaultStructureIndicator(1, 1,
+                        new StructureIndicator.DefaultElement(0,-1, getOverlayWidget("typeA")));
+                return indicator;
             }
+
 
             @Override
             public String getNamespaceURI() {

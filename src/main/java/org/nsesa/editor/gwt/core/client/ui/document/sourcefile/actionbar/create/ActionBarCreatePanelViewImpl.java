@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -33,7 +34,6 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
 @Scope(EDITOR)
 public class ActionBarCreatePanelViewImpl extends Composite implements ActionBarCreatePanelView {
 
@@ -43,6 +43,10 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     private UIListener uiListener;
+
+    private int highlightedItem = -1;
+
+    private Counter itemCounter = new Counter();
 
     @UiField
     Label siblingTitle;
@@ -69,6 +73,7 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
         this.uiListener = uiListener;
     }
 
+    @Override
     public void addChildAmendableWidget(final String title, final OverlayWidget overlayWidget) {
         childTitle.setVisible(true);
         Anchor w = new Anchor(title);
@@ -79,8 +84,13 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
             }
         });
         childPanel.add(w);
+        if (highlightedItem == itemCounter.get()) {
+            w.getElement().getStyle().setBackgroundColor("yellow");
+        }
+        itemCounter.increment();
     }
 
+    @Override
     public void addSiblingAmendableWidget(final String title, final OverlayWidget overlayWidget) {
         siblingTitle.setVisible(true);
         Anchor w = new Anchor(title);
@@ -91,17 +101,29 @@ public class ActionBarCreatePanelViewImpl extends Composite implements ActionBar
             }
         });
         siblingPanel.add(w);
+        if (highlightedItem == itemCounter.get()) {
+            w.getElement().getStyle().setBackgroundColor("yellow");
+        }
+        itemCounter.increment();
     }
 
+    @Override
     public void setSeparatorVisible(final boolean visible) {
         separator.setVisible(visible);
     }
 
+    @Override
     public void clearChildOverlayWidgets() {
+        itemCounter.reset();
         siblingPanel.clear();
         childPanel.clear();
         siblingTitle.setVisible(false);
         childTitle.setVisible(false);
+    }
+
+    @Override
+    public void setHighlight(int n) {
+        this.highlightedItem = n;
     }
 
     @Override

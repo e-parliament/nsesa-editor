@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -12,6 +12,8 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 package org.nsesa.editor.gwt.core.client.validation;
+
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * A interface for a result of a validation done by a {@link Validator}.
@@ -33,4 +35,13 @@ public interface ValidationResult {
      * @return the error message, or <tt>null</tt> if no error message was given.
      */
     String getErrorMessage();
+
+    /**
+     * If the validation was not successful return the widget that cause problems, otherwise <code>null</code>
+     * value will be returned. It might be the case to return null values for cases where the validation fails
+     * but there is no invalid widget to return eg when check for well formed.
+     * @return {@link OverlayWidget} widget that cause problems
+     */
+    OverlayWidget getInvalidWidget();
+
 }

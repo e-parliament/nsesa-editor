@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -12,6 +12,8 @@
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
+
+import com.google.gwt.user.client.Event;
 
 /**
  * UI events listener for a {@link OverlayWidget}.
@@ -26,28 +28,32 @@ public interface OverlayWidgetUIListener {
      * Callback when the <tt>sender</tt> was clicked.
      *
      * @param sender the overlay widget that was clicked
+     * @param event  the original event
      */
-    void onClick(OverlayWidget sender);
+    void onClick(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> was double clicked.
      *
      * @param sender the overlay widget that was double clicked
+     * @param event  the original event
      */
-    void onDblClick(OverlayWidget sender);
+    void onDblClick(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> was hovered over.
      *
      * @param sender the overlay widget that was hovered
+     * @param event  the original event
      */
-    void onMouseOver(OverlayWidget sender);
+    void onMouseOver(OverlayWidget sender, Event event);
 
     /**
      * Callback when the <tt>sender</tt> lost the mouse hoover.
      *
      * @param sender the overlay widget that lost the mouse hoover
+     * @param event  the original event
      */
-    void onMouseOut(OverlayWidget sender);
+    void onMouseOut(OverlayWidget sender, Event event);
 
 }

@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -62,7 +62,7 @@
 </#macro>
 
 <#macro displayInline overlayStyle overlayClass>
-.akomaNtoso-drafting .${overlayStyle.name}:before {
+.akomaNtoso-drafting .${overlayStyle.name}[ns="http://www.akomantoso.org/2.0"]:before {
 content: "${overlayStyle.name} "!important;
 border: 1px solid #000000!important;
 background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;
@@ -75,7 +75,7 @@ border-radius: 3px!important;
 margin: 0px!important;
 padding: 1px!important;
 }
-.akomaNtoso-drafting .${overlayStyle.name}:after {
+.akomaNtoso-drafting .${overlayStyle.name}[ns="http://www.akomantoso.org/2.0"]:after {
 content: "/${overlayStyle.name}"!important;
 border: 1px solid #000000!important;
 background-color: #${colorGenerator.getColor(overlayStyle.name)}!important;

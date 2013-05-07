@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,19 +13,19 @@
  */
 package org.nsesa.editor.gwt.inline.client.ui.inline;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEvent;
 import org.nsesa.editor.gwt.inline.client.event.AttachInlineEditorEventHandler;
 import org.nsesa.editor.gwt.inline.client.event.DetachInlineEditorEvent;
@@ -54,10 +54,7 @@ public class InlineEditorController implements ProvidesResize {
      */
     private final OverlayFactory overlayFactory;
 
-    /**
-     * The RTE to use for the actual editing.
-     */
-    private final RichTextEditor richTextEditor;
+    private final InlineEditorView view;
 
     /**
      * The amendment to add or edit.
@@ -79,6 +76,7 @@ public class InlineEditorController implements ProvidesResize {
      */
     private OverlayWidget parentOverlayWidget;
 
+    private boolean showing;
 
     /**
      * The document controller.
@@ -91,10 +89,10 @@ public class InlineEditorController implements ProvidesResize {
     @Inject
     public InlineEditorController(final ClientFactory clientFactory,
                                   final OverlayFactory overlayFactory,
-                                  @Named("inlineRichTextEditor") final RichTextEditor richTextEditor) {
+                                  final InlineEditorView view) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
-        this.richTextEditor = richTextEditor;
+        this.view = view;
 
         registerListeners();
     }
@@ -105,7 +103,7 @@ public class InlineEditorController implements ProvidesResize {
             public void onEvent(AttachInlineEditorEvent event) {
 
                 if (overlayWidget != null) {
-                    richTextEditor.destroy();
+                    view.destroy();
                     // we're already editing this one ..
                     overlayWidget.asWidget().setVisible(true);
                 }
@@ -144,21 +142,40 @@ public class InlineEditorController implements ProvidesResize {
      */
     public void show() {
         // attach to the parent
-        overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(richTextEditor.asWidget().getElement(), overlayWidget.getOverlayElement());
-        richTextEditor.setHTML(DOM.toString(overlayWidget.asWidget().getElement()));
-        richTextEditor.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
-        richTextEditor.asWidget().setHeight(overlayWidget.asWidget().getOffsetHeight() + 50 + "px");
-        richTextEditor.init();
-        richTextEditor.asWidget().setVisible(true);
-        richTextEditor.setOverlayWidget(overlayWidget);
-        overlayWidget.asWidget().setVisible(false);
+        overlayWidget.getParentOverlayWidget().asWidget().getElement().insertBefore(view.asWidget().getElement(), overlayWidget.getOverlayElement());
+        view.getRichTextEditor().setHTML(overlayWidget.asWidget().getElement().getInnerHTML());
         adaptSize();
+
+        view.asWidget().setVisible(true);
+        view.getRichTextEditor().setOverlayWidget(overlayWidget);
+        view.init();
+        overlayWidget.asWidget().setVisible(false);
+
+        showing = true;
+    }
+
+    public boolean isShowing() {
+        return showing;
     }
 
     /**
      * Changes the size of the dialog to become the size of the window - 100 pixels.
      */
     public void adaptSize() {
+        view.asWidget().setWidth(overlayWidget.asWidget().getOffsetWidth() + "px");
+        final int offsetHeight = overlayWidget.asWidget().getOffsetHeight();
+        int editorHeight = ((offsetHeight) + 80);
+        if (editorHeight < 200) editorHeight = 200;
+        LOG.info("Setting inline editor height to " + editorHeight);
+        view.asWidget().setHeight(editorHeight + "px");
+
+        final int finalEditorHeight = editorHeight;
+        clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.getRichTextEditor().resize("100%", finalEditorHeight + "px");
+            }
+        });
 
     }
 
@@ -166,14 +183,17 @@ public class InlineEditorController implements ProvidesResize {
      * Call to hide the inline editor - effectively destroys the inline RTE.
      */
     public void hide() {
-        richTextEditor.destroy();
-        richTextEditor.asWidget().setVisible(false);
-        if (overlayWidget != null)
+        view.destroy();
+        view.asWidget().setVisible(false);
+        if (overlayWidget != null) {
             overlayWidget.asWidget().setVisible(true);
+        }
+        showing = false;
     }
 
     /**
      * Return the underlying amendment dto.
+     *
      * @return the amendment dto
      */
     public AmendmentContainerDTO getAmendment() {
@@ -182,6 +202,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the amendment dto.
+     *
      * @param amendment the amendment dto
      */
     public void setAmendment(AmendmentContainerDTO amendment) {
@@ -190,6 +211,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Get the underlying overlay widget.
+     *
      * @return the overlay widget
      */
     public OverlayWidget getOverlayWidget() {
@@ -198,6 +220,7 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the underlying overlay widget.
+     *
      * @param overlayWidget the overlay widget
      */
     public void setOverlayWidget(OverlayWidget overlayWidget) {
@@ -206,9 +229,18 @@ public class InlineEditorController implements ProvidesResize {
 
     /**
      * Set the parent document controller.
+     *
      * @param documentController the document controller
      */
     public void setDocumentController(final DocumentController documentController) {
         this.documentController = documentController;
+    }
+
+    public RichTextEditor getRichTextEditor() {
+        return view.getRichTextEditor();
+    }
+
+    public InlineEditorView getView() {
+        return view;
     }
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -14,17 +14,15 @@
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.create;
 
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerCreateEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.Occurrence;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -65,6 +63,8 @@ public class ActionBarCreatePanelController {
      */
     protected OverlayWidget overlayWidget;
 
+    private int highlightedNumber = -1;
+
     @Inject
     public ActionBarCreatePanelController(final DocumentEventBus documentEventBus,
                                           final ActionBarCreatePanelView view) {
@@ -78,10 +78,16 @@ public class ActionBarCreatePanelController {
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
             public void onClick(final OverlayWidget newChild, final boolean sibling) {
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(newChild,
-                        sibling ? overlayWidget.getParentOverlayWidget() : overlayWidget,
-                        sibling ? overlayWidget.getIndex() + 1 : 0,
-                        AmendmentAction.CREATION, sourceFileController.getDocumentController()));
+                if (sibling) {
+                    documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget.getParentOverlayWidget(),
+                            overlayWidget, newChild,
+                            overlayWidget.getIndex() + 1));
+                } else {
+                    // this is a child, by default add it as the first element (or last, TBD)
+                    documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget,
+                            overlayWidget, newChild, overlayWidget.getChildOverlayWidgets().size() - 1));
+                }
+
             }
         });
     }
@@ -117,14 +123,14 @@ public class ActionBarCreatePanelController {
         view.clearChildOverlayWidgets();
 
         // add all the possible siblings
-        LinkedHashMap<OverlayWidget, Occurrence> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
-        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedSiblings.entrySet()) {
-            view.addSiblingAmendableWidget(entry.getKey().getType(), entry.getKey());
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        for (final OverlayWidget entry : allowedSiblings) {
+            view.addSiblingAmendableWidget(entry.getType(), entry);
         }
         // add all the children
-        LinkedHashMap<OverlayWidget, Occurrence> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
-        for (final Map.Entry<OverlayWidget, Occurrence> entry : allowedChildren.entrySet()) {
-            view.addChildAmendableWidget(entry.getKey().getType(), entry.getKey());
+        List<OverlayWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
+        for (final OverlayWidget entry : allowedChildren) {
+            view.addChildAmendableWidget(entry.getType(), entry);
         }
 
         // show separator if both siblings and children are possible
@@ -139,6 +145,43 @@ public class ActionBarCreatePanelController {
      */
     public void setActionBarController(ActionBarController actionBarController) {
         this.actionBarController = actionBarController;
+    }
+
+    public void clearHighlight() {
+        highlightedNumber = -1;
+    }
+
+    public void highlightNext() {
+        if (overlayWidget != null) {
+            view.setHighlight(++highlightedNumber);
+            // redraw the view
+            setOverlayWidget(overlayWidget);
+        }
+    }
+
+    public void highlightPrevious() {
+        if (overlayWidget != null) {
+            view.setHighlight(--highlightedNumber);
+            // redraw the view
+            setOverlayWidget(overlayWidget);
+        }
+    }
+
+    public OverlayWidget getSelectedSibling() {
+        List<OverlayWidget> all = new ArrayList<OverlayWidget>();
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        all.addAll(allowedSiblings);
+        if (highlightedNumber >= all.size()) return null;
+        return all.get(highlightedNumber);
+    }
+
+    public OverlayWidget getSelectedChild() {
+        List<OverlayWidget> all = new ArrayList<OverlayWidget>();
+        List<OverlayWidget> allowedSiblings = sourceFileController.getDocumentController().getCreator().getAllowedSiblings(sourceFileController.getDocumentController(), overlayWidget);
+        if (highlightedNumber < allowedSiblings.size()) return null;
+        List<OverlayWidget> allowedChildren = sourceFileController.getDocumentController().getCreator().getAllowedChildren(sourceFileController.getDocumentController(), overlayWidget);
+        all.addAll(allowedChildren);
+        return all.get(highlightedNumber - allowedSiblings.size());
     }
 
     /**

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -31,6 +31,8 @@ public class AmendmentContainerDTO implements IsSerializable {
      * The primary key that uniquely identifies an amendment container revision.
      */
     private String id;
+
+    private String documentID;
 
     /**
      * A revision key that identifies all amendment revisions for a single, logical amendment.
@@ -186,5 +188,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setRevisionID(String revisionID) {
         this.revisionID = revisionID;
+    }
+
+    public String getDocumentID() {
+        return documentID;
+    }
+
+    public void setDocumentID(String documentID) {
+        this.documentID = documentID;
     }
 }

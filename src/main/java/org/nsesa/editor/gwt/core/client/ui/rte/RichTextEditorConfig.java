@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -75,5 +75,17 @@ public interface RichTextEditorConfig {
      * @return
      */
     void setDraftingClassName(String draftingClassName);
+
+    /**
+     * Set the ns attribute in the body tag
+     * @param namespaceURI The namespace URI to be set
+     */
+    void setBodyNamespaceURI(String namespaceURI);
+
+    /**
+     * Returns the namespace URI used for body configuration
+     * @return
+     */
+    String getBodyNamespaceURI();
 
 }

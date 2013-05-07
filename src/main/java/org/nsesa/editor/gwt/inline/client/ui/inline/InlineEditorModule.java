@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.inline.client.ui.inline;
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorConfig;
@@ -32,7 +33,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditor;
 public class InlineEditorModule extends AbstractGinModule {
     @Override
     public void configure() {
-        bind(RichTextEditor.class).annotatedWith(Names.named("inlineRichTextEditor")).toProvider(InlineRichTextEditorProvider.class);
+        bind(RichTextEditor.class).annotatedWith(Names.named("inlineRichTextEditor")).toProvider(InlineRichTextEditorProvider.class).in(Singleton.class);
     }
 
     public static class InlineRichTextEditorProvider implements Provider<RichTextEditor> {

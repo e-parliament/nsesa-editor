@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -18,10 +18,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerInjectedEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerStatusUpdatedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
@@ -43,16 +39,14 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Scope(DOCUMENT)
 @Singleton
 public class PaginationController {
-    private int currentPage = 1;
-    private int totalPages = 1;
+    protected int currentPage = 1;
+    protected int totalPages = 1;
 
-    private DocumentEventBus documentEventBus;
-    private PaginationView paginationView;
+    protected DocumentEventBus documentEventBus;
+    protected PaginationView paginationView;
 
-    private Filter currentFilter;
+    protected Filter currentFilter;
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
     private HandlerRegistration filterResponseEventHandlerRegistration;
     private com.google.gwt.event.shared.HandlerRegistration firstHandlerRegistration;
     private com.google.gwt.event.shared.HandlerRegistration nextHandlerRegistration;
@@ -88,20 +82,6 @@ public class PaginationController {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
-                resetPage();
-            }
-        });
-
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                resetPage();
-            }
-        });
-
-        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
                 resetPage();
             }
         });
@@ -153,8 +133,6 @@ public class PaginationController {
      */
     public void removeListeners() {
         documentRefreshRequestEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
-        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
         filterResponseEventHandlerRegistration.removeHandler();
         firstHandlerRegistration.removeHandler();
         nextHandlerRegistration.removeHandler();
@@ -165,7 +143,7 @@ public class PaginationController {
     /**
      * Move to current page in pagination view
      */
-    private void moveTo() {
+    protected void moveTo() {
         if (currentPage <= 0) {
             currentPage = 1;
         } else if (currentPage >= totalPages) {
@@ -180,7 +158,7 @@ public class PaginationController {
     /**
      * Reset to 1 the current page in the pagination view
      */
-    private void resetPage() {
+    protected void resetPage() {
         currentPage = 1;
         displayCurrentPage();
     }

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -52,6 +52,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
     private int zIndex = 10000;
 
     private JavaScriptObject config = JavaScriptObject.createObject();
+    private String namespaceURI;
 
     public CKEditorConfig() {
     }
@@ -68,6 +69,17 @@ public class CKEditorConfig implements RichTextEditorConfig {
     @Override
     public void setDraftingClassName(String draftingClassName) {
         this.draftingClassName = draftingClassName;
+    }
+
+    @Override
+    public void setBodyNamespaceURI(String namespaceURI) {
+        this.namespaceURI = namespaceURI;
+        //setNativeBodyNamespaceURI(namespaceURI);
+    }
+
+    @Override
+    public String getBodyNamespaceURI() {
+        return namespaceURI;
     }
 
     @Override
@@ -359,6 +371,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
 
     private native void setNativeReadOnly(boolean readOnly) /*-{
         this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.readOnly = readOnly;
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.namespace = "http://www.akomantoso.org/2.0";
     }-*/;
 
     private native void setNativeZIndex(int zIndex) /*-{
@@ -430,4 +443,9 @@ public class CKEditorConfig implements RichTextEditorConfig {
             overrides: oldTag
         };
     }-*/;
+
+    private native void setNativeBodyNamespaceURI(String namespaceURI) /*-{
+        this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config.namespaceURI = namespaceURI;
+    }-*/;
+
 }

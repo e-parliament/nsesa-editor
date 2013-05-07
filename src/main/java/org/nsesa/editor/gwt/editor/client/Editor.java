@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -20,6 +20,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.http.client.*;
@@ -28,6 +31,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -64,9 +68,9 @@ public abstract class Editor implements EntryPoint {
 
     private static final String CONFIGURATION_FILE = "configuration.json";
 
-    private ClientFactory clientFactory;
-    private ServiceFactory serviceFactory;
-    private SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
+    protected ClientFactory clientFactory;
+    protected ServiceFactory serviceFactory;
+    protected SimpleLayoutPanel appWidget = new SimpleLayoutPanel();
 
     @Override
     public void onModuleLoad() {
@@ -159,6 +163,9 @@ public abstract class Editor implements EntryPoint {
                 appWidget.setWidget(widget);
             }
         });
+
+        // install keyboard listener
+        clientFactory.getKeyboardListener().install();
 
         RootLayoutPanel.get().add(appWidget);
 

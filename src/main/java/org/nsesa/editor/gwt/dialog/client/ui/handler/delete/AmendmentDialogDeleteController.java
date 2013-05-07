@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -19,10 +19,11 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.amendment.AmendmentInjectionPointFinder;
-import org.nsesa.editor.gwt.core.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -131,7 +132,9 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
         // inject the xpath-like expression to uniquely identify this element
-                dialogContext.getAmendment().setSourceReference(new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget())));
+        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
+        sourceReference.setReferenceID(UUID.uuid());
+        dialogContext.getAmendment().setSourceReference(sourceReference);
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }

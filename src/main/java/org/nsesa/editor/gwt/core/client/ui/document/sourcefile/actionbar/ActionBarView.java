@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,7 +13,9 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar;
 
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -26,6 +28,10 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(ActionBarViewImpl.class)
 public interface ActionBarView extends IsWidget {
+
+    void addWidget(IsWidget isWidget);
+
+    ComplexPanel getActionPanel();
 
     /**
      * Get a reference to the modification link.
@@ -68,6 +74,12 @@ public interface ActionBarView extends IsWidget {
      * @param location the location
      */
     void setLocation(String location);
+
+    /**
+     * Toggle visibility.
+     * @param visible <tt>true</tt> if the element should be visible.
+     */
+    void setVisible(boolean visible);
 
     /**
      * 'Physically' attach the component to the DOM tree.

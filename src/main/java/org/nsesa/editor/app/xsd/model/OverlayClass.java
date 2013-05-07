@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -52,6 +52,8 @@ public class OverlayClass extends OverlayNode {
 
     private List<OverlayClass> children;
     private List<OverlayProperty> properties;
+    private List<OverlayProperty> flatProperties;
+
 
     /**
      * Constructs an empty <code>OverlayClass</code>
@@ -60,6 +62,7 @@ public class OverlayClass extends OverlayNode {
         super();
         this.properties = new ArrayList<OverlayProperty>();
         this.children = new ArrayList<OverlayClass>();
+        this.flatProperties = new ArrayList<OverlayProperty>();
     }
 
     /**
@@ -72,6 +75,7 @@ public class OverlayClass extends OverlayNode {
         super(name, nameSpace, overlayType);
         this.properties = new ArrayList<OverlayProperty>();
         this.children = new ArrayList<OverlayClass>();
+        this.flatProperties = new ArrayList<OverlayProperty>();
     }
 
     /**
@@ -172,16 +176,19 @@ public class OverlayClass extends OverlayNode {
             String packageName = packageNameGenerator.getPackageName(parent);
             imports.add(packageName + "." + StringUtils.capitalize(parent.getClassName()));
         }
-        for (OverlayProperty property : properties) {
+        for (OverlayProperty property : getFlatProperties()) {
             String packageName = packageNameGenerator.getPackageName(property);
             if ("java.lang".equals(packageName)) {
+                continue;
+            }
+            if (property.isAllIndicator() || property.isChoiceIndicator() || property.isSequenceIndicator()) {
                 continue;
             }
             imports.add(packageName + "." + StringUtils.capitalize(property.getClassName()));
         }
         // add imports for parent properties
         if (getParent() != null) {
-            for (OverlayProperty property : getParent().getAllAttributesProperties()) {
+            for (OverlayProperty property : getParent().getAllFlatAttributesProperties()) {
                 String packageName = packageNameGenerator.getPackageName(property);
                 if ("java.lang".equals(packageName)) {
                     continue;
@@ -288,12 +295,20 @@ public class OverlayClass extends OverlayNode {
         return set;
     }
 
+    public List<OverlayProperty> getFlatProperties() {
+        return flatProperties;
+    }
+
+    public void setFlatProperties(List<OverlayProperty> flatProperties) {
+        this.flatProperties = flatProperties;
+    }
+
     /**
      * Returns a list with all properties marked as <code>attribute</code> from <code>OverlayClass</code>
      * and its parents
      * @return A List of <code>OverlayProperty</code>
      */
-    public List<OverlayProperty> getAllAttributesProperties() {
+    public List<OverlayProperty> getAllFlatAttributesProperties() {
         OverlayProperty.Filter filter = new OverlayProperty.Filter() {
             @Override
             public boolean apply(OverlayProperty property) {
@@ -301,6 +316,25 @@ public class OverlayClass extends OverlayNode {
             }
         };
         return getAllFilteredProperties(filter);
+    }
+
+    /**
+     * Returns a list with all properties marked as <code>attribute</code> from <code>OverlayClass</code>
+     * and its parents
+     * @return A List of <code>OverlayProperty</code>
+     */
+    public List<OverlayProperty> getAllStructureProperties() {
+        List<OverlayProperty> result = new ArrayList<OverlayProperty>();
+        OverlayClass aClass = this;
+        while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
+            for (OverlayProperty property : aClass.getProperties()) {
+                if (!property.isAttribute()) {
+                    result.add(property);
+                }
+            }
+            aClass = aClass.getParent();
+        }
+        return result;
     }
 
     /**
@@ -327,7 +361,7 @@ public class OverlayClass extends OverlayNode {
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         OverlayClass aClass = this;
         while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
-            for (OverlayProperty property : aClass.getProperties()) {
+            for (OverlayProperty property : aClass.getFlatProperties()) {
                 if (filter.apply(property)) {
                     result.add(property);
                 }
@@ -355,7 +389,7 @@ public class OverlayClass extends OverlayNode {
         OverlayClass that = (OverlayClass) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (nameSpace != null ? !nameSpace.equals(that.nameSpace) : that.nameSpace != null) return false;
+        if (namespaceURI != null ? !namespaceURI.equals(that.namespaceURI) : that.namespaceURI != null) return false;
         if (overlayType != that.overlayType) return false;
 
         return true;

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -58,7 +58,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     @Override
     public String getPackageName(OverlayNode overlayNode) {
-        String source = overlayNode.getNameSpace();
+        String source = overlayNode.getNamespaceURI();
         return getPackageName(source);
     }
 
@@ -67,7 +67,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
-        String source = overlayClass.getNameSpace();
+        String source = overlayClass.getNamespaceURI();
         return getPackageName(source);
     }
 
@@ -76,7 +76,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         if (overlayProperty.getPackageName() != null) {
             return overlayProperty.getPackageName();
         }
-        String source = overlayProperty.getNameSpace();
+        String source = overlayProperty.getNamespaceURI();
         return getPackageName(source);
     }
 

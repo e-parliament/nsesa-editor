@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -161,4 +161,12 @@ public interface CoreMessages extends Messages {
     @Key("amendment.selection.number")
     String amendmentSelection(@PluralCount int arg);
 
+    @Key("amendment.action.moveup")
+    String amendmentActionMoveUp();
+
+    @Key("amendment.action.movedown")
+    String amendmentActionMoveDown();
+
+    @Key("error.document.content.error")
+    String errorDocumentContentError(String p0);
 }

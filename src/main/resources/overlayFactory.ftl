@@ -2,7 +2,7 @@
 
     Copyright 2013 European Parliament
 
-    Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
     You may not use this work except in compliance with the Licence.
     You may obtain a copy of the Licence at:
 
@@ -37,7 +37,7 @@ public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {
 
 private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first}.class.getName());
 /** the namespace URI of the overlay factory **/
-private final String namespaceURI = "${overlayClass.nameSpace}";
+private final String namespaceURI = "${overlayClass.namespaceURI}";
 
 /**
 * Create <code>${overlayClass.name?cap_first}</code> object with the given overlay strategy
@@ -53,7 +53,7 @@ super(overlayStrategy);
 */
 @Override
 public String getNamespaceURI() {
-return namespace;
+return namespaceURI;
 }
 /**
 * Return <code>OverlayWidget</code> instance based on the given DOM element or null if there is no

@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -55,7 +55,9 @@ public class ContentViewImpl extends Composite implements ContentView {
     /**
      * This correction value is supposed to be the height of the header and footer (plus any margin that might come into play)
      */
-    private static final int SCROLLBAR_OFFSET = 122;
+    private static final int DEFAULT_OFFSET = 122;
+
+    private int scrollPanelOffset = DEFAULT_OFFSET;
 
     private DocumentEventBus documentEventBus;
 
@@ -78,7 +80,7 @@ public class ContentViewImpl extends Composite implements ContentView {
             @Override
             public void onEvent(ResizeEvent event) {
                 // this needs to be a fixed height, or you will not get a scroll bar.
-                final int height = event.getHeight() - SCROLLBAR_OFFSET;
+                final int height = event.getHeight() - scrollPanelOffset;
                 LOG.info("Setting scroll panel to " + height);
                 setScrollPanelHeight(height + "px");
             }
@@ -123,5 +125,9 @@ public class ContentViewImpl extends Composite implements ContentView {
     @Override
     public ScrollPanel getScrollPanel() {
         return scrollPanel;
+    }
+
+    public void setScrollPanelOffset(int scrollPanelOffset) {
+        this.scrollPanelOffset = scrollPanelOffset;
     }
 }

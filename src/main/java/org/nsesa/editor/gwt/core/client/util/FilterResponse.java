@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
+
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ import java.util.List;
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 5/12/12 11:41
  */
-public class FilterResponse<T> {
+public class FilterResponse<T extends OverlayWidgetAware> {
     private final int totalSize;
     private final Filter<T> filter;
     private final List<T> result;

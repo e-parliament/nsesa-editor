@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy;
 /**
  * <code>PaginationView</code> view offers general pagination support functionality.
  * Specifically it is used in the second tabbed panel of the application
- * {@link org.nsesa.editor.gwt.core.client.ui.document.amendments.AmendmentsPanelView} where the
+ * {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelView} where the
  * existing amendments are displayed in a "pagination" way.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>

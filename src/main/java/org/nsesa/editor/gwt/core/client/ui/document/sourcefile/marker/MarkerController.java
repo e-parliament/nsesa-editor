@@ -1,7 +1,7 @@
 /**
  * Copyright 2013 European Parliament
  *
- * Licensed under the EUPL, Version 1.1 or – as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+ * Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
  * You may not use this work except in compliance with the Licence.
  * You may obtain a copy of the Licence at:
  *
@@ -13,11 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -25,13 +21,10 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
-import org.nsesa.editor.gwt.core.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.core.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import java.util.HashMap;
@@ -59,23 +52,23 @@ public class MarkerController {
     /**
      * The main view of this component.
      */
-    private final MarkerView view;
+    protected final MarkerView view;
 
     /**
      * The parent sourcefile controller.
      */
-    private SourceFileController sourceFileController;
+    protected SourceFileController sourceFileController;
 
     /**
      * Document scoped event bus.
      */
-    private final DocumentEventBus documentEventBus;
+    protected final DocumentEventBus documentEventBus;
 
     /**
      * A list of color codes that will be used to set the color of the markers based on the
      * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getAmendmentContainerStatus()}.
      */
-    private static final Map<String, String> colorCodes = new HashMap<String, String>() {
+    protected static final Map<String, String> colorCodes = new HashMap<String, String>() {
         {
             put("candidate", "blue");
             put("tabled", "green");
@@ -90,52 +83,11 @@ public class MarkerController {
      */
     private final Timer timer = new Timer() {
         public void run() {
-            if (sourceFileController != null) {
-                view.clearMarkers();
-                final ScrollPanel scrollPanel = sourceFileController.getContentController().getView().getScrollPanel();
-                final int documentHeight = scrollPanel.getMaximumVerticalScrollPosition();
-                LOG.finest("Document height is: " + documentHeight);
-                for (final AmendmentController amendmentController : sourceFileController.getDocumentController().getAmendmentManager().getAmendmentControllers()) {
-                    if (amendmentController.getDocumentController() == sourceFileController.getDocumentController() && amendmentController.getView().asWidget().isAttached()) {
-                        final int amendmentTop = amendmentController.getView().asWidget().getAbsoluteTop() - scrollPanel.asWidget().getAbsoluteTop() + scrollPanel.getVerticalScrollPosition();
-                        final double division = (double) amendmentTop / (double) (documentHeight);
-                        LOG.finest("Amendment is: " + amendmentTop + ", and division is at " + division);
-                        final FocusWidget focusWidget = view.addMarker(division, colorCodes.get(amendmentController.getModel().getAmendmentContainerStatus()));
-                        focusWidget.addClickHandler(new ClickHandler() {
-                            @Override
-                            public void onClick(ClickEvent event) {
-                                // TODO: this is a very poor solution to find a amendable widget to scroll to ...
-                                if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
-                                    final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
-                                    if (amendedOverlayWidget != null) {
-                                        amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
-
-                                        OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
-                                        while (previousNonIntroducedOverlayWidget != null && !previousNonIntroducedOverlayWidget.asWidget().isVisible()) {
-                                            previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
-                                        }
-                                        if (previousNonIntroducedOverlayWidget != null)
-                                            sourceFileController.scrollTo(previousNonIntroducedOverlayWidget.asWidget());
-                                        else {
-                                            sourceFileController.scrollTo(amendedOverlayWidget.getParentOverlayWidget().asWidget());
-                                        }
-                                    }
-                                } else {
-                                    sourceFileController.scrollTo(amendmentController.getView().asWidget());
-                                }
-                            }
-                        });
-                    }
-                }
-//                scrollPanel.setVerticalScrollPosition(previousScroll);
-            }
+            onTimerRun();
         }
     };
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
-    private HandlerRegistration awitchTabEventHandlerRegistration;
+    private HandlerRegistration switchTabEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
 
     @Inject
@@ -156,31 +108,10 @@ public class MarkerController {
             }
         });
 
-        amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerDeletedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        amendmentContainerStatusUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerStatusUpdatedEvent.TYPE, new AmendmentContainerStatusUpdatedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerStatusUpdatedEvent event) {
-                drawAmendmentControllers();
-            }
-        });
-
-        awitchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
+        switchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
             @Override
             public void onEvent(SwitchTabEvent event) {
-                drawAmendmentControllers();
+                drawMarkers();
             }
         });
 
@@ -190,9 +121,13 @@ public class MarkerController {
             public void onEvent(ResizeEvent event) {
                 final int height = event.getHeight() - 122;
                 view.asWidget().setHeight(height + "px");
-                drawAmendmentControllers();
+                drawMarkers();
             }
         });
+
+    }
+
+    protected void onTimerRun() {
 
     }
 
@@ -201,17 +136,14 @@ public class MarkerController {
      */
     public void removeListeners() {
         documentRefreshRequestEventHandlerRegistration.removeHandler();
-        amendmentContainerDeletedEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
-        amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
-        awitchTabEventHandlerRegistration.removeHandler();
+        switchTabEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
     }
 
     /**
      * Start a timer to draw the amendment controller markers in one second.
      */
-    private void drawAmendmentControllers() {
+    public void drawMarkers() {
         timer.cancel();
         timer.schedule(1000);
     }
@@ -219,7 +151,7 @@ public class MarkerController {
     /**
      * Clear any existing markers.
      */
-    private void clearMarkers() {
+    public void clearMarkers() {
         view.clearMarkers();
     }
 
