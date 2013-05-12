@@ -19,13 +19,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
@@ -269,6 +269,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
             amendment.setBody(transformer.transform(amendment.getRoot()));
             amendment.setDocumentID(documentController.getDocument().getDocumentID());
             // do some checks to make sure all fields are set
+            if (amendment.getId() == null)
+                throw new NullPointerException("No id set before sending to the backend. This will cause problems.");
             if (amendment.getRevisionID() == null)
                 throw new NullPointerException("No revision id set before sending to the backend. This will cause problems.");
         }
@@ -303,12 +305,12 @@ public class DefaultAmendmentManager implements AmendmentManager {
             amendmentController.setModel(amendmentContainerDTO);
             amendmentController.setDocumentController(documentController);
 
-            // check if we already have an amendment with a similar revisionID
+            // check if we already have an amendment with a similar id
             int indexOfOlderRevision = -1;
             int counter = 0;
             for (final AmendmentController ac : amendmentControllers) {
 
-                if (amendmentController.getModel().getRevisionID().equals(ac.getModel().getRevisionID())) {
+                if (amendmentController.getModel().getId().equals(ac.getModel().getId())) {
                     // aha, we found a controller for an older model
                     indexOfOlderRevision = counter;
                     break;
