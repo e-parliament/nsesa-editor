@@ -28,14 +28,17 @@ import java.util.ArrayList;
 public class AmendmentContainerDTO implements IsSerializable {
 
     /**
-     * The primary key that uniquely identifies an amendment container revision.
+     * The primary key that identifies a logical amendment container.
      */
     private String id;
 
+    /**
+     * A reference to the document ID this amendment was made on.
+     */
     private String documentID;
 
     /**
-     * A revision key that identifies all amendment revisions for a single, logical amendment.
+     * A revision key that uniquely identifies this version.
      */
     private String revisionID;
 
