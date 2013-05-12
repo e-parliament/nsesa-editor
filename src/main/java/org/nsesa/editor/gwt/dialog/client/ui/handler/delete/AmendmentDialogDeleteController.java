@@ -18,9 +18,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
@@ -129,10 +129,15 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
      * Handle the request for saving of the amendment & the closing of the parent dialog.
      */
     public void handleSave() {
+        dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
         // inject the xpath-like expression to uniquely identify this element
-        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
+        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(false, false,
+                dialogContext.getOverlayWidget().getNamespaceURI(),
+                amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()),
+                dialogContext.getOverlayWidget().getType(),
+                dialogContext.getIndex());
         sourceReference.setReferenceID(UUID.uuid());
         dialogContext.getAmendment().setSourceReference(sourceReference);
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
