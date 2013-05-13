@@ -13,6 +13,10 @@
  */
 package org.nsesa.editor.gwt.core.shared.exception;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+import java.io.Serializable;
+
 /**
  * An exception thrown if the validation of the payload of an amendment is not valid according to the
  * frontend or backend.
@@ -22,7 +26,7 @@ package org.nsesa.editor.gwt.core.shared.exception;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class ValidationException extends Exception {
+public class ValidationException extends Exception implements Serializable, IsSerializable {
     public ValidationException(Throwable throwable) {
         super(throwable);
     }
