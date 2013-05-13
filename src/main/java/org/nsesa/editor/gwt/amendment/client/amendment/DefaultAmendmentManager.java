@@ -278,9 +278,9 @@ public class DefaultAmendmentManager implements AmendmentManager {
         serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(toSave)), new AsyncCallback<AmendmentContainerDTO[]>() {
             @Override
             public void onFailure(final Throwable caught) {
-                documentEventBus.fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
+                documentEventBus.fireEvent(new CriticalErrorEvent("Could not save amendment: " + caught.getMessage(), caught));
                 if (caught instanceof ValidationException) {
-                    LOG.log(Level.SEVERE, "Could not save amendment.", caught);
+                    LOG.log(Level.SEVERE, "Could not save amendment: " + caught.getMessage(), caught);
                 }
             }
 
@@ -298,44 +298,46 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     protected void mergeAmendmentContainerDTOs(AmendmentContainerDTO... toMerge) {
 
-        final ClientFactory clientFactory = documentController.getClientFactory();
+        if (toMerge != null) {
+            final ClientFactory clientFactory = documentController.getClientFactory();
 
-        for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
-            final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-            amendmentController.setModel(amendmentContainerDTO);
-            amendmentController.setDocumentController(documentController);
+            for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
+                final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
+                amendmentController.setModel(amendmentContainerDTO);
+                amendmentController.setDocumentController(documentController);
 
-            // check if we already have an amendment with a similar id
-            int indexOfOlderRevision = -1;
-            int counter = 0;
-            for (final AmendmentController ac : amendmentControllers) {
+                // check if we already have an amendment with a similar id
+                int indexOfOlderRevision = -1;
+                int counter = 0;
+                for (final AmendmentController ac : amendmentControllers) {
 
-                if (amendmentController.getModel().getId().equals(ac.getModel().getId())) {
-                    // aha, we found a controller for an older model
-                    indexOfOlderRevision = counter;
-                    break;
+                    if (amendmentController.getModel().getId().equals(ac.getModel().getId())) {
+                        // aha, we found a controller for an older model
+                        indexOfOlderRevision = counter;
+                        break;
+                    }
+                    counter++;
                 }
-                counter++;
-            }
-            if (indexOfOlderRevision != -1) {
-                final AmendmentController removed = amendmentControllers.remove(indexOfOlderRevision);
-                amendmentControllers.add(indexOfOlderRevision, amendmentController);
-                if (!removed.getDocumentController().equals(amendmentController.getDocumentController())) {
-                    throw new RuntimeException("Newer revision does not match the document controller?");
+                if (indexOfOlderRevision != -1) {
+                    final AmendmentController removed = amendmentControllers.remove(indexOfOlderRevision);
+                    amendmentControllers.add(indexOfOlderRevision, amendmentController);
+                    if (!removed.getDocumentController().equals(amendmentController.getDocumentController())) {
+                        throw new RuntimeException("Newer revision does not match the document controller?");
+                    }
+                    LOG.info("Replacing amendment controller " + removed + " with " + amendmentController);
+                    documentEventBus.fireEvent(new AmendmentContainerUpdatedEvent(removed, amendmentController));
+                } else {
+                    // new amendment
+                    amendmentControllers.add(amendmentController);
+                    LOG.info("Adding new amendment controller " + amendmentController);
+                    documentEventBus.fireEvent(new AmendmentContainerInjectEvent(toMerge));
                 }
-                LOG.info("Replacing amendment controller " + removed + " with " + amendmentController);
-                documentEventBus.fireEvent(new AmendmentContainerUpdatedEvent(removed, amendmentController));
-            } else {
-                // new amendment
-                amendmentControllers.add(amendmentController);
-                LOG.info("Adding new amendment controller " + amendmentController);
-                documentEventBus.fireEvent(new AmendmentContainerInjectEvent(toMerge));
+                // inform the document the save has happened
+                documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
             }
-            // inform the document the save has happened
-            documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
+            // show notification about our successful save
+            documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionSaveSuccessful(toMerge.length)));
         }
-        // show notification about our successful save
-        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionSaveSuccessful(toMerge.length)));
 
     }
 
