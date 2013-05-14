@@ -187,7 +187,7 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
         Element el = jsObject.cast();
         //raise the event only when something has been changed
         if (el != null) {
-            if (!el.toString().equalsIgnoreCase(previousElement != null ? previousElement.toString() : null) ||
+            if (!el.equals(previousElement) ||
                     moreTagsSelected != previousMoreTagsSelected ||
                     !selectedText.equalsIgnoreCase(previousSelectedText)) {
 
