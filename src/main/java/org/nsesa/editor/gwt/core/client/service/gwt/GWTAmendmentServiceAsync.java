@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
+import org.nsesa.editor.gwt.core.shared.RevisionDTO;
 
 import java.util.ArrayList;
 
@@ -48,7 +49,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext the client context
      * @param id            the identifier of the amendment container
      */
-    void getRevisions(ClientContext clientContext, String id, AsyncCallback<AmendmentContainerDTO[]> async)
+    void getRevisions(ClientContext clientContext, String id, AsyncCallback<ArrayList<RevisionDTO>> async)
     ;
 
     /**
@@ -175,4 +176,7 @@ public interface GWTAmendmentServiceAsync {
      * @return the list of available authors for a given query
      */
     void getAvailableAuthors(ClientContext clientContext, String query, int limit, AsyncCallback<ArrayList<PersonDTO>> async);
+
+    void getAmendmentContainerRevision(ClientContext clientContext, String revisionID, AsyncCallback<AmendmentContainerDTO> async)
+            ;
 }
