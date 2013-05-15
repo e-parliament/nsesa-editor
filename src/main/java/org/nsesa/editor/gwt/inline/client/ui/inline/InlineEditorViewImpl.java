@@ -14,7 +14,6 @@
 package org.nsesa.editor.gwt.inline.client.ui.inline;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -66,6 +65,10 @@ public class InlineEditorViewImpl extends Composite implements InlineEditorView 
 
     @Override
     public void init() {
+        if (super.isAttached()) {
+            super.onDetach();
+        }
+        super.onAttach();
         richTextEditor.init();
     }
 
@@ -78,4 +81,5 @@ public class InlineEditorViewImpl extends Composite implements InlineEditorView 
     public Anchor getCancelAnchor() {
         return cancelAnchor;
     }
+
 }
