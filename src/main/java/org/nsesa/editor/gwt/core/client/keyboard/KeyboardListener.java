@@ -68,9 +68,11 @@ public class KeyboardListener {
         handlerRegistration.removeHandler();
     }
 
-    public void register(KeyCombo keyCombo) {
-        keyCombos.add(keyCombo);
-        LOG.info("Registered keyboard shortcut: " + keyCombo);
+    public void register(KeyCombo... toAdd) {
+        for (final KeyCombo keyCombo : toAdd) {
+            keyCombos.add(keyCombo);
+            LOG.info("Registered keyboard shortcut: " + keyCombo);
+        }
     }
 
     public void filter(final Event.NativePreviewEvent event) {
