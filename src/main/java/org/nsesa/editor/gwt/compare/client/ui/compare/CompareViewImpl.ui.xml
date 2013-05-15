@@ -19,9 +19,7 @@
         >
     <ui:style field="res">
         .comparePanel {
-            display: block;
             width: 100%;
-            margin-bottom: 30px;
         }
 
         .richTextEditor {
@@ -31,7 +29,7 @@
 
         .revisionsPanel {
             width: 100%;
-            height: 95%;
+            height: 100%;
         }
 
         .actionPanel {
@@ -40,20 +38,47 @@
         }
 
         .innerActionPanel {
-            padding: 10px;
+        }
+
+        .revisionPicker {
+            width: 100%;
+            text-align: center;
+            float: right;
+        }
+
+        .revisionList {
+            max-width: 90%;
         }
 
     </ui:style>
-    <g:HTMLPanel styleName="{res.comparePanel}">
-        <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
-            <rte:RichTextEditor ui:field="richTextEditorA" styleName="{res.richTextEditor}"/>
-            <rte:RichTextEditor ui:field="richTextEditorB" styleName="{res.richTextEditor}"/>
-        </g:HorizontalPanel>
-        <g:HTMLPanel styleName="{res.actionPanel}">
-            <g:HTMLPanel styleName="{res.innerActionPanel}">
-                <g:Button ui:field="rollbackButton" text="Save"/>
-                <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
+    <g:DockLayoutPanel styleName="{res.comparePanel}" unit="PX">
+        <g:north size="60">
+            <g:HTMLPanel>
+                <g:HTMLPanel>
+                    <g:HTML text="Compare Revisions"/>
+                </g:HTMLPanel>
+                <g:HorizontalPanel styleName="{res.revisionPicker}" ui:field="revisonPickerPanel">
+                    <g:ListBox ui:field="revisionsA" styleName="{res.revisionList}"/>
+                    <g:Label text=" vs. "/>
+                    <g:ListBox ui:field="revisionsB" styleName="{res.revisionList}"/>
+                </g:HorizontalPanel>
             </g:HTMLPanel>
-        </g:HTMLPanel>
-    </g:HTMLPanel>
+        </g:north>
+        <g:center>
+            <g:HTMLPanel>
+                <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
+                    <rte:RichTextEditor ui:field="richTextEditorA" styleName="{res.richTextEditor}"/>
+                    <rte:RichTextEditor ui:field="richTextEditorB" styleName="{res.richTextEditor}"/>
+                </g:HorizontalPanel>
+            </g:HTMLPanel>
+        </g:center>
+        <g:south size="40">
+            <g:HTMLPanel styleName="{res.actionPanel}">
+                <g:HTMLPanel styleName="{res.innerActionPanel}">
+                    <g:Button ui:field="rollbackButton" text="Save"/>
+                    <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
+                </g:HTMLPanel>
+            </g:HTMLPanel>
+        </g:south>
+    </g:DockLayoutPanel>
 </ui:UiBinder>

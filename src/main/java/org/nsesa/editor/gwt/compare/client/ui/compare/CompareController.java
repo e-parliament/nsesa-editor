@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.compare.client.ui.compare;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -71,6 +73,8 @@ public class CompareController implements ProvidesResize {
 
     private com.google.web.bindery.event.shared.HandlerRegistration hideComparePanelEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration showComparePanelEventHandlerRegistration;
+    private HandlerRegistration revisionAChangeHandlerRegistration;
+    private HandlerRegistration revisionBChangeHandlerRegistration;
 
 
     @Inject
@@ -105,6 +109,17 @@ public class CompareController implements ProvidesResize {
                 hide();
             }
         });
+
+        final ChangeHandler revisionChangeHandler = new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                retrieveRevisionContent(
+                        view.getRevisionsA().getValue(view.getRevisionsA().getSelectedIndex()),
+                        view.getRevisionsB().getValue(view.getRevisionsB().getSelectedIndex()));
+            }
+        };
+        revisionAChangeHandlerRegistration = view.getRevisionsA().addChangeHandler(revisionChangeHandler);
+        revisionBChangeHandlerRegistration = view.getRevisionsB().addChangeHandler(revisionChangeHandler);
 
         hideComparePanelEventHandlerRegistration = clientFactory.getEventBus().addHandler(HideComparePanelEvent.TYPE, new HideComparePanelEventHandler() {
             @Override
@@ -181,6 +196,8 @@ public class CompareController implements ProvidesResize {
     public void removeListeners() {
         rollbackButtonHandlerRegistration.removeHandler();
         cancelButtonHandlerRegistration.removeHandler();
+        revisionAChangeHandlerRegistration.removeHandler();
+        revisionBChangeHandlerRegistration.removeHandler();
         hideComparePanelEventHandlerRegistration.removeHandler();
         showComparePanelEventHandlerRegistration.removeHandler();
     }

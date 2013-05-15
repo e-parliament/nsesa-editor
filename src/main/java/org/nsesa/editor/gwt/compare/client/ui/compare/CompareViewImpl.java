@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.compare.client.ui.compare;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
@@ -50,6 +51,12 @@ public class CompareViewImpl extends Composite implements CompareView {
     RichTextEditor richTextEditorB;
     @UiField
     HorizontalPanel revisionsPanel;
+    @UiField
+    ListBox revisionsA;
+    @UiField
+    ListBox revisionsB;
+    @UiField
+    HorizontalPanel revisonPickerPanel;
 
     @Inject
     public CompareViewImpl(@Named("revisionText") RichTextEditor richTextEditorA,
@@ -58,6 +65,9 @@ public class CompareViewImpl extends Composite implements CompareView {
         this.richTextEditorB = richTextEditorB;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        revisonPickerPanel.setCellHorizontalAlignment(revisionsA, HasHorizontalAlignment.ALIGN_CENTER);
+        revisonPickerPanel.setCellHorizontalAlignment(revisionsB, HasHorizontalAlignment.ALIGN_CENTER);
+
         revisionsPanel.setCellWidth(richTextEditorA, "50%");
         revisionsPanel.setCellHeight(richTextEditorA, "100%");
         revisionsPanel.setCellWidth(richTextEditorB, "50%");
@@ -82,7 +92,31 @@ public class CompareViewImpl extends Composite implements CompareView {
 
     @Override
     public void setAvailableRevisions(List<RevisionDTO> revisions) {
-        // TODO
+        revisionsA.clear();
+        revisionsB.clear();
+
+        if (revisions.size() > 1) {
+
+            for (RevisionDTO revision : revisions.subList(1, revisions.size())) {
+                if (revision == revisions.get(revisions.size() - 1)) {
+                    // last element
+                    revisionsA.addItem("Initial version", revision.getRevisionID());
+                } else {
+                    final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+                    revisionsA.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
+                }
+            }
+
+            for (RevisionDTO revision : revisions.subList(0, revisions.size() - 1)) {
+                if (revision == revisions.get(0)) {
+                    // first element
+                    revisionsB.addItem("Current version", revision.getRevisionID());
+                } else {
+                    final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+                    revisionsB.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
+                }
+            }
+        }
     }
 
     @Override
@@ -93,5 +127,15 @@ public class CompareViewImpl extends Composite implements CompareView {
     @Override
     public void setRevisionB(String revisionContent) {
         richTextEditorB.setHTML(revisionContent);
+    }
+
+    @Override
+    public ListBox getRevisionsA() {
+        return revisionsA;
+    }
+
+    @Override
+    public ListBox getRevisionsB() {
+        return revisionsB;
     }
 }
