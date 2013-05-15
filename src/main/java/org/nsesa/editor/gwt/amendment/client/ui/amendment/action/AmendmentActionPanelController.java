@@ -21,11 +21,9 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -55,7 +53,6 @@ public class AmendmentActionPanelController {
      * The view.
      */
     protected final AmendmentActionPanelView view;
-    private DocumentEventBus documentEventBus;
 
     /**
      * The parent amendment controller.
@@ -105,12 +102,9 @@ public class AmendmentActionPanelController {
 
     @Inject
     public AmendmentActionPanelController(final AmendmentActionPanelView amendmentActionPanelView,
-                                          final DocumentEventBus documentEventBus,
                                           final CoreMessages coreMessages) {
         this.view = amendmentActionPanelView;
-        this.documentEventBus = documentEventBus;
         this.popupPanel.setWidget(amendmentActionPanelView);
-
         // create operations on the amendment
         addWidget(anchorTable);
         addWidget(anchorWithdraw);
@@ -185,7 +179,7 @@ public class AmendmentActionPanelController {
             @Override
             public void onClick(ClickEvent event) {
                 OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
-                documentEventBus.fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
                         OverlayWidgetMoveEvent.MoveType.Up, amendmentController));
                 popupPanel.hide();
             }
@@ -195,7 +189,7 @@ public class AmendmentActionPanelController {
             @Override
             public void onClick(ClickEvent event) {
                 OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
-                documentEventBus.fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
                         OverlayWidgetMoveEvent.MoveType.Down, amendmentController));
                 popupPanel.hide();
             }
