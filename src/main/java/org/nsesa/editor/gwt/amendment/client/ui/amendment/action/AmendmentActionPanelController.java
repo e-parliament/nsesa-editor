@@ -138,7 +138,7 @@ public class AmendmentActionPanelController {
         anchorTableHandlerRegistration = anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
                     amendmentManager.tableAmendmentContainers(amendmentController);
                 } else {
@@ -151,7 +151,7 @@ public class AmendmentActionPanelController {
         anchorWithdrawHandlerRegistration = anchorWithdraw.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
                     amendmentManager.withdrawAmendmentContainers(amendmentController);
                 } else {
@@ -164,7 +164,7 @@ public class AmendmentActionPanelController {
         anchorDeleteHandlerRegistration = anchorDelete.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                final AmendmentManager amendmentManager = ((AmendmentDocumentController)amendmentController.getDocumentController()).getAmendmentManager();
+                final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
                     amendmentManager.deleteAmendmentContainers(amendmentController);
                 } else {
@@ -274,6 +274,7 @@ public class AmendmentActionPanelController {
 
     /**
      * Returns a widget separator as hr html tag
+     *
      * @return {@link Widget} separator
      */
     protected Widget getSeparator() {
