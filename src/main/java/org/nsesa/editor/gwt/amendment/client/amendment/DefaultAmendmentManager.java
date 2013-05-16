@@ -15,6 +15,8 @@ package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -266,6 +268,12 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
         // serialize amendable widget into XML content
         for (final AmendmentContainerDTO amendment : toSave) {
+            if (amendment.getRoot() == null) {
+                // overlay is needed
+                final Element span = DOM.createSpan();
+                span.setInnerHTML(amendment.getBody());
+                amendment.setRoot(documentController.getOverlayFactory().getAmendableWidget(span.getFirstChildElement()));
+            }
             amendment.setBody(transformer.transform(amendment.getRoot()));
             amendment.setDocumentID(documentController.getDocument().getDocumentID());
             // do some checks to make sure all fields are set
