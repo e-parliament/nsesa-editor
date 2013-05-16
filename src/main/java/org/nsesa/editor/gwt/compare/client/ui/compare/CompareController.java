@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.compare.client.ui.compare;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,8 +33,9 @@ import org.nsesa.editor.gwt.compare.client.event.ShowComparePanelEventHandler;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
-import org.nsesa.editor.gwt.core.shared.RevisionDTO;
+import org.nsesa.editor.gwt.core.shared.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -65,6 +67,8 @@ public class CompareController implements ProvidesResize {
     protected ComparisonProvider comparisonProvider;
 
     protected final CompareView view;
+
+    private String revisionA, revisionB;
 
     protected final PopupPanel popupPanel = new DecoratedPopupPanel(false, true);
 
@@ -105,8 +109,10 @@ public class CompareController implements ProvidesResize {
         rollbackButtonHandlerRegistration = view.getRollbackButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // TODO
-                hide();
+                if (comparisonProvider != null) {
+                    comparisonProvider.rollback(view.getRevisionsA().getValue(view.getRevisionsA().getSelectedIndex()));
+                    hide();
+                }
             }
         });
 
@@ -133,7 +139,6 @@ public class CompareController implements ProvidesResize {
             @Override
             public void onEvent(ShowComparePanelEvent event) {
                 CompareController.this.comparisonProvider = event.getComparisonProvider();
-                show();
                 retrieveRevisions();
             }
         });
@@ -153,8 +158,6 @@ public class CompareController implements ProvidesResize {
                 if (result.size() > 1) {
                     retrieveRevisionContent(result.get(1).getRevisionID(), result.get(0).getRevisionID());
                 } else {
-                    // TODO: doesn't seem like a good solution: perhaps show a warning screen saying no revisions are
-                    // available?
                     retrieveRevisionContent(result.get(0).getRevisionID(), result.get(0).getRevisionID());
                 }
             }
@@ -164,7 +167,7 @@ public class CompareController implements ProvidesResize {
     public void retrieveRevisionContent(final String revisionIDA, final String revisionIDB) {
         if (comparisonProvider != null) {
 
-            comparisonProvider.getRevision(revisionIDA, new AsyncCallback<String>() {
+            comparisonProvider.getRevisionContent(revisionIDA, new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not retrieve revision " + revisionIDA, caught));
@@ -172,11 +175,12 @@ public class CompareController implements ProvidesResize {
 
                 @Override
                 public void onSuccess(String result) {
-                    view.setRevisionA(result);
+                    revisionA = result;
+                    afterRevisionSet();
                 }
             });
 
-            comparisonProvider.getRevision(revisionIDB, new AsyncCallback<String>() {
+            comparisonProvider.getRevisionContent(revisionIDB, new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable caught) {
                     clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not retrieve revision " + revisionIDB, caught));
@@ -184,7 +188,37 @@ public class CompareController implements ProvidesResize {
 
                 @Override
                 public void onSuccess(String result) {
-                    view.setRevisionB(result);
+                    revisionB = result;
+                    afterRevisionSet();
+                }
+            });
+        }
+    }
+
+    private void afterRevisionSet() {
+        if (revisionA != null && revisionB != null) {
+            // request diffing
+            final ArrayList<DiffRequest> commands = new ArrayList<DiffRequest>();
+
+            final DiffRequest diffRequest = new DiffRequest(revisionA, revisionB, DiffMethod.WORD, DiffStyle.TRACK_CHANGES);
+            commands.add(diffRequest);
+
+            serviceFactory.getGwtDiffService().diff(commands, new AsyncCallback<ArrayList<DiffResult>>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not perform diffing.", caught));
+                }
+
+                @Override
+                public void onSuccess(final ArrayList<DiffResult> result) {
+                    clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            view.setRevision(result.get(0).getAmendment());
+                            if (!popupPanel.isShowing())
+                                show();
+                        }
+                    });
                 }
             });
         }

@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.shared.RevisionDTO;
@@ -32,6 +33,7 @@ import java.util.List;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 public class CompareViewImpl extends Composite implements CompareView {
 
     interface MyUiBinder extends UiBinder<Widget, CompareViewImpl> {
@@ -45,10 +47,7 @@ public class CompareViewImpl extends Composite implements CompareView {
     Anchor cancelAnchor;
 
     @UiField(provided = true)
-    RichTextEditor richTextEditorA;
-
-    @UiField(provided = true)
-    RichTextEditor richTextEditorB;
+    RichTextEditor richTextEditor;
     @UiField
     HorizontalPanel revisionsPanel;
     @UiField
@@ -56,22 +55,18 @@ public class CompareViewImpl extends Composite implements CompareView {
     @UiField
     ListBox revisionsB;
     @UiField
-    HorizontalPanel revisonPickerPanel;
+    HorizontalPanel revisionPickerPanel;
 
     @Inject
-    public CompareViewImpl(@Named("revisionText") RichTextEditor richTextEditorA,
-                           @Named("revisionText") RichTextEditor richTextEditorB) {
-        this.richTextEditorA = richTextEditorA;
-        this.richTextEditorB = richTextEditorB;
+    public CompareViewImpl(@Named("revisionText") RichTextEditor richTextEditor) {
+        this.richTextEditor = richTextEditor;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        revisonPickerPanel.setCellHorizontalAlignment(revisionsA, HasHorizontalAlignment.ALIGN_CENTER);
-        revisonPickerPanel.setCellHorizontalAlignment(revisionsB, HasHorizontalAlignment.ALIGN_CENTER);
+        revisionPickerPanel.setCellHorizontalAlignment(revisionsA, HasHorizontalAlignment.ALIGN_CENTER);
+        revisionPickerPanel.setCellHorizontalAlignment(revisionsB, HasHorizontalAlignment.ALIGN_CENTER);
 
-        revisionsPanel.setCellWidth(richTextEditorA, "50%");
-        revisionsPanel.setCellHeight(richTextEditorA, "100%");
-        revisionsPanel.setCellWidth(richTextEditorB, "50%");
-        revisionsPanel.setCellHeight(richTextEditorB, "100%");
+        revisionsPanel.setCellWidth(richTextEditor, "100%");
+        revisionsPanel.setCellHeight(richTextEditor, "100%");
     }
 
     @Override
@@ -86,8 +81,7 @@ public class CompareViewImpl extends Composite implements CompareView {
 
     @Override
     public void destroy() {
-        richTextEditorA.destroy();
-        richTextEditorB.destroy();
+        richTextEditor.destroy();
     }
 
     @Override
@@ -120,13 +114,8 @@ public class CompareViewImpl extends Composite implements CompareView {
     }
 
     @Override
-    public void setRevisionA(String revisionContent) {
-        richTextEditorA.setHTML(revisionContent);
-    }
-
-    @Override
-    public void setRevisionB(String revisionContent) {
-        richTextEditorB.setHTML(revisionContent);
+    public void setRevision(String revisionContent) {
+        richTextEditor.setHTML(revisionContent);
     }
 
     @Override

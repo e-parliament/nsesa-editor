@@ -57,7 +57,7 @@
                 <g:HTMLPanel>
                     <g:HTML text="Compare Revisions"/>
                 </g:HTMLPanel>
-                <g:HorizontalPanel styleName="{res.revisionPicker}" ui:field="revisonPickerPanel">
+                <g:HorizontalPanel styleName="{res.revisionPicker}" ui:field="revisionPickerPanel">
                     <g:ListBox ui:field="revisionsA" styleName="{res.revisionList}"/>
                     <g:Label text=" vs. "/>
                     <g:ListBox ui:field="revisionsB" styleName="{res.revisionList}"/>
@@ -67,15 +67,14 @@
         <g:center>
             <g:HTMLPanel>
                 <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
-                    <rte:RichTextEditor ui:field="richTextEditorA" styleName="{res.richTextEditor}"/>
-                    <rte:RichTextEditor ui:field="richTextEditorB" styleName="{res.richTextEditor}"/>
+                    <rte:RichTextEditor ui:field="richTextEditor" styleName="{res.richTextEditor}"/>
                 </g:HorizontalPanel>
             </g:HTMLPanel>
         </g:center>
         <g:south size="40">
             <g:HTMLPanel styleName="{res.actionPanel}">
                 <g:HTMLPanel styleName="{res.innerActionPanel}">
-                    <g:Button ui:field="rollbackButton" text="Save"/>
+                    <g:Button ui:field="rollbackButton" text="Rollback"/>
                     <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
                 </g:HTMLPanel>
             </g:HTMLPanel>

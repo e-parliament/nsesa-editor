@@ -40,9 +40,7 @@ public interface CompareView extends IsWidget {
 
     void destroy();
 
-    void setRevisionA(String revisionContent);
-
-    void setRevisionB(String revisionContent);
+    void setRevision(String revisionContent);
 
     ListBox getRevisionsA();
 
