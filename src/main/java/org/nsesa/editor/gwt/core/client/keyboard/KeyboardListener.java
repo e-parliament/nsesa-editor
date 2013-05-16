@@ -95,8 +95,7 @@ public class KeyboardListener {
     }
 
     /**
-     * Key combo representation, supporting [Shift] and [Ctrl] modifier keys, and general key codes. No [Alt] is
-     * supported, since this would probably interfere with the browser (at least under Windows).
+     * Key combo representation, supporting [Shift] [Alt] and [Ctrl] modifier keys, and general key codes.
      */
     public static class KeyCombo {
         public final boolean shift, control, alt;
