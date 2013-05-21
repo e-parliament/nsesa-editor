@@ -390,10 +390,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
     protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
         final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController.getModel().getSourceReference().getPath(), root, documentController);
-        boolean isInjected = false;
         if (injectionPoints != null) {
             if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
+                throw new RuntimeException("Multiple injection points for a single amendment are currently not supported.");
             }
             for (final OverlayWidget injectionPoint : injectionPoints) {
                 final OverlayWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
@@ -401,13 +401,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     target.addOverlayWidgetAware(amendmentController);
                     amendmentController.setDocumentController(documentController);
                     documentEventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
-                    isInjected = true;
+                } else {
+                    documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
                 }
             }
-        }
-        if (!isInjected) {
-            // this can happen if the node is not found, or a different language is used ...
-            documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
         }
     }
 

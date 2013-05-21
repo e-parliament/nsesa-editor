@@ -13,10 +13,11 @@
  */
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
-import com.google.gwt.user.client.DOM;
+import com.google.inject.Inject;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjector;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
@@ -35,6 +36,13 @@ import java.util.logging.Logger;
 public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectionPointProvider {
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointProvider.class.getName());
+
+    private final OverlayWidgetInjector overlayWidgetInjector;
+
+    @Inject
+    public DefaultAmendmentInjectionPointProvider(OverlayWidgetInjector overlayWidgetInjector) {
+        this.overlayWidgetInjector = overlayWidgetInjector;
+    }
 
     /**
      * Provides an injection point based on the given {@link AmendmentController} using its model's {@link AmendableWidgetReference}.
@@ -67,29 +75,17 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
             // make sure our document controller is listening to the UI events
             child.setUIListener(documentController.getSourceFileController());
 
-            com.google.gwt.user.client.Element parentElement = injectionPoint.getOverlayElement().cast();
-            com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
+            decideInjectionPoint(injectionPoint, child, reference.getOffset());
 
-            // attach to the DOM
-            if (injectionPoint.getChildOverlayWidgets().isEmpty()) {
-                // ok, insert as the last child
-                DOM.insertChild(parentElement, childElement, parentElement.getChildCount());
-                injectionPoint.addOverlayWidget(child, -1, false);
-            } else {
-                // insert before the first child amendable widget
-                final OverlayWidget overlayWidget = injectionPoint.getChildOverlayWidgets().get(reference.getOffset());
 
-                com.google.gwt.user.client.Element beforeElement = overlayWidget.getOverlayElement().cast();
-                DOM.insertBefore(parentElement, childElement, beforeElement);
-                // logical
-                injectionPoint.addOverlayWidget(child, reference.getOffset(), true);
-            }
-
-            LOG.info("Added new " + child + " as a child to " + injectionPoint + " at position " + reference.getOffset());
             return child;
         } else {
             LOG.info("Added amendment directly on " + injectionPoint);
             return injectionPoint;
         }
+    }
+
+    protected void decideInjectionPoint(OverlayWidget injectionPoint, OverlayWidget child, int offset) {
+        overlayWidgetInjector.injectOverlayWidget(injectionPoint, child, offset);
     }
 }
