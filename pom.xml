@@ -282,7 +282,7 @@
                 <version>1.9.0</version>
                 <configuration>
                     <header>src/main/resources/header.txt</header>
-                    <strictCheck>false</strictCheck>
+                    <strictCheck>true</strictCheck>
                     <encoding>UTF-8</encoding>
                     <excludes>
                         <exclude>web/js/**</exclude>
