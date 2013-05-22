@@ -149,7 +149,6 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
 
-
     @Test
     public void testOnBrowserEvent() throws Exception {
 
@@ -396,6 +395,11 @@ public class AmendableWidgetImplTest extends GwtTest {
             @Override
             public void setOrder(int order) {
                 // ignore
+            }
+
+            @Override
+            public int getInjectionPosition() {
+                return 0;
             }
 
             @Override

@@ -65,27 +65,25 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
         // check if we need to create a new element or not
         if (reference.isCreation()) {
-            final OverlayWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getNamespaceURI(), reference.getType());
+            final OverlayWidget toInject = documentController.getOverlayFactory().getAmendableWidget(reference.getNamespaceURI(), reference.getType());
 
-            if (child == null)
+            if (toInject == null)
                 throw new NullPointerException("The provided overlay factory " + documentController.getOverlayFactory() + " was not able to provide an injection point for " + reference);
 
             // mark the origin so we know it was introduced by amendments.
-            child.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+            toInject.setOrigin(OverlayWidgetOrigin.AMENDMENT);
             // make sure our document controller is listening to the UI events
-            child.setUIListener(documentController.getSourceFileController());
+            toInject.setUIListener(documentController.getSourceFileController());
 
-            decideInjectionPoint(injectionPoint, child, reference.getOffset());
-
-
-            return child;
+            if (reference.isSibling()) {
+                overlayWidgetInjector.injectAsSibling(injectionPoint, toInject);
+            } else {
+                overlayWidgetInjector.injectAsChild(injectionPoint, toInject, reference.getOffset());
+            }
+            return toInject;
         } else {
             LOG.info("Added amendment directly on " + injectionPoint);
             return injectionPoint;
         }
-    }
-
-    protected void decideInjectionPoint(OverlayWidget injectionPoint, OverlayWidget child, int offset) {
-        overlayWidgetInjector.injectOverlayWidget(injectionPoint, child, offset);
     }
 }

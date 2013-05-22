@@ -23,5 +23,7 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(DefaultOverlayWidgetInjector.class)
 public interface OverlayWidgetInjector {
-    void injectOverlayWidget(OverlayWidget parent, OverlayWidget child, int offset);
+    void injectAsSibling(OverlayWidget reference, OverlayWidget sibling);
+
+    void injectAsChild(OverlayWidget parent, OverlayWidget child, int index);
 }

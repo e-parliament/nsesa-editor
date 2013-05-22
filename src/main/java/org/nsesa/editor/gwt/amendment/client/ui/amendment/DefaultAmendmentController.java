@@ -309,4 +309,10 @@ public class DefaultAmendmentController implements AmendmentController {
         if (extendedView != null)
             extendedView.setTitle("Amendment " + order);
     }
+
+    @Override
+    public int getInjectionPosition() {
+        assert amendment.getSourceReference() != null;
+        return amendment.getSourceReference().getOffset();
+    }
 }

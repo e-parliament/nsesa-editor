@@ -28,7 +28,95 @@ public class DefaultOverlayWidgetInjector implements OverlayWidgetInjector {
     private static final Logger LOG = Logger.getLogger(DefaultOverlayWidgetInjector.class.getName());
 
     @Override
-    public void injectOverlayWidget(OverlayWidget parent, OverlayWidget child, int offset) {
+    public void injectAsSibling(OverlayWidget reference, OverlayWidget sibling) {
+        assert sibling.isIntroducedByAnAmendment();
+
+        final int injectionPosition = sibling.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+        if (injectionPosition > 0) {
+            // this implies that the reference is a 'previous'
+
+            // find all overlay widgets between our reference and the 'next' non-introduced overlay widget
+            int indexOfReferenceInParent = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference);
+            assert indexOfReferenceInParent != -1;
+
+            // find the next non-introduced widget
+            final OverlayWidget next = reference.next(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return !toSelect.isIntroducedByAnAmendment();
+                }
+            });
+
+            int until = next != null ? next.getParentOverlayWidget().getChildOverlayWidgets().indexOf(next) - 1 : reference.getParentOverlayWidget().getChildOverlayWidgets().size() - 1;
+
+            // now find all introduced overlay widgets in between
+            int actualInjectionPosition = 0;
+            OverlayWidget before = null;
+            for (int i = indexOfReferenceInParent; i < until; i++) {
+                OverlayWidget mustHaveBeenIntroduced = reference.getParentOverlayWidget().getChildOverlayWidgets().get(i);
+                assert mustHaveBeenIntroduced.isIntroducedByAnAmendment();
+
+                int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+                if (injectionPositionOfIntroduced > injectionPosition) {
+                    // we're too far, so we're going to inject the sibling at this position
+                    actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
+                    before = mustHaveBeenIntroduced;
+                    break;
+                }
+            }
+            // logical insert
+            reference.getParentOverlayWidget().addOverlayWidget(sibling, actualInjectionPosition);
+
+            if (before != null) {
+                // DOM insert
+                DOM.insertBefore(reference.getParentOverlayWidget().asWidget().getElement(), sibling.asWidget().getElement(), before.asWidget().getElement());
+            } else {
+                // no other introduced widgets
+                if (next != null) {
+                    DOM.insertBefore(reference.getParentOverlayWidget().asWidget().getElement(), sibling.asWidget().getElement(), next.asWidget().getElement());
+                } else {
+                    DOM.appendChild(reference.getParentOverlayWidget().asWidget().getElement(), sibling.asWidget().getElement());
+                }
+            }
+
+        } else {
+            // implies that the reference is a 'next'
+            int indexOfReferenceInParent = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference);
+            assert indexOfReferenceInParent != -1;
+
+            int from = 0; // is the logical upper boundary (since otherwise we would have gotten another reference)
+
+            // now find all introduced overlay widgets in between
+            int actualInjectionPosition = 0;
+            OverlayWidget before = null;
+            for (int i = from; i < indexOfReferenceInParent; i++) {
+                OverlayWidget mustHaveBeenIntroduced = reference.getParentOverlayWidget().getChildOverlayWidgets().get(i);
+                assert mustHaveBeenIntroduced.isIntroducedByAnAmendment();
+
+                int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+                if (injectionPositionOfIntroduced < injectionPosition) {
+                    // we're too far, so we're going to inject the sibling at this position
+                    actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
+                    before = mustHaveBeenIntroduced;
+                    break;
+                }
+            }
+
+            // logical insert
+            reference.getParentOverlayWidget().addOverlayWidget(sibling, actualInjectionPosition);
+
+            if (before != null) {
+                // DOM insert
+                DOM.insertBefore(reference.getParentOverlayWidget().asWidget().getElement(), sibling.asWidget().getElement(), before.asWidget().getElement());
+            } else {
+                // no other introduced widgets
+                DOM.insertChild(reference.getParentOverlayWidget().asWidget().getElement(), sibling.asWidget().getElement(), 0);
+            }
+        }
+    }
+
+    @Override
+    public void injectAsChild(OverlayWidget parent, OverlayWidget child, int index) {
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
 
@@ -40,13 +128,13 @@ public class DefaultOverlayWidgetInjector implements OverlayWidgetInjector {
             LOG.info("Added new " + child + " as the last child to " + parent);
         } else {
             // insert before the first child amendable widget
-            final OverlayWidget overlayWidget = parent.getChildOverlayWidgets().get(offset);
+            final OverlayWidget overlayWidget = parent.getChildOverlayWidgets().get(index);
 
             com.google.gwt.user.client.Element beforeElement = overlayWidget.getOverlayElement().cast();
             DOM.insertBefore(parentElement, childElement, beforeElement);
             // logical
-            parent.addOverlayWidget(child, offset, true);
-            LOG.info("Added new " + child + " as the first child to " + parent + " at position " + offset);
+            parent.addOverlayWidget(child, index, true);
+            LOG.info("Added new " + child + " as the first child to " + parent + " at position " + index);
         }
     }
 }
