@@ -18,9 +18,7 @@ import com.googlecode.gwt.test.GwtTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentViewImpl;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.DefaultAmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayWidgetInjectionStrategy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -64,7 +62,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         root.addOverlayWidget(child3);
     }
 
-    AmendmentInjectionPointFinder finder = new DefaultAmendmentInjectionPointFinder();
+    AmendmentInjectionPointFinder finder = new DefaultAmendmentInjectionPointFinder(new DefaultOverlayWidgetInjectionStrategy());
 
     @Test
     public void testFindInjectionPointsViaID() throws Exception {
@@ -80,6 +78,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
         Assert.assertEquals(injectionPoints.get(0), child1);
     }
+
     @Test
     public void testFindInjectionPointsXpathMultipleChildren() throws Exception {
         reference.setPath("//root/typeB[1]");
@@ -89,12 +88,12 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
 
     @Test
     public void testGetInjectionPoint() throws Exception {
-        Assert.assertEquals("//root[0]", finder.getInjectionPoint(root));
-        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(child1));
-        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(child2));
-        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(child3));
+        Assert.assertEquals("//root[0]", finder.getInjectionPoint(null, root, null).getPath());
+        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(null, child1, null).getPath());
+        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(null, child2, null).getPath());
+        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(null, child3, null).getPath());
         child2.setId("foo");
-        Assert.assertEquals("#foo", finder.getInjectionPoint(child2));
+        Assert.assertEquals("#foo", finder.getInjectionPoint(null, child2, null).getPath());
     }
 
 

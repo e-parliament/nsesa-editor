@@ -14,9 +14,9 @@
 package org.nsesa.editor.gwt.amendment.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 
 /**
  * Event for indicating a request to create a new amendment in the UI.
@@ -32,15 +32,13 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
     private final OverlayWidget parentOverlayWidget;
     private final OverlayWidget reference;
     private final OverlayWidget overlayWidget;
-    private final int index;
     private final AmendmentAction amendmentAction;
     private final DocumentController documentController;
 
-    public AmendmentContainerCreateEvent(OverlayWidget parentOverlayWidget, OverlayWidget reference, OverlayWidget overlayWidget, int index, AmendmentAction amendmentAction, DocumentController documentController) {
+    public AmendmentContainerCreateEvent(OverlayWidget parentOverlayWidget, OverlayWidget reference, OverlayWidget overlayWidget, AmendmentAction amendmentAction, DocumentController documentController) {
         this.parentOverlayWidget = parentOverlayWidget;
         this.reference = reference;
         this.overlayWidget = overlayWidget;
-        this.index = index;
         this.amendmentAction = amendmentAction;
         this.documentController = documentController;
     }
@@ -69,10 +67,6 @@ public class AmendmentContainerCreateEvent extends GwtEvent<AmendmentContainerCr
 
     public OverlayWidget getOverlayWidget() {
         return overlayWidget;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public DocumentController getDocumentController() {

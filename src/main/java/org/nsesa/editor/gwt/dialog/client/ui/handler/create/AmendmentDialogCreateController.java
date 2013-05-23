@@ -30,7 +30,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
-import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
 import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -135,8 +134,6 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // set the assigned number on the amendable widget
-                dialogContext.getOverlayWidget().setAssignedNumber(dialogContext.getIndex());
                 handleSave();
             }
         });
@@ -186,17 +183,12 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         }
         // validate the amendment
         if (validate()) {
-            // set up the source reference so we can re-inject this amendment later.
-            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
-                    dialogContext.getReferenceOverlayWidget() == dialogContext.getOverlayWidget(),
-                    dialogContext.getOverlayWidget().getNamespaceURI(),
-                    amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
-                    dialogContext.getOverlayWidget().getType(),
-                    dialogContext.getIndex());
+            final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
+                    dialogContext.getParentOverlayWidget(),
+                    dialogContext.getReferenceOverlayWidget(),
+                    dialogContext.getOverlayWidget());
 
-            sourceReference.setReferenceID(UUID.uuid());
-
-            dialogContext.getAmendment().setSourceReference(sourceReference);
+            dialogContext.getAmendment().setSourceReference(injectionPoint);
 
             // the language is always the one from the document
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());

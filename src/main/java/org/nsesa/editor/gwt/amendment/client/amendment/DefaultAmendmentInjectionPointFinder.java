@@ -13,10 +13,13 @@
  */
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
+import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjectionStrategy;
+import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
+import org.nsesa.editor.gwt.core.client.util.UUID;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -34,13 +37,20 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointFinder.class.getName());
 
+    protected final OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy;
+
+    @Inject
+    public DefaultAmendmentInjectionPointFinder(OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy) {
+        this.overlayWidgetInjectionStrategy = overlayWidgetInjectionStrategy;
+    }
+
     /**
      * Finds injection points for amendments based on the {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getSourceReference()}.
      *
-     * @param path                  the path to find the injection points for
-     * @param root                  the root overlay widget node
-     * @param documentController    the containing document controller
-     * @return  the list of injection points (that is, overlay widgets which should get the amendment controller)
+     * @param path               the path to find the injection points for
+     * @param root               the root overlay widget node
+     * @param documentController the containing document controller
+     * @return the list of injection points (that is, overlay widgets which should get the amendment controller)
      */
     @Override
     public List<OverlayWidget> findInjectionPoints(final String path, final OverlayWidget root, final DocumentController documentController) {
@@ -57,20 +67,39 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     /**
      * Get the injection point expression for a given <tt>overlayWidget</tt>. This expression uniquely identifies the
      * position within its own branch up to the root.
-     * @param overlayWidget the overlay widget to find the position expression for
+     *
+     * @param reference the overlay widget to find the position expression for
      * @return the injection point expression (xpath like).
      */
     @Override
-    public String getInjectionPoint(final OverlayWidget overlayWidget) {
-        if (overlayWidget.getId() != null && !"".equals(overlayWidget.getId())) {
+    public AmendableWidgetReference getInjectionPoint(final OverlayWidget parent, final OverlayWidget reference, final OverlayWidget child) {
+
+        AmendableWidgetReference injectionPoint;
+        final String xPath = findXPathExpressionToOverlayWidget(reference);
+        if (child != null) {
+            // creation as child or sibling
+            final boolean sibling = parent != reference;
+            injectionPoint = new AmendableWidgetReference(true, sibling, xPath, child.getNamespaceURI(), child.getType(), overlayWidgetInjectionStrategy.getInjectionPosition(reference, child));
+        } else {
+            // modification or deletion
+            injectionPoint = new AmendableWidgetReference(false, false, xPath, reference.getNamespaceURI(), reference.getType(), -1 /* offset doesn't matter */);
+        }
+
+        injectionPoint.setReferenceID(UUID.uuid());
+
+        return injectionPoint;
+    }
+
+    protected String findXPathExpressionToOverlayWidget(final OverlayWidget reference) {
+        if (reference.getId() != null && !"".equals(reference.getId())) {
             // easy!
-            return "#" + overlayWidget.getId();
+            return "#" + reference.getId();
         }
 
         // damn, no id - we need an xpath-like expression ...
         final StringBuilder sb = new StringBuilder("//");
-        final List<OverlayWidget> parentOverlayWidgets = overlayWidget.getParentOverlayWidgets();
-        parentOverlayWidgets.add(overlayWidget);
+        final List<OverlayWidget> parentOverlayWidgets = reference.getParentOverlayWidgets();
+        parentOverlayWidgets.add(reference);
         for (final OverlayWidget parent : parentOverlayWidgets) {
             if (!parent.isIntroducedByAnAmendment()) {
                 sb.append(parent.getType());

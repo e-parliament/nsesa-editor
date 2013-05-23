@@ -14,9 +14,9 @@
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ import java.util.List;
  * widget the amendment applies to (for example, in the case of a new element).
  * <p/>
  * At the same time, this allows us to get the expression to find a unique {@link OverlayWidget} in the tree.
- *
+ * <p/>
  * Date: 30/11/12 11:10
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -39,11 +39,12 @@ public interface AmendmentInjectionPointFinder {
     /**
      * Finds the injection points where an <tt>amendmentController</tt> would need to be injected in. Note that we do
      * not actually inject the amendment.
-     * @param path                  the path to find the inject points.
-     * @param root                  the root overlay widget node
-     * @param documentController    the containing document controller
+     *
+     * @param path               the path to find the inject points.
+     * @param root               the root overlay widget node
+     * @param documentController the containing document controller
      * @return the list of {@link OverlayWidget}s where to which the amendment controller applies, and should be
-     * injected in.
+     *         injected in.
      */
     List<OverlayWidget> findInjectionPoints(String path, OverlayWidget root, DocumentController documentController);
 
@@ -51,8 +52,11 @@ public interface AmendmentInjectionPointFinder {
      * Returns an expression that can be used to uniquely identify the given <tt>overlayWidget</tt> within its tree
      * (note that the overlay widget is inherently part of a tree). The expression can then subsequently be used
      * by passing it to {@link org.nsesa.editor.gwt.core.client.util.OverlayUtil}.
-     * @param overlayWidget the overlay widget to find the position expression for
-     * @return  the expression that can be used to find this <tt>overlayWidget</tt>
+     *
+     * @param parent
+     * @param reference
+     * @param child
+     * @return the reference that can be used to find this <tt>overlayWidget</tt>
      */
-    String getInjectionPoint(OverlayWidget overlayWidget);
+    AmendableWidgetReference getInjectionPoint(OverlayWidget parent, OverlayWidget reference, OverlayWidget child);
 }

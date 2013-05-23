@@ -13,8 +13,6 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
@@ -893,7 +891,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public String getNamespaceURI() {
-        throw new NullPointerException("Should be overridden by subclass.");
+        LOG.warning("Should be overridden by subclass.");
+        return null;
     }
 
     /**
@@ -951,6 +950,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     /**
      * Move the widget in the dom according with the new structure in parent collection
+     *
      * @param widget The widget to be moved
      * @param parent The widget parent
      */

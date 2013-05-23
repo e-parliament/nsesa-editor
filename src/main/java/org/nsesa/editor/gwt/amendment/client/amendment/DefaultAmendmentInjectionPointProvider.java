@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjector;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjectionStrategy;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
@@ -37,11 +37,11 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointProvider.class.getName());
 
-    private final OverlayWidgetInjector overlayWidgetInjector;
+    private final OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy;
 
     @Inject
-    public DefaultAmendmentInjectionPointProvider(OverlayWidgetInjector overlayWidgetInjector) {
-        this.overlayWidgetInjector = overlayWidgetInjector;
+    public DefaultAmendmentInjectionPointProvider(OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy) {
+        this.overlayWidgetInjectionStrategy = overlayWidgetInjectionStrategy;
     }
 
     /**
@@ -76,9 +76,9 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
             toInject.setUIListener(documentController.getSourceFileController());
 
             if (reference.isSibling()) {
-                overlayWidgetInjector.injectAsSibling(injectionPoint, toInject);
+                overlayWidgetInjectionStrategy.injectAsSibling(injectionPoint, toInject);
             } else {
-                overlayWidgetInjector.injectAsChild(injectionPoint, toInject, reference.getOffset());
+                overlayWidgetInjectionStrategy.injectAsChild(injectionPoint, toInject);
             }
             return toInject;
         } else {

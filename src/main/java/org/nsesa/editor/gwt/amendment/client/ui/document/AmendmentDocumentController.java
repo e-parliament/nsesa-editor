@@ -177,7 +177,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetModifyEvent event) {
                 // translate to an amendment
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), 0, AmendmentAction.MODIFICATION, AmendmentDocumentController.this));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), AmendmentAction.MODIFICATION, AmendmentDocumentController.this));
             }
         });
 
@@ -185,7 +185,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetDeleteEvent event) {
                 // translate to an amendment
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), 0, AmendmentAction.DELETION, AmendmentDocumentController.this));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), AmendmentAction.DELETION, AmendmentDocumentController.this));
             }
         });
 
@@ -193,7 +193,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetNewEvent event) {
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getParentOverlayWidget(), event.getReference(), event.getChild(),
-                        event.getPosition(),
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }
         });

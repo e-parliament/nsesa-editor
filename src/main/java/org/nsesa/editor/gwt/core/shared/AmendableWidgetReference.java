@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * A reference to an {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}, used by a
  * {@link org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder} to find the correct
  * widget to amend, and used when passing information when creating a new element.
- *
+ * <p/>
  * Date: 10/07/12 22:34
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -61,24 +61,7 @@ public class AmendableWidgetReference implements IsSerializable {
     public AmendableWidgetReference() {
     }
 
-    public AmendableWidgetReference(String path) {
-        this.path = path;
-    }
-
-    public AmendableWidgetReference(String path, String namespaceURI) {
-        this.path = path;
-        this.namespaceURI = namespaceURI;
-    }
-
-    public AmendableWidgetReference(boolean creation, boolean sibling, String path, String type, int offset) {
-        this.creation = creation;
-        this.sibling = sibling;
-        this.path = path;
-        this.type = type;
-        this.offset = offset;
-    }
-
-    public AmendableWidgetReference(boolean creation, boolean sibling, String namespaceURI, String path, String type, int offset) {
+    public AmendableWidgetReference(boolean creation, boolean sibling, String path, String namespaceURI, String type, int offset) {
         this.creation = creation;
         this.sibling = sibling;
         this.namespaceURI = namespaceURI;

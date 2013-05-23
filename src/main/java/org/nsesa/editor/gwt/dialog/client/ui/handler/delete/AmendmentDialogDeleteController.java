@@ -23,7 +23,6 @@ import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerS
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
-import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
@@ -132,14 +131,10 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
         dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-        // inject the xpath-like expression to uniquely identify this element
-        final AmendableWidgetReference sourceReference = new AmendableWidgetReference(false, false,
-                dialogContext.getOverlayWidget().getNamespaceURI(),
-                amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()),
-                dialogContext.getOverlayWidget().getType(),
-                dialogContext.getIndex());
-        sourceReference.setReferenceID(UUID.uuid());
-        dialogContext.getAmendment().setSourceReference(sourceReference);
+        final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget(), dialogContext.getReferenceOverlayWidget(), dialogContext.getOverlayWidget());
+
+        dialogContext.getAmendment().setSourceReference(injectionPoint);
+
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }

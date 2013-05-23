@@ -21,9 +21,12 @@ import com.google.inject.ImplementedBy;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(DefaultOverlayWidgetInjector.class)
-public interface OverlayWidgetInjector {
+@ImplementedBy(DefaultOverlayWidgetInjectionStrategy.class)
+public interface OverlayWidgetInjectionStrategy {
+
+    int getInjectionPosition(OverlayWidget reference, OverlayWidget child);
+
     void injectAsSibling(OverlayWidget reference, OverlayWidget sibling);
 
-    void injectAsChild(OverlayWidget parent, OverlayWidget child, int index);
+    void injectAsChild(OverlayWidget parent, OverlayWidget child);
 }

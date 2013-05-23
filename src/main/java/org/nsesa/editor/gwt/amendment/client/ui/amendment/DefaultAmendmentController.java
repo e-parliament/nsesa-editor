@@ -87,6 +87,8 @@ public class DefaultAmendmentController implements AmendmentController {
     private HandlerRegistration extClickHandlerRegistration;
     private HandlerRegistration extDoubleClickHandlerRegistration;
 
+    private Integer injectionPosition;
+
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
                                       final AmendmentView amendmentExtendedView,
@@ -311,8 +313,13 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
+    public void setInjectionPosition(int injectionPosition) {
+        this.injectionPosition = injectionPosition;
+    }
+
+    @Override
     public int getInjectionPosition() {
-        assert amendment.getSourceReference() != null;
-        return amendment.getSourceReference().getOffset();
+        if (injectionPosition == null) throw new RuntimeException("Not yet set. --BUG");
+        return injectionPosition;
     }
 }

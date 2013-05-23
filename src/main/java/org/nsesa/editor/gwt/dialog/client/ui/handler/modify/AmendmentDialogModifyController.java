@@ -30,7 +30,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
-import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
 import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -178,15 +177,10 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
             dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
             dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-            // inject the xpath-like expression to uniquely identify this element
-            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(false, false,
-                    dialogContext.getOverlayWidget().getNamespaceURI(),
-                    amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()),
-                    dialogContext.getOverlayWidget().getType(),
-                    dialogContext.getIndex());
+            final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget(), dialogContext.getReferenceOverlayWidget(), dialogContext.getOverlayWidget());
 
-            sourceReference.setReferenceID(UUID.uuid());
-            dialogContext.getAmendment().setSourceReference(sourceReference);
+            dialogContext.getAmendment().setSourceReference(injectionPoint);
+
             dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
             clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
         }

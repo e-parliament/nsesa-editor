@@ -23,15 +23,21 @@ import java.util.logging.Logger;
  * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class DefaultOverlayWidgetInjector implements OverlayWidgetInjector {
+public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjectionStrategy {
 
-    private static final Logger LOG = Logger.getLogger(DefaultOverlayWidgetInjector.class.getName());
+    private static final Logger LOG = Logger.getLogger(DefaultOverlayWidgetInjectionStrategy.class.getName());
+
+    @Override
+    public int getInjectionPosition(OverlayWidget reference, OverlayWidget child) {
+        // by default inject children at the last place
+        return reference.getChildOverlayWidgets().size();
+    }
 
     @Override
     public void injectAsSibling(OverlayWidget reference, OverlayWidget sibling) {
         assert sibling.isIntroducedByAnAmendment();
 
-        final int injectionPosition = sibling.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+        final int injectionPosition = getInjectionPosition(reference, sibling);
         if (injectionPosition > 0) {
             // this implies that the reference is a 'previous'
 
@@ -40,12 +46,17 @@ public class DefaultOverlayWidgetInjector implements OverlayWidgetInjector {
             assert indexOfReferenceInParent != -1;
 
             // find the next non-introduced widget
-            final OverlayWidget next = reference.next(new OverlayWidgetSelector() {
-                @Override
-                public boolean select(OverlayWidget toSelect) {
-                    return !toSelect.isIntroducedByAnAmendment();
+            OverlayWidget next = null;
+            int counter = 0;
+            for (OverlayWidget child : reference.getParentOverlayWidget().getChildOverlayWidgets()) {
+                if (counter > indexOfReferenceInParent) {
+                    if (!child.isIntroducedByAnAmendment()) {
+                        next = child;
+                        break;
+                    }
                 }
-            });
+                counter++;
+            }
 
             int until = next != null ? next.getParentOverlayWidget().getChildOverlayWidgets().indexOf(next) - 1 : reference.getParentOverlayWidget().getChildOverlayWidgets().size() - 1;
 
@@ -116,7 +127,9 @@ public class DefaultOverlayWidgetInjector implements OverlayWidgetInjector {
     }
 
     @Override
-    public void injectAsChild(OverlayWidget parent, OverlayWidget child, int index) {
+    public void injectAsChild(OverlayWidget parent, OverlayWidget child) {
+        int index = getInjectionPosition(parent, child);
+
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
 

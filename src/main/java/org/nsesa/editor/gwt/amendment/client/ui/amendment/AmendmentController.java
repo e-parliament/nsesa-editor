@@ -55,6 +55,7 @@ public interface AmendmentController extends OverlayWidgetAware {
 
     /**
      * Set the model on this controller.
+     *
      * @param amendment the model to set.
      */
     void setModel(AmendmentContainerDTO amendment);
@@ -85,51 +86,62 @@ public interface AmendmentController extends OverlayWidgetAware {
 
     /**
      * Sets the document controller.
+     *
      * @param documentController the document controller
      */
     void setDocumentController(DocumentController documentController);
 
     /**
      * Get the main amendment view (the one injected into the document controller)
+     *
      * @return the amendment view
      */
     AmendmentView getView();
 
     /**
      * Get the extended view (used in the amendments tab) with extended UI elements
+     *
      * @return the extended amendment view
      */
     AmendmentView getExtendedView();
 
     /**
      * Set the title on the amendment views
+     *
      * @param title the title to set
      */
     void setTitle(String title);
 
     /**
      * Set the status on the amendment views
+     *
      * @param status the status to set
      */
     void setStatus(String status);
 
     /**
      * Returns the overlay widget that has this amendment in its list of amendment controllers.
+     *
      * @return the amended overlay widget
      */
     OverlayWidget getAmendedOverlayWidget();
 
     /**
      * Get the local order of the amendment.
+     *
      * @return the order
      */
     int getOrder();
 
     /**
      * Sets the local order of the amendment in the document.
+     *
      * @param order
      */
     void setOrder(int order);
+
+
+    void setInjectionPosition(int injectionPosition);
 
     /**
      * Removes all event listeners that have been added to the eventbus, and any listeners for UI callbacks.
