@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetSelector;
 import org.nsesa.editor.gwt.core.client.util.ClassUtils;
 
 import java.util.*;
@@ -127,10 +128,20 @@ public class DefaultLocator implements Locator {
     public String getNum(final OverlayWidget overlayWidget, final String languageIso) {
         String index;
         if (overlayWidget.isIntroducedByAnAmendment()) {
-            OverlayWidget previous = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
+            final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return !toSelect.isIntroducedByAnAmendment() && overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                }
+            });
             if (previous == null) {
                 // no previous amendable widget ... check if we're perhaps moved before any existing ones?
-                OverlayWidget next = overlayWidget.getNextNonIntroducedOverlayWidget(true);
+                OverlayWidget next = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+                    @Override
+                    public boolean select(OverlayWidget toSelect) {
+                        return !toSelect.isIntroducedByAnAmendment() && overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                    }
+                });
                 if (next == null) {
                     // we're in an all new collection (meaning all sibling amendable widgets are introduced by amendments)
                     index = Integer.toString(overlayWidget.getTypeIndex(true) + 1);

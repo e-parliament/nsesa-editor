@@ -55,13 +55,15 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     /**
      * Check if the overlay has been completed (this might not always be the case for lazy-loading approaches when
      * performance is a problem).
+     *
      * @return <tt>true</tt> if the overlay widget was fully loaded (meaning its children were enumerated and set). If
-     * not, we should use the {@link OverlayStrategy} to retrieve and overlay the children.
+     *         not, we should use the {@link OverlayStrategy} to retrieve and overlay the children.
      */
     boolean areChildrenInitialized();
 
     /**
      * Set the flag that the children of this overlay widget were retrieved and overlaid.
+     *
      * @param childrenInitialized whether or not the children were overlaid
      */
     void setChildrenInitialized(boolean childrenInitialized);
@@ -131,19 +133,22 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     /**
      * Get the previous sibling or <tt>null</tt> if there is none.
      *
+     * @param overlayWidgetSelector the widget selector
      * @return the previous sibling
      */
-    OverlayWidget getPreviousSibling();
+    OverlayWidget getPreviousSibling(OverlayWidgetSelector overlayWidgetSelector);
 
     /**
      * Get the next sibling or <tt>null</tt> if there is none.
      *
+     * @param overlayWidgetSelector the widget selector
      * @return the next sibling
      */
-    OverlayWidget getNextSibling();
+    OverlayWidget getNextSibling(OverlayWidgetSelector overlayWidgetSelector);
 
     /**
      * Returns the next {@link OverlayWidget} in a depth first search.
+     *
      * @param overlayWidgetSelector the widget selector
      * @return the next widget, or <tt>null</tt> if there is none
      */
@@ -151,26 +156,11 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Returns the previous {@link OverlayWidget} in a depth-first search.
+     *
      * @param overlayWidgetSelector the widget selector
      * @return the previous widget, or <tt>null</tt> if there is none
      */
     OverlayWidget previous(OverlayWidgetSelector overlayWidgetSelector);
-
-    /**
-     * Find the previous sibling that is not introduced by an amendment.
-     *
-     * @param sameType if true, only look for an overlay widget of the same type
-     * @return the sibling, or null if it cannot be found
-     */
-    OverlayWidget getPreviousNonIntroducedOverlayWidget(boolean sameType);
-
-    /**
-     * Find the next sibling that is not introduced by an amendment.
-     *
-     * @param sameType if true, only look for an overlay widget of the same type
-     * @return the sibling, or null if it cannot be found
-     */
-    OverlayWidget getNextNonIntroducedOverlayWidget(boolean sameType);
 
     /**
      * Returns the widget root - if this is not a root itself, it will reverse the tree until a root element is found.
@@ -296,6 +286,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Get the structure indicator as it is coming from xsd
+     *
      * @return The structure indicator
      */
     StructureIndicator getStructureIndicator();
@@ -419,6 +410,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Get the index of this element in the DOM tree. Useful for inserting or DOM operations.
+     *
      * @return the DOM index.
      */
     int getDomIndex();
@@ -464,8 +456,9 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     /**
      * Check if this overlay widget is under (meaning one of its matches the given arguments) a certain given overlay widget identified via
      * the <tt>namespaceURI</tt> and its <tt>type</tt>.
-     * @param namespaceURI  the namespace uri
-     * @param type          the type
+     *
+     * @param namespaceURI the namespace uri
+     * @param type         the type
      * @return <tt>true</tt> if it is
      */
     boolean hasParent(String namespaceURI, String type);

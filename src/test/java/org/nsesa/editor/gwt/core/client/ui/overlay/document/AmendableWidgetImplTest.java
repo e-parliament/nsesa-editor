@@ -235,7 +235,12 @@ public class AmendableWidgetImplTest extends GwtTest {
         parent.addOverlayWidget(neighbour2);
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
-        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertEquals(previousNonIntroducedOverlayWidget, neighbour2);
     }
 
@@ -248,10 +253,15 @@ public class AmendableWidgetImplTest extends GwtTest {
         OverlayWidget neighbour2 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour2);
         neighbour2.setType("bar");
-        OverlayWidget overlayWidget = new OverlayWidgetImpl();
+        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
         overlayWidget.setType("foo");
-        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
+        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment() && toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
+            }
+        });
         Assert.assertEquals(previousNonIntroducedOverlayWidget, neighbour1);
     }
 
@@ -271,7 +281,12 @@ public class AmendableWidgetImplTest extends GwtTest {
 
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
-        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertEquals(previousNonIntroducedOverlayWidget, neighbour1);
     }
 
@@ -285,7 +300,12 @@ public class AmendableWidgetImplTest extends GwtTest {
         OverlayWidget neighbour2 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour2);
 
-        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+        final OverlayWidget previousNonIntroducedOverlayWidget = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertNull(previousNonIntroducedOverlayWidget);
     }
 
@@ -299,14 +319,19 @@ public class AmendableWidgetImplTest extends GwtTest {
         OverlayWidget neighbour2 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour2);
 
-        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(false);
+        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertEquals(nextNonIntroducedOverlayWidget, neighbour1);
     }
 
     @Test
     public void testGetNextNonIntroducedAmendableWidgetSameType() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
-        OverlayWidget overlayWidget = new OverlayWidgetImpl();
+        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         overlayWidget.setType("foo");
         parent.addOverlayWidget(overlayWidget);
 
@@ -318,7 +343,12 @@ public class AmendableWidgetImplTest extends GwtTest {
         parent.addOverlayWidget(neighbour2);
         neighbour2.setType("foo");
 
-        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(true);
+        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment() && toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
+            }
+        });
         Assert.assertEquals(nextNonIntroducedOverlayWidget, neighbour2);
     }
 
@@ -343,7 +373,12 @@ public class AmendableWidgetImplTest extends GwtTest {
         neighbour3.setType("foo");
         parent.addOverlayWidget(neighbour3);
 
-        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(false);
+        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertEquals(nextNonIntroducedOverlayWidget, neighbour3);
     }
 
@@ -359,7 +394,12 @@ public class AmendableWidgetImplTest extends GwtTest {
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
 
-        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextNonIntroducedOverlayWidget(false);
+        final OverlayWidget nextNonIntroducedOverlayWidget = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+            @Override
+            public boolean select(OverlayWidget toSelect) {
+                return !toSelect.isIntroducedByAnAmendment();
+            }
+        });
         Assert.assertNull(nextNonIntroducedOverlayWidget);
     }
 

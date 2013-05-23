@@ -28,7 +28,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
     private static final Logger LOG = Logger.getLogger(DefaultOverlayWidgetInjectionStrategy.class.getName());
 
     @Override
-    public int getInjectionPosition(OverlayWidget reference, OverlayWidget child) {
+    public int getInjectionPosition(OverlayWidget parent, OverlayWidget reference, OverlayWidget child) {
         // by default inject children at the last place
         return reference.getChildOverlayWidgets().size();
     }
@@ -37,7 +37,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
     public void injectAsSibling(OverlayWidget reference, OverlayWidget sibling) {
         assert sibling.isIntroducedByAnAmendment();
 
-        final int injectionPosition = getInjectionPosition(reference, sibling);
+        final int injectionPosition = getInjectionPosition(reference.getParentOverlayWidget(), reference, sibling);
         if (injectionPosition > 0) {
             // this implies that the reference is a 'previous'
 
@@ -129,7 +129,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
 
     @Override
     public void injectAsChild(OverlayWidget parent, OverlayWidget child) {
-        int index = getInjectionPosition(parent, child);
+        int index = getInjectionPosition(parent, parent, child);
 
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();

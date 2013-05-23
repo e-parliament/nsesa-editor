@@ -79,7 +79,8 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
         if (child != null) {
             // creation as child or sibling
             final boolean sibling = parent != reference;
-            injectionPoint = new AmendableWidgetReference(true, sibling, xPath, child.getNamespaceURI(), child.getType(), overlayWidgetInjectionStrategy.getInjectionPosition(reference, child));
+            injectionPoint = new AmendableWidgetReference(true, sibling, xPath, child.getNamespaceURI(), child.getType(),
+                    overlayWidgetInjectionStrategy.getInjectionPosition(sibling ? reference.getParentOverlayWidget() : reference, reference, child));
         } else {
             // modification or deletion
             injectionPoint = new AmendableWidgetReference(false, false, xPath, reference.getNamespaceURI(), reference.getType(), -1 /* offset doesn't matter */);
