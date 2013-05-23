@@ -66,13 +66,14 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
             for (int i = indexOfReferenceInParent; i < until; i++) {
                 OverlayWidget mustHaveBeenIntroduced = reference.getParentOverlayWidget().getChildOverlayWidgets().get(i);
                 assert mustHaveBeenIntroduced.isIntroducedByAnAmendment();
-
-                int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
-                if (injectionPositionOfIntroduced > injectionPosition) {
-                    // we're too far, so we're going to inject the sibling at this position
-                    actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
-                    before = mustHaveBeenIntroduced;
-                    break;
+                if (!mustHaveBeenIntroduced.getOverlayWidgetAwareList().isEmpty()) {
+                    int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+                    if (injectionPositionOfIntroduced > injectionPosition) {
+                        // we're too far, so we're going to inject the sibling at this position
+                        actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
+                        before = mustHaveBeenIntroduced;
+                        break;
+                    }
                 }
             }
             // logical insert

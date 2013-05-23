@@ -294,7 +294,7 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public OverlayWidget getAmendedOverlayWidget() {
+    public OverlayWidget getOverlayWidget() {
         return amendedOverlayWidget;
     }
 

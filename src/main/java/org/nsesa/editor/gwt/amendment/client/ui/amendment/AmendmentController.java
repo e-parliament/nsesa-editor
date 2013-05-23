@@ -120,13 +120,6 @@ public interface AmendmentController extends OverlayWidgetAware {
     void setStatus(String status);
 
     /**
-     * Returns the overlay widget that has this amendment in its list of amendment controllers.
-     *
-     * @return the amended overlay widget
-     */
-    OverlayWidget getAmendedOverlayWidget();
-
-    /**
      * Get the local order of the amendment.
      *
      * @return the order

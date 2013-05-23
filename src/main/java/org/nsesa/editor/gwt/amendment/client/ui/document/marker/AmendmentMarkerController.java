@@ -102,8 +102,8 @@ public class AmendmentMarkerController extends MarkerController {
                             @Override
                             public void onClick(ClickEvent event) {
                                 // TODO: this is a very poor solution to find a amendable widget to scroll to ...
-                                if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
-                                    final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                                if (!amendmentController.getOverlayWidget().asWidget().isVisible()) {
+                                    final OverlayWidget amendedOverlayWidget = amendmentController.getOverlayWidget();
                                     if (amendedOverlayWidget != null) {
                                         amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
 

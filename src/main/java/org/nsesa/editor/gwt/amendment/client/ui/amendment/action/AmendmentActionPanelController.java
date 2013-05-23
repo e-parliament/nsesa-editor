@@ -178,7 +178,7 @@ public class AmendmentActionPanelController {
         anchorMoveUpHandlerRegistration = anchorMoveUp.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                OverlayWidget amendedOverlayWidget = amendmentController.getOverlayWidget();
                 amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
                         OverlayWidgetMoveEvent.MoveType.Up, amendmentController));
                 popupPanel.hide();
@@ -188,7 +188,7 @@ public class AmendmentActionPanelController {
         anchorMoveDownHandlerRegistration = anchorMoveDown.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                OverlayWidget amendedOverlayWidget = amendmentController.getOverlayWidget();
                 amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new OverlayWidgetMoveEvent(amendedOverlayWidget,
                         OverlayWidgetMoveEvent.MoveType.Down, amendmentController));
                 popupPanel.hide();

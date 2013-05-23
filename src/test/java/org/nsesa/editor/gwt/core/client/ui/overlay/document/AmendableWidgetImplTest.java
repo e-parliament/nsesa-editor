@@ -393,6 +393,11 @@ public class AmendableWidgetImplTest extends GwtTest {
             }
 
             @Override
+            public OverlayWidget getOverlayWidget() {
+                return target;
+            }
+
+            @Override
             public void setOrder(int order) {
                 // ignore
             }
