@@ -227,11 +227,17 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                 // remove from the selection, if it existed
                 selector.removeFromSelectedAmendmentControllers(Arrays.asList(amendmentController));
 
-                if (amendmentController.getAmendedOverlayWidget() != null) {
-                    if (amendmentController.getAmendedOverlayWidget() == sourceFileController.getActiveOverlayWidget()) {
+                OverlayWidget toRemove = amendmentController.getOverlayWidget();
+                if (toRemove != null) {
+                    if (toRemove == sourceFileController.getActiveOverlayWidget()) {
                         sourceFileController.setActiveOverlayWidget(null);
                     }
-                    amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
+                    toRemove.removeAmendmentController(amendmentController);
+                    if (toRemove.isIntroducedByAnAmendment() &&
+                            toRemove.getOverlayWidgetAwareList().isEmpty()) {
+                        toRemove.getParentOverlayWidget().removeOverlayWidget(toRemove);
+                    }
+
                     sourceFileController.renumberOverlayWidgetsAware();
                 }
             }
@@ -272,7 +278,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         amendmentContainerUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerUpdatedEvent event) {
-                final OverlayWidget overlayWidget = event.getOldRevision().getAmendedOverlayWidget();
+                final OverlayWidget overlayWidget = event.getOldRevision().getOverlayWidget();
                 if (overlayWidget != null) {
                     overlayWidget.removeAmendmentController(event.getOldRevision());
                     overlayWidget.addOverlayWidgetAware(event.getNewRevision());
