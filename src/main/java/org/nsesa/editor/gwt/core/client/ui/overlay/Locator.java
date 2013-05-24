@@ -61,7 +61,8 @@ public interface Locator {
      *
      * @param overlayWidget the overlay widget to get the number for
      * @param languageIso   the ISO code of the language
+     * @param format        if <tt>true</tt>, we format the numbering (if possible), so instead of '7b', you would get '(7b)'
      * @return the number, should never return <tt>null</tt>
      */
-    String getNum(final OverlayWidget overlayWidget, final String languageIso);
+    String getNum(final OverlayWidget overlayWidget, final String languageIso, boolean format);
 }

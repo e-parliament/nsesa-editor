@@ -100,9 +100,11 @@ public class DefaultLocator implements Locator {
                         location.append(getNotation(aw, languageIso));
                     }
 
-                    final String num = getNum(aw, languageIso);
+                    final String num = getNum(aw, languageIso, false);
                     if (num != null && !("".equals(num.trim()))) {
                         location.append(" ").append(num);
+                        // in the location we always add the new notation if necessary
+                        if (aw.isIntroducedByAnAmendment()) location.append(" ").append(getNewNotation(languageIso));
                     }
                 }
                 location.append(splitter);
@@ -126,7 +128,7 @@ public class DefaultLocator implements Locator {
      * @return the number, should never return <tt>null</tt>
      */
     @Override
-    public String getNum(final OverlayWidget overlayWidget, final String languageIso) {
+    public String getNum(final OverlayWidget overlayWidget, final String languageIso, boolean format) {
         String index;
         if (overlayWidget.isIntroducedByAnAmendment()) {
             final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
@@ -146,11 +148,14 @@ public class DefaultLocator implements Locator {
                 if (next == null) {
                     // we're in an all new collection (meaning all sibling amendable widgets are introduced by amendments)
                     index = Integer.toString(overlayWidget.getTypeIndex(true) + 1);
+                    // TODO: choose a correct default numbering format if it's not given
+                    if (format && overlayWidget.getFormat() != null) index = overlayWidget.getFormat().format(index);
                 } else {
                     // we have an amendable widget that has not been introduced by an amendment
                     // this means our offset will be negative (-1)
                     // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
                     index = "-1" + NumberingType.LETTER.get(overlayWidget.getTypeIndex(true));
+                    if (format && next.getFormat() != null) index = next.getFormat().format(index);
                 }
             } else {
                 // we have a previous amendable widget that has not been introduced by an amendment.
@@ -178,16 +183,17 @@ public class DefaultLocator implements Locator {
                 int offset = counter.get();
                 previousIndex += NumberingType.LETTER.get(offset - 1);
                 index = previousIndex;
+                if (format && previous.getFormat() != null) index = previous.getFormat().format(index);
             }
-            return index + " " + getNewNotation(languageIso);
+            return index;
         } else {
             // see if we can extract the index
             final NumberingType numberingType = overlayWidget.getNumberingType();
             if (numberingType != null) {
                 if (!numberingType.isConstant()) {
-                    final String unformattedIndex = overlayWidget.getUnformattedIndex();
-                    if (unformattedIndex != null) {
-                        return unformattedIndex;
+                    index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
+                    if (index != null) {
+                        return index;
                     }
                 }
             }
