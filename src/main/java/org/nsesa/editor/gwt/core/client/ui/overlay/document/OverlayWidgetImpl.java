@@ -260,6 +260,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 }
                 childOverlayWidgets.add(index, child);
             }
+            if (this == child) throw new RuntimeException("You cannot add a child to itself. Check your logic.");
             child.setParentOverlayWidget(this);
             // inform the listener
             if (listener != null) listener.afterOverlayWidgetAdded(this, child);
@@ -386,6 +387,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public void setParentOverlayWidget(OverlayWidget parent) {
+        assert parent != this : "An overlay widget cannot be its own parent.";
         this.parentOverlayWidget = parent;
     }
 
@@ -773,7 +775,14 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      */
     @Override
     public boolean isIntroducedByAnAmendment() {
-        return origin != null ? origin == OverlayWidgetOrigin.AMENDMENT : getParentOverlayWidget() != null && getParentOverlayWidget().isIntroducedByAnAmendment();
+        if (origin != null) {
+            return origin == OverlayWidgetOrigin.AMENDMENT;
+        } else {
+            if (getParentOverlayWidget() != null) {
+                return getParentOverlayWidget().isIntroducedByAnAmendment();
+            }
+        }
+        return false;
     }
 
     @Override
