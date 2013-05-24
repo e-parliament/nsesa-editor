@@ -249,12 +249,12 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                     }
                 }
             }
-            if (index == -1) {
+            if (index == -1 || index == childOverlayWidgets.size()) {
                 if (!childOverlayWidgets.add(child)) {
                     throw new RuntimeException("Child already exists: " + child.getType());
                 }
             } else {
-                if (index > childOverlayWidgets.size()) {
+                if (index >= childOverlayWidgets.size()) {
                     throw new RuntimeException("Could not insert child Overlay widget at index " + index +
                             " because the size of the Overlay children is only " + childOverlayWidgets.size());
                 }
@@ -576,7 +576,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public String toString() {
-        return "[Element " + type + "]";
+        return "[Element " + type + ", " + origin + "]";
     }
 
     /**

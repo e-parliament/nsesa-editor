@@ -30,7 +30,12 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
     @Override
     public int getInjectionPosition(OverlayWidget parent, OverlayWidget reference, OverlayWidget child) {
         // by default inject children at the last place
-        return reference.getChildOverlayWidgets().size();
+        boolean sibling = parent != reference;
+        if (sibling) {
+            return reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference) + 1;
+        } else {
+            return reference.getChildOverlayWidgets().size() - 1;
+        }
     }
 
     @Override
@@ -38,7 +43,9 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
         assert sibling.isIntroducedByAnAmendment();
 
         final int injectionPosition = getInjectionPosition(reference.getParentOverlayWidget(), reference, sibling);
-        if (injectionPosition > 0) {
+        final int offset = injectionPosition - reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference);
+        assert offset != 0 : "Offset cannot be null.";
+        if (offset > 0) {
             // this implies that the reference is a 'previous'
 
             // find all overlay widgets between our reference and the 'next' non-introduced overlay widget
@@ -58,21 +65,22 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
                 counter++;
             }
 
-            int until = next != null ? next.getParentOverlayWidget().getChildOverlayWidgets().indexOf(next) - 1 : reference.getParentOverlayWidget().getChildOverlayWidgets().size() - 1;
+            int until = next != null ? next.getParentOverlayWidget().getChildOverlayWidgets().indexOf(next) : reference.getParentOverlayWidget().getChildOverlayWidgets().size();
 
             // now find all introduced overlay widgets in between
-            int actualInjectionPosition = 0;
+            int actualInjectionPosition = until;
             OverlayWidget before = null;
-            for (int i = indexOfReferenceInParent; i < until; i++) {
+            for (int i = indexOfReferenceInParent + 1; i < until; i++) {
                 OverlayWidget mustHaveBeenIntroduced = reference.getParentOverlayWidget().getChildOverlayWidgets().get(i);
-                assert mustHaveBeenIntroduced.isIntroducedByAnAmendment();
-                if (!mustHaveBeenIntroduced.getOverlayWidgetAwareList().isEmpty()) {
-                    int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
-                    if (injectionPositionOfIntroduced > injectionPosition) {
-                        // we're too far, so we're going to inject the sibling at this position
-                        actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
-                        before = mustHaveBeenIntroduced;
-                        break;
+                if (mustHaveBeenIntroduced.isIntroducedByAnAmendment()) {
+                    if (!mustHaveBeenIntroduced.getOverlayWidgetAwareList().isEmpty()) {
+                        int injectionPositionOfIntroduced = mustHaveBeenIntroduced.getOverlayWidgetAwareList().get(0).getInjectionPosition();
+                        if (injectionPositionOfIntroduced > offset) {
+                            // we're too far, so we're going to inject the sibling at this position
+                            actualInjectionPosition = reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(mustHaveBeenIntroduced);
+                            before = mustHaveBeenIntroduced;
+                            break;
+                        }
                     }
                 }
             }

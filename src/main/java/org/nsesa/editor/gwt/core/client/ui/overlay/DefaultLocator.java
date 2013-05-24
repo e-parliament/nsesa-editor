@@ -18,6 +18,7 @@ import com.google.common.collect.Collections2;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetSelector;
 import org.nsesa.editor.gwt.core.client.util.ClassUtils;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 
 import java.util.*;
 
@@ -156,7 +157,25 @@ public class DefaultLocator implements Locator {
                 // this means we'll take the same index
                 // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
                 String previousIndex = previous.getUnformattedIndex() != null ? previous.getUnformattedIndex() : Integer.toString(previous.getTypeIndex() + 1);
-                int offset = overlayWidget.getTypeIndex(true) - previous.getTypeIndex();
+
+                Counter counter = null;
+                for (OverlayWidget child : previous.getParentOverlayWidget().getChildOverlayWidgets()) {
+                    if (child == previous) {
+                        // start
+                        counter = new Counter();
+                    }
+                    if (child == overlayWidget) {
+                        break;
+                    }
+                    if (counter != null) {
+                        if (child.getType().equalsIgnoreCase(overlayWidget.getType())) {
+                            counter.increment();
+                        }
+                    }
+                }
+
+                assert counter != null;
+                int offset = counter.get();
                 previousIndex += NumberingType.LETTER.get(offset - 1);
                 index = previousIndex;
             }

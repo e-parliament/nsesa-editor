@@ -125,4 +125,39 @@ public class AmendableWidgetReference implements IsSerializable {
     public void setReferenceID(String referenceID) {
         this.referenceID = referenceID;
     }
+
+    @Override
+    public String toString() {
+        return "[ref = {offset: " + offset + ", path: " + path + ", type: " + type + ", ns: " + namespaceURI + ", UUID: " + referenceID + "}]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AmendableWidgetReference)) return false;
+
+        AmendableWidgetReference reference = (AmendableWidgetReference) o;
+
+        if (creation != reference.creation) return false;
+        if (offset != reference.offset) return false;
+        if (sibling != reference.sibling) return false;
+        if (!namespaceURI.equals(reference.namespaceURI)) return false;
+        if (!path.equals(reference.path)) return false;
+        if (!referenceID.equals(reference.referenceID)) return false;
+        if (!type.equals(reference.type)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = referenceID.hashCode();
+        result = 31 * result + (creation ? 1 : 0);
+        result = 31 * result + (sibling ? 1 : 0);
+        result = 31 * result + namespaceURI.hashCode();
+        result = 31 * result + path.hashCode();
+        result = 31 * result + type.hashCode();
+        result = 31 * result + offset;
+        return result;
+    }
 }

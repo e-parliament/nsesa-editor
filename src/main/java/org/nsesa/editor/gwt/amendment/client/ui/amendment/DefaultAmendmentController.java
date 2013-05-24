@@ -319,7 +319,7 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Override
     public int getInjectionPosition() {
-        if (injectionPosition == null) throw new RuntimeException("Not yet set. --BUG");
-        return injectionPosition;
+        if (amendment.getSourceReference() == null) throw new RuntimeException("Not yet set. --BUG");
+        return amendment.getSourceReference().getOffset();
     }
 }
