@@ -137,26 +137,11 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
 
     @Override
     public void injectAsChild(OverlayWidget parent, OverlayWidget child) {
-        int index = getInjectionPosition(parent, parent, child);
-
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
 
-        if (parent.getChildOverlayWidgets().isEmpty()) {
-            // ok, insert as the last child
-            DOM.insertChild(parentElement, childElement, parentElement.getChildCount());
-            parent.addOverlayWidget(child, -1, false);
-
-            LOG.info("Added new " + child + " as the last child to " + parent);
-        } else {
-            // insert before the first child amendable widget
-            final OverlayWidget overlayWidget = parent.getChildOverlayWidgets().get(index);
-
-            com.google.gwt.user.client.Element beforeElement = overlayWidget.getOverlayElement().cast();
-            DOM.insertBefore(parentElement, childElement, beforeElement);
-            // logical
-            parent.addOverlayWidget(child, index, true);
-            LOG.info("Added new " + child + " as the first child to " + parent + " at position " + index);
-        }
+        int injectionPosition = getInjectionPosition(parent, parent, child);
+        parent.addOverlayWidget(child, injectionPosition);
+        DOM.insertChild(parentElement, childElement, injectionPosition);
     }
 }
