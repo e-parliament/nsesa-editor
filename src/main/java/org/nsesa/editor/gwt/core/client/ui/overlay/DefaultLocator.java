@@ -55,20 +55,12 @@ public class DefaultLocator implements Locator {
 
     @Override
     public String getLocation(final OverlayWidget overlayWidget, final String languageIso, final boolean childrenIncluded) {
-        return getLocation(overlayWidget, null, languageIso, childrenIncluded);
-    }
 
-    @Override
-    public String getLocation(final OverlayWidget parentOverlayWidget, final OverlayWidget newChild, final String languageIso, final boolean childrenIncluded) {
+        if (overlayWidget == null) return null;
 
-        if (parentOverlayWidget == null) return null;
-
-        final List<OverlayWidget> path = parentOverlayWidget.getParentOverlayWidgets();
+        final List<OverlayWidget> path = overlayWidget.getParentOverlayWidgets();
         // add the current widget as well (since only the path is retrieved)
-        path.add(parentOverlayWidget);
-        if (newChild != null) {
-            path.add(newChild);
-        }
+        path.add(overlayWidget);
         // our location string
         final StringBuilder location = new StringBuilder();
 
