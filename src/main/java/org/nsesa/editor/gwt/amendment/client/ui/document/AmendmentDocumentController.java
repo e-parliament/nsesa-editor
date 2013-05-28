@@ -194,7 +194,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetNewEvent event) {
                 // set the origin to come from the amendment
-                event.getReference().setOrigin(OverlayWidgetOrigin.AMENDMENT);
+                event.getChild().setOrigin(OverlayWidgetOrigin.AMENDMENT);
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getParentOverlayWidget(), event.getReference(), event.getChild(),
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }
