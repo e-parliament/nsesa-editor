@@ -131,10 +131,13 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
         dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
         dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
         dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-        final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget(), dialogContext.getReferenceOverlayWidget(), dialogContext.getOverlayWidget());
-
-        dialogContext.getAmendment().setSourceReference(injectionPoint);
-
+        if (dialogContext.getReferenceOverlayWidget() != null) {
+            final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
+                    dialogContext.getParentOverlayWidget(),
+                    dialogContext.getReferenceOverlayWidget(),
+                    dialogContext.getOverlayWidget());
+            dialogContext.getAmendment().setSourceReference(injectionPoint);
+        }
         dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
         clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
     }

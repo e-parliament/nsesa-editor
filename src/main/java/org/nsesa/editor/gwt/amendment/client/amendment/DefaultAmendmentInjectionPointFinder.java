@@ -72,16 +72,16 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
      * @return the injection point expression (xpath like).
      */
     @Override
-    public AmendableWidgetReference getInjectionPoint(final OverlayWidget parent, final OverlayWidget reference, final OverlayWidget child) {
+    public AmendableWidgetReference getInjectionPoint(final OverlayWidget parent, final OverlayWidget reference, final OverlayWidget overlayWidget) {
 
         AmendableWidgetReference injectionPoint;
         final String xPath = findXPathExpressionToOverlayWidget(reference);
-        if (child != null) {
+        if (overlayWidget != null) {
             // creation as child or sibling
             final boolean sibling = parent != reference;
-            final int injectionPosition = overlayWidgetInjectionStrategy.getInjectionPosition(sibling ? reference.getParentOverlayWidget() : reference, reference, child);
+            final int injectionPosition = overlayWidgetInjectionStrategy.getInjectionPosition(sibling ? reference.getParentOverlayWidget() : reference, reference, overlayWidget);
             // if we're dealing with a sibling, then we store the offset instead
-            injectionPoint = new AmendableWidgetReference(true, sibling, xPath, child.getNamespaceURI(), child.getType(),
+            injectionPoint = new AmendableWidgetReference(true, sibling, xPath, overlayWidget.getNamespaceURI(), overlayWidget.getType(),
                     sibling ? (injectionPosition - reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference)) : injectionPosition);
         } else {
             // modification or deletion

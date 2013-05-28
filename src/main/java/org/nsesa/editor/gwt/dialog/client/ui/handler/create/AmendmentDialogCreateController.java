@@ -183,12 +183,17 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         }
         // validate the amendment
         if (validate()) {
-            final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
-                    dialogContext.getParentOverlayWidget(),
-                    dialogContext.getReferenceOverlayWidget(),
-                    dialogContext.getOverlayWidget());
+            if (dialogContext.getReferenceOverlayWidget() != null) {
 
-            dialogContext.getAmendment().setSourceReference(injectionPoint);
+                final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
+                        dialogContext.getParentOverlayWidget(),
+                        dialogContext.getReferenceOverlayWidget(),
+                        dialogContext.getOverlayWidget());
+
+                dialogContext.getAmendment().setSourceReference(injectionPoint);
+            } else {
+                // no new reference given, meaning we can keep the old one
+            }
 
             // the language is always the one from the document
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());

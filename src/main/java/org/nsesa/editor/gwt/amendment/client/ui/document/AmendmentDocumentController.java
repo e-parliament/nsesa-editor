@@ -47,6 +47,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
+import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -192,6 +193,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         documentEventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
             @Override
             public void onEvent(OverlayWidgetNewEvent event) {
+                // set the origin to come from the amendment
+                event.getReference().setOrigin(OverlayWidgetOrigin.AMENDMENT);
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getParentOverlayWidget(), event.getReference(), event.getChild(),
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }

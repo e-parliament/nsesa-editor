@@ -154,7 +154,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 dialogContext.setAmendmentController(event.getAmendmentController());
                 dialogContext.setAmendment(event.getAmendmentController().getModel());
                 dialogContext.setOverlayWidget(event.getAmendmentController().getOverlayWidget());
-                dialogContext.setReferenceOverlayWidget(event.getAmendmentController().getOverlayWidget());
+                dialogContext.setReferenceOverlayWidget(event.getReference());
                 dialogContext.setParentOverlayWidget(event.getAmendmentController().getOverlayWidget().getParentOverlayWidget());
                 dialogContext.setAmendmentAction(event.getAmendmentController().getModel().getAmendmentAction());
                 dialogContext.setDocumentController(event.getAmendmentController().getDocumentController());
