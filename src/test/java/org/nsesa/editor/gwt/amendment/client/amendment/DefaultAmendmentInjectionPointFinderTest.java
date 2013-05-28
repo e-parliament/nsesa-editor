@@ -88,12 +88,12 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
 
     @Test
     public void testGetInjectionPoint() throws Exception {
-        Assert.assertEquals("//root[0]", finder.getInjectionPoint(null, root, null).getPath());
-        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(null, child1, null).getPath());
-        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(null, child2, null).getPath());
-        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(null, child3, null).getPath());
+        Assert.assertEquals("//root[0]", finder.getInjectionPoint(null, null, root).getPath());
+        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(null, null, child1).getPath());
+        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(null, null, child2).getPath());
+        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(null, null, child3).getPath());
         child2.setId("foo");
-        Assert.assertEquals("#foo", finder.getInjectionPoint(null, child2, null).getPath());
+        Assert.assertEquals("#foo", finder.getInjectionPoint(null, null, child2).getPath());
     }
 
 

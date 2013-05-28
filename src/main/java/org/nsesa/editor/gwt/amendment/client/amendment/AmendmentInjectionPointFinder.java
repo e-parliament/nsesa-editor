@@ -55,8 +55,8 @@ public interface AmendmentInjectionPointFinder {
      *
      * @param parent
      * @param reference
-     * @param child
+     * @param overlayWidget
      * @return the reference that can be used to find this <tt>overlayWidget</tt>
      */
-    AmendableWidgetReference getInjectionPoint(OverlayWidget parent, OverlayWidget reference, OverlayWidget child);
+    AmendableWidgetReference getInjectionPoint(OverlayWidget parent, OverlayWidget reference, OverlayWidget overlayWidget);
 }

@@ -75,8 +75,8 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     public AmendableWidgetReference getInjectionPoint(final OverlayWidget parent, final OverlayWidget reference, final OverlayWidget overlayWidget) {
 
         AmendableWidgetReference injectionPoint;
-        final String xPath = findXPathExpressionToOverlayWidget(reference);
         if (overlayWidget.isIntroducedByAnAmendment()) {
+            final String xPath = findXPathExpressionToOverlayWidget(reference);
             // creation as child or sibling
             final boolean sibling = parent != reference;
             final int injectionPosition = overlayWidgetInjectionStrategy.getInjectionPosition(sibling ? reference.getParentOverlayWidget() : reference, reference, overlayWidget);
@@ -86,7 +86,8 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
         } else {
             // modification or deletion
             // TODO make offset nullable
-            injectionPoint = new AmendableWidgetReference(false, false, xPath, reference.getNamespaceURI(), reference.getType(), -1 /* offset doesn't matter */);
+            final String xPath = findXPathExpressionToOverlayWidget(overlayWidget);
+            injectionPoint = new AmendableWidgetReference(false, false, xPath, overlayWidget.getNamespaceURI(), overlayWidget.getType(), -1 /* offset doesn't matter */);
         }
 
         injectionPoint.setReferenceID(UUID.uuid());
