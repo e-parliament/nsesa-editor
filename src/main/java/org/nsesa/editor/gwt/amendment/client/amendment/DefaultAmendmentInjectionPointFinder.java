@@ -76,7 +76,7 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
 
         AmendableWidgetReference injectionPoint;
         final String xPath = findXPathExpressionToOverlayWidget(reference);
-        if (overlayWidget != null) {
+        if (overlayWidget.isIntroducedByAnAmendment()) {
             // creation as child or sibling
             final boolean sibling = parent != reference;
             final int injectionPosition = overlayWidgetInjectionStrategy.getInjectionPosition(sibling ? reference.getParentOverlayWidget() : reference, reference, overlayWidget);
