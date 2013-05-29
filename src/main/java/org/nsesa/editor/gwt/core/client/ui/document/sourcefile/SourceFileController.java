@@ -221,7 +221,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
 
         final OverlayWidget root = documentController.getOverlayFactory().getAmendableWidget(element);
         if (root != null) {
-            walk(root, new OverlayWidgetVisitor() {
+            walk(root, new DefaultOverlayWidgetVisitor() {
                 @Override
                 public boolean visit(OverlayWidget visited) {
                     // if the widget is amendable, register a listener for its events
@@ -392,15 +392,14 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      */
     public void renumberOverlayWidgetsAware() {
         final Counter counter = new Counter();
-        walk(new OverlayWidgetVisitor() {
+        walk(new DefaultOverlayWidgetVisitor() {
             @Override
-            public boolean visit(OverlayWidget visited) {
+            public void afterChildren(OverlayWidget visited) {
                 if (visited.isAmended()) {
                     for (final OverlayWidgetAware amendmentController : visited.getOverlayWidgetAwareList()) {
                         amendmentController.setOrder(counter.incrementAndGet());
                     }
                 }
-                return true;
             }
         });
     }

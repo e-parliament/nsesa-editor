@@ -640,7 +640,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         final List<OverlayWidget> order = Arrays.asList(parent, neighbour1, neighbour2, overlayWidget, child1, child2, neighbour3);
 
         final Counter counter = new Counter(0);
-        parent.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        parent.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 Assert.assertEquals(order.get(counter.get()), visited);
@@ -650,7 +650,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         });
 
         final Counter counter2 = new Counter(0);
-        parent.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        parent.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 counter2.increment();
@@ -670,7 +670,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         parent.addOverlayWidget(neighbour2);
 
         final Counter counter = new Counter(0);
-        parent.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        parent.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 counter.increment();
@@ -703,7 +703,7 @@ public class AmendableWidgetImplTest extends GwtTest {
         parent.addOverlayWidget(neighbour3);
 
         final Counter counter = new Counter(0);
-        parent.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        parent.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 counter.increment();

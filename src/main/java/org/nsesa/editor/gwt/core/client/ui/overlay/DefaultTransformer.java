@@ -16,8 +16,8 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * overlay widget by retrieving text content and attributes values from the corresponding DOM element.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 20/11/12 11:02
+ *         Date: 20/11/12 11:02
  */
 public class DefaultTransformer implements Transformer {
 
@@ -43,6 +43,7 @@ public class DefaultTransformer implements Transformer {
 
     /**
      * Generate an Xml representation for the given <code>OverlayWidget</code>
+     *
      * @param widget The overlay widget that will be XML-ized.
      * @return Xml representation as String
      */
@@ -60,17 +61,16 @@ public class DefaultTransformer implements Transformer {
      * it tries to find out the corresponding browser element node and to extract from there the text content and the
      * css attributes values. The process continue then recursively for all descendants of the original overlay widget.
      *
-     * @param widget The overlay widget that will be processed
+     * @param widget     The overlay widget that will be processed
      * @param namespaces The map of all namespaces used in overlay widget and its descendants
-     * @param rootNode True if the
+     * @param rootNode   True if the
      * @param depth
      * @return Xml representation of overlay widget as String
      */
     public String toXMLElement(final OverlayWidget widget,
                                final Map<String, String> namespaces,
                                final boolean rootNode,
-                               int depth)
-    {
+                               int depth) {
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
         sb.append(indent).append("<");
@@ -157,12 +157,13 @@ public class DefaultTransformer implements Transformer {
 
     /**
      * Gather all distinct namespaces from the given <code>OverlayWidget</code> and its chidren
+     *
      * @param root The OverlayWidget that will be processed
      * @return A Map of String
      */
     protected Map<String, String> gatherNamespaces(final OverlayWidget root) {
         final Map<String, String> namespaces = new HashMap<String, String>();
-        root.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        root.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(OverlayWidget visited) {
                 if (!namespaces.containsKey(visited.getNamespaceURI())) {
@@ -181,6 +182,7 @@ public class DefaultTransformer implements Transformer {
 
     /**
      * Return null but can be overridden by subclasses.
+     *
      * @param namespaceURI The namesapce to be processed
      * @return <code>null</code>
      */

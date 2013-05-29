@@ -905,6 +905,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 for (final OverlayWidget child : toVisit.getChildOverlayWidgets()) {
                     walk(child, visitor);
                 }
+                // callback after the children have been visited
+                visitor.afterChildren(toVisit);
             }
         }
     }

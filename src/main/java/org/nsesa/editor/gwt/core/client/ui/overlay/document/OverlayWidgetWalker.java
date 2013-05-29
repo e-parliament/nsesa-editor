@@ -24,6 +24,7 @@ public interface OverlayWidgetWalker {
 
     /**
      * Walks a tree created by traversing this {@link OverlayWidget} with a given visitor <tt>visitor</tt>.
+     *
      * @param visitor the visitor
      */
     void walk(OverlayWidgetVisitor visitor);
@@ -34,11 +35,30 @@ public interface OverlayWidgetWalker {
      */
     public static interface OverlayWidgetVisitor {
         /**
-         * Callback method for each {@link OverlayWidget} that is visited.
+         * Callback method for each {@link OverlayWidget} that is visited, before its children are visited.
          *
          * @param visited the visited {@link OverlayWidget}
          * @return true if the {@link OverlayWidgetVisitor} should go deeper (aka. visit the children of this node).
          */
         boolean visit(OverlayWidget visited);
+
+        /**
+         * Callback after the overlay widget's children have been visited.
+         *
+         * @param visited the visited {@link OverlayWidget}
+         */
+        void afterChildren(OverlayWidget visited);
+    }
+
+    public static class DefaultOverlayWidgetVisitor implements OverlayWidgetVisitor {
+        @Override
+        public boolean visit(OverlayWidget visited) {
+            return true;
+        }
+
+        @Override
+        public void afterChildren(OverlayWidget visited) {
+            // doens't do anything by default
+        }
     }
 }
