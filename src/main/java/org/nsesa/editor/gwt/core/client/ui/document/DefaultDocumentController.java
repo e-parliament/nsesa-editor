@@ -13,20 +13,20 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import com.google.inject.internal.util.$Nullable;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.document.*;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEventHandler;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetSelectEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.*;
 import org.nsesa.editor.gwt.core.client.mode.ActiveState;
 import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
@@ -44,6 +44,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -291,16 +292,44 @@ public class DefaultDocumentController implements DocumentController {
         overlayWidgetMoveEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetMoveEvent.TYPE, new OverlayWidgetMoveEventHandler() {
             @Override
             public void onEvent(OverlayWidgetMoveEvent event) {
-                OverlayWidget overlayWidget = event.getOverlayWidget();
+                final OverlayWidget overlayWidget = event.getOverlayWidget();
                 switch (event.getMoveType()) {
                     case Up:
                         if (mover.canMoveUp(overlayWidget)) {
-                            overlayWidget.moveUp();
+                            boolean wasMoved = overlayWidget.moveUp();
+                            final int widgetIndex = overlayWidget.getParentOverlayWidget().getChildOverlayWidgets().indexOf(overlayWidget);
+                            if (wasMoved) {
+                                //raise a structure change event including all potentials widgets that might be affected
+                                final Collection<OverlayWidget> affectedWidgets =
+                                        Collections2.filter(overlayWidget.getParentOverlayWidget().getChildOverlayWidgets(),
+                                                new Predicate<OverlayWidget>() {
+                                    @Override
+                                    public boolean apply(@$Nullable OverlayWidget input) {
+                                        return input.isIntroducedByAnAmendment() &&
+                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                    }
+                                });
+                                documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
+                            }
                         }
                         break;
                     case Down:
                         if (mover.canMoveDown(overlayWidget)) {
-                            overlayWidget.moveDown();
+                            final int widgetIndex = overlayWidget.getParentOverlayWidget().getChildOverlayWidgets().indexOf(overlayWidget);
+                            boolean wasMoved = overlayWidget.moveDown();
+                            if (wasMoved) {
+                                //raise a structure change event including all potentials widgets that might be affected
+                                final Collection<OverlayWidget> affectedWidgets =
+                                        Collections2.filter(overlayWidget.getParentOverlayWidget().getChildOverlayWidgets(),
+                                                new Predicate<OverlayWidget>() {
+                                    @Override
+                                    public boolean apply(@$Nullable OverlayWidget input) {
+                                        return input.isIntroducedByAnAmendment() &&
+                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                    }
+                                });
+                                documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
+                            }
                         }
                         break;
                     default:

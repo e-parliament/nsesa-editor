@@ -445,13 +445,15 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Move this widget up in the parent collection.
+     * @return <tt>true</tt> if the widget has been moved up
      */
-    void moveUp();
+    boolean moveUp();
 
     /**
      * Move this widget down in the parent collection
+     * @return <tt>true</tt> if the widget has been moved down
      */
-    void moveDown();
+    boolean moveDown();
 
     /**
      * Check if this overlay widget is under (meaning one of its matches the given arguments) a certain given overlay widget identified via
@@ -459,7 +461,7 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      *
      * @param namespaceURI the namespace uri
      * @param type         the type
-     * @return <tt>true</tt> if it is
+     * @return <tt>true</tt> if it has parent
      */
     boolean hasParent(String namespaceURI, String type);
 

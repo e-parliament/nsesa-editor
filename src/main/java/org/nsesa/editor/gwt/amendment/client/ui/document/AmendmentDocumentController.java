@@ -13,11 +13,14 @@
  */
 package org.nsesa.editor.gwt.amendment.client.ui.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import com.google.inject.internal.util.$Nullable;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
@@ -49,7 +52,9 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -232,6 +237,9 @@ public class AmendmentDocumentController extends DefaultDocumentController {
 
                 OverlayWidget toRemove = amendmentController.getOverlayWidget();
                 if (toRemove != null) {
+                    final int widgetIndex = toRemove.getParentOverlayWidget().getChildOverlayWidgets().indexOf(toRemove);
+                    final OverlayWidget parent = toRemove.getParentOverlayWidget();
+
                     if (toRemove == sourceFileController.getActiveOverlayWidget()) {
                         sourceFileController.setActiveOverlayWidget(null);
                     }
@@ -240,9 +248,22 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                             toRemove.getOverlayWidgetAwareList().isEmpty()) {
                         toRemove.getParentOverlayWidget().removeOverlayWidget(toRemove);
                     }
+                    // raise a structural change event now
+                    final Collection<OverlayWidget> affectedWidgets =
+                            Collections2.filter(parent.getChildOverlayWidgets(),
+                                    new Predicate<OverlayWidget>() {
+                                        @Override
+                                        public boolean apply(@$Nullable OverlayWidget input) {
+                                            return input.isIntroducedByAnAmendment() &&
+                                                    parent.getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                        }
+                                    });
+                    if (!affectedWidgets.isEmpty()) {
+                        documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
+                    }
 
-                    sourceFileController.renumberOverlayWidgetsAware();
                 }
+                sourceFileController.renumberOverlayWidgetsAware();
             }
         });
 

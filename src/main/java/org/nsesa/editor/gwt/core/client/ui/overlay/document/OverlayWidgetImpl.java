@@ -717,7 +717,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void moveUp() {
+    public boolean moveUp() {
+        boolean wasMoved = false;
         OverlayWidget parent = getParentOverlayWidget();
         if (parent != null) {
             int colIndex = parent.getChildOverlayWidgets().indexOf(this);
@@ -725,8 +726,10 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 parent.removeOverlayWidget(this);
                 parent.addOverlayWidget(this, colIndex - 1, true);
                 move(this, parent);
+                wasMoved = true;
             }
         }
+        return wasMoved;
     }
 
     public void setFormattedIndex(String formattedIndex) {
@@ -734,16 +737,19 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void moveDown() {
+    public boolean moveDown() {
         OverlayWidget parent = getParentOverlayWidget();
+        boolean wasMoved = false;
         if (parent != null) {
             int colIndex = parent.getChildOverlayWidgets().indexOf(this);
             if (colIndex < parent.getChildOverlayWidgets().size() - 1) {
                 parent.removeOverlayWidget(this);
                 parent.addOverlayWidget(this, colIndex + 1, true);
                 move(this, parent);
+                wasMoved = true;
             }
         }
+        return wasMoved;
     }
 
     @Override
