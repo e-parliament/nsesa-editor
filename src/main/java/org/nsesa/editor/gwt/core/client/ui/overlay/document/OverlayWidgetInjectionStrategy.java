@@ -24,7 +24,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DefaultOverlayWidgetInjectionStrategy.class)
 public interface OverlayWidgetInjectionStrategy {
 
-    int getInjectionPosition(OverlayWidget parent, OverlayWidget reference, OverlayWidget child);
+    int getProposedInjectionPosition(OverlayWidget parent, OverlayWidget reference, OverlayWidget child);
 
     void injectAsSibling(OverlayWidget reference, OverlayWidget sibling);
 

@@ -28,13 +28,22 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
     private static final Logger LOG = Logger.getLogger(DefaultOverlayWidgetInjectionStrategy.class.getName());
 
     @Override
-    public int getInjectionPosition(OverlayWidget parent, OverlayWidget reference, OverlayWidget child) {
+    public int getProposedInjectionPosition(OverlayWidget parent, OverlayWidget reference, final OverlayWidget child) {
         // by default inject children at the last place
         boolean sibling = parent != reference;
         if (sibling) {
-            return reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference) + 1;
+            final OverlayWidget nextSibling = reference.getNextSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return !toSelect.isIntroducedByAnAmendment();
+                }
+            });
+            if (nextSibling != null)
+                return reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(nextSibling);
+            else
+                return reference.getParentOverlayWidget().getChildOverlayWidgets().size();
         } else {
-            return reference.getChildOverlayWidgets().size() - 1;
+            return reference.getChildOverlayWidgets().size();
         }
     }
 
@@ -42,7 +51,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
     public void injectAsSibling(OverlayWidget reference, OverlayWidget sibling) {
         assert sibling.isIntroducedByAnAmendment();
 
-        final int injectionPosition = getInjectionPosition(reference.getParentOverlayWidget(), reference, sibling);
+        final int injectionPosition = getProposedInjectionPosition(reference.getParentOverlayWidget(), reference, sibling);
         final int offset = injectionPosition - reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference);
         assert offset != 0 : "Offset cannot be null.";
         if (offset > 0) {
@@ -140,7 +149,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
 
-        int injectionPosition = getInjectionPosition(parent, parent, child);
+        int injectionPosition = getProposedInjectionPosition(parent, parent, child);
         parent.addOverlayWidget(child, injectionPosition);
         DOM.insertChild(parentElement, childElement, injectionPosition);
     }
