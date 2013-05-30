@@ -89,9 +89,9 @@ public class NotificationController {
     };
 
     /**
-     * The default duration of 5 seconds.
+     * The default duration of 8 seconds.
      */
-    private int duration = 5;
+    private int duration = 8;
     private HandlerRegistration clickHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration mouseOverHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration mouseOutHandlerRegistration;
@@ -103,6 +103,7 @@ public class NotificationController {
         view.asWidget().setHeight(HEIGHT_IN_PX + "px");
         popupPanel.setWidget(view);
         popupPanel.getElement().getStyle().setZIndex(10);
+        popupPanel.getElement().setClassName(""); // removes border
         registerListeners();
     }
 
