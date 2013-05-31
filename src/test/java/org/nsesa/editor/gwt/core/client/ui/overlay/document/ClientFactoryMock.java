@@ -278,12 +278,72 @@ public class ClientFactoryMock implements ClientFactory {
 
         @Override
         public String amendmentActionMoveUp() {
-            return null;
+            return "amendmentActionMoveUp";
         }
 
         @Override
         public String amendmentActionMoveDown() {
-            return null;
+            return "amendmentActionMoveDown";
+        }
+
+        @Override
+        public String amendmentSelectionAll() {
+            return "amendmentSelectionAll";
+        }
+
+        @Override
+        public String amendmentSelectionNone() {
+            return "amendmentSelectionNone";
+        }
+
+        @Override
+        public String confirmationAmendmentTableTitle() {
+            return "confirmationAmendmentTableTitle";
+        }
+
+        @Override
+        public String confirmationAmendmentTableMessage() {
+            return "confirmationAmendmentTableMessage";
+        }
+
+        @Override
+        public String confirmationAmendmentsTableMessage() {
+            return "confirmationAmendmentsTableMessage";
+        }
+
+        @Override
+        public String confirmationAmendmentTableButtonConfirm() {
+            return "confirmationAmendmentTableButtonConfirm";
+        }
+
+        @Override
+        public String confirmationAmendmentTableButtonCancel() {
+            return "confirmationAmendmentTableButtonCancel";
+        }
+
+        @Override
+        public String confirmationAmendmentWithdrawTitle() {
+            return "confirmationAmendmentWithdrawTitle";
+        }
+
+        @Override
+        public String confirmationAmendmentWithdrawMessage() {
+            return "confirmationAmendmentWithdrawMessage";
+        }
+
+        @Override
+        public String confirmationAmendmentsWithdrawMessage() {
+            return "confirmationAmendmentsWithdrawMessage";
+        }
+
+        @Override
+        public String confirmationAmendmentWithdrawButtonConfirm() {
+            return "confirmationAmendmentWithdrawButtonConfirm";
+        }
+
+        @Override
+        public String confirmationAmendmentWithdrawButtonCancel() {
+            return "confirmationAmendmentWithdrawButtonCancel";
         }
     };
 

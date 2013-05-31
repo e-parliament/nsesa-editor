@@ -22,14 +22,14 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Messages;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Constants;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
  * Amendment view implementation using the UI-Binder approach.
- *
+ * <p/>
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -43,7 +43,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final Messages messages;
+    private final Constants constants;
 
     @UiField
     Label title;
@@ -67,8 +67,8 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     Image deleteImage;
 
     @Inject
-    public AmendmentViewImpl(final Messages messages) {
-        this.messages = messages;
+    public AmendmentViewImpl(final Constants constants) {
+        this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
     }
@@ -93,7 +93,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setStatus(final String status) {
         if (status != null) {
             // do a lookup ...
-            final String lookup = messages != null ? messages.getString(status.toLowerCase()) : null;
+            final String lookup = constants != null ? constants.getString(status.toLowerCase()) : null;
             if (lookup != null)
                 this.status.setText(lookup);
             else
@@ -103,6 +103,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     /**
      * Overridden to ensure that browser events do not bubble up to the parent DOM element.
+     *
      * @param event the event
      */
     @Override

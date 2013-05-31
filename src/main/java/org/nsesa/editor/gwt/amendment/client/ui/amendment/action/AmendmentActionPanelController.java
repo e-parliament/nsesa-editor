@@ -21,8 +21,11 @@ import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
@@ -93,6 +96,35 @@ public class AmendmentActionPanelController {
      * The enclosing popup.
      */
     protected final PopupPanel popupPanel = new PopupPanel(true, false);
+
+    private ClickHandler confirmDeleteHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+        }
+    };
+    private ClickHandler confirmTableHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
+            amendmentManager.tableAmendmentContainers(amendmentController);
+        }
+    };
+    private ClickHandler confirmWithdrawHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
+            amendmentManager.withdrawAmendmentContainers(amendmentController);
+        }
+    };
+    private ClickHandler cancelHandler = new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+            // this does not do anything
+        }
+    };
+
+
     private HandlerRegistration anchorTableHandlerRegistration;
     private HandlerRegistration anchorWithdrawHandlerRegistration;
     private HandlerRegistration anchorDeleteHandlerRegistration;
@@ -140,7 +172,16 @@ public class AmendmentActionPanelController {
             public void onClick(ClickEvent event) {
                 final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
-                    amendmentManager.tableAmendmentContainers(amendmentController);
+                    final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                    final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                            clientFactory.getCoreMessages().confirmationAmendmentTableTitle(),
+                            clientFactory.getCoreMessages().confirmationAmendmentTableMessage(),
+                            clientFactory.getCoreMessages().confirmationAmendmentTableButtonConfirm(),
+                            confirmTableHandler,
+                            clientFactory.getCoreMessages().confirmationAmendmentTableButtonCancel(),
+                            cancelHandler);
+
+                    amendmentController.getDocumentController().getDocumentEventBus().fireEvent(confirmationEvent);
                 } else {
                     // you cannot table the amendment if no document controller has been set
                 }
@@ -153,7 +194,16 @@ public class AmendmentActionPanelController {
             public void onClick(ClickEvent event) {
                 final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
-                    amendmentManager.withdrawAmendmentContainers(amendmentController);
+                    final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                    final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                            clientFactory.getCoreMessages().confirmationAmendmentWithdrawTitle(),
+                            clientFactory.getCoreMessages().confirmationAmendmentWithdrawMessage(),
+                            clientFactory.getCoreMessages().confirmationAmendmentWithdrawButtonConfirm(),
+                            confirmWithdrawHandler,
+                            clientFactory.getCoreMessages().confirmationAmendmentWithdrawButtonCancel(),
+                            cancelHandler);
+
+                    amendmentController.getDocumentController().getDocumentEventBus().fireEvent(confirmationEvent);
                 } else {
                     // you cannot withdraw the amendment if no document controller has been set
                 }
@@ -166,7 +216,17 @@ public class AmendmentActionPanelController {
             public void onClick(ClickEvent event) {
                 final AmendmentManager amendmentManager = ((AmendmentDocumentController) amendmentController.getDocumentController()).getAmendmentManager();
                 if (amendmentManager != null) {
-                    amendmentManager.deleteAmendmentContainers(amendmentController);
+                    final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+                    final ConfirmationEvent confirmationEvent = new ConfirmationEvent(
+                            clientFactory.getCoreMessages().confirmationAmendmentDeleteTitle(),
+                            clientFactory.getCoreMessages().confirmationAmendmentDeleteMessage(),
+                            clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonConfirm(),
+                            confirmDeleteHandler,
+                            clientFactory.getCoreMessages().confirmationAmendmentDeleteButtonCancel(),
+                            cancelHandler);
+
+                    amendmentController.getDocumentController().getDocumentEventBus().fireEvent(confirmationEvent);
+
                 } else {
                     // you cannot delete the amendment if no document controller has been set
                 }

@@ -11,16 +11,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.amendment.client.ui.amendment.resources;
+package org.nsesa.editor.gwt.amendment.client.ui.document.resources;
 
 /**
- * Date: 31/05/13 10:59
+ * Date: 10/01/13 17:08
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface Messages extends com.google.gwt.i18n.client.Messages {
+public interface Constants extends com.google.gwt.i18n.client.Constants {
 
-    @Key("amendment.title")
-    String amendmentTitle(String p0);
+    @Key("header.tab.document")
+    String headerTabDocument();
+
+    @Key("header.tab.amendments")
+    String headerTabAmendments();
+
+    @Key("header.tab.info")
+    String headerTabInfo();
 }

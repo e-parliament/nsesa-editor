@@ -24,6 +24,8 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Constants;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Messages;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
@@ -46,6 +48,9 @@ public class DefaultAmendmentController implements AmendmentController {
     protected final AmendmentView view;
 
     protected final AmendmentView extendedView;
+
+    protected final Constants constants;
+    protected final Messages messages;
 
     protected AmendmentContainerDTO amendment;
 
@@ -92,10 +97,14 @@ public class DefaultAmendmentController implements AmendmentController {
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
                                       final AmendmentView amendmentExtendedView,
-                                      final AmendmentActionPanelController amendmentActionPanelController) {
+                                      final AmendmentActionPanelController amendmentActionPanelController,
+                                      final Constants constants,
+                                      final Messages messages) {
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
         this.amendmentActionPanelController = amendmentActionPanelController;
+        this.constants = constants;
+        this.messages = messages;
         registerListeners();
     }
 
@@ -306,10 +315,12 @@ public class DefaultAmendmentController implements AmendmentController {
     @Override
     public void setOrder(int order) {
         this.order = order;
-        if (view != null)
-            view.setTitle("Amendment " + order);
-        if (extendedView != null)
-            extendedView.setTitle("Amendment " + order);
+        if (view != null) {
+            view.setTitle(messages.amendmentTitle(Integer.toString(order)));
+        }
+        if (extendedView != null) {
+            extendedView.setTitle(messages.amendmentTitle(Integer.toString(order)));
+        }
     }
 
     @Override

@@ -20,6 +20,7 @@
              xmlns:info='urn:import:org.nsesa.editor.gwt.core.client.ui.document.info'
         >
     <ui:with field='imageResources' type='org.nsesa.editor.gwt.core.client.ui.document.resources.Resources'/>
+    <ui:with field='constants' type='org.nsesa.editor.gwt.amendment.client.ui.document.resources.Constants'/>
     <ui:style src="AmendmentDocumentViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.document.DocumentViewCss'/>
     <ui:style field="res">
@@ -96,15 +97,21 @@
         <g:center>
             <g:TabLayoutPanel ui:field="tabPanel" barHeight="0" styleName="{res.tabPanel}">
                 <g:tab>
-                    <g:header>Document</g:header>
+                    <g:header>
+                        <ui:msg key="{constants.headerTabDocument}">Document</ui:msg>
+                    </g:header>
                     <sourcefile:SourceFileView ui:field="sourceFileView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
                 <g:tab>
-                    <g:header>Amendments</g:header>
+                    <g:header>
+                        <ui:msg key="{constants.headerTabAmendments}">Amendments</ui:msg>
+                    </g:header>
                     <amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
                 <g:tab>
-                    <g:header>Info</g:header>
+                    <g:header>
+                        <ui:msg key="{constants.headerTabInfo}">Info</ui:msg>
+                    </g:header>
                     <info:InfoPanelView ui:field="infoPanelView"/>
                 </g:tab>
             </g:TabLayoutPanel>
