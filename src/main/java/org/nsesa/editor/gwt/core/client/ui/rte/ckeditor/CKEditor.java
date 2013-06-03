@@ -419,6 +419,7 @@ public class CKEditor extends Composite implements RichTextEditor {
      */
     private native void nativeCaretPosition(CaretPosition caretPosition, JavaScriptObject editorInstance) /*-{
         if (editorInstance.document) {
+            var lastSnapshot = editorInstance.getSnapshot();
             var dummyElement = editorInstance.document.createElement('img', {
                 attributes: {
                     src : 'null',
@@ -426,7 +427,13 @@ public class CKEditor extends Composite implements RichTextEditor {
                     height : 0
                 }
             });
-            editorInstance.insertElement(dummyElement);
+            var range;
+            if (editorInstance.getSelection() && editorInstance.getSelection().getRanges()) {
+                range = editorInstance.getSelection().getRanges()[0];
+                range.insertNode(dummyElement);
+            } else {
+                editorInstance.insertElement(dummyElement);
+            }
             var obj = dummyElement.$;
             var cursor = {left : 0, top :0};
             cursor.keydown = false;
@@ -439,6 +446,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             cursor.top += obj.offsetTop;
             cursor.keydown = true;
             dummyElement.remove();
+
             caretPosition.@org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor.CaretPosition::setLeft(I)(cursor.left);
             caretPosition.@org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor.CaretPosition::setTop(I)(cursor.top);
         }

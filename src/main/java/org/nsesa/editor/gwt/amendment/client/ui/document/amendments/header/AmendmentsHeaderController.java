@@ -24,17 +24,17 @@ import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionActionEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEvent;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionActionEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
@@ -163,10 +163,10 @@ public class AmendmentsHeaderController {
      * event for each type of selection performed
      */
     private void registerSelections() {
-        selectAll = new Anchor("All");
+        selectAll = new Anchor(coreMessages.amendmentSelectionAll());
         view.addSelection(selectAll);
         view.addSelection(new InlineHTML(", "));
-        selectNone = new Anchor("None");
+        selectNone = new Anchor(coreMessages.amendmentSelectionNone());
         view.addSelection(selectNone);
         view.addSelection(new InlineHTML("&nbsp;-&nbsp;"));
         selectCandidate = new Anchor(coreMessages.amendmentStatusCandidate());

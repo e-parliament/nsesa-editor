@@ -13,11 +13,14 @@
  */
 package org.nsesa.editor.gwt.amendment.client.ui.document;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import com.google.inject.internal.util.$Nullable;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
@@ -47,8 +50,11 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
+import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -177,7 +183,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetModifyEvent event) {
                 // translate to an amendment
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), 0, AmendmentAction.MODIFICATION, AmendmentDocumentController.this));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), AmendmentAction.MODIFICATION, AmendmentDocumentController.this));
             }
         });
 
@@ -185,15 +191,16 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(OverlayWidgetDeleteEvent event) {
                 // translate to an amendment
-                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), 0, AmendmentAction.DELETION, AmendmentDocumentController.this));
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getOverlayWidget().getParentOverlayWidget(), event.getOverlayWidget(), event.getOverlayWidget(), AmendmentAction.DELETION, AmendmentDocumentController.this));
             }
         });
 
         documentEventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
             @Override
             public void onEvent(OverlayWidgetNewEvent event) {
+                // set the origin to come from the amendment
+                event.getChild().setOrigin(OverlayWidgetOrigin.AMENDMENT);
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getParentOverlayWidget(), event.getReference(), event.getChild(),
-                        event.getPosition(),
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
             }
         });
@@ -228,13 +235,35 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                 // remove from the selection, if it existed
                 selector.removeFromSelectedAmendmentControllers(Arrays.asList(amendmentController));
 
-                if (amendmentController.getAmendedOverlayWidget() != null) {
-                    if (amendmentController.getAmendedOverlayWidget() == sourceFileController.getActiveOverlayWidget()) {
+                OverlayWidget toRemove = amendmentController.getOverlayWidget();
+                if (toRemove != null) {
+                    final int widgetIndex = toRemove.getParentOverlayWidget().getChildOverlayWidgets().indexOf(toRemove);
+                    final OverlayWidget parent = toRemove.getParentOverlayWidget();
+
+                    if (toRemove == sourceFileController.getActiveOverlayWidget()) {
                         sourceFileController.setActiveOverlayWidget(null);
                     }
-                    amendmentController.getAmendedOverlayWidget().removeAmendmentController(amendmentController);
-                    sourceFileController.renumberOverlayWidgetsAware();
+                    toRemove.removeAmendmentController(amendmentController);
+                    if (toRemove.isIntroducedByAnAmendment() &&
+                            toRemove.getOverlayWidgetAwareList().isEmpty()) {
+                        toRemove.getParentOverlayWidget().removeOverlayWidget(toRemove);
+                    }
+                    // raise a structural change event now
+                    final Collection<OverlayWidget> affectedWidgets =
+                            Collections2.filter(parent.getChildOverlayWidgets(),
+                                    new Predicate<OverlayWidget>() {
+                                        @Override
+                                        public boolean apply(@$Nullable OverlayWidget input) {
+                                            return input.isIntroducedByAnAmendment() &&
+                                                    parent.getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                        }
+                                    });
+                    if (!affectedWidgets.isEmpty()) {
+                        documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
+                    }
+
                 }
+                sourceFileController.renumberOverlayWidgetsAware();
             }
         });
 
@@ -273,7 +302,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         amendmentContainerUpdatedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerUpdatedEvent.TYPE, new AmendmentContainerUpdatedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerUpdatedEvent event) {
-                final OverlayWidget overlayWidget = event.getOldRevision().getAmendedOverlayWidget();
+                final OverlayWidget overlayWidget = event.getOldRevision().getOverlayWidget();
                 if (overlayWidget != null) {
                     overlayWidget.removeAmendmentController(event.getOldRevision());
                     overlayWidget.addOverlayWidgetAware(event.getNewRevision());

@@ -19,9 +19,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
@@ -30,7 +30,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
-import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
 import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
@@ -39,7 +38,9 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of modification amendments. Typically consists of a two
@@ -88,7 +89,9 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
     private com.google.web.bindery.event.shared.HandlerRegistration draftingToggleEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration draftingAttributesToggleEventHandlerRegistration;
 
-    /** the overlay widget validator **/
+    /**
+     * the overlay widget validator *
+     */
     private Validator<OverlayWidget> overlayWidgetValidator;
 
     @Inject
@@ -172,11 +175,17 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         //validate the amendment before saving
         if (validate()) {
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
+            dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
             dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
-            // inject the xpath-like expression to uniquely identify this element
-            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getOverlayWidget()));
-            sourceReference.setReferenceID(UUID.uuid());
-            dialogContext.getAmendment().setSourceReference(sourceReference);
+
+            if (dialogContext.getReferenceOverlayWidget() != null) {
+                final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
+                        dialogContext.getParentOverlayWidget(),
+                        dialogContext.getReferenceOverlayWidget(),
+                        dialogContext.getOverlayWidget());
+                dialogContext.getAmendment().setSourceReference(injectionPoint);
+            }
+
             dialogContext.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerSaveEvent(dialogContext.getAmendment()));
             clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
         }
@@ -225,6 +234,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
 
     /**
      * Validates the content before saving
+     *
      * @return True if content is valid
      */
     protected boolean validate() {

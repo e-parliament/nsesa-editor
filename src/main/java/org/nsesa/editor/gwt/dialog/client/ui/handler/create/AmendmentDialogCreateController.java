@@ -19,21 +19,20 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentInjectionPointFinder;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerSaveEvent;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureAttributesToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEvent;
 import org.nsesa.editor.gwt.core.client.event.visualstructure.VisualStructureToggleEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController;
-import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.client.validation.ValidationResult;
 import org.nsesa.editor.gwt.core.client.validation.Validator;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
-import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
@@ -135,8 +134,6 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // set the assigned number on the amendable widget
-                dialogContext.getOverlayWidget().setAssignedNumber(dialogContext.getIndex());
                 handleSave();
             }
         });
@@ -186,20 +183,22 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         }
         // validate the amendment
         if (validate()) {
-            // set up the source reference so we can re-inject this amendment later.
-            final AmendableWidgetReference sourceReference = new AmendableWidgetReference(true,
-                    dialogContext.getReferenceOverlayWidget() == dialogContext.getOverlayWidget(),
-                    dialogContext.getOverlayWidget().getNamespaceURI(),
-                    amendmentInjectionPointFinder.getInjectionPoint(dialogContext.getParentOverlayWidget()),
-                    dialogContext.getOverlayWidget().getType(),
-                    dialogContext.getIndex());
+            if (dialogContext.getReferenceOverlayWidget() != null) {
 
-            sourceReference.setReferenceID(UUID.uuid());
+                final AmendableWidgetReference injectionPoint = amendmentInjectionPointFinder.getInjectionPoint(
+                        dialogContext.getParentOverlayWidget(),
+                        dialogContext.getReferenceOverlayWidget(),
+                        dialogContext.getOverlayWidget());
 
-            dialogContext.getAmendment().setSourceReference(sourceReference);
+                dialogContext.getAmendment().setSourceReference(injectionPoint);
+            } else {
+                // no new reference given, meaning we can keep the old one
+            }
 
             // the language is always the one from the document
             dialogContext.getAmendment().setLanguageISO(dialogContext.getDocumentController().getDocument().getLanguageIso());
+
+            dialogContext.getAmendment().setDocumentID(dialogContext.getDocumentController().getDocument().getDocumentID());
 
             // store the action as well
             dialogContext.getAmendment().setAmendmentAction(dialogContext.getAmendmentAction());
@@ -256,6 +255,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
     /**
      * Validates the content before saving
+     *
      * @return True if the content is valid
      */
     protected boolean validate() {

@@ -13,10 +13,11 @@
  */
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
-import com.google.gwt.user.client.DOM;
+import com.google.inject.Inject;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjectionStrategy;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
@@ -35,6 +36,13 @@ import java.util.logging.Logger;
 public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectionPointProvider {
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointProvider.class.getName());
+
+    private final OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy;
+
+    @Inject
+    public DefaultAmendmentInjectionPointProvider(OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy) {
+        this.overlayWidgetInjectionStrategy = overlayWidgetInjectionStrategy;
+    }
 
     /**
      * Provides an injection point based on the given {@link AmendmentController} using its model's {@link AmendableWidgetReference}.
@@ -57,36 +65,22 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
         // check if we need to create a new element or not
         if (reference.isCreation()) {
-            final OverlayWidget child = documentController.getOverlayFactory().getAmendableWidget(reference.getNamespaceURI(), reference.getType());
+            final OverlayWidget toInject = documentController.getOverlayFactory().getAmendableWidget(reference.getNamespaceURI(), reference.getType());
 
-            if (child == null)
+            if (toInject == null)
                 throw new NullPointerException("The provided overlay factory " + documentController.getOverlayFactory() + " was not able to provide an injection point for " + reference);
 
             // mark the origin so we know it was introduced by amendments.
-            child.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+            toInject.setOrigin(OverlayWidgetOrigin.AMENDMENT);
             // make sure our document controller is listening to the UI events
-            child.setUIListener(documentController.getSourceFileController());
+            toInject.setUIListener(documentController.getSourceFileController());
 
-            com.google.gwt.user.client.Element parentElement = injectionPoint.getOverlayElement().cast();
-            com.google.gwt.user.client.Element childElement = child.getOverlayElement().cast();
-
-            // attach to the DOM
-            if (injectionPoint.getChildOverlayWidgets().isEmpty()) {
-                // ok, insert as the last child
-                DOM.insertChild(parentElement, childElement, parentElement.getChildCount());
-                injectionPoint.addOverlayWidget(child, -1, false);
+            if (reference.isSibling()) {
+                overlayWidgetInjectionStrategy.injectAsSibling(injectionPoint, toInject);
             } else {
-                // insert before the first child amendable widget
-                final OverlayWidget overlayWidget = injectionPoint.getChildOverlayWidgets().get(reference.getOffset());
-
-                com.google.gwt.user.client.Element beforeElement = overlayWidget.getOverlayElement().cast();
-                DOM.insertBefore(parentElement, childElement, beforeElement);
-                // logical
-                injectionPoint.addOverlayWidget(child, reference.getOffset(), true);
+                overlayWidgetInjectionStrategy.injectAsChild(injectionPoint, toInject);
             }
-
-            LOG.info("Added new " + child + " as a child to " + injectionPoint + " at position " + reference.getOffset());
-            return child;
+            return toInject;
         } else {
             LOG.info("Added amendment directly on " + injectionPoint);
             return injectionPoint;

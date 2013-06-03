@@ -13,8 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.validation;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.StructureIndicator;
 
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
     /**
      * Validate a given {@link OverlayWidget} <tt>toValidate</tt> for the min/max occurrences.
+     *
      * @param toValidate the instance to validate
      * @return the validation result
      */
@@ -42,7 +43,7 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
         final ValidationResultImpl[] validationResults = new ValidationResultImpl[1];
 
-        toValidate.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        toValidate.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(final OverlayWidget visited) {
 
@@ -76,7 +77,7 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
                     // validate the min occurrences goes via the children
                     Map<String, Integer> children = new LinkedHashMap<String, Integer>();
                     for (final OverlayWidget child : visited.getChildOverlayWidgets()) {
-                        final String key = child.getType()  + ":" + child.getNamespaceURI();
+                        final String key = child.getType() + ":" + child.getNamespaceURI();
                         if (children.containsKey(key)) {
                             children.put(key, children.get(key) + 1);
                         } else {
@@ -106,6 +107,7 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
     /**
      * Find the children occurrences for the given overlayWidget
+     *
      * @param overlayWidget {@link OverlayWidget}
      * @return A List of elements as StructureIndicator
      */
@@ -132,15 +134,15 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
                 int maxOccurs = maxOfMax(structureIndicator.getMaxOccurs(), occurrenceIndicator.getMaxOccurs());
                 result.add(new StructureIndicator.DefaultElement(minOccurs, maxOccurs, elemIndicator.asWidget()));
             } else {
-                if (structureIndicator.getIndicators() != null ) {
-                    for(StructureIndicator ind : structureIndicator.getIndicators()) {
+                if (structureIndicator.getIndicators() != null) {
+                    for (StructureIndicator ind : structureIndicator.getIndicators()) {
                         int minOccurs = minOfMinim(occurrenceIndicator.getMinOccurs(), ind.getMinOccurs());
                         if (ind instanceof StructureIndicator.Choice) {
                             minOccurs = 0;
                         }
                         int maxOccurs = maxOfMax(occurrenceIndicator.getMaxOccurs(), ind.getMaxOccurs());
                         stack.add(ind);
-                        stackOccurrence.add(new StructureIndicator.DefaultStructureIndicator(minOccurs,maxOccurs));
+                        stackOccurrence.add(new StructureIndicator.DefaultStructureIndicator(minOccurs, maxOccurs));
                     }
                 }
             }
@@ -150,6 +152,7 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
     /**
      * return the minimum
+     *
      * @param newMinim
      * @return Minimum as int
      */
@@ -159,13 +162,14 @@ public class OverlayWidgetValidator implements Validator<OverlayWidget> {
 
     /**
      * return UNBOUNDED value if one of the two values is unbounded otherwise the maximum
+     *
      * @param newMax
      * @return Maximum as Int
      */
     public int maxOfMax(int oldMax, int newMax) {
-        if (oldMax == StructureIndicator.UNBOUNDED || newMax == StructureIndicator.UNBOUNDED ) {
+        if (oldMax == StructureIndicator.UNBOUNDED || newMax == StructureIndicator.UNBOUNDED) {
             return StructureIndicator.UNBOUNDED;
         }
         return Math.max(oldMax, newMax);
     }
- }
+}

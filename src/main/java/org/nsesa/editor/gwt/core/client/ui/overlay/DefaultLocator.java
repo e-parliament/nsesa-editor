@@ -16,7 +16,9 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetSelector;
 import org.nsesa.editor.gwt.core.client.util.ClassUtils;
+import org.nsesa.editor.gwt.core.client.util.Counter;
 
 import java.util.*;
 
@@ -53,20 +55,12 @@ public class DefaultLocator implements Locator {
 
     @Override
     public String getLocation(final OverlayWidget overlayWidget, final String languageIso, final boolean childrenIncluded) {
-        return getLocation(overlayWidget, null, languageIso, childrenIncluded);
-    }
 
-    @Override
-    public String getLocation(final OverlayWidget parentOverlayWidget, final OverlayWidget newChild, final String languageIso, final boolean childrenIncluded) {
+        if (overlayWidget == null) return null;
 
-        if (parentOverlayWidget == null) return null;
-
-        final List<OverlayWidget> path = parentOverlayWidget.getParentOverlayWidgets();
+        final List<OverlayWidget> path = overlayWidget.getParentOverlayWidgets();
         // add the current widget as well (since only the path is retrieved)
-        path.add(parentOverlayWidget);
-        if (newChild != null) {
-            path.add(newChild);
-        }
+        path.add(overlayWidget);
         // our location string
         final StringBuilder location = new StringBuilder();
 
@@ -98,9 +92,11 @@ public class DefaultLocator implements Locator {
                         location.append(getNotation(aw, languageIso));
                     }
 
-                    final String num = getNum(aw, languageIso);
+                    final String num = getNum(aw, languageIso, false);
                     if (num != null && !("".equals(num.trim()))) {
                         location.append(" ").append(num);
+                        // in the location we always add the new notation if necessary
+                        if (aw.isIntroducedByAnAmendment()) location.append(" ").append(getNewNotation(languageIso));
                     }
                 }
                 location.append(splitter);
@@ -124,40 +120,96 @@ public class DefaultLocator implements Locator {
      * @return the number, should never return <tt>null</tt>
      */
     @Override
-    public String getNum(final OverlayWidget overlayWidget, final String languageIso) {
+    public String getNum(final OverlayWidget overlayWidget, final String languageIso, boolean format) {
         String index;
         if (overlayWidget.isIntroducedByAnAmendment()) {
-            OverlayWidget previous = overlayWidget.getPreviousNonIntroducedOverlayWidget(true);
+            final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return !toSelect.isIntroducedByAnAmendment() && overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                }
+            });
             if (previous == null) {
                 // no previous amendable widget ... check if we're perhaps moved before any existing ones?
-                OverlayWidget next = overlayWidget.getNextNonIntroducedOverlayWidget(true);
+                OverlayWidget next = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
+                    @Override
+                    public boolean select(OverlayWidget toSelect) {
+                        return !toSelect.isIntroducedByAnAmendment() && overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                    }
+                });
                 if (next == null) {
                     // we're in an all new collection (meaning all sibling amendable widgets are introduced by amendments)
                     index = Integer.toString(overlayWidget.getTypeIndex(true) + 1);
+                    if (format) {
+                        if (overlayWidget.getFormat() != null) {
+                            if (overlayWidget.getNumberingType() == NumberingType.NONE) {
+                                index = "";
+                            } else {
+                                index = overlayWidget.getFormat().format(index);
+                            }
+                        }
+                    }
                 } else {
                     // we have an amendable widget that has not been introduced by an amendment
                     // this means our offset will be negative (-1)
                     // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
                     index = "-1" + NumberingType.LETTER.get(overlayWidget.getTypeIndex(true));
+
+                    if (format) {
+                        if (next.getFormat() != null) {
+                            if (next.getNumberingType() == NumberingType.NONE) {
+                                index = "";
+                            } else {
+                                index = next.getFormat().format(index);
+                            }
+                        }
+                    }
                 }
             } else {
                 // we have a previous amendable widget that has not been introduced by an amendment.
                 // this means we'll take the same index
                 // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
                 String previousIndex = previous.getUnformattedIndex() != null ? previous.getUnformattedIndex() : Integer.toString(previous.getTypeIndex() + 1);
-                int offset = overlayWidget.getTypeIndex(true) - previous.getTypeIndex();
+
+                Counter counter = null;
+                for (OverlayWidget child : previous.getParentOverlayWidget().getChildOverlayWidgets()) {
+                    if (child == previous) {
+                        // start
+                        counter = new Counter();
+                    }
+                    if (child == overlayWidget) {
+                        break;
+                    }
+                    if (counter != null) {
+                        if (child.getType().equalsIgnoreCase(overlayWidget.getType())) {
+                            counter.increment();
+                        }
+                    }
+                }
+
+                assert counter != null;
+                int offset = counter.get();
                 previousIndex += NumberingType.LETTER.get(offset - 1);
                 index = previousIndex;
+                if (format) {
+                    if (previous.getFormat() != null) {
+                        if (previous.getNumberingType() == NumberingType.NONE) {
+                            index = "";
+                        } else {
+                            index = previous.getFormat().format(index);
+                        }
+                    }
+                }
             }
-            return index + " " + getNewNotation(languageIso);
+            return index;
         } else {
             // see if we can extract the index
             final NumberingType numberingType = overlayWidget.getNumberingType();
             if (numberingType != null) {
                 if (!numberingType.isConstant()) {
-                    final String unformattedIndex = overlayWidget.getUnformattedIndex();
-                    if (unformattedIndex != null) {
-                        return unformattedIndex;
+                    index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
+                    if (index != null) {
+                        return index;
                     }
                 }
             }

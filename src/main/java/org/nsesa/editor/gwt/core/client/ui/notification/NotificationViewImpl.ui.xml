@@ -20,15 +20,34 @@
 
     <ui:style field="res">
         .notificationView {
+            background-color: #DFF0D8;
+            border: 1px solid #D6E9C6;
+            border-radius: 4px;
+            padding: 6px 35px 6px 14px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            color: #468847;
         }
 
         .closeButton {
+            position: relative;
+            right: -21px;
+            top: -2px;
+
+            background: none repeat scroll 0 0 transparent;
+            border: 0 none;
+            cursor: pointer;
+            padding: 0;
+
+            color: #000;
             float: right;
+            font-size: large;
+            font-weight: bold;
+            opacity: 0.2;
+            text-shadow: 0 1px 0 #fff;
         }
 
         .message {
             font-size: 1.2em;
-            padding: 5px;
         }
     </ui:style>
     <g:HTMLPanel styleName="{res.notificationView}">

@@ -88,16 +88,16 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
                     if (ed.getSelection())
                         checkSelection(ed.getSelection(), ed);
                 })
-                ed.document.on('mousedown', function (ev) {
-                    //remove the ranges
-                    if (ed.getSelection()) {
-                        //editor.getSelection().removeAllRanges();
-                        var range = new $wnd.CKEDITOR.dom.range(ed.document);
-                        range.setStart(ed.document.getBody(), 0);
-                        range.setEnd(ed.document.getBody(), 0);
-                        ed.getSelection().selectRanges([range]);
-                    }
-                })
+//                ed.document.on('mousedown', function (ev) {
+//                    //remove the ranges
+//                    if (ed.getSelection()) {
+//                        //editor.getSelection().removeAllRanges();
+//                        var range = new $wnd.CKEDITOR.dom.range(ed.document);
+//                        range.setStart(ed.document.getBody(), 0);
+//                        range.setEnd(ed.document.getBody(), 0);
+//                        ed.getSelection().selectRanges([range]);
+//                    }
+//                })
                 ed.document.on('keyup', function (ev) {
                     $wnd.clearTimeout(keyHandler);
                     keyHandler = $wnd.setTimeout(function () {
@@ -117,7 +117,6 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
                 moreTagsSelected = false,
                 selectedText = selection.getSelectedText();
             //keep a track of the last visited element
-            var previousElement = ed["cachedElement"];
             ed["cachedElement"] = element;
 
             moreTagsSelected = selectMoreTags(selection);
@@ -187,7 +186,7 @@ public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin 
         Element el = jsObject.cast();
         //raise the event only when something has been changed
         if (el != null) {
-            if (!el.toString().equalsIgnoreCase(previousElement != null ? previousElement.toString() : null) ||
+            if (!el.equals(previousElement) ||
                     moreTagsSelected != previousMoreTagsSelected ||
                     !selectedText.equalsIgnoreCase(previousSelectedText)) {
 

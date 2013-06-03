@@ -13,6 +13,10 @@
  */
 package org.nsesa.editor.gwt.core.shared.exception;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+import java.io.Serializable;
+
 /**
  * An exception thrown if the resource requested is stale (used in combination with optimistic locking).
  * Date: 24/06/12 22:19
@@ -20,7 +24,7 @@ package org.nsesa.editor.gwt.core.shared.exception;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class StaleResourceException extends Exception {
+public class StaleResourceException extends Exception implements Serializable, IsSerializable {
     public StaleResourceException() {
         super();
     }

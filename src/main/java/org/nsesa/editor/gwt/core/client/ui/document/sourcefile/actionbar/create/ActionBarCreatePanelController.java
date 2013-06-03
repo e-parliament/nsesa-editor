@@ -80,12 +80,11 @@ public class ActionBarCreatePanelController {
             public void onClick(final OverlayWidget newChild, final boolean sibling) {
                 if (sibling) {
                     documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget.getParentOverlayWidget(),
-                            overlayWidget, newChild,
-                            overlayWidget.getIndex() + 1));
+                            overlayWidget, newChild));
                 } else {
                     // this is a child, by default add it as the first element (or last, TBD)
                     documentEventBus.fireEvent(new OverlayWidgetNewEvent(overlayWidget,
-                            overlayWidget, newChild, overlayWidget.getChildOverlayWidgets().size() - 1));
+                            overlayWidget, newChild));
                 }
 
             }

@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.amendment.client.event.amendment;
 
 import com.google.gwt.event.shared.GwtEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * A request to edit a given amendment controller.
@@ -28,9 +29,16 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
     public static final Type<AmendmentContainerEditEventHandler> TYPE = new Type<AmendmentContainerEditEventHandler>();
 
     private final AmendmentController amendmentController;
+    private final OverlayWidget reference;
 
     public AmendmentContainerEditEvent(AmendmentController amendmentController) {
         this.amendmentController = amendmentController;
+        this.reference = null;
+    }
+
+    public AmendmentContainerEditEvent(AmendmentController amendmentController, OverlayWidget reference) {
+        this.amendmentController = amendmentController;
+        this.reference = reference;
     }
 
     @Override
@@ -45,5 +53,9 @@ public class AmendmentContainerEditEvent extends GwtEvent<AmendmentContainerEdit
 
     public AmendmentController getAmendmentController() {
         return amendmentController;
+    }
+
+    public OverlayWidget getReference() {
+        return reference;
     }
 }

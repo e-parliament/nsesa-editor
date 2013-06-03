@@ -26,6 +26,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerController;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.marker.MarkerView;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetSelector;
 
 import java.util.logging.Logger;
 
@@ -102,14 +103,25 @@ public class AmendmentMarkerController extends MarkerController {
                             @Override
                             public void onClick(ClickEvent event) {
                                 // TODO: this is a very poor solution to find a amendable widget to scroll to ...
-                                if (!amendmentController.getAmendedOverlayWidget().asWidget().isVisible()) {
-                                    final OverlayWidget amendedOverlayWidget = amendmentController.getAmendedOverlayWidget();
+                                if (!amendmentController.getOverlayWidget().asWidget().isVisible()) {
+                                    final OverlayWidget amendedOverlayWidget = amendmentController.getOverlayWidget();
                                     if (amendedOverlayWidget != null) {
                                         amendedOverlayWidget.getOverlayElement().getPreviousSiblingElement();
 
-                                        OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                        OverlayWidget previousNonIntroducedOverlayWidget = amendedOverlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                                            @Override
+                                            public boolean select(OverlayWidget toSelect) {
+                                                return !toSelect.isIntroducedByAnAmendment();
+                                            }
+                                        });
+
                                         while (previousNonIntroducedOverlayWidget != null && !previousNonIntroducedOverlayWidget.asWidget().isVisible()) {
-                                            previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousNonIntroducedOverlayWidget(false);
+                                            previousNonIntroducedOverlayWidget = previousNonIntroducedOverlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                                                @Override
+                                                public boolean select(OverlayWidget toSelect) {
+                                                    return !toSelect.isIntroducedByAnAmendment();
+                                                }
+                                            });
                                         }
                                         if (previousNonIntroducedOverlayWidget != null)
                                             sourceFileController.scrollTo(previousNonIntroducedOverlayWidget.asWidget());

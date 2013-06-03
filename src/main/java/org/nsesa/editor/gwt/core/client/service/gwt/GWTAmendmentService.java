@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
+import org.nsesa.editor.gwt.core.shared.RevisionDTO;
 import org.nsesa.editor.gwt.core.shared.exception.ResourceNotFoundException;
 import org.nsesa.editor.gwt.core.shared.exception.StaleResourceException;
 import org.nsesa.editor.gwt.core.shared.exception.ValidationException;
@@ -44,6 +45,8 @@ public interface GWTAmendmentService extends RemoteService {
     AmendmentContainerDTO getAmendmentContainer(ClientContext clientContext, String id)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
+    AmendmentContainerDTO getAmendmentContainerRevision(ClientContext clientContext, String revisionID)
+            throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**
      * Get all existing amendment containers that should be visible to this client.
@@ -52,7 +55,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the array of amendment containers
      */
     AmendmentContainerDTO[] getAmendmentContainers(ClientContext clientContext)
-            throws UnsupportedOperationException;
+            throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**
      * Retrieves all revisions for a given amendment container.
@@ -61,7 +64,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @param id            the identifier of the amendment container
      * @return the array of amendment container revisions
      */
-    AmendmentContainerDTO[] getRevisions(ClientContext clientContext, String id)
+    ArrayList<RevisionDTO> getRevisions(ClientContext clientContext, String id)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**
@@ -186,9 +189,10 @@ public interface GWTAmendmentService extends RemoteService {
 
     /**
      * Return a list of potential authors for an amendment based on a given query.
+     *
      * @param query the query to find available authors
      * @param limit the maximum amount of suggestions to return
-     * @return  the list of available authors for a given query
+     * @return the list of available authors for a given query
      */
     ArrayList<PersonDTO> getAvailableAuthors(ClientContext clientContext, String query, int limit);
 }

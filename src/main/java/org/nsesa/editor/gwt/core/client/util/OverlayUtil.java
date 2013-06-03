@@ -13,8 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.util;
 
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.util.select.Selector;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class OverlayUtil {
             injectionPoints.addAll(selector.select(path.substring(2), root));
         } else {
             if (path.startsWith("#")) {
-                visitor = new OverlayWidgetWalker.OverlayWidgetVisitor() {
+                visitor = new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
                     @Override
                     public boolean visit(final OverlayWidget visited) {
                         if (visited != null) {
@@ -48,7 +48,7 @@ public class OverlayUtil {
                     }
                 };
             } else {
-                visitor = new OverlayWidgetWalker.OverlayWidgetVisitor() {
+                visitor = new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
                     @Override
                     public boolean visit(final OverlayWidget visited) {
                         if (visited != null) {
@@ -75,7 +75,7 @@ public class OverlayUtil {
 
     public static List<OverlayWidget> find(final String expression, final OverlayWidget root) {
         final List<OverlayWidget> matches = new ArrayList<OverlayWidget>();
-        root.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+        root.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
             @Override
             public boolean visit(final OverlayWidget visited) {
                 // only simple tag names atm

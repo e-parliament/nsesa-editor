@@ -16,9 +16,9 @@ package org.nsesa.editor.gwt.core.client.ui.rte;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.List;
  * it provides default empty implementation for all methods.
  *
  * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 14/03/13 13:27
+ *         Date: 14/03/13 13:27
  */
 public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
     @Override
@@ -48,9 +48,10 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
 
     /**
      * Create a list of overlay widgets from the editor body
-     * @param editor The editor
+     *
+     * @param editor         The editor
      * @param overlayFactory The factory used to create widgets
-     * @return  A List of overlay widgets
+     * @return A List of overlay widgets
      */
     protected final List<OverlayWidget> overlayEditorBody(JavaScriptObject editor, OverlayFactory overlayFactory) {
         List<OverlayWidget> result = new ArrayList<OverlayWidget>();
@@ -76,7 +77,8 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
 
     /**
      * Return  the editor body if exist
-      * @param editor
+     *
+     * @param editor
      * @return The body as {@link JavaScriptObject}
      */
     protected final native JavaScriptObject getBody(JavaScriptObject editor) /*-{
@@ -88,14 +90,15 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
 
     /**
      * Find an overlay widget in the list of the widgets identified by its overlayElement
-      * @param overlayElement
+     *
+     * @param overlayElement
      * @param widgets
      * @return
      */
     protected OverlayWidget findOverlayWidget(final Element overlayElement, List<OverlayWidget> widgets) {
         final OverlayWidget[] results = new OverlayWidget[1];
         for (OverlayWidget widget : widgets) {
-            widget.walk(new OverlayWidgetWalker.OverlayWidgetVisitor() {
+            widget.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
                 @Override
                 public boolean visit(OverlayWidget visited) {
                     if (visited.getOverlayElement() == overlayElement) {

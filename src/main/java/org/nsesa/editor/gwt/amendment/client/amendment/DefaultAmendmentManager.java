@@ -15,17 +15,19 @@ package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
@@ -266,9 +268,17 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
         // serialize amendable widget into XML content
         for (final AmendmentContainerDTO amendment : toSave) {
+            if (amendment.getRoot() == null) {
+                // overlay is needed
+                final Element span = DOM.createSpan();
+                span.setInnerHTML(amendment.getBody());
+                amendment.setRoot(documentController.getOverlayFactory().getAmendableWidget(span.getFirstChildElement()));
+            }
             amendment.setBody(transformer.transform(amendment.getRoot()));
             amendment.setDocumentID(documentController.getDocument().getDocumentID());
             // do some checks to make sure all fields are set
+            if (amendment.getId() == null)
+                throw new NullPointerException("No id set before sending to the backend. This will cause problems.");
             if (amendment.getRevisionID() == null)
                 throw new NullPointerException("No revision id set before sending to the backend. This will cause problems.");
         }
@@ -276,9 +286,9 @@ public class DefaultAmendmentManager implements AmendmentManager {
         serviceFactory.getGwtAmendmentService().saveAmendmentContainers(clientFactory.getClientContext(), new ArrayList<AmendmentContainerDTO>(Arrays.asList(toSave)), new AsyncCallback<AmendmentContainerDTO[]>() {
             @Override
             public void onFailure(final Throwable caught) {
-                documentEventBus.fireEvent(new CriticalErrorEvent("Woops, could not save the amendment(s).", caught));
+                documentEventBus.fireEvent(new CriticalErrorEvent("Could not save amendment: " + caught.getMessage(), caught));
                 if (caught instanceof ValidationException) {
-                    LOG.log(Level.SEVERE, "Could not save amendment.", caught);
+                    LOG.log(Level.SEVERE, "Could not save amendment: " + caught.getMessage(), caught);
                 }
             }
 
@@ -296,44 +306,46 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     protected void mergeAmendmentContainerDTOs(AmendmentContainerDTO... toMerge) {
 
-        final ClientFactory clientFactory = documentController.getClientFactory();
+        if (toMerge != null) {
+            final ClientFactory clientFactory = documentController.getClientFactory();
 
-        for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
-            final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-            amendmentController.setModel(amendmentContainerDTO);
-            amendmentController.setDocumentController(documentController);
+            for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
+                final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
+                amendmentController.setModel(amendmentContainerDTO);
+                amendmentController.setDocumentController(documentController);
 
-            // check if we already have an amendment with a similar revisionID
-            int indexOfOlderRevision = -1;
-            int counter = 0;
-            for (final AmendmentController ac : amendmentControllers) {
+                // check if we already have an amendment with a similar id
+                int indexOfOlderRevision = -1;
+                int counter = 0;
+                for (final AmendmentController ac : amendmentControllers) {
 
-                if (amendmentController.getModel().getRevisionID().equals(ac.getModel().getRevisionID())) {
-                    // aha, we found a controller for an older model
-                    indexOfOlderRevision = counter;
-                    break;
+                    if (amendmentController.getModel().getId().equals(ac.getModel().getId())) {
+                        // aha, we found a controller for an older model
+                        indexOfOlderRevision = counter;
+                        break;
+                    }
+                    counter++;
                 }
-                counter++;
-            }
-            if (indexOfOlderRevision != -1) {
-                final AmendmentController removed = amendmentControllers.remove(indexOfOlderRevision);
-                amendmentControllers.add(indexOfOlderRevision, amendmentController);
-                if (!removed.getDocumentController().equals(amendmentController.getDocumentController())) {
-                    throw new RuntimeException("Newer revision does not match the document controller?");
+                if (indexOfOlderRevision != -1) {
+                    final AmendmentController removed = amendmentControllers.remove(indexOfOlderRevision);
+                    amendmentControllers.add(indexOfOlderRevision, amendmentController);
+                    if (!removed.getDocumentController().equals(amendmentController.getDocumentController())) {
+                        throw new RuntimeException("Newer revision does not match the document controller?");
+                    }
+                    LOG.info("Replacing amendment controller " + removed + " with " + amendmentController);
+                    documentEventBus.fireEvent(new AmendmentContainerUpdatedEvent(removed, amendmentController));
+                } else {
+                    // new amendment
+                    amendmentControllers.add(amendmentController);
+                    LOG.info("Adding new amendment controller " + amendmentController);
+                    documentEventBus.fireEvent(new AmendmentContainerInjectEvent(toMerge));
                 }
-                LOG.info("Replacing amendment controller " + removed + " with " + amendmentController);
-                documentEventBus.fireEvent(new AmendmentContainerUpdatedEvent(removed, amendmentController));
-            } else {
-                // new amendment
-                amendmentControllers.add(amendmentController);
-                LOG.info("Adding new amendment controller " + amendmentController);
-                documentEventBus.fireEvent(new AmendmentContainerInjectEvent(toMerge));
+                // inform the document the save has happened
+                documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
             }
-            // inform the document the save has happened
-            documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
+            // show notification about our successful save
+            documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionSaveSuccessful(toMerge.length)));
         }
-        // show notification about our successful save
-        documentEventBus.fireEvent(new NotificationEvent(clientFactory.getCoreMessages().amendmentActionSaveSuccessful(toMerge.length)));
 
     }
 
@@ -378,10 +390,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
     protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
         final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController.getModel().getSourceReference().getPath(), root, documentController);
-        boolean isInjected = false;
         if (injectionPoints != null) {
             if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
+                throw new RuntimeException("Multiple injection points for a single amendment are currently not supported.");
             }
             for (final OverlayWidget injectionPoint : injectionPoints) {
                 final OverlayWidget target = injectionPointProvider.provideInjectionPoint(amendmentController, injectionPoint, documentController);
@@ -389,13 +401,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     target.addOverlayWidgetAware(amendmentController);
                     amendmentController.setDocumentController(documentController);
                     documentEventBus.fireEvent(new AmendmentContainerInjectedEvent(amendmentController));
-                    isInjected = true;
+                } else {
+                    documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
                 }
             }
-        }
-        if (!isInjected) {
-            // this can happen if the node is not found, or a different language is used ...
-            documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
         }
     }
 

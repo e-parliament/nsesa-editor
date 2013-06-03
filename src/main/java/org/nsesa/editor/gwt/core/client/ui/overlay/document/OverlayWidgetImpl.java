@@ -13,8 +13,6 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
@@ -251,17 +249,18 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                     }
                 }
             }
-            if (index == -1) {
+            if (index == -1 || index == childOverlayWidgets.size()) {
                 if (!childOverlayWidgets.add(child)) {
                     throw new RuntimeException("Child already exists: " + child.getType());
                 }
             } else {
-                if (index > childOverlayWidgets.size()) {
+                if (index >= childOverlayWidgets.size()) {
                     throw new RuntimeException("Could not insert child Overlay widget at index " + index +
                             " because the size of the Overlay children is only " + childOverlayWidgets.size());
                 }
                 childOverlayWidgets.add(index, child);
             }
+            if (this == child) throw new RuntimeException("You cannot add a child to itself. Check your logic.");
             child.setParentOverlayWidget(this);
             // inform the listener
             if (listener != null) listener.afterOverlayWidgetAdded(this, child);
@@ -388,6 +387,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public void setParentOverlayWidget(OverlayWidget parent) {
+        assert parent != this : "An overlay widget cannot be its own parent.";
         this.parentOverlayWidget = parent;
     }
 
@@ -466,21 +466,33 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public OverlayWidget getPreviousSibling() {
+    public OverlayWidget getPreviousSibling(final OverlayWidgetSelector overlayWidgetSelector) {
         if (parentOverlayWidget == null) return null;
         final int index = parentOverlayWidget.getChildOverlayWidgets().indexOf(this);
         // short circuit if we're already the first widget
         if (index == 0) return null;
-        return parentOverlayWidget.getChildOverlayWidgets().get(index - 1);
+        for (int i = index - 1; i >= 0; i--) {
+            OverlayWidget toTest = parentOverlayWidget.getChildOverlayWidgets().get(i);
+            if (overlayWidgetSelector.select(toTest)) {
+                return toTest;
+            }
+        }
+        return null;
     }
 
     @Override
-    public OverlayWidget getNextSibling() {
+    public OverlayWidget getNextSibling(final OverlayWidgetSelector overlayWidgetSelector) {
         if (parentOverlayWidget == null) return null;
         final int index = parentOverlayWidget.getChildOverlayWidgets().indexOf(this);
         // short circuit if we're already the last widget
         if (index == parentOverlayWidget.getChildOverlayWidgets().size() - 1) return null;
-        return parentOverlayWidget.getChildOverlayWidgets().get(index + 1);
+        for (int i = index + 1; i < parentOverlayWidget.getChildOverlayWidgets().size(); i++) {
+            OverlayWidget toTest = parentOverlayWidget.getChildOverlayWidgets().get(i);
+            if (overlayWidgetSelector.select(toTest)) {
+                return toTest;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -494,7 +506,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
         // if we have no children, but rather a sibling, select that one
         if (next == null) {
-            OverlayWidget sibling = getNextSibling();
+            OverlayWidget sibling = getNextSibling(OverlayWidgetSelector.ANY);
             if (sibling != null) next = sibling;
         }
         // if we still don't have any target, then visit the parent node, and see if this one has a sibling relative
@@ -503,7 +515,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             // get the next parent sibling, if any
             OverlayWidget toCheckForSiblings = getParentOverlayWidget();
             while (toCheckForSiblings != null) {
-                OverlayWidget nextSibling = toCheckForSiblings.getNextSibling();
+                OverlayWidget nextSibling = toCheckForSiblings.getNextSibling(OverlayWidgetSelector.ANY);
                 if (nextSibling != null) {
                     next = nextSibling;
                     break;
@@ -530,7 +542,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         OverlayWidget previous = null;
 
         // if we have a previous sibling, then we need to find the very last child node
-        final OverlayWidget previousSibling = getPreviousSibling();
+        final OverlayWidget previousSibling = getPreviousSibling(OverlayWidgetSelector.ANY);
         if (previousSibling != null) {
             OverlayWidget toCheckForChildren = previousSibling;
             OverlayWidget lastChild = toCheckForChildren;
@@ -560,47 +572,13 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public OverlayWidget getPreviousNonIntroducedOverlayWidget(final boolean sameType) {
-        OverlayWidget previous = getPreviousSibling();
-        while (previous != null) {
-            if (!previous.isIntroducedByAnAmendment()) {
-                if (sameType) {
-                    if (previous.getType().equalsIgnoreCase(getType()))
-                        return previous;
-                } else {
-                    return previous;
-                }
-            }
-            previous = previous.getPreviousSibling();
-        }
-        return null;
-    }
-
-    @Override
-    public OverlayWidget getNextNonIntroducedOverlayWidget(final boolean sameType) {
-        OverlayWidget next = getNextSibling();
-        while (next != null) {
-            if (!next.isIntroducedByAnAmendment()) {
-                if (sameType) {
-                    if (next.getType().equalsIgnoreCase(getType()))
-                        return next;
-                } else {
-                    return next;
-                }
-            }
-            next = next.getNextSibling();
-        }
-        return null;
-    }
-
-    @Override
     public OverlayWidget getRoot() {
         return getParentOverlayWidget() != null ? getParentOverlayWidget().getRoot() : this;
     }
 
     @Override
     public String toString() {
-        return "[Element " + type + "]";
+        return "[Element " + type + ", " + origin + "]";
     }
 
     /**
@@ -739,7 +717,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void moveUp() {
+    public boolean moveUp() {
+        boolean wasMoved = false;
         OverlayWidget parent = getParentOverlayWidget();
         if (parent != null) {
             int colIndex = parent.getChildOverlayWidgets().indexOf(this);
@@ -747,8 +726,10 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 parent.removeOverlayWidget(this);
                 parent.addOverlayWidget(this, colIndex - 1, true);
                 move(this, parent);
+                wasMoved = true;
             }
         }
+        return wasMoved;
     }
 
     public void setFormattedIndex(String formattedIndex) {
@@ -756,16 +737,19 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     }
 
     @Override
-    public void moveDown() {
+    public boolean moveDown() {
         OverlayWidget parent = getParentOverlayWidget();
+        boolean wasMoved = false;
         if (parent != null) {
             int colIndex = parent.getChildOverlayWidgets().indexOf(this);
             if (colIndex < parent.getChildOverlayWidgets().size() - 1) {
                 parent.removeOverlayWidget(this);
                 parent.addOverlayWidget(this, colIndex + 1, true);
                 move(this, parent);
+                wasMoved = true;
             }
         }
+        return wasMoved;
     }
 
     @Override
@@ -797,7 +781,14 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      */
     @Override
     public boolean isIntroducedByAnAmendment() {
-        return origin != null ? origin == OverlayWidgetOrigin.AMENDMENT : getParentOverlayWidget() != null && getParentOverlayWidget().isIntroducedByAnAmendment();
+        if (origin != null) {
+            return origin == OverlayWidgetOrigin.AMENDMENT;
+        } else {
+            if (getParentOverlayWidget() != null) {
+                return getParentOverlayWidget().isIntroducedByAnAmendment();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -893,7 +884,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     @Override
     public String getNamespaceURI() {
-        throw new NullPointerException("Should be overridden by subclass.");
+        LOG.warning("Should be overridden by subclass.");
+        return null;
     }
 
     /**
@@ -919,6 +911,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
                 for (final OverlayWidget child : toVisit.getChildOverlayWidgets()) {
                     walk(child, visitor);
                 }
+                // callback after the children have been visited
+                visitor.afterChildren(toVisit);
             }
         }
     }
@@ -951,6 +945,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
 
     /**
      * Move the widget in the dom according with the new structure in parent collection
+     *
      * @param widget The widget to be moved
      * @param parent The widget parent
      */
@@ -959,7 +954,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         com.google.gwt.user.client.Element parentElement = parent.getOverlayElement().cast();
         com.google.gwt.user.client.Element childElement = widget.getOverlayElement().cast();
         DOM.removeChild(parentElement, childElement);
-        OverlayWidget next = widget.getNextSibling();
+        OverlayWidget next = widget.getNextSibling(OverlayWidgetSelector.ANY);
         if (next != null) {
             com.google.gwt.user.client.Element beforeElement = next.getOverlayElement().cast();
             DOM.insertBefore(parentElement, childElement, beforeElement);

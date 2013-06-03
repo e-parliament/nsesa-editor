@@ -169,4 +169,40 @@ public interface CoreMessages extends Messages {
 
     @Key("error.document.content.error")
     String errorDocumentContentError(String p0);
+
+    @Key("amendment.selection.all")
+    String amendmentSelectionAll();
+
+    @Key("amendment.selection.none")
+    String amendmentSelectionNone();
+
+    @Key("confirmation.amendment.table.title")
+    String confirmationAmendmentTableTitle();
+
+    @Key("confirmation.amendment.table.message")
+    String confirmationAmendmentTableMessage();
+
+    @Key("confirmation.amendments.table.message")
+    String confirmationAmendmentsTableMessage();
+
+    @Key("confirmation.amendment.table.button.confirm")
+    String confirmationAmendmentTableButtonConfirm();
+
+    @Key("confirmation.amendment.table.button.cancel")
+    String confirmationAmendmentTableButtonCancel();
+
+    @Key("confirmation.amendment.withdraw.title")
+    String confirmationAmendmentWithdrawTitle();
+
+    @Key("confirmation.amendment.withdraw.message")
+    String confirmationAmendmentWithdrawMessage();
+
+    @Key("confirmation.amendments.withdraw.message")
+    String confirmationAmendmentsWithdrawMessage();
+
+    @Key("confirmation.amendment.withdraw.button.confirm")
+    String confirmationAmendmentWithdrawButtonConfirm();
+
+    @Key("confirmation.amendment.withdraw.button.cancel")
+    String confirmationAmendmentWithdrawButtonCancel();
 }

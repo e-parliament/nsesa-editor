@@ -192,12 +192,12 @@ this.value = value;
             */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = new ArrayList<<@elementClassName property=property/>>();
-            for (OverlayWidget widget : getChildOverlayWidgets()) {
-            if ("<@elementClassName property=property/>".equalsIgnoreCase(widget.getType())) {
-            result.add((<@elementClassName property=property/>)widget);
-            }
-            }
-            return java.util.Collections.unmodifiableList(result);
+                for (OverlayWidget widget : getChildOverlayWidgets()) {
+                    if ("<@elementClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
+                        result.add((<@elementClassName property=property/>)widget);
+                    }
+                }
+                return java.util.Collections.unmodifiableList(result);
             }
 
             /**
@@ -205,7 +205,7 @@ this.value = value;
             * @return The property as unmodifiable list
             */
             public <@propertyClassName property=property/> get${property.javaName?cap_first}List() {
-            return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
+                return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
             }
             /**
             * Add <code><@propertyClassName property=property/></code> property in the list of properties
@@ -227,13 +227,13 @@ this.value = value;
             */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = null;
-            for (OverlayWidget widget : getChildOverlayWidgets()) {
-            if ("<@propertyClassName property=property/>".equalsIgnoreCase(widget.getType())) {
-            result = (<@propertyClassName property=property/>)widget;
-            break;
-            }
-            }
-            return result;
+                for (OverlayWidget widget : getChildOverlayWidgets()) {
+                    if ("<@propertyClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
+                        result = (<@propertyClassName property=property/>)widget;
+                        break;
+                    }
+                }
+                return result;
             }
             /**
             * Set <code>${property.javaName}Elem</code> property in DSL way
@@ -247,7 +247,7 @@ this.value = value;
                     <@propertyClassName property=property/> result = <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
                 // remove the child of the same type if exist
                 if (result != null) {
-                this.removeOverlayWidget(result);
+                    this.removeOverlayWidget(result);
                 }
                 this.addOverlayWidget(${property.javaName}Elem);
 

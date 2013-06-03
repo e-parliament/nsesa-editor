@@ -22,10 +22,20 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  */
 public interface OverlayWidgetSelector {
 
+    public static OverlayWidgetSelector ANY = new AnyOverlayWidgetSelector();
+
     /**
      * Select a potential {@link OverlayWidget}.
+     *
      * @param toSelect the widget to potentially select
      * @return <tt>true</tt> if the widget should be selected, or <tt>false</tt> if the next/previous one should be selected.
      */
     boolean select(OverlayWidget toSelect);
+
+    public static class AnyOverlayWidgetSelector implements OverlayWidgetSelector {
+        @Override
+        public boolean select(OverlayWidget toSelect) {
+            return true;
+        }
+    }
 }

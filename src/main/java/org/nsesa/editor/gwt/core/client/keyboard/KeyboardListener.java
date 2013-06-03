@@ -68,9 +68,11 @@ public class KeyboardListener {
         handlerRegistration.removeHandler();
     }
 
-    public void register(KeyCombo keyCombo) {
-        keyCombos.add(keyCombo);
-        LOG.info("Registered keyboard shortcut: " + keyCombo);
+    public void register(KeyCombo... toAdd) {
+        for (final KeyCombo keyCombo : toAdd) {
+            keyCombos.add(keyCombo);
+            LOG.info("Registered keyboard shortcut: " + keyCombo);
+        }
     }
 
     public void filter(final Event.NativePreviewEvent event) {
@@ -93,8 +95,7 @@ public class KeyboardListener {
     }
 
     /**
-     * Key combo representation, supporting [Shift] and [Ctrl] modifier keys, and general key codes. No [Alt] is
-     * supported, since this would probably interfere with the browser (at least under Windows).
+     * Key combo representation, supporting [Shift] [Alt] and [Ctrl] modifier keys, and general key codes.
      */
     public static class KeyCombo {
         public final boolean shift, control, alt;

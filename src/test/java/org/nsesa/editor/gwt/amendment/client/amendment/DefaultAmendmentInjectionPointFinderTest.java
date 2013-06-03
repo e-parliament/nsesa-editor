@@ -18,13 +18,12 @@ import com.googlecode.gwt.test.GwtTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentViewImpl;
-import org.nsesa.editor.gwt.amendment.client.ui.amendment.DefaultAmendmentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayWidgetInjectionStrategy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         root.addOverlayWidget(child3);
     }
 
-    AmendmentInjectionPointFinder finder = new DefaultAmendmentInjectionPointFinder();
+    AmendmentInjectionPointFinder finder = new DefaultAmendmentInjectionPointFinder(new DefaultOverlayWidgetInjectionStrategy());
 
     @Test
     public void testFindInjectionPointsViaID() throws Exception {
@@ -80,6 +79,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
         Assert.assertEquals(injectionPoints.get(0), child1);
     }
+
     @Test
     public void testFindInjectionPointsXpathMultipleChildren() throws Exception {
         reference.setPath("//root/typeB[1]");
@@ -88,14 +88,69 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
     }
 
     @Test
-    public void testGetInjectionPoint() throws Exception {
-        Assert.assertEquals("//root[0]", finder.getInjectionPoint(root));
-        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(child1));
-        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(child2));
-        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(child3));
+    public void testGetInjectionPointPath() throws Exception {
+        Assert.assertEquals("//root[0]", finder.getInjectionPoint(null, null, root).getPath());
+        Assert.assertEquals("//root[0]/typeA[0]", finder.getInjectionPoint(null, null, child1).getPath());
+        Assert.assertEquals("//root[0]/typeB[0]", finder.getInjectionPoint(null, null, child2).getPath());
+        Assert.assertEquals("//root[0]/typeB[1]", finder.getInjectionPoint(null, null, child3).getPath());
         child2.setId("foo");
-        Assert.assertEquals("#foo", finder.getInjectionPoint(child2));
+        Assert.assertEquals("#foo", finder.getInjectionPoint(null, null, child2).getPath());
+        child2.setId(null); // cleanup
     }
 
+    @Test
+    public void testGetInjectionPointType() throws Exception {
+        Assert.assertEquals(root.getType(), finder.getInjectionPoint(null, null, root).getType());
+        Assert.assertEquals(child1.getType(), finder.getInjectionPoint(null, null, child1).getType());
+        Assert.assertEquals(child2.getType(), finder.getInjectionPoint(null, null, child2).getType());
+        Assert.assertEquals(child3.getType(), finder.getInjectionPoint(null, null, child3).getType());
+    }
 
+    @Test
+    public void testGetInjectionPointNewAfter() throws Exception {
+        AmendableWidgetReference injectionPoint = finder.getInjectionPoint(null, null, child2);
+        Assert.assertTrue(!injectionPoint.isCreation());
+        Assert.assertTrue(!injectionPoint.isSibling());
+        child2.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+        root.removeOverlayWidget(child2);
+        injectionPoint = finder.getInjectionPoint(root, child1, child2);
+        Assert.assertTrue(injectionPoint.isCreation());
+        Assert.assertTrue(injectionPoint.isSibling());
+        Assert.assertEquals(child2.getType(), injectionPoint.getType());
+        Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", injectionPoint.getPath());
+        Assert.assertEquals(1, injectionPoint.getOffset());
+
+        root.addOverlayWidget(child2);
+
+
+        child3.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+        root.removeOverlayWidget(child3);
+        injectionPoint = finder.getInjectionPoint(root, child1, child3);
+        Assert.assertTrue(injectionPoint.isCreation());
+        Assert.assertTrue(injectionPoint.isSibling());
+        Assert.assertEquals(child3.getType(), injectionPoint.getType());
+        Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", injectionPoint.getPath());
+        Assert.assertEquals(2, injectionPoint.getOffset());
+
+        // cleanup
+        child2.setOrigin(null);
+        child3.setOrigin(null);
+        root.addOverlayWidget(child3);
+    }
+
+    @Test
+    public void testGetInjectionPointNewBefore() throws Exception {
+
+        OverlayWidget childMinus1 = new OverlayWidgetImpl();
+        childMinus1.setType("typeMinus");
+        childMinus1.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+        AmendableWidgetReference proposedInjectionPoint = finder.getInjectionPoint(root, null, childMinus1);
+        Assert.assertEquals("Make sure the root widget's path is used", "//root[0]", proposedInjectionPoint.getPath());
+        Assert.assertEquals(3, proposedInjectionPoint.getOffset());
+        root.addOverlayWidget(childMinus1, 0);
+        AmendableWidgetReference actualInjectionPoint = finder.getInjectionPoint(root, child1, childMinus1);
+        Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", actualInjectionPoint.getPath());
+        Assert.assertEquals(-1, actualInjectionPoint.getOffset());
+        root.removeOverlayWidget(childMinus1);
+    }
 }
