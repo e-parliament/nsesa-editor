@@ -195,6 +195,14 @@
             <version>2.3.19</version>
         </dependency>
 
+        <!-- it seems some configurations need this to build the project. -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <classifier>sources</classifier>
+        </dependency>
+
 
         <!-- TEST ONLY DEPENDENCIES -->
         <dependency>
