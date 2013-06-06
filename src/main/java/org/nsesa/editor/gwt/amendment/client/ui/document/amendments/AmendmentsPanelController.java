@@ -17,6 +17,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
@@ -48,13 +49,13 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsPanelController {
-    /**
-     * Stores hoy many amendments will be displayed per page
-     */
-    private static final int AMENDMENTS_PER_PAGE = 10;
 
     private AmendmentsPanelView view;
     private DocumentEventBus documentEventBus;
+    /**
+     * Stores hoy many amendments will be displayed per page
+     */
+    private int amendmentsPerPage;
     private AmendmentDocumentController documentController;
     private Filter<AmendmentController> currentFilter;
 
@@ -76,10 +77,12 @@ public class AmendmentsPanelController {
      */
     @Inject
     public AmendmentsPanelController(AmendmentsPanelView view,
-                                     DocumentEventBus documentEventBus) {
+                                     DocumentEventBus documentEventBus,
+                                     @Named("amendmentsPerPage") int amendmentsPerPage) {
         this.view = view;
         this.documentEventBus = documentEventBus;
-        this.currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+        this.amendmentsPerPage = amendmentsPerPage;
+        this.currentFilter = new Filter<AmendmentController>(0, amendmentsPerPage,
                 AmendmentController.ORDER_COMPARATOR, DEFAULT_SELECTION);
         registerListeners();
     }
@@ -189,7 +192,7 @@ public class AmendmentsPanelController {
      */
     private void refreshAmendments() {
         if (currentFilter == null) {
-            currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+            currentFilter = new Filter<AmendmentController>(0, amendmentsPerPage,
                     AmendmentController.ORDER_COMPARATOR,
                     DEFAULT_SELECTION);
 
