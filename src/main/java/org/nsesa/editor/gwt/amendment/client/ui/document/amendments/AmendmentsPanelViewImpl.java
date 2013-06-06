@@ -30,17 +30,14 @@ import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.Amend
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderView;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareAddToSelectionEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareRemoveFromSelectionEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.Selection;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -101,6 +98,9 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      * holder map for check boxes
      */
     private Map<String, CheckBox> checkBoxes = new LinkedHashMap<String, CheckBox>();
+
+    /* holder list for selected amendments*/
+    private Set<AmendmentController> selectedAmendments = new HashSet<AmendmentController>();
 
     /**
      * Create <code>AmendmentsPanelViewImpl</code> with the given parameters
@@ -164,10 +164,17 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue()) {
-                        documentEventBus.fireEvent(new OverlayWidgetAwareAddToSelectionEvent(entry.getValue()));
+                        selectedAmendments.add(entry.getValue());
                     } else {
-                        documentEventBus.fireEvent(new OverlayWidgetAwareRemoveFromSelectionEvent(entry.getValue()));
+                        selectedAmendments.remove(entry.getValue());
                     }
+
+                    documentEventBus.fireEvent(new OverlayWidgetAwareSelectionEvent(new Selection<AmendmentController>() {
+                        @Override
+                        public boolean select(AmendmentController amendmentController) {
+                            return selectedAmendments.contains(amendmentController);
+                        }
+                    }));
                 }
             });
             checkBoxes.put(entry.getKey(), checkBox);
