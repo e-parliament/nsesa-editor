@@ -35,7 +35,7 @@ public class CssColorGenerator {
     }
 
     /**
-     * Dissallow creation of other instances
+     * Disallows creation of other instances
      */
     private CssColorGenerator() {
     }
