@@ -37,6 +37,7 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.*;
 import org.nsesa.editor.gwt.core.client.ui.document.DefaultDocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentInjector;
@@ -432,8 +433,11 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             public void execute() {
                 // after the injection, renumber all the amendments.
                 sourceFileController.renumberOverlayWidgetsAware();
+                //raise a filter request event after reordering
+                documentEventBus.fireEvent(new FilterRequestEvent(null));
             }
         });
+
     }
 
     /**

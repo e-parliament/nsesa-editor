@@ -144,7 +144,7 @@ public class AmendmentsPanelController {
             @Override
             public void onEvent(FilterRequestEvent event) {
                 currentFilter = event.getFilter();
-                filterAmendments();
+                refreshAmendments();
             }
         });
         amendmentControllerSelectedEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetAwareSelectedEvent.TYPE, new OverlayWidgetAwareSelectedEventHandler() {
