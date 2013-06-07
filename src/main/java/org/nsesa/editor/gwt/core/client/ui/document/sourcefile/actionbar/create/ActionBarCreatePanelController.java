@@ -117,7 +117,10 @@ public class ActionBarCreatePanelController {
      */
     public void setOverlayWidget(final OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
+        setAvailableChildrenAndSiblings();
+    }
 
+    protected void setAvailableChildrenAndSiblings() {
         // clean up whatever is there
         view.clearChildOverlayWidgets();
 
