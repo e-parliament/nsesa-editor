@@ -37,20 +37,20 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  * @version $Id$
  */
 @Scope(AMENDMENT)
-public class AmendmentViewImpl extends Composite implements AmendmentView {
+public class SingleColumnAmendmentViewImpl extends Composite implements AmendmentView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, SingleColumnAmendmentViewImpl> {
     }
 
     protected static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     protected final Constants constants;
 
-    @Inject
-    @Named("default.pathToOriginalContent")
+    @Inject(optional = true)
+    @Named("single.pathToOriginalContent")
     String pathToOriginalContent;
-    @Inject
-    @Named("default.pathToAmendmentContent")
+    @Inject(optional = true)
+    @Named("single.pathToAmendmentContent")
     String pathToAmendmentContent;
 
     @UiField
@@ -75,7 +75,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     Image deleteImage;
 
     @Inject
-    public AmendmentViewImpl(final Constants constants) {
+    public SingleColumnAmendmentViewImpl(final Constants constants) {
         this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
@@ -149,6 +149,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public HasClickHandlers getDeleteButton() {
         return deleteImage;
     }
+
 
     @Override
     public void attach() {

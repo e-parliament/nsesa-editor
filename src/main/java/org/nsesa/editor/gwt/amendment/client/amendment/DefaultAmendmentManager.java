@@ -162,6 +162,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     AmendmentController amendmentController = toDelete[i];
                     // clean up all listeners
                     amendmentController.removeListeners();
+                    // clean up the views
+                    amendmentController.removeViews();
                     documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(amendmentController));
                 }
                 // show notification about successful delete
@@ -431,6 +433,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendmentContainerDTO) {
         final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
+        amendmentController.registerListeners();
+        amendmentController.registerViews();
         amendmentController.setModel(amendmentContainerDTO);
         amendmentController.setDocumentController(documentController);
         return amendmentController;

@@ -32,6 +32,11 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.DiffMethod;
+import org.nsesa.editor.gwt.core.shared.DiffStyle;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -45,16 +50,24 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 @Scope(AMENDMENT)
 public class DefaultAmendmentController implements AmendmentController {
 
-    protected final AmendmentView view;
+    protected AmendmentView view;
 
-    protected final AmendmentView extendedView;
+    protected AmendmentView extendedView;
+
+    protected final Map<String, AmendmentView> availableViews = new HashMap<String, AmendmentView>();
+    protected final Map<String, AmendmentView> availableExtendedViews = new HashMap<String, AmendmentView>();
 
     protected final Constants constants;
+
     protected final Messages messages;
 
     protected AmendmentContainerDTO amendment;
 
     protected AmendmentActionPanelController amendmentActionPanelController;
+
+    protected DiffStyle diffStyle = DiffStyle.EP;
+
+    protected DiffMethod diffMethod = DiffMethod.WORD;
 
     /**
      * Reference to the parent amendable widget we've been added to.
@@ -102,15 +115,15 @@ public class DefaultAmendmentController implements AmendmentController {
                                       final Messages messages) {
         this.view = amendmentView;
         this.extendedView = amendmentExtendedView;
+
         this.amendmentActionPanelController = amendmentActionPanelController;
         this.constants = constants;
         this.messages = messages;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         if (view != null) {
-            deleteButtonClickHandlerRegistration = view.getDeleteButton().addClickHandler(new ClickHandler() {
+            deleteButtonClickHandlerRegistration = view.getDeleteButton() != null ? view.getDeleteButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
 
@@ -125,21 +138,21 @@ public class DefaultAmendmentController implements AmendmentController {
 
                     documentController.getDocumentEventBus().fireEvent(confirmationEvent);
                 }
-            });
-            editButtonClickHandlerRegistration = view.getEditButton().addClickHandler(new ClickHandler() {
+            }) : null;
+            editButtonClickHandlerRegistration = view.getEditButton() != null ? view.getEditButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
                 }
-            });
-            moreButtonClickHandlerRegistration = view.getMoreActionsButton().addClickHandler(new ClickHandler() {
+            }) : null;
+            moreButtonClickHandlerRegistration = view.getMoreActionsButton() != null ? view.getMoreActionsButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     final Element relativeElement = event.getRelativeElement();
                     amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
                     amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
                 }
-            });
+            }) : null;
             clickHandlerRegistration = view.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -157,7 +170,7 @@ public class DefaultAmendmentController implements AmendmentController {
             });
         }
         if (extendedView != null) {
-            extDeleteButtonClickHandlerRegistration = extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
+            extDeleteButtonClickHandlerRegistration = extendedView.getDeleteButton() != null ? extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
 
@@ -171,23 +184,23 @@ public class DefaultAmendmentController implements AmendmentController {
                             cancelHandler);
                     documentController.getDocumentEventBus().fireEvent(confirmationEvent);
                 }
-            });
+            }) : null;
 
-            extEditButtonClickHandlerRegistration = extendedView.getEditButton().addClickHandler(new ClickHandler() {
+            extEditButtonClickHandlerRegistration = extendedView.getEditButton() != null ? extendedView.getEditButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     documentController.getDocumentEventBus().fireEvent(new AmendmentContainerEditEvent(DefaultAmendmentController.this));
                 }
-            });
+            }) : null;
 
-            extMoreButtonClickHandlerRegistration = extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
+            extMoreButtonClickHandlerRegistration = extendedView.getMoreActionsButton() != null ? extendedView.getMoreActionsButton().addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     final Element relativeElement = event.getRelativeElement();
                     amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
                     amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
                 }
-            });
+            }) : null;
 
             extClickHandlerRegistration = extendedView.addClickHandler(new ClickHandler() {
                 @Override
@@ -208,20 +221,80 @@ public class DefaultAmendmentController implements AmendmentController {
         }
     }
 
+    @Inject
+    public void registerViews() {
+        this.availableViews.put(AmendmentView.DEFAULT, this.view);
+        this.availableExtendedViews.put(AmendmentView.DEFAULT, this.extendedView);
+    }
+
+    public void switchTemplate(final AmendmentView newAmendmentView, final AmendmentView newExtendedView) {
+
+        // keep track
+        final AmendmentView oldView = this.view;
+        final AmendmentView oldExtendedView = this.extendedView;
+
+        // cleanup
+        removeListeners();
+        this.view = newAmendmentView;
+        this.extendedView = newExtendedView;
+
+        if (oldView != this.view) {
+            DOM.insertBefore((com.google.gwt.user.client.Element) oldView.asWidget().getElement().getParentElement(), this.view.asWidget().getElement(), oldView.asWidget().getElement());
+            oldView.detach();
+            DOM.removeChild((com.google.gwt.user.client.Element) oldView.asWidget().getElement().getParentElement(), oldView.asWidget().getElement());
+            this.view.attach();
+        }
+
+        if (oldExtendedView != this.extendedView) {
+            DOM.insertBefore((com.google.gwt.user.client.Element) oldExtendedView.asWidget().getElement().getParentElement(), this.extendedView.asWidget().getElement(), oldExtendedView.asWidget().getElement());
+            oldExtendedView.detach();
+            DOM.removeChild((com.google.gwt.user.client.Element) oldExtendedView.asWidget().getElement().getParentElement(), oldExtendedView.asWidget().getElement());
+            this.extendedView.attach();
+        }
+
+        setModel(amendment);
+
+        // register listeners again
+        registerListeners();
+    }
+
+    public void switchTemplate(final String amendmentViewKey, final String extendedViewKey) {
+        AmendmentView amendmentView = availableViews.get(amendmentViewKey);
+        if (amendmentView == null)
+            throw new NullPointerException("Could not find view registered with " + amendmentViewKey);
+        AmendmentView extendedView = availableExtendedViews.get(extendedViewKey);
+        if (extendedView == null)
+            throw new NullPointerException("Could not find extended view registered with " + extendedViewKey);
+        switchTemplate(amendmentView, extendedView);
+    }
+
     /**
      * Removes all registered event handlers from the event bus and UI.
      */
+    @Override
     public void removeListeners() {
-        deleteButtonClickHandlerRegistration.removeHandler();
-        extDeleteButtonClickHandlerRegistration.removeHandler();
-        editButtonClickHandlerRegistration.removeHandler();
-        extEditButtonClickHandlerRegistration.removeHandler();
-        moreButtonClickHandlerRegistration.removeHandler();
-        extMoreButtonClickHandlerRegistration.removeHandler();
-        clickHandlerRegistration.removeHandler();
-        doubleClickHandlerRegistration.removeHandler();
-        extClickHandlerRegistration.removeHandler();
-        extDoubleClickHandlerRegistration.removeHandler();
+        if (deleteButtonClickHandlerRegistration != null) deleteButtonClickHandlerRegistration.removeHandler();
+        if (extDeleteButtonClickHandlerRegistration != null) extDeleteButtonClickHandlerRegistration.removeHandler();
+        if (editButtonClickHandlerRegistration != null) editButtonClickHandlerRegistration.removeHandler();
+        if (extEditButtonClickHandlerRegistration != null) extEditButtonClickHandlerRegistration.removeHandler();
+        if (moreButtonClickHandlerRegistration != null) moreButtonClickHandlerRegistration.removeHandler();
+        if (extMoreButtonClickHandlerRegistration != null) extMoreButtonClickHandlerRegistration.removeHandler();
+        if (clickHandlerRegistration != null) clickHandlerRegistration.removeHandler();
+        if (doubleClickHandlerRegistration != null) doubleClickHandlerRegistration.removeHandler();
+        if (extClickHandlerRegistration != null) extClickHandlerRegistration.removeHandler();
+        if (extDoubleClickHandlerRegistration != null) extDoubleClickHandlerRegistration.removeHandler();
+    }
+
+    @Override
+    public void removeViews() {
+        for (Map.Entry<String, AmendmentView> view : availableViews.entrySet()) {
+            view.getValue().detach();
+        }
+        availableViews.clear();
+        for (Map.Entry<String, AmendmentView> view : availableExtendedViews.entrySet()) {
+            view.getValue().detach();
+        }
+        availableExtendedViews.clear();
     }
 
     @Override
@@ -248,7 +321,7 @@ public class DefaultAmendmentController implements AmendmentController {
         setStatus(amendment.getAmendmentContainerStatus());
     }
 
-    private void setBody(String xmlContent) {
+    public void setBody(String xmlContent) {
         if (view != null)
             view.setBody(xmlContent);
         if (extendedView != null)
@@ -324,13 +397,28 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setInjectionPosition(int injectionPosition) {
-        this.injectionPosition = injectionPosition;
-    }
-
-    @Override
     public int getInjectionPosition() {
         if (amendment.getSourceReference() == null) throw new RuntimeException("Not yet set. --BUG");
         return amendment.getSourceReference().getOffset();
+    }
+
+    @Override
+    public DiffStyle getDiffStyle() {
+        return diffStyle;
+    }
+
+    @Override
+    public DiffMethod getDiffMethod() {
+        return diffMethod;
+    }
+
+    @Override
+    public void setDiffStyle(DiffStyle diffStyle) {
+        this.diffStyle = diffStyle;
+    }
+
+    @Override
+    public void setDiffMethod(DiffMethod diffMethod) {
+        this.diffMethod = diffMethod;
     }
 }

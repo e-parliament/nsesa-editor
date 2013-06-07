@@ -20,7 +20,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Constants;
@@ -37,45 +40,27 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
  * @version $Id$
  */
 @Scope(AMENDMENT)
-public class AmendmentViewImpl extends Composite implements AmendmentView {
+public class ConsolidatedAmendmentViewImpl extends Composite implements AmendmentView {
 
-    interface MyUiBinder extends UiBinder<Widget, AmendmentViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, ConsolidatedAmendmentViewImpl> {
     }
 
     protected static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
     protected final Constants constants;
 
-    @Inject
-    @Named("default.pathToOriginalContent")
+    @Inject(optional = true)
+    @Named("consolidation.pathToOriginalContent")
     String pathToOriginalContent;
-    @Inject
-    @Named("default.pathToAmendmentContent")
+    @Inject(optional = true)
+    @Named("consolidation.pathToAmendmentContent")
     String pathToAmendmentContent;
-
-    @UiField
-    Label title;
-
-    @UiField
-    Label status;
-
-    @UiField
-    InlineHTML introduction;
 
     @UiField
     HTMLPanel body;
 
-    @UiField
-    Image moreImage;
-
-    @UiField
-    Image editImage;
-
-    @UiField
-    Image deleteImage;
-
     @Inject
-    public AmendmentViewImpl(final Constants constants) {
+    public ConsolidatedAmendmentViewImpl(final Constants constants) {
         this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
@@ -94,19 +79,12 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     @Override
     public void setTitle(String title) {
         super.setTitle(title);
-        this.title.setText(title);
+        // ignore
     }
 
     @Override
     public void setStatus(final String status) {
-        if (status != null) {
-            // do a lookup ...
-            final String lookup = constants != null ? constants.getString(status.toLowerCase()) : null;
-            if (lookup != null)
-                this.status.setText(lookup);
-            else
-                this.status.setText(status);
-        }
+        // ignore
     }
 
     /**
@@ -127,7 +105,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void setIntroduction(String introduction) {
-        this.introduction.setText(introduction);
+        // ignore
     }
 
     @Override
@@ -137,18 +115,19 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public HasClickHandlers getMoreActionsButton() {
-        return moreImage;
+        return null;
     }
 
     @Override
     public HasClickHandlers getEditButton() {
-        return editImage;
+        return null;
     }
 
     @Override
     public HasClickHandlers getDeleteButton() {
-        return deleteImage;
+        return null;
     }
+
 
     @Override
     public void attach() {

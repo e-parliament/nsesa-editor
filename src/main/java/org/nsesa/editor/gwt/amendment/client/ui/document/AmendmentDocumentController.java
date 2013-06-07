@@ -50,7 +50,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.ArrayList;
@@ -164,7 +163,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             public void onEvent(AmendmentContainerInjectedEvent event) {
                 assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
                 if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+                    diffingManager.diff(event.getAmendmentController());
                 } else {
                     LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
                 }
@@ -220,7 +219,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void onEvent(AmendmentContainerSavedEvent event) {
                 if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
+                    diffingManager.diff(event.getAmendmentController());
                 } else {
                     LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
                 }
@@ -447,6 +446,12 @@ public class AmendmentDocumentController extends DefaultDocumentController {
      */
     public AmendmentManager getAmendmentManager() {
         return amendmentManager;
+    }
+
+    @Override
+    public DiffingManager getDiffingManager() {
+        // override to ensure we're using the amendment diffing manager instead of a default one.
+        return diffingManager;
     }
 
     /**

@@ -29,6 +29,8 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AmendmentViewImpl.class)
 public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClickHandlers {
 
+    public static final String DEFAULT = "default", CONSOLIDATION = "consolidation", SINGLE = "single";
+
     /**
      * Set the title
      *
@@ -45,6 +47,7 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
 
     /**
      * Sets an introductory part on the amendment (can be used for declarative amendments).
+     *
      * @param introduction the introductory part
      */
     void setIntroduction(String introduction);
@@ -83,4 +86,12 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
      * @return the component that can be clicked to delete this controller
      */
     HasClickHandlers getDeleteButton();
+
+    void attach();
+
+    void detach();
+
+    String getPathToOriginalContent();
+
+    String getPathToAmendmentContent();
 }
