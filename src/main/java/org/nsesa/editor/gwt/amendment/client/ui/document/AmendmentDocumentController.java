@@ -305,6 +305,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                 final OverlayWidget overlayWidget = event.getOldRevision().getOverlayWidget();
                 if (overlayWidget != null) {
                     overlayWidget.removeAmendmentController(event.getOldRevision());
+                    // make sure to clean up all listeners
+                    event.getOldRevision().removeListeners();
                     overlayWidget.addOverlayWidgetAware(event.getNewRevision());
                     sourceFileController.renumberOverlayWidgetsAware();
                 }

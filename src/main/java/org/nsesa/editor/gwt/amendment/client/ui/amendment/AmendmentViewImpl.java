@@ -161,8 +161,11 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void detach() {
-        if (!isAttached())
+        if (isAttached()) {
             onDetach();
+            if (getElement().getParentElement() == null)
+                RootPanel.detachNow(this);
+        }
     }
 
     @Override

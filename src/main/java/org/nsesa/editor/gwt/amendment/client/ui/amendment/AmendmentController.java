@@ -167,15 +167,30 @@ public interface AmendmentController extends OverlayWidgetAware {
     void removeListeners();
 
     /**
-     * Removes all views from the controller.
+     * Set the diffing style (EP or Track-changes)
+     *
+     * @param diffStyle the diffstyle to use
      */
-    void removeViews();
-
     void setDiffStyle(DiffStyle diffStyle);
 
+    /**
+     * Get the diff style for this amendment (EP or Track-changes)
+     *
+     * @return the diff style
+     */
     DiffStyle getDiffStyle();
 
+    /**
+     * Set the diff method (word or character)
+     *
+     * @param diffMethod the diff method
+     */
     void setDiffMethod(DiffMethod diffMethod);
 
+    /**
+     * Get the diff method (word or character)
+     *
+     * @return the diff method
+     */
     DiffMethod getDiffMethod();
 }

@@ -20,6 +20,8 @@ import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEvent;
@@ -246,16 +248,31 @@ public class DefaultAmendmentController implements AmendmentController {
         this.extendedView = newExtendedView;
 
         if (oldView != this.view) {
-            DOM.insertBefore((com.google.gwt.user.client.Element) oldView.asWidget().getElement().getParentElement(), this.view.asWidget().getElement(), oldView.asWidget().getElement());
-            oldView.detach();
-            DOM.removeChild((com.google.gwt.user.client.Element) oldView.asWidget().getElement().getParentElement(), oldView.asWidget().getElement());
+
+            final Widget parent = oldView.asWidget().getParent();
+            final Element parentElement = oldView.asWidget().getElement().getParentElement();
+
+            final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldView.asWidget().getElement());
+            oldView.asWidget().removeFromParent();
+            if (parent instanceof HasWidgets) {
+                ((HasWidgets) parent).add(this.view.asWidget());
+            } else {
+                DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.view.asWidget().getElement(), childIndex);
+            }
             this.view.attach();
         }
 
         if (oldExtendedView != this.extendedView) {
-            DOM.insertBefore((com.google.gwt.user.client.Element) oldExtendedView.asWidget().getElement().getParentElement(), this.extendedView.asWidget().getElement(), oldExtendedView.asWidget().getElement());
-            oldExtendedView.detach();
-            DOM.removeChild((com.google.gwt.user.client.Element) oldExtendedView.asWidget().getElement().getParentElement(), oldExtendedView.asWidget().getElement());
+            final Widget parent = oldExtendedView.asWidget().getParent();
+            final Element parentElement = oldExtendedView.asWidget().getElement().getParentElement();
+
+            final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldExtendedView.asWidget().getElement());
+            oldExtendedView.asWidget().removeFromParent();
+            if (parent instanceof HasWidgets) {
+                ((HasWidgets) parent).add(this.extendedView.asWidget());
+            } else {
+                DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.extendedView.asWidget().getElement(), childIndex);
+            }
             this.extendedView.attach();
         }
 
@@ -308,15 +325,14 @@ public class DefaultAmendmentController implements AmendmentController {
         if (extDoubleClickHandlerRegistration != null) extDoubleClickHandlerRegistration.removeHandler();
     }
 
-    @Override
     public void removeViews() {
         for (Map.Entry<String, AmendmentView> view : availableViews.entrySet()) {
             view.getValue().detach();
         }
-        availableViews.clear();
+        availableViews.clear();/*
         for (Map.Entry<String, AmendmentView> view : availableExtendedViews.entrySet()) {
             view.getValue().detach();
-        }
+        }*/
         availableExtendedViews.clear();
     }
 

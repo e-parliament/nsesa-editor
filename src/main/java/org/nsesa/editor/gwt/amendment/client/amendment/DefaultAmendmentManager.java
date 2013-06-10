@@ -162,8 +162,6 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     AmendmentController amendmentController = toDelete[i];
                     // clean up all listeners
                     amendmentController.removeListeners();
-                    // clean up the views
-                    amendmentController.removeViews();
                     documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(amendmentController));
                 }
                 // show notification about successful delete
