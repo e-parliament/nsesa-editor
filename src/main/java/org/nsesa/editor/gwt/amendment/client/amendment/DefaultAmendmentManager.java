@@ -312,9 +312,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
             final ClientFactory clientFactory = documentController.getClientFactory();
 
             for (final AmendmentContainerDTO amendmentContainerDTO : toMerge) {
-                final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-                amendmentController.setModel(amendmentContainerDTO);
-                amendmentController.setDocumentController(documentController);
+                final AmendmentController amendmentController = createAmendmentController(amendmentContainerDTO);
 
                 // check if we already have an amendment with a similar id
                 int indexOfOlderRevision = -1;
@@ -433,8 +431,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     private AmendmentController createAmendmentController(final AmendmentContainerDTO amendmentContainerDTO) {
         final AmendmentController amendmentController = documentController.getInjector().getAmendmentController();
-        amendmentController.registerListeners();
         amendmentController.registerViews();
+        amendmentController.registerListeners();
         amendmentController.setModel(amendmentContainerDTO);
         amendmentController.setDocumentController(documentController);
         return amendmentController;
