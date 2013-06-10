@@ -15,7 +15,7 @@
 -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-     <ui:style src="AuthorPanelViewImpl.css" field="css"
+    <ui:style src="AuthorPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelViewCss'/>
     <ui:style field="res">
         .authorPanel {
@@ -54,7 +54,7 @@
         <g:HorizontalPanel styleName="{res.form}" ui:field="form">
             <g:HTML text="Author" styleName="{res.formLabel}"/>
             <g:SuggestBox ui:field="suggestBox" styleName="{res.suggestBox} {res.formValue}"/>
-            <g:Label text="(Only MP values are found.)" styleName="{res.description}"/>
+            <g:Label text="(Only MP values are found)" styleName="{res.description}"/>
         </g:HorizontalPanel>
         <hr/>
         <g:HTMLPanel ui:field="authorsPanel" styleName="{res.authorsPanel}"/>
