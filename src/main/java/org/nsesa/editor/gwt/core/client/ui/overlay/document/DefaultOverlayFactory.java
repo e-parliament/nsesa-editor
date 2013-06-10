@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -64,7 +65,7 @@ public class DefaultOverlayFactory implements OverlayFactory {
     public OverlayWidget getAmendableWidget(Element element, int maxDepth) {
         elementCounter = new Counter();
         final OverlayWidget root = wrap(null, element, 0, -1);
-        LOG.info("Total number of wrapped elements: " + elementCounter.get());
+        LOG.log(Level.FINE, "Total number of wrapped elements: " + elementCounter.get());
         return root;
     }
 
