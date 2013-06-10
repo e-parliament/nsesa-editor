@@ -84,6 +84,11 @@ public interface AmendmentController extends OverlayWidgetAware {
     void switchTemplate(final String amendmentViewKey, final String extendedViewKey);
 
     /**
+     * Restores the previous templates after the last {@link #switchTemplate(String, String)}.
+     */
+    void resetTemplate();
+
+    /**
      * Transforms the given <tt>source</tt> into an overlay widget tree.
      *
      * @param source the XML payload to transform into the overlay tree

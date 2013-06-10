@@ -35,8 +35,11 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DiffStyle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -50,12 +53,17 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 @Scope(AMENDMENT)
 public class DefaultAmendmentController implements AmendmentController {
 
+    private static final Logger LOG = Logger.getLogger(DefaultAmendmentController.class.getName());
+
     protected AmendmentView view;
 
     protected AmendmentView extendedView;
 
     protected final Map<String, AmendmentView> availableViews = new HashMap<String, AmendmentView>();
+
     protected final Map<String, AmendmentView> availableExtendedViews = new HashMap<String, AmendmentView>();
+
+    protected List<String> viewKeys = new ArrayList<String>(), extendedViewKeys = new ArrayList<String>();
 
     protected final Constants constants;
 
@@ -221,13 +229,12 @@ public class DefaultAmendmentController implements AmendmentController {
         }
     }
 
-    @Inject
     public void registerViews() {
         this.availableViews.put(AmendmentView.DEFAULT, this.view);
         this.availableExtendedViews.put(AmendmentView.DEFAULT, this.extendedView);
     }
 
-    public void switchTemplate(final AmendmentView newAmendmentView, final AmendmentView newExtendedView) {
+    protected void switchTemplate(final AmendmentView newAmendmentView, final AmendmentView newExtendedView) {
 
         // keep track
         final AmendmentView oldView = this.view;
@@ -266,6 +273,22 @@ public class DefaultAmendmentController implements AmendmentController {
         if (extendedView == null)
             throw new NullPointerException("Could not find extended view registered with " + extendedViewKey);
         switchTemplate(amendmentView, extendedView);
+        // keep track
+        this.viewKeys.add(amendmentViewKey);
+        this.extendedViewKeys.add(extendedViewKey);
+    }
+
+    public void resetTemplate() {
+        if (viewKeys.size() > 1) {
+            final String amendmentViewKey = viewKeys.get(viewKeys.size() - 2);
+            final String extendedViewKey = extendedViewKeys.get(extendedViewKeys.size() - 2);
+            LOG.info("Resetting template back to " + amendmentViewKey + ", " + extendedViewKey);
+            switchTemplate(amendmentViewKey, extendedViewKey);
+        } else {
+            // reset to default
+            LOG.info("Resetting template back to defaults.");
+            switchTemplate(AmendmentView.DEFAULT, AmendmentView.DEFAULT);
+        }
     }
 
     /**
