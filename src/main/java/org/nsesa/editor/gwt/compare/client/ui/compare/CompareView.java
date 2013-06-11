@@ -38,7 +38,7 @@ public interface CompareView extends IsWidget {
 
     void setAvailableRevisions(List<RevisionDTO> revisions);
 
-    void destroy();
+    void show();
 
     void setRevision(String revisionContent);
 

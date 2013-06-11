@@ -242,13 +242,13 @@ public class CompareController implements ProvidesResize {
     public void show() {
         popupPanel.center();
         popupPanel.show();
+        view.show();
     }
 
     /**
      * Call to hide the comparison popup.
      */
     public void hide() {
-        view.destroy();
         popupPanel.hide();
     }
 

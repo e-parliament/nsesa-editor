@@ -20,8 +20,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
-import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditor;
 import org.nsesa.editor.gwt.core.shared.RevisionDTO;
 
 import java.util.List;
@@ -46,8 +44,10 @@ public class CompareViewImpl extends Composite implements CompareView {
     @UiField
     Anchor cancelAnchor;
 
-    @UiField(provided = true)
-    RichTextEditor richTextEditor;
+    @UiField
+    ScrollPanel scrollPanel;
+    @UiField
+    HTMLPanel richTextEditor;
     @UiField
     HorizontalPanel revisionsPanel;
     @UiField
@@ -58,15 +58,11 @@ public class CompareViewImpl extends Composite implements CompareView {
     HorizontalPanel revisionPickerPanel;
 
     @Inject
-    public CompareViewImpl(@Named("revisionText") RichTextEditor richTextEditor) {
-        this.richTextEditor = richTextEditor;
+    public CompareViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         revisionPickerPanel.setCellHorizontalAlignment(revisionsA, HasHorizontalAlignment.ALIGN_CENTER);
         revisionPickerPanel.setCellHorizontalAlignment(revisionsB, HasHorizontalAlignment.ALIGN_CENTER);
-
-        revisionsPanel.setCellWidth(richTextEditor, "100%");
-        revisionsPanel.setCellHeight(richTextEditor, "100%");
     }
 
     @Override
@@ -80,8 +76,9 @@ public class CompareViewImpl extends Composite implements CompareView {
     }
 
     @Override
-    public void destroy() {
-        richTextEditor.destroy();
+    public void show() {
+        scrollPanel.setHeight((getOffsetHeight() - 110) + "px");
+        scrollPanel.setWidth((getOffsetWidth()) + "px");
     }
 
     @Override
@@ -115,7 +112,9 @@ public class CompareViewImpl extends Composite implements CompareView {
 
     @Override
     public void setRevision(String revisionContent) {
-        richTextEditor.setHTML(revisionContent);
+        richTextEditor.clear();
+        final HTML html = new HTML(revisionContent);
+        richTextEditor.add(html);
     }
 
     @Override
