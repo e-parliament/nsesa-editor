@@ -199,9 +199,9 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
                     @Override
                     public void onSuccess(AmendmentContainerDTO[] result) {
-                        // TODO: incorrect, we should not update the view
                         final AmendmentController amendmentController = toTable[index.get()];
-                        amendmentController.setModel(result[index.get()]);
+                        // update only the status
+                        amendmentController.mergeModel(result[index.get()], true);
                         final List<String> asList = new ArrayList<String>(oldStatuses);
                         final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, asList.get(index.get()));
                         index.increment();
@@ -242,9 +242,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
 
                     @Override
                     public void onSuccess(AmendmentContainerDTO[] result) {
-                        // TODO: incorrect, we should not update the view
                         final AmendmentController amendmentController = toWithdraw[index.get()];
-                        amendmentController.setModel(result[index.get()]);
+                        amendmentController.mergeModel(result[index.get()], true);
                         final List<String> asList = new ArrayList<String>(oldStatuses);
                         final AmendmentContainerStatusUpdatedEvent updatedEvent = new AmendmentContainerStatusUpdatedEvent(amendmentController, asList.get(index.get()));
                         index.increment();

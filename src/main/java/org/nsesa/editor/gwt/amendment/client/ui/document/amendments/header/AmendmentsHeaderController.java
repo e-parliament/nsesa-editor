@@ -265,7 +265,7 @@ public class AmendmentsHeaderController {
                                             for (final AmendmentContainerDTO dto : result) {
                                                 final AmendmentController amendmentController = amendmentControllers.get(index);
                                                 final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
-                                                amendmentController.setModel(dto);
+                                                amendmentController.mergeModel(dto, true);
                                                 documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
                                                 index++;
                                             }
@@ -299,7 +299,7 @@ public class AmendmentsHeaderController {
                                             for (final AmendmentContainerDTO dto : result) {
                                                 final AmendmentController amendmentController = amendmentControllers.get(index);
                                                 final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
-                                                amendmentController.setModel(dto);
+                                                amendmentController.mergeModel(dto, true);
                                                 documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
                                                 index++;
                                             }

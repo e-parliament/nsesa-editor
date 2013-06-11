@@ -63,6 +63,8 @@ public interface AmendmentController extends OverlayWidgetAware {
      */
     void setModel(AmendmentContainerDTO amendment);
 
+    void mergeModel(AmendmentContainerDTO amendment, boolean onlyChangedAttributes);
+
     void setBody(String body);
 
     /**

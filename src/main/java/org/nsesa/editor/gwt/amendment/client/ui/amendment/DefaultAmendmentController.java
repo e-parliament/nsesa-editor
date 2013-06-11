@@ -371,6 +371,37 @@ public class DefaultAmendmentController implements AmendmentController {
         }
     }
 
+    @Override
+    public void mergeModel(AmendmentContainerDTO amendment, boolean onlyChangedAttributes) {
+        if (!getModel().getRevisionID().equals(amendment.getRevisionID())) {
+            throw new IllegalArgumentException("You cannot merge an amendment with a different revisionID. Expected "
+                    + getModel().getRevisionID() + ", but got " + amendment.getRevisionID());
+        }
+
+        if (getModel().getAmendmentAction() != amendment.getAmendmentAction()) {
+            getModel().setAmendmentAction(amendment.getAmendmentAction());
+        }
+
+        if (!getModel().getBody().equals(amendment.getBody())) {
+            getModel().setBody(amendment.getBody());
+            setBody(getModel().getBody());
+        }
+
+        if (!getModel().getAmendmentContainerStatus().equals(amendment.getAmendmentContainerStatus())) {
+            getModel().setAmendmentContainerStatus(amendment.getAmendmentContainerStatus());
+            setStatus(getModel().getAmendmentContainerStatus());
+        }
+
+        if (!getModel().getDocumentID().equals(amendment.getDocumentID())) {
+            getModel().setDocumentID(amendment.getDocumentID());
+        }
+
+        if (!getModel().getLanguageISO().equals(amendment.getLanguageISO())) {
+            getModel().setLanguageISO(amendment.getLanguageISO());
+        }
+    }
+
+    @Override
     public void setBody(String xmlContent) {
         if (view != null)
             view.setBody(xmlContent);
