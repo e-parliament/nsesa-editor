@@ -99,7 +99,11 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     @Scope(DOCUMENT)
     protected Selector<AmendmentController> selector;
 
+    @Scope(DOCUMENT)
     protected DiffingManager<AmendmentController> diffingManager;
+
+    @Scope(DOCUMENT)
+    protected Describer describer;
 
 
     // ------------- event handler registration -----------
@@ -138,6 +142,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             this.selector = amendmentDocumentInjector.getSelector();
             this.diffingManager = amendmentDocumentInjector.getAmendmentDiffingManager();
             this.diffingManager.setDocumentController(this);
+            this.describer = amendmentDocumentInjector.getDescriber();
+            this.describer.setDocumentController(this);
             // install collection filter for the selector
             this.selector.setCollectionFilter(new Selector.CollectionFilter<AmendmentController>() {
                 @Override
@@ -467,6 +473,10 @@ public class AmendmentDocumentController extends DefaultDocumentController {
 
     public Selector<AmendmentController> getSelector() {
         return selector;
+    }
+
+    public Describer getDescriber() {
+        return describer;
     }
 
     @Override

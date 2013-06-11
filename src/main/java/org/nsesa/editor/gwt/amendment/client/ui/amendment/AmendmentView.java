@@ -94,4 +94,6 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
     String getPathToOriginalContent();
 
     String getPathToAmendmentContent();
+
+    void setDescription(String description);
 }

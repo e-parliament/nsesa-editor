@@ -64,7 +64,24 @@ public interface AmendmentDocumentInjector extends DocumentInjector {
      */
     AmendmentsHeaderController getAmendmentsHeaderController();
 
+    /**
+     * Get a selector that holds a selection of amendment controllers.
+     *
+     * @return the selector.
+     */
     Selector<AmendmentController> getSelector();
 
+    /**
+     * Get the diffing manager for diffing amendments.
+     *
+     * @return the diffing manager
+     */
     DiffingManager<AmendmentController> getAmendmentDiffingManager();
+
+    /**
+     * Get a describer for describing the amendment controller.
+     *
+     * @return the describer.
+     */
+    Describer getDescriber();
 }

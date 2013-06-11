@@ -127,7 +127,12 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void setIntroduction(String introduction) {
-        this.introduction.setText(introduction);
+        // ignore
+    }
+
+    @Override
+    public void setDescription(String description) {
+        // ignore
     }
 
     @Override

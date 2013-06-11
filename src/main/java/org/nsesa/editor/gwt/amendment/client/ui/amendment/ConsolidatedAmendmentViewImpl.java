@@ -109,6 +109,11 @@ public class ConsolidatedAmendmentViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public void setDescription(String description) {
+        // ignore
+    }
+
+    @Override
     public Element getBody() {
         return (Element) body.getElement().getFirstChildElement();
     }

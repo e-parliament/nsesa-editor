@@ -63,6 +63,9 @@ public class SingleColumnAmendmentViewImpl extends Composite implements Amendmen
     InlineHTML introduction;
 
     @UiField
+    InlineHTML description;
+
+    @UiField
     HTMLPanel body;
 
     @UiField
@@ -127,7 +130,12 @@ public class SingleColumnAmendmentViewImpl extends Composite implements Amendmen
 
     @Override
     public void setIntroduction(String introduction) {
-        this.introduction.setText(introduction);
+        this.introduction.setHTML(introduction);
+    }
+
+    @Override
+    public void setDescription(String description) {
+        this.description.setHTML(description);
     }
 
     @Override

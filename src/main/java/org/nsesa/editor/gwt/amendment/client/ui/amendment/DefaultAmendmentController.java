@@ -28,6 +28,8 @@ import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerE
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelController;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Constants;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Messages;
+import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.Describer;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
@@ -358,6 +360,15 @@ public class DefaultAmendmentController implements AmendmentController {
         this.amendment = amendment;
         setBody(amendment.getBody());
         setStatus(amendment.getAmendmentContainerStatus());
+
+        if (documentController instanceof AmendmentDocumentController) {
+            AmendmentDocumentController amendmentDocumentController = (AmendmentDocumentController) documentController;
+            final Describer describer = amendmentDocumentController.getDescriber();
+            if (describer != null) {
+                setIntroduction(describer.introduction(this, documentController.getDocument().getLanguageIso()));
+                setDescription(describer.describe(this, documentController.getDocument().getLanguageIso()));
+            }
+        }
     }
 
     public void setBody(String xmlContent) {
@@ -365,6 +376,24 @@ public class DefaultAmendmentController implements AmendmentController {
             view.setBody(xmlContent);
         if (extendedView != null)
             extendedView.setBody(xmlContent);
+    }
+
+    public void setIntroduction(String introduction) {
+        if (this.view != null) {
+            this.view.setIntroduction(introduction);
+        }
+        if (this.extendedView != null) {
+            this.extendedView.setIntroduction(introduction);
+        }
+    }
+
+    public void setDescription(String description) {
+        if (this.view != null) {
+            this.view.setDescription(description);
+        }
+        if (this.extendedView != null) {
+            this.extendedView.setDescription(description);
+        }
     }
 
     @Override

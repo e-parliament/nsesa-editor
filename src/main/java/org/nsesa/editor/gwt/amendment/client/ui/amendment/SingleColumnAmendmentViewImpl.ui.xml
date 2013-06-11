@@ -33,6 +33,14 @@
             cursor: pointer;
         }
 
+        .introduction {
+
+        }
+
+        .description {
+
+        }
+
         .body {
 
         }
@@ -54,7 +62,8 @@
                     <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
                 </g:FlowPanel>
             </div>
-            <g:InlineHTML ui:field="introduction"/>
+            <g:InlineHTML ui:field="introduction" styleName="{res.introduction} introduction"/>
+            <g:InlineHTML ui:field="description" styleName="{res.description} description"/>
             <g:HTMLPanel ui:field="body" styleName="{res.body}">
 
             </g:HTMLPanel>
