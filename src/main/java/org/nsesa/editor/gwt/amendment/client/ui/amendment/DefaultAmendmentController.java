@@ -134,6 +134,11 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     public void registerListeners() {
+        registerListenersOnView();
+        registerListenersOnExtendedView();
+    }
+
+    private void registerListenersOnView() {
         if (view != null) {
             deleteButtonClickHandlerRegistration = view.getDeleteButton() != null ? view.getDeleteButton().addClickHandler(new ClickHandler() {
                 @Override
@@ -181,6 +186,9 @@ public class DefaultAmendmentController implements AmendmentController {
                 }
             });
         }
+    }
+
+    private void registerListenersOnExtendedView() {
         if (extendedView != null) {
             extDeleteButtonClickHandlerRegistration = extendedView.getDeleteButton() != null ? extendedView.getDeleteButton().addClickHandler(new ClickHandler() {
                 @Override
@@ -240,57 +248,68 @@ public class DefaultAmendmentController implements AmendmentController {
 
     protected void switchTemplate(final AmendmentView newAmendmentView, final AmendmentView newExtendedView) {
 
+        if (newAmendmentView != null) {
+            final AmendmentView oldView = this.view;
+            removeListenersFromView();
+            this.view = newAmendmentView;
+
+            if (oldView != this.view) {
+
+                final Widget parent = oldView.asWidget().getParent();
+                final Element parentElement = oldView.asWidget().getElement().getParentElement();
+
+                final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldView.asWidget().getElement());
+                oldView.asWidget().removeFromParent();
+                if (parent instanceof HasWidgets) {
+                    ((HasWidgets) parent).add(this.view.asWidget());
+                } else {
+                    DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.view.asWidget().getElement(), childIndex);
+                }
+                this.view.attach();
+            }
+            registerListenersOnView();
+        } else {
+            LOG.info("View template not switched because null view has been passed.");
+        }
+
+        if (newExtendedView != null) {
+            final AmendmentView oldExtendedView = this.extendedView;
+            removeListenersFromExtendedView();
+            this.extendedView = newExtendedView;
+            if (oldExtendedView != this.extendedView) {
+                final Widget parent = oldExtendedView.asWidget().getParent();
+                final Element parentElement = oldExtendedView.asWidget().getElement().getParentElement();
+
+                final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldExtendedView.asWidget().getElement());
+                oldExtendedView.asWidget().removeFromParent();
+                if (parent instanceof HasWidgets) {
+                    ((HasWidgets) parent).add(this.extendedView.asWidget());
+                } else {
+                    DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.extendedView.asWidget().getElement(), childIndex);
+                }
+                this.extendedView.attach();
+            }
+            registerListenersOnExtendedView();
+        } else {
+            LOG.info("View template not switched because null view has been passed.");
+        }
         // keep track
-        final AmendmentView oldView = this.view;
-        final AmendmentView oldExtendedView = this.extendedView;
-
-        // cleanup
-        removeListeners();
-        this.view = newAmendmentView;
-        this.extendedView = newExtendedView;
-
-        if (oldView != this.view) {
-
-            final Widget parent = oldView.asWidget().getParent();
-            final Element parentElement = oldView.asWidget().getElement().getParentElement();
-
-            final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldView.asWidget().getElement());
-            oldView.asWidget().removeFromParent();
-            if (parent instanceof HasWidgets) {
-                ((HasWidgets) parent).add(this.view.asWidget());
-            } else {
-                DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.view.asWidget().getElement(), childIndex);
-            }
-            this.view.attach();
-        }
-
-        if (oldExtendedView != this.extendedView) {
-            final Widget parent = oldExtendedView.asWidget().getParent();
-            final Element parentElement = oldExtendedView.asWidget().getElement().getParentElement();
-
-            final int childIndex = DOM.getChildIndex((com.google.gwt.user.client.Element) parentElement, oldExtendedView.asWidget().getElement());
-            oldExtendedView.asWidget().removeFromParent();
-            if (parent instanceof HasWidgets) {
-                ((HasWidgets) parent).add(this.extendedView.asWidget());
-            } else {
-                DOM.insertChild((com.google.gwt.user.client.Element) parentElement, this.extendedView.asWidget().getElement(), childIndex);
-            }
-            this.extendedView.attach();
-        }
-
         setModel(amendment);
-
-        // register listeners again
-        registerListeners();
     }
 
     public void switchTemplate(final String amendmentViewKey, final String extendedViewKey) {
-        AmendmentView amendmentView = availableViews.get(amendmentViewKey);
-        if (amendmentView == null)
-            throw new NullPointerException("Could not find view registered with " + amendmentViewKey);
-        AmendmentView extendedView = availableExtendedViews.get(extendedViewKey);
-        if (extendedView == null)
-            throw new NullPointerException("Could not find extended view registered with " + extendedViewKey);
+        AmendmentView amendmentView = null;
+        if (amendmentViewKey != null) {
+            amendmentView = availableViews.get(amendmentViewKey);
+            if (amendmentView == null)
+                throw new NullPointerException("Could not find view registered with " + amendmentViewKey);
+        }
+        AmendmentView extendedView = null;
+        if (extendedViewKey != null) {
+            extendedView = availableExtendedViews.get(extendedViewKey);
+            if (extendedView == null)
+                throw new NullPointerException("Could not find extended view registered with " + extendedViewKey);
+        }
         switchTemplate(amendmentView, extendedView);
         // keep track
         this.viewKeys.add(amendmentViewKey);
@@ -315,16 +334,25 @@ public class DefaultAmendmentController implements AmendmentController {
      */
     @Override
     public void removeListeners() {
-        if (deleteButtonClickHandlerRegistration != null) deleteButtonClickHandlerRegistration.removeHandler();
-        if (extDeleteButtonClickHandlerRegistration != null) extDeleteButtonClickHandlerRegistration.removeHandler();
-        if (editButtonClickHandlerRegistration != null) editButtonClickHandlerRegistration.removeHandler();
-        if (extEditButtonClickHandlerRegistration != null) extEditButtonClickHandlerRegistration.removeHandler();
-        if (moreButtonClickHandlerRegistration != null) moreButtonClickHandlerRegistration.removeHandler();
-        if (extMoreButtonClickHandlerRegistration != null) extMoreButtonClickHandlerRegistration.removeHandler();
+        removeListenersFromView();
+        removeListenersFromExtendedView();
+    }
+
+    private void removeListenersFromView() {
         if (clickHandlerRegistration != null) clickHandlerRegistration.removeHandler();
+        if (deleteButtonClickHandlerRegistration != null) deleteButtonClickHandlerRegistration.removeHandler();
         if (doubleClickHandlerRegistration != null) doubleClickHandlerRegistration.removeHandler();
+        if (moreButtonClickHandlerRegistration != null) moreButtonClickHandlerRegistration.removeHandler();
+    }
+
+    private void removeListenersFromExtendedView() {
+        if (editButtonClickHandlerRegistration != null) editButtonClickHandlerRegistration.removeHandler();
         if (extClickHandlerRegistration != null) extClickHandlerRegistration.removeHandler();
+        if (extDeleteButtonClickHandlerRegistration != null) extDeleteButtonClickHandlerRegistration.removeHandler();
         if (extDoubleClickHandlerRegistration != null) extDoubleClickHandlerRegistration.removeHandler();
+        if (extEditButtonClickHandlerRegistration != null) extEditButtonClickHandlerRegistration.removeHandler();
+        if (extMoreButtonClickHandlerRegistration != null) extMoreButtonClickHandlerRegistration.removeHandler();
+
     }
 
     public void removeViews() {

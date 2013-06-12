@@ -113,10 +113,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
     private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
     private HandlerRegistration documentScrollEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
 
     @Inject
     public AmendmentDocumentController(final ClientFactory clientFactory,
@@ -162,21 +160,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     // event handler.
     public void registerListeners() {
         super.registerListeners();
-
-        // forward the amendment injected event to the parent event bus
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                if (isDiffModeActive()) {
-                    diffingManager.diff(event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-                clientFactory.getEventBus().fireEvent(event);
-            }
-        });
-
         // when we detect a scrolling event, hide the amendment action panel
         documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
@@ -220,17 +203,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
-        // after an amendment has been saved, we have to redo its diffing
-        amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerSavedEvent event) {
-                if (isDiffModeActive()) {
-                    diffingManager.diff(event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-            }
-        });
 
         // if an amendment has been successfully deleted, we need to update our selection and active widget
         // (since it might have been part of it), and renumber the existing amendments locally
@@ -345,10 +317,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
         amendmentContainerDeletedEventHandlerRegistration.removeHandler();
-        amendmentContainerSavedEventHandlerRegistration.removeHandler();
         amendmentContainerEditEventHandlerRegistration.removeHandler();
         documentScrollEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
     }
 
     /**

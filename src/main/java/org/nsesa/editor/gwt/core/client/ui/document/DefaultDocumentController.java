@@ -303,12 +303,12 @@ public class DefaultDocumentController implements DocumentController {
                                 final Collection<OverlayWidget> affectedWidgets =
                                         Collections2.filter(overlayWidget.getParentOverlayWidget().getChildOverlayWidgets(),
                                                 new Predicate<OverlayWidget>() {
-                                    @Override
-                                    public boolean apply(@$Nullable OverlayWidget input) {
-                                        return input.isIntroducedByAnAmendment() &&
-                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
-                                    }
-                                });
+                                                    @Override
+                                                    public boolean apply(@$Nullable OverlayWidget input) {
+                                                        return input.isIntroducedByAnAmendment() &&
+                                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                                    }
+                                                });
                                 documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
                             }
                         }
@@ -322,12 +322,12 @@ public class DefaultDocumentController implements DocumentController {
                                 final Collection<OverlayWidget> affectedWidgets =
                                         Collections2.filter(overlayWidget.getParentOverlayWidget().getChildOverlayWidgets(),
                                                 new Predicate<OverlayWidget>() {
-                                    @Override
-                                    public boolean apply(@$Nullable OverlayWidget input) {
-                                        return input.isIntroducedByAnAmendment() &&
-                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
-                                    }
-                                });
+                                                    @Override
+                                                    public boolean apply(@$Nullable OverlayWidget input) {
+                                                        return input.isIntroducedByAnAmendment() &&
+                                                                input.getParentOverlayWidget().getChildOverlayWidgets().indexOf(input) >= widgetIndex;
+                                                    }
+                                                });
                                 documentEventBus.fireEvent(new OverlayWidgetStructureChangeEvent(new ArrayList<OverlayWidget>(affectedWidgets)));
                             }
                         }
@@ -379,6 +379,8 @@ public class DefaultDocumentController implements DocumentController {
         } else {
             LOG.info("Installing '" + key + "' mode.");
         }
+        // initialize its listeners on the event busses
+        mode.registerListeners();
         documentModes.put(key, mode);
     }
 

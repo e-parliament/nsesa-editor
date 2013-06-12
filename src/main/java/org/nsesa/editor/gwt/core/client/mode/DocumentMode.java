@@ -24,6 +24,7 @@ package org.nsesa.editor.gwt.core.client.mode;
 public interface DocumentMode<S extends DocumentState> {
     /**
      * Applies a new {@link DocumentState}.
+     *
      * @param state the state to apply
      * @return <tt>true</tt> if it was applied successfully, <tt>false</tt> otherwise.
      */
@@ -31,7 +32,18 @@ public interface DocumentMode<S extends DocumentState> {
 
     /**
      * Returns the current state this {@link DocumentMode} is in.
+     *
      * @return
      */
     S getState();
+
+    /**
+     * Callback to register the listeners on the event bus.
+     */
+    void registerListeners();
+
+    /**
+     * Callback to remove the listeners on the event bus.
+     */
+    void removeListeners();
 }
