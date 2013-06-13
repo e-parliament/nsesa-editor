@@ -52,7 +52,7 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     @UiField
     Anchor translateAnchor;
     @UiField
-    Label location;
+    InlineHTML location;
     @UiField
     HTMLPanel actionPanel;
 
@@ -106,8 +106,7 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     public void setLocation(String location) {
         if (location != null) {
             this.location.setText(TextUtils.capitalize(location));
-        }
-        else {
+        } else {
             this.location.setText("");
         }
     }
