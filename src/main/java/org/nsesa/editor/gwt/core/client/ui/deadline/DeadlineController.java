@@ -113,7 +113,7 @@ public class DeadlineController {
             public void onEvent(DeadlinePassedEvent event) {
                 if (event.getDocumentController() == documentController) {
                     view.setPastStyle();
-                    view.setDeadline(getFormattedDeadline());
+                    view.setDeadline(getFormattedDeadlineMessage());
                 }
             }
         });
@@ -122,7 +122,7 @@ public class DeadlineController {
             public void onEvent(Deadline24HourEvent event) {
                 if (event.getDocumentController() == documentController) {
                     view.set24HourStyle();
-                    view.setDeadline(getFormattedDeadline());
+                    view.setDeadline(getFormattedDeadlineMessage());
                 }
             }
         });
@@ -131,7 +131,7 @@ public class DeadlineController {
             public void onEvent(Deadline1HourEvent event) {
                 if (event.getDocumentController() == documentController) {
                     view.set1HourStyle();
-                    view.setDeadline(getFormattedDeadline());
+                    view.setDeadline(getFormattedDeadlineMessage());
                 }
             }
         });
@@ -148,11 +148,11 @@ public class DeadlineController {
 
 
     /**
-     * Get the formatted deadline. See the {@link CoreMessages} for the messages and date formats.
+     * Get the formatted deadline message. See the {@link CoreMessages} for the messages and date formats.
      *
-     * @return the formatted deadline.
+     * @return the formatted deadline message.
      */
-    protected String getFormattedDeadline() {
+    protected String getFormattedDeadlineMessage() {
         // TODO switch to gwt-joda-time
         final Date now = new Date();
         final Date midnight = new Date(now.getDay(), now.getMonth(), now.getYear(), 0, 0, 0);
