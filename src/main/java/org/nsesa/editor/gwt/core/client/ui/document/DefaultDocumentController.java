@@ -16,8 +16,11 @@ package org.nsesa.editor.gwt.core.client.ui.document;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.inject.Inject;
 import com.google.inject.internal.util.$Nullable;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -27,8 +30,6 @@ import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.event.document.*;
 import org.nsesa.editor.gwt.core.client.event.widget.*;
-import org.nsesa.editor.gwt.core.client.mode.ActiveState;
-import org.nsesa.editor.gwt.core.client.mode.DiffMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentMode;
 import org.nsesa.editor.gwt.core.client.mode.DocumentState;
 import org.nsesa.editor.gwt.core.client.ref.ReferenceHandler;
@@ -43,10 +44,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,6 +63,11 @@ public class DefaultDocumentController implements DocumentController {
 
     private static final Logger LOG = Logger.getLogger(DefaultDocumentController.class.getName());
 
+    /**
+     * A container for injected stylesheets. These stylesheets are supposed to be loaded
+     * dynamically by the document itself, or via the matching overlay factory.
+     */
+    private final Set<String> injectedStylesheets = new LinkedHashSet<String>();
 
     /**
      * Client factory, giving access to the client context, global scheduler and event bus.
@@ -171,6 +174,7 @@ public class DefaultDocumentController implements DocumentController {
     private HandlerRegistration overlayWidgetMoveEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
     private HandlerRegistration documentScrollToEventHandlerRegistration;
+    private HandlerRegistration addStylesheetEventHandlerRegistration;
 
     @Inject
     public DefaultDocumentController(final ClientFactory clientFactory,
@@ -212,11 +216,11 @@ public class DefaultDocumentController implements DocumentController {
     }
 
     public void registerModes() {
-
+        // for subclasses
     }
 
     public void registerKeyCombos() {
-
+        // for subclasses
     }
 
     // TODO while this approach is more flexible, it might be better to have the document controller act as the
@@ -238,6 +242,13 @@ public class DefaultDocumentController implements DocumentController {
             public void onEvent(ResizeEvent event) {
                 documentEventBus.fireEvent(event);
                 view.setDocumentHeight(event.getHeight());
+            }
+        });
+
+        addStylesheetEventHandlerRegistration = clientFactory.getEventBus().addHandler(AddStylesheetEvent.TYPE, new AddStylesheetEventHandler() {
+            @Override
+            public void onEvent(AddStylesheetEvent event) {
+                registerStylesheet(event.getStylesheetURL());
             }
         });
 
@@ -353,6 +364,7 @@ public class DefaultDocumentController implements DocumentController {
         overlayWidgetMoveEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
         documentScrollToEventHandlerRegistration.removeHandler();
+        addStylesheetEventHandlerRegistration.removeHandler();
     }
 
 
@@ -396,17 +408,6 @@ public class DefaultDocumentController implements DocumentController {
         }
         LOG.warning("No document mode found under " + key);
         return false;
-    }
-
-    /**
-     * Check if there is a diff mode active (provided a {@link org.nsesa.editor.gwt.core.client.diffing.DiffingManager} has been set on this document
-     * controller).
-     *
-     * @return <tt>true</tt> if the diff mode is active.
-     */
-    protected boolean isDiffModeActive() {
-        final DocumentMode<ActiveState> diffMode = (DocumentMode<ActiveState>) getMode(DiffMode.KEY);
-        return diffingManager != null && diffMode != null && diffMode.getState().isActive();
     }
 
     /**
@@ -693,5 +694,28 @@ public class DefaultDocumentController implements DocumentController {
     @Override
     public String toString() {
         return "Document controller " + documentID + " (" + super.toString() + ")";
+    }
+
+    /**
+     * Dynamic registration of CSS stylesheets. Works by injecting a <link /> tag into the body.
+     *
+     * @param urlToCSS the URL to the CSS resource.
+     */
+    protected void registerStylesheet(final String urlToCSS) {
+        if (urlToCSS == null) {
+            throw new NullPointerException("Null URL passed.");
+        }
+
+        if (!injectedStylesheets.contains(urlToCSS.toLowerCase())) {
+            final Element link = DOM.createElement("link");
+            link.setAttribute("rel", "stylesheet");
+            link.setAttribute("type", "text/css");
+            link.setAttribute("href", urlToCSS.toLowerCase());
+            DOM.appendChild(RootPanel.get().getElement(), link);
+            // register
+            injectedStylesheets.add(urlToCSS.toLowerCase());
+        } else {
+            LOG.warning("The stylesheet resource was already injected - skipped : " + urlToCSS);
+        }
     }
 }
