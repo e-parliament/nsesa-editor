@@ -342,11 +342,11 @@ public class DefaultAmendmentController implements AmendmentController {
         if (clickHandlerRegistration != null) clickHandlerRegistration.removeHandler();
         if (deleteButtonClickHandlerRegistration != null) deleteButtonClickHandlerRegistration.removeHandler();
         if (doubleClickHandlerRegistration != null) doubleClickHandlerRegistration.removeHandler();
+        if (editButtonClickHandlerRegistration != null) editButtonClickHandlerRegistration.removeHandler();
         if (moreButtonClickHandlerRegistration != null) moreButtonClickHandlerRegistration.removeHandler();
     }
 
     private void removeListenersFromExtendedView() {
-        if (editButtonClickHandlerRegistration != null) editButtonClickHandlerRegistration.removeHandler();
         if (extClickHandlerRegistration != null) extClickHandlerRegistration.removeHandler();
         if (extDeleteButtonClickHandlerRegistration != null) extDeleteButtonClickHandlerRegistration.removeHandler();
         if (extDoubleClickHandlerRegistration != null) extDoubleClickHandlerRegistration.removeHandler();
