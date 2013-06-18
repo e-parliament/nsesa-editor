@@ -52,6 +52,10 @@
         .scrollPanel {
         }
 
+        .cancelButton {
+            cursor: pointer;
+        }
+
     </ui:style>
     <g:DockLayoutPanel styleName="{res.comparePanel}" unit="PX">
         <g:north size="60">
@@ -70,7 +74,7 @@
             <g:HTMLPanel>
                 <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
                     <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
-                        <g:HTMLPanel ui:field="richTextEditor" styleName="{res.richTextEditor}"/>
+                        <g:HTMLPanel ui:field="richTextEditor" styleName="{res.richTextEditor} revisionsPanel"/>
                     </g:ScrollPanel>
                 </g:HorizontalPanel>
             </g:HTMLPanel>
@@ -78,8 +82,8 @@
         <g:south size="40">
             <g:HTMLPanel styleName="{res.actionPanel}">
                 <g:HTMLPanel styleName="{res.innerActionPanel}">
-                    <g:Button ui:field="rollbackButton" text="Rollback"/>
-                    <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
+                    <g:Button ui:field="rollbackButton" text="Rollback" title="Rollback"/>
+                    <g:Anchor ui:field="cancelAnchor" text="Cancel" styleName="{res.cancelButton}" title="Cancel"/>
                 </g:HTMLPanel>
             </g:HTMLPanel>
         </g:south>
