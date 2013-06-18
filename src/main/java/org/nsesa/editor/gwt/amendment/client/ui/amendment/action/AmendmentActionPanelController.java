@@ -148,7 +148,6 @@ public class AmendmentActionPanelController {
         // create operations on the amendment
         addWidget(anchorTable);
         addWidget(anchorWithdraw);
-        addSeparator();
         addWidget(anchorDelete);
         moveSeparator = getSeparator();
         addWidget(moveSeparator);
@@ -331,7 +330,7 @@ public class AmendmentActionPanelController {
         final ArrayList<AmendmentContainerDTO> amendmentContainers = new ArrayList<AmendmentContainerDTO>(Arrays.asList(amendmentController.getModel()));
 
         // delete anchor
-        anchorDelete.setEnabled(false);
+        anchorDelete.setVisible(false);
         final GWTAmendmentServiceAsync gwtAmendmentService = amendmentController.getDocumentController().getServiceFactory().getGwtAmendmentService();
         gwtAmendmentService.canDeleteAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
             @Override
@@ -341,12 +340,12 @@ public class AmendmentActionPanelController {
 
             @Override
             public void onSuccess(Boolean[] result) {
-                anchorDelete.setEnabled(result[0]);
+                anchorDelete.setVisible(result[0]);
             }
         });
 
         // table anchor
-        anchorTable.setEnabled(false);
+        anchorTable.setVisible(false);
         gwtAmendmentService.canTableAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -355,12 +354,12 @@ public class AmendmentActionPanelController {
 
             @Override
             public void onSuccess(Boolean[] result) {
-                anchorTable.setEnabled(result[0]);
+                anchorTable.setVisible(result[0]);
             }
         });
 
         // withdraw anchor
-        anchorWithdraw.setEnabled(false);
+        anchorWithdraw.setVisible(false);
         gwtAmendmentService.canWithdrawAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -369,7 +368,7 @@ public class AmendmentActionPanelController {
 
             @Override
             public void onSuccess(Boolean[] result) {
-                anchorWithdraw.setEnabled(result[0]);
+                anchorWithdraw.setVisible(result[0]);
             }
         });
     }
