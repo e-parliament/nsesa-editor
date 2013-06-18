@@ -402,4 +402,7 @@ public class AmendmentActionPanelController {
         return new HTML("<hr class='separator'/>");
     }
 
+    public AmendmentActionPanelView getView() {
+        return view;
+    }
 }

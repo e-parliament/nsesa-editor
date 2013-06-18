@@ -167,7 +167,9 @@ public class DefaultAmendmentController implements AmendmentController {
                 public void onClick(ClickEvent event) {
                     final Element relativeElement = event.getRelativeElement();
                     amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
-                    amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                    final int offsetWidth = amendmentActionPanelController.getView().asWidget().getOffsetWidth();
+                    // we're not guaranteed to have an offset width already, so use 120 in that case (min-width)
+                    amendmentActionPanelController.show(relativeElement.getAbsoluteLeft() - (offsetWidth == 0 ? 112 : offsetWidth), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight() - 2);
                 }
             }) : null;
             clickHandlerRegistration = view.addClickHandler(new ClickHandler() {
@@ -218,7 +220,9 @@ public class DefaultAmendmentController implements AmendmentController {
                 public void onClick(ClickEvent event) {
                     final Element relativeElement = event.getRelativeElement();
                     amendmentActionPanelController.setAmendmentController(DefaultAmendmentController.this);
-                    amendmentActionPanelController.show(relativeElement.getAbsoluteLeft(), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
+                    final int offsetWidth = amendmentActionPanelController.getView().asWidget().getOffsetWidth();
+                    // we're not guaranteed to have an offset width already, so use 120 in that case (min-width)
+                    amendmentActionPanelController.show(relativeElement.getAbsoluteLeft() - (offsetWidth == 0 ? 112 : offsetWidth), relativeElement.getAbsoluteTop() + relativeElement.getOffsetHeight());
                 }
             }) : null;
 
