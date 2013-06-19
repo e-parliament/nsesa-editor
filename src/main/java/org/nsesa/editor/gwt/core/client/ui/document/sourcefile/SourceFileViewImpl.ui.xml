@@ -35,6 +35,7 @@
         }
 
         .contentHolder {
+            background-color: #ccc;
         }
 
         .content {
