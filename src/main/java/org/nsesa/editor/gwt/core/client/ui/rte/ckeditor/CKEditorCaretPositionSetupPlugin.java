@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 /**
  * Set up the caret position by checking the caret marker presence inside of the text nodes.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 11/04/13 16:49
  */
 public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {

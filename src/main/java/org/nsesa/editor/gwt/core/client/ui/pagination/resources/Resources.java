@@ -19,7 +19,7 @@ import com.google.gwt.resources.client.ImageResource;
 /**
  *  Interface to facilitate access to "pagination" image resources
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 30/11/12 15:29
  */
 public interface Resources extends ClientBundle {

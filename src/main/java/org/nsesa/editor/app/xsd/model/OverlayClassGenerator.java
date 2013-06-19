@@ -20,7 +20,7 @@ import java.util.Collection;
 /**
  * Interface to generate objects of type {@link OverlayClass} from different xsd components
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 18/10/12 15:36
  */
 public interface OverlayClassGenerator {

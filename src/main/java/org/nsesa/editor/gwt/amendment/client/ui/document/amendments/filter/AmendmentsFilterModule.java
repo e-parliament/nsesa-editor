@@ -18,7 +18,7 @@ import com.google.gwt.inject.client.AbstractGinModule;
 /**
  * The GIN module for amendments filter functionality
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 13:44
  */
 public class AmendmentsFilterModule extends AbstractGinModule {

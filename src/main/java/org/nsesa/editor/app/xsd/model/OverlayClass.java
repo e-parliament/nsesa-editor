@@ -25,8 +25,8 @@ import java.util.*;
  * Besides providing access to the hierarchy it also provides some convenience methods for accessing
  * certain sets of information.
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 05/08/12 13:36
  */
 public class OverlayClass extends OverlayNode {

@@ -21,8 +21,8 @@ import java.util.Map;
  * It holds all the information required in order to generate a <code>Java property</code>
  * for a <code>java class</code> encapsulated into <code>OverlayClass</code>.
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 05/08/12 16:00
  */
 public class OverlayProperty extends OverlayNode {

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 /**
  * Date: 15/04/13 23:26
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class UndoManager {

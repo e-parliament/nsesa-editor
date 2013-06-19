@@ -27,7 +27,7 @@ import java.util.List;
  * This class is available as a convenience base class for all plugins;
  * it provides default empty implementation for all methods.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 14/03/13 13:27
  */
 public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {

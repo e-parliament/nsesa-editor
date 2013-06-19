@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * This interface emulates the structure of an overlay widget as it comes from xsd definition
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 22/03/13 12:20
  */
 public interface StructureIndicator {

@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * An interface to handle <code>VisualStructureAttributesToggleEvent</code> GWT event.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:15
  *
  */

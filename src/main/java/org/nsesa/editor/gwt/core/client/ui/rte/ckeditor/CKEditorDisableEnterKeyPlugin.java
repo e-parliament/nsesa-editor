@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 /**
  * Disable enter and shift enter keys in the editor
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 31/01/13 08:40
  *
  */

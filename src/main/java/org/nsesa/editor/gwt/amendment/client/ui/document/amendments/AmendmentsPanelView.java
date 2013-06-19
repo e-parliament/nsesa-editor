@@ -24,7 +24,7 @@ import java.util.Map;
  * <code>AmendmentsPanelView</code> view is the main part of the second tabbed panel of the application. It provides a
  * way to display the existing amendments.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 24/06/12 21:44
  *
  */

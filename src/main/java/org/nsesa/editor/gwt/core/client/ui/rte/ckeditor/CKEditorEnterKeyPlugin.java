@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * d. for shift enter just add html custom br in all cases that is displayed in the same way as it is specified
  * at point a)
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 12/03/13 9:03
  */
 public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
@@ -93,9 +93,6 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     private ConversionEnterRule conversionEnterRule;
     /** split enter rule to be applied **/
     private SplitEnterRule splitEnterRule;
-
-    /** snippet factory used to create new widget when press enter**/
-    private OverlaySnippetFactory snippetFactory;
     /** split enter rule to be applied **/
     private LineBreakProvider lineBreakProvider;
 
@@ -110,11 +107,11 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      */
     @Inject
     public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory,
-
                                   LineBreakProvider lineBreakProvider,
-                                  SplitEnterRule splitEnterRule, ConversionEnterRule conversionEnterRule) {
+                                  SplitEnterRule splitEnterRule,
+                                  ConversionEnterRule conversionEnterRule) {
+
         this.overlayFactory = overlayFactory;
-        this.snippetFactory = snippetFactory;
         this.lineBreakProvider = lineBreakProvider;
         this.splitEnterRule = splitEnterRule;
         this.conversionEnterRule = conversionEnterRule;

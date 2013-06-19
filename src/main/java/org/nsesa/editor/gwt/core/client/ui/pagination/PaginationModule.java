@@ -19,7 +19,7 @@ import com.google.gwt.inject.client.binder.GinBinder;
 /**
  * Gin Pagination module
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 28/11/12 15:37
  */
 public class PaginationModule implements GinModule {

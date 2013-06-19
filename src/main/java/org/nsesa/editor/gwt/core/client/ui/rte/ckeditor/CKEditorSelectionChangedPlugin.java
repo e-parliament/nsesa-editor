@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * event bus and can be handled by different controllers like <code>VisualStructureController</code>
  * ({@link org.nsesa.editor.gwt.core.client.ui.visualstructure.VisualStructureController})
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 9:38
  */
 public class CKEditorSelectionChangedPlugin extends DefaultRichTextEditorPlugin {

@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * An interface to handle <code>AmendmentControllerSelectedEvent</code> GWT event.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 29/11/12 13:15
  */
 public interface OverlayWidgetAwareSelectedEventHandler extends EventHandler {

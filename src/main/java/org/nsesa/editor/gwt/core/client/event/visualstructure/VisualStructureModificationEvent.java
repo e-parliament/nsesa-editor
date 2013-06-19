@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * An event occurred when the user wants to modify element attributes.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 15:24
  *
  */

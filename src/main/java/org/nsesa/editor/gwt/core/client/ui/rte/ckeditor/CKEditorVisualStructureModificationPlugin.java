@@ -26,7 +26,7 @@ import java.util.Map;
  * A CK editor plugin to handle <code>VisualStructureModificationEvent</code> GWT event by changing the attributes of the
  * selected element in the editor area.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:27
  */
 public class CKEditorVisualStructureModificationPlugin extends DefaultRichTextEditorPlugin {

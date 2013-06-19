@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * An event raised by the application to include the amendment controllers in the selected list.
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * Date: 24/06/12 21:42
  */
 public class OverlayWidgetAwareSelectedEvent extends GwtEvent<OverlayWidgetAwareSelectedEventHandler> {

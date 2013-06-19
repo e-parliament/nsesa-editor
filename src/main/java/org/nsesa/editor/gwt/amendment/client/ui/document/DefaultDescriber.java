@@ -23,7 +23,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 /**
  * Date: 11/06/13 10:06
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Singleton

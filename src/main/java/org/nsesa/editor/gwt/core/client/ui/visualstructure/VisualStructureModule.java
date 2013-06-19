@@ -18,7 +18,7 @@ import com.google.gwt.inject.client.binder.GinBinder;
 
 /**
  * Gin visual structure module
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 public class VisualStructureModule implements GinModule {

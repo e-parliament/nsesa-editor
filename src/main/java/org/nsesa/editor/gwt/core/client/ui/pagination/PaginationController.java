@@ -33,7 +33,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * <code>PaginationController</code> class is responsible to control {@link PaginationView} view and
  * to react to any amendment changes the user performs in the application.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 30/11/12 15:29
  */
 @Scope(DOCUMENT)

@@ -26,7 +26,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
  * A CK editor plugin to handle a <code>VisualStructureInsertionEvent</code> GWT event by inserting a DOM element into the
  * editor area.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:27
  */
 public class CKEditorVisualStructureInsertionPlugin extends DefaultRichTextEditorPlugin {

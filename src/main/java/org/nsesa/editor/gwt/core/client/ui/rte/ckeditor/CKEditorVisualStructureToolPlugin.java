@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * The event is propagated further through the event bus and is handled by <code>VisualStructureController</code> controller
  * to show/hide drafting tool widget.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 12:32
  */
 public class CKEditorVisualStructureToolPlugin extends DefaultRichTextEditorPlugin {

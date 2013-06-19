@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Selector;
 /**
  * Date: 24/04/13 12:00
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface AmendmentDocumentInjector extends DocumentInjector {

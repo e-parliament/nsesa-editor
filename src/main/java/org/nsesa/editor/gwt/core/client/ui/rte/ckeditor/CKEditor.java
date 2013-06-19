@@ -29,7 +29,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * is based on DockLayoutPanel class where the CKEditor JavaScriptObject representation is added in the middle of
  * the panel. The draft tool widget is added at north while draft attributes widget is positioned at south.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 11/01/13 16:24
  *
  * @see <a href="http://ckeditor.com">CK Editor</a> for more details

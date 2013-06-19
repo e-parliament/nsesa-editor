@@ -23,7 +23,7 @@ import java.util.List;
  * <code>AmendmentsFilterView</code> view is part of the second tabbed panel of the application. It provides a list
  * of options that can be used to filter the amendments displayed in this second panel.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 13:44
  */
 @ImplementedBy(AmendmentsFilterViewImpl.class)

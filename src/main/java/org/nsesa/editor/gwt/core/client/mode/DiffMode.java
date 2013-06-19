@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.mode;
 /**
  * Date: 21/03/13 13:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface DiffMode extends DocumentMode<ActiveState> {

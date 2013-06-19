@@ -30,11 +30,11 @@ import java.util.Properties;
 
 /**
  * Get the result of XSD parsing and generate css class for each element defined in XSD schema.
- * The program is usind a predefined template properties <code>overlayCss.properties</code> whereas the user can add
- * custom css properties that will be generated for certain type of elements. If there are css properties defined in
- * superclasses they will be carried on also in subclasses unless they are overridden in the template file.
+ * The program is using a predefined template properties <code>overlayCss.properties</code> whereas the user can add
+ * custom css properties that will be generated for certain type of elements. The subclasses inherit the css style
+ * of the superclass unless they are overridden in the predefined template file.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 9:38
  */
 public class CssOverlayGenerator extends OverlayGenerator {
@@ -62,7 +62,9 @@ public class CssOverlayGenerator extends OverlayGenerator {
         Writer writer = null;
         try {
             writer = new FileWriter(fileName, false);
-            OverlayClassProcessor processor = new CssOverlayClassProcessor(properties, templateName, writer, cssConfiguration);
+            OverlayClassProcessor processor = new CssOverlayClassProcessor(properties,
+                    templateName, writer, cssConfiguration);
+
             LOG.info("Start css processing...");
             root.process(processor);
             LOG.info("The file {} has been generated.", fileName);

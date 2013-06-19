@@ -24,7 +24,7 @@ import java.util.Vector;
 /**
  * Contains a mapping of xsd facet restriction
  * (See {@link XSFacet})
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 18/10/12 09:11
  */
 public class SimpleTypeRestriction {

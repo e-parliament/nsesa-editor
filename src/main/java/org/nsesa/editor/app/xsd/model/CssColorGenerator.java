@@ -17,9 +17,9 @@ import java.util.Random;
 
 /**
  * A generator to compute randomly color codes in hexadecimal format based on the given label.
- * The generated color remains constant over the recomputation with the same label.
+ * The generated hexadecimal color code remains constant over the recomputation with the same label.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 21/01/13 13:38
  */
 public class CssColorGenerator {
@@ -41,8 +41,8 @@ public class CssColorGenerator {
     }
 
     /**
-     * Generates a color based on the provided label and match then the color
-     * @param label
+     * Generates a black/white color code based on the given label
+     * @param label The label that will be processed
      * @return
      */
     public String getTextColor(final String label) {
@@ -51,9 +51,9 @@ public class CssColorGenerator {
     }
 
     /**
-     * Returns "000000" or "FFFFFF" depending on the lightness of the color
-     * @param color
-     * @return
+     * Returns "000000" or "FFFFFF" depending on the lightness of the background color
+     * @param color The background color code in hexadecimal format
+     * @return The text color in hexadecimal
      */
     public String matchTextColor(String color) {
         if (color.startsWith("#")) color = color.substring(1);

@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Date: 24/04/13 11:32
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultSelector<T extends OverlayWidgetAware> implements Selector<T> {

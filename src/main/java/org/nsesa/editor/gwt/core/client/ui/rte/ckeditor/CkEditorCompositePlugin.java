@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * Make possible to run Java plugins from an external Java script code.
  * There is a wrapper plugin under js CK editor plugins folder (nsesa) responsible to load this java plugin.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 10/01/13 12:24
  */
 public class CkEditorCompositePlugin extends RichTextCompositePlugin {

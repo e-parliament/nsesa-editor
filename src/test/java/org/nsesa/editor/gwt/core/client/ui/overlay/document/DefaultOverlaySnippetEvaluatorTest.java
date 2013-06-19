@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertEquals;
 /**
  * Test for {@link OverlaySnippetEvaluator}
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 15:25
  */
 public class DefaultOverlaySnippetEvaluatorTest {

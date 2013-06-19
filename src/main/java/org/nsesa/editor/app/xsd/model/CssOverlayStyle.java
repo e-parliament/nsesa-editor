@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * Keeps style information for a given overlay class
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 06/11/12 12:46
  */
 public class CssOverlayStyle {

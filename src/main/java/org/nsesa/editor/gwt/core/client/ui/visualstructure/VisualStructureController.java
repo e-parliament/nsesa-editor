@@ -37,7 +37,7 @@ import java.util.TreeMap;
  * The <code>VisualStructureController</code> class acts as a controller to refresh <code>VisualStructureView</code> and
  * <code>VisualStructureAttributesView</code> widgets.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 16/01/13 13:37
  */
 public class VisualStructureController {

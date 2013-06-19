@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.amendment.client.ui.document.resources;
 /**
  * Date: 11/06/13 10:09
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface Messages extends com.google.gwt.i18n.client.Messages {

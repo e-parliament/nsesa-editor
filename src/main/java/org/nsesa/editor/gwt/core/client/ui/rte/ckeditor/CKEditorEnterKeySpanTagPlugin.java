@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
  * A CK Editor plugin to handle enter and shift enter keystrokes. It replaces enter key and shift enter keys
  * with a span tag having type attribute the <code>tagName</code>.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 10/01/13 12:16
  */
 public class CKEditorEnterKeySpanTagPlugin extends DefaultRichTextEditorPlugin {

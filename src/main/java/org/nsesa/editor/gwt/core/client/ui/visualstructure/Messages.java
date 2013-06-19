@@ -18,7 +18,7 @@ import com.google.gwt.i18n.client.ConstantsWithLookup;
 /**
  *  Interface to facilitate locale-sensitive drafting related labels supplied from properties files
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 public interface Messages extends ConstantsWithLookup {

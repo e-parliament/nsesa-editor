@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig;
 /**
  * Defines the configuration required for a rich text editor in order to run it
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 14/01/13 14:42
  *
  */

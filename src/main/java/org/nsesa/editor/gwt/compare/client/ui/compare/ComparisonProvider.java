@@ -22,7 +22,7 @@ import java.util.List;
  * Class responsible for retrieving and rolling back revisions.
  * Date: 14/05/13 14:06
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface ComparisonProvider {

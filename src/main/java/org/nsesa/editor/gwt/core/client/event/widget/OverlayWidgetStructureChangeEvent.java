@@ -22,7 +22,7 @@ import java.util.List;
  *  An event indicating a change in the actual structure of the document. That happens when
  *  you move up and down widgets or delete some widgets
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 28/05/13 10:13
  */
 public class OverlayWidgetStructureChangeEvent extends GwtEvent<OverlayWidgetStructureChangeEventHandler> {

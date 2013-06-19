@@ -16,7 +16,7 @@ package org.nsesa.editor.app.xsd.model;
 /**
  * An enum for XSD types
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/10/12 11:24
  */
 public enum OverlayType {

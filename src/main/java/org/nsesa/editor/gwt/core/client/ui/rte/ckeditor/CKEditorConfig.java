@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Defines configuration settings for CK Editor.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 11/01/13 15:24
  *
  * @see <a href="http://docs.cksource.com/ckeditor_api/symbols/CKEDITOR.config.html">CkEditor configuration</a>
