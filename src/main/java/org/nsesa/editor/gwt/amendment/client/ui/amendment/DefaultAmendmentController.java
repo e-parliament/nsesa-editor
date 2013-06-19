@@ -552,4 +552,21 @@ public class DefaultAmendmentController implements AmendmentController {
     public void setDiffMethod(DiffMethod diffMethod) {
         this.diffMethod = diffMethod;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DefaultAmendmentController)) return false;
+
+        DefaultAmendmentController that = (DefaultAmendmentController) o;
+
+        if (amendment != null ? !amendment.equals(that.amendment) : that.amendment != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return amendment != null ? amendment.hashCode() : 0;
+    }
 }
