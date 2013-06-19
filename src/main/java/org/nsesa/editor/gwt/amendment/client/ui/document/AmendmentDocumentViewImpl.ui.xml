@@ -40,6 +40,8 @@
             font-size: 2em;
             text-align: center;
             width: 100%;
+            position: relative;
+            top: -3px;
         }
 
         .tabPanel {
@@ -56,8 +58,8 @@
             padding: 0;
             margin: 0;
             position: relative;
-            right: 12px;
-            top: -32px;
+            right: 4px;
+            top: -33px;
             float: right;
         }
 

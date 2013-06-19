@@ -79,8 +79,7 @@
                 <g:Image resource="{imageResources.loadingSpinner}" ui:field="loadingIndicator"
                          styleName="{res.loadingSpinner}"/>
                 <g:Label ui:field="loadingMessage" styleName="" visible="false"/>
-                <g:HTML text="" styleName="{res.documentTitle} documentTitle"
-                        ui:field="documentTitle"/>
+                <g:HTML text="" styleName="{res.documentTitle} documentTitle" ui:field="documentTitle"/>
 
                 <g:FlowPanel styleName="{res.tabHeaders}">
                     <g:Image resource='{imageResources.viewDocument}' styleName="{res.tabHeader}"
@@ -99,8 +98,8 @@
                     <sourcefile:SourceFileView ui:field="sourceFileView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
                 <!--<g:tab>-->
-                    <!--<g:header>Amendments</g:header>-->
-                    <!--<amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>-->
+                <!--<g:header>Amendments</g:header>-->
+                <!--<amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>-->
                 <!--</g:tab>-->
                 <g:tab>
                     <g:header>Info</g:header>
