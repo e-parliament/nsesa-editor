@@ -19,7 +19,7 @@
               type='org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderViewCss'/>
     <ui:style field="res">
         .horizontalPanel {
-            float: right;
+            float: left;
             position: relative;
             top: -2px;
         }
