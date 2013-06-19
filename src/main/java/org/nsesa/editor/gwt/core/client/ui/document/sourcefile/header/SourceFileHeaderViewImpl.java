@@ -52,8 +52,6 @@ public class SourceFileHeaderViewImpl extends Composite implements SourceFileHea
     @UiField
     HorizontalPanel extensionPanel;
     @UiField
-    Label documentName;
-    @UiField
     ListBox documentTranslations;
     @UiField
     ListBox relatedDocuments;

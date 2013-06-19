@@ -18,12 +18,6 @@
     <ui:style src="SourceFileHeaderViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.document.sourcefile.header.SourceFileHeaderViewCss'/>
     <ui:style field="res">
-
-
-        .documentName {
-
-        }
-
         .horizontalPanel {
             float: right;
             position: relative;
@@ -47,9 +41,6 @@
 
     <g:HTMLPanel>
         <g:HorizontalPanel ui:field="horizontalPanel" styleName="{res.horizontalPanel}">
-            <g:HTMLPanel styleName="{res.documentName}">
-                <g:Label ui:field="documentName"/>
-            </g:HTMLPanel>
             <g:HTMLPanel styleName="{res.modes} modes">
                 <g:HorizontalPanel ui:field="extensionPanel"/>
             </g:HTMLPanel>
