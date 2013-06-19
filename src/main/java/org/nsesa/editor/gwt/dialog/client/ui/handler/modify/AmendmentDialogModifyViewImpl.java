@@ -57,6 +57,9 @@ public class AmendmentDialogModifyViewImpl extends Composite implements Amendmen
         this.amendmentText = amendmentText;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
         dockPanel.setHeight("100%");
         dockPanel.setWidth("100%");
 

@@ -44,6 +44,9 @@ public class AmendmentDialogMoveViewImpl extends Composite implements AmendmentD
     public AmendmentDialogMoveViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 
     @Override

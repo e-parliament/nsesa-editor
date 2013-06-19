@@ -50,6 +50,9 @@ public class AmendmentDialogDeleteViewImpl extends Composite implements Amendmen
     public AmendmentDialogDeleteViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
         dockPanel.setHeight("100%");
         dockPanel.setWidth("100%");
 

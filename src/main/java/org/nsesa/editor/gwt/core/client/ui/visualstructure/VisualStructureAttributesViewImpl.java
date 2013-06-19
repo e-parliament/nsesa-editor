@@ -56,7 +56,7 @@ public class VisualStructureAttributesViewImpl extends ResizeComposite implement
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         if (!GWT.isScript())
-            this.setTitle(this.getClass().getName());
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

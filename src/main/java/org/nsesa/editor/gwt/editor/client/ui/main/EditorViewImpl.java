@@ -59,6 +59,9 @@ public class EditorViewImpl extends Composite implements EditorView, ProvidesRes
         this.footerView = footerController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 
     /**
