@@ -40,5 +40,9 @@ public class InfoPanelViewImpl extends Composite implements InfoPanelView {
     public InfoPanelViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 }

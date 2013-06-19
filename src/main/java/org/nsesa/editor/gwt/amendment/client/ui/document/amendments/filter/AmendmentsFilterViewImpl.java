@@ -56,6 +56,10 @@ public class AmendmentsFilterViewImpl extends Composite implements AmendmentsFil
     public AmendmentsFilterViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 
     /**

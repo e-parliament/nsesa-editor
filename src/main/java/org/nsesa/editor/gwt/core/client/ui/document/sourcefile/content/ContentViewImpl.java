@@ -71,8 +71,11 @@ public class ContentViewImpl extends Composite implements ContentView {
         this.documentEventBus = documentEventBus;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-        registerListeners();
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
 
+        registerListeners();
     }
 
     private void registerListeners() {

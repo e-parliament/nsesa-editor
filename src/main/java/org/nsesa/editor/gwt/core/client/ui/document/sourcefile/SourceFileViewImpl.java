@@ -89,6 +89,9 @@ public class SourceFileViewImpl extends Composite implements SourceFileView {
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
 
         horizontalPanel.setCellWidth(markerView, "18px");
         horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);

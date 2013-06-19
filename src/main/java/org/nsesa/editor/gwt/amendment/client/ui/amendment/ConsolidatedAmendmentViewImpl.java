@@ -64,6 +64,9 @@ public class ConsolidatedAmendmentViewImpl extends Composite implements Amendmen
         this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ConsolidatedAmendmentViewImpl extends Composite implements Amendmen
 
     @Override
     public void setTitle(String title) {
-        super.setTitle(title);
+        super.setTitle(title + (GWT.isScript() ? "" : " (" + this.getClass().getName() + ")"));
         // ignore
     }
 

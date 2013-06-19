@@ -60,6 +60,10 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     public ActionBarViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 
     @Override

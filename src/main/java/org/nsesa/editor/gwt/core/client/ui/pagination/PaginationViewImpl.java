@@ -81,6 +81,8 @@ public class PaginationViewImpl extends Composite implements PaginationView {
     public PaginationViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     /**

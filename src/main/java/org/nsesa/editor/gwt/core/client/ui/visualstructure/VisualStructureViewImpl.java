@@ -73,6 +73,9 @@ public class VisualStructureViewImpl extends ResizeComposite implements VisualSt
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
         allowedPanel.getElement().addClassName("drafting");
         mandatoryPanel.getElement().addClassName("drafting");
         if (!GWT.isScript())

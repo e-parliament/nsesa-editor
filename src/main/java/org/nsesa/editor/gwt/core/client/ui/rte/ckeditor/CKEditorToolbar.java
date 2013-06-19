@@ -49,7 +49,7 @@ public class CKEditorToolbar {
     public static CKEditorToolbar DEFAULT_TOOLBAR = new CKEditorToolbar()
             .add(new ToolbarLine().add(Option.Subscript).add(Option.Superscript).add(Option._))
             .add(new ToolbarLine().add(Option.Undo).add(Option.Redo).add(Option._).add(Option.SpecialChar))
-            .add(GWT.isProdMode() ? FIND_REPLACE_TOOLBAR_LINE :
+            .add(!GWT.isScript() ? FIND_REPLACE_TOOLBAR_LINE :
                                     FIND_REPLACE_TOOLBAR_LINE.add(Option._).add(Option.Source))
             .add(new ToolbarLine().add(Option.NsesaRemoveFormat).add(Option.NsesaToggle)
                     .add(Option.NsesaToggleAttributes).add(Option._));

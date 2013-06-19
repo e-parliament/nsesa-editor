@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
@@ -128,6 +129,9 @@ public class CKEditor extends Composite implements RichTextEditor {
         }
         mainPanel.add(textArea);
         initWidget(mainPanel);
+        if (!GWT.isScript())
+            mainPanel.setTitle(this.getClass().getName());
+
         mainPanel.setWidth("100%");
         mainPanel.setHeight("100%");
         textArea.setWidth("100%");
