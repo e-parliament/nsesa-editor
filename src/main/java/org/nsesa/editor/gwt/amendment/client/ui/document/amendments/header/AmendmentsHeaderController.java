@@ -39,7 +39,6 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Counter;
-import org.nsesa.editor.gwt.core.client.util.Flag;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -284,8 +283,7 @@ public class AmendmentsHeaderController {
                                     counter.increment();
                                 }
 
-                                // ok, we're done filtering out the ones that cannot be withdrawn
-                                final Flag cancelledByUser = new Flag();
+                                // ok, we're done filtering out the ones that cannot be tabled
                                 if (!toRemoveFromSelection.isEmpty()) {
                                     // propose to remove the ones from the selection
                                     documentEventBus.fireEvent(new ConfirmationEvent(
@@ -294,48 +292,15 @@ public class AmendmentsHeaderController {
                                                 @Override
                                                 public void onClick(ClickEvent event) {
                                                     amendmentControllers.removeAll(toRemoveFromSelection);
-                                                }
-                                            },
-                                            coreMessages.amendmentActionCancel(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    // don't do anything special
-                                                    cancelledByUser.setValue(true);
-                                                }
-                                            }
-                                    ));
-
-                                }
-
-                                // if there are any remaining controllers, let's table them
-                                if (!amendmentControllers.isEmpty() && !cancelledByUser.get()) {
-                                    documentEventBus.fireEvent(new ConfirmationEvent(
-                                            coreMessages.confirmationAmendmentTableTitle(), coreMessages.confirmationAmendmentTableMessage(), coreMessages.amendmentActionTable(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    documentController.getServiceFactory().getGwtAmendmentService().tableAmendmentContainers(documentController.getClientFactory().getClientContext(),
-                                                            transformToDTOs(amendmentControllers),
-                                                            new AsyncCallback<AmendmentContainerDTO[]>() {
-                                                                @Override
-                                                                public void onFailure(Throwable caught) {
-                                                                    documentController.getClientFactory().getEventBus().fireEvent(new CriticalErrorEvent("Could not table amendment(s).", caught));
-                                                                }
-
-                                                                @Override
-                                                                public void onSuccess(AmendmentContainerDTO[] result) {
-                                                                    int index = 0;
-                                                                    for (final AmendmentContainerDTO dto : result) {
-                                                                        final AmendmentController amendmentController = amendmentControllers.get(index);
-                                                                        final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
-                                                                        amendmentController.mergeModel(dto, true);
-                                                                        documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
-                                                                        index++;
-                                                                    }
-                                                                    documentEventBus.fireEvent(new NotificationEvent(coreMessages.amendmentActionWithdrawSuccessful(result.length)));
-                                                                }
-                                                            });
+                                                    // make a copy, because the original list will be modified
+                                                    final List<AmendmentController> copy = new ArrayList<AmendmentController>(amendmentControllers);
+                                                    documentEventBus.fireEvent(new OverlayWidgetAwareSelectionEvent(new Selection<AmendmentController>() {
+                                                        @Override
+                                                        public boolean select(AmendmentController amendmentController) {
+                                                            return copy.contains(amendmentController);
+                                                        }
+                                                    }));
+                                                    tableAmendmentControllers(amendmentControllers);
                                                 }
                                             },
                                             coreMessages.amendmentActionCancel(),
@@ -346,8 +311,8 @@ public class AmendmentsHeaderController {
                                                 }
                                             }
                                     ));
-
-
+                                } else {
+                                    tableAmendmentControllers(amendmentControllers);
                                 }
                             }
                         });
@@ -394,7 +359,6 @@ public class AmendmentsHeaderController {
                                 }
 
                                 // ok, we're done filtering out the ones that cannot be withdrawn
-                                final Flag cancelledByUser = new Flag();
                                 if (!toRemoveFromSelection.isEmpty()) {
                                     // propose to remove the ones from the selection
                                     documentEventBus.fireEvent(new ConfirmationEvent(
@@ -403,48 +367,15 @@ public class AmendmentsHeaderController {
                                                 @Override
                                                 public void onClick(ClickEvent event) {
                                                     amendmentControllers.removeAll(toRemoveFromSelection);
-                                                }
-                                            },
-                                            coreMessages.amendmentActionCancel(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    // don't do anything special
-                                                    cancelledByUser.setValue(true);
-                                                }
-                                            }
-                                    ));
-
-                                }
-
-                                // if there are any remaining controllers, let's withdraw them after a confirmation
-                                if (!amendmentControllers.isEmpty() && !cancelledByUser.get()) {
-                                    documentEventBus.fireEvent(new ConfirmationEvent(
-                                            coreMessages.confirmationAmendmentWithdrawTitle(), coreMessages.confirmationAmendmentWithdrawMessage(), coreMessages.amendmentActionWithdraw(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    documentController.getServiceFactory().getGwtAmendmentService().withdrawAmendmentContainers(documentController.getClientFactory().getClientContext(),
-                                                            transformToDTOs(amendmentControllers),
-                                                            new AsyncCallback<AmendmentContainerDTO[]>() {
-                                                                @Override
-                                                                public void onFailure(Throwable caught) {
-                                                                    documentController.getClientFactory().getEventBus().fireEvent(new CriticalErrorEvent("Could not withdraw amendment(s).", caught));
-                                                                }
-
-                                                                @Override
-                                                                public void onSuccess(AmendmentContainerDTO[] result) {
-                                                                    int index = 0;
-                                                                    for (final AmendmentContainerDTO dto : result) {
-                                                                        final AmendmentController amendmentController = amendmentControllers.get(index);
-                                                                        final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
-                                                                        amendmentController.mergeModel(dto, true);
-                                                                        documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
-                                                                        index++;
-                                                                    }
-                                                                    documentEventBus.fireEvent(new NotificationEvent(coreMessages.amendmentActionWithdrawSuccessful(result.length)));
-                                                                }
-                                                            });
+                                                    // make a copy, because the original list will be modified
+                                                    final List<AmendmentController> copy = new ArrayList<AmendmentController>(amendmentControllers);
+                                                    documentEventBus.fireEvent(new OverlayWidgetAwareSelectionEvent(new Selection<AmendmentController>() {
+                                                        @Override
+                                                        public boolean select(AmendmentController amendmentController) {
+                                                            return copy.contains(amendmentController);
+                                                        }
+                                                    }));
+                                                    withdrawnAmendmentControllers(amendmentControllers);
                                                 }
                                             },
                                             coreMessages.amendmentActionCancel(),
@@ -455,6 +386,9 @@ public class AmendmentsHeaderController {
                                                 }
                                             }
                                     ));
+
+                                } else {
+                                    withdrawnAmendmentControllers(amendmentControllers);
                                 }
                             }
                         });
@@ -501,7 +435,6 @@ public class AmendmentsHeaderController {
                                 }
 
                                 // ok, we're done filtering out the ones that cannot be withdrawn
-                                final Flag cancelledByUser = new Flag();
                                 if (!toRemoveFromSelection.isEmpty()) {
                                     // propose to remove the ones from the selection
                                     documentEventBus.fireEvent(new ConfirmationEvent(
@@ -510,35 +443,15 @@ public class AmendmentsHeaderController {
                                                 @Override
                                                 public void onClick(ClickEvent event) {
                                                     amendmentControllers.removeAll(toRemoveFromSelection);
-                                                }
-                                            },
-                                            coreMessages.amendmentActionCancel(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    // don't do anything special
-                                                    cancelledByUser.setValue(true);
-                                                }
-                                            }
-                                    ));
-
-                                }
-
-                                // if there are any remaining controllers, let's withdraw them after a confirmation
-                                if (!amendmentControllers.isEmpty() && !cancelledByUser.get()) {
-                                    documentEventBus.fireEvent(new ConfirmationEvent(
-                                            coreMessages.confirmationAmendmentDeleteTitle(), coreMessages.confirmationAmendmentDeleteMessage(), coreMessages.amendmentActionDelete(),
-                                            new ClickHandler() {
-                                                @Override
-                                                public void onClick(ClickEvent event) {
-                                                    documentEventBus.fireEvent(new OverlayWidgetAwareSelectionActionEvent<AmendmentController>(new OverlayWidgetAwareSelectionActionEvent.Action<AmendmentController>() {
+                                                    // make a copy, because the original list will be modified
+                                                    final List<AmendmentController> copy = new ArrayList<AmendmentController>(amendmentControllers);
+                                                    documentEventBus.fireEvent(new OverlayWidgetAwareSelectionEvent(new Selection<AmendmentController>() {
                                                         @Override
-                                                        public void execute(final List<AmendmentController> amendmentControllers) {
-                                                            if (!amendmentControllers.isEmpty()) {
-                                                                documentEventBus.fireEvent(new AmendmentContainerDeleteEvent(amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()])));
-                                                            }
+                                                        public boolean select(AmendmentController amendmentController) {
+                                                            return copy.contains(amendmentController);
                                                         }
                                                     }));
+                                                    deleteAmendmentControllers(amendmentControllers);
                                                 }
                                             },
                                             coreMessages.amendmentActionCancel(),
@@ -549,6 +462,9 @@ public class AmendmentsHeaderController {
                                                 }
                                             }
                                     ));
+
+                                } else {
+                                    deleteAmendmentControllers(amendmentControllers);
                                 }
                             }
                         });
@@ -556,6 +472,119 @@ public class AmendmentsHeaderController {
                 }));
             }
         });
+    }
+
+    private void deleteAmendmentControllers(final List<AmendmentController> amendmentControllers) {
+        // if there are any remaining controllers, let's withdraw them after a confirmation
+        if (!amendmentControllers.isEmpty()) {
+            documentEventBus.fireEvent(new ConfirmationEvent(
+                    coreMessages.confirmationAmendmentDeleteTitle(), coreMessages.confirmationAmendmentDeleteMessage(), coreMessages.amendmentActionDelete(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            documentEventBus.fireEvent(new OverlayWidgetAwareSelectionActionEvent<AmendmentController>(new OverlayWidgetAwareSelectionActionEvent.Action<AmendmentController>() {
+                                @Override
+                                public void execute(final List<AmendmentController> amendmentControllers) {
+                                    if (!amendmentControllers.isEmpty()) {
+                                        documentEventBus.fireEvent(new AmendmentContainerDeleteEvent(amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()])));
+                                    }
+                                }
+                            }));
+                        }
+                    },
+                    coreMessages.amendmentActionCancel(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            // don't do anything special
+                        }
+                    }
+            ));
+        }
+    }
+
+    private void withdrawnAmendmentControllers(final List<AmendmentController> amendmentControllers) {
+        // if there are any remaining controllers, let's withdraw them after a confirmation
+        if (!amendmentControllers.isEmpty()) {
+            documentEventBus.fireEvent(new ConfirmationEvent(
+                    coreMessages.confirmationAmendmentWithdrawTitle(), coreMessages.confirmationAmendmentWithdrawMessage(), coreMessages.amendmentActionWithdraw(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            documentController.getServiceFactory().getGwtAmendmentService().withdrawAmendmentContainers(documentController.getClientFactory().getClientContext(),
+                                    transformToDTOs(amendmentControllers),
+                                    new AsyncCallback<AmendmentContainerDTO[]>() {
+                                        @Override
+                                        public void onFailure(Throwable caught) {
+                                            documentController.getClientFactory().getEventBus().fireEvent(new CriticalErrorEvent("Could not withdraw amendment(s).", caught));
+                                        }
+
+                                        @Override
+                                        public void onSuccess(AmendmentContainerDTO[] result) {
+                                            int index = 0;
+                                            for (final AmendmentContainerDTO dto : result) {
+                                                final AmendmentController amendmentController = amendmentControllers.get(index);
+                                                final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
+                                                amendmentController.mergeModel(dto, true);
+                                                documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
+                                                index++;
+                                            }
+                                            documentEventBus.fireEvent(new NotificationEvent(coreMessages.amendmentActionWithdrawSuccessful(result.length)));
+                                        }
+                                    });
+                        }
+                    },
+                    coreMessages.amendmentActionCancel(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            // don't do anything special
+                        }
+                    }
+            ));
+        }
+    }
+
+    private void tableAmendmentControllers(final List<AmendmentController> amendmentControllers) {
+        // if there are any remaining controllers, let's table them
+        if (!amendmentControllers.isEmpty()) {
+            documentEventBus.fireEvent(new ConfirmationEvent(
+                    coreMessages.confirmationAmendmentTableTitle(), coreMessages.confirmationAmendmentTableMessage(), coreMessages.amendmentActionTable(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            documentController.getServiceFactory().getGwtAmendmentService().tableAmendmentContainers(documentController.getClientFactory().getClientContext(),
+                                    transformToDTOs(amendmentControllers),
+                                    new AsyncCallback<AmendmentContainerDTO[]>() {
+                                        @Override
+                                        public void onFailure(Throwable caught) {
+                                            documentController.getClientFactory().getEventBus().fireEvent(new CriticalErrorEvent("Could not table amendment(s).", caught));
+                                        }
+
+                                        @Override
+                                        public void onSuccess(AmendmentContainerDTO[] result) {
+                                            int index = 0;
+                                            for (final AmendmentContainerDTO dto : result) {
+                                                final AmendmentController amendmentController = amendmentControllers.get(index);
+                                                final String oldStatus = amendmentController.getModel().getAmendmentContainerStatus();
+                                                amendmentController.mergeModel(dto, true);
+                                                documentEventBus.fireEvent(new AmendmentContainerStatusUpdatedEvent(amendmentController, oldStatus));
+                                                index++;
+                                            }
+                                            documentEventBus.fireEvent(new NotificationEvent(coreMessages.amendmentActionWithdrawSuccessful(result.length)));
+                                        }
+                                    });
+                        }
+                    },
+                    coreMessages.amendmentActionCancel(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            // don't do anything special
+                        }
+                    }
+            ));
+        }
     }
 
     /**
