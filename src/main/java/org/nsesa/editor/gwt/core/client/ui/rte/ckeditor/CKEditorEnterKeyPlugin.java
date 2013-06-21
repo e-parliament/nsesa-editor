@@ -25,19 +25,21 @@ import java.util.logging.Logger;
 
 /**
  * A plugin to handle enter and shift enter keys.
- * <p>There are three available modes of representation:
- * The "text" mode corresponds to "wysiwyg" ck editor mode, "visual structure" mode is when the visual structure widget
- * is displayed, while "source" mode corresponds to "source" ck editor mode.
- * a. when we are in the middle of the text node display custom BR tag if you are in "text" or
- * "visual structure" mode. This br tag is translated into the For "source" mode nothing happens.
- * b. when you are at the end of the next node, create a new tag with the same type as the parent
- * container of the original text node by default unless there is a specific rule set up to get
- * the "relevant" ancestor type
- * c. when you are at the beginning of the next node, create a new tag with the same type as the parent
- * container of the original text node by default unless there is a specific rule set up to get
- * the "relevant" ancestor type and to create a new tag with that type
- * d. for shift enter just add html custom br in all cases that is displayed in the same way as it is specified
- * at point a)
+ * <p>Inside the rte editor the text can be displayed in three different  ways:
+ * - "text" mode : corresponds to "wysiwyg" ck editor mode,
+ * - "visual structure" mode : the text is decorated with css before/after tags.
+ * - "source" mode: corresponds to "source" ck editor mode.
+ *
+ * The following rules are applied when the user press enter key:
+ * a. in the middle of the text node check if the conversion rule returns an overlay widget. If yes then add that
+ * widget in the text. If no just add BR tag (keep in mind the BR tag is retrieved by using the overlay factory
+ * corresponding to the parent container).
+ * b. at the end of the next node apply same logic specified at point a)
+ * c. at the beginning of the next node apply same logic specified at point a)
+ *
+ * For shift enter just add html custom br inside of the text.
+ *
+ * Remark: The Br tag is not added if the text is displayed in "source" mode.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 12/03/13 9:03
@@ -174,20 +176,37 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
                         container = container.getParent();
                     }
-                    var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::split(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
-                    if (toBeSplit) {
-                        //collapse the range
-                        ranges[0].collapse(true);
-                        var elem = ranges[0].splitElement(container);
-                        var range = new $wnd.CKEDITOR.dom.range(ranges[0].document);
+                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
+                    if (elemAsString) {
+                        var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
+                        // find the parent from rule
+                        while (container != null && (elem.getAttribute('type') != container.getAttribute('type')
+                            )) {
+                            container = container.getParent();
+                        }
+                        if (container) {
+                            ranges[0].setStartAfter(container);
+                            ranges[0].insertNode(elem);
+                        }
+                        var range = new $wnd.CKEDITOR.dom.range(range.document);
                         range.setStart(elem, 0);
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
+                    }  else {
+                        var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::split(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
+                        if (toBeSplit) {
+                            //collapse the range
+                            ranges[0].collapse(true);
+                            var elem = ranges[0].splitElement(container);
+                            var range = new $wnd.CKEDITOR.dom.range(ranges[0].document);
+                            range.setStart(elem, 0);
+                            range.setEnd(elem, 0);
+                            editor.getSelection().selectRanges([range]);
 
-                    } else {
-                        enterBr(editor, range);
+                        } else {
+                            enterBr(editor, range);
+                        }
                     }
-
                     // find start container and end container of the selection
                     // if they are text nodes go to their parents
                 } else if (positionType == -1) {
@@ -234,6 +253,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         editor.getSelection().selectRanges([range]);
                     }
                 }
+                editor.fire('caretPosition');
                 return;
             },
 

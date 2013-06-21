@@ -666,7 +666,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     @Override
     public NumberingType getNumberingType() {
         if (overlayStrategy == null) return numberingType;
-        if (numberingType == null) {
+        if (numberingType == null && getAssignedNumber() != null) {
             numberingType = overlayStrategy.getNumberingType(getElement(), getAssignedNumber());
         }
         return numberingType;
@@ -682,6 +682,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (assignedNumber == null) {
             if (parentOverlayWidget != null) {
                 assignedNumber = getTypeIndex(false) + 1;
+            } else {
+              //  assignedNumber = 1;
             }
         }
         return assignedNumber;
