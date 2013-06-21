@@ -46,27 +46,25 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
-        <div>
-            <div class="header">
-                <span class="title">
-                    <g:Label ui:field="title"/>
-                </span>
-                <span class="status">
-                    <g:Label ui:field="status"/>
-                </span>
-                <g:FlowPanel styleName="{res.tabHeaders}">
-                    <g:Image resource='{imageResources.editOn}' styleName="{res.tabHeader}"
-                             ui:field="editImage"/>
-                    <g:Image resource='{imageResources.deleteOn}' styleName="{res.tabHeader}"
-                             ui:field="deleteImage"/>
-                    <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
-                </g:FlowPanel>
-            </div>
-            <g:InlineHTML ui:field="introduction" styleName="{res.introduction} introduction"/>
-            <g:InlineHTML ui:field="description" styleName="{res.description} description"/>
-            <g:HTMLPanel ui:field="body" styleName="{res.body}">
-
-            </g:HTMLPanel>
+        <div class="header">
+            <span class="title">
+                <g:Label ui:field="title"/>
+            </span>
+            <span class="status">
+                <g:Label ui:field="status"/>
+            </span>
+            <g:FlowPanel styleName="{res.tabHeaders}">
+                <g:Image resource='{imageResources.editOn}' styleName="{res.tabHeader}"
+                         ui:field="editImage"/>
+                <g:Image resource='{imageResources.deleteOn}' styleName="{res.tabHeader}"
+                         ui:field="deleteImage"/>
+                <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
+            </g:FlowPanel>
         </div>
+        <g:InlineHTML ui:field="introduction" styleName="{res.introduction} introduction"/>
+        <g:InlineHTML ui:field="description" styleName="{res.description} description"/>
+        <g:HTMLPanel ui:field="body" styleName="{res.body} single">
+
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

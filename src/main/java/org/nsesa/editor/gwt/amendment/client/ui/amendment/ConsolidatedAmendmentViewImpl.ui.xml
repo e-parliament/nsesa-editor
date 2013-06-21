@@ -24,10 +24,10 @@
         }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
-        <div>
-            <g:HTMLPanel ui:field="body" styleName="{res.body}">
 
-            </g:HTMLPanel>
-        </div>
+        <g:HTMLPanel ui:field="body" styleName="{res.body} consolidation">
+
+        </g:HTMLPanel>
+
     </g:HTMLPanel>
 </ui:UiBinder>
