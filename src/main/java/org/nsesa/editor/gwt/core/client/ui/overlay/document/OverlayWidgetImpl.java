@@ -682,8 +682,6 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (assignedNumber == null) {
             if (parentOverlayWidget != null) {
                 assignedNumber = getTypeIndex(false) + 1;
-            } else {
-              //  assignedNumber = 1;
             }
         }
         return assignedNumber;
