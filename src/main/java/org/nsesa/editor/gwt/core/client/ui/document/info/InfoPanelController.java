@@ -15,8 +15,8 @@ package org.nsesa.editor.gwt.core.client.ui.document.info;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -46,8 +46,17 @@ public class InfoPanelController {
         this.view = view;
     }
 
+    public void registerListeners() {
+
+    }
+
+    public void removeListeners() {
+
+    }
+
     /**
      * Return the main view.
+     *
      * @return the view
      */
     public InfoPanelView getView() {
@@ -56,6 +65,7 @@ public class InfoPanelController {
 
     /**
      * Set the parent document controller.
+     *
      * @param documentController the document controller
      */
     public void setDocumentController(DocumentController documentController) {

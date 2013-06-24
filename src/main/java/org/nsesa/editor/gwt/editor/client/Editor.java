@@ -20,9 +20,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.http.client.*;
@@ -31,7 +28,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -148,6 +144,7 @@ public abstract class Editor implements EntryPoint {
 
         // set up the main window
         final EditorController editorController = getInjector().getEditorController();
+        editorController.registerListeners();
         // there seems to be no other way to inject this 'injector'
         editorController.setInjector(getInjector());
 
@@ -373,6 +370,7 @@ public abstract class Editor implements EntryPoint {
      */
     protected void handleError(final String errorTitle, final String errorMessage, final Throwable throwable) {
         final ErrorController errorController = getInjector().getErrorController();
+        errorController.registerListeners();
         errorController.setError(errorTitle, errorMessage);
         errorController.center();
         LOG.log(Level.SEVERE, errorMessage, throwable);
@@ -392,6 +390,7 @@ public abstract class Editor implements EntryPoint {
                                       final String confirmationButtonText, final ClickHandler confirmationHandler,
                                       final String cancelButtonText, final ClickHandler cancelHandler) {
         ConfirmationController confirmationController = getInjector().getConfirmationController();
+        confirmationController.registerListeners();
         confirmationController.setConfirmation(confirmationTitle, confirmationMessage, confirmationButtonText,
                 confirmationHandler, cancelButtonText, cancelHandler);
         confirmationController.center();
@@ -406,6 +405,7 @@ public abstract class Editor implements EntryPoint {
      */
     protected void handleNotification(final String message, final int duration) {
         final NotificationController notificationController = getInjector().getNotificationController();
+        notificationController.registerListeners();
         notificationController.setMessage(message);
         notificationController.setDuration(duration);
         notificationController.show();

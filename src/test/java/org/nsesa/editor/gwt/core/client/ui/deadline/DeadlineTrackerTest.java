@@ -64,6 +64,7 @@ public class DeadlineTrackerTest extends GwtTestWithEasyMock {
             }
         };
         deadlineController.setDocumentController(documentController);
+        deadlineController.registerListeners();
     }
 
     @Test

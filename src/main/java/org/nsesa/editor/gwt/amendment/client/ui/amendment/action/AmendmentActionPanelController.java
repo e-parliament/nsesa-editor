@@ -166,14 +166,12 @@ public class AmendmentActionPanelController {
         anchorDelete.setText(coreMessages.amendmentActionDelete());
         anchorMoveUp.setText(coreMessages.amendmentActionMoveUp());
         anchorMoveDown.setText(coreMessages.amendmentActionMoveDown());
-
-        registerListeners();
     }
 
     /**
      * Registers the event listeners on the various anchors.
      */
-    private void registerListeners() {
+    public void registerListeners() {
         anchorTableHandlerRegistration = anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

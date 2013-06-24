@@ -134,9 +134,14 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             this.amendmentManager = amendmentDocumentInjector.getAmendmentManager();
             this.amendmentsPanelController = amendmentDocumentInjector.getAmendmentsPanelController();
             this.amendmentsPanelController.setDocumentController(this);
+            this.amendmentsPanelController.registerListeners();
+
             this.amendmentActionPanelController = amendmentDocumentInjector.getAmendmentActionPanelController();
             this.amendmentsHeaderController = amendmentDocumentInjector.getAmendmentsHeaderController();
             this.amendmentsHeaderController.setDocumentController(this);
+            this.amendmentsHeaderController.registerSelections();
+            this.amendmentsHeaderController.registerActions();
+            this.amendmentsHeaderController.registerListeners();
             this.selector = amendmentDocumentInjector.getSelector();
             this.diffingManager = amendmentDocumentInjector.getAmendmentDiffingManager();
             this.diffingManager.setDocumentController(this);

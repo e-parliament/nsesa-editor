@@ -51,13 +51,13 @@ public class AmendmentPaginationController extends PaginationController {
     @Inject
     public AmendmentPaginationController(DocumentEventBus documentEventBus, PaginationView paginationView) {
         super(documentEventBus, paginationView);
-        registerListeners();
     }
 
     /**
      * Refresh the pagination as a reaction of the events occurred in the system
      */
-    private void registerListeners() {
+    public void registerListeners() {
+        super.registerListeners();
         amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {

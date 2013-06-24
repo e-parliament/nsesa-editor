@@ -85,11 +85,9 @@ public class EditorController implements BootstrapEventHandler {
         this.view = view;
         this.clientFactory = clientFactory;
         this.serviceFactory = serviceFactory;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         bootstrapEventHandlerRegistration = clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, this);
     }
 

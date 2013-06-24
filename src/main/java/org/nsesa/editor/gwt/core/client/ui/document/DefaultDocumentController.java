@@ -209,9 +209,15 @@ public class DefaultDocumentController implements DocumentController {
 
         // set references in the child controllers
         this.diffingManager.setDocumentController(this);
+
         this.infoPanelController.setDocumentController(this);
+        this.infoPanelController.registerListeners();
+
         this.sourceFileController.setDocumentController(this);
+        this.sourceFileController.registerListeners();
+
         this.deadlineController.setDocumentController(this);
+        this.deadlineController.registerListeners();
 
     }
 
@@ -365,6 +371,11 @@ public class DefaultDocumentController implements DocumentController {
         resizeEventHandlerRegistration.removeHandler();
         documentScrollToEventHandlerRegistration.removeHandler();
         addStylesheetEventHandlerRegistration.removeHandler();
+
+        // listener cleanup for the injected dependencies
+        this.infoPanelController.removeListeners();
+        this.deadlineController.removeListeners();
+        this.sourceFileController.removeListeners();
     }
 
 

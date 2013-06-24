@@ -111,11 +111,10 @@ public class ActionBarController {
         this.view = view;
         this.actionBarViewCss = actionBarViewCss;
 
-        this.actionBarCreatePanelController = actionBarCreatePanelController;
         this.popupPanel = new DecoratedPopupPanel(true);
-        actionBarCreatePanelController.setActionBarController(this);
-
-        registerListeners();
+        this.actionBarCreatePanelController = actionBarCreatePanelController;
+        this.actionBarCreatePanelController.setActionBarController(this);
+        this.actionBarCreatePanelController.registerListeners();
     }
 
     /**
@@ -129,7 +128,7 @@ public class ActionBarController {
         this.actionBarCreatePanelController.setSourceFileController(sourceFileController);
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         // translate the click on the modify handler into a request to create a new modification amendment
         modifyHandlerRegistration = view.getModifyHandler().addClickHandler(new ClickHandler() {
             @Override

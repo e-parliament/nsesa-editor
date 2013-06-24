@@ -38,10 +38,13 @@ public class ConfirmationController {
         this.view = view;
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
+
+    }
+
+    public void removeListeners() {
 
     }
 
@@ -49,7 +52,7 @@ public class ConfirmationController {
      * Shows the popup at the given coordinates.
      *
      * @param left the left position, in pixels, relative to the browser window
-     * @param top the top position, in pixels, relative to the browser window
+     * @param top  the top position, in pixels, relative to the browser window
      */
     public void show(int left, int top) {
         popupPanel.setPopupPosition(left, top);
@@ -91,6 +94,7 @@ public class ConfirmationController {
             public void onClick(ClickEvent event) {
                 confirmationHandler.onClick(event);
                 hide();
+                removeListeners();
             }
         });
         view.setCancelButtonText(cancelButtonText);
@@ -99,6 +103,7 @@ public class ConfirmationController {
             public void onClick(ClickEvent event) {
                 cancelHandler.onClick(event);
                 hide();
+                removeListeners();
             }
         });
     }

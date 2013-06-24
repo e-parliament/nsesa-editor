@@ -84,7 +84,6 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
         this.view = view;
         this.locator = locator;
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
-        registerListeners();
     }
 
     /**
@@ -100,7 +99,7 @@ public class AmendmentDialogDeleteController extends AmendmentUIHandlerImpl impl
         }
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

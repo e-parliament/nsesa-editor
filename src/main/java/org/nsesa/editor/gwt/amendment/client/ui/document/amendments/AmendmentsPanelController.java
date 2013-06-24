@@ -20,8 +20,6 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
@@ -29,6 +27,8 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
@@ -84,7 +84,6 @@ public class AmendmentsPanelController {
         this.amendmentsPerPage = amendmentsPerPage;
         this.currentFilter = new Filter<AmendmentController>(0, amendmentsPerPage,
                 AmendmentController.ORDER_COMPARATOR, DEFAULT_SELECTION);
-        registerListeners();
     }
 
     /**
@@ -99,7 +98,7 @@ public class AmendmentsPanelController {
     /**
      * Refresh the amendments view whenever the user add/modify amendments or change the current filter
      */
-    private void registerListeners() {
+    public void registerListeners() {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {

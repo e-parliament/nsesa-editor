@@ -75,7 +75,6 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         this.clientFactory = clientFactory;
         this.view = view;
         this.authorPanelViewCss = authorPanelViewCss;
-        registerListeners();
     }
 
     /**
@@ -163,7 +162,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
         this.dialogContext = dialogContext;
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         // add a handler when a selection is made from the autocomplete results
         selectionHandlerRegistration = view.getSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
             @Override

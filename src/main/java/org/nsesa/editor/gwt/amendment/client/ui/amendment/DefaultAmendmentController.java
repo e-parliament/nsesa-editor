@@ -129,6 +129,7 @@ public class DefaultAmendmentController implements AmendmentController {
         this.extendedView = amendmentExtendedView;
 
         this.amendmentActionPanelController = amendmentActionPanelController;
+        this.amendmentActionPanelController.registerListeners();
         this.constants = constants;
         this.messages = messages;
     }

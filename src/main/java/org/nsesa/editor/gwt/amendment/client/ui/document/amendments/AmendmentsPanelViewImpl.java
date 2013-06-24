@@ -119,6 +119,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
         this.amendmentsHeaderView = amendmentsHeaderController.getView();
         this.filterView = amendmentsFilterController.getView();
         this.paginationView = paginationController.getPaginationView();
+        paginationController.registerListeners();
         final Widget widget = uiBinder.createAndBindUi(this);
 
         initWidget(widget);

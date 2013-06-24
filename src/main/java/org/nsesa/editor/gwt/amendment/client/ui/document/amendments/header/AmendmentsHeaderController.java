@@ -114,12 +114,6 @@ public class AmendmentsHeaderController {
         this.view = view;
         this.documentEventBus = documentEventBus;
         this.coreMessages = coreMessages;
-
-        registerSelections();
-
-        registerActions();
-
-        registerListeners();
     }
 
     /**
@@ -135,7 +129,7 @@ public class AmendmentsHeaderController {
      * Register actions that could be performed by the user in the actions area. Three actions are available as
      * default: table, withdraw and delete. When the user performs the actions from the view for each type of action
      */
-    private void registerActions() {
+    public void registerActions() {
         tableButton = new Button(coreMessages.amendmentActionTable());
         view.addAction(tableButton);
         withdrawButton = new Button(coreMessages.amendmentActionWithdraw());
@@ -164,7 +158,7 @@ public class AmendmentsHeaderController {
      * amendments and the associated handlers for each type of selection. Basically a handler fire a GWT
      * event for each type of selection performed
      */
-    private void registerSelections() {
+    public void registerSelections() {
         selectAll = new Anchor(coreMessages.amendmentSelectionAll());
         view.addSelection(selectAll);
         view.addSelection(new InlineHTML(", "));
@@ -185,7 +179,7 @@ public class AmendmentsHeaderController {
     /**
      * Refresh the number of selected amendments by handling {@link org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent} event
      */
-    private void registerListeners() {
+    public void registerListeners() {
         amendmentControllerSelectedEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetAwareSelectedEvent.TYPE, new OverlayWidgetAwareSelectedEventHandler() {
             @Override
             public void onEvent(OverlayWidgetAwareSelectedEvent event) {

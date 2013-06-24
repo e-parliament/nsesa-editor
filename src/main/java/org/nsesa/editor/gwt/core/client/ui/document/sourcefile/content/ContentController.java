@@ -72,10 +72,9 @@ public class ContentController {
 
         this.view = view;
         this.documentEventBus = documentEventBus;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         scrollHandlerRegistration = view.getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {

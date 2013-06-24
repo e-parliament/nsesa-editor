@@ -99,11 +99,9 @@ public class MarkerController {
 
         this.documentEventBus = documentEventBus;
         this.view = view;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {

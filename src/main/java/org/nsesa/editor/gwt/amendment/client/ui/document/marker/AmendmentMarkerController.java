@@ -52,11 +52,12 @@ public class AmendmentMarkerController extends MarkerController {
                                      final MarkerView view, final AmendmentManager amendmentManager) {
         super(documentEventBus, view);
         this.amendmentManager = amendmentManager;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
+
+        super.registerListeners();
+
         amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {

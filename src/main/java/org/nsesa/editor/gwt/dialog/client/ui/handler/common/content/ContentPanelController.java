@@ -54,10 +54,9 @@ public class ContentPanelController implements AmendmentDialogAwareController {
     public ContentPanelController(final ClientFactory clientFactory, final ContentControllerView view) {
         this.clientFactory = clientFactory;
         this.view = view;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         draftingToggleEventHandlerRegistration = clientFactory.getEventBus().addHandler(VisualStructureToggleEvent.TYPE, new VisualStructureToggleEventHandler() {
             @Override
             public void onEvent(VisualStructureToggleEvent event) {

@@ -63,7 +63,6 @@ public class PaginationController {
     public PaginationController(DocumentEventBus documentEventBus, PaginationView paginationView) {
         this.documentEventBus = documentEventBus;
         this.paginationView = paginationView;
-        registerListeners();
     }
 
     /**
@@ -78,7 +77,7 @@ public class PaginationController {
     /**
      * Refresh the pagination as a reaction of the events occurred in the system
      */
-    private void registerListeners() {
+    public void registerListeners() {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {

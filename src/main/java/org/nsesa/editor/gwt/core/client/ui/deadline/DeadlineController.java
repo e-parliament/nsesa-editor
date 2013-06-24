@@ -81,8 +81,6 @@ public class DeadlineController {
         this.deadlineTracker = deadlineTracker;
         this.deadlineTracker.setDeadlineController(this);
         this.view = view;
-        // register private listeners
-        registerListeners();
     }
 
     /**
@@ -107,7 +105,7 @@ public class DeadlineController {
     /**
      * Registers the listeners for events that are being fired by the deadline tracker.
      */
-    private void registerListeners() {
+    public void registerListeners() {
         deadlinePassedEventHandlerRegistration = documentEventBus.addHandler(DeadlinePassedEvent.TYPE, new DeadlinePassedEventHandler() {
             @Override
             public void onEvent(DeadlinePassedEvent event) {

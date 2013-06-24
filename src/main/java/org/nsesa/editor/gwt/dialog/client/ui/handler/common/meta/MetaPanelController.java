@@ -58,10 +58,9 @@ public class MetaPanelController implements AmendmentDialogAwareController {
         this.clientFactory = clientFactory;
         this.view = view;
         this.metaPanelViewCss = metaPanelViewCss;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         // nothing yet
     }
 

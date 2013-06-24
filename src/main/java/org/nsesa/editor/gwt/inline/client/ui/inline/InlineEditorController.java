@@ -14,7 +14,6 @@
 package org.nsesa.editor.gwt.inline.client.ui.inline;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -93,11 +92,9 @@ public class InlineEditorController implements ProvidesResize {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
         this.view = view;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         attachInlineEditorEventHandlerRegistration = clientFactory.getEventBus().addHandler(AttachInlineEditorEvent.TYPE, new AttachInlineEditorEventHandler() {
             @Override
             public void onEvent(AttachInlineEditorEvent event) {

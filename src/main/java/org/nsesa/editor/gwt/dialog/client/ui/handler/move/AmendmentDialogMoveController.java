@@ -49,10 +49,9 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
     public AmendmentDialogMoveController(final ClientFactory clientFactory, final AmendmentDialogMoveView view) {
         this.clientFactory = clientFactory;
         this.view = view;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         cancelClickHandlerRegistration = view.getCancelLink().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

@@ -47,10 +47,9 @@ public class AmendmentDialogBundleController extends AmendmentUIHandlerImpl impl
     public AmendmentDialogBundleController(final ClientFactory clientFactory, final AmendmentDialogBundleView view) {
         this.clientFactory = clientFactory;
         this.view = view;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         clickHandlerRegistration = view.getCancelButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(final ClickEvent event) {

@@ -67,11 +67,11 @@ public class VisualStructureController {
      *
      * @param visualStructureView           The <code>VisualStructureView</code> widget
      * @param visualStructureAttributesView The <code>VisualStructureAttributesView</code> widget
-     * @param clientFactory          The client factory used to reference to event bus
-     * @param creator                The creator
-     * @param overlayFactory         The overlay factory
-     * @param overlayResource        The overlay resource
-     * @param documentController     The document controller
+     * @param clientFactory                 The client factory used to reference to event bus
+     * @param creator                       The creator
+     * @param overlayFactory                The overlay factory
+     * @param overlayResource               The overlay resource
+     * @param documentController            The document controller
      */
     @Inject
     public VisualStructureController(VisualStructureView visualStructureView,
@@ -89,7 +89,6 @@ public class VisualStructureController {
         this.overlayResource = overlayResource;
         this.documentController = documentController;
         this.eventBus = clientFactory.getEventBus();
-        registerListeners();
     }
 
     /**
@@ -107,7 +106,7 @@ public class VisualStructureController {
      * It also create a drafting callback to be called when selecting children from drafting view interface
      * When those events occur <code>VisualStructureView</code> and <code>VisualStructureAttributesView</code> widgets are refreshed.
      */
-    private void registerListeners() {
+    public void registerListeners() {
         selectionChangedEventHandlerRegistration = eventBus.addHandler(VisualStructureSelectionChangedEvent.TYPE, new VisualStructureSelectionChangedEventHandler() {
             @Override
             public void onEvent(VisualStructureSelectionChangedEvent eventVisualStructure) {

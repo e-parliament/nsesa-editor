@@ -56,6 +56,7 @@ public class EditorViewImpl extends Composite implements EditorView, ProvidesRes
     ) {
         this.clientFactory = clientFactory;
         this.headerView = headerController.getView();
+        headerController.registerListeners();
         this.footerView = footerController.getView();
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);

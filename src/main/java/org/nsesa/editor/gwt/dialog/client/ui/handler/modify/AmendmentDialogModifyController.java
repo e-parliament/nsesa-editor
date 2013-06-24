@@ -106,14 +106,14 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         this.view = view;
         this.locator = locator;
         this.visualStructureController = visualStructureController;
+        this.visualStructureController.registerListeners();
+
         this.amendmentInjectionPointFinder = amendmentInjectionPointFinder;
         this.overlayWidgetValidator = overlayWidgetValidator;
 
 
         view.getRichTextEditor().setVisualStructureWidget(visualStructureController.getView());
         view.getRichTextEditor().setVisualStructureAttributesWidget(visualStructureController.getAttributesView());
-
-        registerListeners();
     }
 
     /**
@@ -129,7 +129,7 @@ public class AmendmentDialogModifyController extends AmendmentUIHandlerImpl impl
         }
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

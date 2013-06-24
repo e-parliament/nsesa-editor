@@ -94,11 +94,9 @@ public class CompareController implements ProvidesResize {
 
         view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
         view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         cancelButtonHandlerRegistration = view.getCancelAnchor().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
