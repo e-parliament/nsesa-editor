@@ -118,7 +118,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         Assert.assertTrue(injectionPoint.isSibling());
         Assert.assertEquals(child2.getType(), injectionPoint.getType());
         Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", injectionPoint.getPath());
-        Assert.assertEquals(1, injectionPoint.getOffset());
+        Assert.assertEquals(1, injectionPoint.getOffset().intValue());
 
         root.addOverlayWidget(child2);
 
@@ -130,7 +130,7 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         Assert.assertTrue(injectionPoint.isSibling());
         Assert.assertEquals(child3.getType(), injectionPoint.getType());
         Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", injectionPoint.getPath());
-        Assert.assertEquals(2, injectionPoint.getOffset());
+        Assert.assertEquals(2, injectionPoint.getOffset().intValue());
 
         // cleanup
         child2.setOrigin(null);
@@ -146,11 +146,11 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
         childMinus1.setOrigin(OverlayWidgetOrigin.AMENDMENT);
         AmendableWidgetReference proposedInjectionPoint = finder.getInjectionPoint(root, null, childMinus1);
         Assert.assertEquals("Make sure the root widget's path is used", "//root[0]", proposedInjectionPoint.getPath());
-        Assert.assertEquals(3, proposedInjectionPoint.getOffset());
+        Assert.assertEquals(3, proposedInjectionPoint.getOffset().intValue());
         root.addOverlayWidget(childMinus1, 0);
         AmendableWidgetReference actualInjectionPoint = finder.getInjectionPoint(root, child1, childMinus1);
         Assert.assertEquals("Make sure the referenced widget's path is used", "//root[0]/typeA[0]", actualInjectionPoint.getPath());
-        Assert.assertEquals(-1, actualInjectionPoint.getOffset());
+        Assert.assertEquals(-1, actualInjectionPoint.getOffset().intValue());
         root.removeOverlayWidget(childMinus1);
     }
 }

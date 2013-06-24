@@ -443,7 +443,7 @@ public class AmendableWidgetImplTest extends GwtTest {
             }
 
             @Override
-            public int getInjectionPosition() {
+            public Integer getInjectionPosition() {
                 return 0;
             }
 

@@ -29,7 +29,7 @@ public interface OverlayWidgetAware {
 
     void setOrder(int order);
 
-    int getInjectionPosition();
+    Integer getInjectionPosition();
 
     IsWidget getView();
 
