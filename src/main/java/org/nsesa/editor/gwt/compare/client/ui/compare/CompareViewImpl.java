@@ -90,6 +90,9 @@ public class CompareViewImpl extends Composite implements CompareView {
         revisionsA.clear();
         revisionsB.clear();
 
+        revisionPickerPanel.setVisible(revisions.size() > 1);
+        rollbackButton.setEnabled(revisions.size() > 1);
+
         if (revisions.size() > 1) {
 
             for (RevisionDTO revision : revisions.subList(1, revisions.size())) {
