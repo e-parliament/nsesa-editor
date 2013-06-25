@@ -32,6 +32,7 @@ import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentContro
 import org.nsesa.editor.gwt.amendment.client.ui.document.Describer;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
+import org.nsesa.editor.gwt.core.client.event.InformationEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -96,7 +97,13 @@ public class DefaultAmendmentController implements AmendmentController {
     private ClickHandler confirmationHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(DefaultAmendmentController.this));
+            final String status = getModel().getAmendmentContainerStatus();
+            if (!"candidate".equalsIgnoreCase(status) && !"withdrawn".equalsIgnoreCase(status)) {
+                // you're only allowed to remove
+                documentController.getClientFactory().getEventBus().fireEvent(new InformationEvent("Sorry, you cannot do that", "You can only delete candidate or withdrawn amendments. Please withdraw the amendment first."));
+            } else {
+                documentController.getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(DefaultAmendmentController.this));
+            }
         }
     };
     private ClickHandler cancelHandler = new ClickHandler() {

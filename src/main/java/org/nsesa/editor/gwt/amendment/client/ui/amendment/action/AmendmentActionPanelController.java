@@ -28,6 +28,7 @@ import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentContro
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.InformationEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
@@ -108,7 +109,13 @@ public class AmendmentActionPanelController {
     private ClickHandler confirmDeleteHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+            final String status = amendmentController.getModel().getAmendmentContainerStatus();
+            if (!"candidate".equalsIgnoreCase(status) && !"withdrawn".equalsIgnoreCase(status)) {
+                // you're only allowed to remove
+                amendmentController.getDocumentController().getClientFactory().getEventBus().fireEvent(new InformationEvent("You cannot do that.", "You can only delete candidate or withdrawn amendments. Please withdraw the amendment first."));
+            } else {
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+            }
         }
     };
     private ClickHandler confirmTableHandler = new ClickHandler() {

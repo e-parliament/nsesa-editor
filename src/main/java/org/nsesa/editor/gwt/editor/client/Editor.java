@@ -38,6 +38,7 @@ import org.nsesa.editor.gwt.core.client.event.*;
 import org.nsesa.editor.gwt.core.client.service.gwt.GWTServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.confirmation.ConfirmationController;
 import org.nsesa.editor.gwt.core.client.ui.error.ErrorController;
+import org.nsesa.editor.gwt.core.client.ui.information.InformationController;
 import org.nsesa.editor.gwt.core.client.ui.notification.NotificationController;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 import org.nsesa.editor.gwt.editor.client.activity.EditorPlaceFactory;
@@ -252,6 +253,14 @@ public abstract class Editor implements EntryPoint {
             }
         });
 
+        // deal with information events
+        eventBus.addHandler(InformationEvent.TYPE, new InformationEventHandler() {
+            @Override
+            public void onEvent(InformationEvent event) {
+                handleInformation(event.getTitle(), event.getMessage());
+            }
+        });
+
         // deal with confirmations
         eventBus.addHandler(ConfirmationEvent.TYPE, new ConfirmationEventHandler() {
             @Override
@@ -374,6 +383,21 @@ public abstract class Editor implements EntryPoint {
         errorController.setError(errorTitle, errorMessage);
         errorController.center();
         LOG.log(Level.SEVERE, errorMessage, throwable);
+    }
+
+    /**
+     * Handle an an informative error (eg. local validation). By default, this means passing it on to the {@link InformationController} and displaying it,
+     * as well as logging it via gwt-log on info level.
+     *
+     * @param title   the title of the info message
+     * @param message the content of the info message
+     */
+    protected void handleInformation(final String title, final String message) {
+        final InformationController informationController = getInjector().getInformationController();
+        informationController.registerListeners();
+        informationController.setInformation(title, message);
+        informationController.center();
+        LOG.log(Level.INFO, message);
     }
 
     /**
