@@ -119,9 +119,7 @@ public class CompareViewImpl extends Composite implements CompareView {
 
     @Override
     public void setRevision(String revisionContent) {
-        richTextEditor.clear();
-        final HTML html = new HTML(revisionContent);
-        richTextEditor.add(html);
+        richTextEditor.getElement().setInnerHTML(revisionContent);
     }
 
     @Override
