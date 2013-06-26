@@ -143,6 +143,10 @@ public class CompareController implements ProvidesResize {
     }
 
     public void retrieveRevisions() {
+        // reset the revisions
+        revisionA = null;
+        revisionB = null;
+
         comparisonProvider.getRevisions(new AsyncCallback<List<RevisionDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
