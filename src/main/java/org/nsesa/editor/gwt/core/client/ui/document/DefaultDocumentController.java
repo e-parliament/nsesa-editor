@@ -402,7 +402,7 @@ public class DefaultDocumentController implements DocumentController {
         } else {
             LOG.info("Installing '" + key + "' mode.");
         }
-        // initialize its listeners on the event busses
+        // initialize its listeners on the event bus
         mode.registerListeners();
         documentModes.put(key, mode);
     }
