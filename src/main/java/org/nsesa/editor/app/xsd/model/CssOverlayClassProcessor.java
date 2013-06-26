@@ -29,7 +29,7 @@ import java.util.*;
  * The css style will be inherited from the parent node if it is the case.
  * Otherwise a generic css style containing only the node name is generated
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 30/10/12 13:38
  */
 public class CssOverlayClassProcessor implements OverlayClassProcessor {

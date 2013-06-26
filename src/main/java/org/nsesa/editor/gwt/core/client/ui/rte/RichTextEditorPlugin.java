@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy;
  * Provides possibility to customize the rich text editor functionality without bloating the editor with unneeded
  * features.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 09/01/13 11:06
  */
 @ImplementedBy(RichTextCompositePlugin.class)

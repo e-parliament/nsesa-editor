@@ -29,12 +29,13 @@
             border: 1px solid black;
             padding: 8%;
             max-width: 780px;
-            -moz-box-shadow: 10px 10px 5px #888;
-            -webkit-box-shadow: 10px 10px 5px #888;
-            box-shadow: 10px 10px 5px #888;
+            -moz-box-shadow: 0 0 10px 8px #AAAAAA;
+            -webkit-box-shadow: 0 0 10px 8px #AAAAAA;
+            box-shadow: 0 0 10px 8px #AAAAAA;
             left: 0;
             right: 0;
             margin: auto;
+            background-color: #fff;
         }
 
         .contentPanel {

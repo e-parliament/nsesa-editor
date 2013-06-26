@@ -54,7 +54,7 @@
         <g:HorizontalPanel styleName="{res.form}" ui:field="form">
             <g:HTML text="Author" styleName="{res.formLabel}"/>
             <g:SuggestBox ui:field="suggestBox" styleName="{res.suggestBox} {res.formValue}"/>
-            <g:Label text="(only 'mep' values are found.)" styleName="{res.description}"/>
+            <g:Label text="(Only MP values are found)" styleName="{res.description}"/>
         </g:HorizontalPanel>
         <hr/>
         <g:HTMLPanel ui:field="authorsPanel" styleName="{res.authorsPanel}"/>

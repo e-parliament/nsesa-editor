@@ -42,7 +42,7 @@
         <g:center>
             <g:TabLayoutPanel barHeight="40" barUnit="PX" ui:field="tabLayoutPanel">
                 <g:tab>
-                    <g:header>Original</g:header>
+                    <g:header>Amendment</g:header>
                     <g:DockLayoutPanel unit="PCT">
                         <g:center>
                             <rte:RichTextEditor ui:field="newText"/>

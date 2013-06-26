@@ -46,10 +46,9 @@ public class ErrorController {
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
         this.view.asWidget().setWidth("400px");
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         clickHandlerRegistration = this.view.getOkButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -90,6 +89,7 @@ public class ErrorController {
      */
     public void hide() {
         popupPanel.hide(true);
+        removeListeners();
     }
 
     /**

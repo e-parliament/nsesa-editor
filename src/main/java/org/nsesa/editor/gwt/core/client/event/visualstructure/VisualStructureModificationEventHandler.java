@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * An interface to handle <code>VisualStructureModificationEvent</code> GWT event.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 15:25
  */
 public interface VisualStructureModificationEventHandler extends EventHandler {

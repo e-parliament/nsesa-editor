@@ -20,7 +20,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 /**
  * Set up the caret position by checking the caret marker presence inside of the text nodes.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 11/04/13 16:49
  */
 public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
@@ -46,7 +46,7 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
     }
 
     private native void nativeInit(CKEditorCaretPositionSetupPlugin caretPlugin, JavaScriptObject editor)/*-{
-        editor.on('instanceReady', function (ev) {
+        var caretListener = function(ev) {
             var editorInstance = ev.editor;
             caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = null;
             var range = new $wnd.CKEDITOR.dom.range(editorInstance.document);
@@ -66,7 +66,10 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
                     }
                 }
             }
-        })
+        }
+
+        editor.on('instanceReady', caretListener);
+        editor.on('caretPosition', caretListener);
     }-*/;
 
     private native void visitNative(CKEditorCaretPositionSetupPlugin caretPlugin, JavaScriptObject editorInstance, JavaScriptObject container) /*-{
@@ -84,6 +87,8 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
                 // see if we find our magic marker
                 if (node.hasClass(caretClassName)) {
                     caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretNode = node;
+                    //remove now the caret class name
+                    node.removeClass(caretClassName);
                 } else {
                     caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::visitNative(Lorg/nsesa/editor/gwt/core/client/ui/rte/ckeditor/CKEditorCaretPositionSetupPlugin;Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(caretPlugin, editorInstance, node);
                 }

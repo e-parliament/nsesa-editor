@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 /**
  * Date: 23/04/13 14:39
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class AmendmentMarkerController extends MarkerController {
@@ -52,11 +52,12 @@ public class AmendmentMarkerController extends MarkerController {
                                      final MarkerView view, final AmendmentManager amendmentManager) {
         super(documentEventBus, view);
         this.amendmentManager = amendmentManager;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
+
+        super.registerListeners();
+
         amendmentContainerDeletedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDeletedEvent.TYPE, new AmendmentContainerDeletedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerDeletedEvent event) {

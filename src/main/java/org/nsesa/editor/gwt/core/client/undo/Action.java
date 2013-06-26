@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.undo;
 /**
  * Date: 15/04/13 23:10
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface Action {

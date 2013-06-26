@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -26,11 +27,19 @@ import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.InformationEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetMoveEvent;
+import org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentServiceAsync;
 import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.ClientContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
@@ -100,7 +109,13 @@ public class AmendmentActionPanelController {
     private ClickHandler confirmDeleteHandler = new ClickHandler() {
         @Override
         public void onClick(ClickEvent event) {
-            amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+            final String status = amendmentController.getModel().getAmendmentContainerStatus();
+            if (!"candidate".equalsIgnoreCase(status) && !"withdrawn".equalsIgnoreCase(status)) {
+                // you're only allowed to remove
+                amendmentController.getDocumentController().getClientFactory().getEventBus().fireEvent(new InformationEvent("You cannot do that.", "You can only delete candidate or withdrawn amendments. Please withdraw the amendment first."));
+            } else {
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDeleteEvent(amendmentController));
+            }
         }
     };
     private ClickHandler confirmTableHandler = new ClickHandler() {
@@ -140,7 +155,6 @@ public class AmendmentActionPanelController {
         // create operations on the amendment
         addWidget(anchorTable);
         addWidget(anchorWithdraw);
-        addSeparator();
         addWidget(anchorDelete);
         moveSeparator = getSeparator();
         addWidget(moveSeparator);
@@ -159,14 +173,12 @@ public class AmendmentActionPanelController {
         anchorDelete.setText(coreMessages.amendmentActionDelete());
         anchorMoveUp.setText(coreMessages.amendmentActionMoveUp());
         anchorMoveDown.setText(coreMessages.amendmentActionMoveDown());
-
-        registerListeners();
     }
 
     /**
      * Registers the event listeners on the various anchors.
      */
-    private void registerListeners() {
+    public void registerListeners() {
         anchorTableHandlerRegistration = anchorTable.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -301,6 +313,7 @@ public class AmendmentActionPanelController {
      * @param y the y (top) position, in pixels, relative to the browser window
      */
     public void show(int x, int y) {
+        validatePossibleActions();
         popupPanel.setPopupPosition(x, y);
         popupPanel.show();
     }
@@ -310,6 +323,59 @@ public class AmendmentActionPanelController {
      */
     public void hide() {
         popupPanel.hide();
+    }
+
+    /**
+     * Checks the various possible actions (currently limited to delete, table and withdraw) against the backend
+     * to make sure they are possible on the selected amendment container.
+     */
+    public void validatePossibleActions() {
+        final ClientFactory clientFactory = amendmentController.getDocumentController().getClientFactory();
+        final ClientContext clientContext = clientFactory.getClientContext();
+        final ArrayList<AmendmentContainerDTO> amendmentContainers = new ArrayList<AmendmentContainerDTO>(Arrays.asList(amendmentController.getModel()));
+
+        // delete anchor
+        anchorDelete.setVisible(false);
+        final GWTAmendmentServiceAsync gwtAmendmentService = amendmentController.getDocumentController().getServiceFactory().getGwtAmendmentService();
+        gwtAmendmentService.canDeleteAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not validate delete request.", caught));
+            }
+
+            @Override
+            public void onSuccess(Boolean[] result) {
+                anchorDelete.setVisible(result[0]);
+            }
+        });
+
+        // table anchor
+        anchorTable.setVisible(false);
+        gwtAmendmentService.canTableAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not validate table request.", caught));
+            }
+
+            @Override
+            public void onSuccess(Boolean[] result) {
+                anchorTable.setVisible(result[0]);
+            }
+        });
+
+        // withdraw anchor
+        anchorWithdraw.setVisible(false);
+        gwtAmendmentService.canWithdrawAmendmentContainers(clientContext, amendmentContainers, new AsyncCallback<Boolean[]>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not validate withdraw request.", caught));
+            }
+
+            @Override
+            public void onSuccess(Boolean[] result) {
+                anchorWithdraw.setVisible(result[0]);
+            }
+        });
     }
 
     /**
@@ -341,4 +407,7 @@ public class AmendmentActionPanelController {
         return new HTML("<hr class='separator'/>");
     }
 
+    public AmendmentActionPanelView getView() {
+        return view;
+    }
 }

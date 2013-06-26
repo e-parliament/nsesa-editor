@@ -31,7 +31,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * <code>PaginationController</code> class is responsible to control {@link org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView} view and
  * to react to any amendment changes the user performs in the application.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 30/11/12 15:29
  */
 @Scope(DOCUMENT)
@@ -51,13 +51,13 @@ public class AmendmentPaginationController extends PaginationController {
     @Inject
     public AmendmentPaginationController(DocumentEventBus documentEventBus, PaginationView paginationView) {
         super(documentEventBus, paginationView);
-        registerListeners();
     }
 
     /**
      * Refresh the pagination as a reaction of the events occurred in the system
      */
-    private void registerListeners() {
+    public void registerListeners() {
+        super.registerListeners();
         amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
             @Override
             public void onEvent(AmendmentContainerInjectedEvent event) {

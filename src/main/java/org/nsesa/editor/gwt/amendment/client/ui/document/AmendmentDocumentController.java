@@ -37,6 +37,7 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.*;
 import org.nsesa.editor.gwt.core.client.ui.document.DefaultDocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentInjector;
@@ -49,7 +50,6 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
-import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.ArrayList;
@@ -99,7 +99,11 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     @Scope(DOCUMENT)
     protected Selector<AmendmentController> selector;
 
+    @Scope(DOCUMENT)
     protected DiffingManager<AmendmentController> diffingManager;
+
+    @Scope(DOCUMENT)
+    protected Describer describer;
 
 
     // ------------- event handler registration -----------
@@ -109,10 +113,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
     private HandlerRegistration amendmentContainerStatusUpdatedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerSavedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
     private HandlerRegistration documentScrollEventHandlerRegistration;
-    private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
 
     @Inject
     public AmendmentDocumentController(final ClientFactory clientFactory,
@@ -132,12 +134,19 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             this.amendmentManager = amendmentDocumentInjector.getAmendmentManager();
             this.amendmentsPanelController = amendmentDocumentInjector.getAmendmentsPanelController();
             this.amendmentsPanelController.setDocumentController(this);
+            this.amendmentsPanelController.registerListeners();
+
             this.amendmentActionPanelController = amendmentDocumentInjector.getAmendmentActionPanelController();
             this.amendmentsHeaderController = amendmentDocumentInjector.getAmendmentsHeaderController();
             this.amendmentsHeaderController.setDocumentController(this);
+            this.amendmentsHeaderController.registerSelections();
+            this.amendmentsHeaderController.registerActions();
+            this.amendmentsHeaderController.registerListeners();
             this.selector = amendmentDocumentInjector.getSelector();
             this.diffingManager = amendmentDocumentInjector.getAmendmentDiffingManager();
             this.diffingManager.setDocumentController(this);
+            this.describer = amendmentDocumentInjector.getDescriber();
+            this.describer.setDocumentController(this);
             // install collection filter for the selector
             this.selector.setCollectionFilter(new Selector.CollectionFilter<AmendmentController>() {
                 @Override
@@ -156,21 +165,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     // event handler.
     public void registerListeners() {
         super.registerListeners();
-
-        // forward the amendment injected event to the parent event bus
-        amendmentContainerInjectedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerInjectedEvent.TYPE, new AmendmentContainerInjectedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerInjectedEvent event) {
-                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
-                if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-                clientFactory.getEventBus().fireEvent(event);
-            }
-        });
-
         // when we detect a scrolling event, hide the amendment action panel
         documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
@@ -214,17 +208,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
-        // after an amendment has been saved, we have to redo its diffing
-        amendmentContainerSavedEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerSavedEvent.TYPE, new AmendmentContainerSavedEventHandler() {
-            @Override
-            public void onEvent(AmendmentContainerSavedEvent event) {
-                if (isDiffModeActive()) {
-                    diffingManager.diff(DiffMethod.WORD, event.getAmendmentController());
-                } else {
-                    LOG.info("Diff not active, skipping diff on amendment " + event.getAmendmentController().getModel().getId());
-                }
-            }
-        });
 
         // if an amendment has been successfully deleted, we need to update our selection and active widget
         // (since it might have been part of it), and renumber the existing amendments locally
@@ -305,6 +288,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
                 final OverlayWidget overlayWidget = event.getOldRevision().getOverlayWidget();
                 if (overlayWidget != null) {
                     overlayWidget.removeAmendmentController(event.getOldRevision());
+                    // make sure to clean up all listeners
+                    event.getOldRevision().removeListeners();
                     overlayWidget.addOverlayWidgetAware(event.getNewRevision());
                     sourceFileController.renumberOverlayWidgetsAware();
                 }
@@ -337,10 +322,8 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         amendmentContainerStatusUpdatedEventHandlerRegistration.removeHandler();
         amendmentContainerDeletedEventHandlerRegistration.removeHandler();
-        amendmentContainerSavedEventHandlerRegistration.removeHandler();
         amendmentContainerEditEventHandlerRegistration.removeHandler();
         documentScrollEventHandlerRegistration.removeHandler();
-        amendmentContainerInjectedEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -432,8 +415,11 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             public void execute() {
                 // after the injection, renumber all the amendments.
                 sourceFileController.renumberOverlayWidgetsAware();
+                //raise a filter request event after reordering
+                documentEventBus.fireEvent(new FilterRequestEvent(null));
             }
         });
+
     }
 
     /**
@@ -443,6 +429,12 @@ public class AmendmentDocumentController extends DefaultDocumentController {
      */
     public AmendmentManager getAmendmentManager() {
         return amendmentManager;
+    }
+
+    @Override
+    public DiffingManager getDiffingManager() {
+        // override to ensure we're using the amendment diffing manager instead of a default one.
+        return diffingManager;
     }
 
     /**
@@ -456,6 +448,10 @@ public class AmendmentDocumentController extends DefaultDocumentController {
 
     public Selector<AmendmentController> getSelector() {
         return selector;
+    }
+
+    public Describer getDescriber() {
+        return describer;
     }
 
     @Override

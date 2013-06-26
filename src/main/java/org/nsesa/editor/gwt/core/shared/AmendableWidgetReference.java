@@ -56,7 +56,7 @@ public class AmendableWidgetReference implements IsSerializable {
     /**
      * The offset at which to create this widget under the parent {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget}
      */
-    private int offset;
+    private Integer offset;
 
     public AmendableWidgetReference() {
     }
@@ -86,11 +86,11 @@ public class AmendableWidgetReference implements IsSerializable {
         this.creation = creation;
     }
 
-    public int getOffset() {
+    public Integer getOffset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    public void setOffset(Integer offset) {
         this.offset = offset;
     }
 

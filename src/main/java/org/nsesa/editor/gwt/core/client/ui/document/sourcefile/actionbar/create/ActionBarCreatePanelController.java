@@ -70,10 +70,9 @@ public class ActionBarCreatePanelController {
                                           final ActionBarCreatePanelView view) {
         this.documentEventBus = documentEventBus;
         this.view = view;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         // register a handler for the click event on the name of the overlay widget as a child or sibling
         view.setUIListener(new ActionBarCreatePanelView.UIListener() {
             @Override
@@ -117,7 +116,10 @@ public class ActionBarCreatePanelController {
      */
     public void setOverlayWidget(final OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
+        setAvailableChildrenAndSiblings();
+    }
 
+    protected void setAvailableChildrenAndSiblings() {
         // clean up whatever is there
         view.clearChildOverlayWidgets();
 

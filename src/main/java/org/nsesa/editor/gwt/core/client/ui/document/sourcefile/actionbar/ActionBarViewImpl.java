@@ -52,7 +52,7 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     @UiField
     Anchor translateAnchor;
     @UiField
-    Label location;
+    InlineHTML location;
     @UiField
     HTMLPanel actionPanel;
 
@@ -60,6 +60,10 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     public ActionBarViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
     }
 
     @Override
@@ -106,8 +110,7 @@ public class ActionBarViewImpl extends Composite implements ActionBarView {
     public void setLocation(String location) {
         if (location != null) {
             this.location.setText(TextUtils.capitalize(location));
-        }
-        else {
+        } else {
             this.location.setText("");
         }
     }

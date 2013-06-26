@@ -20,7 +20,7 @@ import com.google.inject.ImplementedBy;
  * <code>AmendmentsHeaderView</code> view is used in the header of the second tabbed panel and determine what
  * type of selections and what type of actions can be done against existing amendments.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 11:50
  */
 @ImplementedBy(AmendmentsHeaderViewImpl.class)

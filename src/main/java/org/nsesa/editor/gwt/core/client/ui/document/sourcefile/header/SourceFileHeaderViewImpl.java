@@ -52,8 +52,6 @@ public class SourceFileHeaderViewImpl extends Composite implements SourceFileHea
     @UiField
     HorizontalPanel extensionPanel;
     @UiField
-    Label documentName;
-    @UiField
     ListBox documentTranslations;
     @UiField
     ListBox relatedDocuments;
@@ -63,6 +61,9 @@ public class SourceFileHeaderViewImpl extends Composite implements SourceFileHea
         this.documentEventBus = documentEventBus;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
         horizontalPanel.getElement().getStyle().setTableLayout(Style.TableLayout.FIXED);
     }
 

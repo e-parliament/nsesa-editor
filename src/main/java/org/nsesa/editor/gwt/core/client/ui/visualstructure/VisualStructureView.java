@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * The drafting view widget is responsible to display the allowed and mandatory children
  * for a specific <code>OverlayWidget</code>
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 @ImplementedBy(VisualStructureViewImpl.class)

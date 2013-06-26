@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Scope;
-import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
@@ -46,17 +45,13 @@ public class DefaultDiffingManager implements DiffingManager<Object> {
         this.documentEventBus = documentEventBus;
     }
 
-    /**
-     * Default no-diffing.
-     * @param method   the diff method
-     * @param objects  the objects to diff
-     */
-    public void diff(final DiffMethod method, final Object... objects) {
+    public void diff(final Object... objects) {
         // default is to not do any diffing at all ..
     }
 
     /**
      * Sets the parent document controller.
+     *
      * @param documentController the document controller
      */
     @Override

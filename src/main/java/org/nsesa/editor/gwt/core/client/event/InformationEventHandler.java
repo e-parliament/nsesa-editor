@@ -11,16 +11,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.selection;
+package org.nsesa.editor.gwt.core.client.event;
 
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * An interface to handle <code>AmendmentControllerAddToSelectionEvent</code> GWT event.
+ * Handler interface for the {@link org.nsesa.editor.gwt.core.client.event.InformationEvent}.
+ * Date: 24/06/12 18:15
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 29/11/12 13:15
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @version $Id$
  */
-public interface OverlayWidgetAwareAddToSelectionEventHandler extends EventHandler {
-     public void onEvent(OverlayWidgetAwareAddToSelectionEvent event);
+public interface InformationEventHandler extends EventHandler {
+    void onEvent(InformationEvent event);
 }

@@ -18,7 +18,7 @@ import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 /**
  * A <code>Selection</code> is an object which determines true or false for a given input
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 28/11/12 10:28
  */
 public interface Selection<T extends OverlayWidgetAware> {

@@ -18,6 +18,7 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -33,7 +34,7 @@ import java.util.Map;
  * {@link AmendmentsFilterView} view and to raise {@link FilterRequestEvent} events as soon as the user select a
  * filter form the view.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 26/11/12 13:44
  */
 @Singleton
@@ -47,9 +48,10 @@ public class AmendmentsFilterController {
      * The view associated to this controller
      */
     private AmendmentsFilterView view;
+    private int amendmentsPerPage;
 
     /**
-     * A map with registered
+     * A map with registered filters
      */
     private Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
@@ -71,9 +73,11 @@ public class AmendmentsFilterController {
      * @param view             The associated view
      */
     @Inject
-    public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view) {
+    public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view,
+                                      @Named("amendmentsPerPage") int amendmentsPerPage) {
         this.documentEventBus = documentEventBus;
         this.view = view;
+        this.amendmentsPerPage = amendmentsPerPage;
         registerFilterActions();
         registerListeners();
         this.view.setFilters(Arrays.asList(filters.keySet().toArray(new String[filters.size()])));
@@ -84,9 +88,9 @@ public class AmendmentsFilterController {
      */
     protected void registerFilterActions() {
         registerFilterAction("All amendments",
-                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, ALL));
+                new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, ALL));
         registerFilterAction("None",
-                new Filter<AmendmentController>(0, 2, AmendmentController.ORDER_COMPARATOR, NONE));
+                new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, NONE));
     }
 
     /**
@@ -103,7 +107,7 @@ public class AmendmentsFilterController {
      * Add a change handler for {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter.AmendmentsFilterView#getFilter()}
      * and raise a new {@link FilterRequestEvent} GWT event
      */
-    private void registerListeners() {
+    protected void registerListeners() {
         changeHandlerRegistration = view.getFilter().addChangeHandler(new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {

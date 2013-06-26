@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  * A simple default reference handler for local {@link OverlayWidget}s in the current document.
  * Date: 28/03/13 14:43
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public class DefaultReferenceHandler implements ReferenceHandler<OverlayWidget> {

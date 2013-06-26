@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
  * It represents a single node in the xsd structure and keep basic information about xsd node like name,
  * namespace, classname, comments and type.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 29/10/12 10:05
  */
 public class OverlayNode {

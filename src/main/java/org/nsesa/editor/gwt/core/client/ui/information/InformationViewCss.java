@@ -11,16 +11,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.event.selection;
+package org.nsesa.editor.gwt.core.client.ui.information;
 
-import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.resources.client.CssResource;
 
 /**
- * An interface to handle <code>AmendmentControllerRemoveFromSelectionEvent</code> GWT event.
+ * CSS resource for the error component.
+ * Date: 24/06/12 16:39
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 29/11/12 13:15
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @version $Id$
  */
-public interface OverlayWidgetAwareRemoveFromSelectionEventHandler extends EventHandler {
-    public void onEvent(OverlayWidgetAwareRemoveFromSelectionEvent event);
+public interface InformationViewCss extends CssResource {
 }

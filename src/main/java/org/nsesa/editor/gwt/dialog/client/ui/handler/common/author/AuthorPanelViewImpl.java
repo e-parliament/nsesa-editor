@@ -65,6 +65,8 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
         oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @UiFactory

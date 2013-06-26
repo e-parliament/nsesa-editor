@@ -18,7 +18,7 @@ import com.google.inject.ImplementedBy;
 /**
  * An overlay snippet resolver is responsible for replacing the place holders which might exist into the
  * template of {@link OverlaySnippet} with values determined from the current context
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 11:48
  */
 @ImplementedBy(DefaultOverlaySnippetEvaluator.class)

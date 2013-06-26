@@ -72,6 +72,9 @@ public class HeaderViewImpl extends Composite implements HeaderView {
         this.clientFactory = clientFactory;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
         registerListeners();
     }
 

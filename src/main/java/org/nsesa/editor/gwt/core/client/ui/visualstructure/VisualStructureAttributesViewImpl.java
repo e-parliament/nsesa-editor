@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Default implementation of {@link VisualStructureAttributesView} interface based on {@link UiBinder} GWT mechanism.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 
@@ -56,7 +56,7 @@ public class VisualStructureAttributesViewImpl extends ResizeComposite implement
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         if (!GWT.isScript())
-            this.setTitle(this.getClass().getName());
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

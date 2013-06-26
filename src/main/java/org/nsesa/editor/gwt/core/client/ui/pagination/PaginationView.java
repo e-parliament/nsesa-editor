@@ -23,7 +23,7 @@ import com.google.inject.ImplementedBy;
  * {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelView} where the
  * existing amendments are displayed in a "pagination" way.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 28/11/12 15:37
  */
 @ImplementedBy(PaginationViewImpl.class)

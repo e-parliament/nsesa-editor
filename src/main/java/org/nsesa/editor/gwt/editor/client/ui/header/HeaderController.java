@@ -63,11 +63,9 @@ public class HeaderController {
         this.serviceFactory = serviceFactory;
         this.clientFactory = clientFactory;
         this.view = view;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         bootstrapEventHandlerRegistration = clientFactory.getEventBus().addHandler(BootstrapEvent.TYPE, new BootstrapEventHandler() {
             @Override
             public void onEvent(BootstrapEvent event) {

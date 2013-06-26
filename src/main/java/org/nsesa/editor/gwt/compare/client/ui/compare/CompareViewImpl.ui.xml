@@ -15,7 +15,6 @@
 -->
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:rte='urn:import:org.nsesa.editor.gwt.core.client.ui.rte'
         >
     <ui:style field="res">
         .comparePanel {
@@ -50,6 +49,13 @@
             max-width: 90%;
         }
 
+        .scrollPanel {
+        }
+
+        .cancelButton {
+            cursor: pointer;
+        }
+
     </ui:style>
     <g:DockLayoutPanel styleName="{res.comparePanel}" unit="PX">
         <g:north size="60">
@@ -67,15 +73,17 @@
         <g:center>
             <g:HTMLPanel>
                 <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
-                    <rte:RichTextEditor ui:field="richTextEditor" styleName="{res.richTextEditor}"/>
+                    <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
+                        <g:HTMLPanel ui:field="richTextEditor" styleName="{res.richTextEditor} revisionsPanel"/>
+                    </g:ScrollPanel>
                 </g:HorizontalPanel>
             </g:HTMLPanel>
         </g:center>
         <g:south size="40">
             <g:HTMLPanel styleName="{res.actionPanel}">
                 <g:HTMLPanel styleName="{res.innerActionPanel}">
-                    <g:Button ui:field="rollbackButton" text="Rollback"/>
-                    <g:Anchor ui:field="cancelAnchor" text="Cancel"/>
+                    <g:Button ui:field="rollbackButton" text="Rollback" title="Rollback"/>
+                    <g:Anchor ui:field="cancelAnchor" text="Cancel" styleName="{res.cancelButton}" title="Cancel"/>
                 </g:HTMLPanel>
             </g:HTMLPanel>
         </g:south>

@@ -131,13 +131,13 @@ public class DefaultTransformer implements Transformer {
                             }
                         }
                         if (child != null) {
-                            sb.append(toXMLElement(child, namespaces, false, depth + 1).trim());
+                            sb.append(toXMLElement(child, namespaces, false, depth + 1));
                         } else {
                             LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
                         }
                         break;
                     case Node.TEXT_NODE:
-                        sb.append(TextUtils.escapeXML(nodes.getItem(i).getNodeValue().trim()));
+                        sb.append(TextUtils.escapeXML(nodes.getItem(i).getNodeValue()));
                         //sb.append(nodes.getItem(i).getNodeValue().trim());
                         break;
                     case Node.DOCUMENT_NODE:

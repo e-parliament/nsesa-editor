@@ -32,7 +32,7 @@ import java.util.logging.Logger;
  * <p/>
  * Date: 25/03/13 11:42
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Singleton

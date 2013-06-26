@@ -17,10 +17,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
-import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
@@ -28,6 +27,8 @@ import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEve
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterResponseEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.FilterResponse;
@@ -42,19 +43,19 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
  * <code>AmendmentsPanelController</code> class is responsible to control set up the selections and the actions available in
  * {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter.AmendmentsFilterView} view.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 26/11/12 11:50
  */
 @Singleton
 @Scope(DOCUMENT)
 public class AmendmentsPanelController {
-    /**
-     * Stores hoy many amendments will be displayed per page
-     */
-    private static final int AMENDMENTS_PER_PAGE = 10;
 
     private AmendmentsPanelView view;
     private DocumentEventBus documentEventBus;
+    /**
+     * Stores hoy many amendments will be displayed per page
+     */
+    private int amendmentsPerPage;
     private AmendmentDocumentController documentController;
     private Filter<AmendmentController> currentFilter;
 
@@ -76,12 +77,13 @@ public class AmendmentsPanelController {
      */
     @Inject
     public AmendmentsPanelController(AmendmentsPanelView view,
-                                     DocumentEventBus documentEventBus) {
+                                     DocumentEventBus documentEventBus,
+                                     @Named("amendmentsPerPage") int amendmentsPerPage) {
         this.view = view;
         this.documentEventBus = documentEventBus;
-        this.currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+        this.amendmentsPerPage = amendmentsPerPage;
+        this.currentFilter = new Filter<AmendmentController>(0, amendmentsPerPage,
                 AmendmentController.ORDER_COMPARATOR, DEFAULT_SELECTION);
-        registerListeners();
     }
 
     /**
@@ -96,7 +98,7 @@ public class AmendmentsPanelController {
     /**
      * Refresh the amendments view whenever the user add/modify amendments or change the current filter
      */
-    private void registerListeners() {
+    public void registerListeners() {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
@@ -141,7 +143,7 @@ public class AmendmentsPanelController {
             @Override
             public void onEvent(FilterRequestEvent event) {
                 currentFilter = event.getFilter();
-                filterAmendments();
+                refreshAmendments();
             }
         });
         amendmentControllerSelectedEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetAwareSelectedEvent.TYPE, new OverlayWidgetAwareSelectedEventHandler() {
@@ -189,7 +191,7 @@ public class AmendmentsPanelController {
      */
     private void refreshAmendments() {
         if (currentFilter == null) {
-            currentFilter = new Filter<AmendmentController>(0, AMENDMENTS_PER_PAGE,
+            currentFilter = new Filter<AmendmentController>(0, amendmentsPerPage,
                     AmendmentController.ORDER_COMPARATOR,
                     DEFAULT_SELECTION);
 

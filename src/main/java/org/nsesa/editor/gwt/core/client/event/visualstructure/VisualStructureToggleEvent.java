@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.GwtEvent;
 /**
  * An event used to show/hide the visual structure tool widget
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 13:14
  *
  */

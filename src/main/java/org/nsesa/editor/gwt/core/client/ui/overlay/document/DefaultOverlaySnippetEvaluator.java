@@ -26,7 +26,7 @@ import java.util.Map;
  * replace the place holders in the {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlaySnippet#getTemplate()}
  * with their corresponding registered {@link OverlaySnippetEvaluator.Evaluator} evaluators.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 12:33
  */
 public class DefaultOverlaySnippetEvaluator implements OverlaySnippetEvaluator {

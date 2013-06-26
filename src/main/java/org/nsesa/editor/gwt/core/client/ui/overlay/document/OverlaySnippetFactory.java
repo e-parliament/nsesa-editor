@@ -19,7 +19,7 @@ import com.google.inject.ImplementedBy;
  * A factory to provide snippets for the overlay widgets.
  * An overlay snippet is a sort of template and is used when you create new overlay widgets
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 11:28
  */
 @ImplementedBy(DefaultOverlaySnippetFactory.class)

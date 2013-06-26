@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.resources.Constants;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
@@ -41,9 +42,16 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     interface MyUiBinder extends UiBinder<Widget, AmendmentViewImpl> {
     }
 
-    private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    protected static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
 
-    private final Constants constants;
+    protected final Constants constants;
+
+    @Inject
+    @Named("default.pathToOriginalContent")
+    String pathToOriginalContent;
+    @Inject
+    @Named("default.pathToAmendmentContent")
+    String pathToAmendmentContent;
 
     @UiField
     Label title;
@@ -71,6 +79,9 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
         this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+    	//show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override
@@ -85,7 +96,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void setTitle(String title) {
-        super.setTitle(title);
+        super.setTitle(title + (GWT.isScript() ? "" : " (" + this.getClass().getName() + ")"));
         this.title.setText(title);
     }
 
@@ -119,7 +130,12 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void setIntroduction(String introduction) {
-        this.introduction.setText(introduction);
+        // ignore
+    }
+
+    @Override
+    public void setDescription(String description) {
+        // ignore
     }
 
     @Override
@@ -141,4 +157,34 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public HasClickHandlers getDeleteButton() {
         return deleteImage;
     }
+
+    @Override
+    public void attach() {
+        if (!isAttached()) {
+            onAttach();
+            if (getElement().getParentElement() == null)
+                RootPanel.detachOnWindowClose(this);
+        }
+    }
+
+    @Override
+    public void detach() {
+        if (isAttached()) {
+            onDetach();
+            if (getElement().getParentElement() == null)
+                RootPanel.detachNow(this);
+        }
+    }
+
+    @Override
+    public String getPathToOriginalContent() {
+        return pathToOriginalContent;
+    }
+
+    @Override
+    public String getPathToAmendmentContent() {
+        return pathToAmendmentContent;
+    }
+
+
 }

@@ -23,7 +23,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * Since CKEditor is based on iframe which do not buddle up key/mouse events to the parent,
  * this plugin will bubble those events further to be then treated by the application listeners.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 5/04/13 8:06
  */
 public class CKEditorBubbleUpEventsPlugin implements RichTextEditorPlugin {

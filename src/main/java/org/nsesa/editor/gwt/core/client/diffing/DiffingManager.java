@@ -15,7 +15,6 @@ package org.nsesa.editor.gwt.core.client.diffing;
 
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
-import org.nsesa.editor.gwt.core.shared.DiffMethod;
 
 /**
  * A diffing manager is responsible for doing a diff on an amendment (after the amendment has been created).
@@ -29,13 +28,14 @@ public interface DiffingManager<T> {
 
     /**
      * Perform a diff (word or character based) on a set of amendment controllers.
-     * @param method    the diff method
-     * @param toDiff    the entities to diff on
+     *
+     * @param toDiff the entities to diff on
      */
-    void diff(final DiffMethod method, final T... toDiff);
+    void diff(final T... toDiff);
 
     /**
      * Sets the parent document controller.
+     *
      * @param documentController the document controller
      */
     void setDocumentController(DocumentController documentController);

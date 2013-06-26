@@ -94,6 +94,9 @@ public class DocumentViewImpl extends Composite implements DocumentView, Provide
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        //show class name tool tip in hosted mode
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
 
         switchToTab(0);
     }

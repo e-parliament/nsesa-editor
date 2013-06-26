@@ -19,13 +19,16 @@ import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.DiffMethod;
+import org.nsesa.editor.gwt.core.shared.DiffStyle;
 
 import java.util.Comparator;
 
 /**
  * A controller for an amendment model. Can be injected on an {@link OverlayWidget} by calling its
- * {@link OverlayWidget#addOverlayWidgetAware(OverlayWidget)} method. Represents a single injected
- * amendment in an overlay tree if the {@link #getDocumentController()} is returning a not-<tt>null</tt> value.
+ * {@link OverlayWidget#addOverlayWidgetAware(org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware)} method.
+ * Represents a single injected amendment in an overlay tree if the {@link #getDocumentController()} is returning a
+ * not-<tt>null</tt> value.
  * <p/>
  * Date: 09/01/13 16:46
  *
@@ -59,6 +62,33 @@ public interface AmendmentController extends OverlayWidgetAware {
      * @param amendment the model to set.
      */
     void setModel(AmendmentContainerDTO amendment);
+
+    void mergeModel(AmendmentContainerDTO amendment, boolean onlyChangedAttributes);
+
+    void setBody(String body);
+
+    /**
+     * Register the callback listeners.
+     */
+    void registerListeners();
+
+    /**
+     * Register different views.
+     */
+    void registerViews();
+
+    /**
+     * Switch to another template for the amendment view.
+     *
+     * @param amendmentViewKey the key for the view.
+     * @param extendedViewKey  the key for the extended view.
+     */
+    void switchTemplate(final String amendmentViewKey, final String extendedViewKey);
+
+    /**
+     * Restores the previous templates after the last {@link #switchTemplate(String, String)}.
+     */
+    void resetTemplate();
 
     /**
      * Transforms the given <tt>source</tt> into an overlay widget tree.
@@ -133,11 +163,36 @@ public interface AmendmentController extends OverlayWidgetAware {
      */
     void setOrder(int order);
 
-
-    void setInjectionPosition(int injectionPosition);
-
     /**
      * Removes all event listeners that have been added to the eventbus, and any listeners for UI callbacks.
      */
     void removeListeners();
+
+    /**
+     * Set the diffing style (EP or Track-changes)
+     *
+     * @param diffStyle the diffstyle to use
+     */
+    void setDiffStyle(DiffStyle diffStyle);
+
+    /**
+     * Get the diff style for this amendment (EP or Track-changes)
+     *
+     * @return the diff style
+     */
+    DiffStyle getDiffStyle();
+
+    /**
+     * Set the diff method (word or character)
+     *
+     * @param diffMethod the diff method
+     */
+    void setDiffMethod(DiffMethod diffMethod);
+
+    /**
+     * Get the diff method (word or character)
+     *
+     * @return the diff method
+     */
+    DiffMethod getDiffMethod();
 }

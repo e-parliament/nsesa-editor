@@ -18,7 +18,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
  * a template with place holders. The place holders will be replaced with the real values as soon as getContent method is
  * invoked.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 11:33
  */
 public class OverlaySnippet {

@@ -18,7 +18,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 /**
  * Default implementation of {@link Mover} interface by allowing all the operations by default
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 10/04/13 15:07
  */
 public class DefaultMover implements Mover {

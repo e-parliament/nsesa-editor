@@ -17,10 +17,11 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="AmendmentActionPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.amendment.client.ui.amendment.action.AmendmentActionPanelViewCss'/>
-    <ui:with field='imageResources' type='org.nsesa.editor.gwt.amendment.client.ui.amendment.action.resources.Resources'/>
+    <ui:with field='imageResources'
+             type='org.nsesa.editor.gwt.amendment.client.ui.amendment.action.resources.Resources'/>
     <ui:style field="res">
         .amendmentActionPanel {
-            min-width: 200px;
+            min-width: 120px;
         }
     </ui:style>
     <g:VerticalPanel ui:field="mainPanel" styleName="{res.amendmentActionPanel} amendmentActionPanel">

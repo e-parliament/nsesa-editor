@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  * Adds a button to CKEditor to remove the format of the selected element.
  * Replace the common ancestor node of the selection with the selected text.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 22/01/13 12:42
  *
  */

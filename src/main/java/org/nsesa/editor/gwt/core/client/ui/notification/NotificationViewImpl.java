@@ -49,6 +49,8 @@ public class NotificationViewImpl extends Composite implements NotificationView 
     public NotificationViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

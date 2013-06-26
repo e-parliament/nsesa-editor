@@ -94,11 +94,9 @@ public class CompareController implements ProvidesResize {
 
         view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
         view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         cancelButtonHandlerRegistration = view.getCancelAnchor().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -145,6 +143,10 @@ public class CompareController implements ProvidesResize {
     }
 
     public void retrieveRevisions() {
+        // reset the revisions
+        revisionA = null;
+        revisionB = null;
+
         comparisonProvider.getRevisions(new AsyncCallback<List<RevisionDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -242,13 +244,13 @@ public class CompareController implements ProvidesResize {
     public void show() {
         popupPanel.center();
         popupPanel.show();
+        view.show();
     }
 
     /**
      * Call to hide the comparison popup.
      */
     public void hide() {
-        view.destroy();
         popupPanel.hide();
     }
 

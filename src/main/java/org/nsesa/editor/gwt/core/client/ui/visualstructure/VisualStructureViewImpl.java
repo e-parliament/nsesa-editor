@@ -30,7 +30,7 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * Default implementation of {@link VisualStructureView} based on {@link UiBinder} GWT mechanism.
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 16/01/13 13:37
  */
 @Scope(DOCUMENT)
@@ -73,6 +73,9 @@ public class VisualStructureViewImpl extends ResizeComposite implements VisualSt
 
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
+
         allowedPanel.getElement().addClassName("drafting");
         mandatoryPanel.getElement().addClassName("drafting");
         if (!GWT.isScript())

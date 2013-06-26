@@ -21,7 +21,7 @@ import org.nsesa.editor.gwt.core.client.util.Selection;
  * An event raised when the user performs a specific <code>Selection</code> in
  * {@link org.nsesa.editor.gwt.amendment.client.ui.document.amendments.AmendmentsPanelView} view
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 29/11/12 13:15
  */
 public class OverlayWidgetAwareSelectionEvent extends GwtEvent<OverlayWidgetAwareSelectionEventHandler> {

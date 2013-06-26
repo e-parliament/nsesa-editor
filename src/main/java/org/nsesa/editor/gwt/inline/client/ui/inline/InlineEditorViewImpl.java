@@ -51,6 +51,8 @@ public class InlineEditorViewImpl extends Composite implements InlineEditorView 
         this.richTextEditor = richTextEditor;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

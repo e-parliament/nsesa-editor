@@ -21,6 +21,8 @@ import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEvent;
 import org.nsesa.editor.gwt.core.client.event.SwitchTabEventHandler;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentModeStateChangedEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentModeStateChangedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
@@ -89,6 +91,7 @@ public class MarkerController {
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
     private HandlerRegistration switchTabEventHandlerRegistration;
     private HandlerRegistration resizeEventHandlerRegistration;
+    private HandlerRegistration documentModeStateChangedEventHandlerRegistration;
 
     @Inject
     public MarkerController(final DocumentEventBus documentEventBus, final MarkerView view) {
@@ -96,11 +99,9 @@ public class MarkerController {
 
         this.documentEventBus = documentEventBus;
         this.view = view;
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         documentRefreshRequestEventHandlerRegistration = documentEventBus.addHandler(DocumentRefreshRequestEvent.TYPE, new DocumentRefreshRequestEventHandler() {
             @Override
             public void onEvent(DocumentRefreshRequestEvent event) {
@@ -111,6 +112,13 @@ public class MarkerController {
         switchTabEventHandlerRegistration = documentEventBus.addHandler(SwitchTabEvent.TYPE, new SwitchTabEventHandler() {
             @Override
             public void onEvent(SwitchTabEvent event) {
+                drawMarkers();
+            }
+        });
+
+        documentModeStateChangedEventHandlerRegistration = documentEventBus.addHandler(DocumentModeStateChangedEvent.TYPE, new DocumentModeStateChangedEventHandler() {
+            @Override
+            public void onEvent(DocumentModeStateChangedEvent event) {
                 drawMarkers();
             }
         });
@@ -138,6 +146,7 @@ public class MarkerController {
         documentRefreshRequestEventHandlerRegistration.removeHandler();
         switchTabEventHandlerRegistration.removeHandler();
         resizeEventHandlerRegistration.removeHandler();
+        documentModeStateChangedEventHandlerRegistration.removeHandler();
     }
 
     /**

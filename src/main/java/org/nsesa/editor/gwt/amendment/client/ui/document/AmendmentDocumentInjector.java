@@ -25,7 +25,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Selector;
 /**
  * Date: 24/04/13 12:00
  *
- * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface AmendmentDocumentInjector extends DocumentInjector {
@@ -64,7 +64,24 @@ public interface AmendmentDocumentInjector extends DocumentInjector {
      */
     AmendmentsHeaderController getAmendmentsHeaderController();
 
+    /**
+     * Get a selector that holds a selection of amendment controllers.
+     *
+     * @return the selector.
+     */
     Selector<AmendmentController> getSelector();
 
+    /**
+     * Get the diffing manager for diffing amendments.
+     *
+     * @return the diffing manager
+     */
     DiffingManager<AmendmentController> getAmendmentDiffingManager();
+
+    /**
+     * Get a describer for describing the amendment controller.
+     *
+     * @return the describer.
+     */
+    Describer getDescriber();
 }

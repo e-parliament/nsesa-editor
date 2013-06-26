@@ -73,10 +73,9 @@ public class SourceFileHeaderController {
         assert view != null : "View is not set --BUG";
         this.view = view;
         this.documentEventBus = documentEventBus;
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
 
         // add a change handler to load translations when a new translation is selected
         translationChangeEventHandlerRegistration = view.getTranslationsListBox().addChangeHandler(new ChangeHandler() {

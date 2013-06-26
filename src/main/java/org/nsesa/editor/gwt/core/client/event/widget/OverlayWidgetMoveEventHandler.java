@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  *  Handler interface for the {@link OverlayWidgetMoveEvent}.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 10/04/13 15:10
  */
 public interface OverlayWidgetMoveEventHandler extends EventHandler {

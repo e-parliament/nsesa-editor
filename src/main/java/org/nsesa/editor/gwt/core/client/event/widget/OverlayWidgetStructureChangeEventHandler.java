@@ -18,7 +18,7 @@ import com.google.gwt.event.shared.EventHandler;
 /**
  * Handler interface for the {@link OverlayWidgetStructureChangeEvent}.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 28/05/13 10:15
  */
 public interface OverlayWidgetStructureChangeEventHandler extends EventHandler {

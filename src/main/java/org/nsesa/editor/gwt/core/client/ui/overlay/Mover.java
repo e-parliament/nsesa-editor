@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 /**
  * Interface responsible to allow movement of the overlay widget within the source text structure
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 10/04/13 14:56
  */
 @ImplementedBy(DefaultMover.class)

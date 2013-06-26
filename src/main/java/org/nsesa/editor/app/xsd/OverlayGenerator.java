@@ -29,7 +29,7 @@ import org.xml.sax.SAXParseException;
  * Any subclass will have access to the result of the parsing which is stored in
  * <code>OverlayClassGenerator</code> object as a tree of <code>OverlayClass</code> objects.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 03/10/12 19:25
  */
 public abstract class OverlayGenerator {

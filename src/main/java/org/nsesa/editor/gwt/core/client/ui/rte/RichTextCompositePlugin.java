@@ -26,7 +26,7 @@ import java.util.List;
  * The composite is useful for creating a single plugin out of an aggregate of
  * multiple other plugins.
  * </p>
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 10/01/13 12:05
  */
 public class RichTextCompositePlugin implements RichTextEditorPlugin {

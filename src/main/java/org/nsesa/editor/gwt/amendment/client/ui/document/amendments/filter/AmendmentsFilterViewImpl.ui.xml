@@ -20,7 +20,8 @@
     <ui:style field="res">
         .filter {
             float: right;
-            vertical-align: baseline;
+            position: relative;
+            top: 4px;
         }
     </ui:style>
     <g:ListBox ui:field="menuFilter" styleName="{res.filter}"/>

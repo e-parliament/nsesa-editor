@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.*;
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DOCUMENT;
 
 /**
  * This class is responsible for tracking a deadline by publishing events when the date nears.
@@ -67,7 +67,7 @@ public class DeadlineTracker {
             aDayBeforeTheDeadline.setHours(aDayBeforeTheDeadline.getHours() - 24);
             final Date anHourBeforeTheDeadline = new Date(deadline.getTime());
             anHourBeforeTheDeadline.setHours(anHourBeforeTheDeadline.getHours() - 1);
-            final Date now = new Date();
+            final Date now = getNow();
 
             if (now.before(deadline)) {
                 if (now.before(aDayBeforeTheDeadline)) {
@@ -113,10 +113,10 @@ public class DeadlineTracker {
 
             // determine the timer to fire immediately
             if (now.before(deadline)) {
-                if (now.after(anHourBeforeTheDeadline)) {
-                    timer1hour.run();
-                } else if (now.after(aDayBeforeTheDeadline)) {
+                if (now.after(aDayBeforeTheDeadline)) {
                     timer24hour.run();
+                } else if (now.after(anHourBeforeTheDeadline)) {
+                    timer1hour.run();
                 }
             } else {
                 // deadline already passed
@@ -124,6 +124,10 @@ public class DeadlineTracker {
             }
         }
         // nothing to schedule, we're past the deadline already
+    }
+
+    protected Date getNow() {
+        return new Date();
     }
 
     private Timer timer24hour = new Timer() {

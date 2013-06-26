@@ -36,16 +36,16 @@ import java.util.*;
  * The generator is coming with the following predefined Freemarker templates which shall exist
  * before running the program:
  * <p>
- *     overlayClass.ftl : responsible for classes generation
+ *     overlayClass.ftl : responsible for generation of the java classes
  * <p>
- *     overlayEnum.ftl : responsible for classes of type enum generation
+ *     overlayEnum.ftl : responsible for generation of the java enum
  * <p>
- *    overlayFactory.ftl: responsible for factories generation
+ *    overlayFactory.ftl: responsible for generation of java classes that follow factory pattern
  * <p>
  *    overlayLocalizableResource.ftl,overlayMessagesProperties.ftl, overlayMessagesProperties.ftl:
- *    responsible for localizable resources generation
+ *    responsible for generation of GWT localizable resources
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 06/11/12 9:09
  */
 public class FileClassOverlayGenerator extends OverlayGenerator {
@@ -151,9 +151,11 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             configuration.setDirectoryForTemplateLoading(directoryForTemplateLoading);
             // create the subdirectory name
             final File targetDirectoryClasses = new File(classLoader.getResource(".").getFile());
-            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(), targetDirectory);
+            generatedSourcesDirectory = new File(targetDirectoryClasses.getParentFile().getParentFile(),
+                    targetDirectory);
             if (!generatedSourcesDirectory.exists() && !generatedSourcesDirectory.mkdirs()) {
-                throw new RuntimeException("Could not create generated source directory " + generatedSourcesDirectory.getAbsolutePath());
+                throw new RuntimeException("Could not create generated source directory " +
+                        generatedSourcesDirectory.getAbsolutePath());
             }
             LOG.info("Writing files to {}", generatedSourcesDirectory.getAbsolutePath());
 

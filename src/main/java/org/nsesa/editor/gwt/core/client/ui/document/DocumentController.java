@@ -40,12 +40,26 @@ import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 @ImplementedBy(DefaultDocumentController.class)
 public interface DocumentController {
 
+    /**
+     * Set the {@link DocumentInjector} to use to provide the dependencies for this controller.
+     *
+     * @param documentInjector the injector
+     */
     void setInjector(DocumentInjector documentInjector);
 
+    /**
+     * A callback method for subclasses to register available {@link DocumentMode}s.
+     */
     void registerModes();
 
+    /**
+     * A callback method for subclasses to register available {@link org.nsesa.editor.gwt.core.client.keyboard.KeyboardListener.KeyCombo}s.
+     */
     void registerKeyCombos();
 
+    /**
+     * A callback method for subclasses to register available listeners (on the event bus or views).
+     */
     void registerListeners();
 
     /**

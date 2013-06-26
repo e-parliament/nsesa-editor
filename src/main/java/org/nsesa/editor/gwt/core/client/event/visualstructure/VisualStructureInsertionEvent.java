@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 /**
  * An event occurred when the user wants to add a new overlay widget into editor area.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 17/01/13 15:24
  */
 public class VisualStructureInsertionEvent extends GwtEvent<VisualStructureInsertionEventHandler> {

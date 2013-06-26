@@ -22,7 +22,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
  * modify its structure or changing the attributes of its children.
  * Date: 13/07/12 19:39
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 14/01/13 11:24
  */
 public interface RichTextEditor extends IsWidget {

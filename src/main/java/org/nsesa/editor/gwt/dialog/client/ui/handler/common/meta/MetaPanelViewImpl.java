@@ -52,6 +52,8 @@ public class MetaPanelViewImpl extends Composite implements MetaPanelView {
         this.serviceFactory = serviceFactory;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

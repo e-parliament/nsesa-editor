@@ -13,21 +13,19 @@
  */
 package org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter;
 
-import com.google.gwt.inject.client.GinModule;
-import com.google.gwt.inject.client.binder.GinBinder;
+import com.google.gwt.inject.client.AbstractGinModule;
 
 /**
  * The GIN module for amendments filter functionality
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 13:44
  */
-public class AmendmentsFilterModule implements GinModule {
+public class AmendmentsFilterModule extends AbstractGinModule {
     /**
      * Configure <code>AmendmentsFilterModule</code> in a GIN way
-     * @param binder
      */
     @Override
-    public void configure(GinBinder binder) {
+    protected void configure() {
     }
 }

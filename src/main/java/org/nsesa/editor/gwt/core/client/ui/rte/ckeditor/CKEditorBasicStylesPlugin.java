@@ -23,7 +23,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
  * A plugin to override the default basic styles (bold, italic, underline, subscript, superscript) of CK editor.
  * The basic styles representation is replaced by spans.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 15/01/13 13:24
  */
 public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
@@ -128,7 +128,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             attributes: {},
             overrides: oldTag
         };
-        addButtonCommand('Bold', lang.bold, 'bold', config.coreStyles_bold);
+        addButtonCommand('Bold', 'Bold', 'bold', config.coreStyles_bold);
 
         oldTag = "i";
         config.coreStyles_italic =
@@ -137,7 +137,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             attributes: {},
             overrides: oldTag
         };
-        addButtonCommand('Italic', lang.italic, 'italic', config.coreStyles_italic);
+        addButtonCommand('Italic', 'Italic', 'italic', config.coreStyles_italic);
 
         oldTag = "u";
         config.coreStyles_underline =
@@ -146,7 +146,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             attributes: {},
             overrides: oldTag
         };
-        addButtonCommand('Underline', lang.underline, 'underline', config.coreStyles_underline);
+        addButtonCommand('Underline', 'Underline', 'underline', config.coreStyles_underline);
 
         oldTag = "sub";
         config.coreStyles_subscript =
@@ -155,7 +155,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             attributes: {},
             overrides: oldTag
         };
-        addButtonCommand('Subscript', lang.subscript, 'subscript', config.coreStyles_subscript);
+        addButtonCommand('Subscript', 'Subscript', 'subscript', config.coreStyles_subscript);
 
         oldTag = "sup";
         config.coreStyles_superscript =
@@ -164,7 +164,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             attributes: {},
             overrides: oldTag
         };
-        addButtonCommand('Superscript', lang.superscript, 'superscript', config.coreStyles_superscript);
+        addButtonCommand('Superscript', 'Superscript', 'superscript', config.coreStyles_superscript);
 
 
     }-*/;

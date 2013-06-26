@@ -104,10 +104,9 @@ public class NotificationController {
         popupPanel.setWidget(view);
         popupPanel.getElement().getStyle().setZIndex(10);
         popupPanel.getElement().setClassName(""); // removes border
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         clickHandlerRegistration = view.getCloseButton().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

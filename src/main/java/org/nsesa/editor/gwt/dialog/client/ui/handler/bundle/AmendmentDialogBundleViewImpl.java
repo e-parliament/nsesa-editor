@@ -47,6 +47,8 @@ public class AmendmentDialogBundleViewImpl extends Composite implements Amendmen
     public AmendmentDialogBundleViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
+        if (!GWT.isScript())
+            widget.setTitle(this.getClass().getName());
     }
 
     @Override

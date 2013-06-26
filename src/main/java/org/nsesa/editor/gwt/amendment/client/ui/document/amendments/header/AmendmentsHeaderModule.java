@@ -19,7 +19,7 @@ import com.google.gwt.inject.client.binder.GinBinder;
 /**
  * The GIN module for amendments header functionality
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 11:50
  */
 public class AmendmentsHeaderModule implements GinModule {

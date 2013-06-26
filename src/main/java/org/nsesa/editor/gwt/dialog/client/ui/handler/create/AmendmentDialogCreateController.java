@@ -111,8 +111,6 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
 
         view.getRichTextEditor().setVisualStructureWidget(visualStructureController.getView());
         view.getRichTextEditor().setVisualStructureAttributesWidget(visualStructureController.getAttributesView());
-
-        registerListeners();
     }
 
     /**
@@ -128,7 +126,7 @@ public class AmendmentDialogCreateController extends AmendmentUIHandlerImpl impl
         }
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         // calls the handleSave() method afterwards
         // TODO validate
         saveClickHandlerRegistration = view.getSaveButton().addClickHandler(new ClickHandler() {

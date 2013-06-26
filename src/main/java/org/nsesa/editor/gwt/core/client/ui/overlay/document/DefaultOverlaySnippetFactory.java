@@ -20,7 +20,7 @@ import java.util.Map;
  * Default implementation of {@link OverlaySnippetFactory} interface by storing all the snippets into a local map.
  *
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 11:38
  */
 public class DefaultOverlaySnippetFactory implements OverlaySnippetFactory {

@@ -117,18 +117,21 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.view = view;
 
         this.amendmentDialogCreateController = amendmentDialogCreateController;
+        this.amendmentDialogCreateController.registerListeners();
         this.amendmentDialogDeleteController = amendmentDialogDeleteController;
+        this.amendmentDialogDeleteController.registerListeners();
         this.amendmentDialogBundleController = amendmentDialogBundleController;
+        this.amendmentDialogBundleController.registerListeners();
         this.amendmentDialogMoveController = amendmentDialogMoveController;
+        this.amendmentDialogMoveController.registerListeners();
         this.amendmentDialogModifyController = amendmentDialogModifyController;
+        this.amendmentDialogModifyController.registerListeners();
 
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
-
-        registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
 
         // register a listener when a request to make an amendment is fired (regardless of its type)
         amendmentContainerCreateEventHandlerRegistration = clientFactory.getEventBus().addHandler(AmendmentContainerCreateEvent.TYPE, new AmendmentContainerCreateEventHandler() {

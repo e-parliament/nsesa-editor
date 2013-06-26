@@ -20,7 +20,7 @@ import java.util.Comparator;
 /**
  * <code>Filter</code> class offers filtered functionality and it does not generate content by itself.
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 3/12/12 13:49
  */
 public class Filter<T extends OverlayWidgetAware> {

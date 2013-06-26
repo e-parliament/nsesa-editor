@@ -128,14 +128,19 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
         this.style = style;
 
         this.markerController.setSourceFileController(this);
-        this.contentController.setSourceFileController(this);
-        this.sourceFileHeaderController.setSourceFileController(this);
-        this.actionBarController.setSourceFileController(this);
+        this.markerController.registerListeners();
 
-        registerListeners();
+        this.contentController.setSourceFileController(this);
+        this.contentController.registerListeners();
+
+        this.sourceFileHeaderController.setSourceFileController(this);
+        this.sourceFileHeaderController.registerListeners();
+
+        this.actionBarController.setSourceFileController(this);
+        this.actionBarController.registerListeners();
     }
 
-    private void registerListeners() {
+    public void registerListeners() {
         documentScrollEventHandlerRegistration = contentController.getView().getScrollPanel().addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
@@ -149,6 +154,11 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      */
     public void removeListeners() {
         documentScrollEventHandlerRegistration.removeHandler();
+
+        this.markerController.removeListeners();
+        this.contentController.removeListeners();
+        this.sourceFileHeaderController.removeListeners();
+        this.actionBarController.removeListeners();
     }
 
     /**

@@ -26,12 +26,7 @@
         }
 
         .footer {
-            position: absolute;
-            bottom: 0;
-            right: -10px;
-            background-color: #ddd;
-            color: #000;
-            font-size: smaller;
+
         }
 
         .documentsPanel {

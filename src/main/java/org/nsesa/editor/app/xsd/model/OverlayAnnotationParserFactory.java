@@ -21,7 +21,7 @@ import org.xml.sax.*;
 /**
  * An XSOM annotation parser implementation to read the documentation from XSD annotations
  * 
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 24/01/13 16:46
  */
 public class OverlayAnnotationParserFactory implements AnnotationParserFactory {

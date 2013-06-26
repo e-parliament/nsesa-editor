@@ -95,7 +95,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the array of deleted amendment containers
      */
     AmendmentContainerDTO[] deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to delete a given set of amendment containers at the backend.
@@ -115,7 +115,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the array of tabled amendment containers
      */
     AmendmentContainerDTO[] tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to tables a given set of amendment containers.
@@ -135,7 +135,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the withdrawn amendment containers
      */
     AmendmentContainerDTO[] withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to withdraw a given set of amendment containers.
@@ -155,7 +155,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the registered amendment containers
      */
     AmendmentContainerDTO[] registerAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to register a given set of amendment containers.
@@ -175,7 +175,7 @@ public interface GWTAmendmentService extends RemoteService {
      * @return the returned amendment containers
      */
     AmendmentContainerDTO[] returnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers)
-            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException;
+            throws UnsupportedOperationException, ResourceNotFoundException, StaleResourceException, ValidationException;
 
     /**
      * Check if it is possible to return a given set of amendment containers.

@@ -18,7 +18,7 @@ import com.google.gwt.resources.client.CssResource;
 /**
  * The amendAmendments panel view css resource
  *
- * @author <a href="stelian.groza@gmail.com">Stelian Groza</a>
+ * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 26/11/12 11:50
  */
 public interface AmendmentsPanelViewCss extends CssResource {
