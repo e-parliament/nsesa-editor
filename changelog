@@ -1,0 +1,12 @@
+Release 0.9 (26-Jun-2013)
+
+- Corrected behaviour of the revision panel: fixed a bug where the revisions did not reset, and hide the revision picker if only one revision exists, moved to a simple HTML rendering instead of the advanced readonly RTE, corrected HTML output
+- Added information when the user tries to perform operations that are not allowed by the business, such as attempting to delete a tabled amendment
+- Improved the switching of dynamic amendment templates: the single/dual column mode and the consolidation mode now work better
+- Added the structural display mode
+- Significantly improved the behaviour of the <enter> button in the RTE. We will now search the content for block level elements, and use the template provider to create a new template for the same block level
+- Bulk actions are now possible with automatic filtering: when you select 10 amendments to table, but only 3 can be tabled, you will be asked to remove the 7 that cannot be tabled
+- Amendment actions are now validated against the backend (can delete, can table, can withdraw, ...)
+- Various UI improvements (to better mimic desktop Word processors), correction on the z-indexes to properly display the glass panels in case of model popups
+- Initial work done on the dynamic loading of stylesheets based on the namespaces in the document
+- Various fixes on the ordering of the amendments in the amendment tab, including CSS restyling
