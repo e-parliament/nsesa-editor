@@ -37,7 +37,7 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
     private static final Logger LOG = Logger.getLogger(DefaultAmendmentInjectionPointProvider.class.getName());
 
-    private final OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy;
+    protected final OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy;
 
     @Inject
     public DefaultAmendmentInjectionPointProvider(OverlayWidgetInjectionStrategy overlayWidgetInjectionStrategy) {

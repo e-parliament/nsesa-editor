@@ -69,21 +69,27 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
     public void testFindInjectionPointsViaID() throws Exception {
         child2.setId("foo");
         reference.setPath("#foo");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendment, root, null);
         Assert.assertEquals(injectionPoints.get(0), child2);
     }
 
     @Test
     public void testFindInjectionPointsXpath() throws Exception {
         reference.setPath("//root/typeA");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendment, root, null);
         Assert.assertEquals(injectionPoints.get(0), child1);
     }
 
     @Test
     public void testFindInjectionPointsXpathMultipleChildren() throws Exception {
         reference.setPath("//root/typeB[1]");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendment, root, null);
         Assert.assertEquals(injectionPoints.get(0), child3);
     }
 

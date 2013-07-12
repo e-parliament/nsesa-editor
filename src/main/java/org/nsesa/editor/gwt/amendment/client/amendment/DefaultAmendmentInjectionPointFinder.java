@@ -21,6 +21,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetSelecto
 import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
+import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -48,13 +49,14 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     /**
      * Finds injection points for amendments based on the {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getSourceReference()}.
      *
-     * @param path               the path to find the injection points for
+     * @param amendmentContainer the path to find the injection points for
      * @param root               the root overlay widget node
      * @param documentController the containing document controller
      * @return the list of injection points (that is, overlay widgets which should get the amendment controller)
      */
     @Override
-    public List<OverlayWidget> findInjectionPoints(final String path, final OverlayWidget root, final DocumentController documentController) {
+    public List<OverlayWidget> findInjectionPoints(final AmendmentContainerDTO amendmentContainer, final OverlayWidget root, final DocumentController documentController) {
+        final String path = amendmentContainer.getSourceReference().getPath();
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("Trying to find nodes matching '" + path + "'");
         }

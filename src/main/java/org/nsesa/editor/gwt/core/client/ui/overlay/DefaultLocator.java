@@ -217,6 +217,19 @@ public class DefaultLocator implements Locator {
         }
     }
 
+    @Override
+    public Location[] parse(OverlayWidget root, String location, String languageIso) {
+        List<Location> locations = new ArrayList<Location>();
+        // split the location
+        final String[] locationParts = location.split(getSplitter(languageIso));
+        for (final String part : locationParts) {
+            DefaultLocation defaultLocation = new DefaultLocation();
+            // TODO
+            locations.add(defaultLocation);
+        }
+        return locations.toArray(new Location[locations.size()]);
+    }
+
     /**
      * Returns the used splitter that is injected between overlay widgets in the path calculation.
      *

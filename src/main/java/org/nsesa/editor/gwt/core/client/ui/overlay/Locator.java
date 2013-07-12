@@ -46,5 +46,15 @@ public interface Locator {
      * @param format        if <tt>true</tt>, we format the numbering (if possible), so instead of '7b', you would get '(7b)'
      * @return the number, should never return <tt>null</tt>
      */
-    String getNum(final OverlayWidget overlayWidget, final String languageIso, boolean format);
+    String getNum(OverlayWidget overlayWidget, String languageIso, boolean format);
+
+    /**
+     * Analyze a given path and return the location parts, ordered from root to child.
+     *
+     * @param root        the overlay widget to get the path for
+     * @param location    the location string
+     * @param languageIso the ISO code of the language the location string is in
+     * @return the location parts
+     */
+    Location[] parse(OverlayWidget root, String location, String languageIso);
 }
