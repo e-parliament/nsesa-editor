@@ -126,6 +126,17 @@ public class DefaultAmendmentController implements AmendmentController {
 
     private Integer injectionPosition;
 
+    /**
+     * Just for easier testing ...
+     */
+    public DefaultAmendmentController() {
+        this.view = null;
+        this.extendedView = null;
+        this.amendmentActionPanelController = null;
+        this.constants = null;
+        this.messages = null;
+    }
+
     @Inject
     public DefaultAmendmentController(final AmendmentView amendmentView,
                                       final AmendmentView amendmentExtendedView,

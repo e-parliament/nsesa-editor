@@ -14,10 +14,10 @@
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.shared.AmendableWidgetReference;
-import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 
 import java.util.List;
 
@@ -41,13 +41,13 @@ public interface AmendmentInjectionPointFinder {
      * Finds the injection points where an <tt>amendmentController</tt> would need to be injected in. Note that we do
      * not actually inject the amendment.
      *
-     * @param amendmentContainer the amendment to find the injection for
-     * @param root               the root overlay widget node
-     * @param documentController the containing document controller
+     * @param amendmentController the amendment controller to find the injection point for
+     * @param root                the root overlay widget node
+     * @param documentController  the containing document controller
      * @return the list of {@link OverlayWidget}s where to which the amendment controller applies, and should be
      *         injected in.
      */
-    List<OverlayWidget> findInjectionPoints(AmendmentContainerDTO amendmentContainer, OverlayWidget root, DocumentController documentController);
+    List<OverlayWidget> findInjectionPoints(AmendmentController amendmentController, OverlayWidget root, DocumentController documentController);
 
     /**
      * Returns an expression that can be used to uniquely identify the given <tt>overlayWidget</tt> within its tree
