@@ -19,27 +19,30 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Keeps style information for a given overlay class
+ * Keeps track of the style information for a given overlay class.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 06/11/12 12:46
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 06/11/12 12:46
  */
 public class CssOverlayStyle {
     /**
      * Factory to create styles for the given class
      */
     public static class CssOverlayFactory {
-        private static CssOverlayFactory instance = new CssOverlayFactory();
+
+        private static CssOverlayFactory FACTORY_INSTANCE = new CssOverlayFactory();
 
         public static CssOverlayFactory getInstance() {
-            return instance;
+            return FACTORY_INSTANCE;
         }
 
-        public CssOverlayStyle create(OverlayClass aClass, List<CssOverlayStyle> styles) {
+        public CssOverlayStyle create(final OverlayClass aClass, final List<CssOverlayStyle> styles) {
+            // if we cannot or should not process the class, just generate an empty CSS overlay style.
             if (!canProcess(aClass)) {
-                return new CssOverlayStyle(null, null);
+                return new CssOverlayStyle();
             }
-            CssOverlayStyle overlayStyle = new CssOverlayStyle(aClass);
+            final CssOverlayStyle overlayStyle = new CssOverlayStyle(aClass);
             overlayStyle.cssProcess(styles);
             return overlayStyle;
         }
@@ -48,13 +51,14 @@ public class CssOverlayStyle {
          * Check whether or not a css style can be generated for a given overlay class.
          * Exclude the ones which are not relevant for generation.
          *
-         * @param overlayClass
-         * @return
+         * @param overlayClass the overlay class to check.
+         * @return <tt>true</tt> if the processing is possible for this overlay class.
          */
         private boolean canProcess(OverlayClass overlayClass) {
             if (overlayClass.getNamespaceURI() == null) {
                 return false;
             }
+            // TODO Stelian (not sure why we're not processing non-AN elements here? - Phil)
             if (!"http://www.akomantoso.org/2.0".equalsIgnoreCase(overlayClass.getNamespaceURI())) {
                 return false;
             }
@@ -64,7 +68,7 @@ public class CssOverlayStyle {
             if (overlayClass instanceof OverlayClassGenerator.OverlaySchemaClass) {
                 return false;
             }
-            boolean skipped = EnumSet.of(OverlayType.AttrGroup,
+            final boolean skipped = EnumSet.of(OverlayType.AttrGroup,
                     OverlayType.Attribute,
                     OverlayType.Group,
                     OverlayType.SimpleType,
@@ -72,46 +76,81 @@ public class CssOverlayStyle {
 
             return !skipped;
         }
-
     }
 
-
+    /**
+     * The overlay class we're generating the CSS style for.
+     */
     private OverlayClass overlayClass;
+
+    /**
+     * The CSS directive name.
+     */
     private String name;
+
+    /**
+     * The CSS properties for the CSS directive.
+     */
     private Map<String, String> values;
 
-    CssOverlayStyle(OverlayClass aClass) {
+    /**
+     * Creates an empty overlay style class.
+     */
+    public CssOverlayStyle() {
+    }
+
+    /**
+     * Create an default overlay style for the given class, and initialize the CSS properties.
+     *
+     * @param aClass the overlay class
+     */
+    public CssOverlayStyle(OverlayClass aClass) {
         this.overlayClass = aClass;
         this.name = aClass.getName();
         this.values = new HashMap<String, String>();
     }
 
+    /**
+     * Used in combination with the CSS properties file to override the default (empty) CSS settings.
+     *
+     * @param name   the CSS class name
+     * @param values the CSS properties
+     */
     public CssOverlayStyle(String name, Map<String, String> values) {
         this.name = name;
         this.values = values;
-
     }
 
+    /**
+     * Return the CSS directive name (eg. 'paragraph', 'recital', ...).
+     *
+     * @return the (class) name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Return the CSS properties for a given {@link #getName()}.
+     *
+     * @return the CSS properties
+     */
     public Map<String, String> getValues() {
         return values;
     }
 
     /**
-     * Generates css values including the ones from parent class
+     * Generates css values including the ones from the parent class (by walking the parent class).
      *
-     * @param styles
+     * @param styles the accumulator of CSS overlay styles.
      */
-    public void cssProcess(List<CssOverlayStyle> styles) {
+    public void cssProcess(final List<CssOverlayStyle> styles) {
         OverlayClass aClass = overlayClass;
         while (aClass != null) {
             for (CssOverlayStyle cssStyle : styles) {
                 if (aClass.getName() != null && aClass.getName().equalsIgnoreCase(cssStyle.getName())) {
                     // if the key already exist do not override it
-                    for (Map.Entry<String, String> entry : cssStyle.values.entrySet()) {
+                    for (final Map.Entry<String, String> entry : cssStyle.values.entrySet()) {
                         if (!values.containsKey(entry.getKey())) {
                             values.put(entry.getKey(), entry.getValue());
                         }
@@ -122,13 +161,18 @@ public class CssOverlayStyle {
         }
     }
 
+    /**
+     * Generates a CSS valid String representation for this CSS overlay style instance.
+     *
+     * @return the CSS representation.
+     */
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(name + " {").append("\n");
-        String delimiter = ";";
+        final String delimiter = ";";
+        final StringBuilder sb = new StringBuilder();
+        sb.append(name).append(" {").append("\n");
         if (values != null) {
-            for (Map.Entry<String, String> entry : values.entrySet()) {
-                sb.append("\t" + entry.getKey() + ":" + entry.getValue()).append(delimiter).append("\n");
+            for (final Map.Entry<String, String> entry : values.entrySet()) {
+                sb.append("\t").append(entry.getKey()).append(":").append(entry.getValue()).append(delimiter).append("\n");
             }
         }
         sb.append("}\n");

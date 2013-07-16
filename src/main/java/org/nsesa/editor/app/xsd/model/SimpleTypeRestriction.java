@@ -17,17 +17,19 @@ import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
 import com.sun.xml.xsom.XSSimpleType;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
- * Contains a mapping of xsd facet restriction
- * (See {@link XSFacet})
+ * Contains a mapping of xsd facet restriction (See {@link XSFacet}).
+ *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 18/10/12 09:11
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         <p/>
+ *         Date: 18/10/12 09:11
  */
 public class SimpleTypeRestriction {
+
     private List<String> enumeration = null;
     private String fractionDigits = null;
     private String maxExclusive = null;
@@ -45,7 +47,7 @@ public class SimpleTypeRestriction {
         return enumeration;
     }
 
-    public void setEnumeration(List<String> enumeration) {
+    public void setEnumeration(final List<String> enumeration) {
         this.enumeration = enumeration;
     }
 
@@ -53,7 +55,7 @@ public class SimpleTypeRestriction {
         return fractionDigits;
     }
 
-    public void setFractionDigits(String fractionDigits) {
+    public void setFractionDigits(final String fractionDigits) {
         this.fractionDigits = fractionDigits;
     }
 
@@ -61,7 +63,7 @@ public class SimpleTypeRestriction {
         return maxExclusive;
     }
 
-    public void setMaxExclusive(String maxExclusive) {
+    public void setMaxExclusive(final String maxExclusive) {
         this.maxExclusive = maxExclusive;
     }
 
@@ -69,7 +71,7 @@ public class SimpleTypeRestriction {
         return maxInclusive;
     }
 
-    public void setMaxInclusive(String maxInclusive) {
+    public void setMaxInclusive(final String maxInclusive) {
         this.maxInclusive = maxInclusive;
     }
 
@@ -77,7 +79,7 @@ public class SimpleTypeRestriction {
         return minExclusive;
     }
 
-    public void setMinExclusive(String minExclusive) {
+    public void setMinExclusive(final String minExclusive) {
         this.minExclusive = minExclusive;
     }
 
@@ -85,7 +87,7 @@ public class SimpleTypeRestriction {
         return minInclusive;
     }
 
-    public void setMinInclusive(String minInclusive) {
+    public void setMinInclusive(final String minInclusive) {
         this.minInclusive = minInclusive;
     }
 
@@ -93,7 +95,7 @@ public class SimpleTypeRestriction {
         return length;
     }
 
-    public void setLength(String length) {
+    public void setLength(final String length) {
         this.length = length;
     }
 
@@ -101,7 +103,7 @@ public class SimpleTypeRestriction {
         return maxLength;
     }
 
-    public void setMaxLength(String maxLength) {
+    public void setMaxLength(final String maxLength) {
         this.maxLength = maxLength;
     }
 
@@ -109,7 +111,7 @@ public class SimpleTypeRestriction {
         return minLength;
     }
 
-    public void setMinLength(String minLength) {
+    public void setMinLength(final String minLength) {
         this.minLength = minLength;
     }
 
@@ -117,7 +119,7 @@ public class SimpleTypeRestriction {
         return pattern;
     }
 
-    public void setPattern(String pattern) {
+    public void setPattern(final String pattern) {
         this.pattern = pattern;
     }
 
@@ -125,7 +127,7 @@ public class SimpleTypeRestriction {
         return totalDigits;
     }
 
-    public void setTotalDigits(String totalDigits) {
+    public void setTotalDigits(final String totalDigits) {
         this.totalDigits = totalDigits;
     }
 
@@ -133,24 +135,22 @@ public class SimpleTypeRestriction {
         return whiteSpace;
     }
 
-    public void setWhiteSpace(String whiteSpace) {
+    public void setWhiteSpace(final String whiteSpace) {
         this.whiteSpace = whiteSpace;
     }
 
     /**
-     * Generates a restriction based on the given xsd simple type
+     * Generates a restriction based on the given xsd simple type.
      *
-     * @param simpleType The simple type processed
-     * @return
+     * @param simpleType The simple type to be processed
+     * @return the restriction
      */
-    public static SimpleTypeRestriction getRestriction(XSSimpleType simpleType) {
-        SimpleTypeRestriction typeRestriction = new SimpleTypeRestriction();
-        XSRestrictionSimpleType restriction = simpleType.asRestriction();
+    public static SimpleTypeRestriction getRestriction(final XSSimpleType simpleType) {
+        final SimpleTypeRestriction typeRestriction = new SimpleTypeRestriction();
+        final XSRestrictionSimpleType restriction = simpleType.asRestriction();
         if (restriction != null) {
-            Vector<String> enumeration = new Vector<String>();
-            Iterator<? extends XSFacet> i = restriction.getDeclaredFacets().iterator();
-            while (i.hasNext()) {
-                XSFacet facet = i.next();
+            final List<String> enumeration = new ArrayList<String>();
+            for (final XSFacet facet : restriction.getDeclaredFacets()) {
                 if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {
                     enumeration.add(facet.getValue().value);
                 }
@@ -188,7 +188,7 @@ public class SimpleTypeRestriction {
                     typeRestriction.setFractionDigits(facet.getValue().value);
                 }
             }
-            if (enumeration.size() > 0) {
+            if (!enumeration.isEmpty()) {
                 typeRestriction.setEnumeration(enumeration);
             }
         }

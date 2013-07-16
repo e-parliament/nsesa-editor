@@ -46,7 +46,7 @@
                     <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>
                 </#if>
             <#else>
-                <#if overlayClass.isDescendentOf("Inline") && (overlayClass.isElement() || overlayClass.isComplex())>
+                <#if overlayClass.isDescendantOf("Inline") && (overlayClass.isElement() || overlayClass.isComplex())>
                     <@displayInline overlayStyle=overlayStyle overlayClass=overlayClass/>
                 <#else>
                     <@displayBlock overlayStyle=overlayStyle overlayClass=overlayClass/>

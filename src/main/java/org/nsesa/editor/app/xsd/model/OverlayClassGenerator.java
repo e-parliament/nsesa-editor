@@ -18,10 +18,11 @@ import com.sun.xml.xsom.*;
 import java.util.Collection;
 
 /**
- * Interface to generate objects of type {@link OverlayClass} from different xsd components
+ * Interface to generate objects of type {@link OverlayClass} from different xsd components.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 18/10/12 15:36
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 18/10/12 15:36
  */
 public interface OverlayClassGenerator {
     /**
@@ -43,57 +44,58 @@ public interface OverlayClassGenerator {
     }
 
     /**
-     * Return tree result of overlay classes after xsd parsing
+     * Return tree result of overlay classes after xsd parsing.
      *
-     * @return
+     * @return the root overlay class
      */
     OverlayRootClass getResult();
 
     /**
-     * Start generation of overlay classes
-     * @param schemas
+     * Start generation of overlay classes.
+     *
+     * @param schemas the collection of schemas to use
      */
     void generate(Collection<XSSchema> schemas);
 
     /**
-     * Generates overlay class from simple type component
+     * Generates overlay class from simple type component.
      *
      * @param simpleType The simple type processed
      */
     void generate(XSSimpleType simpleType);
 
     /**
-     * Generates overlay class from complex type component
+     * Generates overlay class from complex type component.
      *
      * @param complexType The complex type processed
      */
     void generate(XSComplexType complexType);
 
     /**
-     * Generates overlay class from attribute type component
+     * Generates overlay class from attribute type component.
      *
      * @param attribute The attribute type that will be processed
      */
     void generate(XSAttributeDecl attribute);
 
     /**
-     * Generates overlay class from group type component
+     * Generates overlay class from group type component.
      *
      * @param modelGroup The xsd group processed
      */
     void generate(XSModelGroupDecl modelGroup);
 
     /**
-     * Generates overlay class from attribute group type component
+     * Generates overlay class from attribute group type component.
      *
      * @param attrGroup The xsd attribute group processed
      */
     void generate(XSAttGroupDecl attrGroup);
 
     /**
-     * Generates overlay class from XSElementDecl type component
-     * @param element
-     * @return
+     * Generates overlay class from XSElementDecl type component.
+     *
+     * @param element the underlying element
      */
     void generate(XSElementDecl element);
 

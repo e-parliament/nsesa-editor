@@ -17,14 +17,15 @@ package org.nsesa.editor.app.xsd.model;
  * Define how to process, if the case, an overlay class, when traversing it
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 29/10/12 12:35
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 29/10/12 12:35
  */
 public interface OverlayClassProcessor {
     /**
-     * Process the overlay class
+     * Process the overlay class in a variety of ways (binding class, CSS properties, ...).
      *
-     * @param overlayClass The class to be processed
-     * @return True when the class was processed
+     * @param overlayClass The overlay class to be processed
+     * @return <tt>true</tt> if the class was actually processed
      */
     public abstract boolean process(OverlayClass overlayClass);
 }
