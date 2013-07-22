@@ -42,6 +42,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Mover;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.*;
@@ -473,13 +474,13 @@ public class DefaultDocumentController implements DocumentController {
      * via the {@link #getServiceFactory()}.
      * <p/>
      * If this call fails, a {@link org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent} is fired on the global event bus. If the request was successful,
-     * we call {@link #onDocumentContentLoaded(String)} with the received content.
+     * we call {@link #onDocumentContentLoaded(org.nsesa.editor.gwt.core.shared.DocumentContentDTO)} with the received content.
      */
     public void loadDocumentContent() {
         assert document.getDocumentID() != null : "No documentID set on the document object.";
         // clean up any previous content - if any
         showLoadingIndicator(true, "Retrieving document.");
-        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<String>() {
+        serviceFactory.getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), document.getDocumentID(), new AsyncCallback<DocumentContentDTO>() {
             @Override
             public void onFailure(Throwable caught) {
                 showLoadingIndicator(false, "Done retrieving document content.");
@@ -488,9 +489,9 @@ public class DefaultDocumentController implements DocumentController {
             }
 
             @Override
-            public void onSuccess(final String content) {
+            public void onSuccess(final DocumentContentDTO documentContentDTO) {
                 showLoadingIndicator(false, "Done retrieving document content.");
-                onDocumentContentLoaded(content);
+                onDocumentContentLoaded(documentContentDTO);
             }
         });
     }
@@ -499,11 +500,11 @@ public class DefaultDocumentController implements DocumentController {
      * Callback when the document content was successfully received. Will set the received content on the
      * {@link #getSourceFileController()}.
      *
-     * @param content the received HTML content to be place in the source file controller
+     * @param documentContentDTO the received document content to be placed in the source file controller
      */
-    public void onDocumentContentLoaded(final String content) {
+    public void onDocumentContentLoaded(final DocumentContentDTO documentContentDTO) {
         showLoadingIndicator(true, "Parsing document.");
-        sourceFileController.setContent(content);
+        sourceFileController.setContent(documentContentDTO);
         showLoadingIndicator(true, "Building document tree.");
     }
 

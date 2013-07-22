@@ -50,6 +50,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 import java.util.ArrayList;
@@ -314,6 +315,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     /**
      * Removes all registered event handlers from the event bus and UI.
      */
+    @Override
     public void removeListeners() {
         super.removeListeners();
         documentRefreshRequestEventHandlerRegistration.removeHandler();
@@ -331,9 +333,10 @@ public class AmendmentDocumentController extends DefaultDocumentController {
      * {@link #getSourceFileController()}, and via a deferred
      * command call the amendments to be fetched via {@link #fetchAmendments()}.
      *
-     * @param content the received HTML content to be place in the source file controller
+     * @param content the received document content to be placed in the source file controller
      */
-    public void onDocumentContentLoaded(final String content) {
+    @Override
+    public void onDocumentContentLoaded(final DocumentContentDTO content) {
         super.onDocumentContentLoaded(content);
         clientFactory.getScheduler().scheduleDeferred(new Command() {
             @Override
