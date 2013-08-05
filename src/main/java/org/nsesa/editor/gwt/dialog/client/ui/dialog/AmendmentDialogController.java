@@ -187,7 +187,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
 
     /**
      * Create a default {@link AmendmentContainerDTO} with a
-     * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getId()} and
+     * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getAmendmentContainerID()} and
      * {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getRevisionID()} set.
      *
      * @return the amendment container DTO
@@ -195,7 +195,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     protected AmendmentContainerDTO createAmendment() {
         final AmendmentContainerDTO dto = new AmendmentContainerDTO();
         // set the primary key
-        dto.setId(UUID.uuid());
+        dto.setAmendmentContainerID(UUID.uuid());
         // set the revision
         dto.setRevisionID(UUID.uuid());
         return dto;

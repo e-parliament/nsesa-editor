@@ -61,7 +61,7 @@ public class DefaultAmendmentInjectionPointProvider implements AmendmentInjectio
 
         final AmendableWidgetReference reference = amendmentController.getModel().getSourceReference();
         if (reference == null)
-            throw new NullPointerException("No reference set on the amendment controller's model with ID: " + amendmentController.getModel().getId());
+            throw new NullPointerException("No reference set on the amendment controller's model with ID: " + amendmentController.getModel().getAmendmentContainerID());
 
         // check if we need to create a new element or not
         if (reference.isCreation()) {

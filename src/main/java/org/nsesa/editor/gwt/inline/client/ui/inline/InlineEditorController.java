@@ -129,7 +129,7 @@ public class InlineEditorController implements ProvidesResize {
 
     protected AmendmentContainerDTO createAmendment() {
         AmendmentContainerDTO dto = new AmendmentContainerDTO();
-        dto.setId(UUID.uuid());
+        dto.setAmendmentContainerID(UUID.uuid());
         return dto;
     }
 

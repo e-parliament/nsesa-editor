@@ -14,6 +14,9 @@
 package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 import java.util.ArrayList;
@@ -25,42 +28,50 @@ import java.util.ArrayList;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Dto
 public class AmendmentContainerDTO implements IsSerializable {
 
     /**
      * The primary key that identifies a logical amendment container.
      */
-    private String id;
+    @DtoField
+    private String amendmentContainerID;
 
     /**
      * A reference to the document ID this amendment was made on.
      */
+    @DtoField
     private String documentID;
 
     /**
      * A revision key that uniquely identifies this version.
      */
+    @DtoField
     private String revisionID;
 
     /**
      * The two letter ISO code of the (primary) language this amendment is created in.
      */
+    @DtoField
     private String languageISO;
 
     /**
      * The type of action of this amendment (modification, deletion, creation, move, ...)
      */
+    @DtoVirtualField(converter = "amendmentActionConvertor")
     private AmendmentAction amendmentAction;
 
     /**
      * The status of an amendment. The initial status of an amendment is 'candidate'. Left as a String for
      * easier extension.
      */
+    @DtoField
     private String amendmentContainerStatus = "candidate";
 
     /**
      * The serialized body/payload of this amendment. Can be XML or JSON, depending on what your backend provides.
      */
+    @DtoField
     private String body;
 
     /**
@@ -72,6 +83,7 @@ public class AmendmentContainerDTO implements IsSerializable {
     /**
      * A reference to the source of this this amendment (meaning, the place where the amendment should be injected upon)
      */
+    @DtoField
     private AmendableWidgetReference sourceReference;
 
     /**
@@ -100,7 +112,7 @@ public class AmendmentContainerDTO implements IsSerializable {
         if (amendmentAction != that.amendmentAction) return false;
         if (!amendmentContainerStatus.equals(that.amendmentContainerStatus)) return false;
         if (body != null ? !body.equals(that.body) : that.body != null) return false;
-        if (!id.equals(that.id)) return false;
+        if (!amendmentContainerID.equals(that.amendmentContainerID)) return false;
         if (languageISO != null ? !languageISO.equals(that.languageISO) : that.languageISO != null)
             return false;
         if (!revisionID.equals(that.revisionID)) return false;
@@ -114,7 +126,7 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = amendmentContainerID.hashCode();
         result = 31 * result + (revisionID != null ? revisionID.hashCode() : 0);
         result = 31 * result + (languageISO != null ? languageISO.hashCode() : 0);
         result = 31 * result + (amendmentAction != null ? amendmentAction.hashCode() : 0);
@@ -169,12 +181,12 @@ public class AmendmentContainerDTO implements IsSerializable {
         this.root = root;
     }
 
-    public String getId() {
-        return id;
+    public String getAmendmentContainerID() {
+        return amendmentContainerID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAmendmentContainerID(String amendmentContainerID) {
+        this.amendmentContainerID = amendmentContainerID;
     }
 
     public String getLanguageISO() {

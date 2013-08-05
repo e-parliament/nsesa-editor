@@ -154,7 +154,7 @@ public class AmendmentsPanelController {
                 final Collection<String> ids = Collections2.transform(selected, new Function<AmendmentController, String>() {
                     @Override
                     public String apply(final AmendmentController input) {
-                        return input.getModel().getId();
+                        return input.getModel().getAmendmentContainerID();
                     }
                 });
                 view.selectAmendmentControllers(new ArrayList<String>(ids));
@@ -212,7 +212,7 @@ public class AmendmentsPanelController {
             documentEventBus.fireEvent(new FilterRequestEvent(currentFilter));
         } else {
             for (final AmendmentController amendmentController : response.getResult()) {
-                amendments.put(amendmentController.getModel().getId(), amendmentController);
+                amendments.put(amendmentController.getModel().getAmendmentContainerID(), amendmentController);
             }
             view.refreshAmendmentControllers(amendments);
             // fire a filter response
@@ -221,7 +221,7 @@ public class AmendmentsPanelController {
             view.selectAmendmentControllers(new ArrayList<String>(Collections2.transform(documentController.getSelector().getSelected(), new Function<AmendmentController, String>() {
                 @Override
                 public String apply(AmendmentController input) {
-                    return input.getModel().getId();
+                    return input.getModel().getAmendmentContainerID();
                 }
             })));
         }
