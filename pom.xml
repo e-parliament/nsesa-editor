@@ -195,6 +195,13 @@
             <version>2.3.19</version>
         </dependency>
 
+        <!-- core module: use can you it on its own if you are not using Spring 3 -->
+        <dependency>
+            <groupId>com.inspire-software.lib.dto.geda</groupId>
+            <artifactId>geda.core</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+
         <!-- it seems some configurations need this to build the project. -->
         <dependency>
             <groupId>javax.validation</groupId>
