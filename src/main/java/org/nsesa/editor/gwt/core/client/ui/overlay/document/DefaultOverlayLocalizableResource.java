@@ -15,13 +15,15 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 
 /**
  * Default implementation for <code>OverlayLocalizableResource<code/> interface returning the overlay widget type
+ *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 28/01/13 9:59
+ *         Date: 28/01/13 9:59
  */
 public class DefaultOverlayLocalizableResource implements OverlayLocalizableResource {
 
     /**
      * Return the type of the overlay widget
+     *
      * @param widget The overlay widget to be processed
      * @return The overlay widget type
      */
@@ -32,11 +34,22 @@ public class DefaultOverlayLocalizableResource implements OverlayLocalizableReso
 
     /**
      * Return the type of the overlay widget
+     *
      * @param widget The overlay widget to be processed
      * @return The overlay widget type
      */
     @Override
     public String getDescription(OverlayWidget widget) {
         return widget.getType();
+    }
+
+    /**
+     * The default implementation is not associated with any namespace.
+     *
+     * @return
+     */
+    @Override
+    public String getNamespaceURI() {
+        return null;
     }
 }
