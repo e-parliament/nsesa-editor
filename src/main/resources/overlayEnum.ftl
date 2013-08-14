@@ -25,7 +25,7 @@ import java.util.ArrayList;
 */
 public enum ${overlayClass.className?cap_first} {
 
-// FIELDS ------------------
+// ENUM VALUES ------------------
 
 <#list overlayClass.restriction.enumeration as enum>
 ${enum?upper_case}("${enum}")<#if enum_has_next>,</#if>
@@ -60,5 +60,11 @@ return en;
 }
 }
 return null;
+}
+
+private static final String namespaceURI = "${overlayClass.namespaceURI}";
+
+public static String getNamespaceURI() {
+return namespaceURI;
 }
 }
