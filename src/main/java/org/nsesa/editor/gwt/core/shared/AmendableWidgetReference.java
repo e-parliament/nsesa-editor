@@ -139,7 +139,7 @@ public class AmendableWidgetReference implements IsSerializable {
         AmendableWidgetReference reference = (AmendableWidgetReference) o;
 
         if (creation != reference.creation) return false;
-        if (offset != reference.offset) return false;
+        if (!offset.equals(reference.offset)) return false;
         if (sibling != reference.sibling) return false;
         if (!namespaceURI.equals(reference.namespaceURI)) return false;
         if (!path.equals(reference.path)) return false;
