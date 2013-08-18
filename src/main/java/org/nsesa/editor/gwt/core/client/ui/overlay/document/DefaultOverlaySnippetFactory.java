@@ -19,7 +19,6 @@ import java.util.Map;
 /**
  * Default implementation of {@link OverlaySnippetFactory} interface by storing all the snippets into a local map.
  *
- *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 8/04/13 11:38
  */
@@ -45,7 +44,8 @@ public class DefaultOverlaySnippetFactory implements OverlaySnippetFactory {
 
     /**
      * Register a snippet for the given overlay widget
-     * @param widget The widget for which the overlay snippet is registered
+     *
+     * @param widget         The widget for which the overlay snippet is registered
      * @param overlaySnippet The overlay snippet to be registered
      */
     public void registerSnippet(final OverlayWidget widget, final OverlaySnippet overlaySnippet) {
