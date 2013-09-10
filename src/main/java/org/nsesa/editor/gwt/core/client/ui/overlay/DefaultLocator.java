@@ -213,7 +213,11 @@ public class DefaultLocator implements Locator {
                     }
                 }
             }
-            return Integer.toString(overlayWidget.getTypeIndex() + 1);
+            final String nextTypeIndex = Integer.toString(overlayWidget.getTypeIndex() + 1);
+            if (format) {
+                return overlayWidget.getFormat().format(nextTypeIndex);
+            }
+            return nextTypeIndex;
         }
     }
 
