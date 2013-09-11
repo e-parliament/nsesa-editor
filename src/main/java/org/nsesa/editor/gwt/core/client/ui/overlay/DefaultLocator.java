@@ -203,21 +203,23 @@ public class DefaultLocator implements Locator {
             }
             return index;
         } else {
-            // see if we can extract the index
-            final NumberingType numberingType = overlayWidget.getNumberingType();
-            if (numberingType != null) {
-                if (!numberingType.isConstant()) {
-                    index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
-                    if (index != null) {
-                        return index;
+
+            if (format) {
+                return overlayWidget.getFormat().format(overlayWidget.getNumberingType().get(overlayWidget.getTypeIndex()));
+            } else {
+                // TODO: we don't handle formatting here for elements that are not introduced
+                // see if we can extract the index
+                final NumberingType numberingType = overlayWidget.getNumberingType();
+                if (numberingType != null) {
+                    if (!numberingType.isConstant()) {
+                        index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
+                        if (index != null) {
+                            return index;
+                        }
                     }
                 }
+                return Integer.toString(overlayWidget.getTypeIndex() + 1);
             }
-            final String nextTypeIndex = Integer.toString(overlayWidget.getTypeIndex() + 1);
-            if (format) {
-                return overlayWidget.getFormat().format(nextTypeIndex);
-            }
-            return nextTypeIndex;
         }
     }
 
