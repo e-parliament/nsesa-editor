@@ -396,7 +396,18 @@ public class OverlayClass extends OverlayNode {
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         OverlayClass aClass = this;
         while (aClass != null && (aClass.isComplex() || aClass.isSimple() || aClass.isElement())) {
-            for (OverlayProperty property : aClass.getFlatProperties()) {
+            final List<OverlayProperty> flatProperties = aClass.getFlatProperties();
+            Collections.sort(flatProperties, new Comparator<OverlayProperty>() {
+                @Override
+                public int compare(OverlayProperty overlayProperty, OverlayProperty overlayProperty2) {
+
+                    assert overlayProperty2 != null;
+                    assert overlayProperty2.getName() != null;
+
+                    return overlayProperty.getName().compareTo(overlayProperty2.getName());
+                }
+            });
+            for (OverlayProperty property : flatProperties) {
                 if (filter.apply(property)) {
                     result.add(property);
                 }
