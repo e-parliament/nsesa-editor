@@ -80,6 +80,11 @@ public class DefaultOverlayFactory implements OverlayFactory {
         return null;
     }
 
+    @Override
+    public OverlayStrategy getOverlayStrategy() {
+        return overlayStrategy;
+    }
+
     protected OverlayWidget wrap(final OverlayWidget parent, final com.google.gwt.dom.client.Element element, final int depth, final int maxDepth) {
         final OverlayWidget overlayWidget = toAmendableWidget(element);
         if (overlayWidget != null) {

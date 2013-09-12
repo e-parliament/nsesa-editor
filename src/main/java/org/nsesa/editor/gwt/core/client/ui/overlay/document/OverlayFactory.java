@@ -40,10 +40,11 @@ public interface OverlayFactory {
     /**
      * Similar to {@link #getAmendableWidget(com.google.gwt.dom.client.Element)}, but with an extra limiter for the
      * depth of the children to be overlaid.
-     * @param element       the element to get the overlaying element for
-     * @param maxDepth      the max depth to be overlaid (a value of '1' makes that only the direct children of the
-     *                      given <tt>element</tt> will be searched.
-     * @return  the overlay widget, or <tt>null</tt> if it cannot be found.
+     *
+     * @param element  the element to get the overlaying element for
+     * @param maxDepth the max depth to be overlaid (a value of '1' makes that only the direct children of the
+     *                 given <tt>element</tt> will be searched.
+     * @return the overlay widget, or <tt>null</tt> if it cannot be found.
      */
     OverlayWidget getAmendableWidget(Element element, int maxDepth);
 
@@ -70,4 +71,6 @@ public interface OverlayFactory {
      * @return the namespace URI
      */
     String getNamespaceURI();
+
+    OverlayStrategy getOverlayStrategy();
 }
