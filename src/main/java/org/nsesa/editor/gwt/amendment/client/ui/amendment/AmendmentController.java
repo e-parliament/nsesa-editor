@@ -63,8 +63,19 @@ public interface AmendmentController extends OverlayWidgetAware {
      */
     void setModel(AmendmentContainerDTO amendment);
 
+    /**
+     * Merge a amendment DTO into this controller.
+     *
+     * @param amendment             the amendment to merge in
+     * @param onlyChangedAttributes <tt>true</tt> if only the attributes changed, and not the content
+     */
     void mergeModel(AmendmentContainerDTO amendment, boolean onlyChangedAttributes);
 
+    /**
+     * Set the body of the amendment.
+     *
+     * @param body the body to set
+     */
     void setBody(String body);
 
     /**

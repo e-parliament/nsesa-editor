@@ -38,6 +38,11 @@ public class AmendmentContainerDTO implements IsSerializable {
     private String amendmentContainerID;
 
     /**
+     * Contains the sorted references to the bundled amendment containers.
+     */
+    private String[] bundledAmendmentContainerIDs;
+
+    /**
      * A reference to the document ID this amendment was made on.
      */
     @DtoField
@@ -211,5 +216,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setDocumentID(String documentID) {
         this.documentID = documentID;
+    }
+
+    public String[] getBundledAmendmentContainerIDs() {
+        return bundledAmendmentContainerIDs;
+    }
+
+    public void setBundledAmendmentContainerIDs(String[] bundledAmendmentContainerIDs) {
+        this.bundledAmendmentContainerIDs = bundledAmendmentContainerIDs;
     }
 }
