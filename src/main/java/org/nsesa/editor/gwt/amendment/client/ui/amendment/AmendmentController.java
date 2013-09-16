@@ -212,4 +212,11 @@ public interface AmendmentController extends OverlayWidgetAware {
      * @return the diff method
      */
     DiffMethod getDiffMethod();
+
+    /**
+     * Check if this amendment controller consists of multiple bundled amendments.
+     *
+     * @return <tt>true</tt> if this is a bundle
+     */
+    boolean isBundle();
 }

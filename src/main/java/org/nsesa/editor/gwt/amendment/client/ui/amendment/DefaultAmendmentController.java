@@ -571,6 +571,11 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
+    public boolean isBundle() {
+        return amendment.getBundledAmendmentContainerIDs().length > 0;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DefaultAmendmentController)) return false;
