@@ -79,7 +79,7 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
         this.constants = constants;
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
-    	//show class name tool tip in hosted mode
+        //show class name tool tip in hosted mode
         if (!GWT.isScript())
             widget.setTitle(this.getClass().getName());
     }
@@ -98,6 +98,16 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
     public void setTitle(String title) {
         super.setTitle(title + (GWT.isScript() ? "" : " (" + this.getClass().getName() + ")"));
         this.title.setText(title);
+    }
+
+    @Override
+    public void setId(String id) {
+        // TODO
+    }
+
+    @Override
+    public void setBundle(String[] amendmentContainerIDs) {
+        // TODO
     }
 
     @Override

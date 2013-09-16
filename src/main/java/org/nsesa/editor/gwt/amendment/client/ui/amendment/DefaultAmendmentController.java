@@ -70,6 +70,8 @@ public class DefaultAmendmentController implements AmendmentController {
 
     protected List<String> viewKeys = new ArrayList<String>(), extendedViewKeys = new ArrayList<String>();
 
+    protected List<AmendmentController> bundledAmendmentControllers = new ArrayList<AmendmentController>();
+
     protected final Constants constants;
 
     protected final Messages messages;
@@ -88,6 +90,11 @@ public class DefaultAmendmentController implements AmendmentController {
     protected OverlayWidget amendedOverlayWidget;
 
     protected int order;
+
+    /**
+     * Flag to keep track if this controller is part of a bundle or not.
+     */
+    protected boolean bundled;
 
     /**
      * The document controller into which we are injected. If it is not set, we're not injected anywhere.
@@ -519,6 +526,14 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
+    public void setId(String id) {
+        if (view != null)
+            this.view.setId(id);
+        if (extendedView != null)
+            this.extendedView.setId(id);
+    }
+
+    @Override
     public void setOverlayWidget(OverlayWidget amendedOverlayWidget) {
         this.amendedOverlayWidget = amendedOverlayWidget;
     }
@@ -572,7 +587,17 @@ public class DefaultAmendmentController implements AmendmentController {
 
     @Override
     public boolean isBundle() {
-        return amendment.getBundledAmendmentContainerIDs().length > 0;
+        return amendment.getBundledAmendmentContainerIDs() != null && amendment.getBundledAmendmentContainerIDs().length > 0;
+    }
+
+    @Override
+    public void setBundled(boolean isBundled) {
+        this.bundled = isBundled;
+    }
+
+    @Override
+    public boolean isBundled() {
+        return bundled;
     }
 
     @Override

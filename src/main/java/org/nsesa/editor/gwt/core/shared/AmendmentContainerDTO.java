@@ -142,6 +142,30 @@ public class AmendmentContainerDTO implements IsSerializable {
         return result;
     }
 
+    public AmendmentContainerDTO deepCopy() {
+        final AmendmentContainerDTO copy = new AmendmentContainerDTO();
+        copy.setAmendmentAction(amendmentAction);
+        copy.setAmendmentContainerID(amendmentContainerID);
+        copy.setAmendmentContainerStatus(amendmentContainerStatus);
+        copy.setBody(body);
+        copy.setDocumentID(documentID);
+        copy.setLanguageISO(languageISO);
+        copy.setRevisionID(revisionID);
+        copy.setRoot(root);
+
+        if (sourceReference != null) {
+            copy.setSourceReference(sourceReference.deepCopy());
+        }
+
+        if (targetReferences != null) {
+            copy.setTargetReferences(new ArrayList<AmendableWidgetReference>());
+            for (AmendableWidgetReference targetReference : targetReferences) {
+                copy.getTargetReferences().add(targetReference.deepCopy());
+            }
+        }
+        return copy;
+    }
+
     public void setAmendmentAction(AmendmentAction amendmentAction) {
         this.amendmentAction = amendmentAction;
     }

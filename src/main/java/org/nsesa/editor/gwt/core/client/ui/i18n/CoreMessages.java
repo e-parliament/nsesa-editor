@@ -116,6 +116,9 @@ public interface CoreMessages extends Messages {
     @Key("amendment.action.return")
     String amendmentActionReturn();
 
+    @Key("amendment.action.bundle")
+    String amendmentActionBundle();
+
     @Key("amendment.action.save.successful")
     String amendmentActionSaveSuccessful(@PluralCount int arg);
 
@@ -205,4 +208,16 @@ public interface CoreMessages extends Messages {
 
     @Key("confirmation.amendment.withdraw.button.cancel")
     String confirmationAmendmentWithdrawButtonCancel();
+
+    @Key("confirmation.amendment.bundle.title")
+    String confirmationAmendmentBundleTitle();
+
+    @Key("confirmation.amendment.bundle.message")
+    String confirmationAmendmentBundleMessage();
+
+    @Key("confirmation.amendment.bundle.button.confirm")
+    String confirmationAmendmentBundleButtonConfirm();
+
+    @Key("confirmation.amendment.bundle.button.cancel")
+    String confirmationAmendmentBundleButtonCancel();
 }

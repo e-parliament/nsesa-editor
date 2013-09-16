@@ -167,6 +167,13 @@ public interface AmendmentController extends OverlayWidgetAware {
     void setStatus(String status);
 
     /**
+     * Set the id on the views.
+     *
+     * @param id the id to set
+     */
+    void setId(String id);
+
+    /**
      * Get the local order of the amendment.
      *
      * @return the order
@@ -217,6 +224,23 @@ public interface AmendmentController extends OverlayWidgetAware {
      * Check if this amendment controller consists of multiple bundled amendments.
      *
      * @return <tt>true</tt> if this is a bundle
+     * @since 0.9
      */
     boolean isBundle();
+
+    /**
+     * Set the flag to indicate this controller is part of a bundle or not.
+     *
+     * @param isBundled <tt>true</tt> if this is part of a bundle
+     * @since 0.9
+     */
+    void setBundled(boolean isBundled);
+
+    /**
+     * Check if this amendment controller is part of a bundle.
+     *
+     * @return <tt>true</tt> if this is part of a bundle
+     * @since 0.9
+     */
+    boolean isBundled();
 }

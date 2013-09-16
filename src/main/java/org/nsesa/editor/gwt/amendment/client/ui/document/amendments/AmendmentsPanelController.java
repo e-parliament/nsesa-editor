@@ -59,7 +59,16 @@ public class AmendmentsPanelController {
     private AmendmentDocumentController documentController;
     private Filter<AmendmentController> currentFilter;
 
-    private Selection<AmendmentController> DEFAULT_SELECTION = new Selection.AllSelection<AmendmentController>();
+    /**
+     * The default selection only selects those controllers that are not part of a bundle
+     */
+    private Selection<AmendmentController> DEFAULT_SELECTION = new Selection<AmendmentController>() {
+        @Override
+        public boolean select(AmendmentController amendmentController) {
+            return !amendmentController.isBundled();
+        }
+    };
+
     private HandlerRegistration documentRefreshRequestEventHandlerRegistration;
     private HandlerRegistration amendmentContainerInjectedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerSkippedEventHandlerRegistration;

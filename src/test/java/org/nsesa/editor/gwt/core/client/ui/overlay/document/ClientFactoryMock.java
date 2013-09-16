@@ -202,6 +202,11 @@ public class ClientFactoryMock implements ClientFactory {
         }
 
         @Override
+        public String amendmentActionBundle() {
+            return "amendmentActionBundle";
+        }
+
+        @Override
         public String amendmentActionSaveSuccessful(@PluralCount int arg) {
             return "amendmentActionSaveSuccessful";
         }
@@ -344,6 +349,26 @@ public class ClientFactoryMock implements ClientFactory {
         @Override
         public String confirmationAmendmentWithdrawButtonCancel() {
             return "confirmationAmendmentWithdrawButtonCancel";
+        }
+
+        @Override
+        public String confirmationAmendmentBundleTitle() {
+            return "confirmationAmendmentBundleTitle";
+        }
+
+        @Override
+        public String confirmationAmendmentBundleMessage() {
+            return "confirmationAmendmentBundleMessage";
+        }
+
+        @Override
+        public String confirmationAmendmentBundleButtonConfirm() {
+            return "confirmationAmendmentBundleButtonConfirm";
+        }
+
+        @Override
+        public String confirmationAmendmentBundleButtonCancel() {
+            return "confirmationAmendmentBundleButtonCancel";
         }
     };
 

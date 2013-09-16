@@ -32,6 +32,20 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
     public static final String DEFAULT = "default", CONSOLIDATION = "consolidation", SINGLE = "single";
 
     /**
+     * Set the id on the view.
+     *
+     * @param id the id to set.
+     */
+    void setId(String id);
+
+    /**
+     * Set the bundled amendment containers (if any).
+     *
+     * @param amendmentContainerIDs the amendment container IDs that are bundled
+     */
+    void setBundle(String[] amendmentContainerIDs);
+
+    /**
      * Set the title
      *
      * @param title the title to set
