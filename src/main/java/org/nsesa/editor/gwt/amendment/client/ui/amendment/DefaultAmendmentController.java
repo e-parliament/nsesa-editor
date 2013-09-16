@@ -124,8 +124,6 @@ public class DefaultAmendmentController implements AmendmentController {
     private HandlerRegistration extClickHandlerRegistration;
     private HandlerRegistration extDoubleClickHandlerRegistration;
 
-    private Integer injectionPosition;
-
     /**
      * Just for easier testing ...
      */
