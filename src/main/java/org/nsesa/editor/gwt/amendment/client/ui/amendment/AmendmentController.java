@@ -50,6 +50,12 @@ public interface AmendmentController extends OverlayWidgetAware {
     };
 
     /**
+     * Various status codes to get rid of the strings in the comparison scenarios.
+     */
+    public static final String STATUS_CANDIDATE = "candidate", STATUS_TABLED = "tabled", STATUS_WITHDRAWN = "withdrawn",
+            STATUS_DELETED = "deleted", STATUS_REJECTED = "rejected", STATUS_RETURNED = "returned";
+
+    /**
      * Returns the underlying DTO model.
      *
      * @return the model

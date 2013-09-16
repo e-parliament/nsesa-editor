@@ -98,7 +98,7 @@ public class DefaultAmendmentController implements AmendmentController {
         @Override
         public void onClick(ClickEvent event) {
             final String status = getModel().getAmendmentContainerStatus();
-            if (!"candidate".equalsIgnoreCase(status) && !"withdrawn".equalsIgnoreCase(status)) {
+            if (!STATUS_CANDIDATE.equalsIgnoreCase(status) && !STATUS_WITHDRAWN.equalsIgnoreCase(status)) {
                 // you're only allowed to remove
                 documentController.getClientFactory().getEventBus().fireEvent(new InformationEvent("Sorry, you cannot do that", "You can only delete candidate or withdrawn amendments. Please withdraw the amendment first."));
             } else {
