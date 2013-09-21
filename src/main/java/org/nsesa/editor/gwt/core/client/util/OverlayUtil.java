@@ -79,8 +79,15 @@ public class OverlayUtil {
             @Override
             public boolean visit(final OverlayWidget visited) {
                 // only simple tag names atm
-                if (visited.getType().equalsIgnoreCase(expression)) {
-                    matches.add(visited);
+                Selector.NodeNameMatcher nodeNameMatcher = new Selector.NodeNameMatcher();
+                if (nodeNameMatcher.matches(expression, visited)) {
+                    Selector.AttributeMatcher attributeMatcher = new Selector.AttributeMatcher();
+                    if (attributeMatcher.applicable(expression)) {
+                        if (attributeMatcher.matches(expression, visited))
+                            matches.add(visited);
+                    } else {
+                        matches.add(visited);
+                    }
                 }
                 return true;
             }
