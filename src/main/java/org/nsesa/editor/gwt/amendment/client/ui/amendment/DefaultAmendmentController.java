@@ -40,10 +40,7 @@ import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DiffStyle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
@@ -387,10 +384,7 @@ public class DefaultAmendmentController implements AmendmentController {
         for (Map.Entry<String, AmendmentView> view : availableViews.entrySet()) {
             view.getValue().detach();
         }
-        availableViews.clear();/*
-        for (Map.Entry<String, AmendmentView> view : availableExtendedViews.entrySet()) {
-            view.getValue().detach();
-        }*/
+        availableViews.clear();
         availableExtendedViews.clear();
     }
 
@@ -412,10 +406,11 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setModel(AmendmentContainerDTO amendment) {
+    public void setModel(final AmendmentContainerDTO amendment) {
         this.amendment = amendment;
         setBody(amendment.getBody());
         setStatus(amendment.getAmendmentContainerStatus());
+        setBundle(amendment.getBundledAmendmentContainerIDs());
 
         if (documentController instanceof AmendmentDocumentController) {
             AmendmentDocumentController amendmentDocumentController = (AmendmentDocumentController) documentController;
@@ -443,6 +438,11 @@ public class DefaultAmendmentController implements AmendmentController {
             setBody(getModel().getBody());
         }
 
+        if (!Arrays.asList(getModel().getBundledAmendmentContainerIDs()).equals(Arrays.asList(amendment.getBundledAmendmentContainerIDs()))) {
+            getModel().setBundledAmendmentContainerIDs(amendment.getBundledAmendmentContainerIDs());
+            setBundle(getModel().getBundledAmendmentContainerIDs());
+        }
+
         if (!getModel().getAmendmentContainerStatus().equals(amendment.getAmendmentContainerStatus())) {
             getModel().setAmendmentContainerStatus(amendment.getAmendmentContainerStatus());
             setStatus(getModel().getAmendmentContainerStatus());
@@ -458,14 +458,22 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setBody(String xmlContent) {
+    public void setBody(final String xmlContent) {
         if (view != null)
             view.setBody(xmlContent);
         if (extendedView != null)
             extendedView.setBody(xmlContent);
     }
 
-    public void setIntroduction(String introduction) {
+    @Override
+    public void setBundle(final String[] amendmentContainerIDs) {
+        if (view != null)
+            view.setBundle(amendmentContainerIDs);
+        if (extendedView != null)
+            extendedView.setBundle(amendmentContainerIDs);
+    }
+
+    public void setIntroduction(final String introduction) {
         if (this.view != null) {
             this.view.setIntroduction(introduction);
         }
@@ -474,7 +482,7 @@ public class DefaultAmendmentController implements AmendmentController {
         }
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         if (this.view != null) {
             this.view.setDescription(description);
         }
@@ -534,7 +542,7 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setOverlayWidget(OverlayWidget amendedOverlayWidget) {
+    public void setOverlayWidget(final OverlayWidget amendedOverlayWidget) {
         this.amendedOverlayWidget = amendedOverlayWidget;
     }
 
@@ -549,7 +557,7 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setOrder(int order) {
+    public void setOrder(final int order) {
         this.order = order;
         if (view != null) {
             view.setTitle(messages.amendmentTitle(Integer.toString(order)));
@@ -576,12 +584,12 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setDiffStyle(DiffStyle diffStyle) {
+    public void setDiffStyle(final DiffStyle diffStyle) {
         this.diffStyle = diffStyle;
     }
 
     @Override
-    public void setDiffMethod(DiffMethod diffMethod) {
+    public void setDiffMethod(final DiffMethod diffMethod) {
         this.diffMethod = diffMethod;
     }
 
@@ -591,13 +599,23 @@ public class DefaultAmendmentController implements AmendmentController {
     }
 
     @Override
-    public void setBundled(boolean isBundled) {
+    public void setBundled(final boolean isBundled) {
         this.bundled = isBundled;
     }
 
     @Override
     public boolean isBundled() {
         return bundled;
+    }
+
+    @Override
+    public void mergeIntoBundle(final AmendmentController toBundle) {
+        // do nothing - supposed to be overridden
+    }
+
+    @Override
+    public void removedFromBundle(final AmendmentController amendmentController) {
+        // do nothing - supposed to be overridden
     }
 
     @Override

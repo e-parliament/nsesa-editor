@@ -110,7 +110,10 @@ public class SingleColumnAmendmentViewImpl extends Composite implements Amendmen
 
     @Override
     public void setBundle(String[] amendmentContainerIDs) {
-        // TODO
+        if (amendmentContainerIDs != null && amendmentContainerIDs.length > 0)
+            addStyleName("bundle");
+        else
+            removeStyleName("bundle");
     }
 
     @Override

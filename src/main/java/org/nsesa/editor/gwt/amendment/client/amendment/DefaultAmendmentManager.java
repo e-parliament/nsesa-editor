@@ -268,7 +268,10 @@ public class DefaultAmendmentManager implements AmendmentManager {
         final String[] amendmentContainerIDs = new String[amendmentControllers.length];
         int index = 0;
         for (AmendmentController amendmentController : amendmentControllers) {
+            // keep track of the amendment container ids (and not specific versions of an amendment)
             amendmentContainerIDs[index++] = amendmentController.getModel().getAmendmentContainerID();
+            // inform the amendment controller that it's added to the parent so the parent can merge in the XML
+            parent.mergeIntoBundle(amendmentController);
         }
         parent.getModel().setBundledAmendmentContainerIDs(amendmentContainerIDs);
         saveAmendmentContainers(parent.getModel());
@@ -445,6 +448,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
                 }
             }
+        } else {
+            LOG.warning("Injection point not found for " + amendmentController);
         }
     }
 

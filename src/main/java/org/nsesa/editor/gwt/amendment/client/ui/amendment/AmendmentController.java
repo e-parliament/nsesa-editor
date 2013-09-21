@@ -85,6 +85,13 @@ public interface AmendmentController extends OverlayWidgetAware {
     void setBody(String body);
 
     /**
+     * If this amendment is a bundle, set the amendment container IDs that this bundle encompasses.
+     *
+     * @param amendmentContainerIDs the bundled amendment container IDs.
+     */
+    void setBundle(String[] amendmentContainerIDs);
+
+    /**
      * Register the callback listeners.
      */
     void registerListeners();
@@ -243,4 +250,18 @@ public interface AmendmentController extends OverlayWidgetAware {
      * @since 0.9
      */
     boolean isBundled();
+
+    /**
+     * Called when an amendment controller needs to be added to this amendment.
+     *
+     * @param toBundle the amendment controller that was added
+     */
+    void mergeIntoBundle(AmendmentController toBundle);
+
+    /**
+     * Called when the given <tt>amendmentController</tt> is removed from this bundle.
+     *
+     * @param amendmentController the removed amendment controller
+     */
+    void removedFromBundle(AmendmentController amendmentController);
 }

@@ -107,7 +107,10 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @Override
     public void setBundle(String[] amendmentContainerIDs) {
-        // TODO
+        if (amendmentContainerIDs != null && amendmentContainerIDs.length > 0)
+            addStyleName("bundle");
+        else
+            removeStyleName("bundle");
     }
 
     @Override
