@@ -22,9 +22,9 @@ import java.util.List;
 /**
  * Selector class to support xpath-like expressions. Very simplified, it only supports basic expressions, and definitely
  * not yet well tested.
- *
+ * <p/>
  * TODO untested
- *
+ * <p/>
  * Date: 07/01/13 14:23
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class Selector {
 
-    private static final Matcher[] MATCHERS = new Matcher[]{
+    public static final Matcher[] MATCHERS = new Matcher[]{
             new AttributeMatcher(), new NodeNameIndexMatcher(), new IndexMatcher(), new NodeNameMatcher(), new WildcardMatcher()
     };
 
@@ -40,11 +40,12 @@ public class Selector {
      * Selects a list of matching nodes based on the passed expression and a given <tt>root</tt> node. Valid examples
      * are in the form of:
      * <ul>
-     *     <li>//{nodeType}[{index}]/{nodeType}</li>
+     * <li>//{nodeType}[{index}]/{nodeType}</li>
      * </ul>
      * Where <tt>nodeType</tt> and <tt>index</tt> can be replaced by a wildcard.
-     * @param path  the path expression
-     * @param root  the root node
+     *
+     * @param path the path expression
+     * @param root the root node
      * @return a list of matching {@link OverlayWidget}s
      */
     public List<OverlayWidget> select(final String path, final OverlayWidget root) {
@@ -90,7 +91,7 @@ public class Selector {
     /**
      * A wildcard matcher that matches everything if the expression is '*'.
      */
-    private static class WildcardMatcher implements Matcher {
+    public static class WildcardMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
             return "*".equals(expression);
@@ -106,11 +107,13 @@ public class Selector {
      * An attribute matcher, that can be used to find {@link OverlayWidget}s with an attribute value such as
      * <code>/foo[name=bar]</code> or <code>//blah[id=foo]</code>.
      */
-    private static class AttributeMatcher implements Matcher {
+    public static class AttributeMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
-            final String attributeName = expression.substring(0, expression.indexOf("="));
-            final String attributeValue = expression.substring(expression.indexOf("=") + 1, expression.length());
+            final String attributeName = expression.substring(expression.indexOf("[") + 1, expression.indexOf("="));
+            String attributeValue = expression.substring(expression.indexOf("=") + 1, expression.indexOf("]"));
+            if (attributeValue.startsWith("\"") && attributeValue.endsWith("\""))
+                attributeValue = attributeValue.substring(1, attributeValue.length() - 1);
             final String attribute;
             if ("id".equalsIgnoreCase(attributeName)) {
                 return attributeValue.equalsIgnoreCase(overlayWidget.getId());
@@ -128,10 +131,11 @@ public class Selector {
     /**
      * A matcher on the type name of of node.
      */
-    private static class NodeNameMatcher implements Matcher {
+    public static class NodeNameMatcher implements Matcher {
         @Override
-        public boolean matches(String expression, OverlayWidget overlayWidget) {
-            return expression.equalsIgnoreCase(overlayWidget.getType());
+        public boolean matches(final String expression, final OverlayWidget overlayWidget) {
+            String filtered = (expression.contains("[")) ? expression.substring(0, expression.indexOf("[")) : expression;
+            return filtered.equalsIgnoreCase(overlayWidget.getType());
         }
 
         @Override
@@ -143,7 +147,7 @@ public class Selector {
     /**
      * A composite matcher on node type and index.
      */
-    private static class NodeNameIndexMatcher implements Matcher {
+    public static class NodeNameIndexMatcher implements Matcher {
 
         private NodeNameMatcher nodeNameMatcher = new NodeNameMatcher();
         private WildcardMatcher wildcardMatcher = new WildcardMatcher();
@@ -166,7 +170,7 @@ public class Selector {
     /**
      * A matcher on the index.
      */
-    private static class IndexMatcher implements Matcher {
+    public static class IndexMatcher implements Matcher {
         @Override
         public boolean matches(String expression, OverlayWidget overlayWidget) {
             try {
