@@ -963,4 +963,25 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OverlayWidgetImpl)) return false;
+
+        OverlayWidgetImpl other = (OverlayWidgetImpl) o;
+
+        if (id != null ? !id.equals(other.id) : other.id != null) return false;
+        if (!getNamespaceURI().equalsIgnoreCase(other.getNamespaceURI())) return false;
+        if (!type.equalsIgnoreCase(other.type)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + getNamespaceURI().hashCode();
+        return result;
+    }
 }
