@@ -59,27 +59,28 @@ public class Selector {
      * Similar {@link #select(String, org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget)}, but using
      * recursion.
      *
-     * @param split an array of expression parts
-     * @param root  the root node
-     * @param found a list of {@link OverlayWidget}s to store the matching nodes in
+     * @param split         an array of expression parts
+     * @param overlayWidget the root node
+     * @param found         a list of {@link OverlayWidget}s to store the matching nodes in
      */
-    public void select(final String[] split, final OverlayWidget root, final List<OverlayWidget> found) {
+    public void select(final String[] split, final OverlayWidget overlayWidget, final List<OverlayWidget> found) {
         if (split != null && split.length > 0) {
             final String expression = split[0];
             for (final Matcher matcher : MATCHERS) {
                 if (matcher.applicable(expression)) {
-                    if (matcher.matches(expression, root)) {
+                    if (matcher.matches(expression, overlayWidget)) {
                         if (split.length == 1) {
                             // we're at the last part of the expression ...
-                            found.add(root);
-                        }
-                        // go deeper
-                        for (final OverlayWidget child : root.getChildOverlayWidgets()) {
-                            // does not work in GWT ...
-                            // final String[] tail = Arrays.copyOfRange(split, 1, split.length);
-                            final List<String> copy = Arrays.asList(split).subList(1, split.length);
-                            final String[] tail = copy.toArray(new String[copy.size()]);
-                            select(tail, child, found);
+                            found.add(overlayWidget);
+                        } else {
+                            // go deeper
+                            for (final OverlayWidget child : overlayWidget.getChildOverlayWidgets()) {
+                                // does not work in GWT ...
+                                // final String[] tail = Arrays.copyOfRange(split, 1, split.length);
+                                final List<String> copy = Arrays.asList(split).subList(1, split.length);
+                                final String[] tail = copy.toArray(new String[copy.size()]);
+                                select(tail, child, found);
+                            }
                         }
                         break;
                     }
@@ -140,7 +141,7 @@ public class Selector {
 
         @Override
         public boolean applicable(String expression) {
-            return true;
+            return !expression.contains("[") && !expression.contains("]");
         }
     }
 
@@ -163,7 +164,8 @@ public class Selector {
 
         @Override
         public boolean applicable(String expression) {
-            return nodeNameMatcher.applicable(expression) && indexMatcher.applicable(expression);
+            final String type = expression.contains("[") ? expression.substring(0, expression.indexOf("[")) : expression;
+            return nodeNameMatcher.applicable(type) && indexMatcher.applicable(expression);
         }
     }
 
