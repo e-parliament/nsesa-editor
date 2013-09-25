@@ -152,7 +152,8 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
                 final int typeIndex = parent.getTypeIndex();
                 // note: type index will be -1 for the root node
                 sb.append("[").append(typeIndex != -1 ? typeIndex : 0).append("]");
-                if (parentOverlayWidgets.indexOf(parent) < parentOverlayWidgets.size() - 1) {
+                final boolean notLast = parentOverlayWidgets.indexOf(parent) < parentOverlayWidgets.size() - 1;
+                if (notLast) {
                     sb.append("/");
                 }
             }
