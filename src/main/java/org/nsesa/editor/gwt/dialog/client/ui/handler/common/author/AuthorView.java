@@ -11,29 +11,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
-import com.google.gwt.inject.client.AbstractGinModule;
-import com.google.inject.Inject;
-import com.google.inject.Provides;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.ImplementedBy;
 
 /**
- * GIN module for the common author component.
- * Date: 24/06/12 15:11
+ * View for the {@link AuthorController}.
+ * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AuthorsPanelModule extends AbstractGinModule {
-    @Override
-    protected void configure() {
-    }
+@ImplementedBy(AuthorViewImpl.class)
+public interface AuthorView extends IsWidget {
 
-    @Inject
-    @Provides
-    AuthorsPanelViewCss createStyle(final Resources resources) {
-        AuthorsPanelViewCss style = resources.style();
-        style.ensureInjected();
-        return style;
-    }
+    void setName(String displayName);
 }
