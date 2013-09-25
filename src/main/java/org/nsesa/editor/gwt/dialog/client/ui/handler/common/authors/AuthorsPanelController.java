@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -41,17 +41,17 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
  * @version $Id$
  */
 @Scope(DIALOG)
-public class AuthorPanelController implements AmendmentDialogAwareController {
+public class AuthorsPanelController implements AmendmentDialogAwareController {
 
     /**
      * The main view.
      */
-    protected final AuthorPanelView view;
+    protected final AuthorsPanelView view;
 
     /**
      * The CSS resource.
      */
-    protected final AuthorPanelViewCss authorPanelViewCss;
+    protected final AuthorsPanelViewCss authorsPanelViewCss;
 
     /**
      * The client factory.
@@ -70,11 +70,11 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
     private HandlerRegistration selectionHandlerRegistration;
 
     @Inject
-    public AuthorPanelController(final ClientFactory clientFactory, final AuthorPanelView view,
-                                 final AuthorPanelViewCss authorPanelViewCss) {
+    public AuthorsPanelController(final ClientFactory clientFactory, final AuthorsPanelView view,
+                                  final AuthorsPanelViewCss authorsPanelViewCss) {
         this.clientFactory = clientFactory;
         this.view = view;
-        this.authorPanelViewCss = authorPanelViewCss;
+        this.authorsPanelViewCss = authorsPanelViewCss;
     }
 
     /**
@@ -190,7 +190,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      *
      * @return the view
      */
-    public AuthorPanelView getView() {
+    public AuthorsPanelView getView() {
         return view;
     }
 

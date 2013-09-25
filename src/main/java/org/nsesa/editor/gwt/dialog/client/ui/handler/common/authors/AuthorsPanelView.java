@@ -11,32 +11,32 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
 import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
- * View for the {@link AuthorPanelController}.
+ * View for the {@link AuthorsPanelController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(AuthorPanelViewImpl.class)
-public interface AuthorPanelView extends IsWidget {
+@ImplementedBy(AuthorsPanelViewImpl.class)
+public interface AuthorsPanelView extends IsWidget {
     /**
      * Get a reference to the (autocomplete) suggestbox with the author.
+     *
      * @return the suggest box
      */
     SuggestBox getSuggestBox();
 
     /**
      * Get a reference to the selected authors panel.
+     *
      * @return the selected authors panel
      */
     ComplexPanel getAuthorsPanel();

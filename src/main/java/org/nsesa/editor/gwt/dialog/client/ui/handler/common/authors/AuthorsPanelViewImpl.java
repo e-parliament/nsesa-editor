@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -26,16 +26,16 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
 /**
- * Default implementation for the {@link AuthorPanelView} using UIBinder.
+ * Default implementation for the {@link AuthorsPanelView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 @Scope(DIALOG)
-public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
+public class AuthorsPanelViewImpl extends Composite implements AuthorsPanelView {
 
-    interface MyUiBinder extends UiBinder<Widget, AuthorPanelViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, AuthorsPanelViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
@@ -59,7 +59,7 @@ public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
     HorizontalPanel form;
 
     @Inject
-    public AuthorPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
+    public AuthorsPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
         this.serviceFactory = serviceFactory;
         this.clientFactory = clientFactory;
         oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);

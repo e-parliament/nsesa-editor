@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
@@ -25,7 +25,7 @@ import java.util.Collection;
 /**
  * An extension of the {@link MultiWordSuggestOracle} backed by a the
  * {@link org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService} to retrieve the list of possible authors
- * for this amendment, based on a query. Used to provide autocompletion results in {@link AuthorPanelController}.
+ * for this amendment, based on a query. Used to provide autocompletion results in {@link AuthorsPanelController}.
  * <p/>
  * Date: 20/02/13 15:39
  *
@@ -60,8 +60,9 @@ public class PersonMultiWordSuggestionOracle extends MultiWordSuggestOracle {
     /**
      * Creates the suggestions using the
      * {@link org.nsesa.editor.gwt.core.client.service.gwt.GWTAmendmentService#getAvailableAuthors(org.nsesa.editor.gwt.core.shared.ClientContext, String, int)}.
-     * @param request   the autocompletion request
-     * @param callback  the callback
+     *
+     * @param request  the autocompletion request
+     * @param callback the callback
      */
     @Override
     public void requestSuggestions(final Request request, final Callback callback) {
