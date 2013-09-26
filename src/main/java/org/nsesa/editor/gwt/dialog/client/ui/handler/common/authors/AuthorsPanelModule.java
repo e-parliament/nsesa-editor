@@ -27,6 +27,7 @@ import com.google.inject.Provides;
 public class AuthorsPanelModule extends AbstractGinModule {
     @Override
     protected void configure() {
+
     }
 
     @Inject
