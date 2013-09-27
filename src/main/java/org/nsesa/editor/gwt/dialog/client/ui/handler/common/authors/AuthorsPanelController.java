@@ -13,6 +13,10 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
+import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,9 +37,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAware
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorControllerProvider;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
@@ -76,8 +78,15 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
     /**
      * The set of selected persons.
      */
-    private Set<AuthorController> selectedPersons = new LinkedHashSet<AuthorController>();
+    private List<AuthorController> selectedPersons = new ArrayList<AuthorController>();
+
     private HandlerRegistration selectionHandlerRegistration;
+
+    private VerticalPanelDropController verticalPanelDropController;
+
+    private PickupDragController widgetDragController;
+
+    private AuthorController selectedAuthorController;
 
     @Inject
     public AuthorsPanelController(final ClientFactory clientFactory, final AuthorsPanelView view,
@@ -87,6 +96,27 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
         this.view = view;
         this.authorsPanelViewCss = authorsPanelViewCss;
         this.authorControllerProvider = authorControllerProvider;
+        this.verticalPanelDropController = new VerticalPanelDropController(view.getAuthorsPanel()) {
+            @Override
+            public void onDrop(DragContext context) {
+                super.onDrop(context);
+                final int widgetIndex = view.getAuthorsPanel().getWidgetIndex(context.draggable);
+                selectedPersons.remove(selectedAuthorController);
+                selectedPersons.add(widgetIndex, selectedAuthorController);
+                selectedAuthorController = null;
+            }
+        };
+
+        widgetDragController = new PickupDragController(view.getBoundaryPanel(), false) {
+            @Override
+            public void previewDragStart() throws VetoDragException {
+                super.previewDragStart();
+                final int widgetIndex = view.getAuthorsPanel().getWidgetIndex(context.draggable);
+                selectedAuthorController = selectedPersons.get(widgetIndex);
+            }
+        };
+        widgetDragController.setBehaviorMultipleSelection(false);
+        widgetDragController.registerDropController(verticalPanelDropController);
     }
 
     /**
@@ -119,10 +149,15 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
      * @param person the person to add as an author
      * @see #getSelectedPersons() to get the list
      */
-    public void addPerson(final PersonDTO person) {
+    public void addPerson(final PersonDTO person, int index) {
         AuthorController authorController = authorControllerProvider.get();
         authorController.setPerson(person);
-        if (selectedPersons.add(authorController)) {
+        if (!selectedPersons.contains(authorController)) {
+            if (index > selectedPersons.size()) {
+                selectedPersons.add(authorController);
+            } else {
+                selectedPersons.add(index, authorController);
+            }
             drawPersons();
         }
     }
@@ -152,11 +187,11 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
 
     /**
      * Draw the selected persons using some quick & dirty panel with removal button.
-     * TODO replace with a UI binder
      */
     private void drawPersons() {
         view.getAuthorsPanel().clear();
         for (final AuthorController authorController : selectedPersons) {
+
             final Button removeButton = new Button("x", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -169,7 +204,9 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
             holder.add(removeButton);
             holder.setCellHorizontalAlignment(authorController.getView(), HasHorizontalAlignment.ALIGN_LEFT);
             holder.setCellHorizontalAlignment(removeButton, HasHorizontalAlignment.ALIGN_RIGHT);
+
             view.getAuthorsPanel().add(holder);
+            widgetDragController.makeDraggable(holder, authorController.getView().asWidget());
         }
     }
 
@@ -193,7 +230,7 @@ public class AuthorsPanelController implements AmendmentDialogAwareController {
                     final PersonMultiWordSuggestion personMultiWordSuggestion = (PersonMultiWordSuggestion) selectedItem;
                     // clear the selection
                     view.getSuggestBox().setText("");
-                    addPerson(personMultiWordSuggestion.getPerson());
+                    addPerson(personMultiWordSuggestion.getPerson(), selectedPersons.size());
                 }
             }
         });

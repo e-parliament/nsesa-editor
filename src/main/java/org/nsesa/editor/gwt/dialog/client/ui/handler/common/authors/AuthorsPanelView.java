@@ -13,9 +13,10 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -39,5 +40,7 @@ public interface AuthorsPanelView extends IsWidget {
      *
      * @return the selected authors panel
      */
-    ComplexPanel getAuthorsPanel();
+    VerticalPanel getAuthorsPanel();
+
+    AbsolutePanel getBoundaryPanel();
 }

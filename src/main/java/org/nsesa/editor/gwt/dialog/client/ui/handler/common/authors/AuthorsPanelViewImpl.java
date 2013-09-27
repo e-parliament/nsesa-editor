@@ -53,10 +53,12 @@ public class AuthorsPanelViewImpl extends Composite implements AuthorsPanelView 
     SuggestBox suggestBox;
 
     @UiField
-    HTMLPanel authorsPanel;
+    VerticalPanel authorsPanel;
 
     @UiField
     HorizontalPanel form;
+    @UiField
+    AbsolutePanel boundaryPanel;
 
     @Inject
     public AuthorsPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
@@ -79,7 +81,12 @@ public class AuthorsPanelViewImpl extends Composite implements AuthorsPanelView 
     }
 
     @Override
-    public ComplexPanel getAuthorsPanel() {
+    public VerticalPanel getAuthorsPanel() {
         return authorsPanel;
+    }
+
+    @Override
+    public AbsolutePanel getBoundaryPanel() {
+        return boundaryPanel;
     }
 }

@@ -14,6 +14,10 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasMouseDownHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -28,7 +32,7 @@ import com.google.inject.Inject;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public class AuthorViewImpl extends Composite implements AuthorView {
+public class AuthorViewImpl extends Composite implements AuthorView, HasMouseDownHandlers {
 
     interface MyUiBinder extends UiBinder<Widget, AuthorViewImpl> {
     }
@@ -48,5 +52,10 @@ public class AuthorViewImpl extends Composite implements AuthorView {
     @Override
     public void setName(String displayName) {
         displayNameLabel.setText(displayName);
+    }
+
+    @Override
+    public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+        return addDomHandler(handler, MouseDownEvent.getType());
     }
 }
