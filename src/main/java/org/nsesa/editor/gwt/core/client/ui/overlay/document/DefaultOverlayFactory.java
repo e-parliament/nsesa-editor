@@ -50,8 +50,8 @@ public class DefaultOverlayFactory implements OverlayFactory {
     @Override
     public OverlayWidget getAmendableWidget(final String namespaceURI, final String tag) {
         com.google.gwt.user.client.Element element = DOM.createSpan();
-        element.setAttribute("ns", namespaceURI);
-        element.setAttribute("type", tag);
+        element.setAttribute("data-ns", namespaceURI);
+        element.setAttribute("data-type", tag);
         element.setClassName("widget " + tag);
         return getAmendableWidget(element);
     }

@@ -30,8 +30,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * the panel. The draft tool widget is added at north while draft attributes widget is positioned at south.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 11/01/13 16:24
- *
+ *         Date: 11/01/13 16:24
  * @see <a href="http://ckeditor.com">CK Editor</a> for more details
  */
 public class CKEditor extends Composite implements RichTextEditor {
@@ -41,7 +40,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     private static int counter = 1;
 
     /**
-     *  whether or not the editor is attached to dom
+     * whether or not the editor is attached to dom
      */
     private boolean attached;
 
@@ -51,7 +50,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     private String temporaryContent;
 
     /**
-     *  identify uniquely the editor when there are more instances created
+     * identify uniquely the editor when there are more instances created
      */
     private String id;
 
@@ -81,7 +80,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     private boolean showDraftingTool;
 
     /**
-     *  the main panel for ck editor
+     * the main panel for ck editor
      */
     private DockLayoutPanel mainPanel = new DockLayoutPanel(Style.Unit.PX);
 
@@ -112,8 +111,9 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     /**
      * Create an instance of the editor.
-     * @param plugin The plugin linked to the editor which
-     * @param config The editor configuration
+     *
+     * @param plugin           The plugin linked to the editor which
+     * @param config           The editor configuration
      * @param showDraftingTool Show/hide the drafting tool and attributes widgets
      */
     public CKEditor(RichTextEditorPlugin plugin, RichTextEditorConfig config, boolean showDraftingTool) {
@@ -172,8 +172,7 @@ public class CKEditor extends Composite implements RichTextEditor {
     public void setFocus(boolean focus) {
         if (focus) {
             setFocusNative(editorInstance);
-        }
-        else {
+        } else {
             setBlurNative(editorInstance);
         }
     }
@@ -190,6 +189,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     /**
      * Setup the size of the draft tool holder panel according with the value of <code>toggled</code> param.
+     *
      * @param toggled When true the drafting tool widget is shown
      */
     @Override
@@ -225,8 +225,10 @@ public class CKEditor extends Composite implements RichTextEditor {
         };
         timer.schedule(delay);
     }
+
     /**
      * Setup the size of the drafting attributes tool holder panel according with the value of <code>toggled</code> param.
+     *
      * @param toggled When true the drafting attributes tool widget is shown
      */
     @Override
@@ -236,7 +238,7 @@ public class CKEditor extends Composite implements RichTextEditor {
             if (showDraftingTool) {
                 mainPanel.setWidgetSize(attributesHolderPanel, toggled ? 100 : 0);
                 //resize the height of the editor by using the original height saved on initialization
-                resize("100%", (toggled ? (height - 100) + "" : height +""));
+                resize("100%", (toggled ? (height - 100) + "" : height + ""));
             }
         }
     }
@@ -274,6 +276,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     /**
      * return the editor instance body as element
+     *
      * @param editorInstance The editor instance processed
      * @return The body element as JavaScriptObject
      */
@@ -287,6 +290,7 @@ public class CKEditor extends Composite implements RichTextEditor {
 
     /**
      * return the editor window element
+     *
      * @param editorInstance The editor instance processed
      * @return The body element as JavaScriptObject
      */
@@ -310,9 +314,9 @@ public class CKEditor extends Composite implements RichTextEditor {
     }-*/;
 
     private native void resize(JavaScriptObject editorInstance, String width, String height) /*-{
-        try{
+        try {
             editorInstance.resize(width, height, true);
-        } catch(e){
+        } catch (e) {
             // ignore - strange exception being thrown in native ckeditor.js
         }
     }-*/;
@@ -408,16 +412,19 @@ public class CKEditor extends Composite implements RichTextEditor {
             }
         });
     }
+
     private native void nativeSetBodyNamespaceURI(JavaScriptObject editor, String ns) /*-{
         editor.on('mode', function (ev) {
             var editorInstance = ev.editor;
             if (editorInstance && editorInstance.document) {
-                editorInstance.document.getBody().setAttribute("ns", ns);
+                editorInstance.document.getBody().setAttribute("data-ns", ns);
             }
         })
     }-*/;
+
     /**
      * Computes the caret position by introducing a fake img and summing the offsets
+     *
      * @param caretPosition  {@link CaretPosition}
      * @param editorInstance The editor instance as {@link JavaScriptObject}
      */
@@ -426,9 +433,9 @@ public class CKEditor extends Composite implements RichTextEditor {
             var lastSnapshot = editorInstance.getSnapshot();
             var dummyElement = editorInstance.document.createElement('img', {
                 attributes: {
-                    src : 'null',
-                    width : 0,
-                    height : 0
+                    src: 'null',
+                    width: 0,
+                    height: 0
                 }
             });
             var range;
@@ -439,7 +446,7 @@ public class CKEditor extends Composite implements RichTextEditor {
                 editorInstance.insertElement(dummyElement);
             }
             var obj = dummyElement.$;
-            var cursor = {left : 0, top :0};
+            var cursor = {left: 0, top: 0};
             cursor.keydown = false;
             while (obj.offsetParent) {
                 cursor.left += obj.offsetLeft;
