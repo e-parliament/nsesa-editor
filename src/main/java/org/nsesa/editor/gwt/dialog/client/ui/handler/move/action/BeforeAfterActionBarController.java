@@ -14,7 +14,11 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.move.action;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -51,9 +55,13 @@ public class BeforeAfterActionBarController {
 
     private OverlayWidget overlayWidget;
 
+    private OverlayWidget toMove;
+
     private ContentController contentController;
 
     private Messages messages;
+    private HandlerRegistration beforeHandlerRegistration;
+    private HandlerRegistration afterHandlerRegistration;
 
     @Inject
     public BeforeAfterActionBarController(final ClientFactory clientFactory,
@@ -65,20 +73,37 @@ public class BeforeAfterActionBarController {
     }
 
     public void registerListeners() {
+        beforeHandlerRegistration = this.view.getBeforeAnchor().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO actually build the amendment
+            }
+        });
 
+        afterHandlerRegistration = this.view.getAfterAnchor().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO
+            }
+        });
     }
 
     /**
      * Removes all registered event handlers from the event bus and UI.
      */
     public void removeListeners() {
-
+        beforeHandlerRegistration.removeHandler();
+        afterHandlerRegistration.removeHandler();
     }
 
     public void setOverlayWidget(final OverlayWidget overlayWidget) {
         boolean different = this.overlayWidget != overlayWidget;
         this.overlayWidget = overlayWidget;
         if (different) attach();
+    }
+
+    public void setOverlayWidgetToMove(OverlayWidget toMove) {
+        this.toMove = toMove;
     }
 
     public void setContentController(ContentController contentController) {
@@ -119,6 +144,24 @@ public class BeforeAfterActionBarController {
             getView().asWidget().getElement().getStyle().setPosition(Style.Position.STATIC);
 
             view.asWidget().setVisible(true);
+
+            final Element beforePlaceHolderDiv = DOM.createDiv();
+            final Element afterPlaceHolderDiv = DOM.createDiv();
+
+            // copy these ones over so they appear already look like the element to insert
+            beforePlaceHolderDiv.getStyle().setHeight(toMove.asWidget().getElement().getOffsetHeight(), Style.Unit.PX);
+            afterPlaceHolderDiv.getStyle().setHeight(toMove.asWidget().getElement().getOffsetHeight(), Style.Unit.PX);
+
+            beforePlaceHolderDiv.getStyle().setWidth(toMove.asWidget().getElement().getOffsetWidth(), Style.Unit.PX);
+            afterPlaceHolderDiv.getStyle().setWidth(toMove.asWidget().getElement().getOffsetWidth(), Style.Unit.PX);
+
+            beforePlaceHolderDiv.getStyle().setBackgroundColor("red");
+            afterPlaceHolderDiv.getStyle().setBackgroundColor("red");
+
+            // TODO cleanup
+            DOM.insertBefore(overlayWidget.getParentOverlayWidget().asWidget().getElement(), beforePlaceHolderDiv, overlayWidget.asWidget().getElement());
+            DOM.insertChild(overlayWidget.getParentOverlayWidget().asWidget().getElement(), afterPlaceHolderDiv, overlayWidget.getDomIndex() + 1);
+
         }
 
     }

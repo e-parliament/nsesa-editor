@@ -36,6 +36,11 @@
         .icon {
             vertical-align: middle;
         }
+
+        .placeHolder {
+            border: 2px dotted red;
+            background-color: goldenrod;
+        }
     </ui:style>
     <g:HTMLPanel styleName="{res.beforeAfterPanel}">
         <g:HorizontalPanel>

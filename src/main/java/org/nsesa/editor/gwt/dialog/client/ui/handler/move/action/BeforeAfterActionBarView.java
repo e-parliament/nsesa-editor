@@ -40,5 +40,4 @@ public interface BeforeAfterActionBarView extends IsWidget {
     Anchor getBeforeAnchor();
 
     Anchor getAfterAnchor();
-
 }

@@ -80,6 +80,9 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
                 clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
             }
         });
+
+        beforeAfterActionBarController.registerListeners();
+        contentController.registerListeners();
     }
 
     /**
@@ -87,6 +90,8 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
      */
     public void removeListeners() {
         cancelClickHandlerRegistration.removeHandler();
+        beforeAfterActionBarController.removeListeners();
+        contentController.removeListeners();
     }
 
     /**
@@ -125,6 +130,7 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
                             visited.setUIListener(new OverlayWidgetUIListener() {
                                 @Override
                                 public void onClick(OverlayWidget sender, Event event) {
+                                    beforeAfterActionBarController.setOverlayWidgetToMove(dialogContext.getOverlayWidget());
                                     beforeAfterActionBarController.setOverlayWidget(sender);
                                 }
 
