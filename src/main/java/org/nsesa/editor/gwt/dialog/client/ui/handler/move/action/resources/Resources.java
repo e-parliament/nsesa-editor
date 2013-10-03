@@ -11,35 +11,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.resources;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.move.action.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 /**
- * Resources for the {@link org.nsesa.editor.gwt.core.client.ui.document.sourcefile.actionbar.ActionBarView}.
- * Date: 03/08/12 15:37
+ * Date: 03/10/13 14:18
  *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
+ * @author <a href="philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
 public interface Resources extends ClientBundle {
+    @Source("arrow_up_16x16.png")
+    ImageResource arrowUp();
 
-    @Source("comment_fill_16x14.png")
-    ImageResource translate();
-
-    @Source("lock_fill_12x16.png")
-    ImageResource lock();
-
-    @Source("move_alt1_16x16.png")
-    ImageResource move();
-
-    @Source("pen_alt2_16x16.png")
-    ImageResource amend();
-
-    @Source("plus_alt_16x16.png")
-    ImageResource children();
-
-    @Source("x_alt_16x16.png")
-    ImageResource delete();
+    @Source("arrow_down_16x16.png")
+    ImageResource arrowDown();
 }

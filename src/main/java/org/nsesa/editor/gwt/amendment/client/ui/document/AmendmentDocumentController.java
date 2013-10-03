@@ -116,6 +116,10 @@ public class AmendmentDocumentController extends DefaultDocumentController {
     private HandlerRegistration amendmentContainerDeletedEventHandlerRegistration;
     private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
     private HandlerRegistration documentScrollEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerUnboundedMoveEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetNewEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetDeleteEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetModifyEventHandlerRegistration;
 
     @Inject
     public AmendmentDocumentController(final ClientFactory clientFactory,
@@ -162,8 +166,6 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         this.amendmentManager.registerListeners();
     }
 
-    // TODO while this approach is more flexible, it might be better to have the document controller act as the
-    // event handler.
     public void registerListeners() {
         super.registerListeners();
         // when we detect a scrolling event, hide the amendment action panel
@@ -174,7 +176,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
-        documentEventBus.addHandler(OverlayWidgetModifyEvent.TYPE, new OverlayWidgetModifyEventHandler() {
+        overlayWidgetModifyEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetModifyEvent.TYPE, new OverlayWidgetModifyEventHandler() {
             @Override
             public void onEvent(OverlayWidgetModifyEvent event) {
                 // translate to an amendment
@@ -182,7 +184,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
-        documentEventBus.addHandler(OverlayWidgetDeleteEvent.TYPE, new OverlayWidgetDeleteEventHandler() {
+        overlayWidgetDeleteEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetDeleteEvent.TYPE, new OverlayWidgetDeleteEventHandler() {
             @Override
             public void onEvent(OverlayWidgetDeleteEvent event) {
                 // translate to an amendment
@@ -190,13 +192,21 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
-        documentEventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
+        overlayWidgetNewEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetNewEvent.TYPE, new OverlayWidgetNewEventHandler() {
             @Override
             public void onEvent(OverlayWidgetNewEvent event) {
                 // set the origin to come from the amendment
                 event.getChild().setOrigin(OverlayWidgetOrigin.AMENDMENT);
                 documentEventBus.fireEvent(new AmendmentContainerCreateEvent(event.getParentOverlayWidget(), event.getReference(), event.getChild(),
                         AmendmentAction.CREATION, sourceFileController.getDocumentController()));
+            }
+        });
+
+        amendmentContainerUnboundedMoveEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetUnboundedMoveEvent.TYPE, new OverlayWidgetUnboundedMoveEventHandler() {
+            @Override
+            public void onEvent(OverlayWidgetUnboundedMoveEvent event) {
+                documentEventBus.fireEvent(new AmendmentContainerCreateEvent(null, event.getOverlayWidget(), event.getOverlayWidget(),
+                        AmendmentAction.MOVE, sourceFileController.getDocumentController()));
             }
         });
 
@@ -326,6 +336,10 @@ public class AmendmentDocumentController extends DefaultDocumentController {
         amendmentContainerDeletedEventHandlerRegistration.removeHandler();
         amendmentContainerEditEventHandlerRegistration.removeHandler();
         documentScrollEventHandlerRegistration.removeHandler();
+        overlayWidgetModifyEventHandlerRegistration.removeHandler();
+        overlayWidgetDeleteEventHandlerRegistration.removeHandler();
+        overlayWidgetNewEventHandlerRegistration.removeHandler();
+        amendmentContainerUnboundedMoveEventHandlerRegistration.removeHandler();
     }
 
     /**

@@ -69,8 +69,8 @@
             <g:Anchor ui:field="childAnchor" styleName="{res.anchor}" text="New"/>
             <g:Image resource="{resource.delete}" styleName="{res.icon}"/>
             <g:Anchor ui:field="deleteAnchor" styleName="{res.anchor}" text="Delete"/>
-            <!--<g:Image resource="{resource.move}" styleName="{res.icon}"/>-->
-            <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move" visible="false"/>
+            <g:Image resource="{resource.move}" styleName="{res.icon}"/>
+            <g:Anchor ui:field="moveAnchor" styleName="{res.anchor}" text="Move"/>
             <!--<g:Image resource="{resource.translate}" styleName="{res.icon}"/>-->
             <g:Anchor ui:field="translateAnchor" styleName="{res.anchor}" text="Translate" visible="false"/>
         </g:HTMLPanel>

@@ -11,37 +11,34 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.move.action;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentView;
 
 /**
- * View for the {@link AmendmentDialogMoveController}.
+ * View for the {@link BeforeAfterActionBarController}.
  * <p/>
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(AmendmentDialogMoveViewImpl.class)
-public interface AmendmentDialogMoveView extends IsWidget {
+@ImplementedBy(BeforeAfterActionBarViewImpl.class)
+public interface BeforeAfterActionBarView extends IsWidget {
+    void setStyleName(String styleName);
+
+    void setVisible(boolean visible);
+
 
     /**
-     * Get a reference to the save button.
-     *
-     * @return the save button
+     * 'Physically' attach the component to the DOM tree.
      */
-    HasClickHandlers getSaveButton();
+    void attach();
 
-    /**
-     * Get a reference to the cancel link.
-     *
-     * @return the cancel link
-     */
-    HasClickHandlers getCancelLink();
+    Anchor getBeforeAnchor();
 
-    ContentView getContentView();
+    Anchor getAfterAnchor();
+
 }
