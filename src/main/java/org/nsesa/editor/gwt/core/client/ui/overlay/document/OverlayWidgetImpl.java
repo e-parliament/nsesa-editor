@@ -922,7 +922,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
      *
      * @return the list of the allowed child types
      */
-    protected List<OverlayWidget> getAllowedChildTypes() {
+    public List<OverlayWidget> getAllowedChildTypes() {
         if (allowedChildren == null) {
             allowedChildren = new ArrayList<OverlayWidget>();
             List<StructureIndicator> stack = new ArrayList<StructureIndicator>();

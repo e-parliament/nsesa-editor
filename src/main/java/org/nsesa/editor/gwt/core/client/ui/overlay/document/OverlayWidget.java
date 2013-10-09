@@ -445,12 +445,14 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
 
     /**
      * Move this widget up in the parent collection.
+     *
      * @return <tt>true</tt> if the widget has been moved up
      */
     boolean moveUp();
 
     /**
      * Move this widget down in the parent collection
+     *
      * @return <tt>true</tt> if the widget has been moved down
      */
     boolean moveDown();
@@ -465,4 +467,10 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
      */
     boolean hasParent(String namespaceURI, String type);
 
+    /**
+     * Returns a list of allowed child types under this overlay widget.
+     *
+     * @return the list of allowed overlay widget child types.
+     */
+    List<OverlayWidget> getAllowedChildTypes();
 }
