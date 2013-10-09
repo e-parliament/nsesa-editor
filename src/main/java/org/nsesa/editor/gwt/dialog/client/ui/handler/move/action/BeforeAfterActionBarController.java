@@ -17,8 +17,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -63,6 +62,9 @@ public class BeforeAfterActionBarController {
     private HandlerRegistration beforeHandlerRegistration;
     private HandlerRegistration afterHandlerRegistration;
 
+    private Element beforePlaceHolderDiv = DOM.createDiv();
+    private Element afterPlaceHolderDiv = DOM.createDiv();
+
     @Inject
     public BeforeAfterActionBarController(final ClientFactory clientFactory,
                                           final BeforeAfterActionBarView view,
@@ -76,14 +78,18 @@ public class BeforeAfterActionBarController {
         beforeHandlerRegistration = this.view.getBeforeAnchor().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // TODO actually build the amendment
+                event.preventDefault();
+                event.stopPropagation();
+                BeforeAfterActionBarController.this.onClick(toMove, overlayWidget, true);
             }
         });
 
         afterHandlerRegistration = this.view.getAfterAnchor().addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // TODO
+                event.preventDefault();
+                event.stopPropagation();
+                BeforeAfterActionBarController.this.onClick(toMove, overlayWidget, false);
             }
         });
     }
@@ -145,24 +151,56 @@ public class BeforeAfterActionBarController {
 
             view.asWidget().setVisible(true);
 
-            final Element beforePlaceHolderDiv = DOM.createDiv();
-            final Element afterPlaceHolderDiv = DOM.createDiv();
+            adaptPlaceholders();
+        }
+    }
 
-            // copy these ones over so they appear already look like the element to insert
-            beforePlaceHolderDiv.getStyle().setHeight(toMove.asWidget().getElement().getOffsetHeight(), Style.Unit.PX);
-            afterPlaceHolderDiv.getStyle().setHeight(toMove.asWidget().getElement().getOffsetHeight(), Style.Unit.PX);
+    protected void adaptPlaceholders() {
+        // detach the old place holders
 
-            beforePlaceHolderDiv.getStyle().setWidth(toMove.asWidget().getElement().getOffsetWidth(), Style.Unit.PX);
-            afterPlaceHolderDiv.getStyle().setWidth(toMove.asWidget().getElement().getOffsetWidth(), Style.Unit.PX);
-
-            beforePlaceHolderDiv.getStyle().setBackgroundColor("red");
-            afterPlaceHolderDiv.getStyle().setBackgroundColor("red");
-
-            // TODO cleanup
-            DOM.insertBefore(overlayWidget.getParentOverlayWidget().asWidget().getElement(), beforePlaceHolderDiv, overlayWidget.asWidget().getElement());
-            DOM.insertChild(overlayWidget.getParentOverlayWidget().asWidget().getElement(), afterPlaceHolderDiv, overlayWidget.getDomIndex() + 1);
-
+        if (beforePlaceHolderDiv != null && beforePlaceHolderDiv.hasParentElement()) {
+            beforePlaceHolderDiv.removeFromParent();
+        }
+        if (afterPlaceHolderDiv != null && afterPlaceHolderDiv.hasParentElement()) {
+            afterPlaceHolderDiv.removeFromParent();
         }
 
+        beforePlaceHolderDiv = createPlaceHolder(true);
+        afterPlaceHolderDiv = createPlaceHolder(false);
+
+        DOM.insertBefore(overlayWidget.getParentOverlayWidget().asWidget().getElement(), beforePlaceHolderDiv, overlayWidget.asWidget().getElement());
+        DOM.insertChild(overlayWidget.getParentOverlayWidget().asWidget().getElement(), afterPlaceHolderDiv, overlayWidget.getDomIndex() + 1);
+    }
+
+    protected Element createPlaceHolder(boolean before) {
+        Element div = DOM.clone(toMove.asWidget().getElement(), true);
+        DOM.sinkEvents(div, Event.MOUSEEVENTS | Event.BUTTON_LEFT);
+        DOM.setEventListener(div, createEventListener(div, before));
+        div.getStyle().setOpacity(0.2);
+        return div;
+    }
+
+    protected EventListener createEventListener(final Element element, final boolean before) {
+        return new EventListener() {
+            @Override
+            public void onBrowserEvent(Event event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.getTypeInt() == Event.ONMOUSEOVER) {
+                    element.getStyle().setOpacity(1.0);
+                    element.getStyle().setCursor(Style.Cursor.POINTER);
+                } else if (event.getTypeInt() == Event.ONMOUSEOUT) {
+                    element.getStyle().setOpacity(0.2);
+                    element.getStyle().setCursor(Style.Cursor.AUTO);
+                } else if (event.getTypeInt() == Event.ONCLICK) {
+                    // build and fire event
+                    onClick(toMove, overlayWidget, before);
+                }
+            }
+        };
+    }
+
+    protected void onClick(OverlayWidget toMove, OverlayWidget selected, boolean before) {
+        Window.alert("Sorry, not implemented yet :(");
     }
 }
