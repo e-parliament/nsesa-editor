@@ -126,6 +126,18 @@ public class AmendableWidgetReference implements IsSerializable {
         this.referenceID = referenceID;
     }
 
+    public AmendableWidgetReference deepCopy() {
+        final AmendableWidgetReference copy = new AmendableWidgetReference();
+        copy.setCreation(creation);
+        copy.setNamespaceURI(namespaceURI);
+        copy.setOffset(offset);
+        copy.setPath(path);
+        copy.setReferenceID(referenceID);
+        copy.setSibling(sibling);
+        copy.setType(type);
+        return copy;
+    }
+
     @Override
     public String toString() {
         return "[ref = {offset: " + offset + ", path: " + path + ", type: " + type + ", ns: " + namespaceURI + ", UUID: " + referenceID + "}]";
@@ -139,7 +151,7 @@ public class AmendableWidgetReference implements IsSerializable {
         AmendableWidgetReference reference = (AmendableWidgetReference) o;
 
         if (creation != reference.creation) return false;
-        if (offset != reference.offset) return false;
+        if (!offset.equals(reference.offset)) return false;
         if (sibling != reference.sibling) return false;
         if (!namespaceURI.equals(reference.namespaceURI)) return false;
         if (!path.equals(reference.path)) return false;

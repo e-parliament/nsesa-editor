@@ -14,9 +14,10 @@
 package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * A Data Transfer Object (DTO) for a person.
@@ -25,31 +26,36 @@ import java.util.Date;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Dto
 public class PersonDTO implements IsSerializable, Serializable {
 
     /**
-     * The primary key identifier for this person.
+     * The public key identifier for this person.
      */
-    private String id;
+    @DtoField
+    private String personID;
     /**
      * The username of this person.
      */
+    @DtoField
     private String username;
     /**
      * The first name of this person.
      */
+    @DtoField
     private String name;
 
     /**
      * The family name of this person.
      */
+    @DtoField
     private String lastName;
 
     public PersonDTO() {
     }
 
-    public PersonDTO(String id, String username, String name, String lastName) {
-        this.id = id;
+    public PersonDTO(String personID, String username, String name, String lastName) {
+        this.personID = personID;
         this.username = username;
         this.name = name;
         this.lastName = lastName;
@@ -62,7 +68,7 @@ public class PersonDTO implements IsSerializable, Serializable {
 
         PersonDTO personDTO = (PersonDTO) o;
 
-        if (id != null ? !id.equals(personDTO.id) : personDTO.id != null) return false;
+        if (personID != null ? !personID.equals(personDTO.personID) : personDTO.personID != null) return false;
         if (lastName != null ? !lastName.equals(personDTO.lastName) : personDTO.lastName != null) return false;
         if (name != null ? !name.equals(personDTO.name) : personDTO.name != null) return false;
         if (username != null ? !username.equals(personDTO.username) : personDTO.username != null) return false;
@@ -72,7 +78,7 @@ public class PersonDTO implements IsSerializable, Serializable {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = personID != null ? personID.hashCode() : 0;
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
@@ -81,18 +87,19 @@ public class PersonDTO implements IsSerializable, Serializable {
 
     /**
      * Returns the display name of this person (name + space + family name to upper case)
+     *
      * @return the display name
      */
     public String getDisplayName() {
         return name + " " + lastName.toUpperCase();
     }
 
-    public String getId() {
-        return id;
+    public String getPersonID() {
+        return personID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPersonID(String personID) {
+        this.personID = personID;
     }
 
     public String getUsername() {

@@ -14,6 +14,9 @@
 package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,30 +28,36 @@ import java.util.Date;
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Dto
 public class DocumentDTO implements IsSerializable, Serializable {
 
     /**
      * The primary key identifier for this particular document translation.
      */
+    @DtoField
     private String documentID;
 
     /**
      * The name of the document.
      */
+    @DtoField
     private String name;
     /**
      * The 2 letter ISO code for this translation.
      */
+    @DtoField
     private String languageIso;
 
     /**
      * A flag indicating if this document is amendable or not.
      */
+    @DtoField
     private boolean amendable;
 
     /**
      * The deadline for this document.
      */
+    @DtoVirtualField(converter = "calendarDateConvertor")
     private Date deadline;
 
     public DocumentDTO() {

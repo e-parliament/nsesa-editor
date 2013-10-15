@@ -13,15 +13,29 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.dialog.client.event.CloseDialogEvent;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandler;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.AmendmentUIHandlerImpl;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.move.action.BeforeAfterActionBarController;
+
+import java.util.Collection;
 
 /**
  * Dialog controller to handle the creation and editing of a movement amendments (amendments suggesting the move of
@@ -43,12 +57,24 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
      * The associated view.
      */
     protected final AmendmentDialogMoveView view;
+
     private HandlerRegistration cancelClickHandlerRegistration;
 
+    private final ContentController contentController;
+
+    private final BeforeAfterActionBarController beforeAfterActionBarController;
+
+    private OverlayWidget root;
+
     @Inject
-    public AmendmentDialogMoveController(final ClientFactory clientFactory, final AmendmentDialogMoveView view) {
+    public AmendmentDialogMoveController(final ClientFactory clientFactory, final AmendmentDialogMoveView view,
+                                         final ContentController contentController,
+                                         final BeforeAfterActionBarController beforeAfterActionBarController) {
         this.clientFactory = clientFactory;
         this.view = view;
+        this.contentController = contentController;
+        this.beforeAfterActionBarController = beforeAfterActionBarController;
+        this.beforeAfterActionBarController.setContentController(contentController);
     }
 
     public void registerListeners() {
@@ -58,6 +84,9 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
                 clientFactory.getEventBus().fireEvent(new CloseDialogEvent());
             }
         });
+
+        beforeAfterActionBarController.registerListeners();
+        contentController.registerListeners();
     }
 
     /**
@@ -65,6 +94,8 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
      */
     public void removeListeners() {
         cancelClickHandlerRegistration.removeHandler();
+        beforeAfterActionBarController.removeListeners();
+        contentController.removeListeners();
     }
 
     /**
@@ -84,5 +115,62 @@ public class AmendmentDialogMoveController extends AmendmentUIHandlerImpl implem
     @Override
     public void handle() {
 
+        final DocumentController documentController = dialogContext.getDocumentController();
+        documentController.getServiceFactory().getGwtDocumentService().getDocumentContent(clientFactory.getClientContext(), documentController.getDocumentID(), new AsyncCallback<DocumentContentDTO>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                clientFactory.getEventBus().fireEvent(new CriticalErrorEvent("Could not retrieve document content with ID " + documentController.getDocumentID(), caught));
+            }
+
+            @Override
+            public void onSuccess(DocumentContentDTO result) {
+                contentController.setContent(result.getContent());
+                root = documentController.getOverlayFactory().getAmendableWidget(contentController.getContentElements()[0]);
+
+                root.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
+                    @Override
+                    public boolean visit(final OverlayWidget visited) {
+                        if (visited.getId() != null && !"".equals(visited.getId()) && visited.getParentOverlayWidget() != null) {
+
+                            final Collection<OverlayWidget> allowed = Collections2.filter(visited.getParentOverlayWidget().getAllowedChildTypes(), new Predicate<OverlayWidget>() {
+                                @Override
+                                public boolean apply(OverlayWidget input) {
+                                    return input.getType().equalsIgnoreCase(dialogContext.getOverlayWidget().getType());
+                                }
+                            });
+
+                            if (!allowed.isEmpty()) {
+                                visited.asWidget().getElement().getStyle().setColor("#000000");
+                                visited.setUIListener(new OverlayWidgetUIListener() {
+                                    @Override
+                                    public void onClick(OverlayWidget sender, Event event) {
+                                        beforeAfterActionBarController.setOverlayWidgetToMove(dialogContext.getOverlayWidget());
+                                        beforeAfterActionBarController.setOverlayWidget(sender);
+                                    }
+
+                                    @Override
+                                    public void onDblClick(OverlayWidget sender, Event event) {
+                                        // do nothing
+                                    }
+
+                                    @Override
+                                    public void onMouseOver(OverlayWidget sender, Event event) {
+                                        // do nothing
+                                    }
+
+                                    @Override
+                                    public void onMouseOut(OverlayWidget sender, Event event) {
+                                        // do nothing
+                                    }
+                                });
+                            } else {
+                                visited.asWidget().getElement().getStyle().setColor("#cccccc");
+                            }
+                        }
+                        return true;
+                    }
+                });
+            }
+        });
     }
 }

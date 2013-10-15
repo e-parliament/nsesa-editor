@@ -19,9 +19,9 @@ import com.googlecode.gwt.test.GwtModule;
 import com.googlecode.gwt.test.GwtTest;
 import junit.framework.Assert;
 import org.junit.Test;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayStrategy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
-import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayStrategy;
 import org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin;
 
 /**
@@ -35,7 +35,7 @@ public class DefaultLocatorTest extends GwtTest {
 
     private static final String ISO_ENGLISH = "EN";
 
-    final Locator locator = new DefaultLocator();
+    final DefaultLocator locator = new DefaultLocator();
 
     @Test
     public void testGetLocationNull() throws Exception {
@@ -258,5 +258,25 @@ public class DefaultLocatorTest extends GwtTest {
 
         Assert.assertEquals("foo – bar -1a (new)", locator.getLocation(overlayWidget, ISO_ENGLISH, false));
         Assert.assertEquals("foo – bar -1b (new)", locator.getLocation(overlayWidget2, ISO_ENGLISH, false));
+    }
+
+    @Test
+    public void testParse() throws Exception {
+        final OverlayWidget root = new OverlayWidgetImpl();
+        root.setType("foo");
+
+        final Location[] locations = locator.parse(root, "Foo 1", ISO_ENGLISH);
+        Assert.assertTrue(locations.length == 1);
+        Assert.assertEquals(root.getType(), locations[0].getType());
+
+        final OverlayWidget overlayWidget = new OverlayWidgetImpl();
+        overlayWidget.setType("bar");
+        root.addOverlayWidget(overlayWidget);
+
+        final Location[] locations2 = locator.parse(root, "Foo 1" + locator.getSplitter(ISO_ENGLISH) + "bar 1 a (new)", ISO_ENGLISH);
+        Assert.assertTrue(locations2.length == 2);
+        Assert.assertEquals(root.getType(), locations2[0].getType());
+        Assert.assertEquals(overlayWidget.getType(), locations2[1].getType());
+        Assert.assertTrue(locations2[1].isNew());
     }
 }

@@ -36,6 +36,7 @@ import java.util.Map;
 public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {
 
 private final static Logger LOG = Logger.getLogger(${overlayClass.name?cap_first}.class.getName());
+
 /** the namespace URI of the overlay factory **/
 private final String namespaceURI = "${overlayClass.namespaceURI}";
 
@@ -55,6 +56,7 @@ super(overlayStrategy);
 public String getNamespaceURI() {
 return namespaceURI;
 }
+
 /**
 * Return <code>OverlayWidget</code> instance based on the given DOM element or null if there is no
 * possibility to create an overlay widget with the type specified in the DOM element "type" attribute

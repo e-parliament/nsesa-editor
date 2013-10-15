@@ -41,6 +41,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetUIListener;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 import org.nsesa.editor.gwt.core.client.util.Counter;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +177,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      *
      * @param documentContent the document content to set
      */
-    public void setContent(String documentContent) {
+    public void setContent(DocumentContentDTO documentContent) {
         /*if (activeOverlayWidget != null) {
             activeOverlayWidget = null;
         }*/
@@ -186,7 +187,7 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
                 overlayWidget.onDetach();
             }
         }
-        contentController.setContent(documentContent);
+        contentController.setContent(documentContent.getContent());
     }
 
     /**
@@ -201,7 +202,13 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
     public void overlay() {
         long start = System.currentTimeMillis();
         final Element[] contentElements = contentController.getContentElements();
-        if (overlayWidgets == null) overlayWidgets = new ArrayList<OverlayWidget>();
+        // make sure we're initialized
+        if (overlayWidgets == null) {
+            overlayWidgets = new ArrayList<OverlayWidget>();
+        } else {
+            // and make sure we're clearing older overlay widgets if the overlaying is called twice
+            overlayWidgets.clear();
+        }
         for (final Element element : contentElements) {
             try {
                 final OverlayWidget rootOverlayWidget = overlay(element, this);
@@ -429,15 +436,8 @@ public class SourceFileController implements OverlayWidgetUIListener, OverlayWid
      * @param activeOverlayWidget the active overlay widget
      */
     public void setActiveOverlayWidget(OverlayWidget activeOverlayWidget) {
-        if (this.activeOverlayWidget != null) {
-            this.activeOverlayWidget.asWidget().removeStyleName(style.selected());
-        }
         LOG.info("Setting " + activeOverlayWidget + " as active widget on " + documentController);
         this.activeOverlayWidget = activeOverlayWidget;
-
-        if (this.activeOverlayWidget != null) {
-            this.activeOverlayWidget.asWidget().addStyleName(style.selected());
-        }
     }
 
     /**

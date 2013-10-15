@@ -13,31 +13,18 @@
  */
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.inject.ImplementedBy;
-import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 /**
- * View for the {@link AuthorPanelController}.
+ * View for the {@link AuthorController}.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(AuthorPanelViewImpl.class)
-public interface AuthorPanelView extends IsWidget {
-    /**
-     * Get a reference to the (autocomplete) suggestbox with the author.
-     * @return the suggest box
-     */
-    SuggestBox getSuggestBox();
+@ImplementedBy(AuthorViewImpl.class)
+public interface AuthorView extends IsWidget {
 
-    /**
-     * Get a reference to the selected authors panel.
-     * @return the selected authors panel
-     */
-    ComplexPanel getAuthorsPanel();
+    void setName(String displayName);
 }

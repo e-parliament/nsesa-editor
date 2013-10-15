@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
@@ -19,7 +19,7 @@ import org.nsesa.editor.gwt.core.shared.PersonDTO;
 /**
  * An extension to the {@link MultiWordSuggestOracle.MultiWordSuggestion} to keep a reference to the given
  * {@link PersonDTO}. Used in combination with the {@link PersonMultiWordSuggestionOracle}.
- *
+ * <p/>
  * Date: 20/02/13 15:39
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
@@ -38,6 +38,7 @@ public class PersonMultiWordSuggestion extends MultiWordSuggestOracle.MultiWordS
 
     /**
      * Creates a suggestion based on the passed {@link PersonDTO}.
+     *
      * @param person the person DTO
      */
     public PersonMultiWordSuggestion(final PersonDTO person) {
@@ -47,6 +48,7 @@ public class PersonMultiWordSuggestion extends MultiWordSuggestOracle.MultiWordS
 
     /**
      * Get the reference to the person DTO that was used to build this suggestion.
+     *
      * @return the person DTO
      */
     public PersonDTO getPerson() {

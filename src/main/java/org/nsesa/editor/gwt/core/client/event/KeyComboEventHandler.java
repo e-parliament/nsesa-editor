@@ -16,7 +16,7 @@ package org.nsesa.editor.gwt.core.client.event;
 import com.google.gwt.event.shared.EventHandler;
 
 /**
- * Handler interface for the {@link org.nsesa.editor.gwt.core.client.event.LocaleChangeEvent}.
+ * Handler interface for the {@link org.nsesa.editor.gwt.core.client.event.KeyComboEvent}.
  * Date: 24/06/12 18:15
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>

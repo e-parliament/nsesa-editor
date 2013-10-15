@@ -19,10 +19,11 @@ import com.sun.xml.xsom.parser.AnnotationParserFactory;
 import org.xml.sax.*;
 
 /**
- * An XSOM annotation parser implementation to read the documentation from XSD annotations
- * 
+ * An XSOM annotation parser implementation to read the documentation from XSD annotations.
+ *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 24/01/13 16:46
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 24/01/13 16:46
  */
 public class OverlayAnnotationParserFactory implements AnnotationParserFactory {
     @Override

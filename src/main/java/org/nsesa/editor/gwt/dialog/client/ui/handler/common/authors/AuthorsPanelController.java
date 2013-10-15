@@ -11,23 +11,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors;
 
+import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.inject.Inject;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.PersonDTO;
 import org.nsesa.editor.gwt.dialog.client.ui.dialog.DialogContext;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.AmendmentDialogAwareController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorControllerProvider;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
@@ -41,22 +51,24 @@ import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
  * @version $Id$
  */
 @Scope(DIALOG)
-public class AuthorPanelController implements AmendmentDialogAwareController {
+public class AuthorsPanelController implements AmendmentDialogAwareController {
 
     /**
      * The main view.
      */
-    protected final AuthorPanelView view;
+    protected final AuthorsPanelView view;
 
     /**
      * The CSS resource.
      */
-    protected final AuthorPanelViewCss authorPanelViewCss;
+    protected final AuthorsPanelViewCss authorsPanelViewCss;
 
     /**
      * The client factory.
      */
     protected final ClientFactory clientFactory;
+
+    protected final AuthorControllerProvider authorControllerProvider;
 
     /**
      * The dialog context.
@@ -66,15 +78,45 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
     /**
      * The set of selected persons.
      */
-    private Set<PersonDTO> selectedPersons = new LinkedHashSet<PersonDTO>();
+    private List<AuthorController> selectedPersons = new ArrayList<AuthorController>();
+
     private HandlerRegistration selectionHandlerRegistration;
 
+    private VerticalPanelDropController verticalPanelDropController;
+
+    private PickupDragController widgetDragController;
+
+    private AuthorController selectedAuthorController;
+
     @Inject
-    public AuthorPanelController(final ClientFactory clientFactory, final AuthorPanelView view,
-                                 final AuthorPanelViewCss authorPanelViewCss) {
+    public AuthorsPanelController(final ClientFactory clientFactory, final AuthorsPanelView view,
+                                  final AuthorsPanelViewCss authorsPanelViewCss,
+                                  final AuthorControllerProvider authorControllerProvider) {
         this.clientFactory = clientFactory;
         this.view = view;
-        this.authorPanelViewCss = authorPanelViewCss;
+        this.authorsPanelViewCss = authorsPanelViewCss;
+        this.authorControllerProvider = authorControllerProvider;
+        this.verticalPanelDropController = new VerticalPanelDropController(view.getAuthorsPanel()) {
+            @Override
+            public void onDrop(DragContext context) {
+                super.onDrop(context);
+                final int widgetIndex = view.getAuthorsPanel().getWidgetIndex(context.draggable);
+                selectedPersons.remove(selectedAuthorController);
+                selectedPersons.add(widgetIndex, selectedAuthorController);
+                selectedAuthorController = null;
+            }
+        };
+
+        widgetDragController = new PickupDragController(view.getBoundaryPanel(), false) {
+            @Override
+            public void previewDragStart() throws VetoDragException {
+                super.previewDragStart();
+                final int widgetIndex = view.getAuthorsPanel().getWidgetIndex(context.draggable);
+                selectedAuthorController = selectedPersons.get(widgetIndex);
+            }
+        };
+        widgetDragController.setBehaviorMultipleSelection(false);
+        widgetDragController.registerDropController(verticalPanelDropController);
     }
 
     /**
@@ -93,7 +135,12 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      * @return the selected persons.
      */
     public Set<PersonDTO> getSelectedPersons() {
-        return selectedPersons;
+        return new LinkedHashSet<PersonDTO>(Collections2.transform(selectedPersons, new Function<AuthorController, PersonDTO>() {
+            @Override
+            public PersonDTO apply(AuthorController input) {
+                return input.getPerson();
+            }
+        }));
     }
 
     /**
@@ -102,8 +149,15 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      * @param person the person to add as an author
      * @see #getSelectedPersons() to get the list
      */
-    public void addPerson(final PersonDTO person) {
-        if (selectedPersons.add(person)) {
+    public void addPerson(final PersonDTO person, int index) {
+        AuthorController authorController = authorControllerProvider.get();
+        authorController.setPerson(person);
+        if (!selectedPersons.contains(authorController)) {
+            if (index > selectedPersons.size()) {
+                selectedPersons.add(authorController);
+            } else {
+                selectedPersons.add(index, authorController);
+            }
             drawPersons();
         }
     }
@@ -115,7 +169,10 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      * @see #getSelectedPersons() to get the list
      */
     public void removePerson(final PersonDTO person) {
-        if (selectedPersons.remove(person)) {
+        Iterator<AuthorController> iterator = selectedPersons.iterator();
+        while (iterator.hasNext()) {
+            AuthorController toCheck = iterator.next();
+            if (toCheck.getPerson().equals(person)) iterator.remove();
             drawPersons();
         }
     }
@@ -130,25 +187,26 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
 
     /**
      * Draw the selected persons using some quick & dirty panel with removal button.
-     * TODO replace with a UI binder
      */
     private void drawPersons() {
         view.getAuthorsPanel().clear();
-        for (final PersonDTO person : selectedPersons) {
-            final HTML html = new HTML(person.getDisplayName());
+        for (final AuthorController authorController : selectedPersons) {
+
             final Button removeButton = new Button("x", new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    removePerson(person);
+                    removePerson(authorController.getPerson());
                 }
             });
             HorizontalPanel holder = new HorizontalPanel();
-            holder.add(html);
+            holder.add(authorController.getView());
             holder.setWidth("100%");
             holder.add(removeButton);
-            holder.setCellHorizontalAlignment(html, HasHorizontalAlignment.ALIGN_LEFT);
+            holder.setCellHorizontalAlignment(authorController.getView(), HasHorizontalAlignment.ALIGN_LEFT);
             holder.setCellHorizontalAlignment(removeButton, HasHorizontalAlignment.ALIGN_RIGHT);
+
             view.getAuthorsPanel().add(holder);
+            widgetDragController.makeDraggable(holder, authorController.getView().asWidget());
         }
     }
 
@@ -172,7 +230,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
                     final PersonMultiWordSuggestion personMultiWordSuggestion = (PersonMultiWordSuggestion) selectedItem;
                     // clear the selection
                     view.getSuggestBox().setText("");
-                    addPerson(personMultiWordSuggestion.getPerson());
+                    addPerson(personMultiWordSuggestion.getPerson(), selectedPersons.size());
                 }
             }
         });
@@ -190,7 +248,7 @@ public class AuthorPanelController implements AmendmentDialogAwareController {
      *
      * @return the view
      */
-    public AuthorPanelView getView() {
+    public AuthorsPanelView getView() {
         return view;
     }
 

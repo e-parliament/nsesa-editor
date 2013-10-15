@@ -19,8 +19,10 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.filter.resources.Constants;
+import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
+import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.util.Filter;
 import org.nsesa.editor.gwt.core.client.util.Selection;
@@ -53,18 +55,27 @@ public class AmendmentsFilterController {
     /**
      * A map with registered filters
      */
-    private Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
+    private final Map<String, Filter<AmendmentController>> filters = new LinkedHashMap<String, Filter<AmendmentController>>();
 
-    /**
-     * <code>Selection</code> of all <code>AmendmentController</code>
-     */
-    private Selection<AmendmentController> ALL = new Selection.AllSelection<AmendmentController>();
-
-    /**
-     * <code>Selection</code> of none of <code>AmendmentController</code>
-     */
-    private Selection<AmendmentController> NONE = new Selection.NoneSelection<AmendmentController>();
     private HandlerRegistration changeHandlerRegistration;
+
+    private final Constants constants;
+
+    private final Selection<AmendmentController> ALL = new Selection.AllSelection<AmendmentController>();
+
+    private final Selection<AmendmentController> APPLIED = new Selection<AmendmentController>() {
+        @Override
+        public boolean select(AmendmentController amendmentController) {
+            return amendmentController.getDocumentController() != null;
+        }
+    };
+    private final Selection<AmendmentController> LANGUAGE = new Selection<AmendmentController>() {
+        @Override
+        public boolean select(AmendmentController amendmentController) {
+            final DocumentController documentController = amendmentController.getDocumentController();
+            return documentController != null && documentController.getDocument().getLanguageIso().equalsIgnoreCase(amendmentController.getModel().getLanguageISO());
+        }
+    };
 
     /**
      * Create <code>AmendmentsFilterController</code> with the given parameters
@@ -74,10 +85,12 @@ public class AmendmentsFilterController {
      */
     @Inject
     public AmendmentsFilterController(DocumentEventBus documentEventBus, AmendmentsFilterView view,
-                                      @Named("amendmentsPerPage") int amendmentsPerPage) {
+                                      @Named("amendmentsPerPage") int amendmentsPerPage,
+                                      Constants constants) {
         this.documentEventBus = documentEventBus;
         this.view = view;
         this.amendmentsPerPage = amendmentsPerPage;
+        this.constants = constants;
         registerFilterActions();
         registerListeners();
         this.view.setFilters(Arrays.asList(filters.keySet().toArray(new String[filters.size()])));
@@ -87,10 +100,14 @@ public class AmendmentsFilterController {
      * Register the actions that will be displayed in the view
      */
     protected void registerFilterActions() {
-        registerFilterAction("All amendments",
+        registerFilterAction(constants.amendmentsHeaderFilterAll(),
                 new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, ALL));
-        registerFilterAction("None",
-                new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, NONE));
+
+        registerFilterAction(constants.amendmentsHeaderFilterApplied(),
+                new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, APPLIED));
+
+        registerFilterAction(constants.amendmentsHeaderFilterLanguage(),
+                new Filter<AmendmentController>(0, amendmentsPerPage, AmendmentController.ORDER_COMPARATOR, LANGUAGE));
     }
 
     /**

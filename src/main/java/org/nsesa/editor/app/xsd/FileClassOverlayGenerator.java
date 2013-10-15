@@ -27,26 +27,27 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.net.URL;
 import java.util.*;
 
 /**
- * Get the result of XSD parsing and based on Freemarker template mechanism it generate a class for each element
- * defined in XSD schema. A factory API is also generated in order to facilitate the object's creation.
- * <p>
- * The generator is coming with the following predefined Freemarker templates which shall exist
- * before running the program:
- * <p>
- *     overlayClass.ftl : responsible for generation of the java classes
- * <p>
- *     overlayEnum.ftl : responsible for generation of the java enum
- * <p>
- *    overlayFactory.ftl: responsible for generation of java classes that follow factory pattern
- * <p>
- *    overlayLocalizableResource.ftl,overlayMessagesProperties.ftl, overlayMessagesProperties.ftl:
- *    responsible for generation of GWT localizable resources
+ * Get the result of the XSD parsing and generate, based on the Freemarker template an overlay class for each element
+ * defined in the XSD schema. A factory implementation is also generated in order to facilitate the object's creation.
+ * <p/>
+ * The generator is coming with the following predefined Freemarker templates:
+ * <ul>
+ * <li>overlayClass.ftl: responsible for generation of the Java overlay classes.</li>
+ * <li>overlayEnum.ftl: responsible for generation of the Java enum.</li>
+ * <li>overlayFactory.ftl: responsible for generation of Java classes that implement the
+ * {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory} interface.</li>
+ * <li>overlayLocalizableResource.ftl, overlayMessagesProperties.ftl, overlayMessagesProperties.ftl:
+ * responsible for generation of GWT localizable resources.</li>
+ * </ul>
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 06/11/12 9:09
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 06/11/12 9:09
  */
 public class FileClassOverlayGenerator extends OverlayGenerator {
     public static final Logger LOG = LoggerFactory.getLogger(FileClassOverlayGenerator.class);
@@ -61,13 +62,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     /**
      * A holder for overlay property. It will keep a flag to identify whether the parent was
-     * used as a collection or not
+     * used as a collection or not.
      */
     private static final class OverlayPropertyHolder {
         private OverlayProperty property;
         private boolean parentCollection;
 
-        OverlayPropertyHolder(OverlayProperty property, boolean parentCollection) {
+        OverlayPropertyHolder(final OverlayProperty property, final boolean parentCollection) {
             this.property = property;
             this.parentCollection = parentCollection;
         }
@@ -89,11 +90,24 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         }
     }
 
+    /**
+     * The directory to hold the generated source classes.
+     */
     private File generatedSourcesDirectory;
 
-    // Freemarker configuration
+    /**
+     * The Freemarker configuration object.
+     */
     private final Configuration configuration;
+
+    /**
+     * The base package name to use.
+     */
     private String basePackageName;
+
+    /**
+     * The target directory where the generated files will be stored.
+     */
     private String targetDirectory;
 
     /**
@@ -112,9 +126,8 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
     /**
      * Generate files containing the source code for classes, for factories.
-     *
      */
-    public void print() {
+    public void export() {
 
         final PackageNameGenerator packageNameGenerator = new PackageNameGeneratorImpl(basePackageName);
         final PackageNameGenerator directoryNameGenerator = new PackageNameGeneratorImpl("");
@@ -122,13 +135,13 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         //generate source directory
         generateSourcesDirectory();
 
-        OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getResult();
-        List<OverlayClass> generatedClasses = getFlatListWithNoGroups(root);
+        final OverlayClassGenerator.OverlayRootClass root = overlayClassGenerator.getResult();
+        final List<OverlayClass> generatedClasses = getFlatListWithNoGroups(root);
 
         // generate classes
         generateClasses(generatedClasses, packageNameGenerator, directoryNameGenerator);
 
-        Map<String, List<OverlayClass>> elementClasses = filter(generatedClasses, OverlayType.Element);
+        final Map<String, List<OverlayClass>> elementClasses = filter(generatedClasses, OverlayType.Element);
 
         // generate factories for element types
         generateFactories(elementClasses, packageNameGenerator, directoryNameGenerator);
@@ -141,13 +154,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     }
 
     /**
-     * Generate the directory where the sources will be created
+     * Generate the directory where the Java source files will be created.
      */
     private void generateSourcesDirectory() {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         try {
-            final File directoryForTemplateLoading =
-                    new File(classLoader.getResource(OVERLAY_ELEMENT_TEMPLATE_NAME).getFile()).getParentFile();
+            final URL resource = classLoader.getResource(OVERLAY_ELEMENT_TEMPLATE_NAME);
+            if (resource == null) throw new RuntimeException("Could not find " + OVERLAY_ELEMENT_TEMPLATE_NAME +
+                    " template file in the classpath.");
+            final File directoryForTemplateLoading = new File(resource.getFile()).getParentFile();
+            // freemarker directory with the templates
             configuration.setDirectoryForTemplateLoading(directoryForTemplateLoading);
             // create the subdirectory name
             final File targetDirectoryClasses = new File(classLoader.getResource(".").getFile());
@@ -165,16 +181,17 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     }
 
     /**
-     * Generate overlay resources for element types
-     * @param elementClasses
-     * @param packageNameGenerator
-     * @param directoryNameGenerator
+     * Generate overlay resources for element types.
+     *
+     * @param elementClasses         the map with overlay classes for each namespace.
+     * @param packageNameGenerator   the package name generator
+     * @param directoryNameGenerator the directory name generator
      */
-    private void generateOverlayResources(Map<String, List<OverlayClass>> elementClasses,
-                                          PackageNameGenerator packageNameGenerator,
-                                          PackageNameGenerator directoryNameGenerator) {
+    private void generateOverlayResources(final Map<String, List<OverlayClass>> elementClasses,
+                                          final PackageNameGenerator packageNameGenerator,
+                                          final PackageNameGenerator directoryNameGenerator) {
         // create the resource for each namespace
-        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+        for (final Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
             String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
@@ -183,7 +200,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             final String className = StringUtils.capitalize(factoryName) + "OverlayLocalizableResource";
             final File file = new File(generatedSourcesDirectory, className + ".java");
 
-            Map<String, Object> rootMap = new HashMap<String, Object>();
+            final Map<String, Object> context = new HashMap<String, Object>();
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
@@ -191,25 +208,26 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
-            rootMap.put("overlayClass", factoryClass);
-            rootMap.put("factoryName", factoryName);
-            rootMap.put("overlayClasses", entry.getValue());
-            rootMap.put("packageNameGenerator", packageNameGenerator);
-            writeToFile(file, rootMap, OVERLAY_RESOURCE_TEMPLATE_NAME);
+            context.put("overlayClass", factoryClass);
+            context.put("factoryName", factoryName);
+            context.put("overlayClasses", entry.getValue());
+            context.put("packageNameGenerator", packageNameGenerator);
+            writeToFile(file, context, OVERLAY_RESOURCE_TEMPLATE_NAME);
         }
     }
 
     /**
-     * Generate overlay messages for element types based on xsd documentation
-     * @param elementClasses
-     * @param packageNameGenerator
-     * @param directoryNameGenerator
+     * Generate overlay messages for element types based on xsd documentation.
+     *
+     * @param elementClasses         the map with overlay classes for each namespace.
+     * @param packageNameGenerator   the package name generator
+     * @param directoryNameGenerator the directory name generator
      */
-    private void generateOverlayMessages(Map<String, List<OverlayClass>> elementClasses,
-                                         PackageNameGenerator packageNameGenerator,
-                                         PackageNameGenerator directoryNameGenerator) {
+    private void generateOverlayMessages(final Map<String, List<OverlayClass>> elementClasses,
+                                         final PackageNameGenerator packageNameGenerator,
+                                         final PackageNameGenerator directoryNameGenerator) {
         // create overlay message properties file for each namespace
-        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+        for (final Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
             String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
@@ -219,7 +237,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             final File classFile = new File(generatedSourcesDirectory, className + ".java");
             final File propFile = new File(generatedSourcesDirectory, className + ".properties");
 
-            Map<String, Object> rootMap = new HashMap<String, Object>();
+            final Map<String, Object> context = new HashMap<String, Object>();
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
@@ -227,29 +245,30 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
-            rootMap.put("overlayClass", factoryClass);
-            rootMap.put("overlayClasses", entry.getValue());
-            rootMap.put("packageNameGenerator", packageNameGenerator);
+            context.put("overlayClass", factoryClass);
+            context.put("overlayClasses", entry.getValue());
+            context.put("packageNameGenerator", packageNameGenerator);
 
-            writeToFile(classFile, rootMap, OVERLAY_MESSAGE_TEMPLATE_NAME);
-            writeToFile(propFile, rootMap, OVERLAY_MESSAGE_PROP_TEMPLATE_NAME);
+            writeToFile(classFile, context, OVERLAY_MESSAGE_TEMPLATE_NAME);
+            writeToFile(propFile, context, OVERLAY_MESSAGE_PROP_TEMPLATE_NAME);
 
         }
     }
 
     /**
-     * Generates factories of elements
-     * @param elementClasses
-     * @param packageNameGenerator
-     * @param directoryNameGenerator
+     * Generates overlay factories that implement {@link org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory}.
+     * Used during the overlay mechanism when creating a higher abstraction based on the DOM.
+     *
+     * @param elementClasses         the map with overlay classes for each namespace.
+     * @param packageNameGenerator   the package name generator
+     * @param directoryNameGenerator the directory name generator
      */
     private void generateFactories(Map<String, List<OverlayClass>> elementClasses,
                                    PackageNameGenerator packageNameGenerator,
                                    PackageNameGenerator directoryNameGenerator) {
         // create the factory for each namespace
-        for (Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
+        for (final Map.Entry<String, List<OverlayClass>> entry : elementClasses.entrySet()) {
             String factoryName = directoryNameGenerator.getPackageName(entry.getKey()).replace("_", "");
-
             if (!Character.isJavaIdentifierStart(factoryName.charAt(0))) {
                 factoryName = "_" + factoryName;
             }
@@ -257,7 +276,7 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             final String className = StringUtils.capitalize(factoryName) + "OverlayFactory";
             final File file = new File(generatedSourcesDirectory, className + ".java");
 
-            Map<String, Object> rootMap = new HashMap<String, Object>();
+            final Map<String, Object> context = new HashMap<String, Object>();
 
             final OverlayClass factoryClass = new OverlayClass(className, null, OverlayType.Unknown);
             factoryClass.setClassName(className);
@@ -265,30 +284,31 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             factoryClass.setPackageName(basePackageName.endsWith(".")
                     ? basePackageName.substring(0, basePackageName.length() - 1) : basePackageName);
 
-            rootMap.put("overlayClass", factoryClass);
-            rootMap.put("overlayClasses", entry.getValue());
-            rootMap.put("packageNameGenerator", packageNameGenerator);
-            writeToFile(file, rootMap, OVERLAY_FACTORY_TEMPLATE_NAME);
+            context.put("overlayClass", factoryClass);
+            context.put("overlayClasses", entry.getValue());
+            context.put("packageNameGenerator", packageNameGenerator);
+            writeToFile(file, context, OVERLAY_FACTORY_TEMPLATE_NAME);
         }
     }
 
     /**
-     * Generates source code for elements
-     * @param generatedClasses
-     * @param packageNameGenerator
-     * @param directoryNameGenerator
+     * Generates Java source code for the overlay classes.
+     *
+     * @param generatedClasses       the overlay classes
+     * @param packageNameGenerator   the package name generator
+     * @param directoryNameGenerator the directory name generator
      */
-    private void generateClasses(List<OverlayClass> generatedClasses,
-                                 PackageNameGenerator packageNameGenerator,
-                                 PackageNameGenerator directoryNameGenerator) {
+    private void generateClasses(final List<OverlayClass> generatedClasses,
+                                 final PackageNameGenerator packageNameGenerator,
+                                 final PackageNameGenerator directoryNameGenerator) {
 
-        for (OverlayClass overlayClass : generatedClasses) {
+        for (final OverlayClass overlayClass : generatedClasses) {
             // generate directories
             String filePackageName = directoryNameGenerator.getPackageName(overlayClass);
             if (filePackageName == null || filePackageName.length() == 0) {
                 continue;
             }
-            File filePackage = new File(generatedSourcesDirectory, filePackageName);
+            final File filePackage = new File(generatedSourcesDirectory, filePackageName);
             if (!filePackage.exists()) {
                 try {
                     filePackage.mkdir();
@@ -298,29 +318,31 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             }
             final File file = new File(filePackage, StringUtils.capitalize(overlayClass.getClassName()) + ".java");
             try {
-                Map<String, Object> rootMap = new HashMap<String, Object>();
-                rootMap.put("overlayClass", overlayClass);
-                rootMap.put("packageNameGenerator", packageNameGenerator);
+                final Map<String, Object> context = new HashMap<String, Object>();
+                context.put("overlayClass", overlayClass);
+                context.put("packageNameGenerator", packageNameGenerator);
                 String templateName = OVERLAY_ELEMENT_TEMPLATE_NAME;
                 if (overlayClass.isEnumeration()) {
                     templateName = OVERLAY_ENUM_TEMPLATE_NAME;
                 }
-                writeToFile(file, rootMap, templateName);
+                writeToFile(file, context, templateName);
             } catch (Exception e) {
-                throw new RuntimeException("The class can not be generated " + file.getAbsolutePath(), e);
+                throw new RuntimeException("The Java source code for " + overlayClass + " could not be generated at "
+                        + file.getAbsolutePath(), e);
             }
         }
     }
 
     /**
-     * Filter generated classes based on the given <code>OverlayType</code> type
-     * @param generatedClasses
-     * @param overlayType
-     * @return
+     * Filter generated classes based on the given <code>OverlayType</code> type.
+     *
+     * @param generatedClasses the overlay classes
+     * @param overlayType      the overlay type
+     * @return the map with namespace and the generated overlay classes
      */
     private Map<String, List<OverlayClass>> filter(List<OverlayClass> generatedClasses, OverlayType overlayType) {
-        Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
-        for (OverlayClass generatedClass : generatedClasses) {
+        final Map<String, List<OverlayClass>> result = new HashMap<String, List<OverlayClass>>();
+        for (final OverlayClass generatedClass : generatedClasses) {
             if (generatedClass.getNamespaceURI() != null) {
                 List<OverlayClass> namespaceElements = result.get(generatedClass.getNamespaceURI());
                 if (namespaceElements == null) {
@@ -337,18 +359,19 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
     }
 
     /**
-     * Create a file using freemarker template mechanism
-     * @param file
-     * @param rootMap
-     * @param templateName
+     * Write a file after processing it in Freemarker.
+     *
+     * @param file         the file to write to
+     * @param context      the context map
+     * @param templateName the template to use
      */
-    public void writeToFile(File file, Object rootMap, String templateName) {
-        FileWriter writer = null;
+    public void writeToFile(final File file, final Object context, final String templateName) {
+        Writer writer = null;
         try {
             final Template template = configuration.getTemplate(templateName);
             writer = new FileWriter(file);
             final DefaultObjectWrapper wrapper = new DefaultObjectWrapper();
-            template.process(rootMap, writer, wrapper);
+            template.process(context, writer, wrapper);
         } catch (IOException e) {
             throw new RuntimeException("Could not read template or write to file.", e);
         } catch (TemplateException e) {
@@ -358,29 +381,36 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    LOG.error("Could not close written file '" + file.getAbsolutePath() + "'.", e);
+                    LOG.error("Could not close writer.", e);
                 }
             }
         }
     }
 
     /**
-     * The main method
+     * The main method. The following arguments are expected:
+     * <ul>
+     * <li>base_package: the base package name, <strong>must</strong> end with a dot (eg. 'org.nsesa.editor.gwt.an.client.ui.overlay.document.gen.')</li>
+     * <li>target_dir: the target directory for writing the generated source files (eg. 'src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/')</li>
+     * <li>xsd_schema: the XSD file to generate the classes for (eg. 'akomaNtoso/akomantoso20.xsd')</li>
+     * </ul>
      *
-     * @param args
+     * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         if (args.length != 3) {
-            System.out.println("Usage org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<xsd_schema>>");
-            System.out.println("eg: org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.an.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/ akomantoso20.xsd");
+            System.out.println("Usage: java org.nsesa.editor.app.xsd.FileClassOverlayGenerator <<base_package>> <<target_dir>> <<xsd_schema>>");
+            System.out.println("eg: java org.nsesa.editor.app.xsd.FileClassOverlayGenerator org.nsesa.editor.gwt.an.client.ui.overlay.document.gen. src/main/java/org/nsesa/editor/gwt/an/client/ui/overlay/document/gen/ akomaNtoso/akomantoso20.xsd");
             System.exit(1);
         }
 
-        String basePackage = args[0]; //org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.
-        String targetDirectory = args[1]; //src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/
-        String schema = args[2];
+        final String basePackage = args[0]; //org.nsesa.editor.gwt.core.client.ui.overlay.document.gen.
+        final String targetDirectory = args[1]; //src/main/java/org/nsesa/editor/gwt/core/client/ui/overlay/document/gen/
+        final String schema = args[2]; // xsd
 
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        // set up log4j logging
         DOMConfigurator.configure(classLoader.getResource("log4j.xml"));
         // the first schema name is the main one
 
@@ -388,9 +418,9 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
         try {
             generator.parse(schema);
             generator.analyze();
-            generator.print();
+            generator.export();
         } catch (SAXException e) {
-            LOG.error("SAX problem.", e);
+            LOG.error("SAX problem while parsing the XSD.", e);
         }
     }
 
@@ -398,16 +428,16 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
      * Returns a flat list of overlay classes by traversing the root class and exclude the root, schema class type
      * and group classes
      *
-     * @param rootClass The schema overlay class that will be traversed
+     * @param rootClass The root overlay class that will be traversed
      * @return A List of overlay classes
      */
-    protected List<OverlayClass> getFlatListWithNoGroups(OverlayClassGenerator.OverlayRootClass rootClass) {
-        Stack<OverlayClass> stack = new Stack<OverlayClass>();
-        List<OverlayClass> result = new ArrayList<OverlayClass>();
+    protected List<OverlayClass> getFlatListWithNoGroups(final OverlayClassGenerator.OverlayRootClass rootClass) {
+        final Stack<OverlayClass> stack = new Stack<OverlayClass>();
+        final List<OverlayClass> result = new ArrayList<OverlayClass>();
         stack.push(rootClass);
         while (!stack.isEmpty()) {
-            OverlayClass aClass = stack.pop();
-//            skip creation for such classes
+            final OverlayClass aClass = stack.pop();
+            // skip creation for such classes
             if (!(aClass instanceof OverlayClassGenerator.OverlayRootClass ||
                     aClass instanceof OverlayClassGenerator.OverlaySchemaClass ||
                     aClass.getOverlayType().equals(OverlayType.GroupDecl) ||
@@ -416,11 +446,10 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
             )) {
                 // replace the properties
                 replaceGroupProperties(aClass);
-//                add now in the result
+                // add now in the result
                 result.add(aClass);
             }
-            OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[aClass.getChildren().size()]);
-            //Collections.sort(children, comparator);
+            final OverlayClass[] children = aClass.getChildren().toArray(new OverlayClass[aClass.getChildren().size()]);
             for (int i = children.length - 1; i >= 0; i--) {
                 stack.push(children[i]);
             }
@@ -430,19 +459,21 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
 
 
     /**
-     * Replace the group properties with their collection of simple properties
+     * Replace the group properties with their collection of simple properties.
+     *
+     * @param aClass the overlay class
      */
-    private void replaceGroupProperties(OverlayClass aClass) {
+    private void replaceGroupProperties(final OverlayClass aClass) {
         List<OverlayPropertyHolder> stack = new ArrayList<OverlayPropertyHolder>();
         List<OverlayProperty> result = new ArrayList<OverlayProperty>();
         for (OverlayProperty property : aClass.getProperties()) {
             stack.add(new OverlayPropertyHolder(property, property.isCollection()));
         }
         while (!stack.isEmpty()) {
-            OverlayPropertyHolder propertyWrapper = stack.remove(0);
-            OverlayProperty property = propertyWrapper.getProperty();
-            Boolean parentCollection = propertyWrapper.isParentCollection();
-            OverlayClass baseClass = property.getBaseClass();
+            final OverlayPropertyHolder propertyWrapper = stack.remove(0);
+            final OverlayProperty property = propertyWrapper.getProperty();
+            final Boolean parentCollection = propertyWrapper.isParentCollection();
+            final OverlayClass baseClass = property.getBaseClass();
             if (baseClass != null) {
                 // check whether is group or attribute group and replace with its properties
                 if (baseClass.getOverlayType().equals(OverlayType.AttrGroup) ||
@@ -461,14 +492,14 @@ public class FileClassOverlayGenerator extends OverlayGenerator {
                         parent = parent.getParent();
                     }
                 } else {
-                    //create a new copy of overlay property and set its collection flag
-                    OverlayProperty newProperty = property.copy();
+                    // create a new copy of overlay property and set its collection flag
+                    final OverlayProperty newProperty = property.copy();
                     newProperty.setCollection(parentCollection || property.isCollection());
                     result.add(newProperty);
                 }
             } else {
-                //create a new copy of overlay property and set its collection flag
-                OverlayProperty newProperty = property.copy();
+                // create a new copy of overlay property and set its collection flag
+                final OverlayProperty newProperty = property.copy();
                 newProperty.setCollection(parentCollection || property.isCollection());
                 result.add(newProperty);
             }

@@ -18,15 +18,15 @@ import com.google.common.collect.Collections2;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.InlineHTML;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerBundleEvent;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerStatusUpdatedEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.ConfirmationEvent;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
@@ -41,6 +41,7 @@ import org.nsesa.editor.gwt.core.client.ui.i18n.CoreMessages;
 import org.nsesa.editor.gwt.core.client.util.Counter;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.client.util.Selection;
+import org.nsesa.editor.gwt.core.client.util.UUID;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
 
@@ -85,9 +86,17 @@ public class AmendmentsHeaderController {
     private Anchor selectTabled;
     private Anchor selectWithdrawn;
     private Button tableButton;
+    private Button bundleButton;
 
     private Button withdrawButton;
     private Button deleteButton;
+
+    final VerticalPanel possibleParents = new VerticalPanel();
+    final PopupPanel possibleParentsPopupPanel = new DecoratedPopupPanel(true, false) {
+        {
+            setWidget(possibleParents);
+        }
+    };
 
     private HandlerRegistration amendmentControllerSelectedEventHandlerRegistration;
     private com.google.gwt.event.shared.HandlerRegistration selectAllHandlerRegistration;
@@ -136,6 +145,8 @@ public class AmendmentsHeaderController {
         view.addAction(withdrawButton);
         deleteButton = new Button(coreMessages.amendmentActionDelete());
         view.addAction(deleteButton);
+        bundleButton = new Button(coreMessages.amendmentActionBundle());
+        view.addAction(bundleButton);
     }
 
     /**
@@ -466,6 +477,74 @@ public class AmendmentsHeaderController {
                 }));
             }
         });
+
+        bundleButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // we need to show the list of possible parent amendments where the bundled amendments will be grouped in
+                possibleParents.clear();
+
+                documentEventBus.fireEvent(new OverlayWidgetAwareSelectionActionEvent<AmendmentController>(new OverlayWidgetAwareSelectionActionEvent.Action<AmendmentController>() {
+                    @Override
+                    public void execute(final List<AmendmentController> amendmentControllers) {
+                        if (!amendmentControllers.isEmpty() && amendmentControllers.size() > 1) {
+                            for (final AmendmentController amendmentController : amendmentControllers) {
+                                final Anchor anchor = new Anchor("... into amendment " + amendmentController.getOrder());
+                                anchor.addClickHandler(new ClickHandler() {
+                                    @Override
+                                    public void onClick(ClickEvent event) {
+                                        // ok, clone this parent - bundle all amendments into this one
+
+                                        final AmendmentController newParent = ((AmendmentDocumentController) documentController).getInjector().getAmendmentController();
+                                        final AmendmentContainerDTO copy = amendmentController.getModel().deepCopy();
+                                        // force the creation of a new amendment
+                                        copy.setAmendmentContainerID(UUID.uuid());
+                                        copy.setRevisionID(UUID.uuid());
+
+                                        newParent.setDocumentController(amendmentController.getDocumentController());
+                                        newParent.setOverlayWidget(amendmentController.getOverlayWidget());
+                                        newParent.setModel(copy);
+                                        bundleAmendmentControllers(newParent, amendmentControllers);
+                                        // close the popup
+                                        possibleParentsPopupPanel.hide();
+                                    }
+                                });
+                                possibleParents.add(anchor);
+                            }
+                            possibleParentsPopupPanel.showRelativeTo(bundleButton);
+                        }
+                    }
+                }));
+            }
+        });
+    }
+
+    private void bundleAmendmentControllers(final AmendmentController parent, final List<AmendmentController> children) {
+        if (!children.isEmpty()) {
+            documentEventBus.fireEvent(new ConfirmationEvent(
+                    coreMessages.confirmationAmendmentBundleTitle(), coreMessages.confirmationAmendmentBundleMessage(), coreMessages.amendmentActionBundle(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            documentEventBus.fireEvent(new OverlayWidgetAwareSelectionActionEvent<AmendmentController>(new OverlayWidgetAwareSelectionActionEvent.Action<AmendmentController>() {
+                                @Override
+                                public void execute(final List<AmendmentController> amendmentControllers) {
+                                    if (!amendmentControllers.isEmpty()) {
+                                        documentEventBus.fireEvent(new AmendmentContainerBundleEvent(parent, amendmentControllers.toArray(new AmendmentController[amendmentControllers.size()])));
+                                    }
+                                }
+                            }));
+                        }
+                    },
+                    coreMessages.amendmentActionCancel(),
+                    new ClickHandler() {
+                        @Override
+                        public void onClick(ClickEvent event) {
+                            // don't do anything special
+                        }
+                    }
+            ));
+        }
     }
 
     private void deleteAmendmentControllers(final List<AmendmentController> amendmentControllers) {

@@ -27,6 +27,7 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.Creator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 /**
@@ -118,7 +119,7 @@ public interface DocumentController {
      * via the {@link #getServiceFactory()}.
      * <p/>
      * If this call fails, a {@link CriticalErrorEvent} is fired on the global event bus. If the request was successful,
-     * we call {@link #onDocumentContentLoaded(String)} with the received content.
+     * we call {@link #onDocumentContentLoaded(DocumentContentDTO)} with the received content.
      */
     void loadDocumentContent();
 
@@ -126,9 +127,9 @@ public interface DocumentController {
      * Callback when the document content was successfully received. Will set the received content on the
      * {@link #getSourceFileController()}..
      *
-     * @param content the received HTML content to be place in the source file controller
+     * @param content the received document content to be placed in the source file controller
      */
-    void onDocumentContentLoaded(final String content);
+    void onDocumentContentLoaded(final DocumentContentDTO content);
 
     /**
      * Sets the document Data Transfer Object (DTO) on this controller, and this marks the beginning of our document

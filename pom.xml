@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
     <name>Core Editor</name>
     <url>http://code.at4am.org/nsesa-editor</url>
-    <version>0.9</version>
+    <version>0.10</version>
 
     <organization>
         <url>http://www.europarl.europa.eu/</url>
@@ -160,7 +160,7 @@
         <dependency>
             <groupId>com.allen-sauer.gwt.dnd</groupId>
             <artifactId>gwt-dnd</artifactId>
-            <version>r1137</version>
+            <version>3.2.3</version>
         </dependency>
 
         <dependency>
@@ -193,6 +193,13 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.19</version>
+        </dependency>
+
+        <!-- core module: use can you it on its own if you are not using Spring 3 -->
+        <dependency>
+            <groupId>com.inspire-software.lib.dto.geda</groupId>
+            <artifactId>geda.core</artifactId>
+            <version>3.0.0</version>
         </dependency>
 
         <!-- it seems some configurations need this to build the project. -->

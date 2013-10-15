@@ -14,10 +14,10 @@
 package org.nsesa.editor.app.xsd.model;
 
 /**
- * An interface to generate <code>java</code>package name from overlay datatypes.
+ * An interface to generate the <code>java</code> package name from overlay datatypes.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 22/10/12 11:44
+ *         Date: 22/10/12 11:44
  */
 public interface PackageNameGenerator {
 
@@ -27,7 +27,7 @@ public interface PackageNameGenerator {
      * @param overlayNode The overlay node processed
      * @return The package name as String
      */
-    abstract String getPackageName(OverlayNode overlayNode);
+    String getPackageName(OverlayNode overlayNode);
 
     /**
      * Generates a package name from {@link OverlayClass} object
@@ -35,7 +35,7 @@ public interface PackageNameGenerator {
      * @param overlayClass The overlay class processed
      * @return The package name as String
      */
-    abstract String getPackageName(OverlayClass overlayClass);
+    String getPackageName(OverlayClass overlayClass);
 
     /**
      * Generates a package name from {@link OverlayProperty} object
@@ -43,7 +43,7 @@ public interface PackageNameGenerator {
      * @param overlayProperty The overlay property processed
      * @return The package name as String
      */
-    abstract String getPackageName(OverlayProperty overlayProperty);
+    String getPackageName(OverlayProperty overlayProperty);
 
     /**
      * Generates a package name from String
@@ -51,6 +51,6 @@ public interface PackageNameGenerator {
      * @param source The string processed
      * @return The package name as String
      */
-    abstract String getPackageName(String source);
+    String getPackageName(String source);
 
 }

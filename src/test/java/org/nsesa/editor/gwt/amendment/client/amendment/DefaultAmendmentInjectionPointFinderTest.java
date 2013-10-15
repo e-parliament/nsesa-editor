@@ -18,6 +18,8 @@ import com.googlecode.gwt.test.GwtTest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.DefaultAmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.DefaultOverlayWidgetInjectionStrategy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
@@ -69,21 +71,33 @@ public class DefaultAmendmentInjectionPointFinderTest extends GwtTest {
     public void testFindInjectionPointsViaID() throws Exception {
         child2.setId("foo");
         reference.setPath("#foo");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final AmendmentController amendmentController = new DefaultAmendmentController();
+        amendmentController.setModel(amendment);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendmentController, root, null);
         Assert.assertEquals(injectionPoints.get(0), child2);
     }
 
     @Test
     public void testFindInjectionPointsXpath() throws Exception {
         reference.setPath("//root/typeA");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final AmendmentController amendmentController = new DefaultAmendmentController();
+        amendmentController.setModel(amendment);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendmentController, root, null);
         Assert.assertEquals(injectionPoints.get(0), child1);
     }
 
     @Test
     public void testFindInjectionPointsXpathMultipleChildren() throws Exception {
         reference.setPath("//root/typeB[1]");
-        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(reference.getPath(), root, null);
+        final AmendmentContainerDTO amendment = new AmendmentContainerDTO();
+        amendment.setSourceReference(reference);
+        final AmendmentController amendmentController = new DefaultAmendmentController();
+        amendmentController.setModel(amendment);
+        final List<OverlayWidget> injectionPoints = finder.findInjectionPoints(amendmentController, root, null);
         Assert.assertEquals(injectionPoints.get(0), child3);
     }
 

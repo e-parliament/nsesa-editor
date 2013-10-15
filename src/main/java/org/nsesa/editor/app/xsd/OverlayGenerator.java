@@ -30,7 +30,7 @@ import org.xml.sax.SAXParseException;
  * <code>OverlayClassGenerator</code> object as a tree of <code>OverlayClass</code> objects.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 03/10/12 19:25
+ *         Date: 03/10/12 19:25
  */
 public abstract class OverlayGenerator {
 
@@ -61,19 +61,19 @@ public abstract class OverlayGenerator {
     }
 
     /**
-     * Parse the xsd schema
+     * Parse the xsd schema.
      *
      * @param xsd The xsd schema as string
      * @throws SAXException
      */
-    public void parse(String xsd) throws SAXException {
+    public void parse(final String xsd) throws SAXException {
         this.xsdSchema = xsd;
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         parser.parse(classLoader.getResource(xsd));
     }
 
     /**
-     * Analyze the xsd schema and generate overlay classes
+     * Analyze the xsd schema and generate overlay classes.
      *
      * @throws SAXException
      */
@@ -83,12 +83,12 @@ public abstract class OverlayGenerator {
     }
 
     /**
-     * Print overlay classes in different formats
+     * Process and export overlay classes in different formats.
      */
-    public abstract void print();
+    public abstract void export();
 
     /**
-     * Utility class to handle parsing errors
+     * Simple SAX error handler to output errors on the logger.
      */
     private static class LoggingErrorHandler implements ErrorHandler {
         @Override

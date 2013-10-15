@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -28,14 +29,13 @@ import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.NotificationEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEvent;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
-import org.nsesa.editor.gwt.core.client.util.Counter;
-import org.nsesa.editor.gwt.core.client.util.Filter;
-import org.nsesa.editor.gwt.core.client.util.FilterResponse;
-import org.nsesa.editor.gwt.core.client.util.Scope;
+import org.nsesa.editor.gwt.core.client.util.*;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.exception.ValidationException;
 
@@ -90,6 +90,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     private final AmendmentInjectionPointProvider injectionPointProvider;
     private HandlerRegistration amendmentContainerSaveEventHandlerRegistration;
     private HandlerRegistration amendmentContainerDeleteEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerBundleHandlerRegistration;
 
     @Inject
     public DefaultAmendmentManager(final Transformer transformer,
@@ -120,6 +121,13 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 deleteAmendmentContainers(event.getAmendmentControllers());
             }
         });
+
+        amendmentContainerBundleHandlerRegistration = documentEventBus.addHandler(AmendmentContainerBundleEvent.TYPE, new AmendmentContainerBundleEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerBundleEvent event) {
+                bundleAmendmentContainers(event.getParent(), event.getAmendmentControllers());
+            }
+        });
     }
 
     /**
@@ -128,6 +136,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     public void removeListeners() {
         amendmentContainerSaveEventHandlerRegistration.removeHandler();
         amendmentContainerDeleteEventHandlerRegistration.removeHandler();
+        amendmentContainerBundleHandlerRegistration.removeHandler();
     }
 
     /**
@@ -255,6 +264,19 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 });
     }
 
+    public void bundleAmendmentContainers(final AmendmentController parent, final AmendmentController[] amendmentControllers) {
+        final String[] amendmentContainerIDs = new String[amendmentControllers.length];
+        int index = 0;
+        for (AmendmentController amendmentController : amendmentControllers) {
+            // keep track of the amendment container ids (and not specific versions of an amendment)
+            amendmentContainerIDs[index++] = amendmentController.getModel().getAmendmentContainerID();
+            // inform the amendment controller that it's added to the parent so the parent can merge in the XML
+            parent.mergeIntoBundle(amendmentController);
+        }
+        parent.getModel().setBundledAmendmentContainerIDs(amendmentContainerIDs);
+        saveAmendmentContainers(parent.getModel());
+    }
+
     /**
      * Save a list of amendment containers to the backend.
      *
@@ -276,7 +298,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
             amendment.setBody(transformer.transform(amendment.getRoot()));
             amendment.setDocumentID(documentController.getDocument().getDocumentID());
             // do some checks to make sure all fields are set
-            if (amendment.getId() == null)
+            if (amendment.getAmendmentContainerID() == null)
                 throw new NullPointerException("No id set before sending to the backend. This will cause problems.");
             if (amendment.getRevisionID() == null)
                 throw new NullPointerException("No revision id set before sending to the backend. This will cause problems.");
@@ -316,7 +338,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 int counter = 0;
                 for (final AmendmentController ac : amendmentControllers) {
 
-                    if (amendmentController.getModel().getId().equals(ac.getModel().getId())) {
+                    if (amendmentController.getModel().getAmendmentContainerID().equals(ac.getModel().getAmendmentContainerID())) {
                         // aha, we found a controller for an older model
                         indexOfOlderRevision = counter;
                         break;
@@ -337,6 +359,30 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     LOG.info("Adding new amendment controller " + amendmentController);
                     documentEventBus.fireEvent(new AmendmentContainerInjectEvent(toMerge));
                 }
+                // check if the amendment we just saved is a bundle
+                if (amendmentController.isBundle()) {
+                    // ok, find the bundled amendments and remove them
+                    final List<String> amendmentContainerIDs = Arrays.asList(amendmentController.getModel().getBundledAmendmentContainerIDs());
+                    final Collection<AmendmentController> bundledAmendmentContainers = Collections2.filter(amendmentControllers, new Predicate<AmendmentController>() {
+                        @Override
+                        public boolean apply(AmendmentController input) {
+                            return amendmentContainerIDs.contains(input.getModel().getAmendmentContainerID());
+                        }
+                    });
+
+                    // set the bundled flag so the controllers don't get drawn anymore
+                    for (final AmendmentController bundled : bundledAmendmentContainers) {
+                        bundled.setBundled(true);
+                        // ensure they are removed from the source text view
+                        documentEventBus.fireEvent(new AmendmentContainerDeletedEvent(bundled));
+                    }
+
+                    LOG.info("Bundled " + bundledAmendmentContainers.size() + " amendments into " + amendmentController);
+                }
+
+                // clear the selection, or you might keep the children
+                documentEventBus.fireEvent(new OverlayWidgetAwareSelectionEvent(new Selection.NoneSelection<OverlayWidgetAware>()));
+
                 // inform the document the save has happened
                 documentEventBus.fireEvent(new AmendmentContainerSavedEvent(amendmentController));
             }
@@ -386,7 +432,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
      */
     protected void injectInternal(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
         // find the correct amendable widget(s) to which this amendment applies
-        final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController.getModel().getSourceReference().getPath(), root, documentController);
+        final List<OverlayWidget> injectionPoints = injectionPointFinder.findInjectionPoints(amendmentController, root, documentController);
         if (injectionPoints != null) {
             if (injectionPoints.size() > 1) {
                 // TODO: multiple injection points might mean that a single amendment controller gets added to multiple amendable widgets - and that will currently cause issues with the view
@@ -402,6 +448,8 @@ public class DefaultAmendmentManager implements AmendmentManager {
                     documentEventBus.fireEvent(new AmendmentContainerSkippedEvent(amendmentController));
                 }
             }
+        } else {
+            LOG.warning("Injection point not found for " + amendmentController);
         }
     }
 

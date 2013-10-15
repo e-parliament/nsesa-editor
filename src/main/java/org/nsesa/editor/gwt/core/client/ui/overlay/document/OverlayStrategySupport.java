@@ -34,24 +34,23 @@ public class OverlayStrategySupport {
 
     private static final Logger LOG = Logger.getLogger(OverlayStrategySupport.class.getName());
 
+    private static final String TYPE_ATTRIBUTE = "data-type";
+    private static final String NAMESPACE_ATTRIBUTE = "data-ns";
+
     public static final String TAG_LITERAL_INDEX = "num";
-    public static final String TAG_CONTENT = "content";
-
-    public static final String ATTRIB_ID = "id";
-    public static final String ATTRIB_EVOLVING_ID = "evolvingId";
-
-    public static final String ATTRIB_AMENDABLE = "nsesa:amendable";
-    public static final String ATTRIB_IMMUTABLE = "nsesa:immutable";
-    public static final String ATTRIB_ASSIGNED_INDEX = "nsesa:assignedIndex";
-    public static final String ATTRIB_ORIGINAL_INDEX = "nsesa:originalIndex";
-    public static final String ATTRIB_FORMAT = "nsesa:format";
-    public static final String ATTRIB_NUMBERING_TYPE = "nsesa:numberingType";
-    public static final String ATTRIB_TRANSLATION_ID = "nsesa:sequence";
-    public static final String ATTRIB_SOURCE = "nsesa:source";
+    public static final String ATTRIB_AMENDABLE = "data-amendable";
+    public static final String ATTRIB_IMMUTABLE = "data-immutable";
+    public static final String ATTRIB_ASSIGNED_INDEX = "data-assignedIndex";
+    public static final String ATTRIB_ORIGINAL_INDEX = "data-originalIndex";
+    public static final String ATTRIB_FORMAT = "data-format";
+    public static final String ATTRIB_NUMBERING_TYPE = "data-numberingType";
+    public static final String ATTRIB_TRANSLATION_ID = "data-sequence";
 
 
-    public static final String CLASS_OPERATION_PANEL = "nsesa:operationPanel";
-    public static final String CLASS_AMENDMENTS_PANEL = "nsesa:amendmentsPanel";
+    public static final String ATTRIB_SOURCE = "data-source";
+    public static final String CLASS_OPERATION_PANEL = "data-operationPanel";
+
+    public static final String CLASS_AMENDMENTS_PANEL = "data-amendmentsPanel";
 
     private Set<String> asProperties = new HashSet<String>();
 
@@ -104,7 +103,7 @@ public class OverlayStrategySupport {
     }
 
     public String getType(Element element) {
-        return element.hasAttribute("type") ? element.getAttribute("type") : null;
+        return element.hasAttribute(TYPE_ATTRIBUTE) ? element.getAttribute(TYPE_ATTRIBUTE) : null;
     }
 
     /**
@@ -448,7 +447,7 @@ public class OverlayStrategySupport {
     }
 
     public String getNamespaceURI(Element element) {
-        return element.hasAttribute("ns") ? element.getAttribute("ns") : null;
+        return element.hasAttribute(NAMESPACE_ATTRIBUTE) ? element.getAttribute(NAMESPACE_ATTRIBUTE) : null;
     }
 
     private static interface ElementVisitor {

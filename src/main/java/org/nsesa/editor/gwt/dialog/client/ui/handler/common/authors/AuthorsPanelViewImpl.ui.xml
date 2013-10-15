@@ -1,0 +1,70 @@
+<!--
+
+    Copyright 2013 European Parliament
+
+    Licensed under the EUPL, Version 1.1 or - as soon they will be approved by the European Commission - subsequent versions of the EUPL (the "Licence");
+    You may not use this work except in compliance with the Licence.
+    You may obtain a copy of the Licence at:
+
+    http://joinup.ec.europa.eu/software/page/eupl
+
+    Unless required by applicable law or agreed to in writing, software distributed under the Licence is distributed on an "AS IS" basis,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the Licence for the specific language governing permissions and limitations under the Licence.
+
+-->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style src="AuthorsPanelViewImpl.css" field="css"
+              type='org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors.AuthorsPanelViewCss'/>
+    <ui:style field="res">
+        .authorPanel {
+            height: 100%;
+            width: 98%;
+            padding: 10px;
+        }
+
+        .suggestBox {
+
+        }
+
+        .authorsPanel {
+            background-color: #fffacd;
+            width: 99%;
+            padding: 10px;
+        }
+
+        .boundaryPanel {
+
+        }
+
+        .description {
+            color: #333;
+            font: small;
+            width: 100%;
+            text-align: right;
+        }
+
+        .form {
+            width: 100%;
+        }
+
+        .formLabel {
+            padding-right: 10px;
+        }
+
+        .formValue {
+        }
+    </ui:style>
+    <g:HTMLPanel styleName="{res.authorPanel}">
+        <g:HorizontalPanel styleName="{res.form}" ui:field="form">
+            <g:HTML text="Author" styleName="{res.formLabel}"/>
+            <g:SuggestBox ui:field="suggestBox" styleName="{res.suggestBox} {res.formValue}"/>
+            <g:Label text="(Only MP values are found)" styleName="{res.description}"/>
+        </g:HorizontalPanel>
+        <hr/>
+        <g:AbsolutePanel width="100%" height="100%" ui:field="boundaryPanel" styleName="{res.boundaryPanel}">
+            <g:VerticalPanel ui:field="authorsPanel" styleName="{res.authorsPanel}"/>
+        </g:AbsolutePanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

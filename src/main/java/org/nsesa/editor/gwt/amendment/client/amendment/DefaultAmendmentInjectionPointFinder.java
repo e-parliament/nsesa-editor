@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.amendment.client.amendment;
 
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetInjectionStrategy;
@@ -48,13 +49,14 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
     /**
      * Finds injection points for amendments based on the {@link org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO#getSourceReference()}.
      *
-     * @param path               the path to find the injection points for
-     * @param root               the root overlay widget node
-     * @param documentController the containing document controller
+     * @param amendmentController the controller to find the injection points for
+     * @param root                the root overlay widget node
+     * @param documentController  the containing document controller
      * @return the list of injection points (that is, overlay widgets which should get the amendment controller)
      */
     @Override
-    public List<OverlayWidget> findInjectionPoints(final String path, final OverlayWidget root, final DocumentController documentController) {
+    public List<OverlayWidget> findInjectionPoints(final AmendmentController amendmentController, final OverlayWidget root, final DocumentController documentController) {
+        final String path = amendmentController.getModel().getSourceReference().getPath();
         if (LOG.isLoggable(Level.FINE)) {
             LOG.fine("Trying to find nodes matching '" + path + "'");
         }
@@ -150,7 +152,8 @@ public class DefaultAmendmentInjectionPointFinder implements AmendmentInjectionP
                 final int typeIndex = parent.getTypeIndex();
                 // note: type index will be -1 for the root node
                 sb.append("[").append(typeIndex != -1 ? typeIndex : 0).append("]");
-                if (parentOverlayWidgets.indexOf(parent) < parentOverlayWidgets.size() - 1) {
+                final boolean notLast = parentOverlayWidgets.indexOf(parent) < parentOverlayWidgets.size() - 1;
+                if (notLast) {
                     sb.append("/");
                 }
             }

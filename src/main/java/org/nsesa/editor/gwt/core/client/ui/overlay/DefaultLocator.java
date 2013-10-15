@@ -203,18 +203,69 @@ public class DefaultLocator implements Locator {
             }
             return index;
         } else {
-            // see if we can extract the index
-            final NumberingType numberingType = overlayWidget.getNumberingType();
-            if (numberingType != null) {
-                if (!numberingType.isConstant()) {
-                    index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
-                    if (index != null) {
-                        return index;
+
+            if (format) {
+                return overlayWidget.getFormat().format(overlayWidget.getNumberingType().get(overlayWidget.getTypeIndex()));
+            } else {
+                // TODO: we don't handle formatting here for elements that are not introduced
+                // see if we can extract the index
+                final NumberingType numberingType = overlayWidget.getNumberingType();
+                if (numberingType != null) {
+                    if (!numberingType.isConstant()) {
+                        index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
+                        if (index != null) {
+                            return index;
+                        }
                     }
                 }
+                return Integer.toString(overlayWidget.getTypeIndex() + 1);
             }
-            return Integer.toString(overlayWidget.getTypeIndex() + 1);
         }
+    }
+
+    @Override
+    public Location[] parse(OverlayWidget root, String location, String languageIso) {
+        List<Location> locations = new ArrayList<Location>();
+        // assume that the first character in our location string might be capitalized, so normalize it
+        location = location.substring(0, 1).toLowerCase() + location.substring(1);
+
+        // split the location
+        final String[] locationParts = location.split(getSplitter(languageIso));
+        for (String part : locationParts) {
+            DefaultLocation defaultLocation = new DefaultLocation();
+
+            // we assume it'll look something like this {type} {index} {suffix} {(new)}
+            final String newNotation = getNewNotation(languageIso);
+            final boolean isNew = part.endsWith(newNotation);
+            defaultLocation.setNew(isNew);
+            if (isNew) {
+                // strip off the 'new' suffix
+                part = part.substring(0, part.length() - newNotation.length()).trim();
+            }
+
+            // TODO This is massively simplified ...
+            // we're going to assume the new notation will never have spaces (I know, I know ...)
+            // split on spaces
+            final String[] splitBySpaces = part.split(" ");
+
+            if (splitBySpaces.length == 1) {
+                // no spaces, assume we only have a type
+                defaultLocation.setType(splitBySpaces[0]);
+            } else if (splitBySpaces.length == 2) {
+                // must be type
+                defaultLocation.setType(splitBySpaces[0]);
+                defaultLocation.setIndex(splitBySpaces[1]);
+            } else if (splitBySpaces.length == 3) {
+                // must be type
+                defaultLocation.setType(splitBySpaces[0]);
+                defaultLocation.setIndex(splitBySpaces[1] + " " + splitBySpaces[2]);
+            } else {
+                throw new UnsupportedOperationException("Sorry, not yet implemented");
+            }
+
+            locations.add(defaultLocation);
+        }
+        return locations.toArray(new Location[locations.size()]);
     }
 
     /**

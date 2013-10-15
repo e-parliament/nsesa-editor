@@ -18,16 +18,18 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A default implementation of {@link PackageNameGenerator} interface converting the names space of
- * overlay datatypes into a package names.
+ * A default implementation of the {@link PackageNameGenerator} interface converting the names space of
+ * overlay datatypes into a package name.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 22/10/12 11:45
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 22/10/12 11:45
  */
 public class PackageNameGeneratorImpl implements PackageNameGenerator {
 
     /**
-     * a map of replacements in package name generation*
+     * A map of replacements in package name generation. Helps stripping out illegal characters for the Java package
+     * name that gets generated.
      */
     private static Map<String, String> REPLACEMENTS = new HashMap<String, String>() {
         {
@@ -38,32 +40,32 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
         }
     };
     /**
-     * an internal cache used to keep generated package names*
+     * An internal cache used to keep generated package names.
      */
     private Map<String, String> cache = new HashMap<String, String>();
 
     /**
-     * keep the base package name *
+     * Keeps track of the base package name.
      */
     private String basePackage;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param basePackage The base package name as String
      */
-    public PackageNameGeneratorImpl(String basePackage) {
+    public PackageNameGeneratorImpl(final String basePackage) {
         this.basePackage = basePackage;
     }
 
     @Override
-    public String getPackageName(OverlayNode overlayNode) {
-        String source = overlayNode.getNamespaceURI();
+    public String getPackageName(final OverlayNode overlayNode) {
+        final String source = overlayNode.getNamespaceURI();
         return getPackageName(source);
     }
 
     @Override
-    public String getPackageName(OverlayClass overlayClass) {
+    public String getPackageName(final OverlayClass overlayClass) {
         if (overlayClass.getPackageName() != null) {
             return overlayClass.getPackageName();
         }
@@ -72,7 +74,7 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
     }
 
     @Override
-    public String getPackageName(OverlayProperty overlayProperty) {
+    public String getPackageName(final OverlayProperty overlayProperty) {
         if (overlayProperty.getPackageName() != null) {
             return overlayProperty.getPackageName();
         }
@@ -81,35 +83,40 @@ public class PackageNameGeneratorImpl implements PackageNameGenerator {
     }
 
     @Override
-    public String getPackageName(String nameSpace) {
-        if (nameSpace == null) {
+    public String getPackageName(final String namespaceURI) {
+        if (namespaceURI == null) {
             return null;
         }
-        String packageName = cache.get(nameSpace);
+        String packageName = cache.get(namespaceURI);
         if (packageName != null) {
             return packageName;
         }
-        int lastIndex = nameSpace.lastIndexOf("/");
-        packageName = getEligiblePackageName(nameSpace.substring(lastIndex + 1));
+        final int lastIndex = namespaceURI.lastIndexOf("/");
+        packageName = getEligiblePackageName(namespaceURI.substring(lastIndex + 1));
         if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
             // we are trying second time
-            int previousIndex = nameSpace.lastIndexOf("/", lastIndex - 1);
-            packageName = getEligiblePackageName(nameSpace.substring(previousIndex + 1));
+            final int previousIndex = namespaceURI.lastIndexOf("/", lastIndex - 1);
+            packageName = getEligiblePackageName(namespaceURI.substring(previousIndex + 1));
             if (!Character.isJavaIdentifierStart(packageName.charAt(0))) {
                 packageName = "_" + packageName;
             }
-            ;
         }
         packageName = basePackage + packageName;
-        cache.put(nameSpace, packageName);
+        cache.put(namespaceURI, packageName);
 
         return packageName;
 
     }
 
+    /**
+     * Transforms the given <tt>substr</tt> into a String that can be used as part of a package name in Java.
+     *
+     * @param substr the substring to cleanup
+     * @return the cleaned version of the given <tt>substr</tt>
+     */
     private String getEligiblePackageName(String substr) {
-        Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
+        final Set<Map.Entry<String, String>> entries = REPLACEMENTS.entrySet();
+        for (final Map.Entry<String, String> entry : entries) {
             substr = substr.replace(entry.getKey(), entry.getValue());
         }
         substr = substr.toLowerCase();

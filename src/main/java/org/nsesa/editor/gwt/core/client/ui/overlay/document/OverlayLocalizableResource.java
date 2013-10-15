@@ -16,10 +16,10 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 import com.google.inject.ImplementedBy;
 
 /**
- *
  * An interface to provide localizable information about overlay widgets.
+ *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 28/01/13 9:55
+ *         Date: 28/01/13 9:55
  */
 @ImplementedBy(DefaultOverlayLocalizableResource.class)
 public interface OverlayLocalizableResource {
@@ -29,7 +29,7 @@ public interface OverlayLocalizableResource {
      * @param widget The overlay widget to be processed
      * @return The localizable tag name
      */
-    abstract String getName(OverlayWidget widget);
+    String getName(OverlayWidget widget);
 
     /**
      * Returns localized details for the given amendable widget
@@ -37,5 +37,12 @@ public interface OverlayLocalizableResource {
      * @param widget The overlay widget to be processed
      * @return The localizable description
      */
-    abstract String getDescription(OverlayWidget widget);
+    String getDescription(OverlayWidget widget);
+
+    /**
+     * Returns the namespace URI that was used to generate this resource.
+     *
+     * @return the namespace URI, or null if it cannot be found.
+     */
+    String getNamespaceURI();
 }

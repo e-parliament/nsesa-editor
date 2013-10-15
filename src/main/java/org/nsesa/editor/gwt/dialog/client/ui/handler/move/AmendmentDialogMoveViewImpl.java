@@ -19,6 +19,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentView;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.move.action.BeforeAfterActionBarController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.move.action.BeforeAfterActionBarView;
 
 /**
  * Default implementation for the {@link AmendmentDialogMoveView} using UIBinder.
@@ -39,14 +43,33 @@ public class AmendmentDialogMoveViewImpl extends Composite implements AmendmentD
     Button saveButton;
     @UiField
     DockLayoutPanel dockPanel;
+    @UiField
+    HTML title;
+    @UiField
+    TabLayoutPanel tabLayoutPanel;
+    @UiField(provided = true)
+    ContentView contentView;
+    @UiField
+    ScrollPanel scrollPanel;
+    @UiField(provided = true)
+    BeforeAfterActionBarView beforeActionBarView;
+
 
     @Inject
-    public AmendmentDialogMoveViewImpl() {
+    public AmendmentDialogMoveViewImpl(final ContentController contentController,
+                                       final BeforeAfterActionBarController beforeAfterActionBarController) {
+
+        this.contentView = contentController.getView();
+        this.beforeActionBarView = beforeAfterActionBarController.getView();
+
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         if (!GWT.isScript())
             widget.setTitle(this.getClass().getName());
 
+        dockPanel.setHeight("100%");
+        dockPanel.setWidth("100%");
+        scrollPanel.setHeight("100%");
     }
 
     @Override
@@ -57,5 +80,10 @@ public class AmendmentDialogMoveViewImpl extends Composite implements AmendmentD
     @Override
     public HasClickHandlers getCancelLink() {
         return cancelLink;
+    }
+
+    @Override
+    public ContentView getContentView() {
+        return contentView;
     }
 }

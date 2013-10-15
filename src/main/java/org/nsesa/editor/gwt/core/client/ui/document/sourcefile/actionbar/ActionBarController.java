@@ -25,10 +25,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
 import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetDeleteEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetModifyEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEvent;
-import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetNewEventHandler;
+import org.nsesa.editor.gwt.core.client.event.widget.*;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.SourceFileController;
@@ -102,6 +99,7 @@ public class ActionBarController {
     private com.google.web.bindery.event.shared.HandlerRegistration documentScrollEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
     private com.google.web.bindery.event.shared.HandlerRegistration overlayWidgetNewEventHandlerRegistration;
+    private HandlerRegistration moveHandlerRegistration;
 
     @Inject
     public ActionBarController(final DocumentEventBus documentEventBus, final ActionBarView view,
@@ -150,6 +148,12 @@ public class ActionBarController {
                 onNewClick(event);
             }
         });
+        moveHandlerRegistration = view.getMoveHandler().addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onMoveClick(event);
+            }
+        });
         // we hide this toolbar as soon as the user scrolls the content
         documentScrollEventHandlerRegistration = documentEventBus.addHandler(DocumentScrollEvent.TYPE, new DocumentScrollEventHandler() {
             @Override
@@ -193,6 +197,13 @@ public class ActionBarController {
         }
     }
 
+    protected void onMoveClick(ClickEvent event) {
+        event.stopPropagation();
+        if (overlayWidget != null) {
+            documentEventBus.fireEvent(new OverlayWidgetUnboundedMoveEvent(overlayWidget));
+        }
+    }
+
     protected void onScroll() {
         view.asWidget().setVisible(false);
     }
@@ -207,6 +218,7 @@ public class ActionBarController {
         documentScrollEventHandlerRegistration.removeHandler();
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         overlayWidgetNewEventHandlerRegistration.removeHandler();
+        moveHandlerRegistration.removeHandler();
     }
 
     /**

@@ -86,6 +86,19 @@ public class ConsolidatedAmendmentViewImpl extends Composite implements Amendmen
     }
 
     @Override
+    public void setId(String id) {
+        // TODO
+    }
+
+    @Override
+    public void setBundle(String[] amendmentContainerIDs) {
+        if (amendmentContainerIDs != null && amendmentContainerIDs.length > 0)
+            addStyleName("bundle");
+        else
+            removeStyleName("bundle");
+    }
+
+    @Override
     public void setStatus(final String status) {
         // ignore
     }

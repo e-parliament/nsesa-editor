@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.service.gwt;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public interface GWTDocumentServiceAsync {
      * @param documentID    the document identifier
      * @param async         the callback
      */
-    void getDocumentContent(ClientContext clientContext, String documentID, AsyncCallback<String> async);
+    void getDocumentContent(ClientContext clientContext, String documentID, AsyncCallback<DocumentContentDTO> async);
 
     /**
      * Retrieves the list of related documents for a given document.

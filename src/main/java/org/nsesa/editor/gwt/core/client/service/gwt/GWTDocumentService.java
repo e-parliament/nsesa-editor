@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.service.gwt;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.DocumentContentDTO;
 import org.nsesa.editor.gwt.core.shared.DocumentDTO;
 
 import java.util.ArrayList;
@@ -57,11 +58,12 @@ public interface GWTDocumentService extends RemoteService {
      * @param documentID    the identifier of the document to load (or revision)
      * @return the full document content (XML, HTML, JSON, ...)
      */
-    String getDocumentContent(ClientContext clientContext, String documentID);
+    DocumentContentDTO getDocumentContent(ClientContext clientContext, String documentID);
 
     /**
      * Saves the document content with documentID <tt>documentID</tt> to the backend. Note that this does not
      * create a new version.
+     *
      * @param clientContext the client context
      * @param documentID    the documentID
      * @param content       the XML content

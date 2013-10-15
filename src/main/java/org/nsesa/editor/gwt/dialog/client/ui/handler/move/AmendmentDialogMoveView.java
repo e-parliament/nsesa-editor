@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.dialog.client.ui.handler.move;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentView;
 
 /**
  * View for the {@link AmendmentDialogMoveController}.
@@ -30,13 +31,17 @@ public interface AmendmentDialogMoveView extends IsWidget {
 
     /**
      * Get a reference to the save button.
+     *
      * @return the save button
      */
     HasClickHandlers getSaveButton();
 
     /**
      * Get a reference to the cancel link.
+     *
      * @return the cancel link
      */
     HasClickHandlers getCancelLink();
+
+    ContentView getContentView();
 }

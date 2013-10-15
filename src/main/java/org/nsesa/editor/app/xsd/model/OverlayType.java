@@ -14,10 +14,11 @@
 package org.nsesa.editor.app.xsd.model;
 
 /**
- * An enum for XSD types
+ * Represents possible base XSD types.
+ * TODO: needs better documentation - perhaps from the W3C website?
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 22/10/12 11:24
+ *         Date: 22/10/12 11:24
  */
 public enum OverlayType {
     Unknown,

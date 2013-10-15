@@ -21,6 +21,7 @@ import freemarker.template.TemplateException;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -30,54 +31,75 @@ import java.util.*;
  * Otherwise a generic css style containing only the node name is generated
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 30/10/12 13:38
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 30/10/12 13:38
  */
 public class CssOverlayClassProcessor implements OverlayClassProcessor {
-    private boolean emptyCssStyles;
-    //freemarker configuration
+    /**
+     * Freemarker configuration object
+     */
     private Configuration configuration;
+    /**
+     * The Freemarker template name
+     */
     private String templateName;
-    // keep the list of predefined css styles
+    /**
+     * The list of predefined CSS styles.
+     */
     private List<CssOverlayStyle> styles;
+    /**
+     * The writer to write the processed template to.
+     */
     private Writer out;
+    /**
+     * The CSS configuration properties.
+     */
     private Map<String, Object> cssConfiguration;
 
     /**
      * Constructor
+     *
      * @param properties   The predefined list of css styles
      * @param templateName The freemarker template used for css generation
      * @param out          The location where the output is saved
      * @throws IOException
      */
-    public CssOverlayClassProcessor(Properties properties,
-                                    String templateName,
-                                    Writer out,
-                                    Map<String, Object> cssConfiguration) throws IOException {
+    public CssOverlayClassProcessor(final Properties properties,
+                                    final String templateName,
+                                    final Writer out,
+                                    final Map<String, Object> cssConfiguration) throws IOException {
         this.cssConfiguration = cssConfiguration;
         this.configuration = new Configuration();
         this.configuration.setDefaultEncoding("UTF-8");
         this.templateName = templateName;
         this.out = out;
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File dir = new File(classLoader.getResource(templateName).getFile()).getParentFile();
+
+        final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        final URL resource = classLoader.getResource(templateName);
+        if (resource == null) throw new RuntimeException("Could not load resource " + templateName +
+                " from the classpath. Is it available?");
+        final File dir = new File(resource.getFile()).getParentFile();
         configuration.setDirectoryForTemplateLoading(dir);
 
+        // process the CSS properties specified in the overlay css file
         initStyles(properties);
     }
 
     /**
      * Create a list of predefined styles
      *
-     * @param properties The properties whcih store the list of predefined styles
+     * @param properties The properties which store the list of predefined styles
      * @throws IOException
      */
-    private void initStyles(Properties properties) throws IOException {
+    private void initStyles(final Properties properties) throws IOException {
         styles = new ArrayList<CssOverlayStyle>();
-        for (String name : properties.stringPropertyNames()) {
-            String[] props = properties.getProperty(name).split(";");
-            Map<String, String> values = new HashMap<String, String>();
+        for (final String name : properties.stringPropertyNames()) {
+            final String[] props = properties.getProperty(name).split(";");
+            final Map<String, String> values = new HashMap<String, String>();
             for (String value : props) {
-                String[] css = value.split(":");
+                final String[] css = value.split(":");
+                if (css.length != 2)
+                    throw new RuntimeException("Could not process css directive " + value + " - missing ':' separator.");
                 values.put(css[0], css[1]);
             }
             styles.add(new CssOverlayStyle(name, values));
@@ -85,22 +107,29 @@ public class CssOverlayClassProcessor implements OverlayClassProcessor {
     }
 
 
+    /**
+     * Process a given overlay class to generate.
+     *
+     * @param overlayClass The class to be processed
+     * @return true if the class was successfully processed.
+     */
     @Override
-    public boolean process(OverlayClass overlayClass) {
+    public boolean process(final OverlayClass overlayClass) {
         try {
-            Map<String, Object> rootMap = new HashMap<String, Object>();
-            rootMap.put("overlayClass", overlayClass);
-            rootMap.put("overlayStyleFactory", CssOverlayStyle.CssOverlayFactory.getInstance());
-            rootMap.put("styles", styles);
-            rootMap.put("cssConfiguration", cssConfiguration);
-            rootMap.put("colorGenerator", CssColorGenerator.getInstance());
+            // create the context map for usage inside the freemarker template
+            final Map<String, Object> context = new HashMap<String, Object>();
+            context.put("overlayClass", overlayClass);
+            context.put("overlayStyleFactory", CssOverlayStyle.CssOverlayFactory.getInstance());
+            context.put("styles", styles);
+            context.put("cssConfiguration", cssConfiguration);
+            context.put("colorGenerator", CssColorGenerator.getInstance());
             final Template template = configuration.getTemplate(templateName);
             final DefaultObjectWrapper wrapper = new DefaultObjectWrapper();
-            template.process(rootMap, out, wrapper);
+            template.process(context, out, wrapper);
         } catch (IOException e) {
-            throw new RuntimeException("The overlay class can not be processed", e);
+            throw new RuntimeException("The overlay class can not be processed.", e);
         } catch (TemplateException e) {
-            throw new RuntimeException("The overlay css can not be generated", e);
+            throw new RuntimeException("The overlay css can not be generated.", e);
         }
         return true;
     }

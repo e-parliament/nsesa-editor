@@ -43,10 +43,10 @@ public class ${overlayClass.className?cap_first} <#if overlayClass.parent?? && (
 /** Stores a structure indicator coming from xsd structure **/
 private static StructureIndicator STRUCTURE_INDICATOR = new StructureIndicator.DefaultStructureIndicator(1,1
     <#if overlayClass.allStructureProperties?size != 0>
-        ,<#list overlayClass.allStructureProperties as prop>
+    ,<#list overlayClass.allStructureProperties as prop>
         <@structureIndicator prop=prop/>
         <#if prop_has_next>,</#if>
-        </#list>
+    </#list>
     </#if>
 );
 </#if>
@@ -57,8 +57,8 @@ private static StructureIndicator STRUCTURE_INDICATOR = new StructureIndicator.D
 */
 public static Element create() {
 com.google.gwt.user.client.Element span = DOM.createSpan();
-span.setAttribute("type", "${overlayClass.className}");
-span.setAttribute("ns", "${overlayClass.namespaceURI}");
+span.setAttribute("data-type", "${overlayClass.className}");
+span.setAttribute("data-ns", "${overlayClass.namespaceURI}");
 span.setClassName("widget ${overlayClass.className}");
 return span;
 }
@@ -73,23 +73,23 @@ super(create());
 setType("${overlayClass.className}");
 }
 
-<#assign requiredConstructor = false>
-<#list overlayClass.allFlatAttributesProperties as prop>
-<#if prop.required><#assign requiredConstructor = true></#if>
-</#list>
-<#if requiredConstructor>
-/**
-* Constructor with required attributes
-*/
-public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allFlatAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
-this();
-    <#list overlayClass.allFlatAttributesProperties as property>
-        <#if property.required>
-set<@propertyNameCap property = property/>(<@propertyName property = property/>);
-        </#if>
+    <#assign requiredConstructor = false>
+    <#list overlayClass.allFlatAttributesProperties as prop>
+        <#if prop.required><#assign requiredConstructor = true></#if>
     </#list>
-}
-</#if>
+    <#if requiredConstructor>
+    /**
+    * Constructor with required attributes
+    */
+    public ${overlayClass.className?cap_first}(<#assign delim=""><#list overlayClass.allFlatAttributesProperties as property><#if property.required>${delim}<@propertyClassName property=property/> <@propertyName property = property/><#assign delim=","></#if></#list>) {
+    this();
+        <#list overlayClass.allFlatAttributesProperties as property>
+            <#if property.required>
+            set<@propertyNameCap property = property/>(<@propertyName property = property/>);
+            </#if>
+        </#list>
+    }
+    </#if>
 
 </#if>
 
@@ -167,13 +167,13 @@ this.value = value;
         */
         public void set<@propertyNameCap property = property/>(final <@propertyClassName property=property/> <@propertyName property = property/>) {
         this.<@propertyName property = property/> = <@propertyName property = property/>;
-        <#if property.wildCard>
-        getElement().setAttribute("${property.name}",<@propertyName property = property/>);
-        <#elseif property.baseClass?? && property.baseClass.enumeration>
-        getElement().setAttribute("${property.name}",<@propertyName property = property/>.value());
-        <#else>
-        getElement().setAttribute("${property.name}",<@propertyName property = property/>.getValue());
-        </#if>
+            <#if property.wildCard>
+            getElement().setAttribute("${property.name}",<@propertyName property = property/>);
+            <#elseif property.baseClass?? && property.baseClass.enumeration>
+            getElement().setAttribute("${property.name}",<@propertyName property = property/>.value());
+            <#else>
+            getElement().setAttribute("${property.name}",<@propertyName property = property/>.getValue());
+            </#if>
         }
         /**
         * Set <code><@propertyName property=property/></code> property in DSL way
@@ -192,12 +192,12 @@ this.value = value;
             */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = new ArrayList<<@elementClassName property=property/>>();
-                for (OverlayWidget widget : getChildOverlayWidgets()) {
-                    if ("<@elementClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
-                        result.add((<@elementClassName property=property/>)widget);
-                    }
-                }
-                return java.util.Collections.unmodifiableList(result);
+            for (OverlayWidget widget : getChildOverlayWidgets()) {
+            if ("<@elementClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
+            result.add((<@elementClassName property=property/>)widget);
+            }
+            }
+            return java.util.Collections.unmodifiableList(result);
             }
 
             /**
@@ -205,7 +205,7 @@ this.value = value;
             * @return The property as unmodifiable list
             */
             public <@propertyClassName property=property/> get${property.javaName?cap_first}List() {
-                return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
+            return  <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
             }
             /**
             * Add <code><@propertyClassName property=property/></code> property in the list of properties
@@ -227,13 +227,13 @@ this.value = value;
             */
             public <@propertyClassName property=property/> <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>() {
                 <@propertyClassName property=property/> result = null;
-                for (OverlayWidget widget : getChildOverlayWidgets()) {
-                    if ("<@propertyClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
-                        result = (<@propertyClassName property=property/>)widget;
-                        break;
-                    }
-                }
-                return result;
+            for (OverlayWidget widget : getChildOverlayWidgets()) {
+            if ("<@propertyClassName property=property/>".equalsIgnoreCase(widget.getType()) && "${overlayClass.namespaceURI}".equalsIgnoreCase(widget.getNamespaceURI())) {
+            result = (<@propertyClassName property=property/>)widget;
+            break;
+            }
+            }
+            return result;
             }
             /**
             * Set <code>${property.javaName}Elem</code> property in DSL way
@@ -247,7 +247,7 @@ this.value = value;
                     <@propertyClassName property=property/> result = <#if property.className?cap_first == "Boolean">is<#else>get</#if><@propertyNameCap property = property/>();
                 // remove the child of the same type if exist
                 if (result != null) {
-                    this.removeOverlayWidget(result);
+                this.removeOverlayWidget(result);
                 }
                 this.addOverlayWidget(${property.javaName}Elem);
 
@@ -282,8 +282,11 @@ return "${overlayClass.namespaceURI}";
 }
 
 @Override
-public LinkedHashMap<String, String> getAttributes() {
-final LinkedHashMap<String, String> attrs = new LinkedHashMap<String, String>();
+public LinkedHashMap
+<String, String> getAttributes() {
+final LinkedHashMap
+<String, String> attrs = new LinkedHashMap
+<String, String>();
 attrs.putAll(super.getAttributes());
     <#list overlayClass.flatProperties as property>
         <#if property.attribute>
@@ -296,7 +299,7 @@ return attrs;
 
 @Override
 public StructureIndicator getStructureIndicator() {
-    return STRUCTURE_INDICATOR;
+return STRUCTURE_INDICATOR;
 }
 
 /**
@@ -304,8 +307,8 @@ public StructureIndicator getStructureIndicator() {
 */
 @Override
 public ${overlayClass.className?cap_first} html(String s) {
-    super.html(s);
-    return this;
+super.html(s);
+return this;
 }
 </#if>
 <#if overlayClass.simple>
@@ -389,7 +392,7 @@ ${propName}
 <#macro plural propertyName><#compress><#if propertyName?ends_with("y")>${propertyName?substring(0, propertyName?length - 1)}ies<#elseif propertyName?ends_with("s")>${propertyName}es<#else>${propertyName}s</#if></#compress></#macro>
 
 <#macro generateField property accessType>
-    ${accessType} <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
+${accessType} <@propertyClassName property=property/> <#if property.collection><@pl property=property/> = new ArrayList
         <<#if property.wildCard && !property.attribute>OverlayWidgetImpl>
         ();<#elseif property.wildCard && property.attribute> String>()<#else>${property.className?cap_first}
         >();</#if><#else><@propertyName property = property/>;</#if>
@@ -397,13 +400,21 @@ ${propName}
 
 <#macro structureIndicator prop>
     <#if prop.sequenceIndicator>
-        new StructureIndicator.DefaultSequence(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+        new StructureIndicator.DefaultSequence(${prop.minOccurs},${prop.maxOccurs}
+        ,<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>
+        ,</#if></#list><#else>null</#if>)
     <#elseif prop.allIndicator>
-        new StructureIndicator.DefaultAll(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+        new StructureIndicator.DefaultAll(${prop.minOccurs},${prop.maxOccurs}
+        ,<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>
+        ,</#if></#list><#else>null</#if>)
     <#elseif prop.choiceIndicator>
-        new StructureIndicator.DefaultChoice(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+        new StructureIndicator.DefaultChoice(${prop.minOccurs},${prop.maxOccurs}
+        ,<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>
+        ,</#if></#list><#else>null</#if>)
     <#elseif prop.groupIndicator>
-        new StructureIndicator.DefaultGroup(${prop.minOccurs},${prop.maxOccurs},<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>,</#if></#list><#else>null</#if>)
+        new StructureIndicator.DefaultGroup(${prop.minOccurs},${prop.maxOccurs}
+        ,<#if prop.baseClass??><#list prop.baseClass.properties as childProp><@structureIndicator prop=childProp/><#if childProp_has_next>
+        ,</#if></#list><#else>null</#if>)
     <#elseif prop.wildCard>
         new StructureIndicator.DefaultWildcard(${prop.minOccurs},${prop.maxOccurs})
     <#else>

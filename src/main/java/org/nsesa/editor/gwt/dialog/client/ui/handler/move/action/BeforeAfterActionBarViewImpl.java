@@ -11,75 +11,64 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.move.action;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-import org.nsesa.editor.gwt.core.client.ClientFactory;
-import org.nsesa.editor.gwt.core.client.ServiceFactory;
+import com.google.inject.Singleton;
+import org.nsesa.editor.gwt.core.client.ui.document.sourcefile.content.ContentController;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.DIALOG;
 
 /**
- * Default implementation for the {@link AuthorPanelView} using UIBinder.
+ * Default implementation for the {@link BeforeAfterActionBarView} using UIBinder.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
+@Singleton
 @Scope(DIALOG)
-public class AuthorPanelViewImpl extends Composite implements AuthorPanelView {
+public class BeforeAfterActionBarViewImpl extends Composite implements BeforeAfterActionBarView {
 
-    interface MyUiBinder extends UiBinder<Widget, AuthorPanelViewImpl> {
+    interface MyUiBinder extends UiBinder<Widget, BeforeAfterActionBarViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-
-    private final ServiceFactory serviceFactory;
-
-    private final ClientFactory clientFactory;
-
-    /**
-     * Suggest oracle for the person DTOs coming from the backend.
-     */
-    private final PersonMultiWordSuggestionOracle oracle;
-
     @UiField
-    SuggestBox suggestBox;
-
+    Anchor afterAnchor;
     @UiField
-    HTMLPanel authorsPanel;
+    Anchor beforeAnchor;
 
-    @UiField
-    HorizontalPanel form;
 
     @Inject
-    public AuthorPanelViewImpl(final ServiceFactory serviceFactory, final ClientFactory clientFactory) {
-        this.serviceFactory = serviceFactory;
-        this.clientFactory = clientFactory;
-        oracle = new PersonMultiWordSuggestionOracle(serviceFactory, clientFactory);
+    public BeforeAfterActionBarViewImpl(ContentController contentController) {
+
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         if (!GWT.isScript())
             widget.setTitle(this.getClass().getName());
-    }
 
-    @UiFactory
-    SuggestBox createSuggestBox() {
-        return new SuggestBox(oracle);
-    }
-
-    public SuggestBox getSuggestBox() {
-        return suggestBox;
     }
 
     @Override
-    public ComplexPanel getAuthorsPanel() {
-        return authorsPanel;
+    public void attach() {
+        onAttach();
+    }
+
+    @Override
+    public Anchor getBeforeAnchor() {
+        return beforeAnchor;
+    }
+
+    @Override
+    public Anchor getAfterAnchor() {
+        return afterAnchor;
     }
 }

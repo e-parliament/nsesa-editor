@@ -50,6 +50,12 @@ public interface AmendmentController extends OverlayWidgetAware {
     };
 
     /**
+     * Various status codes to get rid of the strings in the comparison scenarios.
+     */
+    public static final String STATUS_CANDIDATE = "candidate", STATUS_TABLED = "tabled", STATUS_WITHDRAWN = "withdrawn",
+            STATUS_DELETED = "deleted", STATUS_REJECTED = "rejected", STATUS_RETURNED = "returned";
+
+    /**
      * Returns the underlying DTO model.
      *
      * @return the model
@@ -63,9 +69,27 @@ public interface AmendmentController extends OverlayWidgetAware {
      */
     void setModel(AmendmentContainerDTO amendment);
 
+    /**
+     * Merge a amendment DTO into this controller.
+     *
+     * @param amendment             the amendment to merge in
+     * @param onlyChangedAttributes <tt>true</tt> if only the attributes changed, and not the content
+     */
     void mergeModel(AmendmentContainerDTO amendment, boolean onlyChangedAttributes);
 
+    /**
+     * Set the body of the amendment.
+     *
+     * @param body the body to set
+     */
     void setBody(String body);
+
+    /**
+     * If this amendment is a bundle, set the amendment container IDs that this bundle encompasses.
+     *
+     * @param amendmentContainerIDs the bundled amendment container IDs.
+     */
+    void setBundle(String[] amendmentContainerIDs);
 
     /**
      * Register the callback listeners.
@@ -150,6 +174,13 @@ public interface AmendmentController extends OverlayWidgetAware {
     void setStatus(String status);
 
     /**
+     * Set the id on the views.
+     *
+     * @param id the id to set
+     */
+    void setId(String id);
+
+    /**
      * Get the local order of the amendment.
      *
      * @return the order
@@ -195,4 +226,42 @@ public interface AmendmentController extends OverlayWidgetAware {
      * @return the diff method
      */
     DiffMethod getDiffMethod();
+
+    /**
+     * Check if this amendment controller consists of multiple bundled amendments.
+     *
+     * @return <tt>true</tt> if this is a bundle
+     * @since 0.9
+     */
+    boolean isBundle();
+
+    /**
+     * Set the flag to indicate this controller is part of a bundle or not.
+     *
+     * @param isBundled <tt>true</tt> if this is part of a bundle
+     * @since 0.9
+     */
+    void setBundled(boolean isBundled);
+
+    /**
+     * Check if this amendment controller is part of a bundle.
+     *
+     * @return <tt>true</tt> if this is part of a bundle
+     * @since 0.9
+     */
+    boolean isBundled();
+
+    /**
+     * Called when an amendment controller needs to be added to this amendment.
+     *
+     * @param toBundle the amendment controller that was added
+     */
+    void mergeIntoBundle(AmendmentController toBundle);
+
+    /**
+     * Called when the given <tt>amendmentController</tt> is removed from this bundle.
+     *
+     * @param amendmentController the removed amendment controller
+     */
+    void removedFromBundle(AmendmentController amendmentController);
 }

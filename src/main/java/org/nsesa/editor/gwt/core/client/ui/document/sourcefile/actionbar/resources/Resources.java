@@ -31,7 +31,7 @@ public interface Resources extends ClientBundle {
     @Source("lock_fill_12x16.png")
     ImageResource lock();
 
-    @Source("move_16x16.png")
+    @Source("move_alt1_16x16.png")
     ImageResource move();
 
     @Source("pen_alt2_16x16.png")

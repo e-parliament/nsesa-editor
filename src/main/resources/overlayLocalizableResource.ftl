@@ -30,7 +30,9 @@ import java.util.Map;
 * Note: this file is generated. Rather than changing this file, correct the template called <tt>overlayLocalizableResource.ftl</tt>.
 */
 public class ${overlayClass.name?cap_first} extends DefaultOverlayLocalizableResource {
+
 private static ${factoryName?cap_first}OverlayMessages MESSAGES = GWT.create(${factoryName?cap_first}OverlayMessages.class);
+private final String namespaceURI = "${overlayClass.namespaceURI}";
 
 @Override
 public String getName(final OverlayWidget widget) {
@@ -60,6 +62,11 @@ return MESSAGES.description${cl.className?cap_first}();
 else {
 return widget.getType();
 }
+}
+
+@Override
+public String getNamespaceURI() {
+return namespaceURI;
 }
 
 }

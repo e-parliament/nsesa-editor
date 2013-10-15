@@ -17,21 +17,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>OverlayNode</code> class is the primary datatype when parsing xsd schema.
- * It represents a single node in the xsd structure and keep basic information about xsd node like name,
- * namespace, classname, comments and type.
+ * The <code>OverlayNode</code> class is the primary data type when parsing an xsd.
+ * It represents a single node in the xsd structure and keeps basic information about the node like its name,
+ * namespace, classname, comments and type. We'll then use this information to generate various files, such
+ * as overlay classes, CSS properties, ...
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 29/10/12 10:05
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 29/10/12 10:05
  */
 public class OverlayNode {
 
     private static final Logger LOG = LoggerFactory.getLogger(OverlayNode.class);
 
+    /**
+     * The local node name.
+     */
     protected String name;
+    /**
+     * The namespace URI.
+     */
     protected String namespaceURI;
+
+    /**
+     * The overlay class name.
+     */
     protected String className;
+    /**
+     * The type of overlay.
+     */
     protected OverlayType overlayType;
+    /**
+     * Any further comments that have been specified.
+     */
     protected String comments;
 
     /**
@@ -41,83 +59,93 @@ public class OverlayNode {
     }
 
     /**
-     * Constructs an <code>OverlayNode</code> with the given name, namespace abd type
-     * @param name The node name as String
+     * Constructs an <code>OverlayNode</code> with the given name, namespace and type.
+     *
+     * @param name         The node name as String
      * @param namespaceURI The namespace as String
      * @param overlayType  The overlayType as Enum
      */
-    public OverlayNode(String name, String namespaceURI, OverlayType overlayType) {
+    public OverlayNode(final String name, final String namespaceURI, final OverlayType overlayType) {
         this.name = name;
         this.namespaceURI = namespaceURI;
         this.overlayType = overlayType;
     }
 
     /**
-     * Return the <code>OverlayType</code> of the <code>OverlayNode</code>
-     * @return
+     * Return the <code>OverlayType</code> of the <code>OverlayNode</code>.
+     *
+     * @return the overlay type
      */
     public OverlayType getOverlayType() {
         return overlayType;
     }
 
     /**
-     * Set the <code>overlayType</code> of the node
-     * @param overlayType
+     * Set the <code>overlayType</code> of the node.
+     *
+     * @param overlayType the overlay type
      */
-    public void setOverlayType(OverlayType overlayType) {
+    public void setOverlayType(final OverlayType overlayType) {
         this.overlayType = overlayType;
     }
 
     /**
-     * Returns the node name
-     * @return the node name as String
+     * Returns the node name.
+     *
+     * @return the node name as a String
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Set the node name
+     * Set the node name.
+     *
      * @param name as String
      */
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * Returns the node namespace
-     * @return The namespace as String
+     * Returns the node namespace.
+     *
+     * @return The namespace as a String
      */
     public String getNamespaceURI() {
         return namespaceURI;
     }
 
     /**
-     * Set the namespace
-     * @param namespaceURI as String
+     * Set the namespace URI.
+     *
+     * @param namespaceURI as a String
      */
-    public void setNamespaceURI(String namespaceURI) {
+    public void setNamespaceURI(final String namespaceURI) {
         this.namespaceURI = namespaceURI;
     }
 
     /**
-     * Returns the node classname
-     * @return Classname as String
+     * Returns the node's class name (for further generation).
+     *
+     * @return the classname as a String
      */
     public String getClassName() {
         return className;
     }
 
     /**
-     * Set the node class name
-     * @param className As String
+     * Set the node class name.
+     *
+     * @param className the classname as a String
      */
-    public void setClassName(String className) {
+    public void setClassName(final String className) {
         this.className = className;
     }
 
     /**
      * True when the <code>OverlayNode</code> is simple type
+     *
      * @return True for simple type
      */
     public boolean isSimple() {
@@ -126,7 +154,8 @@ public class OverlayNode {
 
     /**
      * True when the <code>OverlayNode</code> is complex type
-     * @return True for complex type
+     *
+     * @return <tt>true</tt> for complex type
      */
     public boolean isComplex() {
         return OverlayType.ComplexType.equals(overlayType);
@@ -134,6 +163,7 @@ public class OverlayNode {
 
     /**
      * True when the <code>OverlayNode</code> is xsd element
+     *
      * @return True for xsd element
      */
     public boolean isElement() {
@@ -142,6 +172,7 @@ public class OverlayNode {
 
     /**
      * True when the <code>OverlayNode</code> is wildcard type
+     *
      * @return True for wildcard type
      */
     public boolean isWildCard() {
@@ -149,7 +180,7 @@ public class OverlayNode {
     }
 
     /**
-     * Casts this object to OverlayClass if possible, otherwise returns null.
+     * Casts this object to OverlayClass if possible, otherwise returns <tt>null</tt>.
      */
     public OverlayClass asOverlayClass() {
         if (this instanceof OverlayClass) {
@@ -159,7 +190,7 @@ public class OverlayNode {
     }
 
     /**
-     * Casts this object to OverlayProperty if possible, otherwise returns null.
+     * Casts this object to OverlayProperty if possible, otherwise returns <tt>null</tt>.
      */
     public OverlayProperty asOverlayProperty() {
         if (this instanceof OverlayProperty) {
@@ -179,7 +210,7 @@ public class OverlayNode {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -202,6 +233,7 @@ public class OverlayNode {
 
     /**
      * Returns the comments associated to the node
+     *
      * @return comments as String
      */
     public String getComments() {
@@ -210,10 +242,10 @@ public class OverlayNode {
 
     /**
      * Set the comments to the node
+     *
      * @param comments as String
      */
-    public void setComments(String comments) {
+    public void setComments(final String comments) {
         this.comments = comments;
     }
-
 }

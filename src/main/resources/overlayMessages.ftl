@@ -29,6 +29,7 @@ public interface ${overlayClass.className?cap_first} extends Messages {
 <#list overlayClasses as cl>
 @Key("name.${cl.className}")
 String name${cl.className?cap_first}();
+
 @Key("description.${cl.className}")
 String description${cl.className?cap_first}();
 </#list>

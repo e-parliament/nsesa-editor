@@ -20,15 +20,17 @@ import java.util.Random;
  * The generated hexadecimal color code remains constant over the recomputation with the same label.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
- * Date: 21/01/13 13:38
+ * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a> (cleanup and documentation)
+ *         Date: 21/01/13 13:38
  */
 public class CssColorGenerator {
 
     private static CssColorGenerator INSTANCE = new CssColorGenerator();
 
     /**
-     * Returns one instance of this generator
-     * @return
+     * Returns the one instance of this generator
+     *
+     * @return the instance
      */
     public static CssColorGenerator getInstance() {
         return INSTANCE;
@@ -42,8 +44,9 @@ public class CssColorGenerator {
 
     /**
      * Generates a black/white color code based on the given label
+     *
      * @param label The label that will be processed
-     * @return
+     * @return the generated color to use for this label
      */
     public String getTextColor(final String label) {
         String color = getColor(label);
@@ -52,6 +55,7 @@ public class CssColorGenerator {
 
     /**
      * Returns "000000" or "FFFFFF" depending on the lightness of the background color
+     *
      * @param color The background color code in hexadecimal format
      * @return The text color in hexadecimal
      */
@@ -67,19 +71,19 @@ public class CssColorGenerator {
     }
 
     /**
-     *  Generate a color based on provided label.
-     *  The color remains constant during recomputation with the same label
-     * @param label
-     * @return
+     * Generate a color based on provided label.
+     * The color remains constant during computation with the same label
+     *
+     * @param label the label to get the color for
+     * @return the color
      */
     public String getColor(final String label) {
         final Random random = new Random(label.hashCode());
-        String code = hexColor(random);
-        return code;
+        return hexColor(random);
     }
 
     private String hexColor(final Random random) {
-        StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         String sb = Integer.toHexString(random.nextInt(255));
         if (sb.length() < 2) {
             sb = "0" + sb;

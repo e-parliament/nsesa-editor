@@ -11,17 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.dialog.client.ui.handler.common.author;
-
-import com.google.gwt.resources.client.CssResource;
-
 /**
- * CSS resource for the {@link AuthorPanelView}.
- * Date: 24/06/12 16:39
- *
- * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
- * @version $Id$
+ * Holds the source file tab. Components are in nested packages.
  */
-public interface AuthorPanelViewCss extends CssResource {
-
-}
+package org.nsesa.editor.gwt.core.client.ui.document.sourcefile;

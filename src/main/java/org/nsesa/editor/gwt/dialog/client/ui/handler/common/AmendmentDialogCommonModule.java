@@ -14,7 +14,7 @@
 package org.nsesa.editor.gwt.dialog.client.ui.handler.common;
 
 import com.google.gwt.inject.client.AbstractGinModule;
-import org.nsesa.editor.gwt.dialog.client.ui.handler.common.author.AuthorPanelModule;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.common.authors.AuthorsPanelModule;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.content.ContentPanelModule;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelModule;
 
@@ -28,7 +28,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.common.meta.MetaPanelModule
 public class AmendmentDialogCommonModule extends AbstractGinModule {
     @Override
     protected void configure() {
-        install(new AuthorPanelModule());
+        install(new AuthorsPanelModule());
         install(new MetaPanelModule());
         install(new ContentPanelModule());
     }
