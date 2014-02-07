@@ -27,7 +27,7 @@
 
     <!-- Note: This root logger will be inherited by all loggers unless you use additivity="false". -->
     <root>
-        <level value="DEBUG"/>
+        <level value="INFO"/>
         <appender-ref ref="terminal"/>
     </root>
 
