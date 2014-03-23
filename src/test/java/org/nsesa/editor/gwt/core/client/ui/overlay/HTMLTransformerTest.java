@@ -77,6 +77,6 @@ public class HTMLTransformerTest extends GwtTest {
     @Test
     public void testTransform() throws Exception {
         final String result = htmlTransformer.transform(root);
-        Assert.assertEquals("<span class=\"root\" type=\"root\" ns=\"http://ns.tld\"><span class=\"childA\" type=\"childA\" ns=\"http://ns.tld\"><span class=\"childAA\" type=\"childAA\" ns=\"http://ns.tld\">childAA.innerHTML</span></span><span class=\"childB\" type=\"childB\" ns=\"http://ns.tld\">childB.innerHTML</span></span>", result);
+        Assert.assertEquals("<span class=\"root\" data-type=\"root\" data-ns=\"http://ns.tld\"><span class=\"childA\" data-type=\"childA\" data-ns=\"http://ns.tld\"><span class=\"childAA\" data-type=\"childAA\" data-ns=\"http://ns.tld\">childAA.innerHTML</span></span><span class=\"childB\" data-type=\"childB\" data-ns=\"http://ns.tld\">childB.innerHTML</span></span>", result);
     }
 }
