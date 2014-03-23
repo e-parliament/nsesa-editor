@@ -16,8 +16,11 @@ package org.nsesa.editor.gwt.core.shared;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Data Transfer Object (DTO) for a person.
@@ -50,6 +53,10 @@ public class PersonDTO implements IsSerializable, Serializable {
      */
     @DtoField
     private String lastName;
+
+    //@DtoVirtualField(converter = "membershipToGroupConvertor")
+    @DtoField
+    private Set<GroupDTO> groups = new HashSet<GroupDTO>();
 
     public PersonDTO() {
     }
@@ -124,6 +131,14 @@ public class PersonDTO implements IsSerializable, Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Set<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<GroupDTO> groups) {
+        this.groups = groups;
     }
 
     @Override

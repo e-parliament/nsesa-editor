@@ -107,6 +107,9 @@ public interface CoreMessages extends Messages {
     @Key("amendment.action.delete")
     String amendmentActionDelete();
 
+    @Key("amendment.action.share")
+    String amendmentActionShare();
+
     @Key("amendment.action.withdraw")
     String amendmentActionWithdraw();
 
@@ -133,6 +136,9 @@ public interface CoreMessages extends Messages {
 
     @Key("amendment.action.register.successful")
     String amendmentActionRegisterSuccessful(@PluralCount int arg);
+
+    @Key("amendment.action.share.successful")
+    String amendmentActionShareSuccessful(@PluralCount int arg);
 
     @Key("amendment.action.delete.successful")
     String amendmentActionDeleteSuccessful(@PluralCount int arg);

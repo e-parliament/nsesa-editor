@@ -37,6 +37,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentAction;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.ClientContext;
+import org.nsesa.editor.gwt.core.shared.PersonDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -87,7 +88,17 @@ public class AmendmentActionPanelController {
     protected final Anchor anchorDelete = new Anchor();
 
     /**
-     * An anchor to move up an amendment.
+     * An separator widget.
+     */
+    protected final Widget shareSeparator;
+
+    /**
+     * An anchor to share an amendment.
+     */
+    protected final Anchor anchorShare = new Anchor();
+
+    /**
+     * An separator widget.
      */
     protected final Widget moveSeparator;
 
@@ -143,6 +154,7 @@ public class AmendmentActionPanelController {
     private HandlerRegistration anchorTableHandlerRegistration;
     private HandlerRegistration anchorWithdrawHandlerRegistration;
     private HandlerRegistration anchorDeleteHandlerRegistration;
+    private HandlerRegistration anchorShareHandlerRegistration;
     private HandlerRegistration anchorMoveUpHandlerRegistration;
     private HandlerRegistration anchorMoveDownHandlerRegistration;
 
@@ -156,6 +168,9 @@ public class AmendmentActionPanelController {
         addWidget(anchorTable);
         addWidget(anchorWithdraw);
         addWidget(anchorDelete);
+        shareSeparator = getSeparator();
+        addWidget(shareSeparator);
+        addWidget(anchorShare);
         moveSeparator = getSeparator();
         addWidget(moveSeparator);
         addWidget(anchorMoveUp);
@@ -164,6 +179,7 @@ public class AmendmentActionPanelController {
         anchorTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorWithdraw.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorDelete.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorShare.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorMoveUp.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorMoveDown.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 
@@ -171,6 +187,7 @@ public class AmendmentActionPanelController {
         anchorTable.setText(coreMessages.amendmentActionTable());
         anchorWithdraw.setText(coreMessages.amendmentActionWithdraw());
         anchorDelete.setText(coreMessages.amendmentActionDelete());
+        anchorShare.setText(coreMessages.amendmentActionShare());
         anchorMoveUp.setText(coreMessages.amendmentActionMoveUp());
         anchorMoveDown.setText(coreMessages.amendmentActionMoveDown());
     }
@@ -276,6 +293,7 @@ public class AmendmentActionPanelController {
         anchorTableHandlerRegistration.removeHandler();
         anchorWithdrawHandlerRegistration.removeHandler();
         anchorDeleteHandlerRegistration.removeHandler();
+        anchorShareHandlerRegistration.removeHandler();
         anchorMoveUpHandlerRegistration.removeHandler();
         anchorMoveDownHandlerRegistration.removeHandler();
 
@@ -376,6 +394,12 @@ public class AmendmentActionPanelController {
                 anchorWithdraw.setVisible(result[0]);
             }
         });
+
+        // share anchor
+        PersonDTO person = amendmentController.getDocumentController().getClientFactory().getClientContext().getLoggedInPerson();
+        boolean canShare = !person.getGroups().isEmpty();
+        anchorShare.setVisible(canShare);
+        shareSeparator.setVisible(canShare);
     }
 
     /**
