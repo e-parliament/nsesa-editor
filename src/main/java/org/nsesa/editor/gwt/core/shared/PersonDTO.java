@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 
@@ -54,8 +55,7 @@ public class PersonDTO implements IsSerializable, Serializable {
     @DtoField
     private String lastName;
 
-    //@DtoVirtualField(converter = "membershipToGroupConvertor")
-    @DtoField
+    @DtoVirtualField(converter = "groupConvertor")
     private Set<GroupDTO> groups = new HashSet<GroupDTO>();
 
     public PersonDTO() {

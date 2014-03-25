@@ -38,6 +38,31 @@ public class GroupDTO implements Serializable {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GroupDTO groupDTO = (GroupDTO) o;
+
+        if (groupID != null ? !groupID.equals(groupDTO.groupID) : groupDTO.groupID != null) return false;
+        if (name != null ? !name.equals(groupDTO.name) : groupDTO.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = groupID != null ? groupID.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public String getGroupID() {
         return groupID;
     }

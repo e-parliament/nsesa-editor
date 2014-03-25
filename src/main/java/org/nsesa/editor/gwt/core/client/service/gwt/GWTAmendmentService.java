@@ -45,7 +45,28 @@ public interface GWTAmendmentService extends RemoteService {
     AmendmentContainerDTO getAmendmentContainer(ClientContext clientContext, String id)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
+    /**
+     * Get a specific revision of an amendment container identified by <tt>revisionID</tt>.
+     * @param clientContext the client context
+     * @param revisionID    the revision identifier for a single amendment container revision
+     * @return the amendment container, or <tt>null</tt> if it cannot be found.
+     * @throws UnsupportedOperationException    if the operation is not supported by the backend
+     * @throws ResourceNotFoundException        if the resource cannot be found on the backend
+     */
     AmendmentContainerDTO getAmendmentContainerRevision(ClientContext clientContext, String revisionID)
+            throws UnsupportedOperationException, ResourceNotFoundException;
+
+    /**
+     * Shares a given amendment container identified by <tt>id</tt>.
+     * @param clientContext the client context
+     * @param id            the amendment container identifier
+     * @param groupID       the group identifier
+     * @param share         flag whether or not to share
+     * @return the amendment container, or <tt>null</tt> if it cannot be found.
+     * @throws UnsupportedOperationException    if the operation is not supported by the backend
+     * @throws ResourceNotFoundException        if the resource cannot be found on the backend
+     */
+    AmendmentContainerDTO shareAmendmentContainer(ClientContext clientContext, String id, String groupID, boolean share)
             throws UnsupportedOperationException, ResourceNotFoundException;
 
     /**

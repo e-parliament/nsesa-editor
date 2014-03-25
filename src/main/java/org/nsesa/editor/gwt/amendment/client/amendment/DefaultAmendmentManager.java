@@ -128,6 +128,13 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 bundleAmendmentContainers(event.getParent(), event.getAmendmentControllers());
             }
         });
+
+        documentEventBus.addHandler(AmendmentContainerMergeEvent.TYPE, new AmendmentContainerMergeEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerMergeEvent event) {
+                mergeAmendmentContainerDTOs(event.getAmendmentContainerDTOs());
+            }
+        });
     }
 
     /**
