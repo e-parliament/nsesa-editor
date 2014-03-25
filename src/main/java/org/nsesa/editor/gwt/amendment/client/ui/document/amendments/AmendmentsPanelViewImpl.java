@@ -30,8 +30,12 @@ import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.Amend
 import org.nsesa.editor.gwt.amendment.client.ui.document.amendments.header.AmendmentsHeaderView;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectedEventHandler;
 import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEvent;
+import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelectionEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
+import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationController;
 import org.nsesa.editor.gwt.core.client.ui.pagination.PaginationView;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -59,6 +63,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      */
     private static final int SCROLLBAR_OFFSET = 145;
     private HandlerRegistration resizeEventHandlerRegistration;
+    private HandlerRegistration overlayWidgetAwareSelectedEventHandlerRegistration;
 
     interface MyUiBinder extends UiBinder<Widget, AmendmentsPanelViewImpl> {
     }
@@ -141,6 +146,15 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
                 scrollPanel.setHeight(height + "px");
             }
         });
+
+        overlayWidgetAwareSelectedEventHandlerRegistration = documentEventBus.addHandler(OverlayWidgetAwareSelectedEvent.TYPE, new OverlayWidgetAwareSelectedEventHandler() {
+            @Override
+            public void onEvent(OverlayWidgetAwareSelectedEvent event) {
+                List<AmendmentController> selected = (List<AmendmentController>) event.getSelected();
+                selectedAmendments.clear();
+                selectedAmendments.addAll(selected);
+            }
+        });
     }
 
     /**
@@ -148,6 +162,7 @@ public class AmendmentsPanelViewImpl extends Composite implements AmendmentsPane
      */
     public void removeListeners() {
         resizeEventHandlerRegistration.removeHandler();
+        overlayWidgetAwareSelectedEventHandlerRegistration.removeHandler();
     }
 
     /**
