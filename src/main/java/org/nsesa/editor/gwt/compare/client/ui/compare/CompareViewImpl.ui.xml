@@ -65,7 +65,7 @@
                 </g:HTMLPanel>
                 <g:HorizontalPanel styleName="{res.revisionPicker}" ui:field="revisionPickerPanel">
                     <g:ListBox ui:field="revisionsA" styleName="{res.revisionList}"/>
-                    <g:Label text=" vs. "/>
+                    <g:Label text=" vs. " ui:field="revisionVersusLabel"/>
                     <g:ListBox ui:field="revisionsB" styleName="{res.revisionList}"/>
                 </g:HorizontalPanel>
             </g:HTMLPanel>

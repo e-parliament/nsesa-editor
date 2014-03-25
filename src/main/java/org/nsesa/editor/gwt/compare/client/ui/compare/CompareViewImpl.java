@@ -56,6 +56,8 @@ public class CompareViewImpl extends Composite implements CompareView {
     ListBox revisionsB;
     @UiField
     HorizontalPanel revisionPickerPanel;
+    @UiField
+    Label revisionVersusLabel;
 
     @Inject
     public CompareViewImpl() {
@@ -66,6 +68,7 @@ public class CompareViewImpl extends Composite implements CompareView {
             widget.setTitle(this.getClass().getName());
 
         revisionPickerPanel.setCellHorizontalAlignment(revisionsA, HasHorizontalAlignment.ALIGN_CENTER);
+        revisionPickerPanel.setCellHorizontalAlignment(revisionVersusLabel, HasHorizontalAlignment.ALIGN_CENTER);
         revisionPickerPanel.setCellHorizontalAlignment(revisionsB, HasHorizontalAlignment.ALIGN_CENTER);
     }
 
@@ -96,21 +99,24 @@ public class CompareViewImpl extends Composite implements CompareView {
         if (revisions.size() > 1) {
 
             for (RevisionDTO revision : revisions.subList(1, revisions.size())) {
+                final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
                 if (revision == revisions.get(revisions.size() - 1)) {
                     // last element
-                    revisionsA.addItem("Initial version", revision.getRevisionID());
+                    revisionsA.addItem("Initial version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
                 } else {
-                    final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
                     revisionsA.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
                 }
             }
 
-            for (RevisionDTO revision : revisions.subList(0, revisions.size() - 1)) {
+            for (RevisionDTO revision : revisions) {
+                final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
                 if (revision == revisions.get(0)) {
                     // first element
-                    revisionsB.addItem("Current version", revision.getRevisionID());
+                    revisionsB.addItem("Current version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
+                } else if (revision == revisions.get(revisions.size() - 1)) {
+                    // last element
+                    revisionsB.addItem("Initial version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
                 } else {
-                    final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
                     revisionsB.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
                 }
             }
