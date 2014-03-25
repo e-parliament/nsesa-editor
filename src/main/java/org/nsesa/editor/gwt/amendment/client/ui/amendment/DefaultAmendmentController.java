@@ -438,7 +438,8 @@ public class DefaultAmendmentController implements AmendmentController {
             setBody(getModel().getBody());
         }
 
-        if (!Arrays.asList(getModel().getBundledAmendmentContainerIDs()).equals(Arrays.asList(amendment.getBundledAmendmentContainerIDs()))) {
+        if (getModel().getBundledAmendmentContainerIDs() != null && amendment.getBundledAmendmentContainerIDs() != null
+                && !Arrays.asList(getModel().getBundledAmendmentContainerIDs()).equals(Arrays.asList(amendment.getBundledAmendmentContainerIDs()))) {
             getModel().setBundledAmendmentContainerIDs(amendment.getBundledAmendmentContainerIDs());
             setBundle(getModel().getBundledAmendmentContainerIDs());
         }
