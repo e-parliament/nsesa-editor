@@ -11,27 +11,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.document.info;
+package org.nsesa.editor.gwt.core.client.event.document;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.inject.ImplementedBy;
+import com.google.gwt.event.shared.EventHandler;
 
 /**
- * View for the {@link InfoPanelController}.
- * Date: 24/06/12 21:44
+ * Handler interface for the {@link org.nsesa.editor.gwt.core.client.event.document.DocumentContentLoadedEvent}.
+ * Date: 24/06/12 18:15
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@ImplementedBy(InfoPanelViewImpl.class)
-public interface InfoPanelView extends IsWidget {
-
-    ComplexPanel getMainPanel();
-
-    /**
-     * Set the style of the view
-     * @param styleName
-     */
-    public void setStyleName(String styleName);
+public interface DocumentContentLoadedEventHandler extends EventHandler {
+    void onEvent(DocumentContentLoadedEvent event);
 }

@@ -15,7 +15,10 @@ package org.nsesa.editor.gwt.core.client.ui.document.info;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
@@ -36,6 +39,8 @@ public class InfoPanelViewImpl extends Composite implements InfoPanelView {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
+    @UiField
+    VerticalPanel mainPanel;
 
     public InfoPanelViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
@@ -44,5 +49,10 @@ public class InfoPanelViewImpl extends Composite implements InfoPanelView {
         if (!GWT.isScript())
             widget.setTitle(this.getClass().getName());
 
+    }
+
+    @Override
+    public ComplexPanel getMainPanel() {
+        return mainPanel;
     }
 }

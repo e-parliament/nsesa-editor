@@ -33,10 +33,7 @@ import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.diffing.DiffingManager;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
 import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentRefreshRequestEventHandler;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEvent;
-import org.nsesa.editor.gwt.core.client.event.document.DocumentScrollEventHandler;
+import org.nsesa.editor.gwt.core.client.event.document.*;
 import org.nsesa.editor.gwt.core.client.event.filter.FilterRequestEvent;
 import org.nsesa.editor.gwt.core.client.event.widget.*;
 import org.nsesa.editor.gwt.core.client.ui.document.DefaultDocumentController;
@@ -405,6 +402,7 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             @Override
             public void execute() {
                 sourceFileController.overlay();
+                documentEventBus.fireEvent(new DocumentContentLoadedEvent(AmendmentDocumentController.this));
                 showLoadingIndicator(true, "Done overlaying document.");
                 clientFactory.getEventBus().fireEvent(new ResizeEvent(Window.getClientHeight(), Window.getClientWidth()));
                 showLoadingIndicator(false, "Done retrieving document.");
