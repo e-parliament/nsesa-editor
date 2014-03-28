@@ -83,9 +83,13 @@ public class CompareViewImpl extends Composite implements CompareView {
     }
 
     @Override
-    public void show() {
-        scrollPanel.setHeight((getOffsetHeight() - 110) + "px");
-        scrollPanel.setWidth((getOffsetWidth()) + "px");
+    public void adaptScrollPanel() {
+        if (getOffsetHeight() > 0) {
+            scrollPanel.setHeight((getOffsetHeight() - 110) + "px");
+        }
+        if (getOffsetWidth() > 0) {
+            scrollPanel.setWidth((getOffsetWidth()) + "px");
+        }
     }
 
     @Override

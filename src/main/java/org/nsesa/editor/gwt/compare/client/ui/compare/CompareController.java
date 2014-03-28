@@ -33,6 +33,8 @@ import org.nsesa.editor.gwt.compare.client.event.ShowComparePanelEventHandler;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.shared.*;
 
 import java.util.ArrayList;
@@ -79,6 +81,7 @@ public class CompareController implements ProvidesResize {
     private com.google.web.bindery.event.shared.HandlerRegistration showComparePanelEventHandlerRegistration;
     private HandlerRegistration revisionAChangeHandlerRegistration;
     private HandlerRegistration revisionBChangeHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration resizeEventHandlerRegistration;
 
 
     @Inject
@@ -92,8 +95,7 @@ public class CompareController implements ProvidesResize {
         this.popupPanel.setTitle("Amendment Revisions");
         this.popupPanel.setGlassEnabled(true);
 
-        view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
-        view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
+        resize();
     }
 
     public void registerListeners() {
@@ -140,6 +142,25 @@ public class CompareController implements ProvidesResize {
                 retrieveRevisions();
             }
         });
+
+        resizeEventHandlerRegistration = clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                resize();
+            }
+        });
+    }
+
+    protected void resize() {
+        clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
+                view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
+                view.adaptScrollPanel();
+            }
+        });
+
     }
 
     public void retrieveRevisions() {
@@ -236,6 +257,7 @@ public class CompareController implements ProvidesResize {
         revisionBChangeHandlerRegistration.removeHandler();
         hideComparePanelEventHandlerRegistration.removeHandler();
         showComparePanelEventHandlerRegistration.removeHandler();
+        resizeEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -244,7 +266,7 @@ public class CompareController implements ProvidesResize {
     public void show() {
         popupPanel.center();
         popupPanel.show();
-        view.show();
+        view.adaptScrollPanel();
     }
 
     /**
