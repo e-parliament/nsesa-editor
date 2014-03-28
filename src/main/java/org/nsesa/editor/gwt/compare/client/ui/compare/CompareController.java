@@ -119,6 +119,8 @@ public class CompareController implements ProvidesResize {
         final ChangeHandler revisionChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
+                int version = view.getRevisionsA().getItemCount() - (view.getRevisionsA().getSelectedIndex());
+                view.getRollbackButton().setText("Rollback to version " + version);
                 retrieveRevisionContent(
                         view.getRevisionsA().getValue(view.getRevisionsA().getSelectedIndex()),
                         view.getRevisionsB().getValue(view.getRevisionsB().getSelectedIndex()));
@@ -177,6 +179,9 @@ public class CompareController implements ProvidesResize {
             @Override
             public void onSuccess(List<RevisionDTO> result) {
                 view.setAvailableRevisions(result);
+                if (!result.isEmpty()) {
+                    view.getRollbackButton().setText("Rollback to version " + (result.size() - 1));
+                }
                 // retrieve default revisions: the first and second one
                 if (result.size() > 1) {
                     retrieveRevisionContent(result.get(1).getRevisionID(), result.get(0).getRevisionID());

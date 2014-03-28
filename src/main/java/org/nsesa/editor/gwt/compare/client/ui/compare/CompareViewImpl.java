@@ -101,27 +101,32 @@ public class CompareViewImpl extends Composite implements CompareView {
         rollbackButton.setEnabled(revisions.size() > 1);
 
         if (revisions.size() > 1) {
+            List<RevisionDTO> revisionDTOsWithoutLatest = revisions.subList(1, revisions.size());
+            int versionA = revisionDTOsWithoutLatest.size();
+            int versionB = revisions.size();
 
-            for (RevisionDTO revision : revisions.subList(1, revisions.size())) {
+            for (RevisionDTO revision : revisionDTOsWithoutLatest) {
                 final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+                String entry = versionA-- + ") " + format + " - " + revision.getPerson().getDisplayName();
                 if (revision == revisions.get(revisions.size() - 1)) {
                     // last element
-                    revisionsA.addItem("Initial version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
+                    revisionsA.addItem(entry + " (Initial version)", revision.getRevisionID());
                 } else {
-                    revisionsA.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
+                    revisionsA.addItem(entry, revision.getRevisionID());
                 }
             }
 
             for (RevisionDTO revision : revisions) {
                 final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+                String entry = versionB-- + ") " + format + " - " + revision.getPerson().getDisplayName();
                 if (revision == revisions.get(0)) {
                     // first element
-                    revisionsB.addItem("Current version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
+                    revisionsB.addItem(entry + " (Latest version)", revision.getRevisionID());
                 } else if (revision == revisions.get(revisions.size() - 1)) {
                     // last element
-                    revisionsB.addItem("Initial version (" + format + " - " + revision.getPerson().getDisplayName() + ")", revision.getRevisionID());
+                    revisionsB.addItem(entry + " (Initial version)", revision.getRevisionID());
                 } else {
-                    revisionsB.addItem(format + " - " + revision.getPerson().getDisplayName(), revision.getRevisionID());
+                    revisionsB.addItem(entry, revision.getRevisionID());
                 }
             }
         }
