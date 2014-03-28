@@ -19,11 +19,10 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.compare.client.event.HideComparePanelEvent;
@@ -179,6 +178,9 @@ public class CompareController implements ProvidesResize {
             @Override
             public void onSuccess(List<RevisionDTO> result) {
                 view.setAvailableRevisions(result);
+
+                populateTimeline(result);
+
                 if (!result.isEmpty()) {
                     view.getRollbackButton().setText("Rollback to version " + (result.size() - 1));
                 }
@@ -192,9 +194,51 @@ public class CompareController implements ProvidesResize {
         });
     }
 
+    // TODO: replace with UIBinder
+    protected void populateTimeline(final List<RevisionDTO> revisions) {
+        view.getTimeline().clear();
+        int version = 1;
+        for (final RevisionDTO revision : revisions) {
+            VerticalPanel vp = new VerticalPanel();
+            vp.setWidth("100%");
+            final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+            Anchor anchor = new Anchor("(" + version + ")");
+            if (revision == revisions.get(0)) {
+                anchor.setText("(" + version + " - initial)");
+            } else if (revision == revisions.get(revisions.size() - 1)) {
+                anchor.setText("(" + version + " - latest)");
+            }
+
+            final int index = version -1 ;
+            if (revision != revisions.get(revisions.size() - 1)) {
+                anchor.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        view.getRevisionsA().setSelectedIndex((revisions.size() - 1) - (index + 1));
+                        view.getRevisionsB().setSelectedIndex(0);
+                        view.getRollbackButton().setText("Rollback to version " + (index + 1));
+                        retrieveRevisionContent(revisions.get(index).getRevisionID(), revisions.get(revisions.size() - 1).getRevisionID());
+                    }
+                });
+            }
+            vp.add(anchor);
+            vp.setCellHorizontalAlignment(anchor, HasHorizontalAlignment.ALIGN_CENTER);
+            Label formatLabel = new Label(format);
+            vp.add(formatLabel);
+            vp.setCellHorizontalAlignment(formatLabel, HasHorizontalAlignment.ALIGN_CENTER);
+            Label personLabel = new Label(revision.getPerson().getDisplayName());
+            vp.add(personLabel);
+            vp.setCellHorizontalAlignment(personLabel, HasHorizontalAlignment.ALIGN_CENTER);
+            view.getTimeline().add(vp);
+            view.getTimeline().setCellWidth(vp, Integer.toString(100 / revisions.size()) + "%");
+            version++;
+        }
+    }
+
     public void retrieveRevisionContent(final String revisionIDA, final String revisionIDB) {
         if (comparisonProvider != null) {
-
+            // clear to make it clear we're loading
+            view.setRevision("...");
             comparisonProvider.getRevisionContent(revisionIDA, new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable caught) {

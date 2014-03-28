@@ -14,6 +14,9 @@
 package org.nsesa.editor.gwt.compare.client.ui.compare;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -58,6 +61,8 @@ public class CompareViewImpl extends Composite implements CompareView {
     HorizontalPanel revisionPickerPanel;
     @UiField
     Label revisionVersusLabel;
+    @UiField
+    HorizontalPanel timeline;
 
     @Inject
     public CompareViewImpl() {
@@ -145,5 +150,10 @@ public class CompareViewImpl extends Composite implements CompareView {
     @Override
     public ListBox getRevisionsB() {
         return revisionsB;
+    }
+
+    @Override
+    public HorizontalPanel getTimeline() {
+        return timeline;
     }
 }
