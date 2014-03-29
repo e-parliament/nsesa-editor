@@ -27,6 +27,9 @@ public interface GitMessages extends Messages {
     @Key("git.commit.id.abbrev")
     String gitCommitIdAbbrev();
 
+    @Key("git.commit.id")
+    String gitCommitId();
+
     @Key("git.commit.id.describe")
     String gitCommitIdDescribe();
 
