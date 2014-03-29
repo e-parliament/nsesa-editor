@@ -101,7 +101,8 @@ public class DeadlineTrackerTest extends GwtTestWithEasyMock {
         EasyMock.expectLastCall().once();
 
         EasyMock.replay(view);
-        final Date deadline = new Date(now.getTime() + (23 * 60 * 60 * 1000));
+        // Changed to use 22 hours: using getTime + long is not taking summertime into account.
+        final Date deadline = new Date(now.getTime() + (22 * 60 * 60 * 1000));
         deadlineController.setDeadline(deadline);
         EasyMock.verify(view);
     }
