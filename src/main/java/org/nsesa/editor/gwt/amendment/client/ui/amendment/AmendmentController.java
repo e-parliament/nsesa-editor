@@ -174,6 +174,12 @@ public interface AmendmentController extends OverlayWidgetAware {
     void setStatus(String status);
 
     /**
+     * Set the groups on the amendment views.
+     * @param groups the group names
+     */
+    void setGroups(String... groups);
+
+    /**
      * Set the id on the views.
      *
      * @param id the id to set

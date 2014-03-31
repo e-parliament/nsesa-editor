@@ -29,10 +29,22 @@
             padding: 0;
             cursor: pointer;
         }
+        .groups {
+            position: relative;
+            text-align: center;
+            display: block !important;
+            width: 100%;
+            background-color: #0cc30b;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
         <div>
             <div class="header">
+                <span class="groups">
+                    <g:Label ui:field="groups" styleName="{res.groups}"/>
+                </span>
                 <span class="title">
                     <g:Label ui:field="title"/>
                 </span>

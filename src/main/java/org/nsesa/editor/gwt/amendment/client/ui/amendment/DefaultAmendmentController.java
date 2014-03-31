@@ -39,6 +39,7 @@ import org.nsesa.editor.gwt.core.client.util.Scope;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
 import org.nsesa.editor.gwt.core.shared.DiffMethod;
 import org.nsesa.editor.gwt.core.shared.DiffStyle;
+import org.nsesa.editor.gwt.core.shared.GroupDTO;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -412,6 +413,13 @@ public class DefaultAmendmentController implements AmendmentController {
         setStatus(amendment.getAmendmentContainerStatus());
         setBundle(amendment.getBundledAmendmentContainerIDs());
 
+        String[] names = new String[amendment.getGroups().size()];
+        int index = 0;
+        for (GroupDTO groupDTO : amendment.getGroups()) {
+            names[index++] = groupDTO.getName();
+        }
+        setGroups(names);
+
         if (documentController instanceof AmendmentDocumentController) {
             AmendmentDocumentController amendmentDocumentController = (AmendmentDocumentController) documentController;
             final Describer describer = amendmentDocumentController.getDescriber();
@@ -447,6 +455,15 @@ public class DefaultAmendmentController implements AmendmentController {
         if (!getModel().getAmendmentContainerStatus().equals(amendment.getAmendmentContainerStatus())) {
             getModel().setAmendmentContainerStatus(amendment.getAmendmentContainerStatus());
             setStatus(getModel().getAmendmentContainerStatus());
+        }
+        if (!getModel().getGroups().equals(amendment.getGroups())) {
+            getModel().setGroups(amendment.getGroups());
+            String[] names = new String[amendment.getGroups().size()];
+            int index = 0;
+            for (GroupDTO groupDTO : amendment.getGroups()) {
+                names[index++] = groupDTO.getName();
+            }
+            setGroups(names);
         }
 
         if (!getModel().getDocumentID().equals(amendment.getDocumentID())) {
@@ -532,6 +549,14 @@ public class DefaultAmendmentController implements AmendmentController {
             this.view.setStatus(status);
         if (extendedView != null)
             this.extendedView.setStatus(status);
+    }
+
+    @Override
+    public void setGroups(String... groups) {
+        if (view != null)
+            this.view.setGroups(groups);
+        if (extendedView != null)
+            this.extendedView.setGroups(groups);
     }
 
     @Override

@@ -103,6 +103,11 @@ public class ConsolidatedAmendmentViewImpl extends Composite implements Amendmen
         // ignore
     }
 
+    @Override
+    public void setGroups(String... groupNames) {
+        // ignore for now
+    }
+
     /**
      * Overridden to ensure that browser events do not bubble up to the parent DOM element.
      *

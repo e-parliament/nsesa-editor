@@ -128,6 +128,11 @@ public class SingleColumnAmendmentViewImpl extends Composite implements Amendmen
         }
     }
 
+    @Override
+    public void setGroups(String... groupNames) {
+        // ignore for now
+    }
+
     /**
      * Overridden to ensure that browser events do not bubble up to the parent DOM element.
      *
