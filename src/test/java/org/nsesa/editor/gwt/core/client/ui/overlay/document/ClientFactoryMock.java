@@ -17,6 +17,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.testing.StubScheduler;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
@@ -369,6 +370,16 @@ public class ClientFactoryMock implements ClientFactory {
         @Override
         public String confirmationAmendmentBundleButtonCancel() {
             return "confirmationAmendmentBundleButtonCancel";
+        }
+
+        @Override
+        public String amendmentActionShare() {
+            return "amendmentActionShare";
+        }
+
+        @Override
+        public String amendmentActionShareSuccessful(@PluralCount int arg) {
+            return "amendmentActionShareSuccessful";
         }
     };
 

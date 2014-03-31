@@ -74,6 +74,12 @@ public interface AmendmentView extends IsWidget, HasClickHandlers, HasDoubleClic
     void setStatus(String status);
 
     /**
+     * Sets the groups this amendment is shared with.
+     * @param groupNames the names of the groups
+     */
+    void setGroups(String... groupNames);
+
+    /**
      * Get the body of the amendment as an element.
      *
      * @return the body

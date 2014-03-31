@@ -13,6 +13,7 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.info;
 
+import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.inject.ImplementedBy;
 
@@ -25,4 +26,12 @@ import com.google.inject.ImplementedBy;
  */
 @ImplementedBy(InfoPanelViewImpl.class)
 public interface InfoPanelView extends IsWidget {
+
+    ComplexPanel getMainPanel();
+
+    /**
+     * Set the style of the view
+     * @param styleName
+     */
+    public void setStyleName(String styleName);
 }

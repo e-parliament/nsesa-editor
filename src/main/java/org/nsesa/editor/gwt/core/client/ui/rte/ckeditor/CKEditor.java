@@ -155,6 +155,7 @@ public class CKEditor extends Composite implements RichTextEditor {
                 throw new NullPointerException("Editor instance not created!");
             }
             setBodyNamespaceURI();
+            setBodyType();
             if (!isAttached()) onAttach();
             attached = true;
         }
@@ -413,11 +414,31 @@ public class CKEditor extends Composite implements RichTextEditor {
         });
     }
 
+    private void setBodyType() {
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                if (overlayWidget != null) {
+                    nativeSetBodyType(editorInstance, overlayWidget.getType());
+                }
+            }
+        });
+    }
+
     private native void nativeSetBodyNamespaceURI(JavaScriptObject editor, String ns) /*-{
         editor.on('mode', function (ev) {
             var editorInstance = ev.editor;
             if (editorInstance && editorInstance.document) {
                 editorInstance.document.getBody().setAttribute("data-ns", ns);
+            }
+        })
+    }-*/;
+
+    private native void nativeSetBodyType(JavaScriptObject editor, String type) /*-{
+        editor.on('mode', function (ev) {
+            var editorInstance = ev.editor;
+            if (editorInstance && editorInstance.document) {
+                editorInstance.document.getBody().setAttribute("data-type", type);
             }
         })
     }-*/;

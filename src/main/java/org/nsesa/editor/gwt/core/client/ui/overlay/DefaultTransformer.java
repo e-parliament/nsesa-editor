@@ -39,7 +39,7 @@ public class DefaultTransformer implements Transformer {
 
     private static final Logger LOG = Logger.getLogger(DefaultTransformer.class.getName());
 
-    private boolean withIndentation = true;
+    private boolean withIndentation; // use ONLY for debugging - turning this on will affect the saving of your amendments, and hence the rendering afterward!!
 
     /**
      * Generate an Xml representation for the given <code>OverlayWidget</code>

@@ -73,6 +73,8 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
 
     @UiField
     Image deleteImage;
+    @UiField
+    Label groups;
 
     @Inject
     public AmendmentViewImpl(final Constants constants) {
@@ -123,6 +125,22 @@ public class AmendmentViewImpl extends Composite implements AmendmentView {
             else
                 this.status.setText(status);
         }
+    }
+
+    @Override
+    public void setGroups(String... groupNames) {
+        if (groupNames != null) {
+            final StringBuilder sb = new StringBuilder();
+            for (final String groupName : groupNames) {
+                sb.append(groupName);
+                sb.append(", ");
+            }
+            if (sb.length() > 0) {
+                this.groups.setText(sb.toString().substring(0, sb.length() - 2));
+                return;
+            }
+        }
+        this.groups.setText("");
     }
 
     /**

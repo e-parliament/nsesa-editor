@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.document.info;
+package org.nsesa.editor.gwt.amendment.client.ui.amendment.share;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -20,35 +20,34 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.util.Scope;
 
-import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
+import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.AMENDMENT;
 
 /**
- * Default implementation of the {@link InfoPanelView} using UIBinder.
+ * The default implementation for the amendment action panel using the UIBinder approach.
  * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-@Singleton
-@Scope(EDITOR)
-public class InfoPanelViewImpl extends Composite implements InfoPanelView {
-    interface MyUiBinder extends UiBinder<Widget, InfoPanelViewImpl> {
+@Scope(AMENDMENT)
+public class SharePanelViewImpl extends Composite implements SharePanelView {
+
+    interface MyUiBinder extends UiBinder<Widget, SharePanelViewImpl> {
     }
 
     private static MyUiBinder uiBinder = GWT.create(MyUiBinder.class);
-    @UiField
-    VerticalPanel mainPanel;
 
-    public InfoPanelViewImpl() {
+    @UiField
+    ComplexPanel mainPanel;
+
+    public SharePanelViewImpl() {
         final Widget widget = uiBinder.createAndBindUi(this);
         initWidget(widget);
         //show class name tool tip in hosted mode
         if (!GWT.isScript())
             widget.setTitle(this.getClass().getName());
-
     }
 
     @Override

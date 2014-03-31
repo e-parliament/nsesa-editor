@@ -64,7 +64,7 @@ public class HTMLTransformer implements Transformer {
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
         if (!widget.getOverlayElement().getClassName().contains(widget.getType())) widget.getOverlayElement().addClassName(widget.getType());
         sb.append(indent).append("<span class=\"").append(widget.getOverlayElement().getClassName())
-                .append("\" type=\"").append(widget.getType()).append("\"").append(" ns=\"")
+                .append("\" data-type=\"").append(widget.getType()).append("\"").append(" data-ns=\"")
                 .append(widget.getNamespaceURI()).append("\"");
         //get the attributes
         final LinkedHashMap<String, String> attrs = widget.getAttributes();

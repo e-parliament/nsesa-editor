@@ -97,10 +97,6 @@
                     <g:header>Document</g:header>
                     <sourcefile:SourceFileView ui:field="sourceFileView" styleName="{res.amendmentsPanel}"/>
                 </g:tab>
-                <!--<g:tab>-->
-                <!--<g:header>Amendments</g:header>-->
-                <!--<amendments:AmendmentsPanelView ui:field="amendmentsPanelView" styleName="{res.amendmentsPanel}"/>-->
-                <!--</g:tab>-->
                 <g:tab>
                     <g:header>Info</g:header>
                     <info:InfoPanelView ui:field="infoPanelView"/>

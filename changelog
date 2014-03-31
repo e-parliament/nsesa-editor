@@ -1,3 +1,20 @@
+Release 0.10 (15-October-2013)
+
+- Added initial NLP support for injecting amendments based on their location rather than via element IDs
+- Added support for plaintext handling via content type in the DTO (used in markup module)
+- Corrected id field namings
+- Extracted evaluators used in snippet factory
+- Corrected formatting of indexes in certain cases
+- Exposed overlay strategy on the overlay factory (useful for composite overlay factories)
+- Initial bundling support for amendments
+- X-Path improvements
+- Added 'applied' and 'language' filters for amendments
+- Added GWT-DND support
+- Added DnD support for authors
+- Fixed an ordering bug for authors
+- Switched to data-ns and data-type attributes
+- Added 'move' operation - no amendment is actually created yet
+
 Release 0.9 (26-Jun-2013)
 
 - Corrected behaviour of the revision panel: fixed a bug where the revisions did not reset, and hide the revision picker if only one revision exists, moved to a simple HTML rendering instead of the advanced readonly RTE, corrected HTML output

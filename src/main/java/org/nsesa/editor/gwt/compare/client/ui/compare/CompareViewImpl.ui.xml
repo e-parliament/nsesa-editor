@@ -45,6 +45,11 @@
             float: right;
         }
 
+        .timeline {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
         .revisionList {
             max-width: 90%;
         }
@@ -58,20 +63,23 @@
 
     </ui:style>
     <g:DockLayoutPanel styleName="{res.comparePanel}" unit="PX">
-        <g:north size="60">
+        <g:north size="70">
             <g:HTMLPanel>
                 <g:HTMLPanel>
                     <g:HTML text="Compare Revisions"/>
+                    <br/>
                 </g:HTMLPanel>
                 <g:HorizontalPanel styleName="{res.revisionPicker}" ui:field="revisionPickerPanel">
                     <g:ListBox ui:field="revisionsA" styleName="{res.revisionList}"/>
-                    <g:Label text=" vs. "/>
+                    <g:Label text=" vs. " ui:field="revisionVersusLabel"/>
                     <g:ListBox ui:field="revisionsB" styleName="{res.revisionList}"/>
                 </g:HorizontalPanel>
             </g:HTMLPanel>
         </g:north>
         <g:center>
             <g:HTMLPanel>
+                <g:HorizontalPanel styleName="{res.timeline}" ui:field="timeline"/>
+
                 <g:HorizontalPanel styleName="{res.revisionsPanel}" ui:field="revisionsPanel">
                     <g:ScrollPanel ui:field="scrollPanel" styleName="{res.scrollPanel}">
                         <g:HTMLPanel ui:field="richTextEditor" styleName="{res.richTextEditor} revisionsPanel"/>

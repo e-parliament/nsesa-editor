@@ -19,11 +19,10 @@ import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DecoratedPopupPanel;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.compare.client.event.HideComparePanelEvent;
@@ -33,6 +32,8 @@ import org.nsesa.editor.gwt.compare.client.event.ShowComparePanelEventHandler;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ServiceFactory;
 import org.nsesa.editor.gwt.core.client.event.CriticalErrorEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEvent;
+import org.nsesa.editor.gwt.core.client.event.ResizeEventHandler;
 import org.nsesa.editor.gwt.core.shared.*;
 
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class CompareController implements ProvidesResize {
     private com.google.web.bindery.event.shared.HandlerRegistration showComparePanelEventHandlerRegistration;
     private HandlerRegistration revisionAChangeHandlerRegistration;
     private HandlerRegistration revisionBChangeHandlerRegistration;
+    private com.google.web.bindery.event.shared.HandlerRegistration resizeEventHandlerRegistration;
 
 
     @Inject
@@ -92,8 +94,7 @@ public class CompareController implements ProvidesResize {
         this.popupPanel.setTitle("Amendment Revisions");
         this.popupPanel.setGlassEnabled(true);
 
-        view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
-        view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
+        resize();
     }
 
     public void registerListeners() {
@@ -117,6 +118,8 @@ public class CompareController implements ProvidesResize {
         final ChangeHandler revisionChangeHandler = new ChangeHandler() {
             @Override
             public void onChange(ChangeEvent event) {
+                int version = view.getRevisionsA().getItemCount() - (view.getRevisionsA().getSelectedIndex());
+                view.getRollbackButton().setText("Rollback to version " + version);
                 retrieveRevisionContent(
                         view.getRevisionsA().getValue(view.getRevisionsA().getSelectedIndex()),
                         view.getRevisionsB().getValue(view.getRevisionsB().getSelectedIndex()));
@@ -140,6 +143,25 @@ public class CompareController implements ProvidesResize {
                 retrieveRevisions();
             }
         });
+
+        resizeEventHandlerRegistration = clientFactory.getEventBus().addHandler(ResizeEvent.TYPE, new ResizeEventHandler() {
+            @Override
+            public void onEvent(ResizeEvent event) {
+                resize();
+            }
+        });
+    }
+
+    protected void resize() {
+        clientFactory.getScheduler().scheduleDeferred(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                view.asWidget().setWidth(Window.getClientWidth() - 100 + "px");
+                view.asWidget().setHeight(Window.getClientHeight() - 100 + "px");
+                view.adaptScrollPanel();
+            }
+        });
+
     }
 
     public void retrieveRevisions() {
@@ -156,6 +178,12 @@ public class CompareController implements ProvidesResize {
             @Override
             public void onSuccess(List<RevisionDTO> result) {
                 view.setAvailableRevisions(result);
+
+                populateTimeline(result);
+
+                if (!result.isEmpty()) {
+                    view.getRollbackButton().setText("Rollback to version " + (result.size() - 1));
+                }
                 // retrieve default revisions: the first and second one
                 if (result.size() > 1) {
                     retrieveRevisionContent(result.get(1).getRevisionID(), result.get(0).getRevisionID());
@@ -166,9 +194,51 @@ public class CompareController implements ProvidesResize {
         });
     }
 
+    // TODO: replace with UIBinder
+    protected void populateTimeline(final List<RevisionDTO> revisions) {
+        view.getTimeline().clear();
+        int version = 1;
+        for (final RevisionDTO revision : revisions) {
+            VerticalPanel vp = new VerticalPanel();
+            vp.setWidth("100%");
+            final String format = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(revision.getCreationDate());
+            Anchor anchor = new Anchor("(" + version + ")");
+            if (revision == revisions.get(0)) {
+                anchor.setText("(" + version + " - initial)");
+            } else if (revision == revisions.get(revisions.size() - 1)) {
+                anchor.setText("(" + version + " - latest)");
+            }
+
+            final int index = version -1 ;
+            if (revision != revisions.get(revisions.size() - 1)) {
+                anchor.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        view.getRevisionsA().setSelectedIndex((revisions.size() - 1) - (index + 1));
+                        view.getRevisionsB().setSelectedIndex(0);
+                        view.getRollbackButton().setText("Rollback to version " + (index + 1));
+                        retrieveRevisionContent(revisions.get(index).getRevisionID(), revisions.get(revisions.size() - 1).getRevisionID());
+                    }
+                });
+            }
+            vp.add(anchor);
+            vp.setCellHorizontalAlignment(anchor, HasHorizontalAlignment.ALIGN_CENTER);
+            Label formatLabel = new Label(format);
+            vp.add(formatLabel);
+            vp.setCellHorizontalAlignment(formatLabel, HasHorizontalAlignment.ALIGN_CENTER);
+            Label personLabel = new Label(revision.getPerson().getDisplayName());
+            vp.add(personLabel);
+            vp.setCellHorizontalAlignment(personLabel, HasHorizontalAlignment.ALIGN_CENTER);
+            view.getTimeline().add(vp);
+            view.getTimeline().setCellWidth(vp, Integer.toString(100 / revisions.size()) + "%");
+            version++;
+        }
+    }
+
     public void retrieveRevisionContent(final String revisionIDA, final String revisionIDB) {
         if (comparisonProvider != null) {
-
+            // clear to make it clear we're loading
+            view.setRevision("...");
             comparisonProvider.getRevisionContent(revisionIDA, new AsyncCallback<String>() {
                 @Override
                 public void onFailure(Throwable caught) {
@@ -236,6 +306,7 @@ public class CompareController implements ProvidesResize {
         revisionBChangeHandlerRegistration.removeHandler();
         hideComparePanelEventHandlerRegistration.removeHandler();
         showComparePanelEventHandlerRegistration.removeHandler();
+        resizeEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -244,7 +315,7 @@ public class CompareController implements ProvidesResize {
     public void show() {
         popupPanel.center();
         popupPanel.show();
-        view.show();
+        view.adaptScrollPanel();
     }
 
     /**

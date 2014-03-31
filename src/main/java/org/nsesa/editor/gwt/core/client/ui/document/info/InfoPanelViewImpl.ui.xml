@@ -17,9 +17,44 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <ui:style src="InfoPanelViewImpl.css" field="css"
               type='org.nsesa.editor.gwt.core.client.ui.document.info.InfoPanelViewCss'/>
+    <ui:style field="res">
+
+        .infoPanelOuter {
+            margin: 30px;
+        }
+
+        .infoPanel {
+            border: 1px solid black;
+            padding: 8%;
+            max-width: 780px;
+            -moz-box-shadow: 0 0 10px 8px #AAAAAA;
+            -webkit-box-shadow: 0 0 10px 8px #AAAAAA;
+            box-shadow: 0 0 10px 8px #AAAAAA;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: #fff;
+        }
+
+        .infoContentPanel {
+
+        }
+
+        .title {
+            font-size: 1.3em;
+        }
+    </ui:style>
     <g:HTMLPanel>
-        <div id="infoPanel">
-            <h1>Info panel</h1>
-        </div>
+        <g:HTMLPanel styleName="{res.infoPanelOuter} infoPanelOuter">
+            <g:HTMLPanel styleName="{res.infoPanel} infoPanel">
+                <g:Label styleName="{res.title}">Info</g:Label>
+                <g:HTMLPanel>
+                    <p>This is under construction while we figure out how we want to display the meta information.</p>
+                    <p>We're also going to show a list of the current active/online users in your groups.</p>
+                    <p><br/></p>
+                </g:HTMLPanel>
+                <g:VerticalPanel ui:field="mainPanel" styleName="{res.infoContentPanel} infoContentPanel"/>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

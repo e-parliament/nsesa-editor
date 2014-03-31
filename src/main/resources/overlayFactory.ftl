@@ -30,7 +30,7 @@ import com.google.gwt.dom.client.Element;
 import java.util.logging.Logger;
 import java.util.Map;
 /**
-* A factory class specialization used to create overlay wigets based on the given DOM element input data
+* A factory class specialization used to create overlay widgets based on the given DOM element input data
 * Note: this file is generated. Rather than changing this file, correct the template called <tt>overlayFactory.ftl</tt>.
 */
 public class ${overlayClass.name?cap_first} extends DefaultOverlayFactory  {

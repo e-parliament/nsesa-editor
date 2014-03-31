@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Data Transfer Object (DTO) for an Amendment entity.
@@ -99,6 +101,11 @@ public class AmendmentContainerDTO implements IsSerializable {
      * TODO the target references are not yet supported
      */
     private ArrayList<AmendableWidgetReference> targetReferences = new ArrayList<AmendableWidgetReference>();
+
+    /**
+     * Set of groups this amendment is shared with.
+     */
+    private Set<GroupDTO> groups = new HashSet<GroupDTO>();
 
     public AmendmentContainerDTO() {
     }
@@ -248,5 +255,13 @@ public class AmendmentContainerDTO implements IsSerializable {
 
     public void setBundledAmendmentContainerIDs(String[] bundledAmendmentContainerIDs) {
         this.bundledAmendmentContainerIDs = bundledAmendmentContainerIDs;
+    }
+
+    public Set<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<GroupDTO> groups) {
+        this.groups = groups;
     }
 }

@@ -11,31 +11,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.client.ui.resources;
+package org.nsesa.editor.gwt.amendment.client.ui.amendment.share;
 
-import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.ImplementedBy;
 
 /**
- * Git messages - its corresponding .properties file is generated automatically by the Maven Git plugin with the
- * latest commit information.
- * Date: 17/10/12 22:57
+ * The view for the amendment action panel.
+ * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public interface GitMessages extends Messages {
-    @Key("git.commit.id.abbrev")
-    String gitCommitIdAbbrev();
+@ImplementedBy(SharePanelViewImpl.class)
+public interface SharePanelView extends IsWidget {
 
-    @Key("git.commit.id")
-    String gitCommitId();
-
-    @Key("git.commit.id.describe")
-    String gitCommitIdDescribe();
-
-    @Key("git.build.time")
-    String gitBuildTime();
-
-    @Key("git.branch")
-    String gitBranch();
+    ComplexPanel getMainPanel();
 }

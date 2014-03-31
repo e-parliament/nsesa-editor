@@ -22,9 +22,6 @@
         .tabHeaders {
             padding: 0;
             margin: 0;
-            position: relative;
-            top: -36px;
-            float: right;
         }
 
         .tabHeader {
@@ -32,16 +29,26 @@
             padding: 0;
             cursor: pointer;
         }
+        .groups {
+            position: relative;
+            text-align: center;
+            display: block !important;
+            width: 100%;
+            background-color: #0cc30b;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
     </ui:style>
     <g:HTMLPanel styleName="amendmentHolder">
         <div>
             <div class="header">
+                <span class="groups">
+                    <g:Label ui:field="groups" styleName="{res.groups}"/>
+                </span>
                 <span class="title">
                     <g:Label ui:field="title"/>
                 </span>
-                <span class="status">
-                    <g:Label ui:field="status"/>
-                </span>
+                <span class="menu">
                     <g:FlowPanel styleName="{res.tabHeaders}">
                         <g:Image resource='{imageResources.editOn}' styleName="{res.tabHeader}"
                                  ui:field="editImage"/>
@@ -49,6 +56,11 @@
                                  ui:field="deleteImage"/>
                         <g:Image resource='{imageResources.moreOn}' styleName="{res.tabHeader}" ui:field="moreImage"/>
                     </g:FlowPanel>
+                </span>
+
+                <span class="status">
+                    <g:Label ui:field="status"/>
+                </span>
             </div>
             <g:InlineHTML ui:field="introduction"/>
             <g:HTMLPanel ui:field="body">

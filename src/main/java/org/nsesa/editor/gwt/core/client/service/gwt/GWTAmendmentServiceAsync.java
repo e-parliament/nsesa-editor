@@ -32,16 +32,14 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext the client context
      * @param id            the identifier for a single amendment container
      */
-    void getAmendmentContainer(ClientContext clientContext, String id, AsyncCallback<AmendmentContainerDTO> async)
-    ;
+    void getAmendmentContainer(ClientContext clientContext, String id, AsyncCallback<AmendmentContainerDTO> async);
 
     /**
      * Get all existing amendment containers that should be visible to this client.
      *
      * @param clientContext the client context
      */
-    void getAmendmentContainers(ClientContext clientContext, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void getAmendmentContainers(ClientContext clientContext, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Retrieves all revisions for a given amendment container.
@@ -49,8 +47,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext the client context
      * @param id            the identifier of the amendment container
      */
-    void getRevisions(ClientContext clientContext, String id, AsyncCallback<ArrayList<RevisionDTO>> async)
-    ;
+    void getRevisions(ClientContext clientContext, String id, AsyncCallback<ArrayList<RevisionDTO>> async);
 
     /**
      * Save a set of amendment containers to the backend.
@@ -58,8 +55,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to save
      */
-    void saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void saveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Deletes a set of amendment containers.
@@ -67,8 +63,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to delete
      */
-    void deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void deleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Tables a set of amendment containers.
@@ -76,8 +71,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to table
      */
-    void tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void tableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Withdraws a set of amendment containers.
@@ -85,8 +79,7 @@ public interface GWTAmendmentServiceAsync {
      * @param clientContext       the client context
      * @param amendmentContainers the amendment container(s) to withdraw
      */
-    void withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void withdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Register a given set of amendment containers.
@@ -95,8 +88,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to register
      * @return the registered amendment containers
      */
-    void registerAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void registerAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Check if it is possible to withdraws a given set of amendment containers.
@@ -105,8 +97,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to withdraw
      * @return the array with <tt>true</tt> booleans for each amendment container that can be withdrawn
      */
-    void canWithdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canWithdrawAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Check if it is possible to tables a given set of amendment containers.
@@ -115,8 +106,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to table
      * @return the array with <tt>true</tt> booleans for each amendment container that can be tabled
      */
-    void canTableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canTableAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Check if it is possible to delete a given set of amendment containers at the backend.
@@ -125,8 +115,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to delete
      * @return the array with <tt>true</tt> booleans for each amendment container that can be deleted
      */
-    void canDeleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canDeleteAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Check if it is possible to save a given set of amendment containers to the backend.
@@ -135,8 +124,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to save
      * @return the array with <tt>true</tt> booleans for each amendment container that can be saved
      */
-    void canSaveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canSaveAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Check if it is possible to register a given set of amendment containers.
@@ -145,8 +133,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to register
      * @return the array with <tt>true</tt> booleans for each amendment container that can be registered
      */
-    void canRegisterAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canRegisterAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Return a given set of amendment containers.
@@ -155,8 +142,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to return
      * @return the returned amendment containers
      */
-    void returnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async)
-    ;
+    void returnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<AmendmentContainerDTO[]> async);
 
     /**
      * Check if it is possible to return a given set of amendment containers.
@@ -165,8 +151,7 @@ public interface GWTAmendmentServiceAsync {
      * @param amendmentContainers the amendment container(s) to return
      * @return the array with <tt>true</tt> booleans for each amendment container that can be returned
      */
-    void canReturnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async)
-    ;
+    void canReturnAmendmentContainers(ClientContext clientContext, ArrayList<AmendmentContainerDTO> amendmentContainers, AsyncCallback<Boolean[]> async);
 
     /**
      * Return a list of potential authors for an amendment based on a given query.
@@ -177,6 +162,20 @@ public interface GWTAmendmentServiceAsync {
      */
     void getAvailableAuthors(ClientContext clientContext, String query, int limit, AsyncCallback<ArrayList<PersonDTO>> async);
 
-    void getAmendmentContainerRevision(ClientContext clientContext, String revisionID, AsyncCallback<AmendmentContainerDTO> async)
-            ;
+    /**
+     * Get a specific revision of an amendment container identified by <tt>revisionID</tt>.
+     * @param clientContext the client context
+     * @param revisionID    the revision identifier for a single amendment container revision
+     */
+    void getAmendmentContainerRevision(ClientContext clientContext, String revisionID, AsyncCallback<AmendmentContainerDTO> async);
+
+    /**
+     * Shares a given amendment container identified by <tt>id</tt>.
+     *
+     * @param clientContext the client context
+     * @param id            the amendment container identifier
+     * @param groupID       the group identifier
+     * @param share         flag whether or not to share
+     */
+    void shareAmendmentContainer(ClientContext clientContext, String id, String groupID, boolean share, AsyncCallback<AmendmentContainerDTO> async);
 }

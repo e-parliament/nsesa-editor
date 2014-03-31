@@ -13,10 +13,7 @@
  */
 package org.nsesa.editor.gwt.compare.client.ui.compare;
 
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.*;
 import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.shared.RevisionDTO;
 
@@ -38,11 +35,13 @@ public interface CompareView extends IsWidget {
 
     void setAvailableRevisions(List<RevisionDTO> revisions);
 
-    void show();
+    void adaptScrollPanel();
 
     void setRevision(String revisionContent);
 
     ListBox getRevisionsA();
 
     ListBox getRevisionsB();
+
+    HorizontalPanel getTimeline();
 }

@@ -13,10 +13,20 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.document.info;
 
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentContentLoadedEvent;
+import org.nsesa.editor.gwt.core.client.event.document.DocumentContentLoadedEventHandler;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
+import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 import org.nsesa.editor.gwt.core.client.util.Scope;
+
+import java.util.List;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
 
@@ -40,6 +50,7 @@ public class InfoPanelController {
      * The parent document controller.
      */
     protected DocumentController documentController;
+    private HandlerRegistration documentContentLoadedEventHandlerRegistration;
 
     @Inject
     public InfoPanelController(InfoPanelView view) {
@@ -47,11 +58,29 @@ public class InfoPanelController {
     }
 
     public void registerListeners() {
-
+        documentContentLoadedEventHandlerRegistration = documentController.getDocumentEventBus().addHandler(DocumentContentLoadedEvent.TYPE, new DocumentContentLoadedEventHandler() {
+            @Override
+            public void onEvent(DocumentContentLoadedEvent event) {
+                // extract the meta data
+                List<OverlayWidget> roots = documentController.getSourceFileController().getOverlayWidgets();
+                for (final OverlayWidget root : roots) {
+                    OverlayWidget metadata = OverlayUtil.findSingle("meta", root);
+                    if (metadata != null) {
+                        metadata.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
+                            @Override
+                            public boolean visit(OverlayWidget visited) {
+                                return super.visit(visited);
+                            }
+                        });
+                    }
+                    view.getMainPanel().add(new Label(metadata.getInnerHTML()));
+                }
+            }
+        });
     }
 
     public void removeListeners() {
-
+        documentContentLoadedEventHandlerRegistration.removeHandler();
     }
 
     /**
