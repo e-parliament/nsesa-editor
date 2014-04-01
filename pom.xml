@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
     <name>Core Editor</name>
     <url>http://code.at4am.org/nsesa-editor</url>
-    <version>0.11</version>
+    <version>0.12-SNAPSHOT</version>
 
     <organization>
         <url>http://www.europarl.europa.eu/</url>
@@ -47,14 +47,14 @@
 
     <properties>
         <gwt.version>2.5.0</gwt.version>
-        <spring.version>3.1.0.RELEASE</spring.version>
+        <spring.version>3.2.6.RELEASE</spring.version>
         <gwtplugin.version>2.5.0</gwtplugin.version>
         <jdk.source>1.6</jdk.source>
         <jdk.target>1.6</jdk.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <project.name.long>Nsesa Amendment Editor</project.name.long>
+        <project.name.long>Nsesa Core Editor</project.name.long>
         <maven.build.timestamp.format>yyyyMMdd_HHmm</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
