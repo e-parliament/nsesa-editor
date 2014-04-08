@@ -36,10 +36,10 @@ import java.util.List;
  * @version $Id$
  */
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")
-public class AmendableWidgetImplTest extends GwtTest {
+public class OverlayWidgetImplTest extends GwtTest {
 
     @Test
-    public void testAddAmendableWidget() throws Exception {
+    public void testAddOverlayWidget() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         OverlayWidget child = new OverlayWidgetImpl();
         overlayWidget.addOverlayWidget(child);
@@ -47,7 +47,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testAddAmendableWidgetWithListener() throws Exception {
+    public void testAddOverlayWidgetWithListener() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         final Boolean[] hits = new Boolean[]{false, false};
         overlayWidget.setListener(new OverlayWidgetListenerMock() {
@@ -69,7 +69,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testAddAmendableWidgetWithVetoListener() throws Exception {
+    public void testAddOverlayWidgetWithVetoListener() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         final Boolean[] hits = new Boolean[]{false, false};
         overlayWidget.setListener(new OverlayWidgetListenerMock() {
@@ -92,7 +92,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testRemoveAmendableWidget() throws Exception {
+    public void testRemoveOverlayWidget() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         OverlayWidget child = new OverlayWidgetImpl();
         overlayWidget.addOverlayWidget(child);
@@ -102,7 +102,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testRemoveAmendableWidgetWithListener() throws Exception {
+    public void testRemoveOverlayWidgetWithListener() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         final Boolean[] hits = new Boolean[]{false, false};
         overlayWidget.setListener(new OverlayWidgetListenerMock() {
@@ -125,7 +125,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testRemoveAmendableWidgetWithVetoListener() throws Exception {
+    public void testRemoveOverlayWidgetWithVetoListener() throws Exception {
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         final Boolean[] hits = new Boolean[]{false, false};
         overlayWidget.setListener(new OverlayWidgetListenerMock() {
@@ -181,7 +181,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetParentAmendableWidgets() throws Exception {
+    public void testGetParentOverlayWidgets() throws Exception {
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         OverlayWidget parent = new OverlayWidgetImpl();
         overlayWidget.setParentOverlayWidget(parent);
@@ -198,7 +198,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetChildAmendableWidgets() throws Exception {
+    public void testGetChildOverlayWidgets() throws Exception {
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         OverlayWidget child1 = new OverlayWidgetImpl();
         overlayWidget.addOverlayWidget(child1);
@@ -219,7 +219,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetParentAmendableWidget() throws Exception {
+    public void testGetParentOverlayWidget() throws Exception {
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         OverlayWidget parent = new OverlayWidgetImpl();
         overlayWidget.setParentOverlayWidget(parent);
@@ -227,7 +227,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetPreviousNonIntroducedAmendableWidget() throws Exception {
+    public void testGetPreviousNonIntroducedOverlayWidget() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget neighbour1 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour1);
@@ -245,7 +245,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetPreviousNonIntroducedAmendableWidgetSameType() throws Exception {
+    public void testGetPreviousNonIntroducedOverlayWidgetSameType() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget neighbour1 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour1);
@@ -266,7 +266,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetPreviousNonIntroducedAmendableWidgetSkipIntroducedOne() throws Exception {
+    public void testGetPreviousNonIntroducedOverlayWidgetSkipIntroducedOne() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget neighbour1 = new OverlayWidgetImpl();
         parent.addOverlayWidget(neighbour1);
@@ -291,7 +291,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetPreviousNonIntroducedAmendableWidgetFirstInCollection() throws Exception {
+    public void testGetPreviousNonIntroducedOverlayWidgetFirstInCollection() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
@@ -310,7 +310,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetNextNonIntroducedAmendableWidget() throws Exception {
+    public void testGetNextNonIntroducedOverlayWidget() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         parent.addOverlayWidget(overlayWidget);
@@ -329,7 +329,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetNextNonIntroducedAmendableWidgetSameType() throws Exception {
+    public void testGetNextNonIntroducedOverlayWidgetSameType() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         final OverlayWidget overlayWidget = new OverlayWidgetImpl();
         overlayWidget.setType("foo");
@@ -353,7 +353,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetNextNonIntroducedAmendableWidgetSkipIntroducedOne() throws Exception {
+    public void testGetNextNonIntroducedOverlayWidgetSkipIntroducedOne() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget overlayWidget = new OverlayWidgetImpl();
         overlayWidget.setType("foo");
@@ -383,7 +383,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetNextNonIntroducedAmendableWidgetLastInCollection() throws Exception {
+    public void testGetNextNonIntroducedOverlayWidgetLastInCollection() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
 
         OverlayWidget neighbour1 = new OverlayWidgetImpl();
@@ -487,54 +487,54 @@ public class AmendableWidgetImplTest extends GwtTest {
 
     @Test
     public void testGetFormattedIndex() throws Exception {
-        OverlayWidgetImpl amendableWidget = new OverlayWidgetImpl();
-        amendableWidget.setFormattedIndex("(15)");
-        Assert.assertEquals("(15)", amendableWidget.getFormattedIndex());
+        OverlayWidgetImpl OverlayWidget = new OverlayWidgetImpl();
+        OverlayWidget.setFormattedIndex("(15)");
+        Assert.assertEquals("(15)", OverlayWidget.getFormattedIndex());
     }
 
     @Test
     public void testGetAssignedNumber() throws Exception {
         OverlayWidgetImpl parent = new OverlayWidgetImpl();
-        OverlayWidgetImpl amendableWidget = new OverlayWidgetImpl();
-        amendableWidget.setType("foo");
-        parent.addOverlayWidget(amendableWidget);
+        OverlayWidgetImpl OverlayWidget = new OverlayWidgetImpl();
+        OverlayWidget.setType("foo");
+        parent.addOverlayWidget(OverlayWidget);
 
-        OverlayWidgetImpl amendableWidget2 = new OverlayWidgetImpl();
-        amendableWidget2.setType("foo");
-        parent.addOverlayWidget(amendableWidget2);
+        OverlayWidgetImpl OverlayWidget2 = new OverlayWidgetImpl();
+        OverlayWidget2.setType("foo");
+        parent.addOverlayWidget(OverlayWidget2);
 
-        OverlayWidgetImpl amendableWidget3 = new OverlayWidgetImpl();
-        amendableWidget3.setType("foo");
-        amendableWidget3.setOrigin(OverlayWidgetOrigin.AMENDMENT);
-        parent.addOverlayWidget(amendableWidget3);
+        OverlayWidgetImpl OverlayWidget3 = new OverlayWidgetImpl();
+        OverlayWidget3.setType("foo");
+        OverlayWidget3.setOrigin(OverlayWidgetOrigin.AMENDMENT);
+        parent.addOverlayWidget(OverlayWidget3);
 
-        OverlayWidgetImpl amendableWidget4 = new OverlayWidgetImpl();
-        amendableWidget4.setType("foo");
-        parent.addOverlayWidget(amendableWidget4);
+        OverlayWidgetImpl OverlayWidget4 = new OverlayWidgetImpl();
+        OverlayWidget4.setType("foo");
+        parent.addOverlayWidget(OverlayWidget4);
 
-        OverlayWidgetImpl amendableWidget5 = new OverlayWidgetImpl();
-        amendableWidget5.setType("bar");
-        parent.addOverlayWidget(amendableWidget5);
+        OverlayWidgetImpl OverlayWidget5 = new OverlayWidgetImpl();
+        OverlayWidget5.setType("bar");
+        parent.addOverlayWidget(OverlayWidget5);
 
-        Assert.assertEquals(1, (int) amendableWidget.getAssignedNumber());
-        Assert.assertEquals(2, (int) amendableWidget2.getAssignedNumber());
-        Assert.assertEquals(3, (int) amendableWidget3.getAssignedNumber());
-        Assert.assertEquals(3, (int) amendableWidget4.getAssignedNumber());
-        Assert.assertEquals(1, (int) amendableWidget5.getAssignedNumber());
+        Assert.assertEquals(1, (int) OverlayWidget.getAssignedNumber());
+        Assert.assertEquals(2, (int) OverlayWidget2.getAssignedNumber());
+        Assert.assertEquals(3, (int) OverlayWidget3.getAssignedNumber());
+        Assert.assertEquals(3, (int) OverlayWidget4.getAssignedNumber());
+        Assert.assertEquals(1, (int) OverlayWidget5.getAssignedNumber());
     }
 
     @Test
     public void testGetAssignedNumberSet() throws Exception {
-        OverlayWidgetImpl amendableWidget = new OverlayWidgetImpl();
-        amendableWidget.setAssignedNumber(1);
-        Assert.assertEquals(1, (int) amendableWidget.getAssignedNumber());
+        OverlayWidgetImpl OverlayWidget = new OverlayWidgetImpl();
+        OverlayWidget.setAssignedNumber(1);
+        Assert.assertEquals(1, (int) OverlayWidget.getAssignedNumber());
     }
 
     @Test
     public void testGetUnformattedIndex() throws Exception {
-        OverlayWidgetImpl amendableWidget = new OverlayWidgetImpl();
-        amendableWidget.setUnformattedIndex("15");
-        Assert.assertEquals("15", amendableWidget.getUnformattedIndex());
+        OverlayWidgetImpl OverlayWidget = new OverlayWidgetImpl();
+        OverlayWidget.setUnformattedIndex("15");
+        Assert.assertEquals("15", OverlayWidget.getUnformattedIndex());
     }
 
     @Test
@@ -572,7 +572,7 @@ public class AmendableWidgetImplTest extends GwtTest {
     }
 
     @Test
-    public void testGetTypeIndexWithAmendableWidgetsIntroducedByAmendments() throws Exception {
+    public void testGetTypeIndexWithOverlayWidgetsIntroducedByAmendments() throws Exception {
         OverlayWidget parent = new OverlayWidgetImpl();
         OverlayWidget neighbour1 = new OverlayWidgetImpl();
         neighbour1.setType("foo");
@@ -611,12 +611,12 @@ public class AmendableWidgetImplTest extends GwtTest {
     public void testHtml() throws Exception {
         final Element span = DOM.createSpan();
         span.setInnerHTML("<foo><bar>baz</bar></foo>");
-        OverlayWidgetImpl amendableWidget = new OverlayWidgetImpl(span) {
+        OverlayWidgetImpl OverlayWidget = new OverlayWidgetImpl(span) {
             {
                 amendmentControllersHolderElement = new HTMLPanel("<span></span>");
             }
         };
-        Assert.assertEquals("<foo><bar>baz</bar></foo>", amendableWidget.html());
+        Assert.assertEquals("<foo><bar>baz</bar></foo>", OverlayWidget.html());
     }
 
     @Test
