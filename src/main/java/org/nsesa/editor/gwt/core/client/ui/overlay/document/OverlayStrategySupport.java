@@ -36,6 +36,7 @@ public class OverlayStrategySupport {
 
     private static final String TYPE_ATTRIBUTE = "data-type";
     private static final String NAMESPACE_ATTRIBUTE = "data-ns";
+    private static final String ORIGIN_ATTRIBUTE = "data-origin";
 
     public static final String TAG_LITERAL_INDEX = "num";
     public static final String ATTRIB_AMENDABLE = "data-amendable";
@@ -448,6 +449,10 @@ public class OverlayStrategySupport {
 
     public String getNamespaceURI(Element element) {
         return element.hasAttribute(NAMESPACE_ATTRIBUTE) ? element.getAttribute(NAMESPACE_ATTRIBUTE) : null;
+    }
+
+    public String getOrigin(Element element) {
+        return element.hasAttribute(ORIGIN_ATTRIBUTE) ? element.getAttribute(ORIGIN_ATTRIBUTE) : null;
     }
 
     private static interface ElementVisitor {

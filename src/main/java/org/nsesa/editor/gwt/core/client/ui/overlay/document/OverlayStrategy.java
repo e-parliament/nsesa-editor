@@ -88,6 +88,13 @@ public interface OverlayStrategy {
     String getNamespaceURI(Element element);
 
     /**
+     * Return the origin of the element (document, amendment, generated, ...)
+     * @param element the element to get the origin for
+     * @return the origin
+     */
+    String getOrigin(Element element);
+
+    /**
      * Get the numbering type of the given amendable element.
      *
      * @param element the amendable element
