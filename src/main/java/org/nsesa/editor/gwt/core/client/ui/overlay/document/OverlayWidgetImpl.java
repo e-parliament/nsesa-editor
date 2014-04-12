@@ -735,6 +735,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return wasMoved;
     }
 
+    @Override
     public void setFormattedIndex(String formattedIndex) {
         this.formattedIndex = formattedIndex;
     }
@@ -773,6 +774,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         return unformattedIndex;
     }
 
+    @Override
     public void setUnformattedIndex(String unformattedIndex) {
         this.unformattedIndex = unformattedIndex;
     }
