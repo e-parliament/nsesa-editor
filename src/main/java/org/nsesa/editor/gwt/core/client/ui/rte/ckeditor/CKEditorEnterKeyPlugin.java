@@ -169,7 +169,9 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 // position type = -1 , insert an element before the parent element of the selection
                 //identify the parent element of the selection
                 var positionType = selectionPosition(editor);
+//                $wnd.console.log("Position " + positionType);
                 var ranges = editor.getSelection().getRanges();
+//                $wnd.console.log("Ranges: ", ranges);
                 if (positionType == 0) {
                     // if the container need to be splited, do it , otherwise introduce br
                     var container = ranges[0].startContainer;
@@ -177,6 +179,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         container = container.getParent();
                     }
                     var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
+                    // if this value is null, it means no block level element was found.
                     if (elemAsString) {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
@@ -192,20 +195,6 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         range.setStart(elem, 0);
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
-                    }  else {
-                        var toBeSplit = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::split(Lcom/google/gwt/core/client/JavaScriptObject;)(container.$);
-                        if (toBeSplit) {
-                            //collapse the range
-                            ranges[0].collapse(true);
-                            var elem = ranges[0].splitElement(container);
-                            var range = new $wnd.CKEDITOR.dom.range(ranges[0].document);
-                            range.setStart(elem, 0);
-                            range.setEnd(elem, 0);
-                            editor.getSelection().selectRanges([range]);
-
-                        } else {
-                            enterBr(editor, range);
-                        }
                     }
                     // find start container and end container of the selection
                     // if they are text nodes go to their parents
@@ -356,9 +345,8 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
      * @return The new element that will be inserted
      */
     private String onEnter(JavaScriptObject existingElement, JavaScriptObject editor) {
-        List<OverlayWidget> roots = overlayEditorBody(editor, overlayFactory);
         Element el = existingElement.cast();
-        OverlayWidget original = findOverlayWidget(el, roots);
+        OverlayWidget original = findOverlayWidget(el, getEditorBodyAsOverlay(editor, overlayFactory));
 
         OverlayWidget newWidget =  null;
         if (conversionEnterRule != null) {
