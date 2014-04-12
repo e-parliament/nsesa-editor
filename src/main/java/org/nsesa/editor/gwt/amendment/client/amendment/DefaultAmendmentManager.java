@@ -33,7 +33,7 @@ import org.nsesa.editor.gwt.core.client.event.selection.OverlayWidgetAwareSelect
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentController;
 import org.nsesa.editor.gwt.core.client.ui.document.DocumentEventBus;
 import org.nsesa.editor.gwt.core.client.ui.document.OverlayWidgetAware;
-import org.nsesa.editor.gwt.core.client.ui.overlay.Transformer;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Formatter;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 import org.nsesa.editor.gwt.core.client.util.*;
 import org.nsesa.editor.gwt.core.shared.AmendmentContainerDTO;
@@ -62,7 +62,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
     /**
      * The transformer for serializing the payload of the body of an amendment container DTO.
      */
-    private final Transformer transformer;
+    private final Formatter formatter;
 
     /**
      * An event bus that is private to the current document controller.
@@ -93,11 +93,11 @@ public class DefaultAmendmentManager implements AmendmentManager {
     private HandlerRegistration amendmentContainerBundleHandlerRegistration;
 
     @Inject
-    public DefaultAmendmentManager(final Transformer transformer,
+    public DefaultAmendmentManager(final org.nsesa.editor.gwt.core.client.ui.overlay.Formatter formatter,
                                    final DocumentEventBus documentEventBus,
                                    final AmendmentInjectionPointFinder injectionPointFinder,
                                    final AmendmentInjectionPointProvider injectionPointProvider) {
-        this.transformer = transformer;
+        this.formatter = formatter;
         this.documentEventBus = documentEventBus;
         this.injectionPointFinder = injectionPointFinder;
         this.injectionPointProvider = injectionPointProvider;
@@ -302,7 +302,7 @@ public class DefaultAmendmentManager implements AmendmentManager {
                 span.setInnerHTML(amendment.getBody());
                 amendment.setRoot(documentController.getOverlayFactory().getAmendableWidget(span.getFirstChildElement()));
             }
-            amendment.setBody(transformer.transform(amendment.getRoot()));
+            amendment.setBody(formatter.format(amendment.getRoot()));
             amendment.setDocumentID(documentController.getDocument().getDocumentID());
             // do some checks to make sure all fields are set
             if (amendment.getAmendmentContainerID() == null)

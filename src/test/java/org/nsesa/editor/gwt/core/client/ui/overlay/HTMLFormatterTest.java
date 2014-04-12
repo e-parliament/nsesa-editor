@@ -29,10 +29,10 @@ import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetImpl;
  * @version $Id$
  */
 @GwtModule("org.nsesa.editor.gwt.editor.Editor")
-public class HTMLTransformerTest extends GwtTest {
+public class HTMLFormatterTest extends GwtTest {
 
     private OverlayWidget root;
-    private HTMLTransformer htmlTransformer = new HTMLTransformer();
+    private HTMLFormatter htmlTransformer = new HTMLFormatter();
 
     @Before
     public void setUp() throws Exception {
@@ -76,7 +76,7 @@ public class HTMLTransformerTest extends GwtTest {
 
     @Test
     public void testTransform() throws Exception {
-        final String result = htmlTransformer.transform(root);
+        final String result = htmlTransformer.format(root);
         Assert.assertEquals("<span class=\"root\" data-type=\"root\" data-ns=\"http://ns.tld\"><span class=\"childA\" data-type=\"childA\" data-ns=\"http://ns.tld\"><span class=\"childAA\" data-type=\"childAA\" data-ns=\"http://ns.tld\">childAA.innerHTML</span></span><span class=\"childB\" data-type=\"childB\" data-ns=\"http://ns.tld\">childB.innerHTML</span></span>", result);
     }
 }

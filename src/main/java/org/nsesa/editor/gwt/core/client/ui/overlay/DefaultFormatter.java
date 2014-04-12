@@ -16,35 +16,43 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
-import com.google.gwt.user.client.DOM;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidgetWalker;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Default implementation of {@link org.nsesa.editor.gwt.core.client.ui.overlay.Transformer} interface. It tries to generate an XML representation of an
+ * Default implementation of {@link Formatter} interface. It tries to generate an XML representation of an
  * overlay widget by retrieving text content and attributes values from the corresponding DOM element.
  *
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 20/11/12 11:02
  */
-public class HTMLTransformer implements Transformer {
+public class DefaultFormatter implements Formatter {
 
-    private static final Logger LOG = Logger.getLogger(HTMLTransformer.class.getName());
+    public static final String XML_DECLARATION = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+    public static final String DEFAULT_NAMESPACE = "";
+
+    private static final Logger LOG = Logger.getLogger(DefaultFormatter.class.getName());
+
+    private boolean withIndentation; // use ONLY for debugging - turning this on will affect the saving of your amendments, and hence the rendering afterward!!
 
     /**
-     * Generate an HTML representation for the given <code>OverlayWidget</code>
+     * Generate an Xml representation for the given <code>OverlayWidget</code>
      *
      * @param widget The overlay widget that will be XML-ized.
      * @return Xml representation as String
      */
     @Override
-    public String transform(final OverlayWidget widget) {
-        final StringBuilder sb = new StringBuilder();
-        return sb.append(toHTMLElement(widget, false, 0)).toString();
+    public String format(final OverlayWidget widget) {
+        final Map<String, String> namespaces = gatherNamespaces(widget);
+        namespaces.put(widget.getNamespaceURI(), DEFAULT_NAMESPACE);
+        final StringBuilder sb = new StringBuilder(XML_DECLARATION).append("\n");
+        return sb.append(toXMLElement(widget, namespaces, true, 0)).toString();
     }
 
     /**
@@ -53,19 +61,37 @@ public class HTMLTransformer implements Transformer {
      * it tries to find out the corresponding browser element node and to extract from there the text content and the
      * css attributes values. The process continue then recursively for all descendants of the original overlay widget.
      *
-     * @param widget The overlay widget that will be processed
+     * @param widget     The overlay widget that will be processed
+     * @param namespaces The map of all namespaces used in overlay widget and its descendants
+     * @param rootNode   True if the
      * @param depth
      * @return Xml representation of overlay widget as String
      */
-    public String toHTMLElement(final OverlayWidget widget, boolean withIndentation,
-                                int depth) {
-
+    public String toXMLElement(final OverlayWidget widget,
+                               final Map<String, String> namespaces,
+                               final boolean rootNode,
+                               int depth) {
         final StringBuilder sb = new StringBuilder();
         final String indent = withIndentation ? TextUtils.repeat(depth, "  ") : "";
-        if (!widget.getOverlayElement().getClassName().contains(widget.getType())) widget.getOverlayElement().addClassName(widget.getType());
-        sb.append(indent).append("<span class=\"").append(widget.getOverlayElement().getClassName())
-                .append("\" data-type=\"").append(widget.getType()).append("\"").append(" data-ns=\"")
-                .append(widget.getNamespaceURI()).append("\"");
+        sb.append(indent).append("<");
+        if (rootNode) {
+            sb.append(widget.getType());
+            for (final Map.Entry<String, String> entry : namespaces.entrySet()) {
+                if (DEFAULT_NAMESPACE.equals(entry.getValue())) {
+                    // this is the default namespace
+                    sb.append(" xmlns=\"").append(widget.getNamespaceURI()).append("\"");
+                } else {
+                    // prefixed namespace
+                    sb.append(" xmlns:").append(entry.getValue()).append("=\"").append(entry.getKey()).append("\"");
+                }
+            }
+        } else {
+            final String prefix = namespaces.get(widget.getNamespaceURI());
+            if (!DEFAULT_NAMESPACE.equals(prefix)) {
+                sb.append(prefix).append(":");
+            }
+            sb.append(widget.getType());
+        }
         //get the attributes
         final LinkedHashMap<String, String> attrs = widget.getAttributes();
         if (!attrs.isEmpty()) {
@@ -78,7 +104,6 @@ public class HTMLTransformer implements Transformer {
                 }
             }
         }
-        // add class names
         sb.append(">");
         Element element = widget.getOverlayElement();
         NodeList<Node> nodes = element.getChildNodes();
@@ -87,7 +112,7 @@ public class HTMLTransformer implements Transformer {
             // the root is all the time a new one
             // apply xml transformation for children
             for (final OverlayWidget child : widget.getChildOverlayWidgets()) {
-                sb.append(toHTMLElement(child, false, depth + 1).trim());
+                sb.append(toXMLElement(child, namespaces, false, depth + 1).trim());
             }
         } else {
             for (int i = 0; i < length; i++) {
@@ -106,14 +131,13 @@ public class HTMLTransformer implements Transformer {
                             }
                         }
                         if (child != null) {
-                            sb.append(toHTMLElement(child, false, depth + 1).trim());
+                            sb.append(toXMLElement(child, namespaces, false, depth + 1));
                         } else {
-                            LOG.warning("No amendable child widget found for element " + childElement.getNodeName());
-                            sb.append(DOM.toString((com.google.gwt.user.client.Element) childElement.cast()));
+                            LOG.warning("No amendable child widget found for element " + childElement.getInnerHTML());
                         }
                         break;
                     case Node.TEXT_NODE:
-                        sb.append(TextUtils.escapeXML(nodes.getItem(i).getNodeValue().trim()));
+                        sb.append(TextUtils.escapeXML(nodes.getItem(i).getNodeValue()));
                         //sb.append(nodes.getItem(i).getNodeValue().trim());
                         break;
                     case Node.DOCUMENT_NODE:
@@ -122,8 +146,47 @@ public class HTMLTransformer implements Transformer {
                 }
             }
         }
-        sb.append("</span>");
+        sb.append("</");
+        final String prefix = namespaces.get(widget.getNamespaceURI());
+        if (!DEFAULT_NAMESPACE.equals(prefix)) {
+            sb.append(prefix).append(":");
+        }
+        sb.append(widget.getType()).append(">");
         return sb.toString();
     }
 
+    /**
+     * Gather all distinct namespaces from the given <code>OverlayWidget</code> and its chidren
+     *
+     * @param root The OverlayWidget that will be processed
+     * @return A Map of String
+     */
+    protected Map<String, String> gatherNamespaces(final OverlayWidget root) {
+        final Map<String, String> namespaces = new HashMap<String, String>();
+        root.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
+            @Override
+            public boolean visit(OverlayWidget visited) {
+                if (!namespaces.containsKey(visited.getNamespaceURI())) {
+                    String prefix = getPrefix(visited.getNamespaceURI());
+                    if (prefix == null) {
+                        // generate namespace (ns1, ns2, ...)
+                        prefix = "ns" + (namespaces.size() + 1);
+                    }
+                    namespaces.put(visited.getNamespaceURI(), prefix);
+                }
+                return true;
+            }
+        });
+        return namespaces;
+    }
+
+    /**
+     * Return null but can be overridden by subclasses.
+     *
+     * @param namespaceURI The namesapce to be processed
+     * @return <code>null</code>
+     */
+    protected String getPrefix(final String namespaceURI) {
+        return null;
+    }
 }
