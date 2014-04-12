@@ -31,6 +31,13 @@ public interface OverlaySnippetFactory {
      * @return {@link OverlaySnippet}
      */
     abstract OverlaySnippet getSnippet(OverlayWidget widget);
+    /**
+     * Returns the snippet associated to the overlay widget
+     * @param widget        The widget for which we determine the associated {@link OverlaySnippet}
+     * @param templateName  the name of the snippet template
+     * @return {@link OverlaySnippet}
+     */
+    abstract OverlaySnippet getSnippet(OverlayWidget widget, String templateName);
 
     /**
      * Return the caret position class name used to select an element when it is created by this factory
