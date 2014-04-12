@@ -790,7 +790,8 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
             if (overlayStrategy != null) {
                 String originAttribute = overlayStrategy.getOrigin(getOverlayElement());
                 if (originAttribute != null) {
-                    return OverlayWidgetOrigin.AMENDMENT.name().equalsIgnoreCase(originAttribute);
+                    origin = OverlayWidgetOrigin.valueOf(originAttribute);
+                    return OverlayWidgetOrigin.AMENDMENT == origin;
                 }
             }
 
