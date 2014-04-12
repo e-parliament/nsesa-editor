@@ -17,17 +17,17 @@ import com.google.inject.ImplementedBy;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
- * An interface to transform {@link OverlayWidget} object into its XML representation
+ * An interface to transform {@link OverlayWidget} object into a String representation.
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  * Date: 20/11/12 10:59
  */
-@ImplementedBy(DefaultTransformer.class)
-public interface Transformer {
+@ImplementedBy(DefaultFormatter.class)
+public interface Formatter {
     /**
-     * Transforms an overlay widget into XML representation
+     * Formats an overlay widget into a String representation
      *
      * @param widget The overlay widget that will be XML-ized.
      * @return XML representation as String
      */
-    String transform(OverlayWidget widget);
+    String format(OverlayWidget widget);
 }
