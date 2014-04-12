@@ -53,7 +53,7 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
      * @param overlayFactory The factory used to create widgets
      * @return A List of overlay widgets
      */
-    protected final List<OverlayWidget> overlayEditorBody(JavaScriptObject editor, OverlayFactory overlayFactory) {
+    protected List<OverlayWidget> getEditorBodyChildrenAsOverlay(JavaScriptObject editor, OverlayFactory overlayFactory) {
         List<OverlayWidget> result = new ArrayList<OverlayWidget>();
 
         JavaScriptObject body = getBody(editor);
@@ -72,7 +72,14 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
 
         }
         return result;
-
+    }
+    protected OverlayWidget getEditorBodyAsOverlay(JavaScriptObject editor, OverlayFactory overlayFactory) {
+        JavaScriptObject body = getBody(editor);
+        if (body != null) {
+            Element bodyElement = body.cast();
+            return overlayFactory.getAmendableWidget(bodyElement);
+        }
+        return null;
     }
 
     /**
@@ -92,22 +99,21 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
      * Find an overlay widget in the list of the widgets identified by its overlayElement
      *
      * @param overlayElement
-     * @param widgets
+     * @param root
      * @return
      */
-    protected OverlayWidget findOverlayWidget(final Element overlayElement, List<OverlayWidget> widgets) {
+    protected OverlayWidget findOverlayWidget(final Element overlayElement, OverlayWidget root) {
         final OverlayWidget[] results = new OverlayWidget[1];
-        for (OverlayWidget widget : widgets) {
-            widget.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
+            root.walk(new OverlayWidgetWalker.DefaultOverlayWidgetVisitor() {
                 @Override
                 public boolean visit(OverlayWidget visited) {
                     if (visited.getOverlayElement() == overlayElement) {
                         results[0] = visited;
+                        return false;
                     }
-                    return true;
+                    return results[0] == null;
                 }
             });
-        }
         return results[0];
     }
 
