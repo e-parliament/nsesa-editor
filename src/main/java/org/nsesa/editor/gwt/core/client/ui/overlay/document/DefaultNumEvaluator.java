@@ -16,6 +16,7 @@ package org.nsesa.editor.gwt.core.client.ui.overlay.document;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Format;
 import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.NumberingType;
 
@@ -69,10 +70,12 @@ public class DefaultNumEvaluator implements OverlaySnippetEvaluator.Evaluator {
             });
             if (sibling != null) {
                 overlayWidget.setNumberingType(sibling.getNumberingType());
+                overlayWidget.setFormat(sibling.getFormat());
             } else {
                 // take the parent's numbering, but use a different one
                 // TODO
                 overlayWidget.setNumberingType(NumberingType.ROMANITO);
+                overlayWidget.setFormat(Format.BRACKET);
             }
         }
         //add the overlay widget in the parent children collection to compute the num
