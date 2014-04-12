@@ -195,6 +195,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         range.setStart(elem, 0);
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
+                        elem.scrollIntoView(false);
                     }
                     // find start container and end container of the selection
                     // if they are text nodes go to their parents
@@ -215,6 +216,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                             ranges[0].setStartBefore(startContainer);
                             ranges[0].insertNode(elem);
                         }
+                        elem.scrollIntoView(false);
                     }
                 } else {
                     var endContainer = ranges[ranges.length - 1].endContainer;
@@ -240,6 +242,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         range.setStart(elem, 0);
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
+                        elem.scrollIntoView(false);
                     }
                 }
                 editor.fire('caretPosition');
