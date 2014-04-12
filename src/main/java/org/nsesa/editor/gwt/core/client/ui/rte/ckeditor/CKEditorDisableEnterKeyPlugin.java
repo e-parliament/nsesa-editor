@@ -88,7 +88,7 @@ public class CKEditorDisableEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             if (!mode)
                 mode = editor.config.enterMode;
 
-            // Use setTimout so the keys get cancelled immediatelly.
+            // Use setTimout so the keys get cancelled immediately.
             setTimeout(function () {
                 editor.fire('saveSnapshot');	// Save undo step.
 

@@ -439,7 +439,7 @@ public class CKEditorConfig implements RichTextEditorConfig {
         this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorConfig::config[ckStyleName] =
         {
             element: newTag,
-            attributes: { 'class': className, 'type': newType, 'ns': nameSpace},
+            attributes: { 'class': className, 'data-type': newType, 'data-ns': nameSpace},
             overrides: oldTag
         };
     }-*/;

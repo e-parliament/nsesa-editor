@@ -83,7 +83,7 @@ public class CKEditorRemoveFormatPlugin extends DefaultRichTextEditorPlugin {
                     while (node && node.type != $wnd.CKEDITOR.NODE_ELEMENT) {
                         node = node.getParent();
                     }
-                    if (node && node.getAttribute('type')) {
+                    if (node && node.getAttribute('data-type')) {
                         node.remove();
                         if (ed.getSelection().getRanges(1).length > 0) {
                             ed.getSelection().getRanges(1)[0].insertNode(text);
