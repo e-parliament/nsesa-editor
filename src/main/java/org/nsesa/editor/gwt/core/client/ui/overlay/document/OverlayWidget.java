@@ -445,11 +445,23 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     String getUnformattedIndex();
 
     /**
+     * Set the unformatted index for this widget.
+     * @param unformattedIndex the unformatted index - use <tt>null</tt> to reset to the attribute.
+     */
+    void setUnformattedIndex(String unformattedIndex);
+
+    /**
      * Get the formatted index, if any.
      *
      * @return the formatted index.
      */
     String getFormattedIndex();
+
+    /**
+     * Set the formatted index for this widget.
+     * @param formattedIndex the formatted index - use <tt>null</tt> to reset to the attribute.
+     */
+    void setFormattedIndex(String formattedIndex);
 
     /**
      * Move this widget up in the parent collection.
