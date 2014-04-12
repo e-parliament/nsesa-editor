@@ -87,8 +87,8 @@ public class CKEditorVisualStructureInsertionPlugin extends DefaultRichTextEdito
             var toInsert = this.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureInsertionPlugin::text(Lcom/google/gwt/dom/client/Element;Ljava/lang/String;)(el, text);
             editor.insertHtml(toInsert);
             var endContainer = editor.getSelection().getRanges(1)[0].endContainer;
-            var parentTagType = endContainer.getAttribute('type'),
-                    nameSpace = endContainer.getAttribute('ns');
+            var parentTagType = endContainer.getAttribute('data-type'),
+                    nameSpace = endContainer.getAttribute('data-ns');
             plugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorVisualStructureInsertionPlugin::fireEvent(Lcom/google/gwt/core/client/JavaScriptObject;ZLjava/lang/String;)(endContainer.$, false, "");
         }
 

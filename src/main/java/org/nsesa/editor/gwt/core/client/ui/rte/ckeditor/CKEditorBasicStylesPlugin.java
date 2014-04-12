@@ -97,9 +97,9 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
                 var tagName = this.styleDefinition.overrides;
                 var basicEl = basicStylesPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorBasicStylesPlugin::findBasicStyleElement(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(container, tagName);
                 if (basicEl) {
-                    this.styleDefinition.attributes['ns'] = basicEl.getAttribute('ns');
+                    this.styleDefinition.attributes['data-ns'] = basicEl.getAttribute('data-ns');
                     this.styleDefinition.attributes['class'] = basicEl.getAttribute('class');
-                    this.styleDefinition.attributes['type'] = basicEl.getAttribute('type');
+                    this.styleDefinition.attributes['data-type'] = basicEl.getAttribute('data-type');
                 }
 
                 this.style = new $wnd.CKEDITOR.style(this.styleDefinition);

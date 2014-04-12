@@ -93,8 +93,8 @@ public class CKEditorEnterKeySpanTagPlugin extends DefaultRichTextEditorPlugin {
                 //create a span of type br
                 lineBreak = doc.createElement('span');
                 lineBreak.setAttribute('class', 'widget ' + tagName);
-                lineBreak.setAttribute('type', tagName);
-                lineBreak.setAttribute('ns', ns);
+                lineBreak.setAttribute('data-type', tagName);
+                lineBreak.setAttribute('data-ns', ns);
 //                var aw = overlayFactory.@org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory::getAmendableWidget(Ljava/lang/String;)('br');
 //                var el = aw.@org.nsesa.editor.gwt.core.client.ui.overlay.document.AmendableWidget::getAmendableElement()();
                 range.deleteContents();

@@ -89,7 +89,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         public OverlayWidget get(OverlayWidget parentWidget) {
             return overlayFactory.getAmendableWidget(parentWidget.getNamespaceURI(), "br");
         }
-    };
+    }
 
     /** conversion enter rule to be applied **/
     private ConversionEnterRule conversionEnterRule;
@@ -180,7 +180,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     if (elemAsString) {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
-                        while (container != null && (elem.getAttribute('type') != container.getAttribute('type')
+                        while (container != null && (elem.getAttribute('data-type') != container.getAttribute('data-type')
                             )) {
                             container = container.getParent();
                         }
@@ -218,7 +218,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     if (elemAsString) {
                         var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
-                        while (startContainer != null && (elem.getAttribute('type') != startContainer.getAttribute('type')
+                        while (startContainer != null && (elem.getAttribute('data-type') != startContainer.getAttribute('data-type')
                             )) {
                             startContainer = startContainer.getParent();
                         }
@@ -237,7 +237,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         var elem =  $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
                         // find the parent from rule
                         while (endContainer != null) {
-                            if ((elem.getAttribute('type') == endContainer.getAttribute('type')
+                            if ((elem.getAttribute('data-type') == endContainer.getAttribute('data-type')
                                 )) {
                                 break;
                             }
@@ -392,9 +392,9 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     }
 
     /**
-     * Returns true when the element was set up to be splitted
+     * Returns true when the element was set up to be split
      * @param existingElement the element to be processed
-     * @return True when the element was set up to be splitted;
+     * @return True when the element was set up to be split;
      */
     private boolean split(JavaScriptObject existingElement) {
         Element el = existingElement.cast();
