@@ -61,10 +61,10 @@ public class DefaultNumEvaluator implements OverlaySnippetEvaluator.Evaluator {
     public String evaluate() {
         if (overlayWidget.getNumberingType() == null) {
             // if there is a sibling of the same type, use that one
-            OverlayWidget sibling = reference != null ? reference : overlayWidget.next(new OverlayWidgetSelector() {
+            OverlayWidget sibling = reference != null ? reference : overlayWidget.previous(new OverlayWidgetSelector() {
                 @Override
                 public boolean select(OverlayWidget toSelect) {
-                    return true;
+                    return overlayWidget.getType().equals(toSelect.getType());
                 }
             });
             if (sibling != null) {
