@@ -58,12 +58,19 @@ public enum NumberingType {
     COMBO {
         @Override
         public String get(int index) {
-            throw new UnsupportedOperationException("A combination literal index (1A, A23, ...) cannot be used for new elements.");
+            return Integer.toString(index + 1);
+            // throw new UnsupportedOperationException("A combination literal index (1A, A23, ...) should be used for new elements.");
         }
 
         @Override
         public Integer get(String unformattedIndex) {
-            return null;
+            String justTheNumber = "";
+            for (char c : unformattedIndex.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    justTheNumber += c;
+                }
+            }
+            return !"".equals(justTheNumber) ? Integer.parseInt(justTheNumber) : null;
         }
     },
     NONE {
