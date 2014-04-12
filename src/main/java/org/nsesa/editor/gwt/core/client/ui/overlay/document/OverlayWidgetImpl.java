@@ -700,6 +700,9 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     @Override
     public void setOrigin(OverlayWidgetOrigin origin) {
         this.origin = origin;
+        if (getOverlayElement() != null) {
+            overlayStrategy.setOrigin(getOverlayElement(), origin.name());
+        }
     }
 
     @Override
@@ -784,9 +787,29 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (origin != null) {
             return origin == OverlayWidgetOrigin.AMENDMENT;
         } else {
+            String originAttribute = overlayStrategy.getOrigin(getOverlayElement());
+            if (originAttribute != null) {
+                return OverlayWidgetOrigin.AMENDMENT.name().equalsIgnoreCase(originAttribute);
+            }
+
             if (getParentOverlayWidget() != null) {
                 return getParentOverlayWidget().isIntroducedByAnAmendment();
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isGenerated() {
+        if (origin != null) {
+            return origin == OverlayWidgetOrigin.GENERATED;
+        }
+        String originAttribute = overlayStrategy.getOrigin(getOverlayElement());
+        if (originAttribute != null) {
+            return OverlayWidgetOrigin.GENERATED.name().equalsIgnoreCase(originAttribute);
+        }
+        if (getParentOverlayWidget() != null) {
+            return getParentOverlayWidget().isGenerated();
         }
         return false;
     }

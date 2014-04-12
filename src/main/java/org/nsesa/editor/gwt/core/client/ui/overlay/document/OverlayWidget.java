@@ -368,6 +368,14 @@ public interface OverlayWidget extends IsWidget, HasWidgets, OverlayWidgetWalker
     boolean isIntroducedByAnAmendment();
 
     /**
+     * Check if the overlay widget('s content) is generated (eg. by a template or snippet). We assume that a widget
+     * is generated if its origin is {@link org.nsesa.editor.gwt.core.shared.OverlayWidgetOrigin#GENERATED} or
+     * the content is blank, and this for the current widget and all its children.
+     * @return <tt>true</tt> if the overlay widget is generated (eg. as part of a template).
+     */
+    boolean isGenerated();
+
+    /**
      * Get the underlying element. Should never be <tt>null</tt>.
      *
      * @return the element.

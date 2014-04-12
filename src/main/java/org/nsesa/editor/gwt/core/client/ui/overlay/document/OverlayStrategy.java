@@ -95,6 +95,13 @@ public interface OverlayStrategy {
     String getOrigin(Element element);
 
     /**
+     * Set the origin of the element (document, amendment, generated, ...)
+     * @param element the element to set the origin on
+     * @param origin the origin to set
+     */
+    void setOrigin(Element element, String origin);
+
+    /**
      * Get the numbering type of the given amendable element.
      *
      * @param element the amendable element

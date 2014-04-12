@@ -454,6 +454,10 @@ public class OverlayStrategySupport {
     public String getOrigin(Element element) {
         return element.hasAttribute(ORIGIN_ATTRIBUTE) ? element.getAttribute(ORIGIN_ATTRIBUTE) : null;
     }
+    
+    public void setOrigin(Element element, String origin) {
+        element.setAttribute(ORIGIN_ATTRIBUTE, origin);
+    }
 
     private static interface ElementVisitor {
         boolean visit(Element visited);

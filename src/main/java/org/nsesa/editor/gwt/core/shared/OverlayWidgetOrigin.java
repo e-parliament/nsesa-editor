@@ -28,5 +28,10 @@ public enum OverlayWidgetOrigin {
     /**
      * The widget was introduced by an amendment, and was therefore not part of the original document.
      */
-    AMENDMENT
+    AMENDMENT,
+
+    /**
+     * The widget was introduced, but not by the user, but rather generated (eg. by a snippet)
+     */
+    GENERATED
 }
