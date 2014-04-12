@@ -67,6 +67,11 @@ public class DefaultOverlayStrategy implements OverlayStrategy {
     }
 
     @Override
+    public void setOrigin(Element element, String origin) {
+        overlayStrategySupport.setOrigin(element, origin);
+    }
+
+    @Override
     public String getIndex(Element element) {
         return overlayStrategySupport.getLiteralIndex(element);
     }
