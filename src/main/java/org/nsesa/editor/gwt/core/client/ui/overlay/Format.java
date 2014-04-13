@@ -33,11 +33,20 @@ public enum Format {
         public final String format(String index) {
             return index + ".";
         }
+
+        @Override
+        public String unformat(String index) {
+            return index.substring(0, index.length() - 1);
+        }
     }, // eg. 1.
     BRACKET {
         @Override
         public final String format(String index) {
             return index + ")";
+        }
+        @Override
+        public String unformat(String index) {
+            return index.substring(0, index.length() - 1);
         }
     }, // eg. 1)
     DOUBLE_BRACKET {
@@ -45,11 +54,19 @@ public enum Format {
         public final String format(String index) {
             return "(" + index + ")";
         }
+        @Override
+        public String unformat(String index) {
+            return index.substring(1, index.length() - 1);
+        }
     }, // eg. (1)
     INDENT {
         @Override
         public final String format(String index) {
             return "–";
+        }
+        @Override
+        public String unformat(String index) {
+            return "";
         }
     }, // eg. –
     NONE {
@@ -57,9 +74,17 @@ public enum Format {
         public String format(String index) {
             return index;
         }
+        @Override
+        public String unformat(String index) {
+            return index;
+        }
     };
 
     public String format(String index) {
+        throw new RuntimeException("Should have been overridden by subclass.");
+    }
+
+    public String unformat(String index) {
         throw new RuntimeException("Should have been overridden by subclass.");
     }
 }
