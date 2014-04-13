@@ -68,14 +68,14 @@ public enum NumberingType {
     COMBO {
         @Override
         public String get(int index, final OverlayWidget overlayWidget) {
-            OverlayWidget reference = overlayWidget.previous(new OverlayWidgetSelector() {
+            OverlayWidget reference = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
                 @Override
                 public boolean select(OverlayWidget toSelect) {
                     return toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
                 }
             });
             if (reference == null) {
-                reference = overlayWidget.next(new OverlayWidgetSelector() {
+                reference = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
                     @Override
                     public boolean select(OverlayWidget toSelect) {
                         return toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
@@ -108,14 +108,14 @@ public enum NumberingType {
         @Override
         public Integer get(String unformattedIndex, final OverlayWidget overlayWidget) {
 
-            OverlayWidget reference = overlayWidget.previous(new OverlayWidgetSelector() {
+            OverlayWidget reference = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
                 @Override
                 public boolean select(OverlayWidget toSelect) {
                     return toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
                 }
             });
             if (reference == null) {
-                reference = overlayWidget.next(new OverlayWidgetSelector() {
+                reference = overlayWidget.getNextSibling(new OverlayWidgetSelector() {
                     @Override
                     public boolean select(OverlayWidget toSelect) {
                         return toSelect.getType().equalsIgnoreCase(overlayWidget.getType());
