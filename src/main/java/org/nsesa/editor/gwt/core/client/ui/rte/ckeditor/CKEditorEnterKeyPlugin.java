@@ -17,8 +17,14 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
 import com.google.inject.Inject;
+import org.nsesa.editor.gwt.core.client.ClientFactory;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetModifyEvent;
+import org.nsesa.editor.gwt.core.client.event.widget.OverlayWidgetStructureChangeEvent;
+import org.nsesa.editor.gwt.core.client.ui.overlay.Locator;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.*;
 import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
+import org.nsesa.editor.gwt.core.client.ui.rte.event.RTEStructureChangedEvent;
+import org.nsesa.editor.gwt.core.client.util.OverlayUtil;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,17 +104,21 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
     /** split enter rule to be applied **/
     private LineBreakProvider lineBreakProvider;
 
+    private ClientFactory clientFactory;
+
     private OverlayFactory overlayFactory;
 
     /**
      * Create an instance with the given parameters
      * @param overlayFactory {@link OverlayFactory}
+     * @param clientFactory {@link org.nsesa.editor.gwt.core.client.ClientFactory}
      * @param lineBreakProvider {@link LineBreakProvider}
      * @param splitEnterRule {@link SplitEnterRule}
      * @param conversionEnterRule {@link ConversionEnterRule}
      */
     @Inject
     public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory,
+                                  ClientFactory clientFactory,
                                   LineBreakProvider lineBreakProvider,
                                   SplitEnterRule splitEnterRule,
                                   ConversionEnterRule conversionEnterRule) {
@@ -117,13 +127,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         this.lineBreakProvider = lineBreakProvider;
         this.splitEnterRule = splitEnterRule;
         this.conversionEnterRule = conversionEnterRule;
-    }
-
-    public CKEditorEnterKeyPlugin(OverlayFactory overlayFactory, OverlaySnippetFactory overlaySnippetFactory) {
-        this(overlayFactory,
-                new DefaultLineBreakProvider(overlayFactory),
-                SPLIT_ALWAYS_ENTER_RULE,
-                null);
+        this.clientFactory = clientFactory;
     }
 
     @Override
@@ -196,6 +200,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
                         elem.scrollIntoView(false);
+                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
                     }
                     // find start container and end container of the selection
                     // if they are text nodes go to their parents
@@ -217,6 +222,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                             ranges[0].insertNode(elem);
                         }
                         elem.scrollIntoView(false);
+                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
                     }
                 } else {
                     var endContainer = ranges[ranges.length - 1].endContainer;
@@ -243,6 +249,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                         range.setEnd(elem, 0);
                         editor.getSelection().selectRanges([range]);
                         elem.scrollIntoView(false);
+                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
                     }
                 }
                 editor.fire('caretPosition');
@@ -364,6 +371,14 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
         }
 
         return newWidget == null ? null :  DOM.toString((com.google.gwt.user.client.Element) newWidget.getOverlayElement());
+    }
+
+    private void notifyModification(JavaScriptObject existingElement, JavaScriptObject editor) {
+        Element el = existingElement.cast();
+        final OverlayWidget overlayWidget = findOverlayWidget(el, getEditorBodyAsOverlay(editor, overlayFactory));
+        if (overlayWidget != null && overlayWidget.getParentOverlayWidget() != null) {
+            clientFactory.getEventBus().fireEvent(new RTEStructureChangedEvent(overlayWidget.getParentOverlayWidget()));
+        }
     }
 
     /**
