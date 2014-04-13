@@ -153,7 +153,7 @@ public class DefaultLocator implements Locator {
                     // we have an amendable widget that has not been introduced by an amendment
                     // this means our offset will be negative (-1)
                     // and the additional index will be defined on the place of the amendment (eg. a, b, c, ...)
-                    index = "-1" + NumberingType.LETTER.get(overlayWidget.getTypeIndex(true));
+                    index = "-1" + NumberingType.LETTER.get(overlayWidget.getTypeIndex(true), overlayWidget);
 
                     if (format) {
                         if (next.getFormat() != null) {
@@ -189,7 +189,7 @@ public class DefaultLocator implements Locator {
 
                 assert counter != null;
                 int offset = counter.get();
-                previousIndex += NumberingType.LETTER.get(offset - 1);
+                previousIndex += NumberingType.LETTER.get(offset - 1, previous);
                 index = previousIndex;
                 if (format) {
                     if (previous.getFormat() != null) {
@@ -203,9 +203,9 @@ public class DefaultLocator implements Locator {
             }
             return index;
         } else {
-
+            // widget is not introduced by an amendment, so we're in drafting mode.
             if (format) {
-                return overlayWidget.getFormat().format(overlayWidget.getNumberingType().get(overlayWidget.getTypeIndex()));
+                return overlayWidget.getFormat().format(overlayWidget.getNumberingType().get(overlayWidget.getTypeIndex(), overlayWidget));
             } else {
                 // TODO: we don't handle formatting here for elements that are not introduced
                 // see if we can extract the index

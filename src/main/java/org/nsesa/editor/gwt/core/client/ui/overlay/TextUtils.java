@@ -14,7 +14,10 @@
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Unsorted collection of utilities related to String and XML processing.
@@ -129,7 +132,6 @@ public class TextUtils {
                 startsWithDigits = true;
                 continue;
             }
-            ;
             startForLetters = i;
             break;
         }
@@ -140,11 +142,100 @@ public class TextUtils {
                     followedByLetters = false;
                     break;
                 }
-                ;
             }
         }
         return startsWithDigits && followedByLetters;
 
+    }
+
+    public static String findRelevantPart(String unformattedIndex) {
+        char[] charArray = unformattedIndex.toCharArray();
+        final List<Character> chars = new ArrayList<Character>();
+        for (char c : charArray) {
+            chars.add(c);
+        }
+        Collections.reverse(chars);
+        boolean inPrefix = false;
+        Character previous = null;
+        String relevantSuffix = "";
+        String irrelevantPrefix = "";
+        int count = 0;
+        for (char c : chars) {
+            if (!inPrefix) {
+                if (Character.isDigit(c)) {
+                    if (previous == null || Character.isDigit(previous)) {
+                        relevantSuffix += c;
+                    } else if (!Character.isDigit(previous)) {
+                        inPrefix = true;
+                    }
+                } else if (Character.isLetter(c)) {
+                    if (previous == null || Character.isLetter(previous)) {
+                        relevantSuffix += c;
+                    } else if (!Character.isLetter(previous)) {
+                        inPrefix = true;
+                    }
+                }
+            } else {
+                irrelevantPrefix += c;
+            }
+            previous = c;
+            count++;
+        }
+        relevantSuffix = reverseIt(relevantSuffix);
+        return relevantSuffix;
+    }
+
+    public static String findIrrelevantPart(String unformattedIndex) {
+        char[] charArray = unformattedIndex.toCharArray();
+        final List<Character> chars = new ArrayList<Character>();
+        for (char c : charArray) {
+            chars.add(c);
+        }
+        Collections.reverse(chars);
+        boolean inPrefix = false;
+        Character previous = null;
+        String relevantSuffix = "";
+        String irrelevantPrefix = "";
+        int count = 0;
+        for (char c : chars) {
+            if (!inPrefix) {
+                if (Character.isDigit(c)) {
+                    if (previous == null || Character.isDigit(previous)) {
+                        relevantSuffix += c;
+                    } else if (!Character.isDigit(previous)) {
+                        irrelevantPrefix += c;
+                        inPrefix = true;
+                    }
+                } else if (Character.isLetter(c)) {
+                    if (previous == null || Character.isLetter(previous)) {
+                        relevantSuffix += c;
+                    } else if (!Character.isLetter(previous)) {
+                        irrelevantPrefix += c;
+                        inPrefix = true;
+                    }
+                }
+                else {
+                    irrelevantPrefix += c;
+                    inPrefix = true;
+                }
+            } else {
+                irrelevantPrefix += c;
+            }
+            previous = c;
+            count++;
+        }
+        irrelevantPrefix = reverseIt(irrelevantPrefix);
+        return irrelevantPrefix;
+    }
+
+    public static String reverseIt(String source) {
+        int i, length = source.length();
+        final StringBuilder sb = new StringBuilder(length);
+
+        for (i = (length - 1); i >= 0; i--) {
+            sb.append(source.charAt(i));
+        }
+        return sb.toString();
     }
 
     /**
