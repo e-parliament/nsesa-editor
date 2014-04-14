@@ -202,24 +202,62 @@ public class DefaultLocator implements Locator {
                 }
             }
             return index;
-        } else {
-            // widget is not introduced by an amendment, so we're in drafting mode.
-            if (format) {
-                return overlayWidget.getFormat().format(overlayWidget.getNumberingType().get(overlayWidget.getTypeIndex(), overlayWidget));
-            } else {
-                // TODO: we don't handle formatting here for elements that are not introduced
-                // see if we can extract the index
-                final NumberingType numberingType = overlayWidget.getNumberingType();
-                if (numberingType != null) {
-                    if (!numberingType.isConstant()) {
-                        index = format ? overlayWidget.getFormattedIndex() : overlayWidget.getUnformattedIndex();
-                        if (index != null) {
-                            return index;
-                        }
-                    }
+        } else if (overlayWidget.isGenerated()) {
+            // widget is generated, so adapt to the previous
+            final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
                 }
-                return Integer.toString(overlayWidget.getTypeIndex() + 1);
+            });
+            if (previous == null) {
+                // index should be 0 since we're the first element
+                // TODO calculate the correct numberingType and format
+                String s = NumberingType.LETTER.get(0, overlayWidget);
+                if (format) {
+                    return Format.BRACKET.format(s);
+                } else {
+                    return s;
+                }
             }
+            String unformattedIndex = previous.getUnformattedIndex();
+            if (unformattedIndex != null) {
+                int previousIndex = previous.getNumberingType().get(unformattedIndex, overlayWidget);
+                String newIndex = previous.getNumberingType().get(previousIndex + 1, overlayWidget);
+                if (format) {
+                    return previous.getFormat().format(newIndex);
+                } else {
+                    return newIndex;
+                }
+            }
+            // no unformatted index?
+            return null;
+        } else {
+            final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                }
+            });
+            if (previous == null) {
+                if (format) {
+                    return overlayWidget.getFormattedIndex();
+                } else {
+                    return overlayWidget.getUnformattedIndex();
+                }
+            }
+            // we have a previous one, so use the offset calculation
+            String unformattedIndex = previous.getUnformattedIndex();
+            if (unformattedIndex != null) {
+                int previousIndex = previous.getNumberingType().get(unformattedIndex, overlayWidget);
+                String newIndex = previous.getNumberingType().get(previousIndex + 1, overlayWidget);
+                if (format) {
+                    return previous.getFormat().format(newIndex);
+                } else {
+                    return newIndex;
+                }
+            }
+            return null;
         }
     }
 
