@@ -230,8 +230,7 @@ public class DefaultLocator implements Locator {
                     return newIndex;
                 }
             }
-            // no unformatted index?
-            return null;
+            return Integer.toString(overlayWidget.getTypeIndex() + 1);
         } else {
             final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
                 @Override
@@ -243,7 +242,8 @@ public class DefaultLocator implements Locator {
                 if (format) {
                     return overlayWidget.getFormattedIndex();
                 } else {
-                    return overlayWidget.getUnformattedIndex();
+                    String unformattedIndex = overlayWidget.getUnformattedIndex();
+                    return unformattedIndex == null ? Integer.toString(overlayWidget.getTypeIndex() + 1) : unformattedIndex;
                 }
             }
             // we have a previous one, so use the offset calculation
@@ -257,7 +257,7 @@ public class DefaultLocator implements Locator {
                     return newIndex;
                 }
             }
-            return null;
+            return Integer.toString(overlayWidget.getTypeIndex() + 1);
         }
     }
 
