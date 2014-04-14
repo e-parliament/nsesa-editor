@@ -50,7 +50,8 @@ public enum NumberingType {
 
         @Override
         public Integer get(String unformattedIndex, OverlayWidget overlayWidget) {
-            return Integer.valueOf(unformattedIndex);
+            // - 1 because it is zero based
+            return Integer.valueOf(unformattedIndex) - 1;
         }
     },
     LETTER {
@@ -62,7 +63,7 @@ public enum NumberingType {
         @Override
         public Integer get(String unformattedIndex, OverlayWidget overlayWidget) {
             // todo: handle cases with alphabet overflows (> 26)
-            return (int) unformattedIndex.toCharArray()[0];
+            return ((int) unformattedIndex.toLowerCase().toCharArray()[0]) - 97;
         }
     },
     COMBO {
@@ -138,7 +139,7 @@ public enum NumberingType {
                     }
                 }
             }
-            return Integer.parseInt(unformattedIndex);
+            return Integer.parseInt(unformattedIndex) - 1;
         }
 
     },
