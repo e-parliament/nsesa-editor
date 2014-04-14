@@ -700,7 +700,7 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
     @Override
     public void setOrigin(OverlayWidgetOrigin origin) {
         this.origin = origin;
-        if (getOverlayElement() != null) {
+        if (overlayStrategy != null) {
             overlayStrategy.setOrigin(getOverlayElement(), origin.name());
         }
     }
