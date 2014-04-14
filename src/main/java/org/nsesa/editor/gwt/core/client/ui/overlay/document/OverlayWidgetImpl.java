@@ -809,9 +809,11 @@ public class OverlayWidgetImpl extends ComplexPanel implements OverlayWidget, Ha
         if (origin != null) {
             return origin == OverlayWidgetOrigin.GENERATED;
         }
-        String originAttribute = overlayStrategy.getOrigin(getOverlayElement());
-        if (originAttribute != null) {
-            return OverlayWidgetOrigin.GENERATED.name().equalsIgnoreCase(originAttribute);
+        if (overlayStrategy != null) {
+            String originAttribute = overlayStrategy.getOrigin(getOverlayElement());
+            if (originAttribute != null) {
+                return OverlayWidgetOrigin.GENERATED.name().equalsIgnoreCase(originAttribute);
+            }
         }
         if (getParentOverlayWidget() != null) {
             return getParentOverlayWidget().isGenerated();
