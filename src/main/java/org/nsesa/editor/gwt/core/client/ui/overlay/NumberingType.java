@@ -87,11 +87,9 @@ public enum NumberingType {
                 return Integer.toString(index + 1);
             }
 
-            final OverlayWidget num = OverlayUtil.xpathSingle("//*/num", reference);
-            if (num != null) {
-                String unformattedIndex = num.getOverlayElement().getInnerText();
+            String unformattedIndex = reference.getUnformattedIndex();
+            if (unformattedIndex != null) {
                 unformattedIndex = reference.getFormat().unformat(unformattedIndex);
-                boolean ltr = true; // todo: check for different languages (eg. Hebrew or Japanese)
                 String relevantPart = TextUtils.findRelevantPart(unformattedIndex);
                 String irrelevantPart = TextUtils.findIrrelevantPart(unformattedIndex);
 
@@ -99,7 +97,7 @@ public enum NumberingType {
                     return irrelevantPart + (Integer.parseInt(relevantPart) + 1);
                 } else {
                     // todo: handle cases with alphabet overflows (> 26)
-                    return irrelevantPart + (char)((int) relevantPart.toCharArray()[0] + 1);
+                    return irrelevantPart + (char) ((int) relevantPart.toCharArray()[0] + 1);
                 }
             } else {
                 return Integer.toString(index + 1);
@@ -125,9 +123,8 @@ public enum NumberingType {
             }
 
             if (reference != null) {
-                final OverlayWidget num = OverlayUtil.xpathSingle("//*/num", reference);
-                if (num != null) {
-                    unformattedIndex = num.getOverlayElement().getInnerText();
+                unformattedIndex = reference.getUnformattedIndex();
+                if (unformattedIndex != null) {
                     unformattedIndex = reference.getFormat().unformat(unformattedIndex);
                     String relevantSuffix = TextUtils.findRelevantPart(unformattedIndex);
 
