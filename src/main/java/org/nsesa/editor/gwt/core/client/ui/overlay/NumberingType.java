@@ -89,7 +89,6 @@ public enum NumberingType {
 
             String unformattedIndex = reference.getUnformattedIndex();
             if (unformattedIndex != null) {
-                unformattedIndex = reference.getFormat().unformat(unformattedIndex);
                 String relevantPart = TextUtils.findRelevantPart(unformattedIndex);
                 String irrelevantPart = TextUtils.findIrrelevantPart(unformattedIndex);
 
@@ -125,7 +124,6 @@ public enum NumberingType {
             if (reference != null) {
                 unformattedIndex = reference.getUnformattedIndex();
                 if (unformattedIndex != null) {
-                    unformattedIndex = reference.getFormat().unformat(unformattedIndex);
                     String relevantSuffix = TextUtils.findRelevantPart(unformattedIndex);
 
                     if (Character.isDigit(relevantSuffix.toCharArray()[0])) {
