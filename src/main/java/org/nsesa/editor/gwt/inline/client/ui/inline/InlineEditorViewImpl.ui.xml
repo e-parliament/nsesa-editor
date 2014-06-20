@@ -20,7 +20,7 @@
     <ui:style field="res">
         .inlineEditorPanel {
             display: block;
-            margin-bottom: 30px;
+            margin-bottom: 60px;
         }
 
         .richTextEditor {
@@ -30,7 +30,7 @@
         .actionPanel {
             width: 100%;
             text-align: center;
-
+            cursor: pointer;
         }
 
         .innerActionPanel {
