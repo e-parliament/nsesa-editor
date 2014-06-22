@@ -129,6 +129,8 @@ public class DefaultOverlayFactory implements OverlayFactory {
     protected void visitChildren(final OverlayWidget overlayWidget, final Element element, final int depth, final int maxDepth, boolean deferred) {
         // attach all children (note, this is a recursive call)
         final Element[] children = overlayStrategy.getChildren(element);
+        // clear the children if they already exist, this will allow us to overlay this element several times
+        overlayWidget.getChildOverlayWidgets().clear();
         if (children != null) {
             for (final Element child : children) {
                 final OverlayWidget amendableChild = wrap(overlayWidget, child, depth, maxDepth);
