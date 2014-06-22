@@ -176,82 +176,34 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
 //                $wnd.console.log("Position " + positionType);
                 var ranges = editor.getSelection().getRanges();
 //                $wnd.console.log("Ranges: ", ranges);
-                if (positionType == 0) {
-                    // if the container need to be splited, do it , otherwise introduce br
-                    var container = ranges[0].startContainer;
-                    while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
-                        container = container.getParent();
-                    }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
-                    // if this value is null, it means no block level element was found.
-                    if (elemAsString) {
-                        var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
-                        // find the parent from rule
-                        while (container != null && (elem.getAttribute('data-type') != container.getAttribute('data-type')
+
+                var endContainer = ranges[ranges.length - 1].endContainer;
+                while (endContainer != null && endContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
+                    endContainer = endContainer.getParent();
+                }
+                var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$, editor);
+                if (elemAsString) {
+                    var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
+                    // find the parent from rule
+                    while (endContainer != null) {
+                        if ((elem.getAttribute('data-type') == endContainer.getAttribute('data-type')
                             )) {
-                            container = container.getParent();
+                            break;
                         }
-                        if (container) {
-                            ranges[0].setStartAfter(container);
-                            ranges[0].insertNode(elem);
-                        }
-                        var range = new $wnd.CKEDITOR.dom.range(range.document);
-                        range.setStart(elem, 0);
-                        range.setEnd(elem, 0);
-                        editor.getSelection().selectRanges([range]);
-                        elem.scrollIntoView(false);
-                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
-                    }
-                    // find start container and end container of the selection
-                    // if they are text nodes go to their parents
-                } else if (positionType == -1) {
-                    var startContainer = ranges[0].startContainer;
-                    while (startContainer != null && startContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
-                        startContainer = startContainer.getParent();
-                    }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(startContainer.$, editor);
-                    if (elemAsString) {
-                        var elem = $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
-                        // find the parent from rule
-                        while (startContainer != null && (elem.getAttribute('data-type') != startContainer.getAttribute('data-type')
-                            )) {
-                            startContainer = startContainer.getParent();
-                        }
-                        if (startContainer) {
-                            ranges[0].setStartBefore(startContainer);
-                            ranges[0].insertNode(elem);
-                        }
-                        elem.scrollIntoView(false);
-                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
-                    }
-                } else {
-                    var endContainer = ranges[ranges.length - 1].endContainer;
-                    while (endContainer != null && endContainer.type == $wnd.CKEDITOR.NODE_TEXT) {
                         endContainer = endContainer.getParent();
                     }
-                    var elemAsString = keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::onEnter(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(endContainer.$, editor);
-                    if (elemAsString) {
-                        var elem =  $wnd.CKEDITOR.dom.element.createFromHtml(elemAsString);
-                        // find the parent from rule
-                        while (endContainer != null) {
-                            if ((elem.getAttribute('data-type') == endContainer.getAttribute('data-type')
-                                )) {
-                                break;
-                            }
-                            endContainer = endContainer.getParent();
-                        }
-                        if (endContainer) {
-                            ranges[ranges.length - 1].setStartAfter(endContainer);
-                            ranges[ranges.length - 1].insertNode(elem);
-                        }
-                        var range = new $wnd.CKEDITOR.dom.range(range.document);
-                        range.setStart(elem, 0);
-                        range.setEnd(elem, 0);
-                        editor.getSelection().selectRanges([range]);
-                        elem.scrollIntoView(false);
-                        keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
+                    if (endContainer) {
+                        ranges[ranges.length - 1].setStartAfter(endContainer);
+                        ranges[ranges.length - 1].insertNode(elem);
                     }
+                    var range = new $wnd.CKEDITOR.dom.range(range.document);
+                    range.setStart(elem, 0);
+                    range.setEnd(elem, 0);
+                    editor.getSelection().selectRanges([range]);
+                    elem.scrollIntoView(false);
+                    keyPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorEnterKeyPlugin::notifyModification(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(container.$, editor);
                 }
+
                 editor.fire('caretPosition');
                 return;
             },
