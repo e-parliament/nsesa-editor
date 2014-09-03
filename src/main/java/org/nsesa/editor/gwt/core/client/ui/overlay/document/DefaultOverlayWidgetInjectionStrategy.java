@@ -49,7 +49,7 @@ public class DefaultOverlayWidgetInjectionStrategy implements OverlayWidgetInjec
 
     @Override
     public void injectAsSibling(OverlayWidget reference, OverlayWidget sibling) {
-        assert sibling.isIntroducedByAnAmendment();
+        //assert sibling.isIntroducedByAnAmendment();
 
         final int injectionPosition = getProposedInjectionPosition(reference.getParentOverlayWidget(), reference, sibling);
         final int offset = injectionPosition - reference.getParentOverlayWidget().getChildOverlayWidgets().indexOf(reference);
