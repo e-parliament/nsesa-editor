@@ -31,6 +31,9 @@ import java.util.List;
  *         Date: 14/03/13 13:27
  */
 public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
+
+    protected OverlayWidget parentOverlayWidget;
+
     @Override
     public void beforeInit(JavaScriptObject editor) {
         //do nothing
@@ -117,4 +120,8 @@ public class DefaultRichTextEditorPlugin implements RichTextEditorPlugin {
         return results[0];
     }
 
+    @Override
+    public void setParentOverlayWidget(OverlayWidget parentOverlayWidget) {
+        this.parentOverlayWidget = parentOverlayWidget;
+    }
 }
