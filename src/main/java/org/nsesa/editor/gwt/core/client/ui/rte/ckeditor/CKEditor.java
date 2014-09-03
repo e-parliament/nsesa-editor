@@ -335,7 +335,9 @@ public class CKEditor extends Composite implements RichTextEditor {
         config.addBodyClass(overlayWidget.getType());
         config.setBodyNamespaceURI(overlayWidget.getNamespaceURI());
         // keep track of the parent overlay widget
-        plugin.setParentOverlayWidget(overlayWidget.getParentOverlayWidget());
+        if (plugin != null) {
+            plugin.setParentOverlayWidget(overlayWidget.getParentOverlayWidget());
+        }
     }
 
     @Override
