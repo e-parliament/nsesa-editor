@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.inject.ImplementedBy;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 /**
  * Provides possibility to customize the rich text editor functionality without bloating the editor with unneeded
@@ -33,20 +34,27 @@ public interface RichTextEditorPlugin {
      *
      * @param editor The Rich Text editor as JavaScriptObject
      */
-    abstract void beforeInit(JavaScriptObject editor);
+    void beforeInit(JavaScriptObject editor);
 
     /**
      * Run during editor initialization
      *
      * @param editor The Rich Text editor as JavaScriptObject
      */
-    abstract void init(JavaScriptObject editor);
+    void init(JavaScriptObject editor);
 
     /**
      * Run after editor initialization
      *
      * @param editor The Rich Text editor as JavaScriptObject
      */
-    abstract void afterInit(JavaScriptObject editor);
+    void afterInit(JavaScriptObject editor);
+
+    /**
+     * Set the parent overlay widget on the rich text editor. This can be used to link between the existing document
+     * and the elements in the RTE.
+     * @param parentOverlayWidget the parent overlay widget
+     */
+    void setParentOverlayWidget(OverlayWidget parentOverlayWidget);
 
 }

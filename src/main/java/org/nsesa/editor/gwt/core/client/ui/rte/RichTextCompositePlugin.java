@@ -14,6 +14,7 @@
 package org.nsesa.editor.gwt.core.client.ui.rte;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.List;
  */
 public class RichTextCompositePlugin implements RichTextEditorPlugin {
     protected List<RichTextEditorPlugin> plugins;
+
+    protected OverlayWidget parentOverlayWidget;
 
     /**
      * Default constructor
@@ -73,4 +76,8 @@ public class RichTextCompositePlugin implements RichTextEditorPlugin {
         }
     }
 
+    @Override
+    public void setParentOverlayWidget(OverlayWidget parentOverlayWidget) {
+        this.parentOverlayWidget = parentOverlayWidget;
+    }
 }
