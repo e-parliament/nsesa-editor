@@ -15,6 +15,7 @@ package org.nsesa.editor.gwt.core.client.ui.rte.ckeditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
@@ -23,7 +24,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 11/04/13 16:49
  */
-public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
+public class CKEditorCaretPositionSetupPlugin extends DefaultRichTextEditorPlugin {
 
     private OverlayFactory overlayFactory;
     private String caretPositionClassName;
@@ -80,6 +81,7 @@ public class CKEditorCaretPositionSetupPlugin implements RichTextEditorPlugin {
 
         var caretClassName = caretPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorCaretPositionSetupPlugin::caretPositionClassName;
         var documentRange = new $wnd.CKEDITOR.dom.range(editorInstance.document);
+        $wnd.console.log("------->", container);
         var nodeList = container.getChildren();
         for (var i = 0; i < nodeList.count(); i++) {
             var node = nodeList.getItem(i);

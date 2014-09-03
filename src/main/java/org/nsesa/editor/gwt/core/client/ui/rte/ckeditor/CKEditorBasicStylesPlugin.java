@@ -94,6 +94,7 @@ public class CKEditorBasicStylesPlugin extends DefaultRichTextEditorPlugin {
             NsesaStyleCommand.prototype.exec = function (editor) {
                 // identify the basic style elements based on the selection start element
                 var container = editor.getSelection().getStartElement().$;
+                $wnd.console.log("--->", container);
                 var tagName = this.styleDefinition.overrides;
                 var basicEl = basicStylesPlugin.@org.nsesa.editor.gwt.core.client.ui.rte.ckeditor.CKEditorBasicStylesPlugin::findBasicStyleElement(Lcom/google/gwt/core/client/JavaScriptObject;Ljava/lang/String;)(container, tagName);
                 if (basicEl) {

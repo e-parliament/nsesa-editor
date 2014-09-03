@@ -205,7 +205,6 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 }
 
                 editor.fire('caretPosition');
-                return;
             },
 
             enterBr: function (editor, range) {
@@ -216,7 +215,8 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                 if (!range)
                     return;
                 var container = range.startContainer;
-                while (container != null && container.type == $wnd.CKEDITOR.NODE_TEXT) {
+                $wnd.console.log("->", container);
+                while (container && container.type == $wnd.CKEDITOR.NODE_TEXT) {
                     container = container.getParent();
                 }
 
@@ -229,7 +229,6 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
                     range.collapse(false);
                     range.select(false);
                 }
-                return;
             }
         };
 
@@ -252,7 +251,7 @@ public class CKEditorEnterKeyPlugin extends DefaultRichTextEditorPlugin {
             if (!mode)
                 mode = 1;
 
-            // Use setTimout so the keys get cancelled immediately.
+            // Use setTimeout so the keys get cancelled immediately.
             setTimeout(function () {
                 editor.fire('saveSnapshot');	// Save undo step.
 

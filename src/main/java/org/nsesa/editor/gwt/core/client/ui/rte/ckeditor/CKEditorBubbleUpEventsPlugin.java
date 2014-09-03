@@ -17,6 +17,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
+import org.nsesa.editor.gwt.core.client.ui.rte.DefaultRichTextEditorPlugin;
 import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
 
 /**
@@ -26,7 +27,7 @@ import org.nsesa.editor.gwt.core.client.ui.rte.RichTextEditorPlugin;
  * @author <a href="mailto:stelian.groza@gmail.com">Stelian Groza</a>
  *         Date: 5/04/13 8:06
  */
-public class CKEditorBubbleUpEventsPlugin implements RichTextEditorPlugin {
+public class CKEditorBubbleUpEventsPlugin extends DefaultRichTextEditorPlugin {
     @Override
     public void beforeInit(JavaScriptObject editor) {
     }
