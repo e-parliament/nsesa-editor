@@ -57,9 +57,7 @@ public class KeyboardListener {
         handlerRegistration = Event.addNativePreviewHandler(new Event.NativePreviewHandler() {
             @Override
             public void onPreviewNativeEvent(Event.NativePreviewEvent event) {
-                if (event.getNativeEvent().getKeyCode() > 0 && KEY_UP_CONSTANT.equalsIgnoreCase(event.getNativeEvent().getType())) {
-                    filter(event);
-                }
+                filter(event);
             }
         });
     }
@@ -85,7 +83,10 @@ public class KeyboardListener {
             //LOG.info("Matching key combo --> " + toMatch);
             event.getNativeEvent().preventDefault();
             event.getNativeEvent().stopPropagation();
-            eventBus.fireEvent(new KeyComboEvent(toMatch, event.getNativeEvent()));
+            // only pass them to the event bus if they are released (key up)
+            if (event.getNativeEvent().getKeyCode() > 0 && KEY_UP_CONSTANT.equalsIgnoreCase(event.getNativeEvent().getType())) {
+                eventBus.fireEvent(new KeyComboEvent(toMatch, event.getNativeEvent()));
+            }
         }
     }
 
