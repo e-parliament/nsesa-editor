@@ -207,7 +207,7 @@ public class DefaultLocator implements Locator {
                 }
             }
             return index;
-        } else {
+        } else if (overlayWidget.isGenerated()) {
 
             NumberingType numberingTypeToUse = overlayWidget.getNumberingType();
             Format formatToUse = overlayWidget.getFormat();
@@ -249,6 +249,13 @@ public class DefaultLocator implements Locator {
             else {
                 return numberingTypeToUse.get(typeIndexToUse, overlayWidget);
             }
+        }
+        else {
+            // part of the original document
+            if (format) {
+                return overlayWidget.getFormattedIndex();
+            }
+            return overlayWidget.getUnformattedIndex();
         }
     }
 
