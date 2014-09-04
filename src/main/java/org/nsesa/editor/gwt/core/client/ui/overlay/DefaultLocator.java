@@ -95,9 +95,14 @@ public class DefaultLocator implements Locator {
                     final String num = getNum(aw, languageIso, false);
                     if (num != null && !("".equals(num.trim()))) {
                         location.append(" ").append(num);
-                        // in the location we always add the new notation if necessary
-                        if (aw.isIntroducedByAnAmendment()) location.append(" ").append(getNewNotation(languageIso));
+
                     }
+                    else if (path.indexOf(aw) == path.size() - 1) {
+                         // always add the number if we're at the end
+                        location.append(" ").append(aw.getTypeIndex() + 1);
+                    }
+                    // in the location we always add the new notation if necessary
+                    if (aw.isIntroducedByAnAmendment()) location.append(" ").append(getNewNotation(languageIso));
                 }
                 location.append(splitter);
             }
@@ -145,7 +150,7 @@ public class DefaultLocator implements Locator {
                             if (overlayWidget.getNumberingType() == NumberingType.NONE) {
                                 index = "";
                             } else {
-                                index = overlayWidget.getFormat().format(index);
+                                index = overlayWidget.getFormat().format(index, overlayWidget);
                             }
                         }
                     }
@@ -160,7 +165,7 @@ public class DefaultLocator implements Locator {
                             if (next.getNumberingType() == NumberingType.NONE) {
                                 index = "";
                             } else {
-                                index = next.getFormat().format(index);
+                                index = next.getFormat().format(index, next);
                             }
                         }
                     }
@@ -196,68 +201,54 @@ public class DefaultLocator implements Locator {
                         if (previous.getNumberingType() == NumberingType.NONE) {
                             index = "";
                         } else {
-                            index = previous.getFormat().format(index);
+                            index = previous.getFormat().format(index, previous);
                         }
                     }
                 }
             }
             return index;
-        } else if (overlayWidget.isGenerated()) {
-            // widget is generated, so adapt to the previous
-            final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
-                @Override
-                public boolean select(OverlayWidget toSelect) {
-                    return overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
-                }
-            });
-            if (previous == null) {
-                // index should be 0 since we're the first element
-                // TODO calculate the correct numberingType and format
-                String s = NumberingType.LETTER.get(0, overlayWidget);
-                if (format) {
-                    return Format.BRACKET.format(s);
-                } else {
-                    return s;
-                }
-            }
-            String unformattedIndex = previous.getUnformattedIndex();
-            if (unformattedIndex != null) {
-                int previousIndex = previous.getNumberingType().get(unformattedIndex, overlayWidget);
-                String newIndex = previous.getNumberingType().get(previousIndex + 1, overlayWidget);
-                if (format) {
-                    return previous.getFormat().format(newIndex);
-                } else {
-                    return newIndex;
-                }
-            }
-            return Integer.toString(overlayWidget.getTypeIndex() + 1);
         } else {
+
+            NumberingType numberingTypeToUse = overlayWidget.getNumberingType();
+            Format formatToUse = overlayWidget.getFormat();
+            Integer typeIndexToUse = 0;
+
             final OverlayWidget previous = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
                 @Override
                 public boolean select(OverlayWidget toSelect) {
                     return overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
                 }
             });
-            if (previous == null) {
-                if (format) {
-                    return overlayWidget.getFormattedIndex();
+
+            final OverlayWidget next = overlayWidget.getPreviousSibling(new OverlayWidgetSelector() {
+                @Override
+                public boolean select(OverlayWidget toSelect) {
+                    return overlayWidget.getType().equalsIgnoreCase(toSelect.getType());
+                }
+            });
+
+            if (previous != null) {
+                numberingTypeToUse = numberingTypeToUse == null ? previous.getNumberingType() : numberingTypeToUse;
+                formatToUse = formatToUse == null ? previous.getFormat() : formatToUse;
+                typeIndexToUse = (previous.getTypeIndex() + 1);
+            } else {
+                if (next != null) {
+                    numberingTypeToUse = numberingTypeToUse == null ? next.getNumberingType() : numberingTypeToUse;
+                    formatToUse = formatToUse == null ? next.getFormat() : formatToUse;
+                    typeIndexToUse = (next.getTypeIndex() - 1);
                 } else {
-                    String unformattedIndex = overlayWidget.getUnformattedIndex();
-                    return unformattedIndex == null ? Integer.toString(overlayWidget.getTypeIndex() + 1) : unformattedIndex;
+                    // nothing, we're the first or only one of this type in the collection
+                    numberingTypeToUse = numberingTypeToUse == null ? NumberingType.LETTER : numberingTypeToUse;
+                    formatToUse = formatToUse == null ? Format.BRACKET : formatToUse;
+                    typeIndexToUse = overlayWidget.getTypeIndex();
                 }
             }
-            // we have a previous one, so use the offset calculation
-            String unformattedIndex = previous.getUnformattedIndex();
-            if (unformattedIndex != null) {
-                int previousIndex = previous.getNumberingType().get(unformattedIndex, overlayWidget);
-                String newIndex = previous.getNumberingType().get(previousIndex + 1, overlayWidget);
-                if (format) {
-                    return previous.getFormat().format(newIndex);
-                } else {
-                    return newIndex;
-                }
+            if (format) {
+                return formatToUse.format(numberingTypeToUse.get(typeIndexToUse, overlayWidget), overlayWidget);
             }
-            return Integer.toString(overlayWidget.getTypeIndex() + 1);
+            else {
+                return numberingTypeToUse.get(typeIndexToUse, overlayWidget);
+            }
         }
     }
 

@@ -13,6 +13,8 @@
  */
 package org.nsesa.editor.gwt.core.client.ui.overlay;
 
+import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayWidget;
+
 /**
  * Index format for enumerations in the source text.
  * Possible supported formats:
@@ -28,63 +30,75 @@ package org.nsesa.editor.gwt.core.client.ui.overlay;
  * @version $Id: Format.java 4771 2012-01-20 13:24:50Z pluppens $
  */
 public enum Format {
+    ELEMENT {
+        @Override
+        public final String format(String index, OverlayWidget overlayWidget) {
+            return TextUtils.capitalize(overlayWidget.getType()) + " " + index;
+        }
+
+        @Override
+        public String unformat(String index, OverlayWidget overlayWidget) {
+            throw new RuntimeException("TODO");
+            //return index.substring(0, index.length() - 1);
+        }
+    }, // eg. 1.
     POINT {
         @Override
-        public final String format(String index) {
+        public final String format(String index, OverlayWidget overlayWidget) {
             return index + ".";
         }
 
         @Override
-        public String unformat(String index) {
+        public String unformat(String index, OverlayWidget overlayWidget) {
             return index.substring(0, index.length() - 1);
         }
     }, // eg. 1.
     BRACKET {
         @Override
-        public final String format(String index) {
+        public final String format(String index, OverlayWidget overlayWidget) {
             return index + ")";
         }
         @Override
-        public String unformat(String index) {
+        public String unformat(String index, OverlayWidget overlayWidget) {
             return index.substring(0, index.length() - 1);
         }
     }, // eg. 1)
     DOUBLE_BRACKET {
         @Override
-        public final String format(String index) {
+        public final String format(String index, OverlayWidget overlayWidget) {
             return "(" + index + ")";
         }
         @Override
-        public String unformat(String index) {
+        public String unformat(String index, OverlayWidget overlayWidget) {
             return index.substring(1, index.length() - 1);
         }
     }, // eg. (1)
     INDENT {
         @Override
-        public final String format(String index) {
+        public final String format(String index, OverlayWidget overlayWidget) {
             return "–";
         }
         @Override
-        public String unformat(String index) {
+        public String unformat(String index, OverlayWidget overlayWidget) {
             return "";
         }
     }, // eg. –
     NONE {
         @Override
-        public String format(String index) {
+        public String format(String index, OverlayWidget overlayWidget) {
             return index;
         }
         @Override
-        public String unformat(String index) {
+        public String unformat(String index, OverlayWidget overlayWidget) {
             return index;
         }
     };
 
-    public String format(String index) {
+    public String format(String index, OverlayWidget overlayWidget) {
         throw new RuntimeException("Should have been overridden by subclass.");
     }
 
-    public String unformat(String index) {
+    public String unformat(String index, OverlayWidget overlayWidget) {
         throw new RuntimeException("Should have been overridden by subclass.");
     }
 }
