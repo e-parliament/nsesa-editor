@@ -231,6 +231,12 @@ public class OverlayStrategySupport {
         String literalIndex = getLiteralIndex(element);
         if (literalIndex != null) {
             literalIndex = TextUtils.stripTags(literalIndex.trim(), false);
+            // see if we start with the same name as the element
+            // TODO: dynamic lookup of the translated name - because this alone won't be enough
+            // eg. in Dutch 'Artikel' won't match the type name
+            if (literalIndex.toLowerCase().startsWith(getType(element))) {
+                return Format.ELEMENT;
+            }
             if (literalIndex.startsWith("("))
                 return Format.DOUBLE_BRACKET;
             if (literalIndex.endsWith("."))
