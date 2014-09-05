@@ -97,7 +97,7 @@ public class DefaultLocator implements Locator {
                         location.append(" ").append(num);
 
                     }
-                    else if (path.indexOf(aw) == path.size() - 1) {
+                    else /*if (path.indexOf(aw) == path.size() - 1)*/ {
                          // always add the number if we're at the end
                         location.append(" ").append(aw.getTypeIndex() + 1);
                     }
@@ -254,6 +254,12 @@ public class DefaultLocator implements Locator {
             // part of the original document
             if (format) {
                 return overlayWidget.getFormattedIndex();
+            }
+            // if this is not formatted, we need to check the
+            if (overlayWidget.getNumberingType() != null) {
+                if (overlayWidget.getNumberingType().isConstant()) {
+                    return Integer.toString(overlayWidget.getTypeIndex() + 1);
+                }
             }
             return overlayWidget.getUnformattedIndex();
         }

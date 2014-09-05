@@ -234,7 +234,8 @@ public class OverlayStrategySupport {
             // see if we start with the same name as the element
             // TODO: dynamic lookup of the translated name - because this alone won't be enough
             // eg. in Dutch 'Artikel' won't match the type name
-            if (literalIndex.toLowerCase().startsWith(getType(element))) {
+            final String type = getType(element);
+            if (type != null && literalIndex.toLowerCase().startsWith(type)) {
                 return Format.ELEMENT;
             }
             if (literalIndex.startsWith("("))
