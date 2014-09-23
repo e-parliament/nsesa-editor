@@ -116,7 +116,8 @@ public class ActionBarCreatePanelController {
      */
     public void setOverlayWidget(final OverlayWidget overlayWidget) {
         this.overlayWidget = overlayWidget;
-        setAvailableChildrenAndSiblings();
+        if (overlayWidget != null)
+            setAvailableChildrenAndSiblings();
     }
 
     protected void setAvailableChildrenAndSiblings() {
