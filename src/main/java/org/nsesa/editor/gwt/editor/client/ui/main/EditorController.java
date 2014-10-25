@@ -13,8 +13,6 @@
  */
 package org.nsesa.editor.gwt.editor.client.ui.main;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -29,7 +27,6 @@ import org.nsesa.editor.gwt.editor.client.Injector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.nsesa.editor.gwt.core.client.util.Scope.ScopeValue.EDITOR;
@@ -115,28 +112,17 @@ public class EditorController implements BootstrapEventHandler {
             final String message = clientFactory.getCoreMessages().errorDocumentIdMissing();
             clientFactory.getEventBus().fireEvent(new CriticalErrorEvent(message));
         } else {
-            GWT.runAsync(new RunAsyncCallback() {
-                @Override
-                public void onFailure(Throwable reason) {
-                    LOG.log(Level.SEVERE, "Code split problem.", reason);
-                }
-
-                @Override
-                public void onSuccess() {
-                    // retrieve the documents
-                    for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
-                        final DocumentController documentController = injector.getDocumentController();
-                        documentController.setInjector(documentController.getInjector());
-                        documentController.registerListeners();
-                        documentController.registerModes();
-                        documentController.registerKeyCombos();
-                        documentController.setDocumentID(documentID);
-                        addDocumentController(documentController);
-                        // request the amendments in the backend, this will fire off the document loading afterwards
-                        documentController.loadDocument();
-                    }
-                }
-            });
+            for (final String documentID : clientFactory.getClientContext().getDocumentIDs()) {
+                final DocumentController documentController = injector.getDocumentController();
+                documentController.setInjector(documentController.getInjector());
+                documentController.registerListeners();
+                documentController.registerModes();
+                documentController.registerKeyCombos();
+                documentController.setDocumentID(documentID);
+                addDocumentController(documentController);
+                // request the amendments in the backend, this will fire off the document loading afterwards
+                documentController.loadDocument();
+            }
         }
     }
 
