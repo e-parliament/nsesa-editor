@@ -15,6 +15,7 @@
 -->
 <#-- @ftlvariable name="overlayClasses" type="java.util.List<OverlayClass>" -->
 <#-- @ftlvariable name="overlayClass" type="org.nsesa.editor.app.xsd.model.OverlayClass" -->
+
 # Note: this file is generated. Rather than editing this file, edit the template called overlayMessagesProperties.ftl
 <#list overlayClasses as cl>
 
