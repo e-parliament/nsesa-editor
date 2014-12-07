@@ -24,6 +24,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.nsesa.editor.gwt.amendment.client.amendment.AmendmentManager;
 import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDeleteEvent;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerDiscussEvent;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.AmendmentController;
 import org.nsesa.editor.gwt.amendment.client.ui.amendment.share.SharePanelController;
 import org.nsesa.editor.gwt.amendment.client.ui.document.AmendmentDocumentController;
@@ -100,6 +101,11 @@ public class AmendmentActionPanelController {
     protected final Anchor anchorShare = new Anchor();
 
     /**
+     * An anchor to discuss an amendment.
+     */
+    protected final Anchor anchorDiscuss = new Anchor();
+
+    /**
      * An separator widget.
      */
     protected final Widget moveSeparator;
@@ -161,6 +167,7 @@ public class AmendmentActionPanelController {
     private HandlerRegistration anchorShareHandlerRegistration;
     private HandlerRegistration anchorMoveUpHandlerRegistration;
     private HandlerRegistration anchorMoveDownHandlerRegistration;
+    private HandlerRegistration anchorDiscussHandlerRegistration;
 
 
     @Inject
@@ -177,6 +184,7 @@ public class AmendmentActionPanelController {
         shareSeparator = getSeparator();
         addWidget(shareSeparator);
         addWidget(anchorShare);
+        addWidget(anchorDiscuss);
         moveSeparator = getSeparator();
         addWidget(moveSeparator);
         addWidget(anchorMoveUp);
@@ -188,6 +196,7 @@ public class AmendmentActionPanelController {
         anchorShare.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorMoveUp.getElement().getStyle().setCursor(Style.Cursor.POINTER);
         anchorMoveDown.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+        anchorDiscuss.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 
         // set the correct anchor labels
         anchorTable.setText(coreMessages.amendmentActionTable());
@@ -196,6 +205,7 @@ public class AmendmentActionPanelController {
         anchorShare.setText(coreMessages.amendmentActionShare());
         anchorMoveUp.setText(coreMessages.amendmentActionMoveUp());
         anchorMoveDown.setText(coreMessages.amendmentActionMoveDown());
+        anchorDiscuss.setText(coreMessages.amendmentActionDiscuss());
     }
 
     /**
@@ -305,21 +315,29 @@ public class AmendmentActionPanelController {
             }
         });
 
+        anchorDiscussHandlerRegistration = anchorDiscuss.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                amendmentController.getDocumentController().getDocumentEventBus().fireEvent(new AmendmentContainerDiscussEvent(amendmentController, AmendmentAction.DISCUSS,
+                        amendmentController.getDocumentController()));
+                popupPanel.hide();
+            }
+        });
+
     }
 
     /**
      * Removes all registered event handlers from the event bus and UI.
      */
     public void removeListeners() {
-
         sharePanelController.removeListeners();
-
         anchorTableHandlerRegistration.removeHandler();
         anchorWithdrawHandlerRegistration.removeHandler();
         anchorDeleteHandlerRegistration.removeHandler();
         anchorShareHandlerRegistration.removeHandler();
         anchorMoveUpHandlerRegistration.removeHandler();
         anchorMoveDownHandlerRegistration.removeHandler();
+        anchorDiscussHandlerRegistration.removeHandler();
     }
 
     /**

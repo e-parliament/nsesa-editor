@@ -216,6 +216,14 @@ public class AmendmentDocumentController extends DefaultDocumentController {
             }
         });
 
+        // forward the discuss event
+        amendmentContainerEditEventHandlerRegistration = documentEventBus.addHandler(AmendmentContainerDiscussEvent.TYPE, new AmendmentContainerDiscussEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerDiscussEvent event) {
+                assert event.getAmendmentController().getDocumentController() != null : "Expected document controller on injected amendment controller.";
+                clientFactory.getEventBus().fireEvent(event);
+            }
+        });
 
         // if an amendment has been successfully deleted, we need to update our selection and active widget
         // (since it might have been part of it), and renumber the existing amendments locally

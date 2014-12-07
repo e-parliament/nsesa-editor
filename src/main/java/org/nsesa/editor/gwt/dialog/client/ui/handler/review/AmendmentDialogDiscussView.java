@@ -11,43 +11,31 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Licence for the specific language governing permissions and limitations under the Licence.
  */
-package org.nsesa.editor.gwt.core.shared;
+package org.nsesa.editor.gwt.dialog.client.ui.handler.review;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.inject.ImplementedBy;
 
 /**
- * The different amendment actions.
- * Date: 10/07/12 13:27
+ * View for the reviewing of amendments.
+ * Date: 24/06/12 21:44
  *
  * @author <a href="mailto:philip.luppens@gmail.com">Philip Luppens</a>
  * @version $Id$
  */
-public enum AmendmentAction {
-    /**
-     * Indicates the creation of a new element.
-     */
-    CREATION,
+@ImplementedBy(AmendmentDialogDiscussViewImpl.class)
+public interface AmendmentDialogDiscussView extends IsWidget {
 
     /**
-     * Indicates the deletion of an existing element.
+     * Return a reference to the save button.
+     * @return the save button
      */
-    DELETION,
+    HasClickHandlers getSaveButton();
 
     /**
-     * Indicates the movement of an existing element to a new location.
+     * Return a reference to the cancel button.
+     * @return the cancel button
      */
-    MOVE,
-
-    /**
-     * Indicates a modification of an existing element's content.
-     */
-    MODIFICATION,
-
-    /**
-     * Action to bundle one or more standalone amendments in a so-called bundle amendment.
-     */
-    BUNDLE,
-
-    /**
-     * Action to discuss an amendment.
-     */
-    DISCUSS
+    HasClickHandlers getCancelButton();
 }

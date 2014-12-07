@@ -17,10 +17,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerCreateEventHandler;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEvent;
-import org.nsesa.editor.gwt.amendment.client.event.amendment.AmendmentContainerEditEventHandler;
+import org.nsesa.editor.gwt.amendment.client.event.amendment.*;
 import org.nsesa.editor.gwt.core.client.ClientFactory;
 import org.nsesa.editor.gwt.core.client.ui.overlay.document.OverlayFactory;
 import org.nsesa.editor.gwt.core.client.util.UUID;
@@ -34,6 +31,7 @@ import org.nsesa.editor.gwt.dialog.client.ui.handler.create.AmendmentDialogCreat
 import org.nsesa.editor.gwt.dialog.client.ui.handler.delete.AmendmentDialogDeleteController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.modify.AmendmentDialogModifyController;
 import org.nsesa.editor.gwt.dialog.client.ui.handler.move.AmendmentDialogMoveController;
+import org.nsesa.editor.gwt.dialog.client.ui.handler.review.AmendmentDialogDiscussController;
 
 /**
  * Main amendment dialog. Allows for the creation and editing of amendments. Typically consists of a two
@@ -79,6 +77,11 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private final AmendmentDialogMoveController amendmentDialogMoveController;
 
     /**
+     * Controller for reviewing amendments.
+     */
+    private final AmendmentDialogDiscussController amendmentDialogDiscussController;
+
+    /**
      * Controller for amendments on
      */
     private final AmendmentDialogModifyController amendmentDialogModifyController;
@@ -102,6 +105,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
     private HandlerRegistration amendmentContainerCreateEventHandlerRegistration;
     private HandlerRegistration amendmentContainerEditEventHandlerRegistration;
     private HandlerRegistration closeDialogEventHandlerRegistration;
+    private HandlerRegistration amendmentContainerReviewEventHandlerRegistration;
 
 
     @Inject
@@ -111,6 +115,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                                      final AmendmentDialogBundleController amendmentDialogBundleController,
                                      final AmendmentDialogMoveController amendmentDialogMoveController,
                                      final AmendmentDialogModifyController amendmentDialogModifyController,
+                                     final AmendmentDialogDiscussController amendmentDialogDiscussController,
                                      final OverlayFactory overlayFactory) {
         this.clientFactory = clientFactory;
         this.overlayFactory = overlayFactory;
@@ -126,6 +131,8 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         this.amendmentDialogMoveController.registerListeners();
         this.amendmentDialogModifyController = amendmentDialogModifyController;
         this.amendmentDialogModifyController.registerListeners();
+        this.amendmentDialogDiscussController = amendmentDialogDiscussController;
+        this.amendmentDialogDiscussController.registerListeners();
 
         this.popupPanel.setWidget(view);
         this.popupPanel.setGlassEnabled(true);
@@ -174,6 +181,19 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
                 hide();
             }
         });
+
+        amendmentContainerReviewEventHandlerRegistration = clientFactory.getEventBus().addHandler(AmendmentContainerDiscussEvent.TYPE, new AmendmentContainerDiscussEventHandler() {
+            @Override
+            public void onEvent(AmendmentContainerDiscussEvent event) {
+                dialogContext = new DialogContext();
+                dialogContext.setOverlayWidget(event.getAmendmentController().getOverlayWidget());
+                dialogContext.setAmendmentAction(event.getAmendmentAction());
+                dialogContext.setDocumentController(event.getDocumentController());
+                dialogContext.setAmendment(event.getAmendmentController().getModel());
+                handle();
+                show();
+            }
+        });
     }
 
     /**
@@ -183,6 +203,7 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         amendmentContainerCreateEventHandlerRegistration.removeHandler();
         amendmentContainerEditEventHandlerRegistration.removeHandler();
         closeDialogEventHandlerRegistration.removeHandler();
+        amendmentContainerReviewEventHandlerRegistration.removeHandler();
     }
 
     /**
@@ -221,6 +242,9 @@ public class AmendmentDialogController extends Composite implements ProvidesResi
         }
         if (dialogContext.getAmendmentAction() == AmendmentAction.BUNDLE) {
             return amendmentDialogBundleController;
+        }
+        if (dialogContext.getAmendmentAction() == AmendmentAction.DISCUSS) {
+            return amendmentDialogDiscussController;
         }
         return amendmentDialogModifyController;
     }

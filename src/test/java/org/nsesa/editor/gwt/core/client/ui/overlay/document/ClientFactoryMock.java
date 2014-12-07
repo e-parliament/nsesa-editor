@@ -208,6 +208,11 @@ public class ClientFactoryMock implements ClientFactory {
         }
 
         @Override
+        public String amendmentActionDiscuss() {
+            return "amendmentActionDiscuss";
+        }
+
+        @Override
         public String amendmentActionSaveSuccessful(@PluralCount int arg) {
             return "amendmentActionSaveSuccessful";
         }

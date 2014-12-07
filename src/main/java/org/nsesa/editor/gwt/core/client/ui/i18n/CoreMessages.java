@@ -176,6 +176,9 @@ public interface CoreMessages extends Messages {
     @Key("amendment.action.movedown")
     String amendmentActionMoveDown();
 
+    @Key("amendment.action.discuss")
+    String amendmentActionDiscuss();
+
     @Key("error.document.content.error")
     String errorDocumentContentError(String p0);
 
