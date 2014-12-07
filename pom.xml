@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
     <name>Core Editor</name>
     <url>http://nsesa.org</url>
-    <version>0.12</version>
+    <version>0.13-SNAPSHOT</version>
 
     <organization>
         <url>http://www.europarl.europa.eu/</url>
