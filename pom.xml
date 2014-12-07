@@ -8,8 +8,8 @@
     <artifactId>editor</artifactId>
     <packaging>jar</packaging>
     <name>Core Editor</name>
-    <url>http://code.at4am.org/nsesa-editor</url>
-    <version>0.12-SNAPSHOT</version>
+    <url>http://nsesa.org</url>
+    <version>0.12</version>
 
     <organization>
         <url>http://www.europarl.europa.eu/</url>
